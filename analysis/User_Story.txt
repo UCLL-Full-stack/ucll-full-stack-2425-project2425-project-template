@@ -1,21 +1,59 @@
 User Story:
 
-As a user 
-i'm able to login to my account
-So that i can see my pokemons and place new ones
+
 
 As a user
+I'm able to create a new account:
+so that i can login to my account 
+
+
+
+
+As a user 
+i'm able to login as a trainer of nurse 
+So that i can see my pokemons and place new ones
+
+Wireframe:
+
+
+
+
+
+
+As a Trainer
 I'm able to click on my pokemons
 So that i can see there stats and health 
 
-As a user
+
+
+
+As a Trainer
 I'm able to send my pokemons to the hospital
 So that they can heal and return with full health.
 
-As a user
+
+
+
+
+As a Trainer
 I'm able to edit my calendar
 so that i can see when i have a new gym battle 
 
+
+
+
+
+
+
+
 As a nurse
-I'm able to login as nurse and  see all the pokemons
-so that i can heal them and return to there trainers
+I'm able to login as nurse 
+so that i can start my job
+
+
+
+
+
+As a nurse 
+I'm able to see all the pokemons that need healing
+so that i can look after the pokemon and heal them
