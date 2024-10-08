@@ -6,6 +6,13 @@ As a user
 I'm able to create a new account:
 so that i can login to my account 
 
+Wireframe:
+
+Acceptance criteria:
+- if E-mail already in use give a  message: "E-mail already in use".
+- if the password dont match giev a message: "password dont match".
+- if a user created a account login automatic.
+- password has to be shown as " * ".
 
 
 
@@ -14,6 +21,14 @@ i'm able to login as a trainer of nurse
 So that i can see my pokemons and place new ones
 
 Wireframe:
+
+Acceptance criteria:
+- if the user made a trainer account. than he cant login as a nurse.
+- if the E-mail and the password dont match when he created a account.
+  Dont login and send a message: "Wrong E-mail of password".
+- password has to be shown as " * ".
+
+
 
 
 
@@ -24,6 +39,12 @@ As a Trainer
 I'm able to click on my pokemons
 So that i can see there stats and health 
 
+Wireframe:
+
+Acceptance criteria:
+- can easy see all his pokemons
+- see all there stats and if possible evolve them.
+
 
 
 
@@ -31,7 +52,11 @@ As a Trainer
 I'm able to send my pokemons to the hospital
 So that they can heal and return with full health.
 
+Wireframe:
 
+Acceptance criteria:
+- can't send pokemons to the hospital when they are full health
+- pokemon remove from the inventory when send to the hospital.
 
 
 
@@ -40,7 +65,11 @@ I'm able to edit my calendar
 so that i can see when i have a new gym battle 
 
 
+Wireframe:
 
+Acceptance criteria:
+- can't have a gym battle at the same hour.
+- trainer can make a new event and shown in the calendar.
 
 
 
@@ -50,10 +79,25 @@ As a nurse
 I'm able to login as nurse 
 so that i can start my job
 
+Wireframe:
+
+Acceptance criteria:
+- if the user made a nurse account. than he cant login as a trainer.
+- if the E-mail and the password dont match when he created a account.
+  Dont login and send a message: "Wrong E-mail of password".
+- password has to be shown as " * ".
+
 
 
 
 
 As a nurse 
 I'm able to see all the pokemons that need healing
-so that i can look after the pokemon and heal them
+so that i can look after the pokemon and heal them. after the healing return to there trainers
+
+Wireframe:
+
+Acceptance criteria:
+- when a pokemon is send to the hospital the nurse can see it.
+- nurse need to heal them manual and return them to there trainers
+- pokemons in the hospital cant be swapt to a diffrent trainer
