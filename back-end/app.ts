@@ -4,8 +4,12 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+<<<<<<< HEAD
 import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
+=======
+import userRouter from './controller/user.router';
+>>>>>>> 581a3f3e5b4c93b754bbac1c25916c1e27447b03
 
 
 const app = express();
@@ -16,7 +20,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/users', userRouter)
+<<<<<<< HEAD
 app.use('/workouts', workoutRouter)
+=======
+>>>>>>> 581a3f3e5b4c93b754bbac1c25916c1e27447b03
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
