@@ -1,7 +1,7 @@
 import { Workout } from "../workout";
 
 const workouts: Workout[] = [
-    new Workout({ workout_id: 1, user_id: 1, name: "Upper body", description: "This workout is upper body focussed", createdAt: new Date(), updatedAt: new Date() }),
+    new Workout({ workout_id: 1, user_id: 1, name: "Upper body", description: "This workout is upper body focussed"}),
 
     ]
 
@@ -25,11 +25,11 @@ const getWorkoutsByUserId = (id: number): Workout[] => {
     return userWorkouts;
 };
 
-const createWorkout = ({ workout_id, user_id, name, description, createdAt, updatedAt }: Workout): Workout => {
-    const workout = new Workout({ workout_id, user_id, name, description, createdAt, updatedAt });
+const createWorkout = ({ workout_id, user_id, name, description}: Workout): Workout => {
+    const workout = new Workout({ workout_id, user_id, name, description });
     workouts.push(workout);
     return workout;
 }
 
 
-export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout };
+export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, workouts };
