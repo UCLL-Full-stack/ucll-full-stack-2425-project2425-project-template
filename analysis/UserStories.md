@@ -1,8 +1,3 @@
-# ClinicalLink
-
-## Project Description
-ClinicalLink is an all-in-one digital platform designed to streamline appointment scheduling, patient management, and medical data tracking for healthcare professionals such as doctors, chiropractors, physiotherapists, and other medical specialists. The platform offers robust tools for both healthcare providers and patients, allowing them to collaborate more efficiently in managing health-related activities.
-
 ## User Stories
 
 ### User Story 1:
