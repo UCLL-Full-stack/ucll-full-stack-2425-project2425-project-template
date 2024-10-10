@@ -1,7 +1,0 @@
-Title: PokéPal
-Description: "As a user, you can log in either as a Trainer or a Nurse (Hospital staff).
-              As a Trainer, you can view your Pokémon collection, register new catches,
-              and keep track of what you have. You can click on any Pokémon to view its stats and,
-              if possible, evolve it. If a Pokémon is not at full health, you can send it to the hospital for healing.
-              Additionally, there's a calendar feature where you can schedule and keep track of upcoming gym battles.
-              As a Nurse, you can view the Pokémon that need healing and check how long it will take for them to fully recover."
