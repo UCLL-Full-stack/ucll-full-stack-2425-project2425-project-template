@@ -105,3 +105,13 @@ ClinicalLink strives to bridge the gap between healthcare providers and patients
 4. The system should allow the chiropractor to search and filter patients by name, appointment date, or condition.
 5. The chiropractor should be able to add or update notes and medical records after each consultation, and these updates should be reflected in the patient’s profile in real-time.
 6. All patient data should be secure and compliant with privacy regulations (e.g., HIPAA/GDPR).
+
+
+
+
+## TO DO:
+1. custumizable time slots for initial and follow-up consultations
+2. ID card reader built in
+3. direct contact between users
+4. count down for prescribed appointments
+5. personal (and sharable) highlights and edits on patient files
