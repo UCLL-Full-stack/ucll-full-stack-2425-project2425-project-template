@@ -1,12 +1,16 @@
+import { Profile } from './profile';
+
 export class User {
     private id?: number;
     private username: string;
     private password: string;
+    private profile?: Profile;
 
-    constructor(user: { id?: number; username: string; password: string }) {
+    constructor(user: { id?: number; username: string; password: string; profile?: Profile }) {
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
+        this.profile = user.profile;
     }
 
     getId(): number | undefined {
@@ -19,6 +23,10 @@ export class User {
 
     getPassword(): string {
         return this.password;
+    }
+
+    getProfile(): Profile | undefined {
+        return this.profile;
     }
 
     equals(user: User): boolean {
