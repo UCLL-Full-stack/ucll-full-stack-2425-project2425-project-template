@@ -1,8 +1,6 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/twPj_hbU)
-# Project template
+# Plateful
 
-To get started, open the Readme.md files in the analysis, back-end and front-end folders.
+Plateful is a personalized meal planning app that enables users to organize their monthly meals, store their favourite recipes, and manage shopping lists based on their meal plans. 
+The app offers a fully customizable experience, where every recipe and meal plan are unique to each user, ensuring complete control over their meal choices and preferences.
 
-Change this readme file to describe your project, change the title and fill in your name below.
-
-### \<Student 1 name\> / \<Student 2 name\>
+### \<Anette Hardy Sosa\> / \<Shulin Xu\>
