@@ -1,8 +1,5 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/twPj_hbU)
-# Project template
+# ALuValut
 
-To get started, open the Readme.md files in the analysis, back-end and front-end folders.
+With the AluValut app we want users to be able to look for and buy different aluminum cases. Users can login, add items to a shopping cart and see them. Admin can create, read, update and delete the items.
 
-Change this readme file to describe your project, change the title and fill in your name below.
-
-### \<Student 1 name\> / \<Student 2 name\>
+### Matvii Rubets / Anton Maiba
