@@ -256,6 +256,15 @@
         <mxCell id="qGmKelO1uOc2lFueApY_-74" value="Due Date" style="ellipse;whiteSpace=wrap;html=1;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
           <mxGeometry x="-300" y="200" width="100" height="40" as="geometry" />
         </mxCell>
+        <mxCell id="T0KrB81YaPvpOle39-FV-1" value="Settings" style="ellipse;whiteSpace=wrap;html=1;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="560" y="180" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="T0KrB81YaPvpOle39-FV-3" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="qGmKelO1uOc2lFueApY_-9" target="T0KrB81YaPvpOle39-FV-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="166" as="sourcePoint" />
+            <mxPoint x="571" y="164" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
