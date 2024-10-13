@@ -1,4 +1,4 @@
-class Customer {
+export class Customer {
     private id?: undefined | number;
     private password: string;
     private securityQuestion: string;
@@ -32,7 +32,7 @@ class Customer {
     getPassword(): string {
         return this.password;
     }
-    setPassword(password: string): undefined {
+    setPassword(password: string): void {
         this.password = password;
     }
     
@@ -40,7 +40,7 @@ class Customer {
         return this.securityQuestion;
     }
 
-    setSecurityQuestion(securityQuestion: string): undefined {
+    setSecurityQuestion(securityQuestion: string): void {
         this.securityQuestion = securityQuestion;
     }
     
@@ -48,7 +48,7 @@ class Customer {
         return this.username;
     }
 
-    setUsername(username: string): undefined {
+    setUsername(username: string): void {
         this.username = username;
     }
     
@@ -56,7 +56,7 @@ class Customer {
         return this.firstName;
     }
 
-    setFirstName(firstName: string): undefined {
+    setFirstName(firstName: string): void {
         this.firstName = firstName;
     }
     
@@ -64,7 +64,7 @@ class Customer {
         return this.lastName;
     }
 
-    setLastName(lastName: string): undefined {
+    setLastName(lastName: string): void {
         this.lastName = lastName;
     }
     
@@ -72,7 +72,7 @@ class Customer {
         return this.phone;
     }
 
-    setPhone(phone: number): undefined {
+    setPhone(phone: number): void {
         this.phone = phone;
     }
 }
