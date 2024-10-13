@@ -1,8 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/twPj_hbU)
-# Project template
+# Setback
 
-To get started, open the Readme.md files in the analysis, back-end and front-end folders.
+### \<Eren Derinbay\> / \<Hamza Sadioglu\>
 
-Change this readme file to describe your project, change the title and fill in your name below.
-
-### \<Student 1 name\> / \<Student 2 name\>
+Setback is an online platform designed for gamers to explore, purchase, and manage their game library. Users can browse through a collection of games, take advantage of discounts, and view games by category. Additionally, each user has a personalized profile where they can showcase their profile picture, name, and games, allowing for a social experience within the gaming
+community.
