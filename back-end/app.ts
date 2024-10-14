@@ -27,7 +27,7 @@ const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Nalex api',
+            title: 'Workout Tracker API',
             version: '1.0.0',
         },
     },
