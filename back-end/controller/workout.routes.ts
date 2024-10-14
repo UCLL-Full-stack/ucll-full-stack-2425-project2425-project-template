@@ -8,7 +8,7 @@ const workoutRouter = express.Router();
  * /workouts:
  *   get:
  *     summary: Get all workouts
- *    tags: [Workouts]
+ *     tags: [Workouts]
  *     description: Retrieve a list of all workouts.
  *     responses:
  *       200:
@@ -34,7 +34,7 @@ workoutRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  * /workouts/{id}:
  *   get:
  *     summary: Get a workout by ID
- *    tags: [Workouts]
+ *     tags: [Workouts]
  *     description: Retrieve a single workout by its ID.
  *     parameters:
  *       - in: path
@@ -51,7 +51,6 @@ workoutRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               type: object
  */
-
 workoutRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
     try{
         const workoutId = parseInt(req.params.id)
@@ -67,7 +66,7 @@ workoutRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  * /workouts/user/{id}:
  *   get:
  *     summary: Get workouts by user ID
- *   tags: [Workouts]
+ *     tags: [Workouts]
  *     description: Retrieve workouts associated with a specific user.
  *     parameters:
  *       - in: path
@@ -86,7 +85,6 @@ workoutRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  *               items:
  *                 type: object
  */
-
 workoutRouter.get('/user/:id', (req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = parseInt(req.params.id)
@@ -102,7 +100,7 @@ workoutRouter.get('/user/:id', (req: Request, res: Response, next: NextFunction)
  * /workouts:
  *   post:
  *     summary: Create a new workout
- *    tags: [Workouts]
+ *     tags: [Workouts]
  *     description: Create a new workout entry in the database.
  *     requestBody:
  *       required: true
