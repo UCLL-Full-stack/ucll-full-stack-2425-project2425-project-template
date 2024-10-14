@@ -1,5 +1,7 @@
+import { Patient as PatientPrisma} from "@prisma/client";
 
-export class patient {
+export class Patient {
+
     readonly id?: number;
     readonly name: string;
     readonly sex: string;
@@ -22,9 +24,36 @@ export class patient {
         this.nationalRegister = patient.nationalRegister;
     }
 
+
     validate(patient: {id?: number; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
         if (patient.name.trim() == "")
-            throw new Error("Playlist name cannot be empty")
+            throw new Error("Patient name cannot be empty")
+    }
+
+    
+
+    static from({
+        id,
+        name,
+        sex,
+        dateOfBirth,
+        age,
+        address,
+        email,
+        complaints,
+        nationalRegister
+    }: PatientPrisma) {
+        return new Patient({
+            id,
+            name,
+            sex,
+            dateOfBirth,
+            age,
+            address,
+            email,
+            complaints,
+            nationalRegister
+        })
     }
 
 }
