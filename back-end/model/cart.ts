@@ -1,7 +1,9 @@
 export class Cart {
     private id?: undefined | number;
     private total_price: number;
-    private customer_id: number; // Q& Is it not better to use setters immediately in the constructor?
+    private customer_id: number; 
+    // Q& Is it not better to use setters immediately in the constructor?
+    //I also thought of the same thing. I thing we could
 
     constructor(cart: { id?: undefined | number, total_price: number, customer_id: number }) {
         this.setId(cart.id);
