@@ -5,4 +5,11 @@ To get started, open the Readme.md files in the analysis, back-end and front-end
 
 Change this readme file to describe your project, change the title and fill in your name below.
 
-### \<Student 1 name\> / \<Student 2 name\>
+Title: ISP submission system
+
+Description: Applied Computer Science program ISP(Individual Study Program) submission
+system revises some functionalities of UCLL’s KuLoket: Student can choose courses based on
+their profiles(study points, passed exam), receive tuition fee invoices based on their ISP and
+profiles, and review his/her ISP.
+
+### \<Student 1 Dhruv Agarwal\> / \<Student 2 Rostislav Duşnîi\>
