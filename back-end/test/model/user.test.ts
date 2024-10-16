@@ -32,3 +32,33 @@ test(`given: valid values for user, when: user is created, then: user is created
     expect(user.getPassword()).toBe(password);
     expect(user.getRole()).toBe(role);
 });
+
+test(`given: two equal users, when: the user.equals method is called, then: the method will return true`, () => {
+    //given
+    const user1 = new User({ id, username, firstName, lastName, email, password, role });
+
+    //when
+    const isEqual = user1.equal(user1);
+
+    //then
+    expect(isEqual).toBe(true);
+});
+
+test(`given: two different users, when: the user.equals method is called, then: the method will return false`, () => {
+    //given
+    const user1 = new User({ id, username, firstName, lastName, email, password, role });
+    const user2 = new User({
+        id,
+        username: '@DifferentUser',
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+    });
+    //when
+    const isEqual = user1.equal(user2);
+
+    //then
+    expect(isEqual).toBe(false);
+});
