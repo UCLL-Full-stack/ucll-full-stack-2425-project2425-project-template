@@ -1,4 +1,4 @@
-import { Role } from "../types";
+import { Role } from '../types';
 
 export class User {
     private _userId?: number;
@@ -27,12 +27,12 @@ export class User {
         this._role = user.role;
     }
 
-     public getUserId(): number | undefined {
+    public getUserId(): number | undefined {
         return this._userId;
     }
 
-    public setUserId(Id: number):void {
-        this._userId = Id; 
+    public setUserId(Id: number): void {
+        this._userId = Id;
     }
 
     public getUsername(): string {
@@ -48,7 +48,7 @@ export class User {
     }
 
     public setFirstName(firstName: string): void {
-        this._firstName = firstName; 
+        this._firstName = firstName;
     }
 
     public getLastName(): string {
@@ -56,7 +56,7 @@ export class User {
     }
 
     public setLastName(lastName: string): void {
-        this._lastName = lastName; 
+        this._lastName = lastName;
     }
 
     public getEmail(): string {
@@ -70,9 +70,9 @@ export class User {
     public getPassword(): string {
         return this._password;
     }
-    
+
     public setPassword(password: string): void {
-        this._password = password; 
+        this._password = password;
     }
 
     getRole(): Role {
@@ -80,7 +80,17 @@ export class User {
     }
 
     public setRole(role: Role): void {
-        this._role = role; 
+        this._role = role;
     }
 
+    equal(user: User): boolean {
+        return (
+            this._username === user.getUsername() &&
+            this._firstName === user.getFirstName() &&
+            this._lastName === user.getLastName() &&
+            this._email === user.getEmail() &&
+            this._password === user.getPassword() &&
+            this._role === user.getRole()
+        );
+    }
 }
