@@ -31,9 +31,7 @@ export class User {
         return this._userId;
     }
 
-    public setUserId(Id: number): void {
-        this._userId = Id;
-    }
+    // no setter need for the id.
 
     public getUsername(): string {
         return this._username;
