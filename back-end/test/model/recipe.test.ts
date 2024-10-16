@@ -1,5 +1,6 @@
 import { Recipe } from '../../model/recipe';
 import { User } from '../../model/user';
+import { Tag } from '../../model/tags';
 
 let recipeId: number | undefined;
 let user: User;
@@ -11,6 +12,7 @@ let cookingTips: string;
 let extraNotes: string;
 let createdAt: Date;
 let updatedAt: Date;
+let tags: Tag[];
 
 beforeEach(() => {
     user = new User({
@@ -22,6 +24,7 @@ beforeEach(() => {
         password: 'bob123',
         role: 'user',
     });
+    tags = [new Tag({ name: 'Italian', description: 'Food from Italy', recipes: [] })];
     recipeId = undefined;
     title = 'spaghetti';
     description = 'A delicious spaghetti recipe.';
@@ -47,6 +50,7 @@ test(`given: valid values for recipe, when: recipe is created, then: recipe is c
         extraNotes,
         createdAt,
         updatedAt,
+        tags: [],
     });
 
     // then
@@ -75,6 +79,7 @@ test(`given: two equal recipe's, when: the recipe.equals method is called, then:
         extraNotes,
         createdAt,
         updatedAt,
+        tags,
     });
 
     //when
@@ -97,6 +102,7 @@ test(`given: two different recipe's ,when: the recipe.equals method is called, t
         extraNotes,
         createdAt,
         updatedAt,
+        tags,
     });
 
     const recipe2 = new Recipe({
@@ -110,6 +116,7 @@ test(`given: two different recipe's ,when: the recipe.equals method is called, t
         extraNotes,
         createdAt,
         updatedAt,
+        tags,
     });
 
     //when

@@ -1,3 +1,4 @@
+import { Tag } from './tags';
 import { User } from './user';
 
 export class Recipe {
@@ -11,6 +12,7 @@ export class Recipe {
     private _extraNotes: string;
     private _createdAt: Date;
     private _updatedAt: Date;
+    private _tags: Tag[];
 
     constructor(recipe: {
         recipeId?: number;
@@ -23,6 +25,7 @@ export class Recipe {
         extraNotes: string;
         createdAt: Date;
         updatedAt: Date;
+        tags: Tag[];
     }) {
         this._recipeId = recipe.recipeId;
         this._user = recipe.user;
@@ -34,16 +37,15 @@ export class Recipe {
         this._extraNotes = recipe.extraNotes;
         this._createdAt = recipe.createdAt;
         this._updatedAt = recipe.updatedAt;
+        this._tags = recipe.tags;
     }
 
     public getRecipeId(): number | undefined {
         return this._recipeId;
     }
 
-    public setRecipeId(recipeId: number): void {
-        this._recipeId = recipeId;
-    }
-
+    // no setter need for the id
+    
     public getUser(): User {
         return this._user;
     }
@@ -116,6 +118,14 @@ export class Recipe {
         this._updatedAt = updatedAt;
     }
 
+    public getTags(): Tag[] {
+        return this._tags;
+    }
+
+    public setTags(tags: Tag[]): void {
+        this._tags = tags;
+    }
+
     equals(recipe: Recipe): boolean {
         return (
             this._recipeId === recipe._recipeId &&
@@ -127,7 +137,8 @@ export class Recipe {
             this._cookingTips === recipe._cookingTips &&
             this._extraNotes === recipe._extraNotes &&
             this._createdAt === recipe._createdAt &&
-            this._updatedAt === recipe._updatedAt
+            this._updatedAt === recipe._updatedAt &&
+            this._tags.every((tag, index) => tag.equals(recipe.getTags()[index]))
         );
     }
 }
