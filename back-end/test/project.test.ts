@@ -4,7 +4,7 @@ import { User } from "../model/user";
 import { Project } from "../model/project";
 
 const task1 = new Task({
-    taskId: 1,
+    task_Id: 1,
     name: "Task 1",
     description: "Task 1 description",
     due_date: set(new Date(), { year: 2024, month: 10, date: 25 }),
@@ -12,7 +12,7 @@ const task1 = new Task({
 });
 
 const task2 = new Task({
-    taskId: 2,
+    task_Id: 2,
     name: "Task 2",
     description: "Task 2 description",
     due_date: set(new Date(), { year: 2024, month: 10, date: 17 }),

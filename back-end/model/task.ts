@@ -1,20 +1,20 @@
 import { User } from "./user";
 
 export class Task {
-    private task_Id: any;
-    private name: string;
-    private description: string;
-    private due_date: Date;
-    private users: User[] = [];
+    task_Id: any;
+    readonly name: string;
+    readonly description: string;
+    readonly due_date: Date;
+    readonly users: User[] = [];
 
     constructor(task: {
-        taskId: any;
+        task_Id: any;
         name: string;
         description: string;
         due_date: Date;
         users: User[];
     }) {
-        this.task_Id = task.taskId;
+        this.task_Id = task.task_Id;
         this.name = task.name;
         this.description = task.description;
         this.due_date = task.due_date;
@@ -48,5 +48,9 @@ export class Task {
             this.description === task.getDescription() &&
             this.due_date === task.getDueDate() &&
             this.users === task.getUsers();
+    }
+    addUserToTaskx(user: User) {
+        if (!this.users.includes(user))
+            this.users.push(user);
     }
 }
