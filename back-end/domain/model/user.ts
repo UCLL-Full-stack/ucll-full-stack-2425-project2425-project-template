@@ -1,7 +1,7 @@
 export class User {
-    private readonly id?: number | undefined;
-    private readonly email: string;
-    private readonly name: string;
+    readonly id?: number | undefined;
+    readonly email: string;
+    readonly name: string;
 
     constructor(user: { id?: number, email: string, name: string }) {
         this.id == user.id;

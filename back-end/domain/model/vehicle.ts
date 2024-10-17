@@ -1,15 +1,17 @@
 export class Vehicle{
-    private readonly id?: number | undefined;
-    private readonly manufacturer: string;
-    private readonly model_name: string;
-    private readonly price: number;
-    private readonly fuel_type: string;
-    private readonly transmission_type: string;
-    private readonly year: number;
+    readonly id?: number | undefined;
+    readonly manufacturer: string;
+    readonly model_name: string;
+    readonly price: number;
+    readonly fuel_type: string;
+    readonly transmission_type: string;
+    readonly year: number;
+    readonly vehicle_type: string;
 
     constructor(vehicle: {
         id?: number, manufacturer: string,
-        model_name: string, price: number, fuel_type: string, transmission_type: string, year: number
+        model_name: string, price: number, fuel_type: string, 
+        transmission_type: string, year: number, vehicle_type: string
     }) {
         this.id == vehicle.id;
         this.manufacturer = vehicle.manufacturer;
@@ -18,6 +20,7 @@ export class Vehicle{
         this.fuel_type = vehicle.fuel_type;
         this.transmission_type = vehicle.transmission_type;
         this.year = vehicle.year;
+        this.vehicle_type = vehicle.vehicle_type;
     }
 
 
@@ -49,6 +52,8 @@ export class Vehicle{
         return this.year
     }
 
-
+    getVehicleType(): string{
+        return this.vehicle_type
+    }
 
 }

@@ -1,32 +1,10 @@
-/**
- * @swagger
- *   components:
- *    schemas:
- *      User:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            name:
- *              type: string
- *              description: The name of the user
- *            email:
- *              type: string
- *              description: The email of the user
- *            User:
- *              $ref: '#/components/schemas/User'
- */
-import express, {NextFunction, Request, Response} from 'express';
-import {User} from '../model/user';
+// import userService from "../service/user.service"
 
-const userRouter = express.Router();
-
-/**
- * @swagger
- * /users:
- *  get:
- *      summary: Get all users.
- *      responses:
- */
-userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {});
+// userRouter.get('/', async (req: Request, res: Response) => {
+//     try {
+//         const users = await userService.getAllUSers();
+//         res.status(200).json(users);
+//     } catch (error) {
+//         res.status(400).json({ status: 'error', errorMessage: error.message });
+//     }
+// });

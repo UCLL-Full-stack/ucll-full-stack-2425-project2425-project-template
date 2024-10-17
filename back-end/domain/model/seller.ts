@@ -2,11 +2,8 @@ import { Car } from "./car";
 import { User } from "./user";
 
 export class Seller extends User {
-    // private readonly id?:number | undefined;
-    // private readonly name: string;
-    private readonly phone_number: number;
-    // private readonly email: string;
-    private list_of_cars: Car[];
+    readonly phone_number: number;
+    list_of_cars: Car[];
 
     constructor(seller: {
         id?: number, name: string,
