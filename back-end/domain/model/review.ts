@@ -1,22 +1,19 @@
 import { Booking } from './booking';
+import { Student } from './student';
 
 export class Review {
     private id?: number; 
     private comment: string;
     private rating: number;
-    private booking: Booking; // A review is tied to a booking
+    private booking: Booking;
+    private student: Student;
 
-    constructor(review: { id?: number; comment: string; rating: number; booking: Booking }) {
+    constructor(review: { id?: number; comment: string; rating: number; booking: Booking; student: Student }) {
         this.id = review.id;
         this.comment = review.comment;
         this.rating = review.rating;
         this.booking = review.booking;
-
-        // Validate upon instantiation
-        const validationResult = this.validate();
-        if (!validationResult.isValid) {
-            throw new Error(`Validation failed: ${validationResult.errors?.join(', ')}`);
-        }
+        this.student = review.student;
     }
 
     getId(): number | undefined {
@@ -50,6 +47,10 @@ export class Review {
             isValid: errors.length === 0,
             errors: errors.length > 0 ? errors : undefined,
         };
+      
+    getStudent(): Student {
+        return this.student;
+
     }
 
     equals(review: Review): boolean {
@@ -57,7 +58,8 @@ export class Review {
             this.id === review.getId() &&
             this.comment === review.getComment() &&
             this.rating === review.getRating() &&
-            this.booking.equals(review.getBooking())
+            this.booking.equals(review.getBooking())&&
+            this.student.equals(review.getStudent())
         );
     }
 }
