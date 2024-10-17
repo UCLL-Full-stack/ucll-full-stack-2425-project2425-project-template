@@ -1,117 +1,94 @@
-import { Doctor } from "./doctor";
-import { Consultation as ConsultationPrisma } from "@prisma/client";
-import { Patient } from "./patient";
+import { Specialization } from "../../types";
+import { Office } from './office';
 
-export class Consultation {
+export class Doctor {
 
     readonly id?: number;
-    private startDate: Date;
-    private endDate: Date;
     private name: string;
-    private patient: Patient;
-    private doctors: Doctor[];
+    private email: string;
+    private specialisation: Specialization;
+    private offices: Office[];
 
-    constructor(consultation: { id?: number; startDate: Date; endDate: Date; name: string; patient: Patient; doctors: Doctor[]; }) {
-        this.id = consultation.id;
-        this.startDate = consultation.startDate;
-        this.endDate = consultation.endDate;
-        this.name = consultation.name;
-        this.patient = consultation.patient;
-        this.doctors = consultation.doctors;
+    constructor(doctor: { id?: number; name: string; email: string; specialisation: Specialization; offices?: Office[] }) {
+        this.id = doctor.id;
+        this.name = doctor.name;
+        this.email = doctor.email;
+        this.specialisation = doctor.specialisation;
+        this.offices = doctor.offices || [];
     }
 
     // Getters
-    getStartDate(): Date {
-        return this.startDate;
-    }
-
-    getEndDate(): Date {
-        return this.endDate;
-    }
-
     getName(): string {
         return this.name;
     }
 
-    getPatient(): Patient {
-        return this.patient;
+    getEmail(): string {
+        return this.email;
     }
 
-    getDoctors(): Doctor[] {
-        return this.doctors;
+    getSpecialisation(): Specialization {
+        return this.specialisation;
+    }
+
+    getOffices(): Office[] {
+        return this.offices;
     }
 
     // Setters with validation
-    setStartDate(value: Date) {
-        if (value > this.endDate) {
-            throw new Error("Start date cannot be later than end date.");
-        }
-        if (!this.isSameDay(value, this.endDate)) {
-            throw new Error("Consultation must start and end on the same day.");
-        }
-        this.startDate = value;
-    }
-
-    setEndDate(value: Date) {
-        if (value < this.startDate) {
-            throw new Error("End date cannot be earlier than start date.");
-        }
-        if (!this.isSameDay(this.startDate, value)) {
-            throw new Error("Consultation must start and end on the same day.");
-        }
-        this.endDate = value;
-    }
-
     setName(value: string) {
-        if (value.trim() === "") {
-            throw new Error("Consultation name cannot be empty.");
+        if (value.trim().length < 3) {
+            throw new Error("Name must be at least 3 characters long.");
         }
         this.name = value;
     }
 
-    setPatient(value: Patient) {
-        if (!value) {
-            throw new Error("Patient is required.");
+    setEmail(value: string) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            throw new Error("Invalid email format.");
         }
-        this.patient = value;
+        this.email = value;
     }
 
-    setDoctors(value: Doctor[]) {
-        if (!value || value.length === 0) {
-            throw new Error("At least one doctor is required.");
+    setSpecialisation(value: Specialization) {
+        this.specialisation = value;
+    }
+
+    setOffices(value: Office[]) {
+        if (!Array.isArray(value)) {
+            throw new Error("Offices must be an array.");
         }
-        this.doctors = value;
+        this.offices = value;
+    }
+
+    // Add a single office to the offices array
+    addOffice(office: Office): void {
+        this.offices.push(office);
+    }
+
+    // Remove an office from the offices array
+    removeOffice(office: Office): void {
+        const index = this.offices.indexOf(office);
+        if (index > -1) {
+            this.offices.splice(index, 1);
+        } else {
+            throw new Error("Office not found.");
+        }
     }
 
     // Validation method
-    validate(consultation: { id?: number; startDate: Date; endDate: Date; name: string; patient: Patient; doctors: Doctor[]; }) {
-        if (consultation.name.trim() === "") {
-            throw new Error("Consultation name cannot be empty.");
+    validate(doctor: { id?: number; name: string; email: string; specialisation: Specialization; offices?: Office[] }) {
+        if (doctor.name.trim().length < 3) {
+            throw new Error("Doctor's name must be at least 3 characters long.");
         }
-        if (!consultation.patient) {
-            throw new Error("Patient information is required.");
-        }
-        if (!consultation.doctors || consultation.doctors.length === 0) {
-            throw new Error("At least one doctor is required.");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(doctor.email)) {
+            throw new Error("Invalid email format.");
         }
     }
 
-    // Helper function to check if two dates are on the same day
-    private isSameDay(date1: Date, date2: Date): boolean {
-        return date1.getFullYear() === date2.getFullYear() &&
-               date1.getMonth() === date2.getMonth() &&
-               date1.getDate() === date2.getDate();
-    }
-
-    // Static method to create Consultation from Prisma model
-    static from({ id, startDate, endDate, name, patient, doctors }: ConsultationPrisma) {
-        return new Consultation({
-            id,
-            startDate,
-            endDate,
-            name,
-            patient,
-            doctors
-        });
+    // Static method to create a Doctor from Prisma model or other sources
+    static from(doctorData: { id?: number; name: string; email: string; specialisation: Specialization; offices: Office[] }) {
+        return new Doctor(doctorData);
     }
 }
