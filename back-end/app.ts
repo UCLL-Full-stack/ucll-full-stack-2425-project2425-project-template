@@ -8,14 +8,55 @@ import swaggerUi from 'swagger-ui-express';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
-
+// app.use(helmet())
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       connectSrc: ["'self', 'https://api.ucll.be'"]
+//     },
+//   })
+// );
 app.use(cors());
 app.use(bodyParser.json());
+// app.use(
+//   expressjwt({
+//     secret: process.env.JWT_SECRET,
+//     algorithms: ['HS256'],
+//   }).unless({
+//   path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
+//   })
+// )
+// app.use('/students', studentRouter)
+// app.use('/bookings', bookingRouter)
+// app.use('/trips', tripRouter)
+// app.use('/reviews', reviewRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
+const swaggerOpts = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'Course API',
+        version: '1.0.0',
+      },
+    },
+    apis: ['./controller/*.routes.ts'], // Update this path to your route definitions.
+  };
+  
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+//   if(err.name === 'UnauthorizedError'){
+//       res.status(401).json({ status: 'unauthorized', message: err.message});
+//   } else if (err.name === 'MoviesError') {
+//       res.status(400).json({ status: 'domain error', message: err.message});
+//   } else {
+//       res.status(400).json({ status: 'application error', message: err.message});
+//   }
+// });
 app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
 });

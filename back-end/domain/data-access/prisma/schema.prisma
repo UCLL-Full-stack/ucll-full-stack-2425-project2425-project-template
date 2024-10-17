@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Define the datasource and generator
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Student model
+model Student {
+  id            String     @id @default(autoincrement())
+  username      String     @unique
+  email         String     
+  password      String     @unique
+  studentNumber String     @unique
+  favourites    Trip[]     @relation("Favourites")
+  bookings      Booking[]
+}
+
+// Trip model
+model Trip {
+  id          String     @id @default(autoincrement())
+  description String
+  location    String
+  startDate   DateTime
+  endDate     DateTime
+  price       Float
+  bookings    Booking[]
+  favouritedBy Student[] @relation("Favourites")
+}
+
+// Booking model
+model Booking {
+  id            String    @id @default(autoincrement())
+  bookingDate   DateTime  @default(now())
+  paymentStatus PaymentStatus
+  studentId     String
+  tripId        String
+  student       Student   @relation(fields: [studentId], references: [id])
+  trip          Trip      @relation(fields: [tripId], references: [id])
+  review        Review[]
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+}
+
+// Review model
+model Review {
+  id        String   @id @default(autoincrement())
+  comment   String
+  rating    Int
+  bookingId String   @unique
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+}
