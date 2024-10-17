@@ -16,7 +16,13 @@ const createUser = ({ firstName, lastName, email, password, role }: User): User 
 
 const getAllUsers = (): User[] => users;
 
+const getUserById = (user_Id: number): User | undefined => {
+    return users.find(user => user.user_Id === user_Id);
+};
+
+
 export default {
     createUser,
-    getAllUsers
+    getAllUsers,
+    getUserById
 };

@@ -18,7 +18,12 @@ const createTask = ({ name, description, due_date, users }: Task): Task => {
 
 const getAllTasks = (): Task[] => tasks;
 
+const getTaskById = (task_Id: number): Task | undefined => {
+    return tasks.find(task => task.task_Id === task_Id);
+};
+
 export default {
     createTask,
     getAllTasks,
+    getTaskById
 };

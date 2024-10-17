@@ -11,7 +11,7 @@ type UserInput = {
     firstName?: string;
     lastName?: string;
     email?: string;
-    password: string;
+    password?: string;
     role?: Role;
     projects?: Project[];
 };
@@ -30,3 +30,5 @@ type TaskInput = {
     due_date?: Date;
     users?: User[];
 };
+
+export { UserInput, ProjectInput, TaskInput };

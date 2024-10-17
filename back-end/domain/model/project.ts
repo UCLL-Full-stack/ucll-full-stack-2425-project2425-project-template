@@ -8,13 +8,11 @@ export class Project {
     readonly tasks: Task[] = [];
 
     constructor(project: {
-        project_Id: any;
         name: string;
         users: User[];
         tasks: Task[];
 
     }) {
-        this.project_Id = project.project_Id;
         this.name = project.name;
         this.users = project.users;
         this.tasks = project.tasks;
