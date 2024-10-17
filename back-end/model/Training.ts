@@ -2,7 +2,7 @@ import { Role } from "../types";
 import { User } from "./User";
 
 export class Training {
-    trainingId : number;
+    trainingId? : number;
     date : Date;
     hall : string;
     square : number;
@@ -10,7 +10,7 @@ export class Training {
     coach : User;
 
     constructor (training: {
-        id : number,
+        id? : number,
         date : Date,
         hall : string,
         square : number;

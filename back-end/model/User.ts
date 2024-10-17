@@ -1,14 +1,14 @@
 import { Role } from "../types";
 
 export class User {
-    userId : number;
+    userId? : number;
     username : string;
     password : string;
     role : Role;
     attendance? : number;
 
     constructor (user: {
-        id : number,
+        id? : number,
         username : string,
         password : string,
         role : Role,

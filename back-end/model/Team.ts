@@ -2,12 +2,12 @@ import { Role } from "../types";
 import { User } from "./User";
 
 export class Team {
-    teamId : number;
+    teamId? : number;
     members? : Array<Members>; // Unusable for now
     coach : User;
 
     constructor (team: {
-        id : number,
+        id? : number,
         members? : Array<Members>, // Unusable for now
         coach : User,
     }) {
