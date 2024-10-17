@@ -4,17 +4,18 @@ export class User {
   private name: string;
   private firstName: string;
   private password: string;
-  private chat: string;
+  // private chat: string;
 
 
 
-  constructor(user : {id?: number, role: string, name: string, firstName: string, password: string, chat: string}) {
+  constructor(user : {id?: number, role: string, name: string, firstName: string, password: string}) {
+    this.validate(user);
     this.id = user.id;
     this.role = user.role;
     this.name = user.name;
     this.firstName = user.firstName;
     this.password = user.password;
-    this.chat = user.chat;
+    // this.chat = user.chat;
   }
 
   public getId(): number|undefined {
@@ -36,12 +37,26 @@ export class User {
   public getPassword(): string {
     return this.password;
   }
-  public addChat(chat: string): void {
-    this.chat = chat;
-  }
+
 
   equals(user: User): boolean {
     return this.id === user.getId() && this.role === user.getRole() && this.name === user.getName() && this.firstName === user.getFirstName() && this.password === user.getPassword();
+  }
+
+  validate(user: {id?: number, role: string, name: string, firstName: string, password: string}): void {
+    if (!user.role || user.role === '') {
+      throw new Error('User role is required');
+    }
+    if (!user.name || user.name === '') {
+      throw new Error('User name is required');
+    }
+    if (!user.firstName || user.firstName === '') {
+      throw new Error('User first name is required');
+    }
+    if (!user.password || user.password === '') {
+      throw new Error('User password is required');
+    }
+
   }
 
 
