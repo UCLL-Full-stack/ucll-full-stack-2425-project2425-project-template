@@ -1,17 +1,17 @@
-import { Role } from '../types';
+import { Role } from '../../types';
 import { Project } from './project';
 
 export class User {
-    private id?: number;
-    private firstName: string;
-    private lastName: string;
-    private email: string;
-    private password: string;
-    private role: Role;
-    private projects: Project[] = [];
+    readonly user_Id?: number;
+    readonly firstName: string;
+    readonly lastName: string;
+    readonly email: string;
+    readonly password: string;
+    readonly role: Role;
+    readonly projects: Project[] = [];
 
     constructor(user: {
-        id?: number;
+        user_Id?: number;
         firstName: string;
         lastName: string;
         email: string;
@@ -19,7 +19,7 @@ export class User {
         role: Role;
         projects: Project[];
     }) {
-        this.id = user.id;
+        this.user_Id = user.user_Id;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.email = user.email;
@@ -29,7 +29,7 @@ export class User {
     }
 
     public getId(): number | undefined {
-        return this.id;
+        return this.user_Id;
     }
 
     public getFirstName(): string {
@@ -57,7 +57,7 @@ export class User {
     }
 
     equals(user: User): boolean {
-        return this.id === user.getId() &&
+        return this.user_Id === user.getId() &&
             this.firstName === user.getFirstName() &&
             this.lastName === user.getLastName() &&
             this.email === user.getEmail() &&

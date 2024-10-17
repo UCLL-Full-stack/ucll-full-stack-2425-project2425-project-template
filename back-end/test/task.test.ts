@@ -1,6 +1,6 @@
 import { set } from "date-fns";
-import { User } from "../model/user";
-import { Task } from "../model/task";
+import { User } from "../domain/model/user";
+import { Task } from "../domain/model/task";
 
 const due_date = set(new Date(), { year: 2024, month: 10, date: 25 }); 
 

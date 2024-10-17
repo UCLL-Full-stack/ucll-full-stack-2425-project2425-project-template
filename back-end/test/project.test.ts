@@ -1,7 +1,7 @@
 import { set } from "date-fns";
-import { Task } from "../model/task";
-import { User } from "../model/user";
-import { Project } from "../model/project";
+import { Task } from "../domain/model/task";
+import { User } from "../domain/model/user";
+import { Project } from "../domain/model/project";
 
 const task1 = new Task({
     task_Id: 1,
