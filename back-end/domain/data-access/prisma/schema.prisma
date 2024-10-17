@@ -1,10 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// Define the datasource and generator
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -16,39 +12,42 @@ generator client {
 
 // Student model
 model Student {
-  id            String     @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   username      String     @unique
-  email         String     
+  email         String     @unique
   password      String     @unique
   studentNumber String     @unique
   favourites    Trip[]     @relation("Favourites")
   bookings      Booking[]
+  reviews       Review[]
 }
 
 // Trip model
 model Trip {
-  id          String     @id @default(autoincrement())
-  description String
-  location    String
-  startDate   DateTime
-  endDate     DateTime
-  price       Float
-  bookings    Booking[]
-  favouritedBy Student[] @relation("Favourites")
+  id            Int     @id @default(autoincrement())
+  description   String
+  location      String
+  startDate     DateTime
+  endDate       DateTime
+  price         Float
+  bookings      Booking[]
+  favouritedBy  Student[]  @relation("Favourites")
+  reviews       Review[]
 }
 
 // Booking model
 model Booking {
-  id            String    @id @default(autoincrement())
-  bookingDate   DateTime  @default(now())
+  id            Int     @id @default(autoincrement())
+  bookingDate   DateTime    @default(now())
   paymentStatus PaymentStatus
   studentId     String
   tripId        String
-  student       Student   @relation(fields: [studentId], references: [id])
-  trip          Trip      @relation(fields: [tripId], references: [id])
+  student       Student     @relation(fields: [studentId], references: [id])
+  trip          Trip        @relation(fields: [tripId], references: [id])
   review        Review[]
 }
 
+// Enum for Payment Status
 enum PaymentStatus {
   Pending
   Paid
@@ -56,9 +55,13 @@ enum PaymentStatus {
 
 // Review model
 model Review {
-  id        String   @id @default(autoincrement())
-  comment   String
-  rating    Int
-  bookingId String   @unique
-  booking   Booking  @relation(fields: [bookingId], references: [id])
+  id            Int     @id @default(autoincrement())
+  comment    String
+  rating     Int       @min(1) @max(5)
+  bookingId  String    @unique
+  studentId  String
+  tripId     String
+  booking    Booking   @relation(fields: [bookingId], references: [id])
+  student    Student   @relation(fields: [studentId], references: [id])
+  trip       Trip      @relation(fields: [tripId], references: [id])
 }
