@@ -1,6 +1,6 @@
 import { Seller } from "../domain/model/seller";
 import { User } from "../domain/model/user";
-import UserDb from "../domain/data-access/user.db";
+import UserDb from "../repository/user.db";
 import { SellerInput } from "../types";
 
 

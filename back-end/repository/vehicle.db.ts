@@ -1,5 +1,5 @@
 import { de } from "date-fns/locale";
-import { Vehicle } from "../model/vehicle";
+import { Vehicle } from "../domain/model/vehicle";
 
 const cars: Vehicle[] = [];
 
@@ -16,4 +16,3 @@ const createVehicle = ({ id, manufacturer, model_name, price, fuel_type, transmi
 const getAllCars = (): Vehicle[] => cars;
 
 export default { getAllCars, createVehicle }
-

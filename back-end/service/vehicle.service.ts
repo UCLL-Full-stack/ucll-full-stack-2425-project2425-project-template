@@ -1,9 +1,8 @@
 import { Vehicle } from "../domain/model/vehicle";
 import { VehicleInput } from "../types";
-// import { vehicleDB } from "../domain/data-access/vehicle.db";
+import vehicleDB from "../repository/vehicle.db";
 
-// const createVehicle = ({ manufacturer, model_name, year, price, fuel_type, transmission_type, vehicle_type }: VehicleInput): Vehicle => {
-//     const vehicle = new Vehicle({ manufacturer, model_name, year, price, fuel_type, transmission_type, vehicle_type });
+// const createVehicle = async (input: VehicleInput): Promise<Vehicle> => vehicleDB.createVehicle(input);
 
-//     return vehicleDB.createVehicle(vehicle);
-// }
+
+const getAllCars = async (): Promise<Vehicle[]> => vehicleDB.getAllCars();
