@@ -62,6 +62,15 @@ courseRouter.get("/" , async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+
+courseRouter.get("/short" , async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.status(200).json(courseService.getAllShort());
+    } catch (error) {
+        next(error);
+    }
+});
+
 export {
     courseRouter
 };
