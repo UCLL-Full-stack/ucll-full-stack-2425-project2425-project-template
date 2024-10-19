@@ -1,10 +1,9 @@
 import { User } from "./user";
 
 export class Student extends User {
-    private nationality: string;
+    private _nationality: string;
 
     constructor(student: { id: number; name: string; email: string; password: string; nationality: string }) {
-
         super({
             id: student.id,
             name: student.name,
@@ -12,20 +11,24 @@ export class Student extends User {
             password: student.password,
         });
 
-        this.nationality = student.nationality;
+        this._nationality = student.nationality;
     }
 
-    public getNationality(): string {
-        return this.nationality;
+    public get nationality(): string {
+        return this._nationality;
+    }
+
+    public set nationality(value: string) {
+        this._nationality = value;
     }
 
     public equals(student: Student): boolean {
         return (
-            this.getId() === student.getId() &&
-            this.getName() === student.getName() &&
-            this.getEmail() === student.getEmail() &&
-            this.getPassword() === student.getPassword() &&
-            this.getNationality() === student.getNationality()
+            this.id === student.id &&
+            this.name === student.name &&
+            this.email === student.email &&
+            this.password === student.password &&
+            this.nationality === student.nationality
         );
     }
 }

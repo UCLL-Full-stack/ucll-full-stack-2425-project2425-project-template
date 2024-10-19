@@ -1,25 +1,35 @@
-import { th } from "date-fns/locale";
+export class Privilege {
+    private _id: number;
+    private _name: string;
+    private _description: string;
 
-export class Privilege{
-    private id: number;
-    private name: string;
-    private description: string;
-
-    constructor(privilege:{id: number, name: string, description: string}) {
-        this.id = privilege.id;
-        this.name = privilege.name;
-        this.description = privilege.description;
+    constructor(privilege: { id: number, name: string, description: string }) {
+        this._id = privilege.id;
+        this._name = privilege.name;
+        this._description = privilege.description;
     }
 
-    getId(): number {
-        return this.id;
+    get id(): number {
+        return this._id;
     }
 
-    getName(): string{
-        return this.name;
+    set id(value: number) {
+        this._id = value;
     }
 
-    getDescription(): string{
-        return this.description;
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+    }
+
+    get description(): string {
+        return this._description;
+    }
+
+    set description(value: string) {
+        this._description = value;
     }
 }

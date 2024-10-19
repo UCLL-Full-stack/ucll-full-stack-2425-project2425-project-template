@@ -1,38 +1,54 @@
-export class ISP{
-    private id: number;
-    private status: string;
-    private totalCredits: number;
-    private year: number;
+export class ISP {
+    private _id: number;
+    private _status: string;
+    private _totalCredits: number;
+    private _year: number;
 
     constructor(isp: { id: number; status: string; totalCredits: number; year: number }) {
-        this.id = isp.id;
-        this.status = isp.status;
-        this.totalCredits = isp.totalCredits;
-        this.year = isp.year;
+        this._id = isp.id;
+        this._status = isp.status;
+        this._totalCredits = isp.totalCredits;
+        this._year = isp.year;
     }
 
-    public getId(): number {
-        return this.id;
+    public get id(): number {
+        return this._id;
     }
 
-    public getStatus(): string {
-        return this.status;
+    public set id(value: number) {
+        this._id = value;
     }
 
-    public getTotalCredits(): number {
-        return this.totalCredits;
+    public get status(): string {
+        return this._status;
     }
 
-    public getYear(): number {
-        return this.year;
+    public set status(value: string) {
+        this._status = value;
+    }
+
+    public get totalCredits(): number {
+        return this._totalCredits;
+    }
+
+    public set totalCredits(value: number) {
+        this._totalCredits = value;
+    }
+
+    public get year(): number {
+        return this._year;
+    }
+
+    public set year(value: number) {
+        this._year = value;
     }
 
     public equals(isp: ISP): boolean {
         return (
-            this.getId() === isp.getId() &&
-            this.getStatus() === isp.getStatus() &&
-            this.getTotalCredits() === isp.getTotalCredits() &&
-            this.getYear() === isp.getYear()
+            this.id === isp.id &&
+            this.status === isp.status &&
+            this.totalCredits === isp.totalCredits &&
+            this.year === isp.year
         );
     }
 }
