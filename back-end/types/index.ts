@@ -4,3 +4,14 @@ type itemInput = {
     price?: number;
     urgency?: string | number;
 }
+
+type shoppingListInput = {
+    ListName?: string;
+    items?: itemInput[];
+}
+
+export {
+    itemInput,
+    shoppingListInput,
+    
+}
