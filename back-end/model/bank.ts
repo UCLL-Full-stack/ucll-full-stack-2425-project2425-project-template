@@ -4,13 +4,11 @@ export class Bank {
     private phoneNumber: string;
     private address: string;
 
-
-    constructor(bank: {id?: number; bankName: string; phoneNumber: string; address: string;}) {
-        this.id = bank.id
+    constructor(bank: { id?: number; bankName: string; phoneNumber: string; address: string }) {
+        this.id = bank.id;
         this.bankName = bank.bankName;
         this.phoneNumber = bank.phoneNumber;
         this.address = bank.address;
-
     }
 
     getId(): number | undefined {
