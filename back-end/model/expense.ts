@@ -35,7 +35,7 @@ export class Expense extends Transaction {
         }
     }
 
-    makeExpense(destination: string) {
-        //
-    }
+    // makeExpense(destination: string) {
+    //
+    // }
 }

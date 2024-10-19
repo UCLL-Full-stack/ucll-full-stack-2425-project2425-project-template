@@ -73,13 +73,13 @@ export abstract class Transaction {
         }
     }
 
-    makeTransaction(
-        referenceNumber: string,
-        date: Date,
-        amount: number,
-        currency: string,
-        type: string
-    ) {
-        //
-    }
+    // makeTransaction(
+    //     referenceNumber: string,
+    //     date: Date,
+    //     amount: number,
+    //     currency: string,
+    //     type: string
+    // ) {
+    //
+    // }
 }
