@@ -1,4 +1,5 @@
 import { Transaction } from './transaction';
+import { Account } from './account';
 
 export class Income extends Transaction {
     private source: string;
@@ -10,6 +11,7 @@ export class Income extends Transaction {
         currency: string;
         type: string;
         source: string;
+        account: Account;
         id?: number;
     }) {
         super(income);
@@ -28,6 +30,7 @@ export class Income extends Transaction {
         currency: string;
         type: string;
         source: string;
+        account: Account;
         id?: number;
     }) {
         if (!income.source) {
