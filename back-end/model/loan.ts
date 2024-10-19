@@ -1,3 +1,4 @@
+import { Account } from "./account";
 
 export class Loan {
     private id?: number;
@@ -6,14 +7,16 @@ export class Loan {
     private amount: number;
     private startDate: Date;
     private endDate: Date;
+    private accounts: Account[];
 
-    constructor(loan: {id?: number; loanID: string; type: string; amount: number; startDate: Date; endDate: Date}) {
+    constructor(loan: {id?: number; loanID: string; type: string; amount: number; startDate: Date; endDate: Date; accounts: Account[]}) {
         this.id = loan.id
         this.loanID = loan.loanID;
         this.type = loan.type;
         this.amount = loan.amount;
         this.startDate = loan.startDate;
         this.endDate = loan.endDate;
+        this.accounts = loan.accounts;
     }
 
     getId(): number | undefined {
@@ -38,5 +41,9 @@ export class Loan {
 
     getEndDate(): Date {
         return this.endDate;
+    }
+
+    getAccounts(): Account[] {
+        return this.accounts;
     }
 }
