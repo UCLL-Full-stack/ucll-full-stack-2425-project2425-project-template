@@ -1,0 +1,1 @@
+import ShoppingList from "../../model/shoppingList";
