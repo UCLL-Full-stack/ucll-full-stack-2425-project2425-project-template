@@ -84,6 +84,26 @@ export class Account {
         return this.type;
     }
 
+    getTransactions(): Transaction[] {
+        return this.transactions;
+    }
+
+    getUsers(): User[] {
+        return this.users;
+    }
+
+    getLoans(): Loan[] {
+        return this.loans;
+    }
+
+    getBank(): Bank {
+        return this.bank;
+    }
+
+    getBudgetgoals(): Budgetgoal[] {
+        return this.budgetgoals;
+    }
+
     validate(account: {
         accountNumber: string;
         balance: number;
