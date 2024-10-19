@@ -1,4 +1,5 @@
 import { Transaction } from './transaction';
+import { Account } from './account';
 
 export class Expense extends Transaction {
     private destination: string;
@@ -10,6 +11,7 @@ export class Expense extends Transaction {
         currency: string;
         type: string;
         destination: string;
+        account: Account;
         id?: number;
     }) {
         super(expense);
@@ -28,6 +30,7 @@ export class Expense extends Transaction {
         currency: string;
         type: string;
         destination: string;
+        account: Account;
         id?: number;
     }) {
         if (!expense.destination) {

@@ -1,3 +1,5 @@
+import { Account } from './account';
+
 export abstract class Transaction {
     private id?: number;
     private referenceNumber: string;
@@ -5,7 +7,7 @@ export abstract class Transaction {
     private amount: number;
     private currency: string;
     private type: string;
-    // private account: Account;
+    private account: Account;
 
     constructor(transaction: {
         referenceNumber: string;
@@ -13,6 +15,7 @@ export abstract class Transaction {
         amount: number;
         currency: string;
         type: string;
+        account: Account;
         id?: number;
     }) {
         this.validate(transaction);
@@ -22,6 +25,7 @@ export abstract class Transaction {
         this.amount = transaction.amount;
         this.currency = transaction.currency;
         this.type = transaction.type;
+        this.account = transaction.account;
     }
 
     getId(): number | undefined {
@@ -48,6 +52,10 @@ export abstract class Transaction {
         return this.type;
     }
 
+    getAccount(): Account {
+        return this.account;
+    }
+
     validate(transaction: {
         referenceNumber: string;
         date: Date;
@@ -72,14 +80,4 @@ export abstract class Transaction {
             throw new Error('Type is required.');
         }
     }
-
-    // makeTransaction(
-    //     referenceNumber: string,
-    //     date: Date,
-    //     amount: number,
-    //     currency: string,
-    //     type: string
-    // ) {
-    //
-    // }
 }
