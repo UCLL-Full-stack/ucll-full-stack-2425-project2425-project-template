@@ -14,16 +14,16 @@ class Item {
     }
 
     private validateitems = (item: {name: string, description: string, price?: number, urgency?: string | number}) => {
-        if (typeof item.name !== 'string') {
+        if (typeof item.name !== 'string' || item.name.length > 40) {
             throw new Error('Invalid name value');
         }
 
-        if (typeof item.description !== 'string') {
+        if (typeof item.description !== 'string' || item.description.length > 240) {
             throw new Error('Invalid description value');
         }
 
         if (item.price !== undefined) {
-            if (typeof item.price !== 'number' || !isFinite(item.price)) {
+            if (typeof item.price !== 'number' || !isFinite(item.price) || item.price <0) {
                 throw new Error('Invalid price value');
             }
         }
