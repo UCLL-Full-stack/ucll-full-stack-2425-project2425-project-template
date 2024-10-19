@@ -12,7 +12,16 @@ const getAllShort = () : CourseShortView[] => {
     });
 }
 
+const getCourseById = (id: number): Course => {
+    let res: Course | null = CourseRepository.findById({id: id});
+    if (res === null) {
+        throw new Error(`Course with id ${id} does not exist`);
+    }
+    return res;
+}
+
 export default {
     getAll,
-    getAllShort
+    getAllShort,
+    getCourseById,
 };

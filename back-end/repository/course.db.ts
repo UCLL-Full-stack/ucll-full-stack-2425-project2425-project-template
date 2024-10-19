@@ -11,6 +11,16 @@ const findAll = (): Course[] => {
     }
 };
 
+const findById = ({id}: {id : number}): Course | null => {
+    try {
+        return courses.find(course => course.id === id) || null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     findAll,
+    findById,
 };
