@@ -130,6 +130,26 @@ courseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
+/**
+ * @swagger
+ * /courses/delete:
+ *   delete:
+ *     summary: Delete courses by IDs
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: number
+ *               description: The IDs of the courses to delete.
+ *     responses:
+ *       200:
+ *         description: Courses are successfully deleted
+ *       400:
+ *         description: Course with id does not exist
+ */
 courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Response, next: NextFunction) => {
     try {
         const courseIds: number[] = req.body;
