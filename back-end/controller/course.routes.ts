@@ -130,6 +130,16 @@ courseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
+courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Response, next: NextFunction) => {
+    try {
+        const courseIds: number[] = req.body;
+        const operationStatus : String= courseService.deleteCourses(courseIds);
+        res.status(200).send(operationStatus);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export {
     courseRouter
 };

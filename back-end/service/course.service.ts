@@ -13,15 +13,31 @@ const getAllShort = () : CourseShortView[] => {
 }
 
 const getCourseById = (id: number): Course => {
-    let res: Course | null = CourseRepository.findById({id: id});
+    let res: Course | null = CourseRepository.findById(id);
     if (res === null) {
         throw new Error(`Course with id ${id} does not exist`);
     }
     return res;
 }
 
+const deleteCourses = (ids: number[]) : String => {
+    ids.forEach(id => {
+        throwErrorIfNotExist(id);
+    });
+    CourseRepository.deleteCourses(ids);
+    return "Courses are successfully deleted";
+}
+
+const throwErrorIfNotExist = (id: number) : void => {
+    let res: Course | null = CourseRepository.findById(id);
+    if (res === null) {
+        throw new Error(`Course with id ${id} does not exist`);
+    }
+}
+
 export default {
     getAll,
     getAllShort,
     getCourseById,
+    deleteCourses,
 };

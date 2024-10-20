@@ -1,19 +1,29 @@
 import { Course } from '../model/course';
 import courses from '../data/courses';
 
+let DBcourses: Course[] = courses
 
 const findAll = (): Course[] => {
     try {
-        return courses;
+        return DBcourses;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
 };
 
-const findById = ({id}: {id : number}): Course | null => {
+const findById = (id : number): Course | null => {
     try {
-        return courses.find(course => course.id === id) || null;
+        return DBcourses.find(course => course.id === id) || null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+const deleteCourses = (ids: number[]) : void => {
+    try {
+        DBcourses = DBcourses.filter(course => !ids.includes(course.id));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -23,4 +33,5 @@ const findById = ({id}: {id : number}): Course | null => {
 export default {
     findAll,
     findById,
+    deleteCourses,
 };
