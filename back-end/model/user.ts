@@ -44,7 +44,7 @@ export class User {
     equals(user: User): boolean {
         return (
             this.name === user.getName() &&
-            this.password === user.getPassword() &&
+            this.password === user.getPassword()
         );
     }
 }
