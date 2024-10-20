@@ -3,7 +3,7 @@ import { User } from "../model/user";
 import { resolve } from "path";
 import exp from "constants";
 
-const users = [
+export const users = [
   new User({
     id: 1,
     role: 'admin',
