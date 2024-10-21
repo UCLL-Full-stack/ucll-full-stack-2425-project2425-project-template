@@ -9,6 +9,7 @@ const getUserById = async ({id}: {id:number}) => {
   return userDB.getUserById(id);
 }
 
+
 export default
 { 
   getAllUsers,

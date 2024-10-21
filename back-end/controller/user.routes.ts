@@ -53,13 +53,45 @@ const userRouter = express.Router();
 
 
 
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {;
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 try {
     const users = await userservice.getAllUsers();
     res.json(users);
   } catch (error) {
     next(error);
     
+  }
+});
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Get user by id
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: User id
+ *     responses:
+ *       200:
+ *         description: The user description by id.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id);
+    const user = await userservice.getUserById({id: id});
+    res.json(user);
+  } catch (error) {
+    next(error);
   }
 });
 

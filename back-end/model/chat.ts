@@ -5,7 +5,7 @@ export class Chat {
     private message: string;
     private createdAt: Date;
     private user: User
-    // private chat: string;
+    
 
     constructor(chat: {
         id?: number;
@@ -13,11 +13,11 @@ export class Chat {
         createdAt: Date;
         user: User;
     }) {
+        this.validate(chat);
         this.id = chat.id;
         this.message = chat.message;
         this.createdAt = chat.createdAt;
         this.user = chat.user;
-        // this.chat = user.chat;
     }
 
     public getId(): number | undefined {
@@ -34,6 +34,16 @@ export class Chat {
 
     public getUser(): User {
         return this.user;
+    }
+
+    validate(chat: { id?: number; message: string; createdAt: Date; user: User }): void {
+
+        if (!chat.createdAt) {
+            throw new Error('Chat creation date is required');
+        }
+        if (!chat.user) {
+            throw new Error('Chat user is required');
+        }
     }
 
     

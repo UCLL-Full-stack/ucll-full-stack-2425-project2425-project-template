@@ -1,21 +1,23 @@
+import { Chat } from "./chat";
+
 export class User {
   private id?: number;
   private role: string;
   private name: string;
   private firstName: string;
   private password: string;
-  // private chat: string;
+  private chats?: Chat[] = []; 
 
 
 
-  constructor(user : {id?: number, role: string, name: string, firstName: string, password: string}) {
+  constructor(user : {id?: number, role: string, name: string, firstName: string, password: string, chats?: Chat[]}) {
     this.validate(user);
     this.id = user.id;
     this.role = user.role;
     this.name = user.name;
     this.firstName = user.firstName;
     this.password = user.password;
-    // this.chat = user.chat;
+    this.chats = user.chats || [];
   }
 
   public getId(): number|undefined {
@@ -37,6 +39,15 @@ export class User {
   public getPassword(): string {
     return this.password;
   }
+
+  public getChats(): Chat[] {
+    return this.chats || [];
+  }
+
+  public addChat(chat: Chat): void {
+    this.chats?.push(chat);
+  }
+  
 
 
   equals(user: User): boolean {
