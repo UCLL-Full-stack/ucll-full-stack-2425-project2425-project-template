@@ -1,3 +1,4 @@
+import { Item } from '../model/item';
 import { Category } from '../types';
 
 test('given: valid values for a item, when: item is constructed, then: item is created with those values', () => {
@@ -45,7 +46,7 @@ test('given: invalid name for a item, when: item is constructed, then: error is 
 test('given: invalid price for a item, when: item is constructed, then: error is thrown', () => {
     // given invalid name for a item
     const validName = 'Paprika';
-    const invalidPrice = null;
+    const invalidPrice = NaN;
     const validPathToImage = '/public/paprika.png';
     const validCategory = 'fruits' as Category;
 
@@ -59,7 +60,7 @@ test('given: invalid price for a item, when: item is constructed, then: error is
         });
 
     // then error is thrown
-    expect(item).toThrow('Name is required');
+    expect(item).toThrow('Price is required');
 });
 
 test('given: negative price for a item, when: item is constructed, then: error is thrown', () => {
@@ -79,7 +80,7 @@ test('given: negative price for a item, when: item is constructed, then: error i
         });
 
     // then error is thrown
-    expect(item).toThrow('Price should be positive');
+    expect(item).toThrow('Price should be a positive number');
 });
 
 test('given: invalid path to image for a item, when: item is constructed, then: error is thrown', () => {
