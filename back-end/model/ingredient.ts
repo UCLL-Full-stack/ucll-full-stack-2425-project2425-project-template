@@ -1,21 +1,25 @@
 import { IngredientCategory } from '../types';
+import { RecipeIngredient } from './recipeIngredient';
 
 export class Ingredient {
     private id?: number;
     private name: string;
     private category: IngredientCategory;
     private store?: string;
+    private recipes: RecipeIngredient[];
 
     constructor(ingredient: {
         id?: number;
         name: string;
         category: IngredientCategory;
         store?: string;
+        recipes: RecipeIngredient[];
     }) {
         this.id = ingredient.id;
         this.name = ingredient.name;
         this.category = ingredient.category;
         this.store = ingredient.store;
+        this.recipes = ingredient.recipes;
     }
 
     getId(): number | undefined {
@@ -32,6 +36,10 @@ export class Ingredient {
 
     getStore(): string | undefined {
         return this.store;
+    }
+
+    getRecipes(): RecipeIngredient[] {
+        return this.recipes;
     }
 
     equals(ingredient: Ingredient): boolean {

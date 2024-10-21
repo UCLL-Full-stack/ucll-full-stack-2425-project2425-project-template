@@ -1,9 +1,12 @@
+import { RecipeIngredient } from './recipeIngredient';
+
 export class Recipe {
     private id?: number;
     private title: string;
     private instructions: string;
     private cookingTime: number;
     private category: string; // flexible for custom categories
+    private ingredients: RecipeIngredient[];
 
     constructor(recipe: {
         id?: number;
@@ -11,12 +14,14 @@ export class Recipe {
         instructions: string;
         cookingTime: number;
         category: string;
+        ingredients: RecipeIngredient[];
     }) {
         this.id = recipe.id;
         this.title = recipe.title;
         this.instructions = recipe.instructions;
         this.cookingTime = recipe.cookingTime;
         this.category = recipe.category;
+        this.ingredients = recipe.ingredients;
     }
 
     getId(): number | undefined {
@@ -37,6 +42,10 @@ export class Recipe {
 
     getCategory(): string {
         return this.category;
+    }
+
+    getIngredients(): RecipeIngredient[] {
+        return this.ingredients;
     }
 
     equals(recipe: Recipe): boolean {
