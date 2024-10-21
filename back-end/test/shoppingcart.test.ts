@@ -1,8 +1,5 @@
 import { set } from 'date-fns';
-import { User } from '../model/user';
 import { Shoppingcart } from '../model/shoppingcart';
-
-const user = new User({ email: 'john.doe@mail.com', password: 'JohnD123!', role: 'admin' });
 
 test('given: valid values for a shopping cart, when: shopping cart is constructed, then: shopping cart is created with those values', () => {
     // given valid values for a shopping cart
