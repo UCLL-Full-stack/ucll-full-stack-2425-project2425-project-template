@@ -10,8 +10,22 @@ type shoppingListInput = {
     items?: itemInput[];
 }
 
+type userInput = {
+    username: string;
+    password: string;
+    role: string;
+}
+
+type profileInput = {
+    email: string;
+    name: string;
+    lastname: string;
+}
+
 export {
     itemInput,
     shoppingListInput,
+    userInput,
+    profileInput,
     
 }
