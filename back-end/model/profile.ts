@@ -1,11 +1,12 @@
+import e from "express";
+
 class Profile {
     private email: string;
     public name: string;
-    private lastname: string;
+    public lastname: string;
 
     constructor (profile: {email: string, name: string, lastname: string}) {
         this.validateprofiles(profile);
-        this.validateEmail(profile.email);
 
         this.email = profile.email;
         this.name = profile.name;
@@ -13,7 +14,7 @@ class Profile {
     }
 
     private validateprofiles = (profile: {email: string, name: string, lastname: string}) => {
-        if (typeof profile.email !== 'string' || profile.email.length > 60) {
+        if (typeof profile.email !== 'string' || profile.email.length > 60 || !this.validateEmail(profile.email)) {
             throw new Error('Invalid email value');
         }
 
@@ -22,7 +23,9 @@ class Profile {
         }
 
         if (typeof profile.lastname !== 'string' || profile.lastname.length > 60) {
-            throw new Error('Invalid lastname value')
+            
+            throw new Error('Invalid lastname value');
+    
         }
 
     };

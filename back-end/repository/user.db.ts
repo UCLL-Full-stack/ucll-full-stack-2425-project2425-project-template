@@ -29,9 +29,9 @@ const getAllUsers = ():Array<User> => {
 };
 
 const createTestUsers = (): void => {
-    const user1 = new User({ username: "Janneke", password: "b@2", role: "admin" });
-    const user2 = new User({ username: "Jannineke", password: "a&2", role: "member" });
-    const user3 = new User({ username: "Jeanke", password: "c|3", role: "member" });
+    const user1 = new User({ username: "Janneke", password: "B@2", role: "admin" });
+    const user2 = new User({ username: "Jannineke", password: "A&2", role: "member" });
+    const user3 = new User({ username: "Jeanke", password: "C|3", role: "member" });
     saveUser(user1);
     saveUser(user2);
     saveUser(user3);
