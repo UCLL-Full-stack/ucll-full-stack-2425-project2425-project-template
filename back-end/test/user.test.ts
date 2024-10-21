@@ -1,3 +1,5 @@
+import { set } from 'date-fns';
+import { Shoppingcart } from '../model/shoppingcart';
 import { User } from '../model/user';
 import { Role } from '../types';
 
@@ -50,4 +52,39 @@ test('given: invalid role for a user, when: a user is constructed, then: error i
     const user = () => new User({ email: validEmail, password: validPassword, role: invalidRole });
 
     expect(user).toThrow('Role is required');
+});
+
+test('given: valid user, when: adding a shopping cart to a user, then: shopping cart is added to that user', () => {
+    // given valid user
+    const user = new User({ email: 'john.doe@mail.com', password: 'JohnD123!', role: 'admin' });
+    const shoppingcart = new Shoppingcart({
+        name: 'Groceries',
+        deliveryDate: set(new Date(Date.now() + 86400000), { hours: 12, minutes: 0 }),
+    });
+
+    // when adding a shopping cart to a user
+    user.addShoppingcart(shoppingcart);
+
+    // then shopping cart is added to that user
+    expect(user.getShoppingcarts()).toContain(shoppingcart);
+    expect(user.getShoppingcarts()).toHaveLength(1);
+});
+
+test('given: valid user, when: adding a user to a shopping cart that is already added, then: error is thrown and user is not added', () => {
+    // given valid user
+    const user = new User({ email: 'john.doe@mail.com', password: 'JohnD123!', role: 'admin' });
+    const shoppingcart = new Shoppingcart({
+        name: 'Groceries',
+        deliveryDate: set(new Date(Date.now() + 86400000), { hours: 12, minutes: 0 }),
+    });
+
+    user.addShoppingcart(shoppingcart);
+
+    // adding a user to a shopping cart that is already added
+    const addShoppingcartToUser = () => user.addShoppingcart(shoppingcart);
+
+    // then error is thrown and user is not added
+    expect(addShoppingcartToUser).toThrow('This shopping cart is already added to this user');
+    expect(user.getShoppingcarts()).toContain(shoppingcart);
+    expect(user.getShoppingcarts()).toHaveLength(1);
 });

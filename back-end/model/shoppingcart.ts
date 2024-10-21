@@ -2,12 +2,9 @@ import { User } from './user';
 
 export class Shoppingcart {
     private id?: number | undefined;
-
     private name: string;
-
     private deliveryDate: Date;
-
-    private users: User[] = [];
+    private user!: User;
 
     constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date }) {
         this.validate(shoppingcart);
@@ -42,15 +39,12 @@ export class Shoppingcart {
         return this.deliveryDate;
     }
 
-    getUsers(): User[] {
-        return this.users;
+    getUser(): User {
+        return this.user;
     }
 
-    addUserToShoppingCart(user: User) {
-        if (this.users.includes(user)) {
-            throw new Error(`This user is already added to ${this.name}`);
-        }
-        this.users.push(user);
+    setUser(user: User) {
+        this.user = user;
     }
 
     equals(shoppingcart: Shoppingcart): boolean {
@@ -58,7 +52,7 @@ export class Shoppingcart {
             this.id === shoppingcart.getId() &&
             this.name === shoppingcart.getName() &&
             this.deliveryDate === shoppingcart.getDeliveryDate() &&
-            this.users === shoppingcart.getUsers()
+            this.user === shoppingcart.getUser()
         );
     }
 }

@@ -1,13 +1,12 @@
 import { Role } from '../types';
+import { Shoppingcart } from './shoppingcart';
 
 export class User {
     private id?: number | undefined;
-
     private email: string;
-
     private password: string;
-
     private role: Role;
+    private shoppingcarts: Shoppingcart[] = [];
 
     constructor(user: { id?: number; email: string; password: string; role: Role }) {
         this.validate(user);
@@ -31,6 +30,18 @@ export class User {
 
     getRole(): Role {
         return this.role;
+    }
+
+    getShoppingcarts(): Shoppingcart[] {
+        return this.shoppingcarts;
+    }
+
+    addShoppingcart(shoppingcart: Shoppingcart) {
+        if (this.shoppingcarts.includes(shoppingcart)) {
+            throw new Error('This shopping cart is already added to this user');
+        }
+        this.shoppingcarts.push(shoppingcart);
+        shoppingcart.setUser(this);
     }
 
     validate(user: { email: string; password: string; role: Role }) {
