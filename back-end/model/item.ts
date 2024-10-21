@@ -1,4 +1,5 @@
 import { Category } from '../types';
+import { Nutritionlabel } from './nutritionlabel';
 
 export class Item {
     private id?: number;
@@ -6,6 +7,7 @@ export class Item {
     private price: number;
     private pathToImage: string;
     private category: Category;
+    private nutritionlabel!: Nutritionlabel;
 
     constructor(item: {
         id?: number;
@@ -64,12 +66,22 @@ export class Item {
         return this.category;
     }
 
+    getNutritionLabel(): Nutritionlabel {
+        return this.nutritionlabel;
+    }
+
+    setNutritionLabel(nutritionlabel: Nutritionlabel) {
+        this.nutritionlabel = nutritionlabel;
+        nutritionlabel.setItem(this);
+    }
+
     equals(item: Item): boolean {
         return (
             this.id === item.getId() &&
             this.name === item.getName() &&
             this.pathToImage === item.getPathToImage() &&
-            this.category === item.getCategory()
+            this.category === item.getCategory() &&
+            this.nutritionlabel == item.getNutritionLabel()
         );
     }
 }

@@ -60,9 +60,11 @@ export class User {
 
     equals(user: User): boolean {
         return (
+            this.id === user.getId() &&
             this.email === user.getEmail() &&
             this.password === user.getPassword() &&
-            this.role === user.getRole()
+            this.role === user.getRole() &&
+            this.shoppingcarts === user.getShoppingcarts()
         );
     }
 }

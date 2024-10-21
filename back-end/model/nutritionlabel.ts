@@ -1,3 +1,5 @@
+import { Item } from './item';
+
 export class Nutritionlabel {
     private id?: number | undefined;
     private energy: number;
@@ -7,6 +9,7 @@ export class Nutritionlabel {
     private sugar: number;
     private protein: number;
     private salts: number;
+    private item!: Item;
 
     constructor(nutritionlabel: {
         id?: number;
@@ -58,6 +61,14 @@ export class Nutritionlabel {
 
     getSalts(): number {
         return this.salts;
+    }
+
+    getItem(): Item {
+        return this.item;
+    }
+
+    setItem(item: Item) {
+        this.item == item;
     }
 
     validate(nutritionlabel: {
@@ -121,7 +132,8 @@ export class Nutritionlabel {
             this.carbohydrates === nutritionlabel.getCarbohydrates() &&
             this.sugar === nutritionlabel.getSugar() &&
             this.protein === nutritionlabel.getProtein() &&
-            this.salts === nutritionlabel.getSalts()
+            this.salts === nutritionlabel.getSalts() &&
+            this.item === nutritionlabel.getItem()
         );
     }
 }
