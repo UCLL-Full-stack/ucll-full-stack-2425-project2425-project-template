@@ -1,3 +1,5 @@
+import { Nutritionlabel } from '../model/nutritionlabel';
+
 test('given: valid values for a user, when: user is constructed, then: user is created with those values', () => {
     // given valid values for a user
     const validEnergy = 100;
@@ -171,7 +173,7 @@ test('given: negative salts value, when: nutritionlabel is constructed, then: er
 
 test('given: invalid energy value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid energy value
-    const invalidEnergy = -100;
+    const invalidEnergy = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
@@ -191,7 +193,7 @@ test('given: invalid energy value, when: nutritionlabel is constructed, then: er
 
 test('given: invalid fat value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid fat value
-    const invalidFat = -10;
+    const invalidFat = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
@@ -211,7 +213,7 @@ test('given: invalid fat value, when: nutritionlabel is constructed, then: error
 
 test('given: invalid saturated fats value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid saturated fats value
-    const invalidSaturatedFats = -5;
+    const invalidSaturatedFats = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
@@ -226,12 +228,12 @@ test('given: invalid saturated fats value, when: nutritionlabel is constructed, 
         });
 
     // then error is thrown
-    expect(nutritionlabel).toThrow('Saturated fats is required');
+    expect(nutritionlabel).toThrow('Saturated fats are required');
 });
 
 test('given: invalid carbohydrates value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid carbohydrates value
-    const invalidCarbohydrates = -20;
+    const invalidCarbohydrates = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
@@ -251,7 +253,7 @@ test('given: invalid carbohydrates value, when: nutritionlabel is constructed, t
 
 test('given: invalid sugar value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid sugar value
-    const invalidSugar = -15;
+    const invalidSugar = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
@@ -271,7 +273,7 @@ test('given: invalid sugar value, when: nutritionlabel is constructed, then: err
 
 test('given: invalid protein value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid protein value
-    const invalidProtein = -8;
+    const invalidProtein = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
@@ -291,7 +293,7 @@ test('given: invalid protein value, when: nutritionlabel is constructed, then: e
 
 test('given: invalid salts value, when: nutritionlabel is constructed, then: error is thrown', () => {
     // given invalid salts value
-    const invalidSalts = -2;
+    const invalidSalts = NaN;
 
     // when nutritionlabel is constructed
     const nutritionlabel = () =>
