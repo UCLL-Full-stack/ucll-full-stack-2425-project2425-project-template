@@ -1,3 +1,4 @@
+import { Item } from './item';
 import { User } from './user';
 
 export class Shoppingcart {
@@ -5,6 +6,7 @@ export class Shoppingcart {
     private name: string;
     private deliveryDate: Date;
     private user!: User;
+    private items: Item[] = [];
 
     constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date }) {
         this.validate(shoppingcart);
@@ -27,6 +29,17 @@ export class Shoppingcart {
         }
     }
 
+    addItem(item: Item) {
+        this.items.push(item);
+    }
+
+    removeItem(item: Item) {
+        if (!this.items.includes(item)) {
+            throw new Error('This item does not exist in this shopping cart');
+        }
+        this.items.splice(this.items.indexOf(item), 1);
+    }
+
     getId(): number | undefined {
         return this.id;
     }
@@ -41,6 +54,10 @@ export class Shoppingcart {
 
     getUser(): User {
         return this.user;
+    }
+
+    getItems(): Item[] {
+        return this.items;
     }
 
     setUser(user: User) {

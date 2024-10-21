@@ -1,5 +1,6 @@
 import { set } from 'date-fns';
 import { Shoppingcart } from '../model/shoppingcart';
+import { Item } from '../model/item';
 
 test('given: valid values for a shopping cart, when: shopping cart is constructed, then: shopping cart is created with those values', () => {
     // given valid values for a shopping cart
@@ -64,4 +65,75 @@ test('given: delivery date before today for a shopping cart, when: shopping cart
 
     // then error is thrown
     expect(shoppingcart).toThrow('Delivery date should be after today');
+});
+
+test('given: valid shoppingcart and item, when: adding item to a shopping cart, then: item is added to the shopping cart', () => {
+    // given valid shoppingcart
+    const shoppingcart = new Shoppingcart({
+        name: 'Groceries',
+        deliveryDate: set(new Date(Date.now() + 86400000), { hours: 12, minutes: 0 }),
+    });
+
+    const item = new Item({
+        name: 'Paprika',
+        price: 0.49,
+        pathToImage: '/public/paprika.png',
+        category: 'vegetables',
+    });
+
+    // when adding item to a shopping cart
+    shoppingcart.addItem(item);
+
+    // then item is added to the shopping cart
+    expect(shoppingcart.getItems()).toHaveLength(1);
+    expect(shoppingcart.getItems()).toContain(item);
+});
+
+test('given: valid shopping cart with items, when: removing item, then: that item is removed once', () => {
+    // given valid shopping cart with items
+    const shoppingcart = new Shoppingcart({
+        name: 'Groceries',
+        deliveryDate: set(new Date(Date.now() + 86400000), { hours: 12, minutes: 0 }),
+    });
+
+    const item = new Item({
+        name: 'Paprika',
+        price: 0.49,
+        pathToImage: '/public/paprika.png',
+        category: 'vegetables',
+    });
+
+    shoppingcart.addItem(item);
+    shoppingcart.addItem(item);
+
+    // when removing item
+    shoppingcart.removeItem(item);
+
+    // then that item is removed once
+    expect(shoppingcart.getItems()).toHaveLength(1);
+});
+
+test('given: valid shopping cart with items, when: removing item that does not exist in the shoppingcart, then: error is thrown', () => {
+    // given valid shopping cart with items
+    const shoppingcart = new Shoppingcart({
+        name: 'Groceries',
+        deliveryDate: set(new Date(Date.now() + 86400000), { hours: 12, minutes: 0 }),
+    });
+
+    const item = new Item({
+        name: 'Paprika',
+        price: 0.49,
+        pathToImage: '/public/paprika.png',
+        category: 'vegetables',
+    });
+
+    shoppingcart.addItem(item);
+
+    // when removing item
+    shoppingcart.removeItem(item);
+
+    // then error is thrown when trying to remove the item again
+    expect(() => shoppingcart.removeItem(item)).toThrow(
+        'This item does not exist in this shopping cart'
+    );
 });
