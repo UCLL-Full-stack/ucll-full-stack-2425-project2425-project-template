@@ -1,4 +1,6 @@
 import { RecipeIngredient } from './recipeIngredient';
+import { Schedule } from './schedule';
+import { User } from './user';
 
 export class Recipe {
     private id?: number;
@@ -6,7 +8,9 @@ export class Recipe {
     private instructions: string;
     private cookingTime: number;
     private category: string; // flexible for custom categories
-    private ingredients: RecipeIngredient[];
+    private ingredients?: RecipeIngredient[]; // do i make it optional? '?'
+    private user: User;
+    private schedules?: Schedule[];
 
     constructor(recipe: {
         id?: number;
@@ -15,6 +19,8 @@ export class Recipe {
         cookingTime: number;
         category: string;
         ingredients: RecipeIngredient[];
+        user: User;
+        schedules?: Schedule[];
     }) {
         this.id = recipe.id;
         this.title = recipe.title;
@@ -22,6 +28,8 @@ export class Recipe {
         this.cookingTime = recipe.cookingTime;
         this.category = recipe.category;
         this.ingredients = recipe.ingredients;
+        this.user = recipe.user;
+        this.schedules = recipe.schedules || [];
     }
 
     getId(): number | undefined {
@@ -44,8 +52,20 @@ export class Recipe {
         return this.category;
     }
 
-    getIngredients(): RecipeIngredient[] {
+    getIngredients(): RecipeIngredient[] | undefined {
         return this.ingredients;
+    }
+
+    getUser(): User {
+        return this.user;
+    }
+
+    getSchedules(): Schedule[] | undefined {
+        return this.schedules;
+    }
+
+    addSchedule(schedule: Schedule): void {
+        this.schedules?.push(schedule);
     }
 
     equals(recipe: Recipe): boolean {
