@@ -5,13 +5,13 @@ export class Schedule {
     private id?: number;
     private user: User;
     private date: Date;
-    private recipe: Recipe;
+    private recipes?: Recipe[];
 
-    constructor(schedule: { id?: number; user: User; date: Date; recipe: Recipe }) {
+    constructor(schedule: { id?: number; user: User; date: Date; recipes?: Recipe[] }) {
         this.id = schedule.id;
         this.user = schedule.user;
         this.date = schedule.date;
-        this.recipe = schedule.recipe;
+        this.recipes = schedule.recipes || [];
     }
 
     getId(): number | undefined {
@@ -26,22 +26,15 @@ export class Schedule {
         return this.date;
     }
 
-    getRecipe(): Recipe {
-        return this.recipe;
+    getRecipes(): Recipe[] | undefined {
+        return this.recipes;
     }
 
     // Add recipe
     // Check if a meal with the same name already exists for that date
     // Future implementation: Multiple recipes can be schedule for one day
-    addRecipe(date: Date, recipe: Recipe) {
-        if (
-            this.date.getTime() === date.getTime() &&
-            this.recipe.getTitle() === recipe.getTitle()
-        ) {
-            return 'A meal with this name already exists on the selected date.';
-        }
-
-        this.date = date;
-        this.recipe = recipe;
+    addRecipe(recipe: Recipe): void {
+        this.recipes?.push(recipe);
+        recipe.addSchedule(this);
     }
 }
