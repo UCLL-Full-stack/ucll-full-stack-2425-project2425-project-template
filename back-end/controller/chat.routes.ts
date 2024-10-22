@@ -34,16 +34,16 @@ const chatRouter = express.Router();
  * /chats:
  *   get:
  *     summary: Get all chat
- *     tags: [Users]
+ *     tags: [Chats]
  *     responses:
  *       200:
- *         description: The list of users.
+ *         description: The list of chats.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *                 $ref: '#/components/schemas/Chat'
  */
 
 
@@ -66,6 +66,7 @@ try {
  *   get:
  *     summary: Get a chat by ID.
  *     description: Returns a chat object by the provided chat ID.
+ *     tags: [Chats]
  *     parameters:
  *       - in: path
  *         name: id
@@ -80,7 +81,7 @@ try {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/chat'
+ *               $ref: '#/components/schemas/Chat'
  *       404:
  *         description: chat not found.
  */
@@ -102,6 +103,7 @@ chatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *   get:
  *     summary: Get a chat by UserID.
  *     description: Returns a chat object by the provided user ID.
+ *     tags: [Chats]
  *     parameters:
  *       - in: path
  *         name: id
@@ -116,7 +118,7 @@ chatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/chat'
+ *               $ref: '#/components/schemas/Chat'
  *       404:
  *         description: chat not found.
  */
