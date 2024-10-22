@@ -6,7 +6,7 @@ export class Ingredient {
     private name: string;
     private category: IngredientCategory;
     private store?: string;
-    private recipes: RecipeIngredient[];
+    private recipes?: RecipeIngredient[];
 
     constructor(ingredient: {
         id?: number;
@@ -38,7 +38,7 @@ export class Ingredient {
         return this.store;
     }
 
-    getRecipes(): RecipeIngredient[] {
+    getRecipes(): RecipeIngredient[] | undefined {
         return this.recipes;
     }
 
