@@ -1,4 +1,5 @@
-import { User } from './user'; // Assuming User class is in the same directory
+import { User } from './user';
+import {Promotion} from './promotion';
 
 export class Order {
     private id?: number;
@@ -6,6 +7,7 @@ export class Order {
     private product: string;
     private price: number;
     private userId: number;
+    private promotions: Promotion[];
 
     constructor(order: {
         id?: number;
@@ -13,6 +15,8 @@ export class Order {
         product: string;
         price: number;
         user: User;
+        promotions: Promotion[];
+
     }) {
         this.validate(order);
 
@@ -21,6 +25,7 @@ export class Order {
         this.product = order.product;
         this.price = order.price;
         this.userId = order.user.getId()!;
+        this.promotions = order.promotions;
     }
 
     getOrderDate(): Date {
@@ -43,11 +48,16 @@ export class Order {
         return this.userId;
     }
 
+    getPromotions(): Promotion[] {
+        return this.promotions;
+    }
+
     validate(order: {
         orderDate: Date;
         product: string;
         price: number;
         user: User;
+        promotions: Promotion[];
     }) {
         if (!(order.orderDate instanceof Date)) {
             throw new Error('Order date must be a valid date');
@@ -67,7 +77,8 @@ export class Order {
         return (
             this.product === order.getProduct() &&
             this.price === order.getPrice() &&
-            this.userId === order.getUserId()
+            this.userId === order.getUserId() &&
+            this.promotions.every((promotion, index) => promotion.equals(order.getPromotions()[index]))
         );
     }
 }
