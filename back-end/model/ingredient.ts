@@ -4,7 +4,7 @@ export class Ingredient {
     private type: string;
     private aantal: number;
     private prijs: number;
-    private ingredientLimit: number = 0;
+    private ingredientLimit: number = 2;
 
     constructor(ingredient: {
         id?: number;
@@ -56,6 +56,10 @@ export class Ingredient {
 
     getAantal(): number {
         return this.aantal;
+    }
+
+    setAantal(aantal: number) {
+        this.aantal == aantal;
     }
 
     getPrijs(): number {
