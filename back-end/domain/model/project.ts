@@ -13,10 +13,24 @@ export class Project {
         tasks: Task[];
 
     }) {
+        this.validate(project);
         this.name = project.name;
         this.users = project.users;
         this.tasks = project.tasks;
     }
+
+    private validate(project: { name: string; users: User[]; tasks: Task[] }) {
+        if (!project.name) {
+            throw new Error('Name is required');
+        }
+        if (!Array.isArray(project.users) || project.users.length === 0) {
+            throw new Error('At least one user is required');
+        }
+        if (!Array.isArray(project.tasks) || project.tasks.length === 0) {
+            throw new Error('At least one task is required');
+        }
+    }
+
 
     public getProjectId(): number | undefined {
         return this.project_Id;

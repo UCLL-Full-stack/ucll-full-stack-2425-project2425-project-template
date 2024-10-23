@@ -14,12 +14,28 @@ export class Task {
         due_date: Date;
         users: User[];
     }) {
+        this.validate(task);
         this.task_Id = task.task_Id;
         this.name = task.name;
         this.description = task.description;
         this.due_date = task.due_date;
         this.users = task.users;
 
+    }
+
+    private validate(task: { task_Id: any; name: string; description: string; due_date: Date; users: User[] }) {
+        if (!task.name) {
+            throw new Error('Name is required');
+        }
+        if (!task.description) {
+            throw new Error('Description is required');
+        }
+        if (!(task.due_date instanceof Date)) {
+            throw new Error('Due date must be a valid date');
+        }
+        if (!Array.isArray(task.users) || task.users.length === 0) {
+            throw new Error('At least one user is required');
+        }
     }
 
     public getTaskId(): number | undefined {
