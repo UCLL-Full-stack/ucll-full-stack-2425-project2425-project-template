@@ -65,7 +65,7 @@ export class Task {
             this.due_date === task.getDueDate() &&
             this.users === task.getUsers();
     }
-    addUserToTaskx(user: User) {
+    addUserToTask(user: User) {
         if (!this.users.includes(user))
             this.users.push(user);
     }
