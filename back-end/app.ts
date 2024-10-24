@@ -19,14 +19,6 @@ app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
 
-app.listen(port || 3000, () => {
-    console.log(`Back-end is running on port ${port}.`);
-});
-
-app.get('/status', (req, res) => {
-    res.json({ message: 'Courses API is running...' });
-});
-
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
@@ -37,6 +29,7 @@ const swaggerOpts = {
     },
     apis: ['./controller/*.routes.ts'],
 };
+
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -49,3 +42,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         res.status(400).json({ status: 'application error', message: err.message });
     }
 });
+
+app.listen(port, () => {
+    console.log(`Back-end is running on port ${port}.`);
+});
+
+export default app;
