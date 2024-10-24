@@ -1,3 +1,5 @@
+import e from "express";
+
 export class Event {
     private id?: number;
     private name: string;
@@ -46,6 +48,10 @@ export class Event {
         //dates (lastEdit and dateCreated) are changed/added when instance is made or editted
         //location to be added
         //category to be added
+    }
+    
+    getId(): number {
+        return this.id? this.id : -1;
     }
 
     getName(): string {
@@ -100,3 +106,5 @@ export class Event {
         this.dateCreated = date;
     }
 }
+
+export default Event;
