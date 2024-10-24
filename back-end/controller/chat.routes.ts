@@ -19,6 +19,10 @@
  *            createdAt:
  *              type: Date
  *              description: chat createdAt.
+ *            userId:
+ *              type: number
+ *              format: int64
+ *              description: user id.
  *        
  * 
  */
@@ -27,6 +31,7 @@
 
 import express, { Request, Response,NextFunction } from 'express';
 import chatservice from '../service/chat.service';
+import { ChatInput } from '../types';
 const chatRouter = express.Router();
 
 /**
@@ -129,6 +134,40 @@ chatRouter.get('/user/:id', async (req: Request, res: Response, next: NextFuncti
       res.status(200).json(chat); // Return the lecturer data if found
   } catch (error) {
       next(error) // Handle errors (e.g., lecturer not found)
+  }
+});
+
+
+/**
+ * @swagger
+ * /chats:
+ *   post:
+ *     summary: Create a new chat
+ *     tags: [Chats]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Chat'
+ *     responses:
+ *       200:
+ *         description: The chat was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Chat'
+ *       400:
+ *         description: Bad request. chat was not created.
+ */
+chatRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+      const chat:ChatInput = req.body;
+      const newChat = await chatservice.createChat(chat);
+      
+      res.status(200).json(chat); 
+  } catch (error) {
+      next(error) 
   }
 });
 

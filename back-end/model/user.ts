@@ -2,7 +2,7 @@ import { Chat } from "./chat";
 
 export class User {
   private id?: number;
-  private role: string;
+  private role?: string;
   private name: string;
   private firstName: string;
   private password: string;
@@ -10,7 +10,7 @@ export class User {
 
 
 
-  constructor(user : {id?: number, role: string, name: string, firstName: string, password: string, chats?: Chat[]}) {
+  constructor(user : {id?: number, role?: string, name: string, firstName: string, password: string, chats?: Chat[]}) {
     this.validate(user);
     this.id = user.id;
     this.role = user.role;
@@ -24,7 +24,7 @@ export class User {
     return this.id;
   }
 
-  public getRole(): string {
+  public getRole(): string|undefined {
     return this.role;
   }
 
@@ -51,13 +51,11 @@ export class User {
 
 
   equals(user: User): boolean {
-    return this.id === user.getId() && this.role === user.getRole() && this.name === user.getName() && this.firstName === user.getFirstName() && this.password === user.getPassword();
+    return this.id === user.getId() && this.name === user.getName() && this.firstName === user.getFirstName() && this.password === user.getPassword();
   }
 
-  validate(user: {id?: number, role: string, name: string, firstName: string, password: string}): void {
-    if (!user.role || user.role === '') {
-      throw new Error('User role is required');
-    }
+  validate(user: {id?: number, role?: string, name: string, firstName: string, password: string}): void {
+
     if (!user.name || user.name === '') {
       throw new Error('User name is required');
     }

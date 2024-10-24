@@ -25,10 +25,12 @@ const getAllUsers = async (): Promise<User[]> => {
 }
 
 const getUserById = async (id: number): Promise<User|undefined> => {
-
-
   return users.find(user => user.getId() === id);
 }
+const createUser = async (user: User): Promise<User> => {
+  users.push(user);
+  return user;
+}
 
-export default { getAllUsers, getUserById };
+export default { getAllUsers, getUserById, createUser };
     
