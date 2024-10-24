@@ -1,5 +1,4 @@
 import { Project } from "../model/project";
-let current_ID = 1;
 
 const projects: Project[] = [
     new Project({ name: "Project 1", users: [], tasks: [] }),
