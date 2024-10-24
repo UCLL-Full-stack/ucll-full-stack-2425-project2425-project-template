@@ -1,38 +1,38 @@
 export class Cart {
-    private id?: undefined | number;
-    private total_price: number;
-    private customer_id: number; 
-    // Q& Is it not better to use setters immediately in the constructor?
+    private id!: number;
+    private totalPrice!: number;
+    private customerId!: number;
+    // Q&A Is it not better to use setters immediately in the constructor? A: https://stackoverflow.com/questions/61690611/typescript-not-recognising-initialising-via-a-setter
     //I also thought of the same thing. I thing we could
 
-    constructor(cart: { id?: undefined | number, total_price: number, customer_id: number }) {
+    constructor(cart: { id: number, totalPrice: number, customerId: number }) {
         this.setId(cart.id);
-        this.setTotal_price(cart.total_price);
-        this.setCustomer_id(cart.customer_id);
+        this.setTotalPrice(cart.totalPrice);
+        this.setCustomerId(cart.customerId);
     }
 
-    getId(): undefined | number {
+    getId(): number {
         return this.id;
     }
 
-    setId(id: undefined | number): void {
+    setId(id: number): void {
         this.id = id;
     }
 
-    getTotal_price(): number {
-        return this.total_price;
+    getTotalPrice(): number {
+        return this.totalPrice;
     }
 
-    setTotal_price(total_price: number): void {
-        this.total_price = total_price;
+    setTotalPrice(totalPrice: number): void {
+        this.totalPrice = totalPrice;
     }
 
-    getCustomer_id(): number {
-        return this.customer_id;
+    getCustomerId(): number {
+        return this.customerId;
     }
 
-    setCustomer_id(customer_id: number): void {
-        this.customer_id = customer_id;
+    setCustomerId(customerId: number): void {
+        this.customerId = customerId;
     }
 
 

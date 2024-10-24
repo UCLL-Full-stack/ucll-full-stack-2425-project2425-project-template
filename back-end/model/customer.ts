@@ -1,5 +1,5 @@
 export class Customer {
-    private id?: undefined | number;
+    private id: number;
     private password: string;
     private securityQuestion: string;
     private username: string;
@@ -7,15 +7,16 @@ export class Customer {
     private lastName: string;
     private phone: number;
 
-    constructor(customer: { 
-        id?: undefined | number;
+    constructor(customer: {
+        id: number;
         password: string;
         securityQuestion: string;
         username: string;
         firstName: string;
         lastName: string;
         phone: number;
-     }) {
+    }) {
+        // TODO: Use setters!.
         this.id = customer.id;
         this.password = customer.password;
         this.securityQuestion = customer.securityQuestion;
@@ -25,7 +26,7 @@ export class Customer {
         this.phone = customer.phone;
     }
 
-    getId(): undefined | number {
+    getId(): number {
         return this.id;
     }
 
@@ -35,7 +36,7 @@ export class Customer {
     setPassword(password: string): void {
         this.password = password;
     }
-    
+
     getSecurityQuestion(): string {
         return this.securityQuestion;
     }
@@ -43,7 +44,7 @@ export class Customer {
     setSecurityQuestion(securityQuestion: string): void {
         this.securityQuestion = securityQuestion;
     }
-    
+
     getUsername(): string {
         return this.username;
     }
@@ -51,7 +52,7 @@ export class Customer {
     setUsername(username: string): void {
         this.username = username;
     }
-    
+
     getFirstName(): string {
         return this.firstName;
     }
@@ -59,7 +60,7 @@ export class Customer {
     setFirstName(firstName: string): void {
         this.firstName = firstName;
     }
-    
+
     getLastName(): string {
         return this.lastName;
     }
@@ -67,7 +68,7 @@ export class Customer {
     setLastName(lastName: string): void {
         this.lastName = lastName;
     }
-    
+
     getPhone(): number {
         return this.phone;
     }
