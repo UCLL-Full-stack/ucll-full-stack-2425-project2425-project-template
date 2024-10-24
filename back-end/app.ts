@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 app.use('/events', eventRouter);
 
+
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
