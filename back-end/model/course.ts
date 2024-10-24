@@ -1,18 +1,31 @@
 export class Course {
     private _id: number;
     private _name: string;
+    private _description: string;
     private _phase: number;
     private _credits: number;
     private _lecturers: string[];
     private _isElective: boolean;
+    private _requiredPassedCourses: Course[];
 
-    constructor(course: { id: number; name: string; phase: number; credits: number; lecturers: string[]; isElective: boolean }) {
+    constructor(course: {
+        id: number;
+        name: string;
+        description: string;
+        phase: number;
+        credits: number;
+        lecturers: string[];
+        isElective: boolean;
+        requiredPassedCourses: Course[];
+    }) {
         this._id = course.id;
         this._name = course.name;
+        this._description = course.description;
         this._phase = course.phase;
         this._credits = course.credits;
         this._lecturers = course.lecturers;
         this._isElective = course.isElective;
+        this._requiredPassedCourses = course.requiredPassedCourses;
     }
 
     public get id(): number {
@@ -29,6 +42,14 @@ export class Course {
 
     public set name(value: string) {
         this._name = value;
+    }
+
+    public get description(): string {
+        return this._description;
+    }
+
+    public set description(value: string) {
+        this._description = value;
     }
 
     public get phase(): number {
@@ -61,6 +82,20 @@ export class Course {
 
     public set isElective(value: boolean) {
         this._isElective = value;
+    }
+
+    public get requiredPassedCourses(): Course[] {
+        return this._requiredPassedCourses;
+    }
+
+    public set requiredPassedCourses(value: Course[]) {
+        this._requiredPassedCourses = value;
+    }
+
+    public set requiredCourse(course: Course) {
+        if (this._requiredPassedCourses.includes(course))
+            throw new Error("Course is already required");    
+        this._requiredPassedCourses.push(course);
     }
 
     public equals(other: Course): boolean {

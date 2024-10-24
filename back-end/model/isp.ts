@@ -1,4 +1,5 @@
 import { Course } from "./course";
+import { Student } from "./student";
 
 export class ISP {
     private _id: number;
@@ -6,13 +7,22 @@ export class ISP {
     private _totalCredits: number;
     private _year: number;
     private _courses: Course[];
+    private _student: Student;
 
-    constructor(isp: { id: number; status: string; totalCredits: number; year: number; courses: Course[] }) {
+    constructor(isp: {
+        id: number;
+        status: string;
+        totalCredits: number;
+        year: number;
+        courses: Course[];
+        student: Student;
+    }) {
         this._id = isp.id;
         this._status = isp.status;
         this._totalCredits = isp.totalCredits;
         this._year = isp.year;
         this._courses = isp.courses;
+        this._student = isp.student;
     }
 
     public get id(): number {
@@ -53,6 +63,14 @@ export class ISP {
 
     public set courses(value: Course[]) {
         this._courses = value;
+    }
+
+    public get student(): Student {
+        return this._student;
+    }
+
+    public set student(value: Student) {
+        this._student = value;
     }
 
     public equals(isp: ISP): boolean {

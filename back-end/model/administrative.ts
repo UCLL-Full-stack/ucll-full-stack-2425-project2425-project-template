@@ -4,6 +4,7 @@ import { Privilege } from "./privilege";
 
 export class Administrative extends User {
     private _privileges: Privilege[];
+    
     constructor(administrative: { id: number; name: string; email: string; password: string; privileges: Privilege[] }) {
         super({
             id: administrative.id,
