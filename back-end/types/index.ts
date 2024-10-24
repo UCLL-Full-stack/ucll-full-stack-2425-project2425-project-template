@@ -25,11 +25,13 @@ type ShoppingCartInput = {
     totalPrice: number;
 }
 
+type Role = 'admin' | 'student' | 'lecturer' | 'guest';
 
 
 export {
     UserInput,
     ReviewInput,
     ProductInput,
-    ShoppingCartInput
+    ShoppingCartInput,
+    Role
 }
