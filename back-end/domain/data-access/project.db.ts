@@ -17,7 +17,13 @@ const createProject = ({ name, users, tasks }: Project): Project => {
 
 const getAllProjects = (): Project[] => projects;
 
+const getProjectByName = ({ name }: { name: string }): Project | null => {
+    const project = projects.find(project => project.name === name);
+    return project || null;
+};
+
 export default {
     createProject,
-    getAllProjects  
+    getAllProjects,
+    getProjectByName
 };

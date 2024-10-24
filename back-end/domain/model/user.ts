@@ -19,6 +19,7 @@ export class User {
         role: Role;
         projects: Project[];
     }) {
+        this.validate(user);
         this.user_Id = user.user_Id;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
@@ -26,6 +27,27 @@ export class User {
         this.password = user.password;
         this.role = user.role;
         this.projects = user.projects;
+    }
+
+    private validate(user: { user_Id?: number; firstName: string; lastName: string; email: string; password: string; role: Role; projects: Project[] }) {
+        if (!user.firstName) {
+            throw new Error('First name is required');
+        }
+        if (!user.lastName) {
+            throw new Error('Last name is required');
+        }
+        if (!user.email) {
+            throw new Error('Email is required');
+        }
+        if (!user.password) {
+            throw new Error('Password is required');
+        }
+        if (!user.role) {
+            throw new Error('Role is required');
+        }
+        if (!Array.isArray(user.projects)) {
+            throw new Error('Projects must be an array');
+        }
     }
 
     public getId(): number | undefined {

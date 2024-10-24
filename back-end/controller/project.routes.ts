@@ -1,9 +1,24 @@
 import express, { Request, Response } from 'express';
 import projectService from "../service/project.service"
-import { ProjectInput } from "../types/index"; // Ensure the file exists at this path
+import { ProjectInput } from "../types/index"; 
 
 const projectRouter = express.Router();
 
+/**
+ * @swagger
+ * /projects:
+ *   get:
+ *     summary: Retrieve a list of projects
+ *     responses:
+ *       200:
+ *         description: A list of projects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ */
 projectRouter.get('/', async (req: Request, res: Response) => {
     try {
         const projects = await projectService.getAllProjects();
@@ -13,6 +28,25 @@ projectRouter.get('/', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /projects:
+ *   post:
+ *     summary: Create a new project
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProjectInput'
+ *     responses:
+ *       200:
+ *         description: The created project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ */
 projectRouter.post('/', async (req: Request, res: Response) => {
     try {
         const project = <ProjectInput>req.body;

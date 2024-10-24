@@ -2,7 +2,11 @@ import { Project } from "../domain/model/project";
 import { Task } from "../domain/model/task";
 import { User } from "../domain/model/user";
 
-type Role = 'admin' | 'lecturer';
+enum Role {
+    Admin = 'admin',
+    Lecturer = 'lecturer',
+    User = 'user'
+}
 
 export { Role };
 
