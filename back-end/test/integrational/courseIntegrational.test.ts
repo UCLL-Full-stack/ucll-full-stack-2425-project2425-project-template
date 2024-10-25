@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../app');
 import courses from '../../data/courses';
 import CourseShortView from '../../types/courseShortView';
+import { errorMessages } from '../../service/course.service';
 
 describe('Course router', () => {
     describe('get all courses', () => {
@@ -48,7 +49,7 @@ describe('Course router', () => {
                 .set('content-type', 'application/json');
 
             expect(response.status).toBe(400);
-            expect(response.text).toContain('Course with id 112123 does not exist');
+            expect(response.text).toContain(errorMessages.ERROR_COURSE_NOT_EXIST(id));
         });
     });
 
@@ -74,7 +75,7 @@ describe('Course router', () => {
                 .set("content-type", "application/json");
 
             expect(response.status).toBe(400);
-            expect(response.text).toContain("Course with id 999999 does not exist");
+            expect(response.text).toContain(errorMessages.ERROR_COURSE_NOT_EXIST(ids[0]));
         });
     });
 });

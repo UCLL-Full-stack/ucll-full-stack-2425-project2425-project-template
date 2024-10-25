@@ -6,6 +6,7 @@ import StudentService from './student.service';
 import CourseShortView from '../types/courseShortView';
 import { Student } from '../model/student';
 import { CourseUpdateView } from '../types/courseUpdateView';
+import { error } from 'console';
 
 const getAll = () : Course[] => {
     return CourseRepository.findAll();
@@ -20,7 +21,7 @@ const getAllShort = () : CourseShortView[] => {
 const getCourseById = (id: number): Course => {
     let res: Course | null = CourseRepository.findById(id);
     if (res === null) {
-        throw new Error(`Course with id ${id} does not exist`);
+        throw new Error(ERROR_COURSE_NOT_EXIST(id));
     }
     return res;
 }
@@ -42,14 +43,14 @@ const updateCourse = (id: number, courseUpdateInfo: CourseUpdateView) : Course =
 
     let requiredCourses: Course[] = [];
     courseUpdateInfo.requiredPassedCourses.forEach(courseId => {
-        if (courseId === id) throw new Error("Course cannot require itself");
+        if (courseId === id) throw new Error(ERROR_COURSE_REQUIRE_ITSELF);
         let course: Course = getCourseById(courseId);
         requiredCourses.push(course);
     });
 
     if (currentCourse.phase !== courseUpdateInfo.phase
         || currentCourse.credits !== courseUpdateInfo.credits) {
-            let errorMessage = "Course's phase or credits cannot be changed, because it is chosen in ISP";
+            let errorMessage = ERROR_COURSE_PHASE_CREDITS_CHANGE;
         throwErrorIfChosenInIsp(id, errorMessage);
     }
 
@@ -70,14 +71,14 @@ const updateCourse = (id: number, courseUpdateInfo: CourseUpdateView) : Course =
 const throwErrorIfNotExist = (id: number) : void => {
     let res: Course | null = CourseRepository.findById(id);
     if (res === null) {
-        throw new Error(`Course with id ${id} does not exist`);
+        throw new Error(ERROR_COURSE_NOT_EXIST(id));
     }
 }
 
 const throwErrorIfExist = (name: string, phase: number) : void => {
     let res: Course | null = CourseRepository.findByNameAndPhase(name, phase);
     if (res !== null) {
-        throw new Error(`Course with name ${name} and semester ${phase} already exists`);
+        throw new Error(ERROR_COURSE_EXIST(name, phase));
     }
 }
 
@@ -87,23 +88,31 @@ const throwErrorIfChosenInIsp = (id: number, errorMessage?: string) : void => {
         if (errorMessage) {
             throw new Error(errorMessage);
         }
-        throw new Error(`Course with id ${id} is chosen in ISP`);
+        throw new Error(ERROR_COURSE_CHOSEN_IN_ISP(id));
     }
 }
 
 const throwErrorIfPassedByStudent = (id: number) : void => {
     let res: Student[] = StudentService.getAllByPassedCourseId(id);
     if (res.length > 0) {
-        throw new Error(`Course with id ${id} is passed by student`);
+        throw new Error(ERROR_COURSE_PASSED_BY_STUDENT(id));
     }
 }
 
 const throwErrorIfRequiredByCourse = (id: number) : void => {
     let res: Course[] = CourseRepository.findAllByRequiredCourseId(id);
     if (res.length > 0) {
-        throw new Error(`Course with id ${id} is required by course`);
+        throw new Error(ERROR_COURSE_REQUIRED_BY_COURSE(id));
     }
 }
+
+const ERROR_COURSE_NOT_EXIST = (id: number) => `Course with id ${id} does not exist`;
+const ERROR_COURSE_EXIST = (name: string, phase: number) => `Course with name ${name} and semester ${phase} already exists`;
+const ERROR_COURSE_CHOSEN_IN_ISP = (id: number) => `Course with id ${id} is chosen in ISP`;
+const ERROR_COURSE_PASSED_BY_STUDENT = (id: number) => `Course with id ${id} is passed by student`;
+const ERROR_COURSE_REQUIRED_BY_COURSE = (id: number) => `Course with id ${id} is required by course`;
+const ERROR_COURSE_REQUIRE_ITSELF = "Course cannot require itself";
+const ERROR_COURSE_PHASE_CREDITS_CHANGE = "Course's phase or credits cannot be changed, because it is chosen in ISP";
 
 export default {
     getAll,
@@ -113,3 +122,12 @@ export default {
     deleteCourses,
 };
 
+export const errorMessages = {
+    ERROR_COURSE_NOT_EXIST,
+    ERROR_COURSE_EXIST,
+    ERROR_COURSE_CHOSEN_IN_ISP,
+    ERROR_COURSE_PASSED_BY_STUDENT,
+    ERROR_COURSE_REQUIRED_BY_COURSE,
+    ERROR_COURSE_REQUIRE_ITSELF,
+    ERROR_COURSE_PHASE_CREDITS_CHANGE
+};
