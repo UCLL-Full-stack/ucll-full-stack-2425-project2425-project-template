@@ -1,5 +1,4 @@
 export class CourseUpdateView {
-    id: number;
     name: string;
     description: string;
     phase: number;
@@ -9,7 +8,6 @@ export class CourseUpdateView {
     requiredPassedCourses: number[];
 
     constructor(course: {
-        id: number;
         name: string;
         description: string;
         phase: number;
@@ -18,7 +16,6 @@ export class CourseUpdateView {
         isElective: boolean;
         requiredPassedCourses: number[];
     }) {
-        this.id = course.id;
         this.name = course.name;
         this.description = course.description;
         this.phase = course.phase;

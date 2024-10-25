@@ -2,7 +2,11 @@ import { Course } from '../model/course';
 import courses from '../data/courses';
 import DBtryCatcher from '../util/tryCatchWrapper';
 
-let DBcourses: Course[] = courses;
+let DBcourses: Course[] = Array.from(courses);
+
+const initDb = (): void => {
+    DBcourses = Array.from(courses);
+};
 
 const findAll = DBtryCatcher((): Course[] => {
     return DBcourses;
@@ -35,6 +39,7 @@ const save = DBtryCatcher((course: Course): Course => {
 });
 
 export default {
+    initDb,
     findAll,
     findById,
     findAllByRequiredCourseId,

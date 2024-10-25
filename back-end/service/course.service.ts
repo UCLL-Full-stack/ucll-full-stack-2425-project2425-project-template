@@ -49,8 +49,7 @@ const updateCourse = (id: number, courseUpdateInfo: CourseUpdateView) : Course =
 
     if (currentCourse.phase !== courseUpdateInfo.phase
         || currentCourse.credits !== courseUpdateInfo.credits) {
-            let errorMessage = ERROR_COURSE_PHASE_CREDITS_CHANGE;
-        throwErrorIfChosenInIsp(id, errorMessage);
+        throwErrorIfChosenInIsp(id, ERROR_COURSE_PHASE_CREDITS_CHANGE);
     }
 
     let course = new Course({
@@ -84,10 +83,7 @@ const throwErrorIfExist = (name: string, phase: number) : void => {
 const throwErrorIfChosenInIsp = (id: number, errorMessage?: string) : void => {
     let res: ISP[] = ISPService.getAllByCourseId(id);
     if (res.length > 0) {
-        if (errorMessage) {
-            throw new Error(errorMessage);
-        }
-        throw new Error(ERROR_COURSE_CHOSEN_IN_ISP(id));
+        throw new Error(errorMessage || ERROR_COURSE_CHOSEN_IN_ISP(id));
     }
 }
 
