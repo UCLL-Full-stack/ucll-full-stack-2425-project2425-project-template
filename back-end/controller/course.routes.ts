@@ -50,6 +50,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import courseService from '../service/course.service';
+import { CourseUpdateView } from '../types/courseUpdateView';
 
 const courseRouter = express.Router();
 
@@ -161,6 +162,15 @@ courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Respo
         const courseIds: number[] = req.body;
         const operationStatus : String= courseService.deleteCourses(courseIds);
         res.status(200).send(operationStatus);
+    } catch (error) {
+        next(error);
+    }
+});
+
+courseRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const course : CourseUpdateView = req.body;
+        res.status(200).json(courseService.updateCourse(parseInt(req.params.id), course));
     } catch (error) {
         next(error);
     }
