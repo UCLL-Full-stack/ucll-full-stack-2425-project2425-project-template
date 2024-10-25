@@ -21,7 +21,4 @@ app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
 
-app.use('/event', (req, res, next) => {
-    console.log("Event route hit");
-    next();
-}, eventRouter);
+app.use('/events', eventRouter);
