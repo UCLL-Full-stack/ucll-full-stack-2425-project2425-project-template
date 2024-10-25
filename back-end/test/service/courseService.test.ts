@@ -1,22 +1,46 @@
 import CourseShortView from "../../types/courseShortView";
 import courseService from "../../service/course.service";
 import courseRepository from "../../repository/course.db";
+import studentService from "../../service/student.service";
+import ispService from "../../service/isp.service";
 import dummyCourses from "../../data/courses";
+import { mock } from "node:test";
 
 let mockDBFindAll: jest.Mock;
 let mockDBFindById: jest.Mock;
 let mockDBDeleteCourses: jest.Mock;
+let mockDBFindAllByRequiredCourseId: jest.Mock;
+let mockStudentServiceGetAllByPassedCourseId: jest.Mock;
+let mockISPServiceGetAllByCourseId: jest.Mock;
 
+beforeEach(() => {
+    mockDBFindAll = jest.fn();
+    mockDBFindById = jest.fn();
+    mockDBDeleteCourses = jest.fn();
+    mockDBFindAllByRequiredCourseId = jest.fn();
+    mockStudentServiceGetAllByPassedCourseId = jest.fn();
+    mockISPServiceGetAllByCourseId = jest.fn();
 
-beforeEach(() => {});
+    courseRepository.findAll = mockDBFindAll;
+    courseRepository.findById = mockDBFindById;
+    courseRepository.deleteCourses = mockDBDeleteCourses;
+    courseRepository.findAllByRequiredCourseId = mockDBFindAllByRequiredCourseId;
+    studentService.getAllByPassedCourseId = mockStudentServiceGetAllByPassedCourseId;
+    ispService.getAllByCourseId = mockISPServiceGetAllByCourseId;
+
+    mockDBFindById.mockImplementation((id) => dummyCourses[0]);
+    mockDBFindAllByRequiredCourseId.mockImplementation((id) => []);
+    mockISPServiceGetAllByCourseId.mockImplementation((id) => []);
+    mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => []);
+
+});
 
 afterEach(() => {
     jest.clearAllMocks();
 });
 
 test("given a list of courses, when getAll is called, then it should return the list of courses", () => {
-    mockDBFindAll = jest.fn(() => dummyCourses);
-    courseRepository.findAll = mockDBFindAll;
+    mockDBFindAll.mockReturnValue(dummyCourses);
 
     const result = courseService.getAll();
 
@@ -25,8 +49,7 @@ test("given a list of courses, when getAll is called, then it should return the 
 });
 
 test("given a list of courses, when getAllShort is called, then it should return the list of courses in short view", () => {
-    mockDBFindAll = jest.fn(() => dummyCourses);
-    courseRepository.findAll = mockDBFindAll;
+    mockDBFindAll.mockReturnValue(dummyCourses);
 
     const result = courseService.getAllShort();
 
@@ -35,8 +58,7 @@ test("given a list of courses, when getAllShort is called, then it should return
 });
 
 test("given a list of courses, when getCourseById is called, then it should return the course with this id", () => {
-    mockDBFindById = jest.fn(() => dummyCourses[1]);
-    courseRepository.findById = mockDBFindById;
+    mockDBFindById.mockReturnValue(dummyCourses[1]);
 
     const result = courseService.getCourseById(1);
 
@@ -45,26 +67,17 @@ test("given a list of courses, when getCourseById is called, then it should retu
 });
 
 test("given a list of courses and wrong ID, when getCourseById is called, then it should throw an exception", () => {
-    mockDBFindById = jest.fn(() => null);
-    courseRepository.findById = mockDBFindById;
-
-    expect(() => courseService.getCourseById(1)).toThrow(`Course with id 1 does not exist`);
-    expect(mockDBFindById).toHaveBeenCalledTimes(1);
-});
-
-test("given a list of courses and wrong ID, when getCourseById is called, then it should throw an exception", () => {
-    mockDBFindById = jest.fn(() => null);
-    courseRepository.findById = mockDBFindById;
+    mockDBFindById.mockReturnValue(null);
 
     expect(() => courseService.getCourseById(1)).toThrow(`Course with id 1 does not exist`);
     expect(mockDBFindById).toHaveBeenCalledTimes(1);
 });
 
 test('given a list of course IDs, when deleteCourses is called, then it should delete the courses', () => {
-    mockDBFindById = jest.fn((id) => ({ id, name: `Course ${id}` }));
-    mockDBDeleteCourses = jest.fn();
-    courseRepository.findById = mockDBFindById;
-    courseRepository.deleteCourses = mockDBDeleteCourses;
+    mockDBFindById.mockImplementation((id) => ({ id, name: `Course ${id}` }));
+    mockDBFindAllByRequiredCourseId.mockImplementation((id) => "");
+    mockISPServiceGetAllByCourseId.mockImplementation((id) => "");
+    mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => "");
 
     const ids = [1, 2, 3];
     const result = courseService.deleteCourses(ids);
@@ -75,11 +88,39 @@ test('given a list of course IDs, when deleteCourses is called, then it should d
 });
 
 test('given a list of course IDs with one non-existent ID, when deleteCourses is called, then it should throw an exception', () => {
-    mockDBFindById = jest.fn((id) => id === 2 ? null : { id, name: `Course ${id}` });
-    courseRepository.findById = mockDBFindById;
-
+    mockDBFindById.mockImplementation((id) => id === 2 ? null : { id, name: `Course ${id}` });
+    
     const ids = [1, 2, 3];
 
     expect(() => courseService.deleteCourses(ids)).toThrow(`Course with id 2 does not exist`);
     expect(mockDBFindById).toHaveBeenCalledTimes(2);
 });
+
+
+test('given a list of course IDs with one required by ISP, when deleteCourses is called, then it should throw an exception', () => {
+    mockISPServiceGetAllByCourseId.mockImplementation((id) => id === 2 ? [{ id: 1, name: `ISP ${id}` }] : []);
+
+    const ids = [1, 2, 3];
+
+    expect(() => courseService.deleteCourses(ids)).toThrow(`Course with id 2 is required in ISP`);
+    expect(mockDBFindById).toHaveBeenCalledTimes(2);
+});
+
+test('given a list of course IDs with one passed by student, when deleteCourses is called, then it should throw an exception', () => {
+    mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => id !== 2 ? [] : [{ id: 1, name: `Student ${id}` }]);
+
+    const ids = [1, 2, 3];
+
+    expect(() => courseService.deleteCourses(ids)).toThrow(`Course with id 2 is passed by student`);
+    expect(mockDBFindById).toHaveBeenCalledTimes(2);
+});
+
+test('given a list of course IDs with one required by another course, when deleteCourses is called, then it should throw an exception', () => {
+    mockDBFindAllByRequiredCourseId.mockImplementation((id) => id !== 2 ? [] : [{ id, name: `Course ${id}` }]);
+
+    const ids = [1, 2, 3];
+
+    expect(() => courseService.deleteCourses(ids)).toThrow(`Course with id 2 is required by course`);
+    expect(mockDBFindById).toHaveBeenCalledTimes(2);
+});
+
