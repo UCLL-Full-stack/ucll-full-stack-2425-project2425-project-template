@@ -6,6 +6,7 @@ import ispService from "../../service/isp.service";
 import dummyCourses from "../../data/courses";
 import {errorMessages} from "../../service/course.service";
 import { CourseUpdateView } from "../../types/courseUpdateView";
+import { Course } from "../../model/course";
 
 describe('Course Service', () => {
     let mockDBFindAll: jest.Mock;
@@ -84,78 +85,59 @@ describe('Course Service', () => {
         });
     });
     
-    describe('delete courses', () => {
-    
+    describe('create course', () => {
         beforeEach(() => {
-            mockDBFindById.mockImplementation((id) => dummyCourses[0]);
-            mockDBFindAllByRequiredCourseId.mockImplementation((id) => []);
-            mockISPServiceGetAllByCourseId.mockImplementation((id) => []);
-            mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => []);
-        });    
+            mockDBFindById.mockImplementation((id) => dummyCourses[id-1]);
+            mockDBFindByNameAndPhase.mockImplementation((name, phase) => null);
+            mockDBSave.mockImplementation((course) => {
+                if (course.id == undefined) {
+                    course.id = dummyCourses.length + 1;
+                }
+                return course;
+            });
+        });  
+        test('given a course, when createCourse is called, then it should create the course', () => {
+            const expectedCourse = new Course(dummyCourses[0]);
+            expectedCourse.id = dummyCourses.length + 1;
+            const inputInfo = new CourseUpdateView({
+                name: expectedCourse.name,
+                description: expectedCourse.description,
+                phase: expectedCourse.phase,
+                credits: expectedCourse.credits,
+                lecturers: expectedCourse.lecturers,
+                isElective: expectedCourse.isElective,
+                requiredPassedCourses: [],
+            });
     
-        test('given a list of course IDs, when deleteCourses is called, then it should delete the courses', () => {
-            mockDBFindById.mockImplementation((id) => ({ id, name: `Course ${id}` }));
-            mockDBFindAllByRequiredCourseId.mockImplementation((id) => "");
-            mockISPServiceGetAllByCourseId.mockImplementation((id) => "");
-            mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => "");
+            const result = courseService.createCourse(inputInfo);
     
-            const ids = [1, 2, 3];
-            const result = courseService.deleteCourses(ids);
-    
-            expect(result).toBe("Courses are successfully deleted");
-            expect(mockDBFindById).toHaveBeenCalledTimes(ids.length);
-            expect(mockDBDeleteCourses).toHaveBeenCalledWith(ids);
+            expect(result).toEqual(expectedCourse);
+            expect(mockDBFindById).toHaveBeenCalledTimes(0);
+            expect(mockDBFindByNameAndPhase).toHaveBeenCalledTimes(1);
+            expect(mockDBSave).toHaveBeenCalledTimes(1);
         });
+
+        test('given a course that already exists with given phase and name, when createCourse is called, then it should throw an exception', () => {
+            const expectedCourse = dummyCourses[0];
+            const inputInfo = new CourseUpdateView({
+                name: expectedCourse.name,
+                description: expectedCourse.description,
+                phase: expectedCourse.phase,
+                credits: expectedCourse.credits,
+                lecturers: expectedCourse.lecturers,
+                isElective: expectedCourse.isElective,
+                requiredPassedCourses: [],
+            });
     
-        test('given a list of course IDs with one non-existent ID, when deleteCourses is called, then it should throw an exception', () => {
-            mockDBFindById.mockImplementation((id) => id === 2 ? null : { id, name: `Course ${id}` });
-            
-            const ids = [1, 2, 3];
+            mockDBFindByNameAndPhase.mockImplementation((name, phase) => expectedCourse);
     
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_NOT_EXIST(2));
-            expect(mockDBFindById).toHaveBeenCalledTimes(2);
-            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
-            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(1);
-            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(1);
-        });
-    
-        test('given a list of course IDs with one required by ISP, when deleteCourses is called, then it should throw an exception', () => {
-            mockISPServiceGetAllByCourseId.mockImplementation((id) => id === 2 ? [{ id: 1, name: `ISP ${id}` }] : []);
-    
-            const ids = [1, 2, 3];
-    
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_CHOSEN_IN_ISP(2));
-            expect(mockDBFindById).toHaveBeenCalledTimes(2);
-            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
-            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
-            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(1);
-        });
-    
-        test('given a list of course IDs with one passed by student, when deleteCourses is called, then it should throw an exception', () => {
-            mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => id !== 2 ? [] : [{ id: 1, name: `Student ${id}` }]);
-    
-            const ids = [1, 2, 3];
-    
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_PASSED_BY_STUDENT(2));
-            expect(mockDBFindById).toHaveBeenCalledTimes(2);
-            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
-            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
-            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(2);
-        });
-    
-        test('given a list of course IDs with one required by another course, when deleteCourses is called, then it should throw an exception', () => {
-            mockDBFindAllByRequiredCourseId.mockImplementation((id) => id !== 2 ? [] : [{ id, name: `Course ${id}` }]);
-    
-            const ids = [1, 2, 3];
-    
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_REQUIRED_BY_COURSE(2));
-            expect(mockDBFindById).toHaveBeenCalledTimes(2);
-            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(2);
-            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
-            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(2);
+            expect(() => courseService.createCourse(inputInfo)).toThrow(errorMessages.ERROR_COURSE_EXIST(expectedCourse.name, expectedCourse.phase));
+            expect(mockDBFindById).toHaveBeenCalledTimes(0);
+            expect(mockDBFindByNameAndPhase).toHaveBeenCalledTimes(1);
+            expect(mockDBSave).toHaveBeenCalledTimes(0);
         });
     });
-    
+
     describe('update course', () => {
         beforeEach(() => {
             mockDBFindById.mockImplementation((id) => dummyCourses[id-1]);
@@ -242,9 +224,76 @@ describe('Course Service', () => {
             expect(mockDBSave).toHaveBeenCalledTimes(0);
         });
     });
+
+    describe('delete courses', () => {
+    
+        beforeEach(() => {
+            mockDBFindById.mockImplementation((id) => dummyCourses[0]);
+            mockDBFindAllByRequiredCourseId.mockImplementation((id) => []);
+            mockISPServiceGetAllByCourseId.mockImplementation((id) => []);
+            mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => []);
+        });    
+    
+        test('given a list of course IDs, when deleteCourses is called, then it should delete the courses', () => {
+            mockDBFindById.mockImplementation((id) => ({ id, name: `Course ${id}` }));
+            mockDBFindAllByRequiredCourseId.mockImplementation((id) => "");
+            mockISPServiceGetAllByCourseId.mockImplementation((id) => "");
+            mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => "");
+    
+            const ids = [1, 2, 3];
+            const result = courseService.deleteCourses(ids);
+    
+            expect(result).toBe("Courses are successfully deleted");
+            expect(mockDBFindById).toHaveBeenCalledTimes(ids.length);
+            expect(mockDBDeleteCourses).toHaveBeenCalledWith(ids);
+        });
+    
+        test('given a list of course IDs with one non-existent ID, when deleteCourses is called, then it should throw an exception', () => {
+            mockDBFindById.mockImplementation((id) => id === 2 ? null : { id, name: `Course ${id}` });
+            
+            const ids = [1, 2, 3];
+    
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_NOT_EXIST(2));
+            expect(mockDBFindById).toHaveBeenCalledTimes(2);
+            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
+            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(1);
+            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(1);
+        });
+    
+        test('given a list of course IDs with one required by ISP, when deleteCourses is called, then it should throw an exception', () => {
+            mockISPServiceGetAllByCourseId.mockImplementation((id) => id === 2 ? [{ id: 1, name: `ISP ${id}` }] : []);
+    
+            const ids = [1, 2, 3];
+    
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_CHOSEN_IN_ISP(2));
+            expect(mockDBFindById).toHaveBeenCalledTimes(2);
+            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
+            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
+            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(1);
+        });
+    
+        test('given a list of course IDs with one passed by student, when deleteCourses is called, then it should throw an exception', () => {
+            mockStudentServiceGetAllByPassedCourseId.mockImplementation((id) => id !== 2 ? [] : [{ id: 1, name: `Student ${id}` }]);
+    
+            const ids = [1, 2, 3];
+    
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_PASSED_BY_STUDENT(2));
+            expect(mockDBFindById).toHaveBeenCalledTimes(2);
+            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
+            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
+            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(2);
+        });
+    
+        test('given a list of course IDs with one required by another course, when deleteCourses is called, then it should throw an exception', () => {
+            mockDBFindAllByRequiredCourseId.mockImplementation((id) => id !== 2 ? [] : [{ id, name: `Course ${id}` }]);
+    
+            const ids = [1, 2, 3];
+    
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_REQUIRED_BY_COURSE(2));
+            expect(mockDBFindById).toHaveBeenCalledTimes(2);
+            expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(2);
+            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
+            expect(mockStudentServiceGetAllByPassedCourseId).toHaveBeenCalledTimes(2);
+        });
+    });
 });
-
-
-
-
-
