@@ -6,7 +6,6 @@ import StudentService from './student.service';
 import CourseShortView from '../types/courseShortView';
 import { Student } from '../model/student';
 import { CourseUpdateView } from '../types/courseUpdateView';
-import { error } from 'console';
 
 const getAll = () : Course[] => {
     return CourseRepository.findAll();

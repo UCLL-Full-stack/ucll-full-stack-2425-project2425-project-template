@@ -1,30 +1,30 @@
 import { Course } from '../model/course';
 import courses from '../data/courses';
-import tryCatcher from '../util/tryCatchWrapper';
+import DBtryCatcher from '../util/tryCatchWrapper';
 
 let DBcourses: Course[] = courses;
 
-const findAll = tryCatcher((): Course[] => {
+const findAll = DBtryCatcher((): Course[] => {
     return DBcourses;
 });
 
-const findById = tryCatcher((id: number): Course | null => {
+const findById = DBtryCatcher((id: number): Course | null => {
     return DBcourses.find(course => course.id === id) || null;
 });
 
-const findAllByRequiredCourseId = tryCatcher((id: number): Course[] => {
+const findAllByRequiredCourseId = DBtryCatcher((id: number): Course[] => {
     return DBcourses.filter(course => course.requiredPassedCourses.some(requiredCourse => requiredCourse.id === id));
 });
 
-const findByNameAndPhase = tryCatcher((name: string, phase: number): Course | null => {
+const findByNameAndPhase = DBtryCatcher((name: string, phase: number): Course | null => {
     return DBcourses.find(course => course.name === name && course.phase === phase) || null;
 });
 
-const deleteCourses = tryCatcher((ids: number[]): void => {
+const deleteCourses = DBtryCatcher((ids: number[]): void => {
     DBcourses = DBcourses.filter(course => course.id && !ids.includes(course.id));
 });
 
-const save = tryCatcher((course: Course): Course => {
+const save = DBtryCatcher((course: Course): Course => {
     const index = DBcourses.findIndex(c => c.id === course.id);
     if (index === -1) {
         DBcourses.push(course);
