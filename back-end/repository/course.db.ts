@@ -1,6 +1,6 @@
 import { Course } from '../model/course';
 import courses from '../data/courses';
-import tryCatcher from '../util/TryCatchWrapper';
+import tryCatcher from '../util/tryCatchWrapper';
 
 let DBcourses: Course[] = courses;
 

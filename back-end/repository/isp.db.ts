@@ -1,6 +1,6 @@
 import { ISP } from '../model/isp';
 import isps from '../data/isp';
-import tryCatcher from '../util/TryCatchWrapper';
+import tryCatcher from '../util/tryCatchWrapper';
 
 let DBisps: ISP[] = isps;
 

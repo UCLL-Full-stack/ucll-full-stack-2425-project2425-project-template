@@ -1,6 +1,6 @@
 import {Student} from '../model/student';
 import students from '../data/students';
-import tryCatcher from '../util/TryCatchWrapper';
+import tryCatcher from '../util/tryCatchWrapper';
 
 let DBstudents: Student[] = students;
 
