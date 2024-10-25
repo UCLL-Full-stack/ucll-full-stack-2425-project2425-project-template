@@ -31,6 +31,10 @@
  *               type: string
  *           isElective:
  *             type: boolean
+ *           requiredPassedCourses:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/Course'
  *       CourseShortView:
  *         type: object
  *         properties:
@@ -93,7 +97,7 @@ courseRouter.get("/" , async (req: Request, res: Response, next: NextFunction) =
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Course'
+ *                 $ref: '#/components/schemas/CourseShortView'
  */
 courseRouter.get("/short" , async (req: Request, res: Response, next: NextFunction) => {
     try {
