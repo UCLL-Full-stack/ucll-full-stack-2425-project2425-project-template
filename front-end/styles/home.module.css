@@ -2,13 +2,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 6rem;
     min-height: 100vh;
+
+    background-image: url('/images/home-cover.jpg'); /* Path to the image */
+    background-size: cover; /* Ensures the image covers the entire main area */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
 }
 
 .main h1 {
     display: inline-block;
     margin-left: 1rem;
+    color: white !important;
 }
 
 .main h2 {
@@ -16,7 +23,10 @@
 }
 
 .description {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
     max-width: var(--max-width);
     width: 100%;
     z-index: 2;
@@ -31,7 +41,8 @@
 }
 
 .description p {
-    position: relative;
+    width: 50vw;
+    color: white;
     margin: 0;
     padding: 1rem;
     background-color: rgba(var(--callout-rgb), 0.5);
