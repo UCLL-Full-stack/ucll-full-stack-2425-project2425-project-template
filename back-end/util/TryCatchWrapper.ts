@@ -1,5 +1,5 @@
 function tryCatchWrapper<T extends Function>(fn: T) {
-    return (args: any[]) => {
+    return (...args: any[]) => {
         try {
             return fn(...args);
         } catch (error) {

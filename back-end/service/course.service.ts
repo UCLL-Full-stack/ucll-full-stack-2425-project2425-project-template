@@ -7,7 +7,7 @@ const getAll = () : Course[] => {
 }
 
 const getAllShort = () : CourseShortView[] => {
-    return CourseRepository.findAll().map(course => {
+    return CourseRepository.findAll().map((course:any) => {
         return new CourseShortView(course);
     });
 }
@@ -38,17 +38,11 @@ const throwErrorIfNotExist = (id: number) : void => {
 }
 
 const throwErrorIfRequiredInIsp = (id: number) : void => {
-    let res: Course | null = CourseRepository.findById(id);
-    if (res !== null && res.requiredInIsp) {
-        throw new Error(`Course with id ${id} is required in ISP`);
-    }
+
 }
 
 const throwErrorIfPassedByStudent = (id: number) : void => {
-    let res: Course | null = CourseRepository.findById(id);
-    if (res !== null && res.passedByStudent) {
-        throw new Error(`Course with id ${id} is passed by student`);
-    }
+
 }
 
 export default {
