@@ -23,6 +23,8 @@ const getCourseById = (id: number): Course => {
 const deleteCourses = (ids: number[]) : String => {
     ids.forEach(id => {
         throwErrorIfNotExist(id);
+        throwErrorIfRequiredInIsp(id);
+        throwErrorIfPassedByStudent(id);
     });
     CourseRepository.deleteCourses(ids);
     return "Courses are successfully deleted";
@@ -32,6 +34,20 @@ const throwErrorIfNotExist = (id: number) : void => {
     let res: Course | null = CourseRepository.findById(id);
     if (res === null) {
         throw new Error(`Course with id ${id} does not exist`);
+    }
+}
+
+const throwErrorIfRequiredInIsp = (id: number) : void => {
+    let res: Course | null = CourseRepository.findById(id);
+    if (res !== null && res.requiredInIsp) {
+        throw new Error(`Course with id ${id} is required in ISP`);
+    }
+}
+
+const throwErrorIfPassedByStudent = (id: number) : void => {
+    let res: Course | null = CourseRepository.findById(id);
+    if (res !== null && res.passedByStudent) {
+        throw new Error(`Course with id ${id} is passed by student`);
     }
 }
 
