@@ -159,6 +159,25 @@ courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Respo
     }
 });
 
+/**
+ * @swagger
+ * /courses/{id}:
+ *   put:
+ *     summary: Update a course by ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Course'
+ *     responses:
+ *       200:
+ *         description: Successfully updated course.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Course'
+ */
 courseRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const course : CourseUpdateView = req.body;
