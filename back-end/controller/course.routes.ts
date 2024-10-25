@@ -149,6 +149,12 @@ courseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
  *         description: Courses are successfully deleted
  *       400:
  *         description: Course with id does not exist
+ *       400:
+ *         description: Course with id is required in ISP
+ *       400:
+ *         description: Course with id is passed by student
+ *       400:
+ *         description: Course with id is required by course
  */
 courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Response, next: NextFunction) => {
     try {
