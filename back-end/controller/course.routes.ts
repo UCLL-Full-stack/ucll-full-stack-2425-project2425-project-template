@@ -138,28 +138,28 @@ courseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
 
 /**
  * @swagger
- * /courses/delete:
- *   delete:
- *     summary: Delete courses by IDs
+ * /courses:
+ *   post:
+ *     summary: Create a new course.
  *     tags: [Course]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: array
- *             items:
- *               type: number
- *               description: The IDs of the courses to delete.
+ *             $ref: '#/components/schemas/Course'
  *     responses:
- *       200:
- *         description: Courses are successfully deleted
+ *       201:
+ *         description: Successfully created course.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Course'
  */
-courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Response, next: NextFunction) => {
+courseRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const courseIds: number[] = req.body;
-        const operationStatus : String= courseService.deleteCourses(courseIds);
-        res.status(200).send(operationStatus);
+        const course : CourseUpdateView = req.body;
+        res.status(201).json(courseService.createCourse(course));
     } catch (error) {
         next(error);
     }
@@ -184,11 +184,40 @@ courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Respo
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Course'
- */
+*/
 courseRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const course : CourseUpdateView = req.body;
         res.status(200).json(courseService.updateCourse(parseInt(req.params.id), course));
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /courses/delete:
+ *   delete:
+ *     summary: Delete courses by IDs
+ *     tags: [Course]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: number
+ *               description: The IDs of the courses to delete.
+ *     responses:
+ *       200:
+ *         description: Courses are successfully deleted
+ */
+courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Response, next: NextFunction) => {
+    try {
+        const courseIds: number[] = req.body;
+        const operationStatus : String= courseService.deleteCourses(courseIds);
+        res.status(200).send(operationStatus);
     } catch (error) {
         next(error);
     }

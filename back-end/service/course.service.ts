@@ -25,33 +25,44 @@ const getCourseById = (id: number): Course => {
     return res;
 }
 
-const deleteCourses = (ids: number[]) : String => {
-    ids.forEach(id => {
-        throwErrorIfNotExist(id);
-        throwErrorIfChosenInIsp(id);
-        throwErrorIfPassedByStudent(id);
-        throwErrorIfRequiredByCourse(id);
+const createCourse = (courseInfo: CourseUpdateView) : Course => {
+    throwErrorIfExist(courseInfo.name, courseInfo.phase);
+    
+    let requiredCourses: Course[] = [];
+    courseInfo.requiredPassedCourses.forEach(courseId => {
+        let course: Course = getCourseById(courseId);
+        requiredCourses.push(course);
     });
-    CourseRepository.deleteCourses(ids);
-    return "Courses are successfully deleted";
+    
+    let course = new Course({
+        name: courseInfo.name,
+        description: courseInfo.description,
+        phase: courseInfo.phase,
+        credits: courseInfo.credits,
+        lecturers: courseInfo.lecturers,
+        isElective: courseInfo.isElective,
+        requiredPassedCourses: requiredCourses
+    });
+    
+    return CourseRepository.save(course);
 }
 
 const updateCourse = (id: number, courseUpdateInfo: CourseUpdateView) : Course => {
     let currentCourse = getCourseById(id);
     throwErrorIfExist(courseUpdateInfo.name, courseUpdateInfo.phase);
-
+    
     let requiredCourses: Course[] = [];
     courseUpdateInfo.requiredPassedCourses.forEach(courseId => {
         if (courseId === id) throw new Error(ERROR_COURSE_REQUIRE_ITSELF);
         let course: Course = getCourseById(courseId);
         requiredCourses.push(course);
     });
-
+    
     if (currentCourse.phase !== courseUpdateInfo.phase
         || currentCourse.credits !== courseUpdateInfo.credits) {
         throwErrorIfChosenInIsp(id, ERROR_COURSE_PHASE_CREDITS_CHANGE);
     }
-
+    
     let course = new Course({
         id: id,
         name: courseUpdateInfo.name,
@@ -62,8 +73,19 @@ const updateCourse = (id: number, courseUpdateInfo: CourseUpdateView) : Course =
         isElective: courseUpdateInfo.isElective,
         requiredPassedCourses: requiredCourses
     });
-
+    
     return CourseRepository.save(course);
+}
+
+const deleteCourses = (ids: number[]) : String => {
+    ids.forEach(id => {
+        throwErrorIfNotExist(id);
+        throwErrorIfChosenInIsp(id);
+        throwErrorIfPassedByStudent(id);
+        throwErrorIfRequiredByCourse(id);
+    });
+    CourseRepository.deleteCourses(ids);
+    return "Courses are successfully deleted";
 }
 
 const throwErrorIfNotExist = (id: number) : void => {
@@ -113,6 +135,7 @@ export default {
     getAll,
     getAllShort,
     getCourseById,
+    createCourse,
     updateCourse,
     deleteCourses,
 };

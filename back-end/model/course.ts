@@ -10,7 +10,7 @@ export class Course {
     private readonly _requiredPassedCourses: Course[];
 
     constructor(course: {
-        id: number;
+        id?: number;
         name: string;
         description: string;
         phase: number;
