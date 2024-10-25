@@ -3,9 +3,10 @@ import { User } from "./user";
 
 export class Student extends User {
     private _nationality: string;
+    private _startYear: number;
     private _passedCourses: Course[];
 
-    constructor(student: { id: number; name: string; email: string; password: string; nationality: string ; passedCourses: Course[]}) {
+    constructor(student: { id: number; name: string; email: string; password: string; nationality: string; startYear: number; passedCourses: Course[] }) {
         super({
             id: student.id,
             name: student.name,
@@ -14,6 +15,7 @@ export class Student extends User {
         });
 
         this._nationality = student.nationality;
+        this._startYear = student.startYear;
         this._passedCourses = student.passedCourses;
     }
 
@@ -25,11 +27,19 @@ export class Student extends User {
         this._nationality = value;
     }
 
-    public get passedCourses(): Course[] {
+    get startYear(): number {
+        return this._startYear;
+    }
+
+    set startYear(value: number) {
+        this._startYear = value;
+    }
+
+    get passedCourses(): Course[] {
         return this._passedCourses;
     }
 
-    public set passedCourses(value: Course[]) {
+    set passedCourses(value: Course[]) {
         this._passedCourses = value;
     }
     equals(student: Student): boolean {
