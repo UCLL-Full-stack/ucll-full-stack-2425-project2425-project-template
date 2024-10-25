@@ -108,6 +108,7 @@ courseRouter.get("/short" , async (req: Request, res: Response, next: NextFuncti
  * /courses/{id}:
  *   get:
  *     summary: Get a course by ID.
+ *     tags: [Course]
  *     parameters:
  *       - in: path
  *         name: id
@@ -136,6 +137,7 @@ courseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
  * /courses/delete:
  *   delete:
  *     summary: Delete courses by IDs
+ *     tags: [Course]
  *     requestBody:
  *       required: true
  *       content:
@@ -164,6 +166,7 @@ courseRouter.delete('/delete', async (req: Request<{}, {}, number[]>, res: Respo
  * /courses/{id}:
  *   put:
  *     summary: Update a course by ID.
+ *     tags: [Course]
  *     requestBody:
  *       required: true
  *       content:
