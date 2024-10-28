@@ -1,7 +1,10 @@
 import express, { Router, Request, Response, NextFunction } from "express";
-import workoutexerciseService from "../service/workoutexercise.service";
+import workoutexerciseService from "../service/workoutxercise.service";
+import { workoutExerciseInput } from "../types";
 
-const workoutExerciseRouter = Router();
+
+const workoutExerciseRouter = express.Router();
+
 
 /**
  * @swagger
@@ -25,10 +28,12 @@ workoutExerciseRouter.get('/', (req: Request, res: Response, next: NextFunction)
     try{
         const workoutExercises = workoutexerciseService.getAllWorkoutExercises()
         res.status(200).json(workoutExercises)
-    }catch (error) {
-        next(error)
+    } catch (error: any) { 
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
-});
+    }
+);
 
 /**
  * @swagger
@@ -60,10 +65,12 @@ workoutExerciseRouter.get('/:id', (req: Request, res: Response, next: NextFuncti
         const workoutExerciseId = parseInt(req.params.id)
         const workoutExercise = workoutexerciseService.getWorkoutExerciseById(workoutExerciseId)
         res.status(200).json(workoutExercise)
-    }catch(error){
-        next(error)
+    } catch (error: any) { 
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
-})
+    }
+)
 
 /**
  * @swagger
@@ -97,9 +104,22 @@ workoutExerciseRouter.get('/workout/:id', (req: Request, res: Response, next: Ne
         const workoutId = parseInt(req.params.id)
         const workoutExercises = workoutexerciseService.getWorkoutExercisesByWorkoutId(workoutId)
         res.status(200).json(workoutExercises)
-    }catch(error){
-        next(error)
+    } catch (error: any) { 
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 })
+
+workoutExerciseRouter.post('/', (req: Request, res: Response) => {
+    try {
+        const workoutExerciseInput: workoutExerciseInput = req.body;
+        const newWorkoutExercise = workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
+        res.status(200).json(newWorkoutExercise);
+    } catch (error: any) {
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
 
 export default workoutExerciseRouter;

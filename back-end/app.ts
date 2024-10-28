@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { NextFunction } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
 import exerciseRouter from './controller/exercise.router';
-import workoutExerciseRouter from './controller/workoutExercise.routes';
+import workoutExerciseRouter from './controller/workoutexercise.routes';
 
 const app = express();
 dotenv.config();
@@ -24,6 +24,8 @@ app.use('/workoutExercises', workoutExerciseRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
+
+
 
 const swaggerOpts = {
     definition: {

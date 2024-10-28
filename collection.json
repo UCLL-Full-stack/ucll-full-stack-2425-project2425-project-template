@@ -1,0 +1,152 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Workout Planner API Tests",
+    "requests": [
+        {
+            "name": "Get All Exercises",
+            "method": "GET",
+            "url": "{{baseUrl}}/exercises",
+            "tests": []
+        },
+        {
+            "name": "Get Exercise by ID - Valid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/exercises/1",
+            "tests": []
+        },
+        {
+            "name": "Get Exercise by ID - Invalid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/exercises/999",
+            "tests": []
+        },
+        {
+            "name": "Get All Users",
+            "method": "GET",
+            "url": "{{baseUrl}}/users",
+            "tests": []
+        },
+        {
+            "name": "Get User by ID - Valid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/users/1",
+            "tests": []
+        },
+        {
+            "name": "Get User by ID - Invalid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/users/999",
+            "tests": []
+        },
+        {
+            "name": "Get All Workouts",
+            "method": "GET",
+            "url": "{{baseUrl}}/workouts",
+            "tests": []
+        },
+        {
+            "name": "Get Workout by ID - Valid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/workouts/1",
+            "tests": []
+        },
+        {
+            "name": "Get Workout by ID - Invalid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/workouts/999",
+            "tests": []
+        },
+        {
+            "name": "Create Workout - Valid Data",
+            "method": "POST",
+            "url": "{{baseUrl}}/workouts",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_id\": 2, \"user_id\": 1, \"name\": \"Lower body\", \"description\": \"Lower body workout\"}"
+            },
+            "tests": []
+        },
+        {
+            "name": "Create WorkoutExercise - Valid Data",
+            "method": "POST",
+            "url": "{{baseUrl}}/workoutExercises",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_exercise_id\": 1, \"workout_id\": 1, \"exercise_id\": 1, \"sets\": 3, \"reps\": 10, \"rpe\": \"7-8\", \"rest_time\": \"1:00\"}"
+            },
+            "tests": []
+        },
+        {
+            "name": "Create WorkoutExercise - Invalid Sets",
+            "method": "POST",
+            "url": "{{baseUrl}}/workoutExercises",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_exercise_id\": 2, \"workout_id\": 1, \"exercise_id\": 1, \"sets\": -1, \"reps\": 10, \"rpe\": \"7-8\", \"rest_time\": \"1:00\"}"
+            },
+            "tests": [
+                {
+                    "type": "json",
+                    "value": "errorMessage",
+                    "description": "Validate Sets Error",
+                    "comparison": "==",
+                    "expected": "Invalid Sets: Must be a positive integer"
+                }
+            ]
+        },
+        {
+            "name": "Create WorkoutExercise - Invalid Reps",
+            "method": "POST",
+            "url": "{{baseUrl}}/workoutExercises",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_exercise_id\": 3, \"workout_id\": 1, \"exercise_id\": 1, \"sets\": 3, \"reps\": 0, \"rpe\": \"7-8\", \"rest_time\": \"1:00\"}"
+            },
+            "tests": [
+                {
+                    "type": "json",
+                    "value": "errorMessage",
+                    "description": "Validate Reps Error",
+                    "comparison": "==",
+                    "expected": "reps must be a positive integer."
+                }
+            ]
+        },
+        {
+            "name": "Create WorkoutExercise - Invalid RPE Format",
+            "method": "POST",
+            "url": "{{baseUrl}}/workoutExercises",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_exercise_id\": 4, \"workout_id\": 1, \"exercise_id\": 1, \"sets\": 3, \"reps\": 10, \"rpe\": \"11\", \"rest_time\": \"1:00\"}"
+            },
+            "tests": [
+                {
+                    "type": "json",
+                    "value": "errorMessage",
+                    "description": "Validate RPE Format Error",
+                    "comparison": "==",
+                    "expected": "rpe must be a valid string in the format '1-10' or '7-8'."
+                }
+            ]
+        },
+        {
+            "name": "Create WorkoutExercise - Invalid Rest Time Format",
+            "method": "POST",
+            "url": "{{baseUrl}}/workoutExercises",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_exercise_id\": 5, \"workout_id\": 1, \"exercise_id\": 1, \"sets\": 3, \"reps\": 10, \"rpe\": \"7-8\", \"rest_time\": \"100\"}"
+            },
+            "tests": [
+                {
+                    "type": "json",
+                    "value": "errorMessage",
+                    "description": "Validate Rest Time Format Error",
+                    "comparison": "==",
+                    "expected": "rest_time must be in the format 'MM:SS' or 'M:SS'."
+                }
+            ]
+        }
+    ]
+}
