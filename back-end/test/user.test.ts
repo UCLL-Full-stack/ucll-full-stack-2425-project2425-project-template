@@ -48,7 +48,7 @@ test(`given: User equals method called with non-matching properties; when: one o
         firstName: 'Jane',
         lastName: 'Smith',
         email: 'jane.smith@example.com',
-        password: 'y'
+        password: 'wachtwoord'
     });
 
     // then
@@ -63,5 +63,5 @@ test(`given: User equals method called; when: only one field is different; then:
     expect(user.equals({ ...validUser, firstName: 'Jane' })).toBe(false);
     expect(user.equals({ ...validUser, lastName: 'Smith' })).toBe(false);
     expect(user.equals({ ...validUser, email: 'jane.doe@example.com' })).toBe(false);
-    expect(user.equals({ ...validUser, password: 'l' })).toBe(false);
+    expect(user.equals({ ...validUser, password: 't' })).toBe(false);
 });
