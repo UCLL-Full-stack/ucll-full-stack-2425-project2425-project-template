@@ -22,3 +22,12 @@ export type User = {
   password?: string;
   role?: string;
 };
+
+export type Product = {
+  name: string;
+  price: number;
+  unit: string;
+  stock: number;
+  description: string;
+  imagePath: string;
+};

@@ -3,7 +3,7 @@ import { Product } from "../model/product";
 // Q& Is it an issue if the descriptions are somehow unappropriate?
 
 // Source of all images: https://pngimg.com/
-const resourceImagePath: String = "../resources/images/";
+const resourceImagePath: String = "/images/"; // refers to "front-end/public/images".
 const products = [
     new Product({
         name: "Bread",

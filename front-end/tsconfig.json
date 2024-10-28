@@ -1,3 +1,4 @@
+// had to change and module to nodenext, instead of esnext.
 {
   "compilerOptions": {
     "lib": [

@@ -1,72 +1,40 @@
 import Header from "@/components/header";
 import Head from "next/head";
 import styles from "../styles/home.module.css";
-import Image from 'next/image'
+import Product from "@/components/product";
+import { Lecturer } from "@/types";
+import { useState, useEffect } from "react";
+import ProductService from "@/services/ProductService";
 
 const Home: React.FC = () => {
+  const [products, setProducts] = useState<Array<Product>>([]);
+
+  const getProducts = async () => {
+    const response = await ProductService.getAllProducts();
+    const productss = await response.json();
+    setProducts(productss);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+
   return (
     <>
       <Head>
-        <title>Courses</title>
+        <title>VESO</title>
         <meta name="description" content="Courses app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/logo.ico" /> */}
       </Head>
       <Header />
       <main className={styles.main}>
         <section className={styles.products}>
-          <article >
-            <Image
-              src="/images/bread.png"
-              width={150}
-              height={150}
-              alt="Bread"
-            />
-            <div>
-              <p>Bread</p>
-              <p>55 $</p>
-            </div>
-          </article>
-
-          <article>
-            <Image
-                src="/images/bread.png"
-                width={150}
-                height={150}
-                alt="Bread"
-              />
-            <div>
-              <p>Bread</p>
-              <p>55 $</p>
-            </div>
-          </article>
-
-          <article>
-            <Image
-                src="/images/bread.png"
-                width={150}
-                height={150}
-                alt="Bread"
-              />
-            <div>
-              <p>Bread</p>
-              <p>55 $</p>
-            </div>
-          </article>
-
-          <article>
-            <Image
-                src="/images/bread.png"
-                width={150}
-                height={150}
-                alt="Bread"
-              />
-            <div>
-              <p>Bread</p>
-              <p>55 $</p>
-            </div>
-          </article>
-
+          {
+            products &&
+            (<Product products={products} />)
+          }
         </section>
       </main>
     </>
