@@ -1,4 +1,6 @@
 import { Item } from '../../model/item';
+import itemDb from '../../repository/item.db';
+import itemService from '../../service/item.service';
 
 let mockItemDbGetAllItems: jest.Mock;
 
@@ -20,7 +22,7 @@ test('given: a filled itemDb, when: getting all items from itemService, then: al
     itemDb.getAll = mockItemDbGetAllItems.mockReturnValue(items);
 
     // when getting all users from userService
-    itemService.getAllFruits();
+    itemService.getAllItems();
 
     // then all users are returned
     expect(mockItemDbGetAllItems).toHaveBeenCalled();

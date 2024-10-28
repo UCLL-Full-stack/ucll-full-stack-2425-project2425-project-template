@@ -1,4 +1,6 @@
 import { Shoppingcart } from '../../model/shoppingcart';
+import shoppingcartDb from '../../repository/shoppingcart.db';
+import shoppingcartService from '../../service/shoppingcart.service';
 
 let mockShoppingcartDbGetAllShoppingcarts: jest.Mock;
 
@@ -9,7 +11,10 @@ beforeEach(() => {
 test('given: a filled shoppingcartDb, when: getting all shoppingcarts from shoppingcartService, then: all shoppingcarts are returned', () => {
     // given a filled shoppingcartDb
     const shoppingcarts: Shoppingcart[] = [
-        new Shoppingcart({ name: 'fruit-shopping', deliveryDate: new Date('2024-09-01') }),
+        new Shoppingcart({
+            name: 'fruit-shopping',
+            deliveryDate: new Date('2025-12-24'), // Ensure delivery date is in the future
+        }),
     ];
 
     shoppingcartDb.getAll = mockShoppingcartDbGetAllShoppingcarts.mockReturnValue(shoppingcarts);

@@ -1,4 +1,6 @@
 import { Nutritionlabel } from '../../model/nutritionlabel';
+import nutritionlabelDb from '../../repository/nutritionlabel.db';
+import nutritionlabelService from '../../service/nutritionlabel.service';
 
 let mockNutritionlabelDbGetAllNutritionlabels: jest.Mock;
 

@@ -1,4 +1,6 @@
 import { User } from '../../model/user';
+import userDb from '../../repository/user.db';
+import userService from '../../service/user.service';
 
 let mockUserDbGetAllUsers: jest.Mock;
 
