@@ -7,7 +7,7 @@ const validWorkoutExercise = {
     sets: 3,
     reps: 12,
     rpe: '9-10',
-    rest_time: '30s',
+    rest_time: '00:30',
 };
 
 test(`given: valid values for WorkoutExercise properties; when: WorkoutExercise is created; then: properties are set correctly`, () => {
@@ -36,7 +36,7 @@ test(`given: WorkoutExercise equals method called with matching properties; when
         sets: 3,
         reps: 12,
         rpe: '9-10',
-        rest_time: '30s',
+        rest_time: '00:30',
     });
 
     // then
@@ -55,7 +55,7 @@ test(`given: WorkoutExercise equals method called with non-matching properties; 
         sets: 4,
         reps: 10,
         rpe: '8-9',
-        rest_time: '50s',
+        rest_time: '00:50',
     });
 
     // then
