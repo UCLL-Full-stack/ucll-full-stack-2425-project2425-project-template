@@ -19,4 +19,65 @@ export class Board{
         this.columns = columns;
         this.permissions = permissions;
     }
+
+    public setBoardId(boardId: string): void{
+        this.boardId = boardId;
+    }
+
+    public setBoardName(boardName: string): void{
+        this.boardName = boardName;
+    }
+
+    public setCreatedByUser(createdByUser: User): void{
+        this.createdByUser = createdByUser;
+    }
+
+    public setGuild(guild: Guild): void{
+        this.guild = guild;
+    }
+
+    public setColumns(columns: Column[]): void{
+        this.columns = columns;
+    }
+
+    public setPermissions(permissions: PermissionEntry[]): void{
+        this.permissions = permissions;
+    }
+
+    public addColumn(column: Column): void{
+        this.columns.push(column);
+    }
+
+    public removeColumn(columnId: string): void{
+        this.columns = this.columns.filter(column => column.getColumnId() !== columnId);
+    }
+
+    public getBoardId(): string{
+        return this.boardId;
+    }
+
+    public getBoardName(): string{
+        return this.boardName;
+    }
+
+    public getCreatedByUser(): User{
+        return this.createdByUser;
+    }
+
+    public getGuild(): Guild{
+        return this.guild;
+    }
+
+    public getColumns(): Column[]{
+        return this.columns;
+    }
+
+    public getPermissions(): PermissionEntry[]{
+        return this.permissions;
+    }
+
+    public addPermission(permission: PermissionEntry): void{
+        this.permissions.push(permission);
+    }
+    
 }

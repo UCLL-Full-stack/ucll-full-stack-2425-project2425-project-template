@@ -15,4 +15,52 @@ export class Guild{
         this.settings = settings;
         this.roles = roles;
     }
+
+    public setGuildId(guildId: string): void{
+        this.guildId = guildId;
+    }
+
+    public setGuildName(guildName: string): void{
+        this.guildName = guildName;
+    }
+
+    public setPermissions(permissions: PermissionEntry[]): void{
+        this.permissions = permissions;
+    }
+
+    public setSettings(settings: PermissionEntry[]): void{
+        this.settings = settings;
+    }
+
+    public setRoles(roles: Role[]): void{
+        this.roles = roles;
+    }
+
+    public addRole(role: Role): void{
+        this.roles.push(role);
+    }
+
+    public removeRole(roleId: string): void{
+        this.roles = this.roles.filter(role => role.getRoleId() !== roleId);
+    }
+
+    public getGuildId(): string{
+        return this.guildId;
+    }
+
+    public getGuildName(): string{
+        return this.guildName;
+    }
+
+    public getPermissions(): PermissionEntry[]{
+        return this.permissions;
+    }
+
+    public getSettings(): PermissionEntry[]{
+        return this.settings;
+    }
+
+    public getRoles(): Role[]{
+        return this.roles;
+    }
 }
