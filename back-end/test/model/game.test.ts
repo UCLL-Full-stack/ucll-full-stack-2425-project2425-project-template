@@ -2,7 +2,7 @@ import { Coach } from "../../model/coach";
 import { Game } from "../../model/game";
 import { Player } from "../../model/player";
 import { Team } from "../../model/team";
-import { set } from "date-fns/set";
+import set from "date-fns/set";
 
 const validDate = set(new Date(), { hours: 15, minutes: 30 });
 const validResult = '0 - 1'
@@ -16,16 +16,34 @@ const validTeamName = "UCLLTeam";
 const validTeamName2 = "UCLLTeam2";
 const validTeam =  new Team({teamName: validTeamName, players: [validPlayer, validPlayer2], coach: validCoach});
 const validTeam2 = new Team({teamName: validTeamName2, players: [validPlayer3, validPlayer4], coach: validCoach2});
+const validId = 1;
 
 test('given: valid values, when: creating game, then: game is successfully created', () => {
     //given
 
     //when
-    const game = new Game({date: validDate, teams: [validTeam, validTeam2]})
+    const game = new Game({id: validId, date: validDate, teams: [validTeam, validTeam2], result: validResult});
 
     //then
+    expect(game.getId()).toEqual(validId);
     expect(game.getDate()).toEqual(validDate);
     expect(game.getTeams()).toContain(validTeam);
     expect(game.getTeams()).toContain(validTeam2);
+    expect(game.getResult()).toEqual(validResult);
+});
+
+test('givenInvalidLengthOfTeams_whenCreatingGame_thenErrorIsThrown', () => {
+    //when
+    expect(() => new Game({date: validDate, teams: [validTeam], result: validResult})).toThrow('Exactly two teams are required.');
+});
+
+test('givenGameWithoutResult_whenSettingResult_thenResultIsSet', () => {
+    //given
+    const game = new Game({id: validId, date: validDate, teams: [validTeam, validTeam2]});
+
+    //when
+    game.setResult(validResult);
+
+    //then
     expect(game.getResult()).toEqual(validResult);
 });

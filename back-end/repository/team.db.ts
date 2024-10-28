@@ -4,6 +4,7 @@ import { Team } from '../model/team';
 
 const teams: Team[] = [
     new Team({
+        id: 1,
         teamName: 'Team 1',
         players: [
             new Player({
@@ -63,13 +64,18 @@ const getAllTeams = (): Team[] => {
 };
 
 const getTeamsByCoach = (coachId: number): Team[] => {
-    const toReturn = [];
-    for (var team of teams) {
-        if (team.getCoach().getId() == coachId) {
-            toReturn.push(team);
+    const teamsToReturn = [];
+    try {
+        for (var team of teams) {
+            if (team.getCoach().getId() == coachId) {
+                teamsToReturn.push(team);
+            }
         }
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
     }
-    return toReturn;
+    return teamsToReturn;
 };
 
 const getTeamById = (id: number): Team | undefined => {
@@ -83,6 +89,7 @@ const getTeamById = (id: number): Team | undefined => {
 
 const createTeam = (newTeam: Team) => {
     teams.push(newTeam);
+    return newTeam;
 };
 
 export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam };

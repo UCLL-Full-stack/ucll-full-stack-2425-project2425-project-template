@@ -44,4 +44,9 @@ const getPlayerById = (id: number): Player | undefined => {
     }
 };
 
-export default { getAllPlayers, getPlayerById };
+const createPlayer = (player: Player): Player => {
+    players.push(player);
+    return player;
+};
+
+export default { getAllPlayers, getPlayerById, createPlayer };

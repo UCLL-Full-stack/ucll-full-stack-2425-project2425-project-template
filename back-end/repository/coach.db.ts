@@ -30,4 +30,9 @@ const getCoachById = (id: number): Coach | undefined => {
     }
 };
 
-export default { getAllCoaches, getCoachById };
+const createCoach = (coach: Coach): Coach => {
+    coaches.push(coach);
+    return coach;
+};
+
+export default { getAllCoaches, getCoachById, createCoach };

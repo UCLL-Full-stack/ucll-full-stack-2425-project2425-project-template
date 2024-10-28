@@ -1,20 +1,28 @@
-import { Coach } from "./coach";
-import { Player } from "./player";
+import { Coach } from './coach';
+import { Player } from './player';
 
 export class Team {
     private id?: number;
     private teamName: string;
     private players: Player[];
     private coach: Coach;
-    
-    constructor(team: {id?: number, teamName: string, players: Player[], coach: Coach}) {
+
+    constructor(team: { id?: number; teamName: string; players: Player[]; coach: Coach }) {
+        this.validate(team);
+        this.id = team.id;
         this.teamName = team.teamName;
         this.players = team.players;
         this.coach = team.coach;
     }
 
-    getId(): number | undefined { 
-        return this.id
+    validate(team: { id?: number; teamName: string; players: Player[]; coach: Coach }) {
+        if (!team.teamName) {
+            throw new Error('Team name is required.');
+        }
+    }
+
+    getId(): number | undefined {
+        return this.id;
     }
 
     getTeamName(): string {
@@ -54,6 +62,12 @@ export class Team {
     updateCoach(coach: Coach) {
         if (this.getCoach() != coach) {
             this.coach = coach;
+        }
+    }
+
+    updateTeamName(newTeamName: string) {
+        if (this.getTeamName() != newTeamName) {
+            this.teamName = newTeamName;
         }
     }
 }

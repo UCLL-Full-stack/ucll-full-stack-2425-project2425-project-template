@@ -80,4 +80,9 @@ const getGameById = (id: number): Game | undefined => {
     }
 };
 
-export default { getAllGames, getGameById };
+const createGame = (game: Game): Game => {
+    games.push(game);
+    return game;
+};
+
+export default { getAllGames, getGameById, createGame };

@@ -1,5 +1,5 @@
 /**
- * @Swagger
+ * @swagger
  *   components:
  *    securityschemes:
  *     bearerAuth:
@@ -15,7 +15,7 @@
  *               format: int64
  *             firstName:
  *               type: string
- *               descriptino: The first name of the player.
+ *               description: The first name of the player.
  *             lastName:
  *               type: string
  *               description: The last name of the player.
@@ -36,7 +36,7 @@ const playerRouter = express.Router();
  * /players:
  *   get:
  *      summary: Get a list of all players.
- *      response:
+ *      responses:
  *       200:
  *          description: A JSON array of all players.
  *          content:
@@ -79,6 +79,34 @@ playerRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
 playerRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const player = await playerService.getPlayerById(parseInt(req.params.id));
+        res.status(200).json(player);
+    } catch (error: any) {
+        res.status(400).json({ status: 'error', errorMessage: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /players:
+ *   post:
+ *     summary: Create a new player.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Player'
+ *     responses:
+ *       200:
+ *         description: A JSON object of the created player.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Player'
+ */
+playerRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const player = await playerService.createPlayer(req.body);
         res.status(200).json(player);
     } catch (error: any) {
         res.status(400).json({ status: 'error', errorMessage: error.message });
