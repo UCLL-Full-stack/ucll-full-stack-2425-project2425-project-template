@@ -9,16 +9,31 @@ const getAllUsers = async () => {
 }
 
 const getUserById = async ({id}: {id:number}) => {
+  if (!id) {
+    throw new Error('User ID is required');
+  }
   return userDB.getUserById(id);
 }
 const createUser = async (user: UserInput) => {
+  console.log(user)
   const newUser = new User({
     id: user.id,
     password: user.password,
-    firstName: user.firstName,
+    firstName: user.firstname,
     name: user.name,
   });
   return userDB.createUser(newUser);
+}
+const getUserByName = async (name: string) => {
+  return userDB.getUserByName(name);
+}
+
+const loginUser = async (user: UserInput) => {
+  const searchUser = await userDB.getUserByName(user.name);
+  if(searchUser === undefined || searchUser.getPassword() !== user.password) {
+    throw new Error('Invalid credentials');
+  }
+  return searchUser;
 }
 
 
@@ -26,5 +41,6 @@ export default
 { 
   getAllUsers,
   getUserById,
-  createUser
+  createUser,
+  loginUser
  };

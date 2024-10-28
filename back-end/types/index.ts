@@ -1,7 +1,7 @@
 type UserInput = {
   id?: number;
   password: string;
-  firstName: string;
+  firstname: string;
   name: string;
   role?: string;
   chats?: ChatInput[];

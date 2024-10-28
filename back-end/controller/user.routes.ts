@@ -131,6 +131,41 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
   }
 });
 
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: login user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user was successfully login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Some parameters may be invalid
+ *       500:
+ *         description: Internal error
+ */
+
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user:UserInput = req.body;
+    const newUser = await userservice.loginUser(user);
+    res.json(newUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 
 export { userRouter };
