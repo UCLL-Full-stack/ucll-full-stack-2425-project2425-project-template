@@ -22,7 +22,7 @@ const Teams: React.FC = () => {
     return (
         <>
             <Head>
-                <title>Teams</title>
+                <title>Teams - TeamTrack</title>
             </Head>
             <Header />
             <main className="d-flex flex-column justify-content-center align-items-center">
@@ -33,6 +33,7 @@ const Teams: React.FC = () => {
                         teams={teams}
                         />)}
                 </section>
+                <button>Create Team</button>
             </main>
         </>
     );
