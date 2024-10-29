@@ -2,10 +2,15 @@ import itemDb from '../../repository/item.db';
 import itemService from '../../service/item.service';
 import { ItemInput } from '../../types';
 
+let createItemMock: jest.Mock;
+
 let mockItemDbGetAllItems: jest.Mock;
+let mockItemDbCreate: jest.Mock;
 
 beforeEach(() => {
     mockItemDbGetAllItems = jest.fn();
+    mockItemDbCreate = jest.fn();
+    createItemMock = jest.fn();
 });
 
 test('given: a filled itemDb, when: getting all items from itemService, then: all items are returned', () => {
@@ -27,4 +32,23 @@ test('given: a filled itemDb, when: getting all items from itemService, then: al
     // then all users are returned
     expect(mockItemDbGetAllItems).toHaveBeenCalled();
     expect(mockItemDbGetAllItems).toHaveReturnedWith(items);
+});
+
+test('given: an a valid item, when: creating a item, then: the item is created and returned', () => {
+    // given a valid item
+    const item: ItemInput = {
+        name: 'Tomato',
+        price: 10,
+        pathToImage: 'public/tomato.png',
+        category: 'vegetables',
+    };
+
+    itemDb.create = createItemMock.mockReturnValue(item);
+
+    // when adding an item to the itemDb
+    itemService.createItem(item);
+
+    // then the item is added
+    expect(createItemMock).toHaveBeenCalled();
+    expect(createItemMock).toHaveBeenCalledWith(item);
 });
