@@ -5,6 +5,8 @@ import { userRouter } from './controller/user.routes';
 import { itemRouter } from './controller/item.routes';
 import { shoppingcartRouter } from './controller/shoppingcart.routes';
 import { nutritionlabelRouter } from './controller/nutritionlabel.routes';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 dotenv.config();
@@ -21,6 +23,21 @@ app.use('/items', itemRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
+
+// Swagger docs
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Shoppingcarts API',
+            version: '1.0.0',
+        },
+    },
+    apis: ['./controller/*.routes.ts'],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
