@@ -1,6 +1,6 @@
-import { Item } from '../../model/item';
 import itemDb from '../../repository/item.db';
 import itemService from '../../service/item.service';
+import { ItemInput } from '../../types';
 
 let mockItemDbGetAllItems: jest.Mock;
 
@@ -10,14 +10,14 @@ beforeEach(() => {
 
 test('given: a filled itemDb, when: getting all items from itemService, then: all items are returned', () => {
     // given a filled userDB
-    const items: Item[] = [
-        new Item({
-            name: 'Banana',
-            price: 10,
-            pathToImage: 'public/banana.png',
-            category: 'fruits',
-        }),
-    ];
+    const item1: ItemInput = {
+        name: 'Banana',
+        price: 10,
+        pathToImage: 'public/banana.png',
+        category: 'fruits',
+    };
+
+    const items: ItemInput[] = [item1];
 
     itemDb.getAll = mockItemDbGetAllItems.mockReturnValue(items);
 

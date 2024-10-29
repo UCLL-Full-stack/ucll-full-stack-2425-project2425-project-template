@@ -1,6 +1,6 @@
-import { User } from '../../model/user';
 import userDb from '../../repository/user.db';
 import userService from '../../service/user.service';
+import { UserInput } from '../../types';
 
 let mockUserDbGetAllUsers: jest.Mock;
 
@@ -10,9 +10,13 @@ beforeEach(() => {
 
 test('given: a filled userDb, when: getting all users from userService, then: all users are returned', () => {
     // given a filled userDB
-    const users: User[] = [
-        new User({ email: 'john.doe@mail.com', password: 'password', role: 'user' }),
-    ];
+    const user1: UserInput = {
+        email: 'john.doe@mail.com',
+        password: 'password',
+        role: 'user',
+    };
+
+    const users: UserInput[] = [user1];
 
     userDb.getAll = mockUserDbGetAllUsers.mockReturnValue(users);
 
