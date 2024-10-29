@@ -8,6 +8,9 @@ const getAllExercises = (): Exercise[] => {
 
 const getExerciseById = (id: number): Exercise => {
     const exercise = exerciseDb.getExerciseById(id);
+    if (!exercise) {
+        throw new Error(`Exercise with ID ${id} not found`);
+    }
     return exercise;
 };
 

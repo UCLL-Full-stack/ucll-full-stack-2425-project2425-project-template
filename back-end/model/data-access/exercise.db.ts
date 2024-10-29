@@ -34,12 +34,8 @@ const getAllExercises = (): Exercise[] => {
     return exercises;
 }
 
-const getExerciseById = (id: number): Exercise => {
-    const exercise = exercises.find((exercise) => exercise.id == id);
-    if (!exercise) {
-        throw new Error(`Exercise with id ${id} not found`)
-    }
-    return exercise;
-}
+const getExerciseById = (id: number): Exercise | undefined => {
+    return exercises.find((exercise) => exercise.id === id);
+};
 
 export default {getAllExercises, getExerciseById}

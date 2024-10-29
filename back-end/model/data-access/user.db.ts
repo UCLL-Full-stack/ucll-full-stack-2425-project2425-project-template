@@ -9,11 +9,8 @@ const getAllUsers = (): User[] => {
     return users;
 }
 
-const getUserById = (id: number): User => {
+const getUserById = (id: number): User | undefined => {
     const user = users.find((user) => user.user_id == id);
-    if (!user) {
-        throw new Error(`User with id ${id} not found`)
-    }
     return user;
 }
 

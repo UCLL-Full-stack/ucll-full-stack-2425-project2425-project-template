@@ -9,11 +9,17 @@ const getAllWorkoutExercises =(): WorkoutExercise[] => {
 
 const getWorkoutExerciseById = (id: number): WorkoutExercise => {
     const workoutExercise = workoutexerciseDb.getWorkoutExerciseById(id);
+    if (!workoutExercise) {
+        throw new Error(`Workout exercise with ID ${id} not found`);
+    }
     return workoutExercise;
 }
 
 const getWorkoutExercisesByWorkoutId = (id: number): WorkoutExercise[] => {
     const workoutExercises = workoutexerciseDb.getWorkoutExercisesByWorkoutId(id);
+    if (workoutExercises.length === 0) {
+        throw new Error(`No workout exercises found for workout with ID ${id}`);
+    }
     return workoutExercises;
 }
 

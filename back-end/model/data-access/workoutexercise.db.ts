@@ -9,20 +9,18 @@ const getAllWorkoutExercises = (): WorkoutExercise[] => {
     return workoutexercises;
 }
 
-const getWorkoutExerciseById = (id: number): WorkoutExercise => {
+const getWorkoutExerciseById = (id: number): WorkoutExercise | undefined => {
     const workoutexercise = workoutexercises.find((workoutexercise) => workoutexercise.workout_exercise_id === id);
-    if (!workoutexercise) {
-        throw new Error(`WorkoutExercise with id ${id} not found`);
-    }
+
     return workoutexercise;
 };
 
 const getWorkoutExercisesByWorkoutId = (id: number): WorkoutExercise[] => {
-    const workoutExercises = workoutexercises.filter((workoutexercise) => workoutexercise.workout_id === id);
-    if (workoutExercises.length === 0) {
-        throw new Error(`No workout exercises found for workout id ${id}`);
-    }
-    return workoutExercises;
+    const workoutExercises = workoutexercises.filter(
+        (workoutexercise) => workoutexercise.workout_id === id
+    );
+
+    return workoutExercises || [];
 };
 
 const createWorkoutExercise = ({ workout_exercise_id, workout_id, exercise_id, sets, reps, rpe, rest_time }: WorkoutExercise): WorkoutExercise => {

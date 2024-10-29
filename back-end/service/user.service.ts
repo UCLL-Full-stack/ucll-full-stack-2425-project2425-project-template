@@ -8,6 +8,9 @@ const getAllUsers = (): User[] => {
 
 const getUserById = (id: number): User => {
     const user = userDb.getUserById(id)
+    if (!user) {
+        throw new Error(`User with ID ${id} not found`);
+    }
     return user
 }
 

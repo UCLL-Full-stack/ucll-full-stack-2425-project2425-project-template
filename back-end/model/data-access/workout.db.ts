@@ -18,20 +18,14 @@ const createWorkout = ({ workout_id, user_id, name, description}: Workout): Work
 
 const getAllWorkouts = (): Workout[] => workouts
 
-const getWorkoutById = (id: number): Workout => {
+const getWorkoutById = (id: number): Workout | undefined => {
     const workout = workouts.find((workout) => workout.workout_id === id);
-    if (!workout) {
-        throw new Error(`Workout with id ${id} not found`);
-    }
     return workout;
 };
 
+
 const getWorkoutsByUserId = (id: number): Workout[] => {
-    const userWorkouts = workouts.filter((workout) => workout.user_id === id);
-    if (userWorkouts.length === 0) {
-        throw new Error(`No workouts found for user id ${id}`);
-    }
-    return userWorkouts;
+    return workouts.filter((workout) => workout.user_id === id) || [];
 };
 
 
