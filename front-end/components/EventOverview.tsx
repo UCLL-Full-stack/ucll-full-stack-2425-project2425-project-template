@@ -5,7 +5,6 @@ type Prop = {
 };
 
 const EventOverview: React.FC<Prop> = ({ events }: Prop) => {
-  console.log(events);
   return (
     events && (
       <div className="d-flex flex-wrap">
@@ -16,17 +15,19 @@ const EventOverview: React.FC<Prop> = ({ events }: Prop) => {
             <p>Price: {event.price}</p>
             <p>Min Participants: {event.minParticipants}</p>
             <p>Max Participants: {event.maxParticipants}</p>
-            <p>
-              Location: {event.location.street} {event.location.number},{" "}
-              {event.location.city}, {event.location.country}
-            </p>
-            <p>Category: {event.category.name}</p>
-            <p>Last Edit: {new Date(event.lastEdit).toLocaleString()}</p>
-            <p>Date Created: {new Date(event.dateCreated).toLocaleString()}</p>
+            {event.location ? (
+              <p>
+                Location: {event.location.street} {event.location.number},{" "}
+                {event.location.city}, {event.location.country}
+              </p>
+            ) : (
+              <p>Location: Not available</p>
+            )}
           </div>
         ))}
       </div>
     )
   );
 };
+
 export default EventOverview;

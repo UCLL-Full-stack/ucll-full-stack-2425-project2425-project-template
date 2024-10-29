@@ -128,6 +128,8 @@ eventRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
 
 eventRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log('Event router back end');
+        console.log(req.body);
         const event = new Event(req.body);
         const newEvent = eventService.addEvent(event);
         res.json(newEvent);
