@@ -33,10 +33,8 @@ const AddEventForm: React.FC = () => {
 
     try {
       await EventService.addEvent(event);
-      alert('Event added successfully!');
     } catch (error) {
       console.error('Error adding event:', error);
-      alert('Failed to add event.');
     }
   };
 
