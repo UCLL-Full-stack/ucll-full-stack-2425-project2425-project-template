@@ -1,20 +1,65 @@
-/** 
+/**
  * @swagger
  * components:
- *  schemas:
-      Workout:
-        type: object
-        properties:
-            workout_id:
-                type: number
-                format: int64
-            user_id:
-                type: number
-                format: int64
-            name:
-                type: string
-            description:
-                type: string
+ *   schemas:
+ *     Workout:
+ *       type: object
+ *       properties:
+ *         workout_id:
+ *           type: number
+ *           format: int64
+ *         user_id:
+ *           type: number
+ *           format: int64
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         exercises:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Exercise'
+ *     WorkoutInput:
+ *       type: object
+ *       properties:
+ *         workout_id:
+ *           type: number
+ *           format: int64
+ *         user_id:
+ *           type: number
+ *           format: int64
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         exercises:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/ExerciseInput'
+ *     Exercise:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         video_link:
+ *           type: string
+ *     ExerciseInput:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         video_link:
+ *           type: string
  */
 
 import express, { Router, Request, Response, NextFunction } from "express";

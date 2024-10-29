@@ -7,7 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
 import exerciseRouter from './controller/exercise.router';
-import workoutExerciseRouter from './controller/workoutexercise.routes';
+import workoutExerciseRouter from './controller/workoutExercise.routes';
+
 
 const app = express();
 dotenv.config();
