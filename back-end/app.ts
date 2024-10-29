@@ -4,7 +4,7 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { eventRouter } from './controller/event.router';
+import { eventRouter } from './controller/event.routes';
 
 const app = express();
 dotenv.config();
@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 
 app.use('/events', eventRouter);
 
-
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
@@ -24,7 +23,7 @@ const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Courses API',
+            title: 'Eventer API',
             version: '1.0.0',
         },
     },

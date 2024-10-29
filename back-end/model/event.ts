@@ -1,4 +1,6 @@
-import e from "express";
+import e from 'express';
+import { Location } from './location';
+import { Category } from './category';
 
 export class Event {
     private id?: number;
@@ -7,10 +9,10 @@ export class Event {
     private price: number;
     private minParticipants: number;
     private maxParticipants: number;
+    private location: Location;
+    private category: Category;
     private lastEdit: Date;
     private dateCreated: Date;
-    //location to be added
-    //category to be added
 
     constructor(event: {
         name: string;
@@ -18,6 +20,8 @@ export class Event {
         price: number;
         minParticipants: number;
         maxParticipants: number;
+        location: Location;
+        category: Category;
     }) {
         this.validate(event);
         this.name = event.name;
@@ -25,6 +29,8 @@ export class Event {
         this.price = event.price;
         this.minParticipants = event.minParticipants;
         this.maxParticipants = event.maxParticipants;
+        this.location = event.location;
+        this.category = event.category;
         this.lastEdit = new Date();
         this.dateCreated = new Date();
     }
@@ -35,6 +41,8 @@ export class Event {
         price: number;
         minParticipants: number;
         maxParticipants: number;
+        location: Location;
+        category: Category;
     }) {
         const currentDate = new Date();
         if (!event.name) throw new Error('Name is required.');
@@ -46,12 +54,10 @@ export class Event {
         if (event.maxParticipants < event.minParticipants)
             throw new Error('Minimum participants must be greater than minimum participants.');
         //dates (lastEdit and dateCreated) are changed/added when instance is made or editted
-        //location to be added
-        //category to be added
     }
-    
+
     getId(): number {
-        return this.id? this.id : -1;
+        return this.id ? this.id : -1;
     }
 
     getName(): string {
@@ -89,6 +95,22 @@ export class Event {
 
     setMaxParticipants(max: number): void {
         this.maxParticipants = max;
+    }
+
+    getLocation(): Location {
+        return this.location;
+    }
+
+    setLocation(location: Location): void {
+        this.location = location;
+    }
+
+    getCategory(): Category {
+        return this.category;
+    }
+
+    setCategory(category: Category): void {
+        this.category = category;
     }
 
     getLastEdit(): Date {
