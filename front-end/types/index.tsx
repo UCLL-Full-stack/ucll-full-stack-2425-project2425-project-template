@@ -20,7 +20,7 @@ export type Event = {
   minParticipants: number;
   maxParticipants: number;
   location: Location;
-  category: Category;
-  lastEdit: Date;
-  dateCreated: Date;
+  category?: Category;
+  lastEdit?: Date;
+  dateCreated?: Date;
 };
