@@ -1,0 +1,60 @@
+datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db?mode=memory"
+}
+
+model User {
+    id       String  @id @default(cuid())
+    username String
+    userTag  String
+    guilds   Guild[] @relation("UserGuilds")
+    boards   Board[] @relation("UserBoards")
+    tasks    Task[]  @relation("UserTasks")
+}
+
+model Guild {
+    id          String  @id @default(cuid())
+    name        String
+    roles       Role[]  @relation("GuildRoles")
+    users       User[]  @relation("UserGuilds")
+    boards      Board[] @relation("GuildBoards")
+    permissions String
+    settings    String
+}
+
+model Role {
+    id          String @id @default(cuid())
+    name        String
+    guildId     String
+    permissions String
+    guild       Guild  @relation("GuildRoles", fields: [guildId], references: [id])
+}
+
+model Board {
+    id              String   @id @default(cuid())
+    name            String
+    createdByUser   User     @relation("UserBoards", fields: [createdByUserId], references: [id])
+    createdByUserId String
+    guild           Guild?   @relation("GuildBoards", fields: [guildId], references: [id])
+    guildId         String?
+    columns         Column[] @relation("BoardColumns")
+    permissions     String
+}
+
+model Column {
+    id      String @id @default(cuid())
+    name    String
+    board   Board  @relation("BoardColumns", fields: [boardId], references: [id])
+    boardId String
+    tasks   Task[] @relation("ColumnTasks")
+}
+
+model Task {
+    id          String   @id @default(cuid())
+    title       String
+    description String
+    dueDate     DateTime
+    column      Column   @relation("ColumnTasks", fields: [columnId], references: [id])
+    columnId    String
+    assignees   User[]   @relation("UserTasks")
+}
