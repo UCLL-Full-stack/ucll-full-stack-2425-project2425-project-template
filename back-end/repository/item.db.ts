@@ -14,6 +14,17 @@ const getAll = (): Item[] => {
     }
 };
 
+const create = (item: Item): Item => {
+    try {
+        items.push(item);
+        return item;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not create item');
+    }
+};
+
 export default {
     getAll,
+    create,
 };

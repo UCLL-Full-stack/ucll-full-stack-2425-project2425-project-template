@@ -56,4 +56,29 @@ itemRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+/**
+ * @swagger
+ * /items:
+ *   post:
+ *     summary: Get a list of all items.
+ *     responses:
+ *       200:
+ *         description: A list of items.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Item'
+ */
+
+itemRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const item = itemService.createItem(req.body);
+        res.status(201).json(item);
+    } catch (error) {
+        res.status(500).json({ message: (error as Error).message });
+    }
+});
+
 export { itemRouter };
