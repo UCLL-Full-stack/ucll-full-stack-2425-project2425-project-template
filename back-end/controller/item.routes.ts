@@ -24,6 +24,25 @@
  *            category:
  *              $ref: '#/components/schemas/Category'
  *              description: The category of the item.
+ *      ItemInput:
+ *          type: object
+ *          properties:
+ *            name:
+ *              type: string
+ *              description: Item name.
+ *              example: "Orange"
+ *            price:
+ *              type: number
+ *              description: Item's price.
+ *              example: 1.99
+ *            pathToImage:
+ *              type: string
+ *              description: Path to the item's image.
+ *              example: "/images/orange.png"
+ *            category:
+ *              $ref: '#/components/schemas/Category'
+ *              description: The category of the item.
+ *              example: "fruits"
  */
 
 import express, { NextFunction, Request, Response } from 'express';
@@ -60,15 +79,19 @@ itemRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /items:
  *   post:
- *     summary: Get a list of all items.
- *     responses:
- *       200:
- *         description: A list of items.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
+ *      summary: Create a new item.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ItemInput'
+ *      responses:
+ *         201:
+ *            description: The created item.
+ *            content:
+ *              application/json:
+ *                schema:
  *                  $ref: '#/components/schemas/Item'
  */
 

@@ -16,6 +16,9 @@ const getAll = (): Item[] => {
 
 const create = (item: Item): Item => {
     try {
+        if (items.includes(item)) {
+            throw new Error('Item already exists');
+        }
         items.push(item);
         return item;
     } catch (error) {
