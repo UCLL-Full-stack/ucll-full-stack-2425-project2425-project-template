@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import EventService from "@/services/EventService";
 import styles from "@/styles/eventForm.module.css";
 import { Event } from "@/types";
+import { useRouter } from "next/router";
 
 const AddEventForm: React.FC = () => {
+  const router = useRouter();
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
   const [price, setPrice] = useState(0);
@@ -33,6 +35,10 @@ const AddEventForm: React.FC = () => {
 
     try {
       await EventService.addEvent(event);
+      setTimeout(() => {
+        router.push('/events');
+      }
+      , 1000);
     } catch (error) {
       console.error('Error adding event:', error);
     }
