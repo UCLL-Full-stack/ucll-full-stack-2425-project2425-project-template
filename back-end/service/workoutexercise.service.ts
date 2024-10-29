@@ -1,6 +1,6 @@
 import workoutexerciseDb from "../model/data-access/workoutexercise.db"
 import { WorkoutExercise } from "../model/workoutexercise";
-import { workoutExerciseInput } from "../types";
+import { WorkoutExerciseInput } from "../types";
 
 const getAllWorkoutExercises =(): WorkoutExercise[] => {
     const workoutExercises = workoutexerciseDb.getAllWorkoutExercises();
@@ -17,13 +17,10 @@ const getWorkoutExercisesByWorkoutId = (id: number): WorkoutExercise[] => {
     return workoutExercises;
 }
 
-const createWorkoutExercise = (workoutExerciseInput: workoutExerciseInput): WorkoutExercise => {
-    try {
-        return new WorkoutExercise(workoutExerciseInput);
-    } catch (error: any) {
-        console.error("Error in createWorkoutExercise:", error.message); 
-        throw new Error(error.message); 
-    }
-};
+const createWorkoutExercise = ({ workout_exercise_id, workout_id, exercise_id, sets, reps, rpe, rest_time }: WorkoutExerciseInput): WorkoutExercise => {
+    const workoutExercise = new WorkoutExercise({ workout_exercise_id, workout_id, exercise_id, sets, reps, rpe, rest_time });
+    return workoutexerciseDb.createWorkoutExercise(workoutExercise);
+
+}
 
 export default { getAllWorkoutExercises, getWorkoutExerciseById, getWorkoutExercisesByWorkoutId, createWorkoutExercise };

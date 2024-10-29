@@ -1,6 +1,6 @@
 import workoutDb from "../model/data-access/workout.db";
 import { Workout } from "../model/workout";
-import { workoutInput } from "../types";
+import { WorkoutInput } from "../types";
 
 
 const getAllWorkouts = (): Workout[] => {
@@ -19,11 +19,10 @@ const getWorkoutsByUserId = (id: number): Workout[] => {
 }
 
 
-const createWorkout = async (workoutInput: workoutInput) => {
-    const newWorkout = new Workout(workoutInput)
-    workoutDb.workouts.push(newWorkout)
-    return newWorkout
-}
+const createWorkout = ({ workout_id, user_id, name, description,}: WorkoutInput): Workout => {
+    const workout = new Workout ({ workout_id, user_id, name, description, exercises: [] });
+    return workoutDb.createWorkout(workout);
+} 
 
 
 

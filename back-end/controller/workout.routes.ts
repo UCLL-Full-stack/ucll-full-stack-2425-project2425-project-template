@@ -1,3 +1,22 @@
+/** 
+ * @swagger
+ * components:
+ *  schemas:
+      Workout:
+        type: object
+        properties:
+            workout_id:
+                type: number
+                format: int64
+            user_id:
+                type: number
+                format: int64
+            name:
+                type: string
+            description:
+                type: string
+ */
+
 import express, { Router, Request, Response, NextFunction } from "express";
 import workoutService from "../service/workout.service";
 
@@ -111,14 +130,14 @@ workoutRouter.get('/user/:id', (req: Request, res: Response, next: NextFunction)
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/WorkoutInput'
  *     responses:
  *       200:
  *         description: The created workout object.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/WorkoutInput'
  */
 workoutRouter.post('/', async (req: Request, res: Response) => {
     try {

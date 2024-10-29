@@ -1,11 +1,28 @@
-type workoutInput = {
+type ExerciseInput = {
+    id?: number;
+    name?: string;
+    description?: string;
+    video_link?: string;
+    workoutExercise?: WorkoutExerciseInput;
+}
+
+type UserInput = {
+    user_id?: number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+}
+
+type WorkoutInput = {
     workout_id: number;
     user_id: number;
     name: string;
     description: string;
+    exercises: ExerciseInput[];
 }
 
-type workoutExerciseInput = {
+type WorkoutExerciseInput = {
     workout_exercise_id: number;
     workout_id: number;
     exercise_id: number;
@@ -15,4 +32,4 @@ type workoutExerciseInput = {
     rest_time: string;
 }
 
-export { workoutInput, workoutExerciseInput };
+export { ExerciseInput, UserInput, WorkoutInput, WorkoutExerciseInput };

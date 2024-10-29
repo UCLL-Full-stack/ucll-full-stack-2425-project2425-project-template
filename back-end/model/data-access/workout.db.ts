@@ -1,13 +1,22 @@
 import { Workout } from "../workout";
 
-const workouts: Workout[] = [
-    new Workout({ workout_id: 1, user_id: 1, name: "Upper body", description: "This workout is upper body focussed"}),
+const workouts: Workout[] = []
 
-    ]
 
-const getAllWorkouts = (): Workout[] => {
-    return workouts;
+const createWorkout = ({ workout_id, user_id, name, description}: Workout): Workout => {
+    const workout = new Workout({
+        workout_id,
+        user_id,
+        name,
+        description,
+        exercises: [],
+    })
+    workouts.push(workout)
+    return workout
 }
+
+
+const getAllWorkouts = (): Workout[] => workouts
 
 const getWorkoutById = (id: number): Workout => {
     const workout = workouts.find((workout) => workout.workout_id === id);
@@ -25,11 +34,7 @@ const getWorkoutsByUserId = (id: number): Workout[] => {
     return userWorkouts;
 };
 
-const createWorkout = ({ workout_id, user_id, name, description}: Workout): Workout => {
-    const workout = new Workout({ workout_id, user_id, name, description });
-    workouts.push(workout);
-    return workout;
-}
+
 
 
 export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, workouts };

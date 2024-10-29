@@ -1,6 +1,6 @@
 import express, { Router, Request, Response, NextFunction } from "express";
-import workoutexerciseService from "../service/workoutxercise.service";
-import { workoutExerciseInput } from "../types";
+import workoutexerciseService from "../service/workoutexercise.service";
+import { WorkoutExerciseInput } from "../types";
 
 
 const workoutExerciseRouter = express.Router();
@@ -112,9 +112,9 @@ workoutExerciseRouter.get('/workout/:id', (req: Request, res: Response, next: Ne
 
 workoutExerciseRouter.post('/', (req: Request, res: Response) => {
     try {
-        const workoutExerciseInput: workoutExerciseInput = req.body;
-        const newWorkoutExercise = workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
-        res.status(200).json(newWorkoutExercise);
+        const workout = <WorkoutExerciseInput>req.body;
+        const result = workoutexerciseService.createWorkoutExercise(workout);
+        res.status(200).json(result);
     } catch (error: any) {
         const errorMessage = error.message || "An unexpected error occurred";
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
