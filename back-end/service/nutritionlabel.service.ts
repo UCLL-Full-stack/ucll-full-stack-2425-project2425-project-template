@@ -1,5 +1,6 @@
 import { Nutritionlabel } from '../model/nutritionlabel';
 import nutritionlabelDb from '../repository/nutritionlabel.db';
+import { NutritionlabelInput } from '../types';
 
 const getAllNutritionlabels = (): Nutritionlabel[] => {
     const nutritionLabels = nutritionlabelDb.getAll();
@@ -10,4 +11,14 @@ const getAllNutritionlabels = (): Nutritionlabel[] => {
     return nutritionLabels;
 };
 
-export default { getAllNutritionlabels };
+const createNutritionlabel = (nutritionlabel: NutritionlabelInput): Nutritionlabel => {
+    const newNutritionlabel = new Nutritionlabel(nutritionlabel);
+    const createdNutritionLabel = nutritionlabelDb.create(newNutritionlabel);
+    if (!createdNutritionLabel) {
+        throw new Error('Could not create nutrition label');
+    }
+
+    return createdNutritionLabel;
+};
+
+export default { getAllNutritionlabels, createNutritionlabel };

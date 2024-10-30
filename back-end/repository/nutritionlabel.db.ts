@@ -31,6 +31,17 @@ const getAll = (): Nutritionlabel[] => {
     }
 };
 
+const create = (nutritionlabel: Nutritionlabel): Nutritionlabel => {
+    try {
+        nutritionlabels.push(nutritionlabel);
+        return nutritionlabel;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not create nutritionlabel');
+    }
+};
+
 export default {
     getAll,
+    create,
 };
