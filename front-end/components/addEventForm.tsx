@@ -9,10 +9,10 @@ const AddEventForm: React.FC = () => {
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
   const [price, setPrice] = useState(0);
-  const [minParticipants, setMinParticipants] = useState(0);
-  const [maxParticipants, setMaxParticipants] = useState(0);
+  const [minParticipants, setMinParticipants] = useState(1);
+  const [maxParticipants, setMaxParticipants] = useState(1);
   const [street, setStreet] = useState('');
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(1);
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
 
@@ -70,6 +70,7 @@ const AddEventForm: React.FC = () => {
           className={styles.input}
           value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
+          min={0}
         />
         <label htmlFor="minParticipantsInput">Minimum participants</label>
         <input
@@ -78,6 +79,7 @@ const AddEventForm: React.FC = () => {
           className={styles.input}
           value={minParticipants}
           onChange={(e) => setMinParticipants(Number(e.target.value))}
+          min={1}
         />
         <label htmlFor="maxParticipantsInput">Maximum participants</label>
         <input
@@ -86,6 +88,7 @@ const AddEventForm: React.FC = () => {
           className={styles.input}
           value={maxParticipants}
           onChange={(e) => setMaxParticipants(Number(e.target.value))}
+          min={1}
         />
         <p className="mt-2 mb-0">
           <strong>Location</strong>
@@ -110,6 +113,7 @@ const AddEventForm: React.FC = () => {
             className={styles.input}
             value={number}
             onChange={(e) => setNumber(Number(e.target.value))}
+            min={1}
           />
           <label htmlFor="cityInput">City</label>
           <input
