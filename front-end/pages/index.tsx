@@ -1,8 +1,9 @@
-import Head from "next/head"
-import Image from "next/image"
 
+import Image from "next/image"
 import styles from "@styles/home.module.css"
-import Header from "@/component/header"
+import Header from "@/components/header"
+import Head from "next/head"
+
 
 const Home: React.FC = () => {
 
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
       <Header />
       <main className="text-center md:mt-24 mx-auto md:w-3/5 lg:w-1/2">
         <span className="flex flex-row justify-center items-center">
+          kashvdfjasvdsajdhksd
         </span>
       </main>
     </>
