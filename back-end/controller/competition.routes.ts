@@ -40,6 +40,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import competitionService from '../service/competition.service';
+import { CompetitionDTO } from '../types';
 
 const competitionRouter = express.Router();
 
@@ -59,10 +60,71 @@ const competitionRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Competition'
  */
-competitionRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+competitionRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const competitions = competitionService.getAllCompetitions();
-        res.status(200).send(competitions);
+        await competitionService.getAllCompetitions();
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+/**
+ * @swagger
+ * /competitions:
+ *   post:
+ *     summary: Create a new competition.
+ *     description: Create a new competition. The request body must contain a JSON object with the competition details.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Competition'
+ *     responses:
+ *       201:
+ *         description: The competition was successfully created
+ *       400:
+ *         description: Bad request. The request body is invalid.
+ *       500:
+ *         description: Internal server error
+ */
+competitionRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const competitionDTO: CompetitionDTO = req.body;
+        await competitionService.createCompetition(competitionDTO);
+        res.sendStatus(201);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /competitions:
+ *   put:
+ *     summary: Edit a competition.
+ *     description: Edit a competition. The request body must contain a JSON object with the competition details.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Competition'
+ *     responses:
+ *       200:
+ *         description: The competition was successfully edited
+ *       400:
+ *         description: Bad request. The request body is invalid.
+ *       500:
+ *         description: Internal server error
+ */
+competitionRouter.put('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const competitionDTO: CompetitionDTO = req.body;
+        await competitionService.editCompetition(competitionDTO);
+        res.sendStatus(200);
     } catch (error) {
         next(error);
     }
