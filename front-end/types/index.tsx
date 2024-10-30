@@ -15,7 +15,7 @@ export type Coach = {
 }
 
 export type Team = {
-    id: number;
+    id?: number;
     teamName: string;
     players: Player[];
     coach: Coach;

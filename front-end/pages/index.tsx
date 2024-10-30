@@ -17,6 +17,19 @@ const Home: React.FC = () => {
       </Head>
       <Header />
       <main className={styles.main}>
+        <span>
+          <Image 
+            src="/images/TeamTrackLogo.png"
+            alt="TeamTrack Logo"
+            width={200}
+            height={200}
+          />
+        </span>
+        <div>
+          <p className={styles.description}>
+            Welcome to TeamTrack! This is a simple app to track your team's performance, games, and players.
+          </p>
+        </div>
       </main>
     </>
   );

@@ -65,31 +65,28 @@ const getAllTeams = (): Team[] => {
 
 const getTeamsByCoach = (coachId: number): Team[] => {
     const teamsToReturn = [];
-    try {
-        for (var team of teams) {
-            if (team.getCoach().getId() == coachId) {
-                teamsToReturn.push(team);
-            }
+
+    for (var team of teams) {
+        if (team.getCoach().getId() == coachId) {
+            teamsToReturn.push(team);
         }
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error, see server log for details.');
     }
     return teamsToReturn;
 };
 
 const getTeamById = (id: number): Team | undefined => {
-    try {
-        return teams.find((team) => team.getId() === id) || undefined;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error, see server log for details.');
-    }
+    return teams.find((team) => team.getId() === id) || undefined;
 };
 
-const createTeam = (newTeam: Team) => {
+const createTeam = (newTeam: Team): Team => {
     teams.push(newTeam);
     return newTeam;
 };
 
-export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam };
+const updateTeam = (updatedTeam: Team): Team => {
+    const oldTeamIndex = teams.findIndex((team) => team.getId() === updatedTeam.getId());
+    teams[oldTeamIndex] = updatedTeam;
+    return updatedTeam;
+};
+
+export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam, updateTeam };

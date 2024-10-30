@@ -1,3 +1,5 @@
+import { Team } from "@/types";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const getAllTeams = async () => {
@@ -9,8 +11,40 @@ const getAllTeams = async () => {
   });
 };
 
+const getTeamById = async (id: number) => {
+  return fetch(apiUrl + `/teams/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const updateTeam = async (id: number, team: Team) => {
+  return await fetch(apiUrl + `/teams/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(team),
+  });
+};
+
+const createTeam = async (team: Team) => {
+  return await fetch(apiUrl + "/teams", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(team),
+  });
+};
+
 const TeamService = {
-    getAllTeams
-  };
-  
-  export default TeamService;
+  getAllTeams,
+  createTeam,
+  getTeamById,
+  updateTeam,
+};
+
+export default TeamService;

@@ -8,7 +8,6 @@ const getAllTeams = (): Team[] => {
 
 const createTeam = ({ teamName, players, coach }: TeamInput): Team => {
     const allTeams = teamDb.getAllTeams() || [];
-    const coachId = coach.getId();
     for (var team of allTeams) {
         if (teamName == team.getTeamName()) {
             throw new Error('Team with that name already exists.');
@@ -16,9 +15,6 @@ const createTeam = ({ teamName, players, coach }: TeamInput): Team => {
     }
     if (players.length === 0) {
         throw new Error('Team must have at least one player.');
-    }
-    if (!coach || coachId === undefined || coachId <= 0) {
-        throw new Error('Coach with that id does not exist.');
     }
 
     const createdTeam = new Team({ teamName, players, coach });
@@ -32,7 +28,6 @@ const getTeamById = (id: number): Team | undefined => {
     if (!team) {
         throw new Error(`Team with id ${id} does not exist.`);
     }
-    teamDb.getTeamById(id);
     return team;
 };
 
@@ -41,6 +36,21 @@ const getTeamsByCoach = (coachId: number): Team[] => {
         throw new Error(`Coach with id ${coachId} does not exist.`);
     }
     return teamDb.getTeamsByCoach(coachId);
+};
+
+const updateTeam = ({id, teamName, coach, players}: TeamInput): Team => {
+
+    if (id == undefined) {
+        throw new Error('An id is required.');
+    }
+    
+    if (teamDb.getTeamById(id) == undefined) {
+        throw new Error('No team with that id exists.');
+    }
+
+    const updatedTeam = new Team({id, teamName, coach, players});
+
+    return teamDb.updateTeam(updatedTeam);
 };
 
 export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam };

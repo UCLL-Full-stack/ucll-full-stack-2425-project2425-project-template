@@ -158,4 +158,14 @@ teamRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
+teamRouter.put('/edit/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const teamData: TeamInput = req.body;
+        const updatedTeam: Team = teamService.updateTeam(teamData);
+        res.status(200).json(updatedTeam);
+    } catch (error: any) {
+        res.status(400).json({ status: 'error', errorMessage: error.message });
+    }
+});
+
 export { teamRouter };

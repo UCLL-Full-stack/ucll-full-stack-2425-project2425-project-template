@@ -150,22 +150,3 @@ test('givenNoPlayers_whenCreatingTeam_thenErrorIsThrown', () => {
     // when & then
     expect(() => teamService.createTeam(teamInput)).toThrow('Team must have at least one player.');
 });
-
-test('givenInvalidCoach_whenCreatingTeam_thenErrorIsThrown', () => {
-    // given
-    const invalidCoach = new Coach({
-        id: invalidId,
-        firstName: 'Mark',
-        lastName: 'Theman',
-        email: 'marktheman@ucll.be',
-        phoneNumber: '0412345679',
-    });
-    const teamInput = {
-        teamName: validTeamName,
-        players: [validPlayer],
-        coach: invalidCoach,
-    };
-
-    // when & then
-    expect(() => teamService.createTeam(teamInput)).toThrow('Coach with that id does not exist.');
-});
