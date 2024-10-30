@@ -1,10 +1,12 @@
-type Rol = "admin" | "klant";
+type Type = "Protein" | "Topping" | "Sauce"
+type Rol = "admin" | "klant" | "manager";
 
 type BestellingInput = {
-    id?:number;
+    id?: number;
+    user: UserInput;
     datum: Date;
     totaalPrijs?: number;
-    //pokebowls: Pokebowl[];
+    pokebowls: PokebowlInput[];
 
 }
 
@@ -22,7 +24,7 @@ type UserInput = {
 type IngredientInput = {
     id?: number,
     naam: string,
-    type: string,
+    type: Type,
     aantal: number,
     prijs: number
 };
@@ -38,9 +40,10 @@ type PokebowlInput = {
 }
 
 export {
+    Type,
     IngredientInput,
     PokebowlInput,
     Rol,
-    BestellingInput, 
+    BestellingInput,
     UserInput
 }

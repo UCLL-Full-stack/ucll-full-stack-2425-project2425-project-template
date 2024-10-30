@@ -1,7 +1,9 @@
+import { Type } from "../types";
+
 export class Ingredient {
     private id?: number;
     private naam: string;
-    private type: string;
+    private type: Type;
     private aantal: number;
     private prijs: number;
     private ingredientLimit: number = 2;
@@ -9,7 +11,7 @@ export class Ingredient {
     constructor(ingredient: {
         id?: number;
         naam: string;
-        type: string;
+        type: Type;
         aantal: number;
         prijs: number;
     }) {
@@ -21,7 +23,7 @@ export class Ingredient {
         this.aantal = ingredient.aantal;
         this.prijs = ingredient.prijs;
     }
-    validate(ingredient: { naam: string, type: string, aantal: number, prijs: number }) {
+    validate(ingredient: { naam: string, type: Type, aantal: number, prijs: number }) {
         if (!ingredient.naam) {
             throw new Error("Naam cannot be empty");
         }

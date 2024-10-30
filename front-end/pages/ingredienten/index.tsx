@@ -1,6 +1,6 @@
 import Header from "@/components/header";
 import IngredientenOverzicht from "@/components/ingredienten/IngredientenOverzicht";
-import IngredientenService from "@/services/IngredientenService";
+import IngredientenService from "@/services/IngredientService";
 import { Ingredient } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";

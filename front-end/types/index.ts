@@ -1,7 +1,10 @@
+type Type = "Protein" | "Topping" | "Sauce"
+type Rol = "admin" | "klant" | "manager";
+
 export type Ingredient = {
     id?: number,
     naam: string,
-    type: string,
+    type: Type,
     aantal: number,
     prijs: number
 }
@@ -13,6 +16,24 @@ export type Pokebowl = {
     beschrijving: string,
     prijs?: number,
     maxAantalIngredienten: number,
-    ingredienten: Ingredient[],
-    getPrijs(): number
+    ingredienten: Ingredient[]
+}
+
+export type Bestelling = {
+    id?: number;
+    user: User;
+    datum: Date;
+    totaalPrijs?: number;
+    pokebowls: Pokebowl[];
+}
+
+export type User = {
+    id?: number;
+    naam: String;
+    voornaam: String;
+    email: String;
+    wachtwoord: String;
+    adres: String;
+    gebruikersnaam: String;
+    rol: Rol;
 }

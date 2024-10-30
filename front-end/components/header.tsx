@@ -15,6 +15,11 @@ const Header: React.FC = () => {
                         </Link>
                     </li>
                     <li>
+                        <Link href="/bestellingen">
+                            Bestellingen
+                        </Link>
+                    </li>
+                    <li>
                         <Link href="/ingredienten">
                             Ingredienten
                         </Link>

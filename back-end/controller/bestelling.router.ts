@@ -28,7 +28,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import bestellingService from '../service/bestelling.service';
 
-const orderRouter = express.Router(); 
+const orderRouter = express.Router();
 
 /**
  * @swagger
@@ -50,11 +50,11 @@ const orderRouter = express.Router();
  *                     $ref: '#/components/schemas/Bestelling'
  */
 orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    try{
+    try {
         const bestellingInput = req.body;
         const newBestelling = await bestellingService.createBestelling(bestellingInput);
         res.status(201).json(newBestelling);
-    }catch (error){
+    } catch (error) {
         next(error);
     }
 });
@@ -76,7 +76,7 @@ orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
  * 
  */
 orderRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    try{
+    try {
         const bestellingen = await bestellingService.getAllBestellingen();
         res.status(200).json(bestellingen);
     } catch (error) {
@@ -84,4 +84,13 @@ orderRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
-export {orderRouter};
+orderRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const bestelling = await bestellingService.getBestellingById(parseInt(req.params.id));
+        res.status(200).json(bestelling);
+    } catch (error) {
+        next(error);
+    }
+});
+
+export { orderRouter };

@@ -1,45 +1,64 @@
-export class Bestelling{
+import { Pokebowl } from "./pokebowl";
+import { User } from "./user";
+
+export class Bestelling {
     private id?: number;
+    private user: User;
     private datum: Date;
-    private totaalPrijs?: number;
-   // private pokebowls: Pokebowl[];
+    private totaalPrijs: number = 0;
+    private pokebowls: Pokebowl[];
 
     constructor(bestelling: {
-        id?:number;
+        id?: number;
+        user: User;
         datum: Date;
-        totaalPrijs?: number;
-        //pokebowls: Pokebowl[];
-    }){
+        pokebowls: Pokebowl[];
+    }) {
         this.id = bestelling.id;
+        this.user = bestelling.user;
         this.datum = bestelling.datum;
-        this.totaalPrijs = bestelling.totaalPrijs;
-        //this.pokebowls = order.pokebowls;
+        this.pokebowls = bestelling.pokebowls;
+        this.calculateTotaalPrijs();
     }
 
     getId(): number | undefined {
         return this.id;
     }
 
-    getDatum(): Date{
+    getUser(): User {
+        return this.user;
+    }
+
+    getDatum(): Date {
         return this.datum;
     }
 
-    getTotaalPrijs(): number | undefined{
+    getTotaalPrijs(): number {
         return this.totaalPrijs;
     }
 
-/*     addPokebowl(Pokebowl: Pokebowl){
+
+    addPokebowl(Pokebowl: Pokebowl) {
         this.pokebowls.push(Pokebowl);
         this.calculateTotaalPrijs();
-    } */
+    }
 
-/*     removePokebowl(pokebowl: Pokebowl) {
+    removePokebowl(pokebowl: Pokebowl) {
         this.pokebowls = this.pokebowls.filter(p => p !== pokebowl);
         this.calculateTotaalPrijs();
-    } */
+    }
 
-/*     calculateTotaalPrijs(){
-        this.totaalPrijs = this.pokebowls.reduce((total, pokebowl) => total + pokebowl.getPrijs(), 0)
-    } */
+    calculateTotaalPrijs() {
+        this.totaalPrijs = 0;
+
+        this.pokebowls.forEach((pokebowl) => {
+            const pokebowlPrijs = pokebowl.getPrijs();
+
+            if (pokebowlPrijs) {
+                this.totaalPrijs += pokebowlPrijs;
+            }
+            console.log(`Prijs: ${pokebowl.getNaam()}`);
+        });
+    }
 
 }
