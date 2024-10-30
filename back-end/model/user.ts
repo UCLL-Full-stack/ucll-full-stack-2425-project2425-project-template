@@ -1,4 +1,5 @@
 import { Rol } from "../types";
+import { Bestelling } from "./bestelling";
 
 export class User{
     private id?: number;
@@ -9,6 +10,7 @@ export class User{
     private adres: String;
     private gebruikersnaam: String;
     private rol: Rol;
+    private bestellingen: Bestelling[] = [];
 
     constructor(user: {
         id?: number;
@@ -58,7 +60,35 @@ export class User{
         return this.gebruikersnaam;
     }
 
+    getBestellingen(): Bestelling[]{
+        return this.bestellingen;
+    }
+
     getRol(): Rol{
         return this.rol;
     }
+
+    register(): void {
+        console.log("User registrated successfully")
+    }
+
+    order(bestelling:Bestelling): void {
+        this.bestellingen.push(bestelling);
+    }
+
+    login(): boolean {
+        console.log("User logged in succesfully")
+        return true;
+        //ook dit moet wss nog aangepast worden
+    }
+
+    deleteUser(user:User): void{
+        console.log("User deleted")
+    }
+
+    updateUser(user:User){
+        Object.assign(this, user);
+        console.log("User updated")
+    }
+
 }
