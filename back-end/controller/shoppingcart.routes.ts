@@ -64,4 +64,13 @@ shoppingcartRouter.post(
     }
 );
 
+shoppingcartRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const shoppingcart = shoppingcartService.createShoppingcart(req.body);
+        res.status(201).json(shoppingcart);
+    } catch (error) {
+        res.status(500).json({ message: (error as Error).message });
+    }
+});
+
 export { shoppingcartRouter };

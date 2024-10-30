@@ -39,8 +39,22 @@ const getById = (id: number): Shoppingcart | undefined => {
     }
 };
 
+const create = (shoppingcart: Shoppingcart): Shoppingcart => {
+    try {
+        if (shoppingcarts.includes(shoppingcart)) {
+            throw new Error('Shoppingcart already exists');
+        }
+        shoppingcarts.push(shoppingcart);
+        return shoppingcart;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not create shoppingcart');
+    }
+};
+
 export default {
     getAll,
     getById,
     addItemToShoppingcart,
+    create,
 };

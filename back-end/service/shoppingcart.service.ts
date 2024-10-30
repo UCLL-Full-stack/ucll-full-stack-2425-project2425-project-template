@@ -2,6 +2,7 @@ import shoppingcartDb from '../repository/shoppingcart.db';
 import { Shoppingcart } from '../model/shoppingcart';
 import itemService from './item.service';
 import itemDb from '../repository/item.db';
+import { ShoppingcartInput } from '../types';
 
 const getAllShoppingcarts = (): Shoppingcart[] => {
     const shoppingcarts = shoppingcartDb.getAll();
@@ -31,4 +32,16 @@ const addItemToShoppingcart = ({
     return shoppingcart;
 };
 
-export default { getAllShoppingcarts, addItemToShoppingcart };
+const createShoppingcart = (shoppingcart: ShoppingcartInput): Shoppingcart => {
+    const newShoppingcart = new Shoppingcart(shoppingcart);
+
+    const createdShoppingcart = shoppingcartDb.create(newShoppingcart);
+
+    if (!createdShoppingcart) {
+        throw new Error('Could not create shoppingcart');
+    }
+
+    return createdShoppingcart;
+};
+
+export default { getAllShoppingcarts, addItemToShoppingcart, createShoppingcart };

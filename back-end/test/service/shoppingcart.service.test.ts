@@ -57,14 +57,14 @@ test('given: a valid shoppingcart, when: creating a new shoppingcart, then: the 
         deliveryDate: new Date('2025-12-24'),
     };
 
-    shoppingcartDb.create = mockShoppingcartDbCreate;
+    shoppingcartDb.create = mockShoppingcartDbCreate.mockReturnValue(shoppingcart1);
 
     // when creating a new shoppingcart
     shoppingcartService.createShoppingcart(shoppingcart1);
 
     // then the shoppingcart is created
     expect(mockShoppingcartDbCreate).toHaveBeenCalled();
-    expect(mockShoppingcartDbCreate).toHaveBeenCalledWith(shoppingcart1);
+    expect(mockShoppingcartDbCreate).toHaveBeenCalledWith(expect.objectContaining(shoppingcart1));
 });
 
 test('given: a valid item, when: adding the item to a shoppingcart, then: the item is added to the shoppingcart', () => {
