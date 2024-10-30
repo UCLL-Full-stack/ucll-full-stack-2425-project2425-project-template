@@ -1,7 +1,7 @@
 import { ISP } from "./isp";
 
 export class Invoice {
-    private _id: number;
+    private _id?: number;
     private _totalAmount: number;
     private _deadline: Date;
     private _paidAmount?: number;
@@ -17,11 +17,11 @@ export class Invoice {
         this._id = invoice.id;
         this._totalAmount = invoice.totalAmount;
         this._deadline = invoice.deadline;
-        this._paidAmount = invoice.paidAmount;
+        this._paidAmount = invoice.paidAmount||0;
         this._isp = invoice.isp;
     }
 
-    public get id(): number {
+    public get id(): number|undefined {
         return this._id;
     }
 
@@ -34,6 +34,9 @@ export class Invoice {
     }
 
     public set totalAmount(value: number) {
+        if (!value || value < 0 ){
+            throw new Error("Total amount cannot be negative.")
+        }
         this._totalAmount = value;
     }
 
@@ -42,6 +45,9 @@ export class Invoice {
     }
 
     public set deadline(value: Date) {
+        if (!value){
+            throw new Error("Deadline is required.")
+        }
         this._deadline = value;
     }
 
@@ -50,6 +56,9 @@ export class Invoice {
     }
 
     public set paidAmount(value: number | undefined) {
+        if (!value || value < 0 ){
+            throw new Error("Paid amount cannot be negative.")
+        }
         this._paidAmount = value;
     }
 
@@ -58,6 +67,9 @@ export class Invoice {
     }
 
     public set isp(value: ISP) {
+        if (!value){
+            throw new Error("ISP is required.")
+        }
         this._isp = value;
     }
 
@@ -66,7 +78,8 @@ export class Invoice {
             this.id === invoice.id &&
             this.totalAmount === invoice.totalAmount &&
             this.deadline.getTime() === invoice.deadline.getTime() &&
-            this.paidAmount === invoice.paidAmount
+            this.paidAmount === invoice.paidAmount&&
+            this.isp === invoice.isp
         );
     }
 }

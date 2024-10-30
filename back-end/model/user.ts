@@ -1,5 +1,5 @@
 export abstract class User {
-    private _id: number;
+    private _id?: number;
     private _name: string;
     private _email: string;
     private _password: string;
@@ -11,7 +11,7 @@ export abstract class User {
         this._password = user.password;
     }
 
-    get id(): number {
+    get id(): number| undefined {
         return this._id;
     }
 
@@ -24,6 +24,9 @@ export abstract class User {
     }
 
     set name(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Name is required.")
+        }
         this._name = value;
     }
 
@@ -32,6 +35,9 @@ export abstract class User {
     }
 
     set email(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Email is required.")
+        }
         this._email = value;
     }
 
@@ -40,6 +46,9 @@ export abstract class User {
     }
 
     set password(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Password is required.")
+        }
         this._password = value;
     }
 

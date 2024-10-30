@@ -1,5 +1,7 @@
+import { th } from "date-fns/locale";
+
 export class Course {
-    private _id: number;
+    private _id?: number;
     private _name: string;
     private _description: string;
     private _phase: number;
@@ -28,7 +30,7 @@ export class Course {
         this._requiredPassedCourses = course.requiredPassedCourses;
     }
 
-    public get id(): number {
+    public get id(): number|undefined {
         return this._id;
     }
 
@@ -37,10 +39,14 @@ export class Course {
     }
 
     public get name(): string {
+
         return this._name;
     }
 
     public set name(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Name is required.")
+        }
         this._name = value;
     }
 
@@ -49,6 +55,9 @@ export class Course {
     }
 
     public set description(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Description is required.")
+        }
         this._description = value;
     }
 
@@ -57,6 +66,9 @@ export class Course {
     }
 
     public set phase(value: number) {
+        if (!value || value <3 || value > 0 ){
+            throw new Error("Phase is required and can be 1 or 2.")
+        }
         this._phase = value;
     }
 
@@ -65,6 +77,9 @@ export class Course {
     }
 
     public set credits(value: number) {
+    if (!value || value <= 0) {
+        throw new Error("Credits are required and cannot be negative")
+    }
         this._credits = value;
     }
 
@@ -73,6 +88,9 @@ export class Course {
     }
 
     public set lecturers(value: string[]) {
+        if (!value || value.length=== 0){
+            throw new Error("Lecturer is required.")
+        }
         this._lecturers = value;
     }
 
@@ -81,6 +99,9 @@ export class Course {
     }
 
     public set isElective(value: boolean) {
+        if (value === null){
+            throw new Error("Course has to be an elective or non elective")
+        }
         this._isElective = value;
     }
 
@@ -89,6 +110,9 @@ export class Course {
     }
 
     public set requiredPassedCourses(value: Course[]) {
+        if (!value|| value.length === 0) {
+            this._requiredPassedCourses = new Array;
+        }
         this._requiredPassedCourses = value;
     }
 

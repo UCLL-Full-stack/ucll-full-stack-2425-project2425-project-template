@@ -16,7 +16,7 @@ export class Student extends User {
 
         this._nationality = student.nationality;
         this._startYear = student.startYear;
-        this._passedCourses = student.passedCourses;
+        this._passedCourses = student.passedCourses || [];
     }
 
     get nationality(): string {
@@ -24,6 +24,9 @@ export class Student extends User {
     }
 
     set nationality(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Nationality is required.")
+        }
         this._nationality = value;
     }
 
@@ -32,6 +35,9 @@ export class Student extends User {
     }
 
     set startYear(value: number) {
+        if (!value){
+            throw new Error("Start year is required.")
+        }
         this._startYear = value;
     }
 
@@ -40,6 +46,9 @@ export class Student extends User {
     }
 
     set passedCourses(value: Course[]) {
+        if(value.length === 0){
+            this._passedCourses = new Array();
+        }
         this._passedCourses = value;
     }
     equals(student: Student): boolean {

@@ -2,7 +2,7 @@ import { Course } from "./course";
 import { Student } from "./student";
 
 export class ISP {
-    private _id: number;
+    private _id?: number;
     private _status: string;
     private _totalCredits: number;
     private _year: number;
@@ -21,11 +21,11 @@ export class ISP {
         this._status = isp.status;
         this._totalCredits = isp.totalCredits;
         this._year = isp.year;
-        this._courses = isp.courses;
+        this._courses = isp.courses ||[];
         this._student = isp.student;
     }
 
-    public get id(): number {
+    public get id(): number|undefined {
         return this._id;
     }
 

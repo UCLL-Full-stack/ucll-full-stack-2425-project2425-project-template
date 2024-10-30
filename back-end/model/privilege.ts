@@ -1,5 +1,5 @@
 export class Privilege {
-    private _id: number;
+    private _id?: number;
     private _name: string;
     private _description: string;
 
@@ -9,7 +9,7 @@ export class Privilege {
         this._description = privilege.description;
     }
 
-    get id(): number {
+    get id(): number| undefined {
         return this._id;
     }
 
@@ -22,6 +22,9 @@ export class Privilege {
     }
 
     set name(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Name is required.")
+        }
         this._name = value;
     }
 
@@ -30,6 +33,9 @@ export class Privilege {
     }
 
     set description(value: string) {
+        if (!value || value.length=== 0){
+            throw new Error("Description is required.")
+        }
         this._description = value;
     }
 }
