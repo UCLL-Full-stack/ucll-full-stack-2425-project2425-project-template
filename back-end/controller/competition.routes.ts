@@ -62,8 +62,8 @@ const competitionRouter = express.Router();
  */
 competitionRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await competitionService.getAllCompetitions();
-        res.sendStatus(200);
+        const competitions = await competitionService.getAllCompetitions();
+        res.json(competitions);
     } catch (error) {
         next(error);
     }
