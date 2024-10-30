@@ -9,7 +9,7 @@ test('given: valid values for Crash, when: Crash is created, then: Crash is crea
     const id = 1;
 
     // when
-    const crash = new Crash(type, description, casualties, deaths, id);
+    const crash = new Crash({ type, description, casualties, deaths, id });
 
     // then
     expect(crash.getType()).toBe(type);

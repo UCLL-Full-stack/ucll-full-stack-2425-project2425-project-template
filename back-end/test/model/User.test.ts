@@ -7,7 +7,7 @@ test('given: valid values for User, when: User is created, then: User is created
     const id = 1;
 
     // when
-    const user = new User(username, password, id);
+    const user = new User({username, password, id});
 
     // then
     expect(user.getUsername()).toBe(username);

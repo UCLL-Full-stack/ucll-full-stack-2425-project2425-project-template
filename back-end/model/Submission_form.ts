@@ -1,31 +1,65 @@
+import { Gebruiker } from './Gebruiker';
+import { Race } from './Race';
+
 export class SubmissionForm {
-    private type: string;
-    private sender: string;
-    private acceptance: boolean;
+    private id?: number;
+    private title: string;
+    private content: string;
+    private user: Gebruiker;
+    private race: Race;
 
-    constructor(type: string, sender: string, acceptance: boolean) {
-        this.type = type;
-        this.sender = sender;
-        this.acceptance = acceptance;
+    constructor(submissionForm: { title: string, content: string, user: Gebruiker, race: Race, id?: number }) {
+        this.validate(submissionForm);
+
+        this.title = submissionForm.title;
+        this.content = submissionForm.content;
+        this.user = submissionForm.user;
+        this.race = submissionForm.race;
+        if (submissionForm.id) this.id = submissionForm.id;
     }
 
-    getType(): string {
-        return this.type;
+    private validate(submissionForm: { title: string, content: string, user: Gebruiker, race: Race, id?: number }): void {
+        if (!submissionForm.title) {
+            throw new Error('Title is required');
+        }
+        if (!submissionForm.content) {
+            throw new Error('Content is required');
+        }
+        if (!submissionForm.user) {
+            throw new Error('User is required');
+        }
+        if (!submissionForm.race) {
+            throw new Error('Race is required');
+        }
     }
 
-    getSender(): string {
-        return this.sender;
+    getId(): number | undefined {
+        return this.id;
     }
 
-    getAcceptance(): boolean {
-        return this.acceptance;
+    getTitle(): string {
+        return this.title;
+    }
+
+    getContent(): string {
+        return this.content;
+    }
+
+    getUser(): Gebruiker {
+        return this.user;
+    }
+
+    getRace(): Race {
+        return this.race;
     }
 
     equals(other: SubmissionForm): boolean {
         return (
-            this.type === other.getType() &&
-            this.sender === other.getSender() &&
-            this.acceptance === other.getAcceptance()
+            this.id === other.getId() &&
+            this.title === other.getTitle() &&
+            this.content === other.getContent() &&
+            this.user.equals(other.getUser()) &&
+            this.race === other.getRace()
         );
     }
 }

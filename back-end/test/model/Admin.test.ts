@@ -7,7 +7,7 @@ test('given: valid values for Admin, when: Admin is created, then: Admin is crea
     const id = 1;
 
     // when
-    const admin = new Admin(username, password, id);
+    const admin = new Admin({ username, password, id });
 
     // then
     expect(admin.getUsername()).toBe(username);

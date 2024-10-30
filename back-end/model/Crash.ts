@@ -1,3 +1,6 @@
+import { Driver } from './Driver';
+import { Race } from './Race';
+
 export class Crash {
     private id?: number;
     private type: string;
@@ -5,12 +8,29 @@ export class Crash {
     private casualties: number;
     private deaths: number;
 
-    constructor(type: string, description: string, casualties: number, deaths: number, id?: number) {
-        this.type = type;
-        this.description = description;
-        this.casualties = casualties;
-        this.deaths = deaths;
-        if (id) this.id = id;
+    constructor(crash: { type: string, description: string, casualties: number, deaths: number, id?: number }) {
+        this.validate(crash);
+
+        this.type = crash.type;
+        this.description = crash.description;
+        this.casualties = crash.casualties;
+        this.deaths = crash.deaths;
+        if (crash.id) this.id = crash.id;
+    }
+
+    private validate(crash: { type: string, description: string, casualties: number, deaths: number, id?: number }): void {
+        if (!crash.type) {
+            throw new Error('Type is required');
+        }
+        if (!crash.description) {
+            throw new Error('Description is required');
+        }
+        if (crash.casualties === undefined) {
+            throw new Error('Casualties are required');
+        }
+        if (crash.deaths === undefined) {
+            throw new Error('Deaths are required');
+        }
     }
 
     getId(): number | undefined {
