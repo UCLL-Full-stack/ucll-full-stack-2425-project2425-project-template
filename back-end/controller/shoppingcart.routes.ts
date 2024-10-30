@@ -47,4 +47,21 @@ shoppingcartRouter.get('/', async (req: Request, res: Response, next: NextFuncti
     }
 });
 
+shoppingcartRouter.post(
+    '/addItem/:itemId/:shoppingcartId',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const itemId = parseInt(req.params.itemId, 10);
+            const shoppingcartId = parseInt(req.params.shoppingcartId);
+            const shoppingcart = shoppingcartService.addItemToShoppingcart({
+                itemId,
+                shoppingcartId,
+            });
+            res.status(200).json(shoppingcart);
+        } catch (error) {
+            res.status(500).json({ message: (error as Error).message });
+        }
+    }
+);
+
 export { shoppingcartRouter };

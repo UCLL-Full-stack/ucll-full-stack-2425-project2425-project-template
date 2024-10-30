@@ -39,7 +39,17 @@ const create = (item: Item): Item => {
     }
 };
 
+const getById = (id: number): Item | undefined => {
+    try {
+        return items.find((item) => item.getId() === id);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not get item by id');
+    }
+};
+
 export default {
     getAll,
     create,
+    getById,
 };
