@@ -88,4 +88,13 @@ pokebowlRouter.post('/', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
+pokebowlRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pokebowl = await pokebowlService.getPokebowlById(parseInt(req.params.id));
+        res.status(200).json(pokebowl);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { pokebowlRouter };

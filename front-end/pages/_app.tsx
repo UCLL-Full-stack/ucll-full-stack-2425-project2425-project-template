@@ -1,4 +1,6 @@
-import "@/styles/globals.css";
+// import "@/styles/globals.css";
+import '@/styles/navigation.css';
+import '@/styles/style.css';
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {

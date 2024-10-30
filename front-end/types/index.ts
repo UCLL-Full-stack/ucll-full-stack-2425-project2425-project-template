@@ -1,23 +1,18 @@
-
-type IngredientInput = {
+export type Ingredient = {
     id?: number,
     naam: string,
     type: string,
     aantal: number,
     prijs: number
-};
+}
 
-type PokebowlInput = {
+export type Pokebowl = {
     id?: number,
     naam: string,
     type: string,
     beschrijving: string,
     prijs?: number,
     maxAantalIngredienten: number,
-    ingredienten: IngredientInput[]
-}
-
-export {
-    IngredientInput,
-    PokebowlInput
+    ingredienten: Ingredient[],
+    getPrijs(): number
 }

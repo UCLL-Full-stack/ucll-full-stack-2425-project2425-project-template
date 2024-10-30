@@ -1,0 +1,44 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.headerNav {
+    background-color: green;
+}
+
+nav {
+    background-color: green;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: flex;
+    align-items: center;
+    height: auto;
+    justify-content: space-between;
+}
+
+nav .logo img {
+    width: 100px;
+}
+
+nav ul {
+    display: flex;
+    margin: 0;
+}
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav ul li a {
+    padding: 37px 40px 37px 40px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    color: #FFF;
+    font-size: 1.25rem;
+    display: block;
+}
+
+nav li a:hover {
+    background-color: rgb(1, 105, 6);
+}

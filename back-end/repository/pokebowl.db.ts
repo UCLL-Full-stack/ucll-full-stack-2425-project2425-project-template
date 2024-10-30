@@ -7,6 +7,7 @@ const pokebowls = [
         naam: "Salmon pokebowl",
         type: "Salmon",
         beschrijving: "Fishy salmon pokebowl with avocado and spicy mayo",
+        prijs: 10.45,
         maxAantalIngredienten: 5,
         ingredienten: [
             new Ingredient({
@@ -32,6 +33,43 @@ const pokebowls = [
             })
         ]
     }),
+    new Pokebowl({
+        id: 2,
+        naam: "Tuna pokebowl",
+        type: "Tuna",
+        beschrijving: "Fishy tuna pokebowl with seaweed, corn and srirachia sauce",
+        maxAantalIngredienten: 6,
+        ingredienten: [
+            new Ingredient({
+                id: 4,
+                naam: 'Tuna',
+                type: 'Protein',
+                aantal: 50,
+                prijs: 3.61
+            }),
+            new Ingredient({
+                id: 5,
+                naam: 'Corn',
+                type: 'Topping',
+                aantal: 198,
+                prijs: 0.54
+            }),
+            new Ingredient({
+                id: 6,
+                naam: 'Seaweed',
+                type: 'Topping',
+                aantal: 228,
+                prijs: 1.09
+            }),
+            new Ingredient({
+                id: 7,
+                naam: 'Srirachia',
+                type: 'Sauce',
+                aantal: 450,
+                prijs: 1.14
+            })
+        ]
+    }),
 ];
 
 
@@ -41,4 +79,8 @@ const createPokebowl = (pokebowl: Pokebowl) => {
     pokebowls.push(pokebowl);
 };
 
-export default { getAllPokebowls, createPokebowl }
+const getPokebowlById = ({ id }: { id: number }): Pokebowl | null => {
+    return pokebowls.find((pokebowl) => pokebowl.getId() === id) || null;
+}
+
+export default { getAllPokebowls, createPokebowl, getPokebowlById }

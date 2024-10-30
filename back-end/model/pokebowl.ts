@@ -6,6 +6,7 @@ export class Pokebowl {
     private type: string;
     private beschrijving: string;
     private maxAantalIngredienten: number;
+    private prijs?: number;
     private ingredienten: Ingredient[];
 
     constructor(pokebowl: {
@@ -13,6 +14,7 @@ export class Pokebowl {
         naam: string;
         type: string;
         beschrijving: string;
+        prijs?: number;
         maxAantalIngredienten: number;
         ingredienten: Array<Ingredient>;
     }) {
@@ -21,15 +23,18 @@ export class Pokebowl {
         this.id = pokebowl.id;
         this.naam = pokebowl.naam;
         this.type = pokebowl.type;
+        this.prijs = pokebowl.prijs;
         this.beschrijving = pokebowl.beschrijving;
         this.maxAantalIngredienten = pokebowl.maxAantalIngredienten;
         this.ingredienten = pokebowl.ingredienten;
+        this.calculatePrice();
     }
 
     validate(pokebowl: {
         naam: string;
         type: string;
         beschrijving: string;
+        prijs?: number;
         maxAantalIngredienten: number;
         ingredienten: Array<Ingredient>
     }) {
@@ -41,6 +46,9 @@ export class Pokebowl {
         }
         if (!pokebowl.beschrijving) {
             throw new Error("Beschrijving cannot be empty");
+        }
+        if (pokebowl.prijs && pokebowl.prijs < 0) {
+            throw new Error("Prijs must be a positive number");
         }
         if (!pokebowl.maxAantalIngredienten) {
             throw new Error("Max aantal ingredienten cannot be empty");
@@ -69,6 +77,14 @@ export class Pokebowl {
         return this.beschrijving;
     }
 
+    getPrijs(): number | undefined {
+        return this.calculatePrice();
+    }
+
+    setPrijs(prijs: number) {
+        this.prijs = prijs;
+    }
+
     getMaxAantalIngredienten(): number {
         return this.maxAantalIngredienten;
     }
@@ -92,15 +108,24 @@ export class Pokebowl {
         let aantal = ingredient.getAantal();
         ingredient.setAantal(aantal -= 1);
         this.ingredienten.push(ingredient);
+        this.calculatePrice();
     }
 
     calculatePrice() {
-        let standaardPrijs = 5;
+        let prijs: number;
 
-        this.ingredienten.forEach((ingredient) => {
-            standaardPrijs += ingredient.getPrijs();
-            console.log(`standaardPrijs: ${ingredient.getNaam()}`);
-        });
-        return standaardPrijs;
+        if (!this.prijs) {
+            prijs = 5;
+
+            this.ingredienten.forEach((ingredient) => {
+                prijs += ingredient.getPrijs();
+                console.log(`standaardPrijs: ${ingredient.getNaam()}`);
+            });
+
+        } else {
+            prijs = this.prijs;
+        }
+        this.setPrijs(Number(prijs.toFixed(2)));
+        return this.prijs;
     }
 }

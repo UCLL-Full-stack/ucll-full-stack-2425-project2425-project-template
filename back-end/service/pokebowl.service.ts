@@ -25,4 +25,13 @@ const createPokebowl = async ({ naam, type, beschrijving, maxAantalIngredienten,
     return pokebowl;
 };
 
-export default { getAllPokebowls, createPokebowl }
+const getPokebowlById = async (id: number): Promise<Pokebowl | null> => {
+    const pokebowl = pokebowlDb.getPokebowlById({ id: id });
+    if (!pokebowl) {
+        throw new Error(`Pokebowl with id ${id} does not exist.`);
+    } else {
+        return pokebowl;
+    }
+}
+
+export default { getAllPokebowls, createPokebowl, getPokebowlById }
