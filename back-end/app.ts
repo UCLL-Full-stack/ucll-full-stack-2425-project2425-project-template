@@ -14,25 +14,18 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const swaggerOptions = {
-  swaggerDefinition: {
+const swaggerOpts = {
+  definition: {
     openapi: "3.0.0",
     info: {
       title: "Competition API",
       version: "1.0.0",
-      description: "API documentation for the Competition service"
     },
-    servers: [
-      {
-        url: "http://localhost:3000",
-        description: "Local server"
-      }
-    ],
   },
-  apis: ["./routes/*.js"], // Path to the API docs
+  apis: ["./controller/*.ts"],
 };
 
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
+const swaggerDocs = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use('/competitions', competitionRouter);
