@@ -63,7 +63,7 @@ const competitionRouter = express.Router();
 competitionRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const competitions = await competitionService.getAllCompetitions();
-        res.json(competitions);
+        res.status(200).json(competitions);
     } catch (error) {
         next(error);
     }
@@ -93,8 +93,8 @@ competitionRouter.get('/', async (req: Request, res: Response, next: NextFunctio
 competitionRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const competitionDTO: CompetitionDTO = req.body;
-        await competitionService.createCompetition(competitionDTO);
-        res.sendStatus(201);
+        const createdCompetition = await competitionService.createCompetition(competitionDTO);
+        res.status(201).json(createdCompetition);
     } catch (error) {
         next(error);
     }
@@ -123,8 +123,8 @@ competitionRouter.post('/', async (req: Request, res: Response, next: NextFuncti
 competitionRouter.put('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const competitionDTO: CompetitionDTO = req.body;
-        await competitionService.editCompetition(competitionDTO);
-        res.sendStatus(200);
+        const editedCompetition = await competitionService.editCompetition(competitionDTO);
+        res.status(200).json(editedCompetition);
     } catch (error) {
         next(error);
     }
