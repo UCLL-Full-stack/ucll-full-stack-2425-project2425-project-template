@@ -7,10 +7,20 @@ const Header: React.FC = () => {
       <div className="nav">
         <img src="/images/FamList Temp.png" alt="famlist logo" />
         <ul>
-          <li>Home</li>
-          <li>Users</li>
-          <li>Families</li>
+          <Link href="/">
+            Home
+          </Link>
+
+          <Link href="/users">
+            Users
+          </Link>
+
+          <Link href="/families">
+            Families
+          </Link>
+
           <li>Sign in</li>
+          
         </ul>
       </div>
     </header>
