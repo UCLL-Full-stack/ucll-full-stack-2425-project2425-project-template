@@ -105,3 +105,11 @@ dist
 
 .DS_Store
 .vscode
+/front-end/nbproject/private/
+/back-end/nbproject/private/
+
+front-end/nbproject/project.xml
+
+front-end/nbproject/
+/back-end/nbproject/
+/.idea/
