@@ -20,8 +20,8 @@ const getTeamById = async (id: number) => {
   });
 };
 
-const updateTeam = async (id: number, team: Team) => {
-  return await fetch(apiUrl + `/teams/${id}`, {
+const updateTeam = async (team: Team) => {
+  return await fetch(apiUrl + `/teams/edit/${team.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

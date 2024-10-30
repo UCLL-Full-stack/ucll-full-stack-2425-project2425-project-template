@@ -27,12 +27,13 @@ const TeamEditor: React.FC<Props> = ({ team, TeamUpdated }: Props) => {
     if (!teamName || !team.id) return;
 
     const updatedTeam: Team = {
+      id: team.id,
       teamName,
       coach: team.coach,
       players: selectedPlayers,
     };
 
-    await TeamService.updateTeam(team.id, updatedTeam);
+    await TeamService.updateTeam(updatedTeam);
     TeamUpdated();
   };
 
@@ -44,14 +45,17 @@ const TeamEditor: React.FC<Props> = ({ team, TeamUpdated }: Props) => {
     );
   };
 
+  const oldTeamName = team.teamName;
+
   return (
     <div>
-      <h2>Edit Team - {teamName}</h2>
+      <h2>Edit Team - {oldTeamName}</h2>
       <input
         type="text"
         placeholder="New Team Name"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
+        required
       />
 
       <h3>Select Players</h3>
