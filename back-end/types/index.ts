@@ -1,8 +1,9 @@
+type Type = "Protein" | "Topping" | "Sauce"
 
 type IngredientInput = {
     id?: number,
     naam: string,
-    type: string,
+    type: Type,
     aantal: number,
     prijs: number
 };
@@ -18,6 +19,7 @@ type PokebowlInput = {
 }
 
 export {
+    Type,
     IngredientInput,
     PokebowlInput
 }
