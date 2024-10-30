@@ -53,4 +53,4 @@ const updateTeam = ({id, teamName, coach, players}: TeamInput): Team => {
     return teamDb.updateTeam(updatedTeam);
 };
 
-export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam };
+export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam, updateTeam };
