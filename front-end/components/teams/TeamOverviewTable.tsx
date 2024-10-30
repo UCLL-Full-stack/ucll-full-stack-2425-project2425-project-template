@@ -1,5 +1,6 @@
 import React from "react";
 import { Team } from "@/types";
+import { useRouter } from "next/router";
 
 type Props = {
   teams: Array<Team>;
@@ -7,6 +8,9 @@ type Props = {
 };
 
 const TeamOverviewTable: React.FC<Props> = ({ teams, selectTeam }: Props) => {
+  
+  const router = useRouter();
+
   return (
     <>
       {teams && (
@@ -20,15 +24,13 @@ const TeamOverviewTable: React.FC<Props> = ({ teams, selectTeam }: Props) => {
           </thead>
           <tbody>
             {teams.map((team, index) => (
-              <tr key={index} onClick={() => selectTeam(team)} role="button">
-                <td>{team.teamName}</td>
-                <td>
+              <tr key={index} role="button">
+                <td onClick={() => selectTeam(team)}>{team.teamName}</td>
+                <td onClick={() => selectTeam(team)}>
                   {team.coach.firstName} {team.coach.lastName}
                 </td>
                 <td>
-                  <link rel="EditTeam" href={`/teams/edit/${team.id}`}>
-                    <button>Edit</button>
-                  </link>
+                    <button onClick={() => router.push(`teams/edit/${team.id}`)}>Edit</button>
                 </td>
               </tr>
             ))}
