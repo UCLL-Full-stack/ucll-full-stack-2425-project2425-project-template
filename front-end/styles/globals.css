@@ -19,6 +19,8 @@
   max-width: 6%;
 }
 
+/* nog ff laten staan voor de button */
+
 .nav li {
   padding: 1rem 2rem;
   background-color: grey;
@@ -26,7 +28,22 @@
   margin: auto; 
 }
 
+/* nog ff laten staan voor de button */
 .nav li:hover {
+  background-color: blue;
+  cursor: pointer;
+}
+
+.nav a {
+  padding: 1rem 2rem;
+  background-color: grey;
+  text-align: center; 
+  margin: auto; 
+  text-decoration: none; 
+  color: white; 
+}
+
+.nav a:hover {
   background-color: blue;
   cursor: pointer;
 }
