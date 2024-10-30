@@ -28,6 +28,10 @@ export class Leiding{
         this.hoofdleiding = leiding.hoofdleiding;
         this.totem = leiding.totem;
         this.groep = leiding.groep;
+
+        if (this.groep !== undefined) {
+            this.groep.addLeiding(this);
+        }
     }
 
     public getId(): number | undefined {
@@ -96,8 +100,7 @@ export class Leiding{
         } else if (leiding === undefined) {
             return false;
         } else if (leiding instanceof Leiding) {
-            return this.id === leiding.getId() && 
-            this.naam === leiding.getNaam() && 
+            return this.naam === leiding.getNaam() && 
             this.voornaam === leiding.getVoornaam() && 
             this.email === leiding.getEmail() && 
             this.telefoon === leiding.getTelefoon() && 

@@ -4,19 +4,26 @@ import { Leiding } from "./leiding";
 export class Groep {
     private id?: number;
     private naam: string;
+    private beschrijving: string;
     private activiteiten?: Activiteit[];
     private leiding?: Leiding[];
 
     constructor(groep:{
         id?: number,
         naam: string
+        beschrijving: string
         activiteiten?: Activiteit[]
         leiding?: Leiding[]
     }) {
         this.id = groep.id;
         this.naam = groep.naam;
+        this.beschrijving = groep.beschrijving;
         this.activiteiten = groep.activiteiten;
         this.leiding = groep.leiding;
+
+        if (this.leiding !== undefined) {
+            this.leiding.forEach((l) => l.setGroep(this));
+        }
     }
 
     public getId(): number | undefined {
@@ -25,6 +32,10 @@ export class Groep {
 
     public getNaam(): string {
         return this.naam;
+    }
+
+    public getBeschrijving(): string {
+        return this.beschrijving;
     }
 
     public getActiviteiten(): Activiteit[] | undefined {
@@ -82,9 +93,13 @@ export class Groep {
     equals(groep: any): boolean {
         if (groep === null) {
             return false;
-        }
-        if (this.id === groep.id && this.naam === groep.naam) {
-            return true;
+        } else if (groep === undefined) {
+            return false;
+        } else if (groep instanceof Groep) {
+            return this.naam === groep.naam && 
+            this.beschrijving === groep.beschrijving && 
+            this.activiteiten === groep.activiteiten && 
+            this.leiding === groep.leiding;
         }
         return false;
     }

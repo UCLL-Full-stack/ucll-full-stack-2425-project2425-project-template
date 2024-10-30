@@ -60,14 +60,13 @@ export class Activiteit {
             return false;
         } else if (activiteit === undefined) {
             return false;
-        } else if (activiteit.classname !== "Activiteit") {
-            return false;
-        } else {
-        return this.id === activiteit.getId() &&
-            this.naam === activiteit.getNaam() &&
+        } else if (activiteit instanceof Activiteit) {
+        return this.naam === activiteit.getNaam() &&
             this.beschrijving === activiteit.getBeschrijving() &&
             this.begindatum === activiteit.getBegindatum() &&
             this.einddatum === activiteit.getEinddatum();
+        } else {
+            return false;
         }
     }
 }
