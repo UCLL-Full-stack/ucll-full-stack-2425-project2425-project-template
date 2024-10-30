@@ -1,8 +1,20 @@
 import { Item } from '../model/item';
 
 const items = [
-    new Item({ name: 'Banana', price: 10, pathToImage: 'public/banana.png', category: 'fruits' }),
-    new Item({ name: 'Apple', price: 20, pathToImage: 'public/apple.png', category: 'fruits' }),
+    new Item({
+        name: 'Banana',
+        price: 10,
+        pathToImage:
+            'https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2018/08/bananas-1354785_1920.jpg',
+        category: 'fruits',
+    }),
+    new Item({
+        name: 'Apple',
+        price: 20,
+        pathToImage:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS_Db0jJvWe6vYScLksI8qoM2WCeHfJnSBVw&s',
+        category: 'fruits',
+    }),
 ];
 
 const getAll = (): Item[] => {
