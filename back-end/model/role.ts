@@ -6,6 +6,7 @@ export class Role{
     private permissions: PermissionEntry[];
 
     constructor(roleId: string, roleName: string, permissions: PermissionEntry[]){
+        this.validate(roleId, roleName);
         this.roleId = roleId;
         this.roleName = roleName;
         this.permissions = permissions;
@@ -33,5 +34,14 @@ export class Role{
 
     public getPermissions(): PermissionEntry[]{
         return this.permissions;
+    }
+
+    public validate(roleId: string, roleName: string): void{
+        if(!roleId){
+            throw new Error("Role ID is required");
+        }
+        if(!roleName){
+            throw new Error("Role Name is required");
+        }
     }
 }

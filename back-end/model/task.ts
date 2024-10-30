@@ -8,6 +8,7 @@ export class Task{
     private assignees: User[];
 
     constructor(taskId: string, title: string, description: string, dueDate: Date, assignees: User[]){
+        this.validate(taskId, title, description, dueDate);
         this.taskId = taskId;
         this.title = title;
         this.description = description;
@@ -61,5 +62,20 @@ export class Task{
 
     public getAssignees(): User[]{
         return this.assignees;
+    }
+
+    public validate( taskId: String, title: String, description: String, dueDate: Date): void{
+        if(!taskId){
+            throw new Error("Task ID is required");
+        }
+        if(!title){
+            throw new Error("Task Title is required");
+        }
+        if(!description){
+            throw new Error("Task Description is required");
+        }
+        if(!dueDate){
+            throw new Error("Task Due Date is required");
+        }
     }
 }

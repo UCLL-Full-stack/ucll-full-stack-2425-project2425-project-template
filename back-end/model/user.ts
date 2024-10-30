@@ -7,6 +7,7 @@ export class User{
     private guilds: Guild[];
 
     constructor(userId: string, username: string, userTag: string, guilds: Guild[]){
+        this.validate(userId, username, userTag);
         this.userId = userId;
         this.username = username;
         this.userTag = userTag;
@@ -51,5 +52,17 @@ export class User{
 
     public getGuilds(): Guild[]{
         return this.guilds;
+    }
+
+    public validate( userId: String, username: String, userTag: String): void{
+        if(!userId){
+            throw new Error("User ID is required");
+        }
+        if(!username){
+            throw new Error("Username is required");
+        }
+        if(!userTag){
+            throw new Error("User Tag is required");
+        }
     }
 }

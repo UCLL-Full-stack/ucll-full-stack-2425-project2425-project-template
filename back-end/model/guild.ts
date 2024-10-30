@@ -9,6 +9,7 @@ export class Guild{
     private roles: Role[];
 
     constructor(guildId: string, guildName: string, permissions: PermissionEntry[], settings: PermissionEntry[], roles: Role[]){
+        this.validate(guildId, guildName);
         this.guildId = guildId;
         this.guildName = guildName;
         this.permissions = permissions;
@@ -62,5 +63,14 @@ export class Guild{
 
     public getRoles(): Role[]{
         return this.roles;
+    }
+
+    public validate(guildId: string, guildName: string): void{
+        if(!guildId){
+            throw new Error("Guild ID is required");
+        }
+        if(!guildName){
+            throw new Error("Guild Name is required");
+        }
     }
 }

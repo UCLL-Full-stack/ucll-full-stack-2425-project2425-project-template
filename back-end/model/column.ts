@@ -42,4 +42,13 @@ export class Column{
     public getTasks(): Task[]{
         return this.tasks;
     }
+
+    public validate(columnId: string, columnName: string): void{
+        if(!columnId){
+            throw new Error("Column ID is required");
+        }
+        if(!columnName){
+            throw new Error("Column Name is required");
+        }
+    }
 }

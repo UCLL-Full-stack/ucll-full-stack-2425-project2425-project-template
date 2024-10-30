@@ -80,4 +80,12 @@ export class Board{
         this.permissions.push(permission);
     }
     
+    public validate(boardId: string, boardName: string): void{
+        if(!boardId){
+            throw new Error("Board ID is required");
+        }
+        if(!boardName){
+            throw new Error("Board Name is required");
+        }
+    }
 }
