@@ -33,3 +33,8 @@ th {
 td img {
     width: 200px;
 }
+
+.totaalPrijs {
+    border-top: 2px solid black;
+    width: 20%;
+}

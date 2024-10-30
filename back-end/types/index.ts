@@ -1,4 +1,25 @@
 type Type = "Protein" | "Topping" | "Sauce"
+type Rol = "admin" | "klant" | "manager";
+
+type BestellingInput = {
+    id?: number;
+    user: UserInput;
+    datum: Date;
+    totaalPrijs?: number;
+    pokebowls: PokebowlInput[];
+
+}
+
+type UserInput = {
+    id?: number;
+    naam: String;
+    voornaam: String;
+    email: String;
+    wachtwoord: String;
+    adres: String;
+    gebruikersnaam: String;
+    rol: Rol;
+}
 
 type IngredientInput = {
     id?: number,
@@ -21,5 +42,8 @@ type PokebowlInput = {
 export {
     Type,
     IngredientInput,
-    PokebowlInput
+    PokebowlInput,
+    Rol,
+    BestellingInput,
+    UserInput
 }

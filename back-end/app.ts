@@ -6,6 +6,8 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { ingredientRouter } from './controller/ingredient.routes';
 import { pokebowlRouter } from './controller/pokebowl.routes';
+import { orderRouter } from './controller/bestelling.router';
+import { userRouter } from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -16,6 +18,8 @@ app.use(bodyParser.json());
 
 app.use('/ingredienten', ingredientRouter);
 app.use('/pokebowls', pokebowlRouter);
+app.use('/bestellingen', orderRouter);
+app.use('/users', userRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

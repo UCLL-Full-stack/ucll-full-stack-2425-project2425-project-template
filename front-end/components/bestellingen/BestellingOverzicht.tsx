@@ -1,31 +1,30 @@
-import { Ingredient } from "@/types"
+import { Bestelling, Ingredient } from "@/types"
+import { useRouter } from "next/router";
 
 type Props = {
-    bestellingen: Array<Ingredient>
+    bestellingen: Array<Bestelling>;
+    selectBestelling: (bestelling: Bestelling) => void;
 }
 
-const BestellingenOverzicht: React.FC<Props> = ({ bestellingen }: Props) => {
+const BestellingenOverzicht: React.FC<Props> = ({ bestellingen, selectBestelling }: Props) => {
+    const router = useRouter();
     return (
         <>
             {bestellingen && (
                 <table>
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>Order nummer</th>
                             <th>Naam</th>
-                            <th>Type</th>
-                            <th>Aantal</th>
-                            <th>Prijs</th>
+                            <th>Datum</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {bestellingen.map((bestelling, key) => (
-                            <tr key={key}>
-                                <td>{bestelling.id}</td>
-                                <td>{bestelling.naam}</td>
-                                <td>{bestelling.type}</td>
-                                <td>{bestelling.aantal}</td>
-                                <td>{bestelling.prijs}</td>
+                        {bestellingen.map((bestelling, index) => (
+                            <tr key={index} onClick={() => { router.push(`/bestellingen/${bestelling.id}`); selectBestelling(bestelling) }} role="button">
+                                <td>#{bestelling.id}</td>
+                                <td>{bestelling.user.voornaam + " " + bestelling.user.naam}</td>
+                                <td>{bestelling.datum.toLocaleString()}</td>
                             </tr>
                         ))
                         }
