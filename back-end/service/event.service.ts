@@ -1,7 +1,7 @@
 import { Event } from "../model/event";
 import eventDb from "../repository/event.db";
 
-//Function to get all the lecturers
+//Function to get all the events
 const getAllEvents = (): Event[] => {
     return eventDb.getAllEvents();
 };
@@ -13,7 +13,7 @@ const getEventById = (id: number): Event => {
     if (!event){
         throw new Error(`Event with id ${id} does not exist.`)
     }
-    return event; // if found return the lecturer.
+    return event; // if found return the event.
 }
 
 export default { getAllEvents, getEventById}
