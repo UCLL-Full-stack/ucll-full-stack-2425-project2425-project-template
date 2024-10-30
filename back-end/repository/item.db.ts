@@ -1,8 +1,20 @@
 import { Item } from '../model/item';
 
 const items = [
-    new Item({ name: 'Banana', price: 10, pathToImage: 'public/banana.png', category: 'fruits' }),
-    new Item({ name: 'Apple', price: 20, pathToImage: 'public/apple.png', category: 'fruits' }),
+    new Item({
+        id: 0,
+        name: 'Banana',
+        price: 10,
+        pathToImage: 'public/banana.png',
+        category: 'fruits',
+    }),
+    new Item({
+        id: 1,
+        name: 'Apple',
+        price: 20,
+        pathToImage: 'public/apple.png',
+        category: 'fruits',
+    }),
 ];
 
 const getAll = (): Item[] => {
@@ -27,7 +39,17 @@ const create = (item: Item): Item => {
     }
 };
 
+const getById = (id: number): Item | undefined => {
+    try {
+        return items.find((item) => item.getId() === id);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not get item by id');
+    }
+};
+
 export default {
     getAll,
     create,
+    getById,
 };
