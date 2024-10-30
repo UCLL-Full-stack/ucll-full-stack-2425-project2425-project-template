@@ -62,7 +62,7 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
         const events = eventService.getAllEvents();
         res.status(200).json(events);
     } catch (error) {
-        res.status(400).json({ status: 'error', message: 'Could not fetch events.' });
+        res.status(400).json({ status: 'error' });
     }
 });
 
@@ -88,8 +88,6 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Event'
- *       404:
- *         description: Event not found.
  *       400:
  *         description: Error occurred while fetching the event.
  */
