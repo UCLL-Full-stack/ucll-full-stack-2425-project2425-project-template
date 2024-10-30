@@ -1,5 +1,6 @@
 import { Groep } from "../model/groep";
 import { activiteiten } from "./activiteit.db";
+import { leiders } from "./leiding.db";
 
 const groepen = [
     new Groep({
@@ -7,14 +8,14 @@ const groepen = [
         naam: 'Groep 1',
         beschrijving: 'Dit is groep 1',
         activiteiten: [activiteiten[0], activiteiten[1]],
-        leiding: []
+        leiding: [leiders[0], leiders[1]]
     }),
     new Groep({
         id: 2,
         naam: 'Groep 2',
         beschrijving: 'Dit is groep 2',
         activiteiten: [activiteiten[0], activiteiten[1], activiteiten[2], activiteiten[3]],
-        leiding: []
+        leiding: [leiders[2]]
     })
 ];
 
