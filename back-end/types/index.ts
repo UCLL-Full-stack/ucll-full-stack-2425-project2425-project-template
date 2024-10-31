@@ -7,6 +7,7 @@ type EventInput = {
     date: Date;
     location: string,
     category: string,
+    backgroundImage?: string,
 };
 
 type UserInput = {

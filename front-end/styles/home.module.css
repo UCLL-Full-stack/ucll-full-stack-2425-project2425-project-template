@@ -22,6 +22,94 @@
     margin-bottom: 1rem;
 }
 
+.upcomingEventsMain {
+    height: 100vh;
+}
+
+.events {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    max-width: 80vw;
+}
+
+.event {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    gap: 0.5rem;
+    border-radius: 20px;
+    background-color: rgb(5, 5, 5);
+    padding: 1rem;
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+    color: white;
+    /* height: min-content; */
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.event:hover {
+    transform: scale(1.05);
+}
+
+.event .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9));
+    z-index: 1; /* Ensure the overlay is above the background but below the text */
+  }
+
+.event h3 {
+    z-index: 2;
+    margin: 0;
+}
+
+.event h5 {
+    z-index: 2;
+}
+
+.event p {
+    border-radius: 10px;
+    color: black;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+    width: min-content;
+    margin: 0;
+    z-index: 2;
+}
+
+.desc {
+    z-index: 2;
+    background-color: transparent !important;
+    padding: 0 !important;
+    color: white !important;
+    display: inline-flex !important;
+    width: auto !important;
+}
+
+.holder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    gap: 5rem;
+}
+
+.hiddenOb {
+    opacity: 0;
+    white-space: nowrap;
+}
+
 .description {
     display: flex;
     flex-direction: column;

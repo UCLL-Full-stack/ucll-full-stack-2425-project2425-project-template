@@ -3,8 +3,14 @@ import EventService from "@services/EventService";
 import EventOverview from '@components/events/EventOverview'
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import styles from '@styles/home.module.css';
 
 const UpcomingEvents: React.FC = () => {
+    type Event = {
+        date: string;
+        // Add other properties of Event here
+    };
+    
     const [events, setEvents] = useState<Array<Event>>();
 
     useEffect(() => {
@@ -14,7 +20,11 @@ const UpcomingEvents: React.FC = () => {
     const getAll = async () => {
         const response = await EventService.getAll();
         const events = await response.json();
-        setEvents(events);
+
+        // Sort events by date
+        const sortedEvents = events.sort((a: Event, b: Event) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        setEvents(sortedEvents);
     };
 
     return (
@@ -26,7 +36,7 @@ const UpcomingEvents: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <main>
+            <main className={styles.upcomingEventsMain}>
                 {events && <EventOverview events={events} />}
             </main>
         </>

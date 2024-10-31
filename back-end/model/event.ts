@@ -5,6 +5,7 @@ export class Event {
     private date: Date;
     private location: string;
     private category: string;
+    private backgroundImage?: string;
 
     constructor(event: {
         id?: number,
@@ -12,7 +13,8 @@ export class Event {
         description: string,
         date: Date,
         location: string,
-        category: string;
+        category: string,
+        backgroundImage?: string,
     }) {
         this.id = event.id;
         this.name = event.name;
@@ -20,6 +22,7 @@ export class Event {
         this.date = event.date;
         this.location = event.location;
         this.category = event.category;
+        this.backgroundImage = event.backgroundImage;
     }
 
     getId(): number | undefined {
@@ -44,6 +47,10 @@ export class Event {
 
     getCategory(): string {
         return this.category;
+    }
+
+    getBackgroundImage(): string | undefined {
+        return this.backgroundImage;
     }
 
     equals(event: Event): boolean {

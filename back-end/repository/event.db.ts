@@ -4,19 +4,21 @@ import { Event } from "../model/event";
 const events = [
     new Event({
         id: 1,
-        name: 'Taylor Swift concert',
+        name: 'Taylor Swift Concert',
         description: 'Amazing music, sang by a talented artist.',
         date: new Date('2024-12-12'), //!!!
         location: 'Amsterdam',
-        category: 'Big-Event'
+        category: 'Big-Event',
+        backgroundImage: '/images/taylor-swift-concert.jpg',
     }),
     new Event({
         id: 2,
-        name: 'Chris his Birthday party',
-        description: 'It is Chris his birthday!',
+        name: 'Chris Birthday Party',
+        description: 'It is Chris Birthday!',
         date: new Date('2025-6-15'),
         location: 'Brussel',
-        category: 'Small-Event'
+        category: 'Small-Event',
+        backgroundImage: '/images/chris-birthday-party.jpg',
     }),
     new Event({
         id: 3,
@@ -24,7 +26,8 @@ const events = [
         description: 'A festival with a variety of delicious foods from all around the world.',
         date: new Date('2024-11-20'),
         location: 'Paris',
-        category: 'Big-Event'
+        category: 'Big-Event',
+        backgroundImage: '/images/food-festival.jpg',
     }),
     new Event({
         id: 4,
@@ -32,7 +35,8 @@ const events = [
         description: 'An evening to connect and network with industry professionals.',
         date: new Date('2024-12-05'),
         location: 'Berlin',
-        category: 'Medium-Event'
+        category: 'Medium-Event',
+        backgroundImage: '/images/company-networking-night.jpg',
     }),
     new Event({
         id: 5,
@@ -40,7 +44,8 @@ const events = [
         description: 'A showcase of contemporary art from emerging artists.',
         date: new Date('2025-02-18'),
         location: 'London',
-        category: 'Big-Event'
+        category: 'Big-Event',
+        backgroundImage: '/images/art-exhibition.jpg',
     }),
     new Event({
         id: 6,
@@ -48,7 +53,8 @@ const events = [
         description: 'A relaxing yoga session for all skill levels, focusing on mindfulness and flexibility.',
         date: new Date('2025-03-10'),
         location: 'Barcelona',
-        category: 'Small-Event'
+        category: 'Small-Event',
+        backgroundImage: '/images/yoga-workshop.jpg',
     }),
     new Event({
         id: 7,
@@ -56,7 +62,8 @@ const events = [
         description: 'Innovative startups compete to win funding and recognition.',
         date: new Date('2025-04-22'),
         location: 'Dublin',
-        category: 'Medium-Event'
+        category: 'Medium-Event',
+        backgroundImage: '/images/startup-pitch-competition.jpg',
     }),
 
     new Event({
@@ -65,7 +72,8 @@ const events = [
         description: 'A conference featuring the latest advancements in technology and innovation.',
         date: new Date('2025-05-10'),
         location: 'San Francisco',
-        category: 'Big-Event'
+        category: 'Big-Event',
+        backgroundImage: '/images/tech-conference.jpg',
     }),
     new Event({
         id: 9,
@@ -73,7 +81,8 @@ const events = [
         description: 'An elegant evening of fine wines and gourmet pairings.',
         date: new Date('2025-07-08'),
         location: 'Rome',
-        category: 'Small-Event'
+        category: 'Small-Event',
+        backgroundImage: '/images/wine-tasting-evening.jpg',
     }),
 
 
