@@ -37,6 +37,7 @@ const UpcomingEvents: React.FC = () => {
             </Head>
             <Header />
             <main className={styles.upcomingEventsMain}>
+                <h1>Top Trending Events</h1>
                 {events && <EventOverview events={events} />}
             </main>
         </>
