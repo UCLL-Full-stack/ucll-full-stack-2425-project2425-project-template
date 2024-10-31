@@ -1,5 +1,6 @@
 import itemDb from '../../repository/item.db';
 import nutritionlabelDb from '../../repository/nutritionlabel.db';
+import nutritionlabelDb from '../../repository/nutritionlabel.db';
 import itemService from '../../service/item.service';
 import { ItemInput, NutritionlabelInput } from '../../types';
 
