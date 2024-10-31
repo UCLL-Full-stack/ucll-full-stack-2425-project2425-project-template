@@ -6,7 +6,7 @@ export class User {
     private id?: number;
     private username: string;
     private password: string;
-    private profile?: Profile;
+    private profile: Profile;
     private recipes?: Recipe[];
     private schedules?: Schedule[];
 
@@ -14,7 +14,7 @@ export class User {
         id?: number;
         username: string;
         password: string;
-        profile?: Profile;
+        profile: Profile;
         recipes?: Recipe[];
         schedules?: Schedule[];
     }) {
@@ -38,7 +38,7 @@ export class User {
         return this.password;
     }
 
-    getProfile(): Profile | undefined {
+    getProfile(): Profile {
         return this.profile;
     }
 

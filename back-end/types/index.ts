@@ -1,24 +1,30 @@
+type UserSignupInput = {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    password: string;
+};
+
+type UserLoginInput = {
+    username: string;
+    password: string;
+};
+
+type ProfileUpdateInput = {
+    firstName: string;
+    lastName: string;
+    email: string;
+};
+
 type IngredientCategory =
-    | 'Vegetables'
-    | 'Fruits'
-    | 'Meats'
-    | 'Seafood'
-    | 'Dairy'
-    | 'Grain'
-    | 'Legumes'
-    | 'Nuts & Seeds'
-    | 'Spices & Herbs'
-    | 'Sauces'
-    | 'Oils'
-    | 'Vinegar & Wine'
-    | 'Sweetener'
-    | 'Beverage'
-    | 'Baking'
+    | 'Produce' // Combines Vegetables & Fruits
+    | 'Meat & Fish' // Combines Meats & Seafood
+    | 'Dairy & Eggs'
+    | 'Pantry' // Combines Grain, Pasta, Canned, Baking, Spices, Oils
+    | 'Snacks'
+    | 'Beverages'
     | 'Frozen'
-    | 'Canned'
-    | 'Pasta'
-    | 'Bread'
-    | 'PreparedFood'
     | 'Other';
 
-export { IngredientCategory };
+export { IngredientCategory, UserSignupInput, UserLoginInput, ProfileUpdateInput };

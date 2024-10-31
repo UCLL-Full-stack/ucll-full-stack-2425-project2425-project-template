@@ -5,14 +5,14 @@ export class Profile {
     private firstName: string;
     private lastName: string;
     private email: string;
-    private user: User;
+    private user?: User;
 
     constructor(profile: {
         id?: number;
         firstName: string;
         lastName: string;
         email: string;
-        user: User;
+        user?: User;
     }) {
         this.id = profile.id;
         this.firstName = profile.firstName;
@@ -29,24 +29,31 @@ export class Profile {
         return this.firstName;
     }
 
+    setFirstName(firstName: string): void {
+        this.firstName = firstName;
+    }
+
     getLastName(): string {
         return this.lastName;
+    }
+
+    setLastName(lastName: string): void {
+        this.lastName = lastName;
     }
 
     getEmail(): string {
         return this.email;
     }
 
-    getUser(): User {
+    setEmail(email: string): void {
+        this.email = email;
+    }
+
+    getUser(): User | undefined {
         return this.user;
     }
 
-    equals(profile: Profile): boolean {
-        return (
-            this.firstName === profile.getFirstName() &&
-            this.lastName === profile.getLastName() &&
-            this.email === profile.getEmail() &&
-            this.user.equals(profile.getUser())
-        );
+    setUser(user: User): void {
+        this.user = user;
     }
 }
