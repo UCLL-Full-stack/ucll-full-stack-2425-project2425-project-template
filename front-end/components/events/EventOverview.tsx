@@ -4,33 +4,25 @@ type Props = {
     events: Event[];
 };
 
-const EventOverview: React.FC<Prop> = ({events}: Props) => {
+const EventOverview: React.FC<Props> = ({events}: Props) => {
+  
+    // Sort events by date
+    const sortedEvents = events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
     return (
         <>
             <section>
-            {events && events.length > 0 ? (
-                <table>
-                <thead>
-                  <tr>
-                    <th scope="col">Event name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Category</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.map((event, index) => (
-                    <tr key={index}>
-                      <td>{event.name}</td>
-                      <td>{event.description}</td>
-                      <td>{new Date(event.date).toLocaleDateString()}</td>
-                      <td>{event.location}</td>
-                      <td>{event.category}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {sortedEvents && sortedEvents.length > 0 ? (
+                <section>
+                {sortedEvents.map((event, index) => (
+                  <div key={index}>
+                    <h3>{event.name}</h3>
+                    <p>{new Date(event.date).toLocaleDateString()}</p>
+                    <p>{event.location}</p>
+                    <p>{event.category}</p>
+                  </div>
+                ))}
+              </section>
             ) : (
               <p>There are no events yet.</p>
             )}
