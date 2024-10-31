@@ -5,5 +5,13 @@ const getAllProducts = async (): Promise<Product[]> => {
     return productDb.getAllProducts();
 }
 
+const getProductById = async ({ id }: { id: number }): Promise<Product | undefined> => {
+    const product =  productDb.getProductById({id});
+    if (!product) {
+        throw new Error('Product not found');
+    }
+    return product;
+}
 
-export default { getAllProducts }
+
+export default { getAllProducts, getProductById }

@@ -15,4 +15,13 @@ productRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+productRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const product = await productService.getProductById({id: parseInt(req.params.id)});
+        res.status(200).json(product);
+
+    }catch(error){
+        next(error);
+    }
+});
 export { productRouter };
