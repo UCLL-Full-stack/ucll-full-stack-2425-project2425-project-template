@@ -1,15 +1,15 @@
-type CompetitionDTO = {
-    id: number;
+type CompetitionInput = {
+    id?: number;
     name: string;
-    teams: TeamDTO[];
+    teams: TeamInput[];
 };
 
-type TeamDTO = {
-    id: number;
+type TeamInput = {
+    id?: number;
     name: string;
 };
 
 export {
-    CompetitionDTO,
-    TeamDTO,
+    CompetitionInput,
+    TeamInput,
 };

@@ -41,16 +41,16 @@ const createCompetition = (competition: Competition): Competition => {
     return competition;
 }
 
-const editCompetition = (competitionId: number, competition: Competition): Competition => {
-    const index = competitions.findIndex(c => c.getId() === competitionId);
-    if (index >= 0) {
-        competitions[index] = competition;
-    }
-    return competition;
-}
+// const editCompetition = (competitionId: number, competition: Competition): Competition => {
+//     const index = competitions.findIndex(c => c.getId() === competitionId);
+//     if (index >= 0) {
+//         competitions[index] = competition;
+//     }
+//     return competition;
+// }
 
 export default {
     getAllCompetitions,
     createCompetition,
-    editCompetition,
+    // editCompetition,
 }
