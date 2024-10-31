@@ -1,6 +1,5 @@
 import itemDb from '../../repository/item.db';
 import nutritionlabelDb from '../../repository/nutritionlabel.db';
-import nutritionlabelDb from '../../repository/nutritionlabel.db';
 import itemService from '../../service/item.service';
 import { ItemInput, NutritionlabelInput } from '../../types';
 
@@ -78,7 +77,7 @@ test('given: a valid nutritionlabel, when: adding a nutritionlabel to a item, th
     };
 
     itemDb.getById = mockItemDbGetById.mockReturnValue(item);
-    nutritionlabelDb.create = mockNutritionlabelDbCreate.mockReturnValue(nutritionlabel);
+    nutritionlabelDb.create = mockNutritionlabelDbCreate.mockReturnValue(item);
 
     // when adding a nutritionlabel to a item
     itemService.addNutritionLabelToItem(item.id, nutritionlabel);
