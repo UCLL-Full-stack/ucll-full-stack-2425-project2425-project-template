@@ -34,7 +34,7 @@ export class Course {
         return this._id;
     }
 
-    public set id(value: number) {
+    public set id(value: number|undefined) {
         this._id = value;
     }
 
