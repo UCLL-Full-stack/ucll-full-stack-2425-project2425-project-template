@@ -195,4 +195,49 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
+
+
+/**
+ * @swagger
+ * /workouts/{workoutId}/exercises/{exerciseId}:
+ *   post:
+ *     summary: Add an exercise to a workout
+ *     tags: [Workouts]
+ *     description: Add an exercise to a specific workout by their IDs.
+ *     parameters:
+ *       - in: path
+ *         name: workoutId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The workout ID
+ *       - in: path
+ *         name: exerciseId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The exercise ID
+ *     responses:
+ *       200:
+ *         description: The updated workout object with the new exercise.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Workout'
+ *       404:
+ *         description: Workout or exercise not found
+ */
+workoutRouter.post('/:workoutId/exercises/:exerciseId', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const workoutId = parseInt(req.params.workoutId);
+        const exerciseId = parseInt(req.params.exerciseId);
+        const updatedWorkout = workoutService.addExerciseToWorkout(workoutId, exerciseId);
+        res.status(200).json(updatedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
+
 export default workoutRouter;

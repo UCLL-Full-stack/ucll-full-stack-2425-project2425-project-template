@@ -21,6 +21,11 @@ export class Workout {
         }
     }
 
+    addExercise(exercise: Exercise): void {
+            this.exercises.push(exercise);
+    }
+
+
     equals({ workout_id, user_id, name, description, exercises }: { workout_id: number; user_id: number; name: string; description: string; exercises: Exercise[] }): boolean {
         return (
             this.workout_id === workout_id &&

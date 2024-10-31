@@ -12,17 +12,19 @@ const WorkoutInfo: React.FC<Props> = ({ workout }: Props) => {
           <table>
             <thead>
               <tr>
-                <th>Workout Name</th>
-                <th>id</th>
+                <th>Name</th>
                 <th>Description</th>
+                <th>Video</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>{workout.name}</td>
-                <td>{workout.workout_id}</td>
-                <td>{workout.description}</td>
-              </tr>
+              {workout.exercises.map((exercise) => (
+                <tr key={exercise.id}>
+                  <td>{exercise.name}</td>
+                  <td>{exercise.description}</td>
+                  <td>{exercise.video_link}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

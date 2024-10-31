@@ -3,24 +3,6 @@
     "collectionName": "Workout Planner API Tests",
     "requests": [
         {
-            "name": "Get All Exercises",
-            "method": "GET",
-            "url": "{{baseUrl}}/exercises",
-            "tests": []
-        },
-        {
-            "name": "Get Exercise by ID - Valid ID",
-            "method": "GET",
-            "url": "{{baseUrl}}/exercises/1",
-            "tests": []
-        },
-        {
-            "name": "Get Exercise by ID - Invalid ID",
-            "method": "GET",
-            "url": "{{baseUrl}}/exercises/999",
-            "tests": []
-        },
-        {
             "name": "Get All Users",
             "method": "GET",
             "url": "{{baseUrl}}/users",
@@ -39,6 +21,34 @@
             "tests": []
         },
         {
+            "name": "Get All Exercises",
+            "method": "GET",
+            "url": "{{baseUrl}}/exercises",
+            "tests": []
+        },
+        {
+            "name": "Get Exercise by ID - Valid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/exercises/1",
+            "tests": []
+        },
+        {
+            "name": "Get Exercise by ID - Invalid ID",
+            "method": "GET",
+            "url": "{{baseUrl}}/exercises/999",
+            "tests": []
+        },
+        {
+            "name": "Create Workout - Valid Data",
+            "method": "POST",
+            "url": "{{baseUrl}}/workouts",
+            "body": {
+                "type": "json",
+                "raw": "{\"workout_id\": 1, \"user_id\": 1, \"name\": \"Full Body Workout\", \"description\": \"A comprehensive full-body workout routine.\"}"
+            },
+            "tests": []
+        },
+        {
             "name": "Get All Workouts",
             "method": "GET",
             "url": "{{baseUrl}}/workouts",
@@ -54,16 +64,6 @@
             "name": "Get Workout by ID - Invalid ID",
             "method": "GET",
             "url": "{{baseUrl}}/workouts/999",
-            "tests": []
-        },
-        {
-            "name": "Create Workout - Valid Data",
-            "method": "POST",
-            "url": "{{baseUrl}}/workouts",
-            "body": {
-                "type": "json",
-                "raw": "{\"workout_id\": 2, \"user_id\": 1, \"name\": \"Lower body\", \"description\": \"Lower body workout\"}"
-            },
             "tests": []
         },
         {
@@ -147,6 +147,12 @@
                     "expected": "rest_time must be in the format 'MM:SS' or 'M:SS'."
                 }
             ]
+        },
+        {
+            "name": "Add Exercise to Workout - Valid Data",
+            "method": "POST",
+            "url": "{{baseUrl}}/workouts/1/exercises/1",
+            "tests": []
         }
     ]
 }

@@ -14,4 +14,6 @@ const getExerciseById = (id: number): Exercise => {
     return exercise;
 };
 
+
+
 export default { getAllExercises, getExerciseById };

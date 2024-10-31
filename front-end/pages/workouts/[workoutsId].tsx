@@ -12,6 +12,12 @@ const ReadWorkoutById = () => {
   const router = useRouter();
   const { workoutId } = router.query;
 
+  useEffect(() => {
+    if (workoutId) {
+      getWorkoutById();
+    }
+  }, [workoutId]);
+
   const getWorkoutById = async () => {
     const [workoutResponse] = await Promise.all([
       WorkoutService.getWorkoutById(workoutId as string),
@@ -19,12 +25,6 @@ const ReadWorkoutById = () => {
     const [workoutt] = await Promise.all([workoutResponse.json()]);
     setWorkout(workoutt);
   };
-
-  useEffect(() => {
-    if (workoutId) {
-      getWorkoutById();
-    }
-  }, [workoutId]);
 
   return (
     <>

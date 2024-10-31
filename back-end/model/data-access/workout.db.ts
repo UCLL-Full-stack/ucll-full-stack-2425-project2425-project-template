@@ -15,6 +15,15 @@ const createWorkout = ({ workout_id, user_id, name, description}: Workout): Work
     return workout
 }
 
+const updateWorkout = (workout: Workout): void => {
+    const index = workouts.findIndex(w => w.workout_id === workout.workout_id);
+    if (index !== -1) {
+        workouts[index] = workout;
+    } else {
+        throw new Error(`Workout with ID ${workout.workout_id} not found`);
+    }
+};
+
 
 const getAllWorkouts = (): Workout[] => workouts
 
@@ -31,4 +40,4 @@ const getWorkoutsByUserId = (id: number): Workout[] => {
 
 
 
-export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, workouts };
+export default { getAllWorkouts,  getWorkoutById, getWorkoutsByUserId, createWorkout, workouts, updateWorkout };

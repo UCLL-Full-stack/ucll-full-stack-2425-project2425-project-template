@@ -5,12 +5,13 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 const Workouts: React.FC = () => {
-  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
+  const [workouts, setWorkouts] = useState<Array<Workout>>();
+  const [error, setError] = useState<string>();
 
   const getWorkouts = async () => {
     const response = await WorkoutService.getAllWorkouts();
-    const workoutss = await response.json();
-    setWorkouts(workoutss);
+    const workouts = await response.json();
+    setWorkouts(workouts);
   };
 
   useEffect(() => {
@@ -22,11 +23,20 @@ const Workouts: React.FC = () => {
       <Head>
         <title>Workouts</title>
       </Head>
+
       <main>
-        <h1>Workouts</h1>
-        <section>
-          {workouts && <WorkoutOverviewTable workouts={workouts} />}
-        </section>
+        <div>
+          <h1>Workouts</h1>
+          <section>
+            {error ? (
+              <p>{error}</p>
+            ) : workouts ? (
+              <WorkoutOverviewTable workouts={workouts} />
+            ) : (
+              <p>Loading workouts...</p>
+            )}
+          </section>
+        </div>
       </main>
     </>
   );

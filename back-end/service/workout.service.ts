@@ -2,6 +2,7 @@ import userDb from "../model/data-access/user.db";
 import workoutDb from "../model/data-access/workout.db";
 import { Workout } from "../model/workout";
 import { WorkoutInput } from "../types";
+import exerciseService from "./exercise.service";
 
 
 const getAllWorkouts = (): Workout[] => {
@@ -31,6 +32,21 @@ const getWorkoutsByUserId = (id: number): Workout[] => {
     return userWorkouts;
 };
 
+const addExerciseToWorkout = (workoutId: number, exerciseId: number): Workout => {
+    const workout = workoutDb.getWorkoutById(workoutId);
+    if (!workout) {
+        throw new Error(`Workout with ID ${workoutId} not found`);
+    }
+
+    const exercise = exerciseService.getExerciseById(exerciseId);
+    if (!exercise) {
+        throw new Error(`Exercise with ID ${exerciseId} not found`);
+    }
+
+    workout.addExercise(exercise); 
+    workoutDb.updateWorkout(workout);
+    return workout;
+};
 
 const createWorkout = ({ workout_id, user_id, name, description,}: WorkoutInput): Workout => {
     const workout = new Workout ({ workout_id, user_id, name, description, exercises: [] });
@@ -39,4 +55,4 @@ const createWorkout = ({ workout_id, user_id, name, description,}: WorkoutInput)
 
 
 
-export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout };
+export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, addExerciseToWorkout };
