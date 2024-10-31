@@ -1,11 +1,11 @@
 import { ISP } from "./isp";
 
 export class Invoice {
-    private _id?: number;
-    private _totalAmount: number;
-    private _deadline: Date;
-    private _paidAmount?: number;
-    private _isp: ISP;
+    private readonly _id?: number;
+    private readonly _totalAmount: number;
+    private readonly _deadline: Date;
+    private readonly _paidAmount?: number;
+    private readonly _isp: ISP;
 
     constructor(invoice: {
         id: number;
@@ -14,6 +14,7 @@ export class Invoice {
         paidAmount?: number;
         isp: ISP;
     }) {
+        this.validate(invoice);
         this._id = invoice.id;
         this._totalAmount = invoice.totalAmount;
         this._deadline = invoice.deadline;
@@ -21,57 +22,41 @@ export class Invoice {
         this._isp = invoice.isp;
     }
 
-    public get id(): number|undefined {
-        return this._id;
+    validate(invoice: {totalAmount: number; deadline: Date; paidAmount?: number; isp: ISP;}) {
+        if (!invoice.totalAmount || invoice.totalAmount < 0 ){
+            throw new Error("Total amount cannot be negative.")
+        }
+        if (!invoice.deadline){
+            throw new Error("Deadline is required.")
+        }
+        if (!invoice.paidAmount ||invoice.paidAmount < 0 ){
+            throw new Error("Paid amount cannot be negative.")
+        }
+        if (!invoice.isp){
+            throw new Error("ISP is required.")
+        }
     }
 
-    public set id(value: number) {
-        this._id = value;
+    public get id(): number|undefined {
+        return this._id;
     }
 
     public get totalAmount(): number {
         return this._totalAmount;
     }
 
-    public set totalAmount(value: number) {
-        if (!value || value < 0 ){
-            throw new Error("Total amount cannot be negative.")
-        }
-        this._totalAmount = value;
-    }
-
     public get deadline(): Date {
         return this._deadline;
-    }
-
-    public set deadline(value: Date) {
-        if (!value){
-            throw new Error("Deadline is required.")
-        }
-        this._deadline = value;
     }
 
     public get paidAmount(): number | undefined {
         return this._paidAmount;
     }
 
-    public set paidAmount(value: number | undefined) {
-        if (!value || value < 0 ){
-            throw new Error("Paid amount cannot be negative.")
-        }
-        this._paidAmount = value;
-    }
-
     public get isp(): ISP {
         return this._isp;
     }
 
-    public set isp(value: ISP) {
-        if (!value){
-            throw new Error("ISP is required.")
-        }
-        this._isp = value;
-    }
 
     public equals(invoice: Invoice): boolean {
         return (

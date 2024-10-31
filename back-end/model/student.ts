@@ -2,9 +2,9 @@ import { Course } from "./course";
 import { User } from "./user";
 
 export class Student extends User {
-    private _nationality: string;
-    private _startYear: number;
-    private _passedCourses: Course[];
+    private readonly _nationality: string;
+    private readonly _startYear: number;
+    private readonly _passedCourses: Course[];
 
     constructor(student: { id: number; name: string; email: string; password: string; nationality: string; startYear: number; passedCourses: Course[] }) {
         super({
@@ -13,44 +13,39 @@ export class Student extends User {
             email: student.email,
             password: student.password,
         });
-
+        this.validates(student);
         this._nationality = student.nationality;
         this._startYear = student.startYear;
         this._passedCourses = student.passedCourses || [];
+    }
+
+    validates(student: { nationality: string; startYear: number;}) {
+        if (!student.nationality || student.nationality.length=== 0){
+            throw new Error("Nationality is required.")
+        }
+        if (!student.startYear) {
+            throw new Error("Start year is required.")
+        }
+        if(student.startYear > 9999 || student.startYear <1000){
+            throw new Error("Start year should be 4 digit.")
+        }
     }
 
     get nationality(): string {
         return this._nationality;
     }
 
-    set nationality(value: string) {
-        if (!value || value.length=== 0){
-            throw new Error("Nationality is required.")
-        }
-        this._nationality = value;
-    }
 
     get startYear(): number {
         return this._startYear;
     }
 
-    set startYear(value: number) {
-        if (!value){
-            throw new Error("Start year is required.")
-        }
-        this._startYear = value;
-    }
 
     get passedCourses(): Course[] {
         return this._passedCourses;
     }
 
-    set passedCourses(value: Course[]) {
-        if(value.length === 0){
-            this._passedCourses = new Array();
-        }
-        this._passedCourses = value;
-    }
+
     equals(student: Student): boolean {
         return (
             this.id === student.id &&
