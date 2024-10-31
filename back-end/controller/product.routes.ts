@@ -24,4 +24,14 @@ productRouter.get('/:id', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+productRouter.get('/:id/reviews', async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const reviews = await productService.getReviewsForProduct({id: parseInt(req.params.id)});
+        res.status(200).json(reviews);
+
+    }catch(error){
+        next(error);
+    }
+});
 export { productRouter };

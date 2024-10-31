@@ -1,4 +1,5 @@
 import { Product } from "../model/product";
+import { Review } from "../model/review";
 import productDb from "../repository/product.db";
 
 const getAllProducts = async (): Promise<Product[]> => {
@@ -12,6 +13,12 @@ const getProductById = async ({ id }: { id: number }): Promise<Product | undefin
     }
     return product;
 }
+const getReviewsForProduct = async ({ id }: { id: number }): Promise<Review[]> => {
+    const reviews = productDb.getReviewsForProduct({ id });
+    if (!reviews) {
+        throw new Error('Reviews not found');
+    }
+    return reviews;
+}
 
-
-export default { getAllProducts, getProductById }
+export default { getAllProducts, getProductById, getReviewsForProduct }
