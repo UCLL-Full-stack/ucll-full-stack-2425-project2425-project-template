@@ -19,7 +19,9 @@ const Header: React.FC = () => {
             Families
           </Link>
 
-          <li>Sign in</li>
+          <Link href='/login'>
+            Sign in
+          </Link>
           
         </ul>
       </div>

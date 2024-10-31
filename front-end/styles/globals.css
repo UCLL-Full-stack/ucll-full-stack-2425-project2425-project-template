@@ -56,3 +56,26 @@ header {
   font-family: Arial, sans-serif;
   box-shadow: 0 4px 2px -2px gray;
 }
+
+/* Login form */
+
+.login {
+  display: flex;
+  flex-direction: column;
+  max-width: 10rem;
+  max-height: 10rem;
+  justify-content: center;
+  margin: auto;
+  padding: 10rem;
+  gap: 1rem;
+}
+
+.login .parentOrChild {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.login #signInButton {
+  margin: auto;
+}
