@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export class Task {
     private id?: number;
     private name: string;
@@ -6,6 +8,7 @@ export class Task {
     private storyPoints: number;
     private startDate: Date;
     private endDate: Date;
+    private users: User[];
 
     constructor(user: {
         id?: number;
@@ -15,6 +18,7 @@ export class Task {
         storyPoints: number;
         startDate: Date;
         endDate: Date;
+        users?: User[];
     }) {
         this.id = user.id;
         this.name = user.name;
@@ -23,6 +27,7 @@ export class Task {
         this.storyPoints = user.storyPoints;
         this.startDate = user.startDate;
         this.endDate = user.endDate;
+        this.users = user.users || [];
     }
 
     // getters
@@ -54,6 +59,10 @@ export class Task {
         return this.endDate;
     }
 
+    getUsers(): User[] {
+        return this.users;
+    }
+
     // setters
     setname(name: string): void {
         this.name = name;
@@ -79,7 +88,17 @@ export class Task {
         this.endDate = endDate;
     }
 
+    setUsers(users: User[]): void {
+        this.users = users;
+    }
+
     // methods
+    addUser(user: User): void {
+        if (!this.users.some(u => u.equals(user))) {
+            this.users.push(user);
+        }
+    }
+
     equals(otherTask: Task): boolean {
         return (
             this.name === otherTask.getName() &&
@@ -87,7 +106,10 @@ export class Task {
             this.priority === otherTask.getPriority() &&
             this.storyPoints === otherTask.getStoryPoints() &&
             this.startDate === otherTask.getStartDate() &&
-            this.endDate === otherTask.getEndDate()
+            this.endDate === otherTask.getEndDate() &&
+            this.users.every((user, index) => {
+                return user.equals(otherTask.getUsers()[index]);
+            })
         );
     }
 }
