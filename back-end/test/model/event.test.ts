@@ -1,8 +1,4 @@
-import { error } from 'console';
 import { Event } from '../../model/event';
-import eventDb from '../../repository/event.db';
-import { set } from 'date-fns';
-
 
 // Sample data for the event
 const name = 'Taylor Swift concert';

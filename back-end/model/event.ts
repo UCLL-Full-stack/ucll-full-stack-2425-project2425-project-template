@@ -17,7 +17,7 @@ export class Event {
         date: Date,
         location: string,
         category: string;
-        
+        backgroundImage?: string;
     }) {
         // Validate the date
         if (isNaN(event.date.getTime())) {
