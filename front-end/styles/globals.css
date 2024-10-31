@@ -83,3 +83,41 @@ tbody tr:hover {
 td, th {
   padding: 0.75rem; 
 }
+/* Login form */
+
+.login {
+  display: flex;
+  flex-direction: column;
+  max-width: 10rem;
+  max-height: 10rem;
+  justify-content: center;
+  margin: auto;
+  padding: 15rem 0 0 0;
+  gap: 1rem;
+}
+
+.login .parentOrChild {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.login #signInButton {
+  margin: auto;
+}
+
+.login .errorMessages {
+  color: red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.login .signInSuccess {
+  color: lightgreen;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}

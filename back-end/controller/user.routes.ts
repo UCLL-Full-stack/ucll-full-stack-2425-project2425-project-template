@@ -28,6 +28,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -52,6 +53,75 @@ userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        } else {
+            res.status(400).json({ status: "error", errorMessage: "An unknown error occurred" });
+        }
+    }
+});
+
+/**
+ * @swagger
+ * /users/{email}:
+ *   get:
+ *     summary: Get a a user by email.
+ *     parameters:
+ *         - in: path
+ *           name: email
+ *           schema:
+ *             type: string
+ *             required: true
+ *             description: user email
+ *     responses:
+ *       200:
+ *         description: A user object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/User'
+ */
+
+userRouter.get("/:email", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.getUserByEmail(req.params.email);
+        res.status(200).json(user);
+    } catch(error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        } else {
+            res.status(400).json({ status: "error", errorMessage: "An unknown error occurred" });
+        }
+    }
+});
+
+// --------------- POST --------------- //
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *      summary: Create a new user object
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = <UserInput>req.body;
+        const result = await userService.createUser(user);
+        res.status(200).json(result);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ status: "error", errorMessage: error.message });
