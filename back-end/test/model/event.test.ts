@@ -1,6 +1,6 @@
 import { error } from 'console';
-import { Event } from '../model/event';
-import eventDb from '../repository/event.db';
+import { Event } from '../../model/event';
+import eventDb from '../../repository/event.db';
 import { set } from 'date-fns';
 
 
