@@ -5,10 +5,12 @@ const Header: React.FC = () => {
     return (
         <header className={styles.header}>
             <div>
+                <Link href="/" className={styles.logo}>
+                    <img src={"/images/logo.png"} alt={"logo"} />
+                </Link>
+            </div>
+            <div className={styles.container}>
                 <nav className={styles.nav}>
-                    <Link href="/" className={styles.link}>
-                        Home
-                    </Link>
                     <Link href="/store" className={styles.link}>
                         Store
                     </Link>
@@ -19,6 +21,11 @@ const Header: React.FC = () => {
                         Profile
                     </Link>
                 </nav>
+            </div>
+            <div>
+                <Link href="/" className={styles.balance}>
+                    Balance: €99.99
+                </Link>
             </div>
         </header>
     );
