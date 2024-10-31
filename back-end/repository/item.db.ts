@@ -1,7 +1,9 @@
 import { Item } from '../model/item';
+import { Nutritionlabel } from '../model/nutritionlabel';
 
 const items = [
     new Item({
+        id: 0,
         name: 'Banana',
         price: 10,
         pathToImage:
@@ -9,6 +11,7 @@ const items = [
         category: 'fruits',
     }),
     new Item({
+        id: 1,
         name: 'Apple',
         price: 20,
         pathToImage:
@@ -48,8 +51,19 @@ const getById = (id: number): Item | undefined => {
     }
 };
 
+const addNutritionlabel = (item: Item, nutritionlabel: Nutritionlabel): Item => {
+    try {
+        item.setNutritionLabel(nutritionlabel);
+        return item;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not add nutritionlabel to item');
+    }
+};
+
 export default {
     getAll,
     create,
     getById,
+    addNutritionlabel,
 };
