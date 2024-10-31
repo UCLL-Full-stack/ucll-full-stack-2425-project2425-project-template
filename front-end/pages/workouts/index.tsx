@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import WorkoutOverviewTable from "@/components/workouts/WorkoutOverviewTable";
 import WorkoutService from "@/services/WorkoutService";
 import { Workout } from "@/types";
@@ -9,9 +10,13 @@ const Workouts: React.FC = () => {
   const [error, setError] = useState<string>();
 
   const getWorkouts = async () => {
-    const response = await WorkoutService.getAllWorkouts();
-    const workouts = await response.json();
-    setWorkouts(workouts);
+    try {
+      const response = await WorkoutService.getAllWorkouts();
+      const workouts = await response.json();
+      setWorkouts(workouts);
+    } catch (err) {
+      setError("Failed to fetch workouts.");
+    }
   };
 
   useEffect(() => {
@@ -23,17 +28,20 @@ const Workouts: React.FC = () => {
       <Head>
         <title>Workouts</title>
       </Head>
+      <Header />
 
-      <main>
-        <div>
-          <h1>Workouts</h1>
-          <section>
+      <main className="py-16 bg-gray-50 min-h-screen">
+        <div className="max-w-screen-xl mx-auto px-6">
+          <h1 className="text-4xl font-bold text-center text-black mb-8">
+            Workouts
+          </h1>
+          <section className="space-y-6">
             {error ? (
-              <p>{error}</p>
+              <p className="text-red-500 text-center">{error}</p>
             ) : workouts ? (
               <WorkoutOverviewTable workouts={workouts} />
             ) : (
-              <p>Loading workouts...</p>
+              <p className="text-center text-gray-600">Loading workouts...</p>
             )}
           </section>
         </div>
