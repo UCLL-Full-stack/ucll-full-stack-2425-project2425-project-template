@@ -6,9 +6,19 @@ import productDb from "./product.db";
 const shoppingCarts = [
 new Shoppingcart({
     id: 1,
-    products: productDb.products.slice(0, 3),
-    totalPrice: productDb.products.slice(0, 3).reduce((acc, product) => acc + product.getPrice(), 0)
+    products: [],
+    totalPrice: 0
 })]
+
+const product1 = productDb.getProductById({id: 1});
+const product2 = productDb.getProductById({id: 2});
+
+if(product1){
+    shoppingCarts[0].addProductToShoppingCart(product1);    
+};
+if(product2){
+    shoppingCarts[0].addProductToShoppingCart(product2);
+}
 
 const getShoppingCartById = async ({ id }: { id: number }): Promise<Shoppingcart | undefined> => {
     try {

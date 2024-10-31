@@ -11,6 +11,11 @@ export class Shoppingcart {
         this.totalPrice = shoppingcart.totalPrice;
     }
 
+    addProductToShoppingCart(product: Product) {
+        this.products.push(product);
+        this.totalPrice += product.getPrice();
+    }
+
     public getId(): number | undefined {
         return this.id;
     }
