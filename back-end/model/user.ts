@@ -7,7 +7,6 @@ export class User {
     private password: string;
     private signUpDate: Date;
     private role: Role;
-    // TODO: Store speedruns here? (currently user is being stored in speedrun itself)
 
 
     constructor(user: {
