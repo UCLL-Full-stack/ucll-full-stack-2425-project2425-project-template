@@ -14,6 +14,24 @@ export class Event {
         location: string,
         category: string;
     }) {
+        // Validate the date
+        if (isNaN(event.date.getTime())) {
+            throw new Error('Date is invalid');
+        }
+
+        if (!event.name) {
+            throw new Error('Name cannot be empty');
+        }
+        if (!event.description) {
+            throw new Error('Description cannot be empty');
+        }
+        if (!event.location) {
+            throw new Error('Location cannot be empty');
+        }
+        if (!event.category) {
+            throw new Error('Category cannot be empty');
+        }
+
         this.id = event.id;
         this.name = event.name;
         this.description = event.description;
@@ -23,6 +41,9 @@ export class Event {
     }
 
     getId(): number | undefined {
+        if (this.id === undefined) {
+            throw new Error('The event needs to have an ID.');
+        }
         return this.id;
     }
 
@@ -45,6 +66,8 @@ export class Event {
     getCategory(): string {
         return this.category;
     }
+
+
 
     equals(event: Event): boolean {
         return (
