@@ -8,6 +8,7 @@ let mockItemDbCreate: jest.Mock;
 let createItemMock: jest.Mock;
 let mockItemDbGetById: jest.Mock;
 let mockNutritionlabelDbCreate: jest.Mock;
+let addNutritionlabelMock: jest.Mock;
 
 beforeEach(() => {
     mockItemDbGetAllItems = jest.fn();
@@ -15,6 +16,7 @@ beforeEach(() => {
     createItemMock = jest.fn();
     mockItemDbGetById = jest.fn();
     mockNutritionlabelDbCreate = jest.fn();
+    addNutritionlabelMock = jest.fn();
 });
 
 test('given: a filled itemDb, when: getting all items from itemService, then: all items are returned', () => {
@@ -60,6 +62,7 @@ test('given: an a valid item, when: creating a item, then: the item is created a
 test('given: a valid nutritionlabel, when: adding a nutritionlabel to a item, then: the nutritionlabel is added to the item and the item is returned', () => {
     // given a valid nutritionlabel
     const item: ItemInput = {
+        id: 0,
         name: 'Tomato',
         price: 10,
         pathToImage: 'public/tomato.png',
@@ -77,12 +80,16 @@ test('given: a valid nutritionlabel, when: adding a nutritionlabel to a item, th
     };
 
     itemDb.getById = mockItemDbGetById.mockReturnValue(item);
-    nutritionlabelDb.create = mockNutritionlabelDbCreate.mockReturnValue(item);
+    nutritionlabelDb.create = mockNutritionlabelDbCreate.mockReturnValue(nutritionlabel);
+
+    itemDb.addNutritionlabel = addNutritionlabelMock.mockReturnValue(item);
 
     // when adding a nutritionlabel to a item
-    itemService.addNutritionLabelToItem(item.id, nutritionlabel);
+    if (item.id !== undefined) {
+        itemService.addNutritionLabelToItem(item.id, nutritionlabel);
+    }
 
     // then the nutritionlabel is added to the item and the item is returned
-    expect(mockNutritionlabelDbCreate).toHaveBeenCalled();
-    expect(mockNutritionlabelDbCreate).toHaveBeenCalledWith(item.id, nutritionlabel);
+    expect(addNutritionlabelMock).toHaveBeenCalled();
+    expect(addNutritionlabelMock).toHaveBeenCalledWith(item, nutritionlabel);
 });

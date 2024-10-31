@@ -47,6 +47,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import itemService from '../service/item.service';
+import { ca } from 'date-fns/locale';
 
 const itemRouter = express.Router();
 
@@ -103,5 +104,20 @@ itemRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
         res.status(500).json({ message: (error as Error).message });
     }
 });
+
+itemRouter.post(
+    '/:itemId/addNutritionlabel',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const itemId = parseInt(req.params.itemId);
+            const nutritionlabel = req.body;
+
+            const item = itemService.addNutritionLabelToItem(itemId, nutritionlabel);
+            res.status(200).json(item);
+        } catch (error) {
+            res.status(500).json({ message: (error as Error).message });
+        }
+    }
+);
 
 export { itemRouter };

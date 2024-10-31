@@ -2,6 +2,7 @@ import { Nutritionlabel } from '../model/nutritionlabel';
 
 const nutritionlabels = [
     new Nutritionlabel({
+        id: 0,
         energy: 100,
         fat: 10,
         saturatedFats: 5,
@@ -12,6 +13,7 @@ const nutritionlabels = [
     }),
 
     new Nutritionlabel({
+        id: 1,
         energy: 200,
         fat: 20,
         saturatedFats: 10,
