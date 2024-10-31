@@ -29,3 +29,34 @@ beforeEach(() => {
 afterEach(()=> {
     jest.clearAllMocks();
 })
+
+
+test('Given a valid event, when event is created, then event is created with those values', () => {
+    // Given: Mock the createEvent function in eventDb
+    eventDb.createEvent = createEventMock;
+
+    // When: Call the eventService.createEvent function
+    const createdEvent = eventService.createEvent({
+        name: eventInput.name,
+        description: eventInput.description,
+        date: eventInput.date,
+        location: eventInput.location,
+        category: eventInput.category,
+    });
+
+    // Then: Verify that the event was created correctly
+    expect(createEventMock).toHaveBeenCalledWith(expect.any(Event)); // Check that it was called with an Event instance
+    expect(createEventMock).toHaveBeenCalledTimes(1); // Check that it was called exactly once
+
+    // Check that the created event has the expected values
+    expect(createEventMock).toHaveBeenCalledTimes(1);
+    expect(createEventMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+            name: eventInput.name,
+            description: eventInput.description,
+            date: eventInput.date,
+            location: eventInput.location,
+            category: eventInput.category,
+        })
+    );
+});

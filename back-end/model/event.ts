@@ -1,4 +1,7 @@
 export class Event {
+    push(event: Event) {
+        throw new Error("Method not implemented.");
+    }
     private id?: number;
     private name: string;
     private description: string;

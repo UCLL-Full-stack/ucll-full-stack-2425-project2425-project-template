@@ -1,5 +1,12 @@
 import { Event } from "../model/event";
 
+//Create event:
+const createEvent = (event: Event): Event =>{
+    events.push(event);
+    return event;
+}
+
+
 
 const events = [
     new Event({
@@ -94,6 +101,7 @@ const getEventById = ({ id }: { id: number }): Event | null => {
 
 
 export default {
+    createEvent,
     getAllEvents,
     getEventById,
 };
