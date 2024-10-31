@@ -62,6 +62,27 @@ userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+/**
+ * @swagger
+ * /users/{email}:
+ *   get:
+ *     summary: Get a a user by email.
+ *     parameters:
+ *         - in: path
+ *           name: email
+ *           schema:
+ *             type: string
+ *             required: true
+ *             description: user email
+ *     responses:
+ *       200:
+ *         description: A user object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/User'
+ */
+
 userRouter.get("/:email", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await userService.getUserByEmail(req.params.email);
@@ -77,6 +98,25 @@ userRouter.get("/:email", async (req: Request, res: Response, next: NextFunction
 
 // --------------- POST --------------- //
 
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *      summary: Create a new user object
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/User'
+ */
 userRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;

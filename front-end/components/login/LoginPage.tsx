@@ -15,14 +15,14 @@ const LoginPage: React.FC = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [selectedOptionError, setSelectedOptionError] = useState('');
-    const [statusErrors, setStatusErrors] = useState([]);
+    const [statusMessage, setStatusMessage] = useState('');
     
     const errorClear = () => {
         setNameError('');
         setEmailError('');
         setPasswordError('');
         setSelectedOptionError('');
-        setStatusErrors([]);
+        setStatusMessage('');
     }
 
 
@@ -69,6 +69,8 @@ const LoginPage: React.FC = () => {
             return;
         }
 
+        setLoggedInUser(name);
+        setStatusMessage('User created successfully');
         return UserService.createUser(name, email, password, parentOrChild);
     }
 
@@ -117,16 +119,10 @@ const LoginPage: React.FC = () => {
                 {passwordError && <p>{passwordError}</p>}
                 {selectedOptionError && <p>{selectedOptionError}</p>}
                 </div>
-                {statusErrors && (
-                    <ul>
-                        {statusErrors.map((error, idx) => (
-                            <li
-                            key={idx}>
-                            {error}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <div className="signInSuccess">
+                    {statusMessage && <p>{statusMessage}</p>}
+                </div>
+
             </form>
         </>
     )
