@@ -1,4 +1,4 @@
-import { User } from "@/types";
+import { Role, User } from "@/types";
 
 const getAllUsers = async () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -31,13 +31,13 @@ const getUserByEmail = async (email: string) => {
 
     const data = await response.json();
     return data;
-    
+
   } catch (error) {
     console.error('Error getting user with certain email:', error);
   }
 }
 
-const createUser = async (name: string, email: string, password: string, role: string) => {
+const createUser = async (name: string, email: string, password: string, role: Role) => {
   const user: User = {name, email, password, role};
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/users`, {

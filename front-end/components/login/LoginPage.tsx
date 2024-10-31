@@ -1,4 +1,5 @@
 import UserService from "@/services/UserService";
+import { Role } from "@/types";
 import { SetStateAction, useEffect, useState } from "react";
 
 const LoginPage: React.FC = () => {
@@ -61,15 +62,9 @@ const LoginPage: React.FC = () => {
         const name = (document.getElementById('login-name') as HTMLTextAreaElement).value;
         const email = (document.getElementById('login-email') as HTMLTextAreaElement).value;
         const password = (document.getElementById('login-password') as HTMLTextAreaElement).value;
-        let parentOrChild = null;
+        const parentOrChild = selectedOption as Role;
 
-        if (selectedOption === 'parent') {
-            parentOrChild = 'parent'
-        } else {
-            parentOrChild = 'child'
-        }
-
-        if (UserService.getUserByEmail(email) !== undefined) {
+        if (await UserService.getUserByEmail(email) !== undefined) {
             setEmailError("A User with this email already exists.");
             return;
         }
