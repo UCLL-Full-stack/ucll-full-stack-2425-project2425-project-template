@@ -16,7 +16,18 @@ const getAllUsers = (): User[] => {
     return users;
 }
 
+const getUserByEmail = (email:string): User | undefined => {
+    return users.find((user) => user.getEmail() === email);
+}
+
+// Post
+const createUser = (user: User) => {
+    users.push(user);
+}
+
 // export functions
 export default {
     getAllUsers,
+    getUserByEmail,
+    createUser
 }

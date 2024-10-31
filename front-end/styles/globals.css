@@ -92,7 +92,7 @@ td, th {
   max-height: 10rem;
   justify-content: center;
   margin: auto;
-  padding: 10rem;
+  padding: 15rem 0 0 0;
   gap: 1rem;
 }
 
@@ -104,4 +104,12 @@ td, th {
 
 .login #signInButton {
   margin: auto;
+}
+
+.login .errorMessages {
+  color: red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }

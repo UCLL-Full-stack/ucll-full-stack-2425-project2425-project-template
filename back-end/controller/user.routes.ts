@@ -28,6 +28,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -52,6 +53,35 @@ userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        } else {
+            res.status(400).json({ status: "error", errorMessage: "An unknown error occurred" });
+        }
+    }
+});
+
+userRouter.get("/:email", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.getUserByEmail(req.params.email);
+        res.status(200).json(user);
+    } catch(error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        } else {
+            res.status(400).json({ status: "error", errorMessage: "An unknown error occurred" });
+        }
+    }
+});
+
+// --------------- POST --------------- //
+
+userRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = <UserInput>req.body;
+        const result = await userService.createUser(user);
+        res.status(200).json(result);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ status: "error", errorMessage: error.message });
