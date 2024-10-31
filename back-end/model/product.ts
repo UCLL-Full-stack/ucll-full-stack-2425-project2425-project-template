@@ -9,6 +9,7 @@ export class Product {
     private reviews: Review[]
 
     constructor(product:{id?: number, name: string, price: number, description: string, stock: number, reviews: Review[]}) {
+        this.validate(product);
         this.id = product.id;
         this.name = product.name;
         this.price = product.price;
@@ -39,7 +40,26 @@ export class Product {
     public getReviews(): Review[] {
         return this.reviews;
     }
-
+    validate(product :{
+        name: string,
+        price: number,
+        description: string,
+        stock: number,
+        reviews: Review[]
+    }){
+        if (!product.name?.trim()) {
+            throw new Error('Name is required');
+        }
+        if (!product.price) {
+            throw new Error('Price is required');
+        }
+        if (!product.description?.trim()) {
+            throw new Error('Description is required');
+        }
+        if (!product.stock) {
+            throw new Error('Stock is required');
+        }
+    }
     equals(product: Product): boolean {
         return (
             this.id === product.getId() &&

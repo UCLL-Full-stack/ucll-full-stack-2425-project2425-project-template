@@ -27,4 +27,12 @@ export class Shoppingcart {
     public getTotalPrice(): number {
         return this.totalPrice;
     }
+    
+    equals(shoppingcart: Shoppingcart): boolean {
+        return (
+            this.id === shoppingcart.getId() &&
+            this.products === shoppingcart.getProducts() &&
+            this.totalPrice === shoppingcart.getTotalPrice()
+        )
+    }
 }
