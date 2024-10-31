@@ -38,7 +38,7 @@ export class Income extends Transaction {
         }
     }
 
-    // getIncome(source: string) {
-    //
-    // }
+    getIncome(source: string): Income {
+        return this;
+    }
 }

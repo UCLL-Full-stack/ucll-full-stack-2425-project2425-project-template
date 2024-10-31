@@ -20,7 +20,7 @@ export abstract class Transaction {
     }) {
         this.validate(transaction);
         this.id = transaction.id;
-        this.referenceNumber = transaction.referenceNumber;
+        this.referenceNumber = this.generateReferenceNumber();
         this.date = transaction.date;
         this.amount = transaction.amount;
         this.currency = transaction.currency;
@@ -57,27 +57,45 @@ export abstract class Transaction {
     }
 
     validate(transaction: {
-        referenceNumber: string;
         date: Date;
         amount: number;
         currency: string;
         type: string;
         id?: number;
     }) {
-        if (!transaction.referenceNumber) {
-            throw new Error('Reference number is required.');
-        }
         if (!transaction.date) {
             throw new Error('Date is required.');
+        } else if (transaction.date > new Date()) {
+            throw new Error('Date cannot be in the future.');
         }
         if (!transaction.amount) {
             throw new Error('Amount is required.');
+        } else if (transaction.amount <= 0) {
+            throw new Error('Amount must be greater than 0.');
         }
         if (!transaction.currency) {
             throw new Error('Currency is required.');
+        } else if (
+            transaction.currency !== 'USD' &&
+            transaction.currency !== 'EUR' &&
+            transaction.currency !== 'GBP'
+        ) {
+            throw new Error('Currency must be either USD, EUR or GBP.');
         }
         if (!transaction.type) {
             throw new Error('Type is required.');
+        } else if (transaction.type !== 'income' && transaction.type !== 'expense') {
+            throw new Error('Type must be either income or expense.');
         }
+    }
+
+    generateReferenceNumber(): string {
+        const lastThreeNumbers = this.account.getAccountNumber().slice(-3).split('').join(' ');
+        const firstTwoLettType = this.type.slice(0, 2).toUpperCase();
+        const year = this.date.getUTCFullYear().toString();
+        const uniqueNumber =
+            Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5);
+        const referenceNumber = `${firstTwoLettType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
+        return referenceNumber;
     }
 }
