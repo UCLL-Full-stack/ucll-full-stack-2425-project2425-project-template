@@ -5,6 +5,7 @@ export class Review {
     private date: Date;
 
     constructor(review:{id?: number, score: number, comment: string, date: Date}) {
+        this.validate(review);
         this.id = review.id;
         this.score = review.score;
         this.comment = review.comment;
@@ -26,7 +27,21 @@ export class Review {
     public getDate(): Date {
         return this.date;
     }
-
+    validate(review :{
+        score: number,
+        comment: string,
+        date: Date,
+    }) {
+        if (!review.score) {
+            throw new Error('Score is required');
+        }
+        if (!review.comment?.trim()) {
+            throw new Error('Comment is required');
+        }
+        if (!review.date) {
+            throw new Error('Date is required');
+        }
+    }
     equals(review: Review): boolean {
         return (
             this.id === review.getId() &&
