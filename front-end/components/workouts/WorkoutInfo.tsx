@@ -1,4 +1,6 @@
 import { Workout } from "@/types";
+import Link from "next/link";
+import { Plus } from "react-feather";
 
 type Props = {
   workout: Workout;
@@ -8,8 +10,15 @@ const WorkoutInfo: React.FC<Props> = ({ workout }: Props) => {
   return (
     <>
       {workout && (
-        <div className="mt-10 bg-white p-6 shadow-md rounded-lg border border-gray-200">
-          <h2 className="text-2xl font-bold mb-4">{workout.name}</h2>
+        <div className="mt-4 bg-white p-6 shadow-md rounded-lg border border-gray-200">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">{workout.name}</h2>
+            <Link href="/exercises">
+              <button className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <Plus className="mr-2" /> Add Exercises
+              </button>
+            </Link>
+          </div>
           <table className="w-full text-sm text-left">
             <thead>
               <tr className="border-b border-gray-300">

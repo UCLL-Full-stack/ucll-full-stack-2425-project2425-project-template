@@ -1,6 +1,7 @@
 import { Workout } from "@/types";
 import { useState } from "react";
 import WorkoutInfo from "./WorkoutInfo";
+import { Plus } from "react-feather";
 
 type Props = {
   workouts: Array<Workout>;
@@ -38,6 +39,17 @@ const WorkoutOverviewTable: React.FC<Props> = ({ workouts }: Props) => {
           )}
         </div>
       ))}
+      <div
+        className="bg-gradient-to-r from-blue-50 to-blue-100 shadow-md rounded-lg border border-blue-300 cursor-pointer hover:shadow-lg hover:border-blue-400 transition-all flex justify-center items-center py-4"
+        onClick={() => {
+          alert("Coming soon but click registered :)");
+        }}
+      >
+        <div className="flex items-center space-x-2">
+          <Plus className="text-blue-600 w-6 h-6" />
+          <span className="text-blue-600 font-medium">Add New Workout</span>
+        </div>
+      </div>
     </div>
   );
 };

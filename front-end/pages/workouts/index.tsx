@@ -1,6 +1,7 @@
 import Header from "@/components/header";
 import WorkoutOverviewTable from "@/components/workouts/WorkoutOverviewTable";
-import WorkoutService from "@/services/WorkoutService";
+import WorkoutService from "@/services/workout/WorkoutService";
+
 import { Workout } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -30,12 +31,10 @@ const Workouts: React.FC = () => {
       </Head>
       <Header />
 
-      <main className="py-16 bg-gray-50 min-h-screen">
+      <main className="py-4 bg-gray-50 min-h-screen">
         <div className="max-w-screen-xl mx-auto px-6">
-          <h1 className="text-4xl font-bold text-center text-black mb-8">
-            Workouts
-          </h1>
-          <section className="space-y-6">
+          <h1 className="text-4xl font-bold text-black mb-8">Workouts</h1>
+          <section className="space-y-4">
             {error ? (
               <p className="text-red-500 text-center">{error}</p>
             ) : workouts ? (

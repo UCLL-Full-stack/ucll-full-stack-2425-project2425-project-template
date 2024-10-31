@@ -16,6 +16,18 @@ const getWorkoutById = async (workoutId: string) => {
         })
 }
 
+const addExerciseToWorkout = async (workoutId: number, exerciseId: number) => {
+    return fetch(
+      process.env.NEXT_PUBLIC_API_URL + `/workouts/${workoutId}/exercises/${exerciseId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
+
 export default {
-    getAllWorkouts, getWorkoutById
+    getAllWorkouts, getWorkoutById, addExerciseToWorkout
 }
