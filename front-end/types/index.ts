@@ -23,14 +23,4 @@ export type Nutritionlabel = {
     item: Item;
 };
 
-
-
-
-
-
-
-
-
-
-
 export default {};
