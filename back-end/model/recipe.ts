@@ -9,7 +9,7 @@ export class Recipe {
     private instructions: string;
     private cookingTime: number;
     private category: string; // flexible for custom categories
-    private ingredients?: RecipeIngredient[]; // do i make it optional? '?'
+    private ingredients: RecipeIngredient[]; // do i make it optional? '?'
     private user: User;
     private imageUrl?: string;
     private isFavorite?: boolean;
