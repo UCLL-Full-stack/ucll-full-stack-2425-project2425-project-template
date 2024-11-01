@@ -14,14 +14,14 @@ export class User {
         id?: number;
         username: string;
         hashedPassword: string;
-        profile: Profile;
+        profile?: Profile;
         groups?: Group[];
         tasks?: Task[];
     }) {
         this.id = user.id;
         this.username = user.username;
         this.hashedPassword = user.hashedPassword;
-        this.profile = user.profile;
+        this.profile = user.profile || undefined;
         this.groups = user.groups || [];
         this.tasks = user.tasks || [];
     }
