@@ -43,11 +43,11 @@ export class Speedrun {
         time: number;
         submitDate: Date;
         videoLink: string;
-        category: Category;
         isValidated: boolean;
         speedrunner: User;
         validator?: User;
         game: Game;
+        category: Category;
     }) {
         throw new Error('Method not implemented.');
     }
@@ -68,10 +68,6 @@ export class Speedrun {
         return this.videoLink;
     }
 
-    getCategory(): Category {
-        return this.category;
-    }
-
     getSpeedrunner(): User {
         return this.speedrunner;
     }
@@ -88,18 +84,22 @@ export class Speedrun {
         return this.game;
     }
 
+    getCategory(): Category {
+        return this.category;
+    }
+
     equals(speedrun: Speedrun): boolean {
         return (
             this.id === speedrun.getId() &&
             this.time === speedrun.getTime() &&
             this.submitDate.getTime() === speedrun.getSubmitDate().getTime() &&
             this.videoLink === speedrun.getVideoLink() &&
-            this.category.equals(speedrun.getCategory()) &&
             this.speedrunner.equals(speedrun.getSpeedrunner()) &&
             this.isValidated === speedrun.getIsValidated() &&
             ((this.validator === undefined && speedrun.getValidator() === undefined) ||
                 this.validator!.equals(speedrun.getValidator()!)) &&
-            this.game.equals(speedrun.getGame())
+            this.game.equals(speedrun.getGame()) &&
+            this.category.equals(speedrun.getCategory())
         );
     }
 }
