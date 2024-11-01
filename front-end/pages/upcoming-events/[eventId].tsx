@@ -15,8 +15,8 @@ const RenderEventDetailsById: React.FC = () => {
     const [email, setEmail] = useState("");
 
     // Show error message
-    const [showError, setShowError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    // const [showError, setShowError] = useState(false);
+    // const [errorMessage, setErrorMessage] = useState("");
 
     const router = useRouter();
     const { eventId } = router.query;
@@ -32,9 +32,7 @@ const RenderEventDetailsById: React.FC = () => {
     };
 
     useEffect(() => {
-        if (eventId && !event) {
             getEventById();
-        }
     }, [eventId, event]);
 
     const handleAddParticipant = () => {
@@ -45,10 +43,10 @@ const RenderEventDetailsById: React.FC = () => {
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         EventService.addParticipantToEvent(email, eventId as string);
+        getEventById();
         setEmail("");
         setShowForm(false);
         setShowAddButton(true);
-        getEventById();
     };
 
     return (
@@ -70,9 +68,9 @@ const RenderEventDetailsById: React.FC = () => {
                     <p>Loading event details...</p>
                 )}
 
-                {showError && (
+                {/* {showError && (
                     <p className={styles.errorMessage}>{errorMessage}</p>
-                )}
+                )} */}
 
                 {showAddButton && (
                     <button onClick={handleAddParticipant}>Add participant</button>
