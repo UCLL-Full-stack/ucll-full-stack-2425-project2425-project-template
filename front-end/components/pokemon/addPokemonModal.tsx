@@ -1,6 +1,6 @@
 // components/pokemons/AddPokemonModal.tsx
 import React, { useState } from 'react';
-import { Pokemon } from '@types';
+import { Pokemon } from '@types'; // Make sure this points to the correct location
 import styles from '../../styles/AddPokemonModal.module.css';
 
 interface AddPokemonModalProps {
@@ -20,6 +20,7 @@ const AddPokemonModal: React.FC<AddPokemonModalProps> = ({ onClose, onAddPokemon
     specialDefence: 0,
     speed: 0,
   });
+  const [canEvolve, setCanEvolve] = useState(false); // Add canEvolve state
 
   const handleAdd = () => {
     const newPokemon: Pokemon = {
@@ -73,6 +74,10 @@ const AddPokemonModal: React.FC<AddPokemonModalProps> = ({ onClose, onAddPokemon
       <label>
         Speed:
         <input type="number" value={stats.speed} onChange={(e) => setStats({ ...stats, speed: Number(e.target.value) })} />
+      </label>
+      <label>
+        Can Evolve:
+        <input type="checkbox" checked={canEvolve} onChange={(e) => setCanEvolve(e.target.checked)} />
       </label>
       <button onClick={handleAdd}>Add Pokémon</button>
       <button onClick={onClose}>Cancel</button>

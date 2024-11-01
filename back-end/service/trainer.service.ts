@@ -15,6 +15,7 @@ const getTrainerWithPokemon = (id: number): Trainer | null => {
     return trainer;
 };
 
+
 export default {
     getAllTrainers,
     getTrainerById,

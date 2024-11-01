@@ -44,4 +44,8 @@ export class Trainer {
         return this.gymBattles;
     }
 
+    public addPokemon(pokemon: Pokemon): void {
+        this.pokemon.push(pokemon); // Allow adding Pokémon
+    }
+
 }

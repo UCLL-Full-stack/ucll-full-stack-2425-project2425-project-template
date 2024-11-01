@@ -1,11 +1,11 @@
 
-export interface User {
+export type User ={
     firstName: string;
     lastName: string;
     email: string;
 }
 
-export interface PokemonStats {
+export type PokemonStats ={
     hp: number;
     attack: number;
     defence: number;
@@ -14,7 +14,7 @@ export interface PokemonStats {
     speed: number;
 }
 
-export interface Pokemon {
+export type Pokemon = {
     id?: number;
     name: string;
     type: string;
@@ -23,19 +23,20 @@ export interface Pokemon {
     canEvolve: boolean;
 }
 
-export interface Trainer {
+
+export type Trainer = {
     id?: number;
     user: User;
     pokemon: Pokemon[];
 }
 
-export interface Badge {
+export type Badge = {
     name: string;
     location: string;
     difficulty: number;
 }
 
-export interface GymBattle {
+export type GymBattle = {
     id?: number;
     date: Date;
     time: Date;
