@@ -70,35 +70,8 @@ export class Board {
         if (!permissions || permissions.length === 0) {
             throw new Error("Board must have permission settings");
         }
-        this.validatePermissions(permissions);
     }
 
-    private validatePermissions(permissions: PermissionEntry[]): void {
-        // Check for required permissions
-        const hasAdminPermission = permissions.some(
-            perm => perm.kanbanPermission === KanbanPermission.ADMINISTRATOR
-        );
-        const hasViewPermission = permissions.some(
-            perm => perm.kanbanPermission === KanbanPermission.VIEW_BOARD
-        );
-
-        if (!hasAdminPermission) {
-            throw new Error("Board must have at least one administrator");
-        }
-        if (!hasViewPermission) {
-            throw new Error("Board must have view permission set");
-        }
-
-        // Validate permission structure
-        permissions.forEach(perm => {
-            if (!perm.identifier) {
-                throw new Error("Permission must have an identifier");
-            }
-            if (!Object.values(KanbanPermission).includes(perm.kanbanPermission)) {
-                throw new Error(`Invalid permission type: ${perm.kanbanPermission}`);
-            }
-        });
-    }
 
     // Getters
     public getBoardId(): string {
@@ -152,28 +125,4 @@ export class Board {
         this.columns = this.columns.filter(column => column.getColumnId() !== columnId);
     }
 
-    // Permission operations
-    public addPermission(permission: PermissionEntry): void {
-        // Validate new permission
-        if (!permission.identifier || !Object.values(KanbanPermission).includes(permission.kanbanPermission)) {
-            throw new Error("Invalid permission");
-        }
-        this.permissions.push(permission);
-    }
-
-    public removePermission(identifier: string, permission: KanbanPermission): void {
-        const isAdmin = permission === KanbanPermission.ADMINISTRATOR;
-        const remainingAdmins = this.permissions.filter(
-            p => p.kanbanPermission === KanbanPermission.ADMINISTRATOR && 
-                 p.identifier !== identifier
-        ).length;
-
-        if (isAdmin && remainingAdmins === 0) {
-            throw new Error("Cannot remove the last administrator");
-        }
-
-        this.permissions = this.permissions.filter(
-            p => !(p.identifier === identifier && p.kanbanPermission === permission)
-        );
-    }
 }

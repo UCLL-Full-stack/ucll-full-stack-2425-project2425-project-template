@@ -1,11 +1,11 @@
-import { PermissionEntry } from "../types";
+import { DiscordPermission } from "../types";
 
 export class Role{
     private roleId: string;
     private roleName: string;
-    private permissions: PermissionEntry[];
+    private permissions: DiscordPermission[];
 
-    constructor(roleId: string, roleName: string, permissions: PermissionEntry[]){
+    constructor(roleId: string, roleName: string, permissions: DiscordPermission[]){
         this.validate(roleId, roleName);
         this.roleId = roleId;
         this.roleName = roleName;
@@ -20,7 +20,7 @@ export class Role{
         this.roleName = roleName;
     }
 
-    public setPermissions(permissions: PermissionEntry[]): void{
+    public setPermissions(permissions: DiscordPermission[]): void{
         this.permissions = permissions;
     }
 
@@ -32,8 +32,29 @@ export class Role{
         return this.roleName;
     }
 
-    public getPermissions(): PermissionEntry[]{
+    public getPermissions(): DiscordPermission[]{
         return this.permissions;
+    }
+
+    public addPermission(permission: DiscordPermission): void {
+        if (!this.permissions.includes(permission)) {
+            this.permissions.push(permission);
+        } else {
+            throw new Error(`Permission ${permission} already exists for this role.`);
+        }
+    }
+
+    public removePermission(permission: DiscordPermission): void {
+        const index = this.permissions.indexOf(permission);
+        if (index !== -1) {
+            this.permissions.splice(index, 1);
+        } else {
+            throw new Error(`Permission ${permission} does not exist for this role.`);
+        }
+    }
+
+    public hasPermission(permission: DiscordPermission): boolean {
+        return this.permissions.includes(permission);
     }
 
     public validate(roleId: string, roleName: string): void{

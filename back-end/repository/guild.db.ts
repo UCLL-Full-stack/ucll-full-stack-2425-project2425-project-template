@@ -1,124 +1,109 @@
-import { PrismaClient } from '@prisma/client';
+// repository/guildRepository.ts
 import { Guild } from '../model/guild';
 import { Role } from '../model/role';
-import { PermissionEntry } from '../types';
+import { PermissionEntry, KanbanPermission, DiscordPermission } from '../types';
+import  roleDb  from './role.db';
 
-const prisma = new PrismaClient();
+const role1_1 = roleDb.getRoleById("role1-1")!;
+const role1_2 = roleDb.getRoleById("role1-2")!;
+const role2_1 = roleDb.getRoleById("role2-1")!;
+const role2_2 = roleDb.getRoleById("role2-2")!;
+const role3_1 = roleDb.getRoleById("role3-1")!;
+const role3_2 = roleDb.getRoleById("role3-2")!;
 
-export class GuildRepository {
-    async getGuildById(guildId: string): Promise<Guild | null> {
-        try {
-            const guildData = await prisma.guild.findUnique({
-                where: { id: guildId },
-                include: {
-                    roles: true,
-                    users: true
-                }
-            });
+// static data
+const guilds: Guild[] = [
+    new Guild(
+        "guild1",
+        "Guild 1",
+        [
+            { identifier: DiscordPermission.ADMINISTRATOR, kanbanPermission: [KanbanPermission.ADMINISTRATOR]},
+            { identifier: DiscordPermission.BAN_MEMBERS, kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.ASSIGN_TASKS, KanbanPermission.CHANGE_TASK_STATUS, KanbanPermission.CREATE_TASKS, KanbanPermission.DELETE_TASKS, KanbanPermission.EDIT_TASKS, KanbanPermission.VIEW_ACTIVITY_LOG, KanbanPermission.EDIT_BOARD, KanbanPermission.CREATE_COLUMNS, KanbanPermission.EDIT_COLUMNS, KanbanPermission.DELETE_COLUMNS, KanbanPermission.MANAGE_TASK_ASSIGNEES] },
+            { identifier: DiscordPermission.TIMEOUT_MEMBERS, kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.ASSIGN_TASKS, KanbanPermission.CHANGE_TASK_STATUS, KanbanPermission.CREATE_TASKS, KanbanPermission.DELETE_TASKS, KanbanPermission.EDIT_TASKS, KanbanPermission.VIEW_ACTIVITY_LOG] },
+            { identifier: "role1-1", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.CHANGE_TASK_STATUS]}
+        ],
+        [
+            role1_1, role1_2
+        ]
+    ),
+    new Guild(
+        "guild2",
+        "Guild 2",
+        [
+            { identifier: DiscordPermission.MANAGE_CHANNELS, kanbanPermission: [KanbanPermission.CREATE_BOARD, KanbanPermission.EDIT_BOARD, KanbanPermission.DELETE_BOARD] },
+            { identifier: DiscordPermission.MANAGE_MESSAGES, kanbanPermission: [KanbanPermission.CREATE_TASKS, KanbanPermission.EDIT_TASKS, KanbanPermission.DELETE_TASKS] },
+            { identifier: "role2-1", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.MANAGE_BOARD_PERMISSIONS] },
+            { identifier: "role2-2", kanbanPermission: [KanbanPermission.CREATE_COLUMNS, KanbanPermission.EDIT_COLUMNS] },
+        ],
+        [
+            role2_1, role2_2
+        ]
+    ),
+    new Guild(
+        "guild3",
+        "Guild 3",
+        [
+            { identifier: DiscordPermission.VIEW_CHANNELS, kanbanPermission: [KanbanPermission.VIEW_BOARD] },
+            { identifier: DiscordPermission.CREATE_INVITE, kanbanPermission: [KanbanPermission.ASSIGN_TASKS, KanbanPermission.MANAGE_TASK_ASSIGNEES] },
+            { identifier: DiscordPermission.MUTE_MEMBERS, kanbanPermission: [KanbanPermission.VIEW_ACTIVITY_LOG, KanbanPermission.CREATE_COLUMNS] },
+            { identifier: "role3-1", kanbanPermission: [KanbanPermission.EDIT_COLUMNS, KanbanPermission.DELETE_COLUMNS] },
+            { identifier: "role3-2", kanbanPermission: [KanbanPermission.VIEW_BOARD] },
+        ],
+        [
+            role3_1, role3_2
+        ]
+    ),
+];
 
-            if (!guildData) {
-                return null;
-            }
+const getGuilds = (): Guild[] => {
+    return guilds;
+}
 
-            const roles = guildData.roles.map((role: any) => 
-                new Role(
-                    role.id,
-                    role.name,
-                    JSON.parse(role.permissions)
-                )
-            );
+const getGuildById = (guildId: string): Guild | null => {
+    return guilds.find(guild => guild.getGuildId() === guildId) || null;
+}
 
-            return new Guild(
-                guildData.id,
-                guildData.name,
-                JSON.parse(guildData.permissions),
-                JSON.parse(guildData.settings),
-                roles
-            );
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(`Failed to fetch guild: ${error.message}`);
-            } else {
-                throw new Error('Failed to fetch guild: An unknown error occurred');
-            }
-        }
-    }
-
-    async updateGuildSettings(
-        guildId: string,
-        settings: PermissionEntry[]
-    ): Promise<Guild> {
-        try {
-            const updatedGuild = await prisma.guild.update({
-                where: { id: guildId },
-                data: {
-                    settings: JSON.stringify(settings)
-                },
-                include: {
-                    roles: true
-                }
-            });
-
-            const roles = updatedGuild.roles.map((role: any) => 
-                new Role(
-                    role.id,
-                    role.name,
-                    JSON.parse(role.permissions)
-                )
-            );
-
-            return new Guild(
-                updatedGuild.id,
-                updatedGuild.name,
-                JSON.parse(updatedGuild.permissions),
-                JSON.parse(updatedGuild.settings),
-                roles
-            );
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(`Failed to update guild settings: ${error.message}`);
-            } else {
-                throw new Error('Failed to update guild settings: An unknown error occurred');
-            }
-        }
-    }
-
-    async updateGuildPermissions(
-        guildId: string,
-        permissions: PermissionEntry[]
-    ): Promise<Guild> {
-        try {
-            const updatedGuild = await prisma.guild.update({
-                where: { id: guildId },
-                data: {
-                    permissions: JSON.stringify(permissions)
-                },
-                include: {
-                    roles: true
-                }
-            });
-
-            const roles = updatedGuild.roles.map((role: any) => 
-                new Role(
-                    role.id,
-                    role.name,
-                    JSON.parse(role.permissions)
-                )
-            );
-
-            return new Guild(
-                updatedGuild.id,
-                updatedGuild.name,
-                JSON.parse(updatedGuild.permissions),
-                JSON.parse(updatedGuild.settings),
-                roles
-            );
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(`Failed to update guild permissions: ${error.message}`);
-            } else {
-                throw new Error('Failed to update guild permissions: An unknown error occurred');
-            }
-        }
+const addSettingsEntryToGuildById = (guildId: string, settingsEntry: PermissionEntry): void => {
+    const guild = getGuildById(guildId);
+    if(guild){
+        guild.addSettingsEntry(settingsEntry);
     }
 }
+
+const setSettingsEntriesToGuildById = (guildId: string, settingsEntries: PermissionEntry[]): void => {
+    const guild = getGuildById(guildId);
+    if(guild){
+        guild.setSettingsEntries(settingsEntries);
+    }
+}
+
+const removeSettingsEntryFromGuildById = (guildId: string, settingsEntryIdentifier: string): void => {
+    const guild = getGuildById(guildId);
+    if(guild){
+        guild.removeSettingsEntry(settingsEntryIdentifier);
+    }
+}
+
+const addRoleToGuildById = (guildId: string, role: Role): void => {
+    const guild = getGuildById(guildId);
+    if(guild){
+        guild.addRole(role);
+    }
+}
+
+const removeRoleFromGuildById = (guildId: string, roleId: string): void => {
+    const guild = getGuildById(guildId);
+    if(guild){
+        guild.removeRole(roleId);
+    }
+}
+
+export default {
+    getGuilds,
+    getGuildById,
+    addSettingsEntryToGuildById,
+    setSettingsEntriesToGuildById,
+    removeSettingsEntryFromGuildById,
+    addRoleToGuildById,
+    removeRoleFromGuildById
+};

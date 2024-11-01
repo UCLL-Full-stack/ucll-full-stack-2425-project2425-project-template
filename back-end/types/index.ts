@@ -64,14 +64,11 @@ export enum KanbanPermission {
     ASSIGN_TASKS = "Assign Tasks",
     CHANGE_TASK_STATUS = "Change Task Status",
     MANAGE_TASK_ASSIGNEES = "Manage Task Assignees",
-    MANAGE_ROLE_PERMISSIONS = "Manage Role-Based Permissions",
-    MANAGE_DISCORD_PERMISSIONS = "Manage Discord Permission-Based Permissions",
-    MANAGE_USER_PERMISSIONS = "Manage User-Based Permissions",
     VIEW_ACTIVITY_LOG = "View Activity Log",
     ADMINISTRATOR = "Administrator",
 }
 
 export interface PermissionEntry{
     identifier: string | DiscordPermission;
-    kanbanPermission: KanbanPermission;
+    kanbanPermission: KanbanPermission[];
 }
