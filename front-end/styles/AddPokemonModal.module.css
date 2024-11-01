@@ -1,0 +1,44 @@
+/* components/pokemons/AddPokemonModal.module.css */
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .modal h2 {
+    margin-top: 0;
+  }
+  
+  .modal label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .modal input {
+    width: calc(100% - 10px);
+    padding: 5px;
+  }
+  
+  .modal button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .modal button:last-child {
+    background-color: #f44336;
+  }
+  
