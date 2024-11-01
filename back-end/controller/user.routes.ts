@@ -13,12 +13,12 @@
  *            id:
  *              type: number
  *              format: int64
- *            name:
+ *            username:
  *              type: string
  *              description: User name.
- *            expertise:
+ *            hashedPassword:
  *              type: string
- *              description: User expertise.
+ *              description: User password.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
