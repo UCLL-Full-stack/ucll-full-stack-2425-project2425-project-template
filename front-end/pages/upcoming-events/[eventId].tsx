@@ -5,6 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { EventInput } from "types";
+import styles from '@styles/home.module.css';
 
 const RenderEventDetailsById: React.FC = () => {
 
@@ -38,10 +39,12 @@ const RenderEventDetailsById: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <main>
+            <main className={styles.eventDetailsMain}>
                 <h1>Event Details</h1>
                 {event ? (
-                    <EventDetails event={event} />
+                    <section className={styles.eventDetails}>
+                        <EventDetails event={event} />
+                    </section>
                 ) : (
                     <p>Loading event details...</p>
                 )}

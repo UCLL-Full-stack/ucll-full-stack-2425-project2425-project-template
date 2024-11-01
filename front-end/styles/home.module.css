@@ -117,6 +117,54 @@
     white-space: nowrap;
 }
 
+.eventDetailsMain {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+};
+
+.eventDetails {
+    display: flex;
+    flex-direction: column;
+};
+
+.participants {
+    margin-top: 2rem;
+}
+
+.participants {
+    margin-top: 20px;
+  }
+  
+  .participantsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .participantsTable th,
+  .participantsTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .participantsTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .participantsTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .participantsTable tr:hover {
+    background-color: #ddd;
+  }
+
 .description {
     display: flex;
     flex-direction: column;

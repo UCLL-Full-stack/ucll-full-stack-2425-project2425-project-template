@@ -1,7 +1,6 @@
+import { Participant } from "./participant";
+
 export class Event {
-    push(event: Event) {
-        throw new Error("Method not implemented.");
-    }
     private id?: number;
     private name: string;
     private description: string;
@@ -9,6 +8,7 @@ export class Event {
     private location: string;
     private category: string;
     private backgroundImage?: string;
+    private participants: Participant[] = [];
 
     constructor(event: {
         id?: number,
@@ -18,6 +18,7 @@ export class Event {
         location: string,
         category: string;
         backgroundImage?: string;
+        participants?: Participant[];
     }) {
         // Validate the date
         if (isNaN(event.date.getTime())) {
@@ -44,6 +45,17 @@ export class Event {
         this.location = event.location;
         this.category = event.category;
         this.backgroundImage = event.backgroundImage;
+        if (event.participants) {
+            this.participants = event.participants;
+        }
+    }
+
+    addParticipant(participant: Participant): void {
+        this.participants.push(participant);
+    }
+
+    getParticipants(): Participant[] {
+        return this.participants;
     }
 
     getId(): number | undefined {

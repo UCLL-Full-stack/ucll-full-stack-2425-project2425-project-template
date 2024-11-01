@@ -1,13 +1,13 @@
-import { UserInput } from "../types";
+import { User } from "./user";
 
 export class Participant {
     private id?: number;
-    private user: UserInput;
+    private user: User;
 
 
     constructor(participant: {
         id?: number,
-        user: UserInput;
+        user: User;
     }) {
         this.id = participant.id;
         this.user = participant.user;
@@ -17,7 +17,7 @@ export class Participant {
         return this.id;
     }
 
-    getUser(): UserInput {
+    getUser(): User {
         return this.user;
     }
 
