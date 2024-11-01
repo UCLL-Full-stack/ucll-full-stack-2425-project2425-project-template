@@ -1,3 +1,4 @@
+// src/app.ts
 import * as dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -19,3 +20,5 @@ app.get('/status', (req, res) => {
 app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
+
+export default app;  // Add this line to export the app
