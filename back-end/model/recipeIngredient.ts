@@ -39,6 +39,14 @@ export class RecipeIngredient {
         this.recipe = recipe;
     }
 
+    toJSON() {
+        return {
+            ingredient: this.ingredient,
+            unit: this.unit,
+            quantity: this.quantity,
+        };
+    }
+
     equals(recipeIngredient: RecipeIngredient): boolean {
         return (
             this.recipe === recipeIngredient.getRecipe() &&

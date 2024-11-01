@@ -56,4 +56,13 @@ export class Schedule {
     hasRecipe(recipe: Recipe): boolean | undefined {
         return this.recipes?.some((r) => r.getId() === recipe.getId());
     }
+
+    toJSON() {
+        return {
+            id: this.id,
+            user: this.user.getId(),
+            date: this.date,
+            recipes: this.recipes?.map((recipe) => recipe.toJSON()),
+        };
+    }
 }

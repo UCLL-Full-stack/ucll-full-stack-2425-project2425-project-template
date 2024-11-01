@@ -56,4 +56,13 @@ export class Profile {
     setUser(user: User): void {
         this.user = user;
     }
+
+    toJSON() {
+        return {
+            id: this.id,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+        };
+    }
 }

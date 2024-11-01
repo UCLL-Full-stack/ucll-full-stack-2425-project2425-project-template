@@ -232,6 +232,23 @@ export class Recipe {
         }
     }
 
+    toJSON() {
+        return {
+            id: this.id,
+            title: this.title,
+            instructions: this.instructions,
+            cookingTime: this.cookingTime,
+            category: this.category,
+            ingredients: this.ingredients?.map((ingredient) => ingredient.toJSON()),
+            user: this.user.getId(),
+            imageUrl: this.imageUrl,
+            isFavorite: this.isFavorite,
+            notes: this.notes,
+            source: this.source,
+            schedule: this.schedule?.getId(),
+        };
+    }
+
     equals(recipe: Recipe): boolean {
         return (
             (this.title === recipe.getTitle() &&

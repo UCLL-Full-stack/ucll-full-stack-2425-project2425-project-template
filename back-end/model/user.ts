@@ -58,15 +58,25 @@ export class User {
         this.recipes?.push(recipe);
     }
 
-    equals(user: User): boolean {
-        return this.username === user.getUsername() && this.password === user.getPassword();
-    }
-
     getSchedule(): Schedule | undefined {
         return this.schedule;
     }
 
     setSchedule(schedule: Schedule) {
         this.schedule = schedule;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            username: this.username,
+            profile: this.profile ? this.profile.toJSON() : undefined,
+            recipes: this.recipes ? this.recipes.map((recipe) => recipe.toJSON()) : undefined,
+            schedule: this.schedule ? this.schedule.toJSON() : undefined,
+        };
+    }
+
+    equals(user: User): boolean {
+        return this.username === user.getUsername() && this.password === user.getPassword();
     }
 }
