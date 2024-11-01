@@ -1,17 +1,15 @@
-import { Type } from "../types";
-
 export class Ingredient {
     private id?: number;
     private naam: string;
-    private type: Type;
+    private type: string;
     private aantal: number;
     private prijs: number;
-    private ingredientLimit: number = 2;
+    private ingredientLimit: number = 0;
 
     constructor(ingredient: {
         id?: number;
         naam: string;
-        type: Type;
+        type: string;
         aantal: number;
         prijs: number;
     }) {
@@ -22,8 +20,9 @@ export class Ingredient {
         this.type = ingredient.type;
         this.aantal = ingredient.aantal;
         this.prijs = ingredient.prijs;
+        this.basicIngredientLimit();
     }
-    validate(ingredient: { naam: string, type: Type, aantal: number, prijs: number }) {
+    validate(ingredient: { naam: string, type: string, aantal: number, prijs: number }) {
         if (!ingredient.naam) {
             throw new Error("Naam cannot be empty");
         }
@@ -61,7 +60,7 @@ export class Ingredient {
     }
 
     setAantal(aantal: number) {
-        this.aantal == aantal;
+        this.aantal = aantal;
     }
 
     getPrijs(): number {
@@ -74,5 +73,15 @@ export class Ingredient {
 
     getIngredientLimit() {
         return this.ingredientLimit;
+    }
+
+    basicIngredientLimit() {
+        if (this.type === "Protein") {
+            this.setIngredientLimit(2);
+        } else if (this.type === "Sauce") {
+            this.setIngredientLimit(1);
+        } else {
+            this.setIngredientLimit(5);
+        }
     }
 }

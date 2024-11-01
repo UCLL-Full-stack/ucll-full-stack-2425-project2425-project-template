@@ -7,7 +7,10 @@ const getAllPokebowls = async (): Promise<Pokebowl[]> => pokebowlDb.getAllPokebo
 
 const createPokebowl = async ({ naam, type, beschrijving, maxAantalIngredienten, ingredienten }: PokebowlInput): Promise<Pokebowl> => {
 
+    const lengte = (await getAllPokebowls()).length
+
     const pokebowl = new Pokebowl({
+        id: lengte + 1,
         naam: naam,
         type: type,
         beschrijving: beschrijving,
@@ -19,8 +22,8 @@ const createPokebowl = async ({ naam, type, beschrijving, maxAantalIngredienten,
         const nieuweIngredient = new Ingredient(ingr);
         pokebowl.addIngredient(nieuweIngredient);
     })
-
     pokebowlDb.createPokebowl(pokebowl);
+    pokebowl.calculatePrice();
 
     return pokebowl;
 };

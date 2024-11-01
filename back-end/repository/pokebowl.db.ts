@@ -1,6 +1,7 @@
 import { Ingredient } from "../model/ingredient";
 import { Pokebowl } from "../model/pokebowl";
 
+let addId = 3;
 const pokebowls = [
     new Pokebowl({
         id: 1,
@@ -37,6 +38,7 @@ const pokebowls = [
         id: 2,
         naam: "Tuna pokebowl",
         type: "Tuna",
+        prijs: 11.88,
         beschrijving: "Fishy tuna pokebowl with seaweed, corn and srirachia sauce",
         maxAantalIngredienten: 6,
         ingredienten: [

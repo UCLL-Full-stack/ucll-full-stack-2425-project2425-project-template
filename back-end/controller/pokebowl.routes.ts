@@ -28,6 +28,32 @@
  *            ingredienten:
  *              type: array
  *              description: Pokebowl ingredienten.
+ *              items:
+ *                type: string
+ *      PokebowlInput:
+ *          type: object
+ *          required:
+ *            - naam
+ *            - type
+ *            - maxAantalIngredienten
+ *          properties:
+ *            naam:
+ *              type: string
+ *              description: Pokebowl naam.
+ *            type:
+ *              type: string
+ *              description: Pokebowl type.
+ *            beschrijving:
+ *              type: string
+ *              description: Optional Pokebowl beschrijving.
+ *            maxAantalIngredienten:
+ *              type: number
+ *              description: Pokebowl maxAantalIngredienten.
+ *            ingredienten:
+ *              type: array
+ *              description: Pokebowl ingredienten.
+ *              items:
+ *                type: string
  */
 import express, { NextFunction, Request, Response } from 'express';
 import pokebowlService from '../service/pokebowl.service';
@@ -69,6 +95,12 @@ pokebowlRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
  *              application/json:
  *                  schema:
  *                     $ref: '#/components/schemas/PokebowlInput'
+ *                  example:
+ *                    naam: "Deluxe tofu bowl"
+ *                    type: "Custom"
+ *                    beschrijving: "Fancy deluxe tofu bowl with cucumber"
+ *                    maxAantalIngredienten: 7
+ *                    ingredienten: ["Cucumber", "Avocado", "Seaweed"]
  *      responses:
  *        200:
  *           description: 'Create new Pokebowl'
