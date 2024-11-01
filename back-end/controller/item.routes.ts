@@ -121,6 +121,16 @@ itemRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+itemRouter.get('/:itemId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const itemId = parseInt(req.params.itemId);
+        const item = itemService.getItemById(itemId);
+        res.status(200).json(item);
+    } catch (error) {
+        res.status(500).json({ message: (error as Error).message });
+    }
+});
+
 /**
  * @swagger
  * /items:
