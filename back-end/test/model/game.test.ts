@@ -23,3 +23,67 @@ test(`given: valid values for game, when: game is created, then: game is created
     expect(game.getGenre()).toEqual(genre);
     expect(game.getReleaseDate()).toEqual(releaseDate);
 });
+
+test(`given: invalid name, when: game is created, then: an error is thrown`, () => {
+    // given
+    const invalidName = ' ';
+    // when
+    const createGame = () => {
+        new Game({
+            name: invalidName,
+            description,
+            genre,
+            releaseDate,
+        });
+    };
+    // then
+    expect(createGame).toThrow('Name is required.');
+});
+
+test(`given: invalid description, when: game is created, then: an error is thrown`, () => {
+    // given
+    const invalidDescription = ' ';
+    // when
+    const createGame = () => {
+        new Game({
+            name,
+            description: invalidDescription,
+            genre,
+            releaseDate,
+        });
+    };
+    // then
+    expect(createGame).toThrow('Description is required.');
+});
+
+test(`given: invalid genre, when: game is created, then: an error is thrown`, () => {
+    // given
+    const invalidGenre = ' ';
+    // when
+    const createGame = () => {
+        new Game({
+            name,
+            description,
+            genre: invalidGenre,
+            releaseDate,
+        });
+    };
+    // then
+    expect(createGame).toThrow('Genre is required.');
+});
+
+test(`given: invalid release date, when: game is created, then: an error is thrown`, () => {
+    // given
+    const invalidReleaseDate: Date = null as any;
+    // when
+    const createGame = () => {
+        new Game({
+            name,
+            description,
+            genre,
+            releaseDate: invalidReleaseDate,
+        });
+    };
+    // then
+    expect(createGame).toThrow('Release date is required.');
+});
