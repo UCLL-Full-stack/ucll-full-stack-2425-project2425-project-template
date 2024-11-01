@@ -3,24 +3,23 @@ import Header from '@components/header';
 import styles from '@styles/home.module.css';
 import { Game } from '@types';
 import StoreTable from '@components/storeTable';
+import React, { useEffect, useState } from 'react';
+import GameService from '@services/GameService';
 
 const Store: React.FC = () => {
-    let game1: Game = {
-        id: 0,
-        title: "Game 1",
-        image: "/images/placeholder.png",
-        categories: ["Action", "Adventure"],
-        price: 49.99,
-        discount: 10
-    };
-    let game2: Game = {
-        id: 0,
-        title: "Game 2",
-        image: "/images/placeholder.png",
-        categories: ["Action"],
-        price: 59.99
-    };
-    const games = [game1, game2];
+    const [games, setGames] = useState<Array<Game>>([]);
+
+    const getGames = async () => {
+        const response = await GameService.getAllGames();
+        const games = await response.json();
+        setGames(games);
+    }
+
+    useEffect(() => {
+            getGames()
+        },
+        []
+    )
 
     return (
         <>

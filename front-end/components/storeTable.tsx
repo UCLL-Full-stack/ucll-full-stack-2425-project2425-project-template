@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Game } from '@types';
-import { right } from '@popperjs/core';
 
-type Props = {
-    games: Array<Game>;
-};
+interface StoreTableProps {
+    games?: Array<Game>;
+}
 
-const StoreTable: React.FC<Props> = ({ games }: Props) => {
+const StoreTable: React.FC<StoreTableProps> = ({ games }) => {
     return (
         <>
             {games && (
