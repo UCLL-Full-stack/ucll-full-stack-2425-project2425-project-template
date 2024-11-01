@@ -217,9 +217,17 @@ const getEventById = ({ id }: { id: number }): Event | null => {
     }
 };
 
+const addParticipantToEvent = (participant: Participant, eventId: number): void => {
+    events.forEach(event => {
+        if (event.getId() === eventId) {
+            event.addParticipant(participant);
+        };
+    });
+};
 
 export default {
     createEvent,
     getAllEvents,
     getEventById,
+    addParticipantToEvent,
 };
