@@ -1,5 +1,5 @@
-import { Seller } from "../model/seller";
-import { User } from "../model/user";
+import { Seller } from "../domain/model/seller";
+import { User } from "../domain/model/user";
 
 // const users: User[] = [
 //     new Seller({
