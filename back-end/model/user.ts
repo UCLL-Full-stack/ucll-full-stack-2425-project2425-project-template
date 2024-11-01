@@ -1,4 +1,5 @@
 import { Role } from '../types';
+import * as EmailValidator from 'email-validator';
 
 export class User {
     private id?: number;
@@ -29,11 +30,26 @@ export class User {
     validate(user: {
         id?: number;
         username: string;
+        email: string;
         password: string;
         signUpDate: Date;
         role: Role;
     }) {
-        // throw new Error("Method not implemented.");
+        if (!user.username?.trim()) {
+            throw new Error('Username is required.');
+        }
+        if (!user.email?.trim()) {
+            throw new Error('Email is required.');
+        }
+        if (!EmailValidator.validate(user.email)) {
+            throw new Error('Email must be valid.');
+        }
+        if (!user.password?.trim()) {
+            throw new Error('Password is required.');
+        }
+        if (!user.role?.trim() || !(user.role === 'Admin' || user.role === 'User')) {
+            throw new Error('Role is required.');
+        }
     }
 
     getId(): number | undefined {

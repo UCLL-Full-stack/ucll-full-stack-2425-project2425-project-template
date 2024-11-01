@@ -34,3 +34,105 @@ test(`given: valid values for user, when: user is created, then: user is created
     expect(user.getRole()).toEqual(role);
     expect(user.getSignUpDate()).toEqual(signUpDate);
 });
+
+test(`given: invalid username, when: user is created, then: an error is thrown`, () => {
+    // given
+    const invalidUsername = ' ';
+    // when
+    const createUser = () => {
+        new User({
+            username: invalidUsername,
+            email,
+            password,
+            role,
+            signUpDate,
+        });
+    };
+    // then
+    expect(createUser).toThrow('Username is required.');
+});
+
+test(`given: empty email, when: user is created, then: an error is thrown`, () => {
+    // given
+    const emptyEmail = ' ';
+    // when
+    const createUser = () => {
+        new User({
+            username,
+            email: emptyEmail,
+            password,
+            role,
+            signUpDate,
+        });
+    };
+    // then
+    expect(createUser).toThrow('Email is required.');
+});
+
+test(`given: invalid email, when: user is created, then: an error is thrown`, () => {
+    // given
+    const invalidEmail = 'in.valid@email@address.com';
+    // when
+    const createUser = () => {
+        new User({
+            username,
+            email: invalidEmail,
+            password,
+            role,
+            signUpDate,
+        });
+    };
+    // then
+    expect(createUser).toThrow('Email must be valid.');
+});
+
+test(`given: invalid password, when: user is created, then: an error is thrown`, () => {
+    // given
+    const invalidPassword = ' ';
+    // when
+    const createUser = () => {
+        new User({
+            username,
+            email,
+            password: invalidPassword,
+            role,
+            signUpDate,
+        });
+    };
+    // then
+    expect(createUser).toThrow('Password is required.');
+});
+
+test(`given: role is null, when: user is created, then: an error is thrown`, () => {
+    // given
+    const invalidRole: Role = null as any;
+    // when
+    const createUser = () => {
+        new User({
+            username,
+            email,
+            password,
+            role: invalidRole,
+            signUpDate,
+        });
+    };
+    // then
+    expect(createUser).toThrow('Role is required.');
+});
+
+test(`given: invalid role, when: user is created, then: an error is thrown`, () => {
+    // given
+    const invalidRole: Role = '  ' as any;
+    // when
+    const createUser = () => {
+        new User({
+            username,
+            email,
+            password,
+            role: invalidRole,
+            signUpDate,
+        });
+    };
+    // then
+    expect(createUser).toThrow('Role is required.');
+});
