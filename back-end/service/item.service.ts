@@ -38,8 +38,18 @@ const addNutritionLabelToItem = (itemId: number, nutritionlabel: NutritionlabelI
     return itemDb.addNutritionlabel(item, createdNutritionlabel);
 };
 
+const getItemById = (itemId: number): Item => {
+    const item = itemDb.getById(itemId);
+    if (!item) {
+        throw new Error('Item not found');
+    }
+
+    return item;
+};
+
 export default {
     getAllItems,
     createItem,
     addNutritionLabelToItem,
+    getItemById,
 };
