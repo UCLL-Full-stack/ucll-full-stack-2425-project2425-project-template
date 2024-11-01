@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import userRouter from './controller/user.routes';
+import familyRouter from './controller/family.routes';
 import { Request, Response, NextFunction } from 'express';
 
 const app = express();
@@ -24,6 +25,7 @@ app.listen(port || 3000, () => {
 
 // ENDPOINTS
 app.use("/users", userRouter)
+app.use("/families", familyRouter);
 
 // Swagger 
 const swaggerOptions = {

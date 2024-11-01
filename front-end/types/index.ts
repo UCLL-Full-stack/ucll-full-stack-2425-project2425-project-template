@@ -5,4 +5,10 @@ export type User = {
     role?: Role;
   };
 
+  export type Family = {
+    name?: string;
+    familyList?: User[];
+    owner?: User;
+  }
+
   export type Role = 'admin' | 'parent' | 'child';

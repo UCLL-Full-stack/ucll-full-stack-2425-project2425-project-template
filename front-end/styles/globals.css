@@ -83,8 +83,8 @@ tbody tr:hover {
 td, th {
   padding: 0.75rem; 
 }
-/* Login form */
 
+/* Login form */
 .login {
   display: flex;
   flex-direction: column;
@@ -120,4 +120,9 @@ td, th {
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+/* Family Page */
+.familyRow {
+  cursor: pointer;
 }
