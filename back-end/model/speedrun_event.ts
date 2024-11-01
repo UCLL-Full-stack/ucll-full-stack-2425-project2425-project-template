@@ -30,7 +30,18 @@ export class SpeedrunEvent {
         endDate: Date;
         participants: Array<User>;
     }) {
-        // throw new Error("Method not implemented.");
+        if (!speedrunEvent.name?.trim()) {
+            throw new Error('Name is required.');
+        }
+        if (!speedrunEvent.startDate) {
+            throw new Error('Start date is required.');
+        }
+        if (!speedrunEvent.endDate) {
+            throw new Error('End date is required.');
+        }
+        if (speedrunEvent.endDate < speedrunEvent.startDate) {
+            throw new Error('Start date must be before end date.');
+        }
     }
 
     getId(): number | undefined {
