@@ -28,6 +28,19 @@ const addExerciseToWorkout = async (workoutId: number, exerciseId: number) => {
     );
   };
 
+  const createWorkout = async (workoutData: { name: string; description: string }) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/workouts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(workoutData), 
+    });
+  };
+  
+
+
+
 export default {
-    getAllWorkouts, getWorkoutById, addExerciseToWorkout
+    getAllWorkouts, getWorkoutById, addExerciseToWorkout, createWorkout
 }
