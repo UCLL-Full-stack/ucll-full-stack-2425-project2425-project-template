@@ -13,7 +13,7 @@ const LibraryTable: React.FC<Props> = ({ games }: Props) => {
                 <table className="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col">Image</th>
+                        <th scope="col"></th>
                         <th scope="col">Title</th>
                         <th scope="col">Categories</th>
                     </tr>
