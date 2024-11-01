@@ -124,15 +124,25 @@ const createWorkout = ({ workout_id, user_id, name, description}: Workout): Work
     return workout
 }
 
-const updateWorkout = (workout: Workout): void => {
-    const index = workouts.findIndex(w => w.workout_id === workout.workout_id);
-    if (index !== -1) {
-        workouts[index] = workout;
-    } else {
-        throw new Error(`Workout with ID ${workout.workout_id} not found`);
-    }
+const addExerciseToWorkout = (workoutId: number, exercise: Exercise): Workout | undefined => {
+  const workout = workouts.find((w) => w.workout_id === workoutId);
+
+  if (workout) {
+    workout.addExercise(exercise);
+  }
+  
+  return workout;
 };
 
+const removeExerciseFromWorkout = (workoutId: number, exerciseId: number): Workout | undefined => {
+  const workout = workouts.find((w) => w.workout_id === workoutId);
+
+  if (workout) {
+    workout.removeExercise(exerciseId);
+  }
+  
+  return workout;
+};
 
 const getAllWorkouts = (): Workout[] => workouts
 
@@ -146,7 +156,17 @@ const getWorkoutsByUserId = (id: number): Workout[] => {
     return workouts.filter((workout) => workout.user_id === id) || [];
 };
 
+const removeWorkout = (workoutId: number): boolean => {
+  const index = workouts.findIndex((w) => w.workout_id === workoutId);
+  if (index !== -1) {
+    workouts.splice(index, 1);
+    return true;
+  }
+  return false;
+};
 
 
 
-export default { getAllWorkouts,  getWorkoutById, getWorkoutsByUserId, createWorkout, workouts, updateWorkout };
+
+
+export default { getAllWorkouts,  getWorkoutById, getWorkoutsByUserId, createWorkout, workouts, addExerciseToWorkout, removeExerciseFromWorkout, removeWorkout };

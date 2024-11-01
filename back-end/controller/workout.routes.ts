@@ -239,5 +239,82 @@ workoutRouter.post('/:workoutId/exercises/:exerciseId', (req: Request, res: Resp
     }
 });
 
+/**
+ * @swagger
+ * /workouts/{workoutId}/exercises/{exerciseId}:
+ *   delete:
+ *     summary: Remove an exercise from a workout
+ *     tags: [Workouts]
+ *     description: Remove an exercise from a specific workout by their IDs.
+ *     parameters:
+ *       - in: path
+ *         name: workoutId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The workout ID
+ *       - in: path
+ *         name: exerciseId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The exercise ID
+ *     responses:
+ *       200:
+ *         description: The updated workout object without the exercise.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Workout'
+ *       404:
+ *         description: Workout or exercise not found
+ */
+workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Response) => {
+    try {
+        const workoutId = parseInt(req.params.workoutId);
+        const exerciseId = parseInt(req.params.exerciseId);
+        const updatedWorkout = workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
+        res.status(200).json(updatedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
+/**
+ * @swagger
+ * /workouts/{id}:
+ *   delete:
+ *     summary: Remove a workout
+ *     tags: [Workouts]
+ *     description: Remove a workout by its ID and return the removed workout.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The workout ID
+ *     responses:
+ *       200:
+ *         description: The removed workout object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Workout'
+ *       404:
+ *         description: Workout not found
+ */
+workoutRouter.delete('/:id', (req: Request, res: Response) => {
+    try {
+        const workoutId = parseInt(req.params.id);
+        const deletedWorkout = workoutService.removeWorkout(workoutId);
+        res.status(200).json(deletedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || "An unexpected error occurred";
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
 
 export default workoutRouter;

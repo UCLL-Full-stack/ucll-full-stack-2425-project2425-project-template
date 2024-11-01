@@ -1,14 +1,17 @@
 import { Workout } from "@/types";
 import { useState } from "react";
 import WorkoutInfo from "./WorkoutInfo";
-import { Plus } from "react-feather";
+import { Plus, Trash } from "react-feather";
 import Modal from "./Modal";
+import WorkoutService from "@/services/workout/WorkoutService";
+import { Toaster, toast } from "sonner";
 
 type Props = {
   workouts: Array<Workout>;
+  setWorkouts: (workouts: Array<Workout>) => void;
 };
 
-const WorkoutOverviewTable: React.FC<Props> = ({ workouts }: Props) => {
+const WorkoutOverviewTable: React.FC<Props> = ({ workouts, setWorkouts }) => {
   const [selectedWorkoutId, setSelectedWorkoutId] = useState<number | null>(
     null
   );
@@ -28,9 +31,49 @@ const WorkoutOverviewTable: React.FC<Props> = ({ workouts }: Props) => {
 
   const handleSubmitWorkout = (e: React.FormEvent) => {
     e.preventDefault();
-
     console.log("New workout submitted, but not implemented yet.");
     handleCloseModal();
+  };
+
+  const handleRemoveExercise = async (exerciseId: number) => {
+    if (selectedWorkoutId !== null) {
+      try {
+        await WorkoutService.removeExerciseFromWorkout(
+          selectedWorkoutId,
+          exerciseId
+        );
+        const updatedWorkouts = workouts.map((workout) => {
+          if (workout.workout_id === selectedWorkoutId) {
+            return {
+              ...workout,
+              exercises: workout.exercises.filter(
+                (exercise) => exercise.id !== exerciseId
+              ),
+            };
+          }
+          return workout;
+        });
+        setWorkouts(updatedWorkouts);
+        toast.success("Exercise removed successfully!");
+      } catch (error) {
+        toast.error("Failed to remove exercise from workout");
+        console.error("Failed to remove exercise from workout", error);
+      }
+    }
+  };
+
+  const handleRemoveWorkout = async (workoutId: number) => {
+    try {
+      await WorkoutService.removeWorkout(workoutId);
+      const updatedWorkouts = workouts.filter(
+        (workout) => workout.workout_id !== workoutId
+      );
+      setWorkouts(updatedWorkouts);
+      toast.success("Workout removed successfully!");
+    } catch (error) {
+      toast.error("Failed to remove workout");
+      console.error("Failed to remove workout", error);
+    }
   };
 
   return (
@@ -51,7 +94,11 @@ const WorkoutOverviewTable: React.FC<Props> = ({ workouts }: Props) => {
           </div>
           {selectedWorkoutId === workout.workout_id && (
             <div className="px-6 pb-4">
-              <WorkoutInfo workout={workout} />
+              <WorkoutInfo
+                workout={workout}
+                onRemoveExercise={handleRemoveExercise}
+                onRemoveWorkout={() => handleRemoveWorkout(workout.workout_id)}
+              />
             </div>
           )}
         </div>
@@ -96,6 +143,8 @@ const WorkoutOverviewTable: React.FC<Props> = ({ workouts }: Props) => {
           </button>
         </form>
       </Modal>
+
+      <Toaster richColors />
     </div>
   );
 };

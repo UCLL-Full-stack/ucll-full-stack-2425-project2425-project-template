@@ -1,25 +1,39 @@
-import { Workout } from "@/types";
+import { Workout, Exercise } from "@/types";
 import Link from "next/link";
-import { Plus } from "react-feather";
+import { Plus, Trash } from "react-feather";
 
 type Props = {
   workout: Workout;
+  onRemoveExercise: (exerciseId: number) => void;
+  onRemoveWorkout: () => void;
 };
 
-const WorkoutInfo: React.FC<Props> = ({ workout }: Props) => {
+const WorkoutInfo: React.FC<Props> = ({
+  workout,
+  onRemoveExercise,
+  onRemoveWorkout,
+}) => {
   return (
     <>
       {workout && (
         <div className="mt-4 bg-white p-6 shadow-md rounded-lg border border-gray-200">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">{workout.name}</h2>
-            <Link
-              href={`/exercises?workoutId=${workout.workout_id}&showAddButton=true`}
-            >
-              <button className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                <Plus className="mr-2" /> Add Exercises
+            <div className="flex space-x-2">
+              <Link
+                href={`/exercises?workoutId=${workout.workout_id}&showAddButton=true`}
+              >
+                <button className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                  <Plus className="mr-2" /> Add Exercises
+                </button>
+              </Link>
+              <button
+                onClick={onRemoveWorkout}
+                className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              >
+                <Trash className="mr-2" /> Remove Workout
               </button>
-            </Link>
+            </div>
           </div>
           <table className="w-full text-sm text-left">
             <thead>
@@ -29,6 +43,7 @@ const WorkoutInfo: React.FC<Props> = ({ workout }: Props) => {
                   Description
                 </th>
                 <th className="py-2 font-semibold text-gray-600">Video</th>
+                <th className="py-2 font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -45,6 +60,14 @@ const WorkoutInfo: React.FC<Props> = ({ workout }: Props) => {
                     >
                       Watch Video
                     </a>
+                  </td>
+                  <td className="py-2">
+                    <button
+                      onClick={() => onRemoveExercise(exercise.id)}
+                      className="text-red-600 hover:text-red-800 transition"
+                    >
+                      <Trash className="w-5 h-5" />
+                    </button>
                   </td>
                 </tr>
               ))}

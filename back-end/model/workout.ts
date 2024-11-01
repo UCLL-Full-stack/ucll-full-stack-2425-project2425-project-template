@@ -25,6 +25,13 @@ export class Workout {
             this.exercises.push(exercise);
     }
 
+    removeExercise(exerciseId: number): void {
+        const index = this.exercises.findIndex(exercise => exercise.id === exerciseId);
+        if (index !== -1) {
+            this.exercises.splice(index, 1); 
+        }
+    }
+
 
     equals({ workout_id, user_id, name, description, exercises }: { workout_id: number; user_id: number; name: string; description: string; exercises: Exercise[] }): boolean {
         return (

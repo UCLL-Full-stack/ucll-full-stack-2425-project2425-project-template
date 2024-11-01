@@ -11,7 +11,7 @@ const Exercises: React.FC = () => {
   const [exercises, setExercises] = useState<Array<Exercise>>();
   const [error, setError] = useState<string>();
   const router = useRouter();
-  const { workoutId, showAddButton } = router.query; 
+  const { workoutId, showAddButton } = router.query;
 
   const getExercises = async () => {
     try {
@@ -66,7 +66,7 @@ const Exercises: React.FC = () => {
               <ExerciseOverviewTable
                 exercises={exercises}
                 onAddExercise={handleAddExercise}
-                showAddButton={showAddButton === "true"} 
+                showAddButton={showAddButton === "true"}
               />
             ) : (
               <p className="text-center text-gray-600">Loading exercises...</p>

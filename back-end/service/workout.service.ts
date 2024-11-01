@@ -43,10 +43,37 @@ const addExerciseToWorkout = (workoutId: number, exerciseId: number): Workout =>
         throw new Error(`Exercise with ID ${exerciseId} not found`);
     }
 
-    workout.addExercise(exercise); 
-    workoutDb.updateWorkout(workout);
+    workoutDb.addExerciseToWorkout(workoutId, exercise);
     return workout;
 };
+
+const removeExerciseFromWorkout = (workoutId: number, exerciseId: number): Workout => {
+    const workout = workoutDb.getWorkoutById(workoutId);
+    if (!workout) {
+        throw new Error(`Workout with ID ${workoutId} not found`);
+    }
+
+    const exerciseExists = workout.exercises.some((exercise) => exercise.id === exerciseId);
+    if (!exerciseExists) {
+        throw new Error(`Exercise with ID ${exerciseId} not found in the workout`);
+    }
+
+    workoutDb.removeExerciseFromWorkout(workoutId, exerciseId);
+    return workout;
+};
+
+const removeWorkout = (workoutId: number): Workout => {
+    const workout = workoutDb.getWorkoutById(workoutId);
+    if (!workout) {
+        throw new Error(`Workout with ID ${workoutId} not found`);
+    }
+    const success = workoutDb.removeWorkout(workoutId);
+    if (!success) {
+        throw new Error(`Failed to remove workout with ID ${workoutId}`);
+    }
+    return workout;
+};
+
 
 const createWorkout = ({ workout_id, user_id, name, description,}: WorkoutInput): Workout => {
     const workout = new Workout ({ workout_id, user_id, name, description, exercises: [] });
@@ -55,4 +82,4 @@ const createWorkout = ({ workout_id, user_id, name, description,}: WorkoutInput)
 
 
 
-export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, addExerciseToWorkout };
+export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, addExerciseToWorkout, removeExerciseFromWorkout, removeWorkout };

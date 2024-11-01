@@ -6,7 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
-import exerciseRouter from './controller/exercise.router';
+import exerciseRouter from './controller/exercise.routes';
 import workoutExerciseRouter from './controller/workoutExercise.routes';
 
 

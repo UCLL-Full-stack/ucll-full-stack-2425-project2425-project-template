@@ -1,13 +1,12 @@
 import Header from "@/components/header";
 import WorkoutOverviewTable from "@/components/workouts/WorkoutOverviewTable";
 import WorkoutService from "@/services/workout/WorkoutService";
-
 import { Workout } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
 const Workouts: React.FC = () => {
-  const [workouts, setWorkouts] = useState<Array<Workout>>();
+  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
   const [error, setError] = useState<string>();
 
   const getWorkouts = async () => {
@@ -38,7 +37,10 @@ const Workouts: React.FC = () => {
             {error ? (
               <p className="text-red-500 text-center">{error}</p>
             ) : workouts ? (
-              <WorkoutOverviewTable workouts={workouts} />
+              <WorkoutOverviewTable
+                workouts={workouts}
+                setWorkouts={setWorkouts}
+              />
             ) : (
               <p className="text-center text-gray-600">Loading workouts...</p>
             )}

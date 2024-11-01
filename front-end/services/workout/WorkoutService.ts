@@ -37,10 +37,33 @@ const addExerciseToWorkout = async (workoutId: number, exerciseId: number) => {
       body: JSON.stringify(workoutData), 
     });
   };
+
+  const removeWorkout = async (workoutId: number) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/workouts/${workoutId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+  
+  const removeExerciseFromWorkout = async (workoutId: number, exerciseId: number) => {
+    return fetch(
+      process.env.NEXT_PUBLIC_API_URL + `/workouts/${workoutId}/exercises/${exerciseId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
+  
+  
   
 
 
 
 export default {
-    getAllWorkouts, getWorkoutById, addExerciseToWorkout, createWorkout
+    getAllWorkouts, getWorkoutById, addExerciseToWorkout, createWorkout, removeWorkout, removeExerciseFromWorkout
 }
