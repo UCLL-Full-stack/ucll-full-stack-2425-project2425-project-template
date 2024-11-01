@@ -1,3 +1,7 @@
+import express, { NextFunction, Request, Response } from 'express';
+import competitionService from '../service/competition.service';
+import { CompetitionInput } from '../types';
+
 /**
  * @swagger
  *   components:
@@ -38,9 +42,6 @@
  *              items:
  *                $ref: '#/components/schemas/Team'
  */
-import express, { NextFunction, Request, Response } from 'express';
-import competitionService from '../service/competition.service';
-import { CompetitionDTO } from '../types';
 
 const competitionRouter = express.Router();
 
@@ -62,13 +63,12 @@ const competitionRouter = express.Router();
  */
 competitionRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await competitionService.getAllCompetitions();
-        res.sendStatus(200);
+        const competitions = await competitionService.getAllCompetitions();
+        res.status(200).json(competitions);
     } catch (error) {
         next(error);
     }
 });
-
 
 /**
  * @swagger
@@ -92,7 +92,7 @@ competitionRouter.get('/', async (req: Request, res: Response, next: NextFunctio
  */
 competitionRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const competitionDTO: CompetitionDTO = req.body;
+        const competitionDTO: CompetitionInput = req.body;
         await competitionService.createCompetition(competitionDTO);
         res.sendStatus(201);
     } catch (error) {
@@ -122,7 +122,11 @@ competitionRouter.post('/', async (req: Request, res: Response, next: NextFuncti
  */
 competitionRouter.put('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const competitionDTO: CompetitionDTO = req.body;
+        const competitionDTO: CompetitionInput = req.body;
+        if (!competitionDTO.id) {
+            res.status(400).send("Competition ID is required.");
+            return;
+        }
         await competitionService.editCompetition(competitionDTO);
         res.sendStatus(200);
     } catch (error) {
