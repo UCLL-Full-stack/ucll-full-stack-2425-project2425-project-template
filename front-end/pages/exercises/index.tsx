@@ -56,7 +56,7 @@ const Exercises: React.FC = () => {
       <Header />
       <main className="py-4 bg-gray-50 min-h-screen">
         <div className="max-w-screen-xl mx-auto px-6">
-          <h1 className="text-4xl font-bold text-black text-center mb-8">
+          <h1 className="text-4xl font-bold text-black text-center mb-8 py-5">
             Exercises
           </h1>
           <section className="space-y-4">

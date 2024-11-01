@@ -32,7 +32,7 @@ const Workouts: React.FC = () => {
 
       <main className="py-4 bg-gray-50 min-h-screen">
         <div className="max-w-screen-xl mx-auto px-6">
-          <h1 className="text-4xl font-bold text-black mb-8">Workouts</h1>
+          <h1 className="text-4xl font-bold text-black mb-8 py-5">Workouts</h1>
           <section className="space-y-4">
             {error ? (
               <p className="text-red-500 text-center">{error}</p>
