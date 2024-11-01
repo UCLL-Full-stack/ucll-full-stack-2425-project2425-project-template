@@ -21,7 +21,7 @@ export class Family {
             throw new Error("Name must not be empty")
         }
         // familylist validation
-        if (family.familyList.length !== 1 && family.familyList.some(user => user !== family.owner)) {
+        if (family.familyList.length < 1 && family.familyList.some(user => user !== family.owner)) {
             throw new Error("Owner must be part of the family")
         }
     }
