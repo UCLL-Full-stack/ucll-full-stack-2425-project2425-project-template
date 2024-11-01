@@ -1,9 +1,12 @@
+import { User } from './user';
+
 export class Player {
     private id?: number;
     private name: string;
     private statistics: string; // still needs to be expended upon
     private class: string; // will later be a Class type
     private currency: number;
+    private user: User;
 
     constructor(player: {
         id?: number;
@@ -11,6 +14,7 @@ export class Player {
         statistics: string;
         class: string;
         currency: number;
+        user: User;
     }) {
         this.validate(player);
 
@@ -19,6 +23,7 @@ export class Player {
         this.statistics = player.statistics;
         this.class = player.class;
         this.currency = player.currency;
+        this.user = player.user;
     }
 
     getId(): number | undefined {
@@ -41,7 +46,17 @@ export class Player {
         return this.currency;
     }
 
-    validate(player: { name: string; statistics: string; class: string; currency: number }) {
+    getUser(): User {
+        return this.user;
+    }
+
+    validate(player: {
+        name: string;
+        statistics: string;
+        class: string;
+        currency: number;
+        user: User;
+    }) {
         // will be implemented later.
     }
 }
