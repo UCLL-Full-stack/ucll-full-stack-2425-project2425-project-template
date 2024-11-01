@@ -27,7 +27,6 @@ export class Pokebowl {
         this.beschrijving = pokebowl.beschrijving;
         this.maxAantalIngredienten = pokebowl.maxAantalIngredienten;
         this.ingredienten = pokebowl.ingredienten;
-        this.calculatePrice();
     }
 
     validate(pokebowl: {
@@ -108,7 +107,6 @@ export class Pokebowl {
         let aantal = ingredient.getAantal();
         ingredient.setAantal(aantal -= 1);
         this.ingredienten.push(ingredient);
-        this.calculatePrice();
     }
 
     calculatePrice() {
