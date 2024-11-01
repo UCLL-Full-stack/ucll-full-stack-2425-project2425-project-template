@@ -4,6 +4,10 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { tripRouter } from './controller/trip.routes';
+import { studentRouter } from './controller/student.routes';
+import { bookingRouter } from './controller/booking.routes';
+import { reviewRouter } from './controller/review.routes';
 
 const app = express();
 dotenv.config();
@@ -26,10 +30,10 @@ app.use(bodyParser.json());
 //   path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
 //   })
 // )
-// app.use('/students', studentRouter)
-// app.use('/bookings', bookingRouter)
-// app.use('/trips', tripRouter)
-// app.use('/reviews', reviewRouter)
+app.use('/students', studentRouter)
+app.use('/bookings', bookingRouter)
+app.use('/trips', tripRouter)
+app.use('/reviews', reviewRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

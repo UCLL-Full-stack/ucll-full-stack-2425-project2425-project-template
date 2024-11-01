@@ -1,22 +1,79 @@
-// import { Review } from '../model/review';
+import database from "../../util/database";
+import { Review } from "../model/review";
+import { Trip } from "../model/trip";
+import { Student } from "../model/student";
 
-// // Dummy data
-// const reviews: Review[] = [
-//     new Review({ id: 1, comment: 'Amazing trip!', rating: 5, bookingId: 1 }),
-//     new Review({ id: 2, comment: 'Had a great time!', rating: 4, bookingId: 2 }),
-// ];
+const getAllReviews = async (): Promise<Review[]> => {
+    const reviewsPrisma = await database.review.findMany({
+        include: {
+            trip: true,
+            student: true
+        }
+    });
+    return reviewsPrisma.map((reviewPrisma) => Review.from(reviewPrisma));
+};
 
-// // Create
-// export const createReview = (review: Review): Review => {
-//     reviews.push(review);
-//     return review;
-// };
+const getReviewById = async (reviewId: number): Promise<Review | null> => {
+    try {
+        const reviewPrisma = await database.review.findUnique({
+            where: { id: reviewId },
+            include: {
+                trip: true,
+                student: true
+            }
+        });
+        return reviewPrisma ? Review.from(reviewPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Failed to retrieve review. See server log for details.");
+    }
+};
 
-// // Read
-// export const findAllReviews = (): Review[] => {
-//     return reviews;
-// };
+const createReview = async ({
+    comment,
+    rating,
+    tripId,
+    studentId,
+}: {
+    comment: string;
+    rating: number;
+    tripId: number;
+    studentId: number;
+}): Promise<Review> => {
+    try {
+        const trip = await database.trip.findUnique({
+            where: { id: tripId },
+        });
 
-// export const findReviewById = (id: number): Review | undefined => {
-//     return reviews.find(review => review.getId() === id);
-// };
+        const student = await database.student.findUnique({
+            where: { id: studentId },
+        });
+
+        if (!trip || !student) {
+            throw new Error('Trip or Student not found');
+        }
+
+        const reviewPrisma = await database.review.create({
+            data: {
+                comment,
+                rating,
+                trip: { connect: { id: tripId } },
+                student: { connect: { id: studentId } },
+            },
+            include: {
+                trip: true,
+                student: true
+            }
+        });
+        return Review.from(reviewPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Failed to create review. See server log for details.");
+    }
+};
+
+export default {
+    getAllReviews,
+    getReviewById,
+    createReview,
+};

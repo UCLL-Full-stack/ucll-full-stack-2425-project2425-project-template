@@ -1,6 +1,6 @@
 import { Booking } from './booking';
+import { Student as StudentPrisma, Booking as BookingPrisma, Review as ReviewPrisma } from '@prisma/client';
 import { Review } from './review';
-import { Trip } from './trip';
 
 export class Student {
     private id?: number;
@@ -8,43 +8,45 @@ export class Student {
     private email: string;
     private password: string;
     private studentNumber: string;
-    private favourites: Trip[] = [];
-    private bookings: Booking[] = [];
-    private reviews: Review[] = [];
-    
-    constructor(student: { id?: number; username: string; email: string; password: string; studentNumber: string; }) {
+    private bookings: Booking[];
+    private review?: Review | null;
+
+    constructor(student: {
+        id?: number;
+        username: string;
+        email: string;
+        password: string;
+        studentNumber: string;
+        bookings?: Booking[]; 
+        review?: Review | null; 
+    }) {
         this.id = student.id;
         this.username = student.username;
         this.email = student.email;
         this.password = student.password;
         this.studentNumber = student.studentNumber;
+        this.bookings = student.bookings || []; // Initialize to empty array if not provided
+        this.review = student.review || null;
     }
 
-    validate(): { isValid: boolean; errors?: string[] } {
-        const errors = [];
-
+    validate() {
         if (!this.username || this.username.trim() === '') {
-            errors.push('Username is required.');
+            throw new Error('Username is required.');
         }
 
         if (!this.email || this.email.trim() === '') {
-            errors.push('Email is required.');
+            throw new Error('Email is required.');
         } else if (!this.isValidEmail()) {
-            errors.push('Invalid email format.');
+            throw new Error('Invalid email format.');
         }
 
         if (!this.password || this.password.trim() === '') {
-            errors.push('Password is required.');
+            throw new Error('Password is required.');
         }
 
         if (!this.studentNumber || this.studentNumber.trim() === '') {
-            errors.push('Student number is required.');
+            throw new Error('Student number is required.');
         }
-
-        return {
-            isValid: errors.length === 0,
-            errors: errors.length > 0 ? errors : undefined,
-        };
     }
 
     private isValidEmail(): boolean {
@@ -52,69 +54,23 @@ export class Student {
         return emailRegex.test(this.email);
     }
 
-    getId(): number | undefined {
-        return this.id;
+    static from({
+        id,
+        username,
+        email,
+        password,
+        studentNumber,
+        bookings,
+        review,
+    }: StudentPrisma & { bookings: BookingPrisma[], review?: ReviewPrisma | null}) : Student{
+        return new Student({
+            id: id ? Number(id) : undefined,
+            username,
+            email,
+            password,
+            studentNumber,
+            bookings: bookings.map((booking) => Booking.from(booking)),
+            review: review ? Review.from(review) : undefined 
+        });
     }
-
-    getUsername(): string {
-        return this.username;
-    }
-
-    getEmail(): string {
-        return this.email;
-    }
-
-    getPassword(): string {
-        return this.password;
-    }
-
-    getFavourites(): Trip[] {
-        return this.favourites;
-    }
-
-    getBookings(): Booking[] {
-        return this.bookings;
-    }
-
-    getReviews(): Review[] {
-        return this.reviews;
-    }
-
-    getStudentNumber(): string {
-        return this.studentNumber;
-    }
-
-    addBooking(booking: Booking): void {
-        if (this.bookings.some(existingBooking => existingBooking.equals(booking))) {
-            throw new Error('Booking is already associated with this student');
-        }
-        this.bookings.push(booking);
-    }
-    addFavourite(trip: Trip): void {
-        if (this.favourites.some(existingTrip => existingTrip.equals(trip))) {
-            throw new Error('Trip is already in favourites');
-        }
-        this.favourites.push(trip);
-    }
-
-    addReview(review: Review): void {
-        if (this.reviews.some(existingReview => existingReview.equals(review))) {
-            throw new Error('Review is already associated with this student');
-        }
-        this.reviews.push(review);
-    }
-    equals(student: Student): boolean {
-        return (
-            this.id === student.getId() &&
-            this.username === student.getUsername() &&
-            this.email === student.getEmail() &&
-            this.password === student.getPassword() &&
-            this.studentNumber === student.getStudentNumber() &&
-            this.bookings.length === student.getBookings().length &&
-            this.bookings.every((booking, index) => booking.equals(student.getBookings()[index])) &&
-            this.reviews.length === student.getReviews().length &&
-            this.reviews.every((review, index) => review.equals(student.getReviews()[index]))
-        );
-    }
-    
 }

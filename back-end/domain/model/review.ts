@@ -1,63 +1,59 @@
-import { Booking } from './booking';
+import { Review as ReviewPrisma } from '@prisma/client';
+import { Student } from './student';
+import { Trip } from './trip';
 
 export class Review {
     private id?: number; 
     private comment: string;
     private rating: number;
-    private booking: Booking; // A review is tied to a booking
+    private trip: Trip;         
+    private student: Student;    
 
-    constructor(review: { id?: number; comment: string; rating: number; booking: Booking }) {
+    constructor(review: {
+        id?: number;
+        comment: string;
+        rating: number;
+        trip: Trip;          
+        student: Student;  
+    }) {
         this.id = review.id;
         this.comment = review.comment;
         this.rating = review.rating;
-        this.booking = review.booking;
-
-        // Validate upon instantiation
-        const validationResult = this.validate();
-        if (!validationResult.isValid) {
-            throw new Error(`Validation failed: ${validationResult.errors?.join(', ')}`);
-        }
+        this.trip = review.trip;              
+        this.student = review.student;         
     }
 
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getComment(): string {
-        return this.comment;
-    }
-
-    getRating(): number {
-        return this.rating;
-    }
-
-    getBooking(): Booking {
-        return this.booking;
-    }
-
-    validate(): { isValid: boolean; errors?: string[] } {
-        const errors = [];
-
+    validate() {
         if (!this.comment || this.comment.trim().length === 0) {
-            errors.push('Comment is required.');
+            throw new Error('Comment is required.');
         }
 
         if (this.rating < 1 || this.rating > 5) {
-            errors.push('Rating must be between 1 and 5.');
+            throw new Error('Rating must be between 1 and 5.');
+        }
+        
+        if (!this.trip) {
+            throw new Error('Trip is required.'); 
         }
 
-        return {
-            isValid: errors.length === 0,
-            errors: errors.length > 0 ? errors : undefined,
-        };
+        if (!this.student) {
+            throw new Error('Student is required.'); 
+        }
     }
 
-    equals(review: Review): boolean {
-        return (
-            this.id === review.getId() &&
-            this.comment === review.getComment() &&
-            this.rating === review.getRating() &&
-            this.booking.equals(review.getBooking())
-        );
+    static from({
+        id,
+        comment,
+        rating,
+        trip,
+        student
+    }: ReviewPrisma & { trip: Trip; student: Student }) { 
+        return new Review({
+            id: id ? Number(id) : undefined,
+            comment,
+            rating,
+            trip,             
+            student          
+        });
     }
 }

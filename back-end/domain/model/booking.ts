@@ -1,75 +1,65 @@
-import { Student } from './student';
 import { Trip } from './trip';
 import { Review } from './review';
+import {
+    Booking as BookingPrisma,
+    Trip as TripPrisma,
+    Review as ReviewPrisma,
+    Student as StudentPrisma
+} from '@prisma/client';
+import { Student } from './student';
 import { PaymentStatus } from './paymentStatusEnum';
 
 export class Booking {
-    private id?: number; 
+    private id?: number;
     private bookingDate: Date;
     private paymentStatus: PaymentStatus; 
-    private student: Student;
+    private students: Student[]; 
     private trip: Trip;
+    private review?: Review; 
 
-    constructor(booking: { id?: number; bookingDate: Date; paymentStatus: PaymentStatus; student: Student; trip: Trip }) {
+    constructor(booking: {
+        id?: number;
+        bookingDate: Date;
+        paymentStatus: PaymentStatus;
+        students?: Student[]; 
+        trip: Trip;
+        review?: Review; 
+    }) {
         this.id = booking.id;
         this.bookingDate = booking.bookingDate;
         this.paymentStatus = booking.paymentStatus;
-        this.student = booking.student;
+        this.students = booking.students || []; 
         this.trip = booking.trip;
-
-        // Validate on instantiation
-        const validationResult = this.validate();
-        if (!validationResult.isValid) {
-            throw new Error(`Validation failed: ${validationResult.errors?.join(', ')}`);
-        }
+        this.review = booking.review; 
     }
 
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getBookingDate(): Date {
-        return this.bookingDate;
-    }
-
-    getPaymentStatus(): PaymentStatus {
-        return this.paymentStatus;
-    }
-
-    getStudent(): Student {
-        return this.student;
-    }
-
-    getTrip(): Trip {
-        return this.trip;
-    }
-
-    validate(): { isValid: boolean; errors?: string[] } {
-        const errors = [];
-
+    validate() {
         if (!this.bookingDate) {
-            errors.push('Booking date is required.');
+            throw new Error('Booking date is required.');
         }
-
         if (!this.paymentStatus) {
-            errors.push('Payment status is required.');
-        } else if (!(this.paymentStatus in PaymentStatus)) {
-            errors.push('Invalid payment status.');
+            throw new Error('Payment status is required.');
         }
-
-        return {
-            isValid: errors.length === 0,
-            errors: errors.length > 0 ? errors : undefined,
-        };
+        if (!this.trip) {
+            throw new Error('Trip is required.'); 
+        }
     }
 
-    equals(booking: Booking): boolean {
-        return (
-            this.id === booking.getId() &&
-            this.bookingDate.getTime() === booking.getBookingDate().getTime() && // Compare timestamps for Date
-            this.paymentStatus === booking.getPaymentStatus() &&
-            this.student.equals(booking.getStudent()) &&
-            this.trip.equals(booking.getTrip())
-        );
+    static from({
+        id,
+        bookingDate,
+        paymentStatus,
+        trip,
+        review,
+        students,
+    }: BookingPrisma & { trip: TripPrisma, review?: ReviewPrisma, students: StudentPrisma[] }) : Booking {
+        return new Booking({
+            id: id ? Number(id) : undefined,
+            bookingDate,
+            paymentStatus: paymentStatus as PaymentStatus, 
+            trip: Trip.from({ ...trip, bookings: [], reviews: [] }),
+            review: review ? Review.from({ ...review, trip: Trip.from(trip), student: Student.from(students[0]) }) : undefined,
+            students: students.map((student) => Student.from({ ...student, bookings: [], review: null })) 
+        });
     }
 }

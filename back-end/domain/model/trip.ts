@@ -1,6 +1,10 @@
-import { Booking } from "./booking";
-import { Review } from "./review";
-import { Student } from "./student";
+import { Booking } from './booking';
+import { Review } from './review';
+import {
+    Trip as TripPrisma,
+    Booking as BookingPrisma,
+    Review as ReviewPrisma
+} from '@prisma/client';
 
 export class Trip {
     private id?: number; 
@@ -9,96 +13,70 @@ export class Trip {
     private startDate: Date;
     private endDate: Date;
     private price: number;
-    private bookings: Booking[] = [];
-    private favouritedBy: Student[] = [];
-    private reviews: Review[] = [];
+    private bookings: Booking[];
+    private reviews: Review[]; 
 
-    constructor(trip: { id?: number; description: string; location: string; startDate: Date; endDate: Date; price: number }) {
+    constructor(trip: { 
+        id?: number; 
+        description: string; 
+        location: string; 
+        startDate: Date; 
+        endDate: Date; 
+        price: number; 
+        bookings?: Booking[]; 
+        reviews?: Review[]; 
+    }) {
         this.id = trip.id;
         this.description = trip.description;
         this.location = trip.location;
         this.startDate = trip.startDate;
         this.endDate = trip.endDate;
         this.price = trip.price;
-
-        // Validation checks
-        this.validateDescription();
-        this.validateLocation();
-        this.validateDates();
-        this.validatePrice();
+        this.bookings = trip.bookings || []; 
+        this.reviews = trip.reviews || []; 
     }
 
-    private validateDescription() {
+    validate() {
         if (!this.description || this.description.trim().length === 0) {
-            throw new Error("Description cannot be empty.");
+            throw new Error('Description is required.');
         }
-    }
 
-    private validateLocation() {
         if (!this.location || this.location.trim().length === 0) {
-            throw new Error("Location cannot be empty.");
+            throw new Error('Location is required.');
+        }
+
+        if (!this.startDate) {
+            throw new Error('Start date is required.');
+        }
+
+        if (!this.endDate) {
+            throw new Error('End date is required.');
+        }
+
+        if (this.price < 0) {
+            throw new Error('Price must be a positive number.');
         }
     }
 
-    private validateDates() {
-        if (this.startDate >= this.endDate) {
-            throw new Error("Start date must be earlier than end date.");
-        }
-    }
-
-    private validatePrice() {
-        if (this.price <= 0) {
-            throw new Error("Price must be a positive number.");
-        }
-    }
-
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getDescription(): string {
-        return this.description;
-    }
-
-    getLocation(): string {
-        return this.location;
-    }
-
-    getPrice(): number {
-        return this.price;
-    }
-
-    getStartDate(): Date {
-        return this.startDate;
-    }
-
-    getEndDate(): Date { 
-        return this.endDate;
-    }
-
-    addBooking(booking: Booking): void {
-        this.bookings.push(booking);
-    }
-
-    addFavourite(student: Student): void {
-        if (this.favouritedBy.some(existingStudent => existingStudent.equals(student))) {
-            throw new Error('Student has already favourited this trip');
-        }
-        this.favouritedBy.push(student);
-    }
-
-    addReview(review: Review): void {
-        this.reviews.push(review);
-    }
-
-    equals(trip: Trip): boolean {
-        return (
-            this.id === trip.getId() &&
-            this.description === trip.getDescription() &&
-            this.location === trip.getLocation() &&
-            this.startDate.getTime() === trip.getStartDate().getTime() &&
-            this.endDate.getTime() === trip.getEndDate().getTime() &&
-            this.price === trip.getPrice()
-        );
+    static from({
+        id,
+        description,
+        location,
+        startDate,
+        endDate,
+        price,
+        bookings,
+        reviews
+    }: TripPrisma & { bookings: BookingPrisma[], reviews: ReviewPrisma[] }) : Trip{
+        return new Trip({
+            id: id ? Number(id) : undefined,
+            description,
+            location,
+            startDate,
+            endDate,
+            price,
+            bookings: bookings.map((booking) => Booking.from(booking)), 
+            reviews: reviews.map((review) => Review.from(review))
+        });
     }
 }

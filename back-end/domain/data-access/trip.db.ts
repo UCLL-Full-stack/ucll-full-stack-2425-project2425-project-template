@@ -1,23 +1,80 @@
+import database from '../../util/database';
 import { Trip } from '../model/trip';
 
-// Dummy data
-const trips: Trip[] = [
-    new Trip({ id: 1, description: 'Beach getaway', location: 'Hawaii', startDate: new Date('2023-07-01'), endDate: new Date('2023-07-10'), price: 1500 }),
-    new Trip({ id: 2, description: 'Mountain hiking', location: 'Rocky Mountains', startDate: new Date('2023-08-15'), endDate: new Date('2023-08-20'), price: 900 }),
-];
-
-// Create
-export const createTrip = (trip: Trip): Trip => {
-    trips.push(trip);
-    return trip;
+const getAllTrips = async (): Promise<Trip[]> => {
+    const tripsPrisma = await database.trip.findMany({
+        include: {
+            bookings: true,
+            reviews: true,
+        }
+    });
+    return tripsPrisma.map((tripPrisma) => Trip.from(tripPrisma));
 };
 
-// Read
-export const findAllTrips = (): Trip[] => {
-    return trips;
+const getTripById = async (tripId: number): Promise<Trip | null> => {
+    try {
+        const tripPrisma = await database.trip.findUnique({
+            where: { id: tripId },
+            include: {
+                bookings: true,
+                reviews: true,
+            }
+        });
+        return tripPrisma ? Trip.from(tripPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
 };
 
-export const findTripById = (id: number): Trip | undefined => {
-    return trips.find(trip => trip.getId() === id);
+const createTrip = async ({
+    description,
+    location,
+    startDate,
+    endDate,
+    price,
+}: {
+    description: string;
+    location: string;
+    startDate: Date;
+    endDate: Date;
+    price: number;
+}): Promise<Trip> => {
+    try {
+        const trip = new Trip({
+            description,
+            location,
+            startDate,
+            endDate,
+            price,
+            bookings: [],
+            reviews: []
+        });
+        
+        trip.validate();
+
+        const tripPrisma = await database.trip.create({
+            data: {
+                description,
+                location,
+                startDate,
+                endDate,
+                price,
+            },
+            include: {
+                bookings: true,
+                reviews: true,
+            }
+        });
+        return Trip.from(tripPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
 };
 
+export default {
+    getAllTrips,
+    getTripById,
+    createTrip
+};

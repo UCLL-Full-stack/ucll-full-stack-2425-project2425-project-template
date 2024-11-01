@@ -1,4 +1,4 @@
-type Student = {
+type StudentInput = {
     id?: number;
     username: string;
     email: string;
@@ -6,25 +6,25 @@ type Student = {
     studentNumber: string;
 }
 
-type Trip = {
+type TripInput = {
     id?: number;
     destination: string;
     startDate: Date;
     endDate: Date;
     price: number;
     description: string;
-    images: string[];
+    images: string;
 }
 
-type Booking = {
+type BookingInput = {
     id?: number;
     studentId: number;  
-    tripId: number;    
-    bookingDate: Date;
+    trip?: TripInput;   
+    bookingDate?: Date;
     paymentStatus: 'Pending' | 'Confirmed' | 'Cancelled';
 }
 
-type Review = {
+type ReviewInput = {
     id?: number;
     studentId: number; 
     tripId: number;     
@@ -34,9 +34,9 @@ type Review = {
 type Role = 'admin' | 'user' | 'guest';
 
 export{
-    Trip,
-    Booking,
-    Student,
-    Review,
+    TripInput,
+    BookingInput,
+    StudentInput,
+    ReviewInput,
     Role
 }

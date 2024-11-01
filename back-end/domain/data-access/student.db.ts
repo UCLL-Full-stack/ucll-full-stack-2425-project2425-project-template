@@ -1,23 +1,80 @@
-import { Student } from '../model/student';
+import database from "../../util/database";
+import { Student } from "../model/student";
+import { Booking } from "../model/booking";
 
-// Dummy data
-const students: Student[] = [
-    new Student({ id: 1, username: 'john_doe', email: 'john@example.com', password: 'securepassword', studentNumber: '123456' }),
-    new Student({ id: 2, username: 'jane_smith', email: 'jane@example.com', password: 'password123', studentNumber: '654321' }),
-];
-
-// Create
-export const createStudent = (student: Student): Student => {
-    students.push(student);
-    return student;
+const getStudentById = async (studentId: number): Promise<Student | null> => {
+  try {
+    const studentPrisma = await database.student.findUnique({
+      where: { id: studentId },
+      include: {
+        bookings: true,
+        review: true,
+      }
+    });
+    return studentPrisma ? Student.from(studentPrisma) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Database error. See server log for details.");
+  }
 };
 
-// Read
-export const findAllStudents = (): Student[] => {
-    return students;
+const getAllStudents = async (): Promise<Student[]> => {
+  try {
+    const studentsPrisma = await database.student.findMany({
+      include: {
+        bookings: true,
+        review: true,
+      }
+    });
+    return studentsPrisma.map((studentPrisma) => Student.from(studentPrisma));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Database error. See server log for details.");
+  }
 };
 
-export const findStudentById = (id: number): Student | undefined => {
-    return students.find(student => student.getId() === id);
+const getStudentByUsername = async (username: string): Promise<Student | null> => {
+  try {
+    const studentPrisma = await database.student.findFirst({
+      where: { username },
+      include: {
+        bookings: true,
+        review: true,
+      }
+    });
+    return studentPrisma ? Student.from(studentPrisma) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Database error. See server log for details.");
+  }
 };
 
+const createStudent = async ({ username, email, password, studentNumber }: { username: string, email: string, password: string, studentNumber: string }): Promise<Student> => {
+  try {
+    const studentPrisma = await database.student.create({
+      data: {
+        username,
+        email,
+        password,
+        studentNumber,
+        bookings: { create: [] },
+        review: {},
+      },
+      include: {
+        bookings: true,
+        review: true,
+      }
+    });
+    return Student.from(studentPrisma);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Database error. See server log for details.");
+  }
+};
+
+export default {
+  getStudentById,
+  getAllStudents,
+  getStudentByUsername,
+  createStudent
+};

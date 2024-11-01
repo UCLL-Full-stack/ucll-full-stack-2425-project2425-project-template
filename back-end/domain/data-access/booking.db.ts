@@ -1,22 +1,55 @@
-// import { Booking } from '../model/booking';
+import database from '../../util/database';
+import { Booking } from '../model/booking';
+import { PaymentStatus } from '../model/paymentStatusEnum';
 
-// // Dummy data
-// const bookings: Booking[] = [
-//     new Booking({ id: 1, bookingDate: new Date(), paymentStatus: 'Paid', studentId: 1, tripId: 1 }),
-//     new Booking({ id: 2, bookingDate: new Date(), paymentStatus: 'Pending', studentId: 2, tripId: 2 }),
-// ];
+const getAllBookings = async (): Promise<Booking[]> => {
+    const bookingsPrisma = await database.booking.findMany({
+        include: {
+            trip: true,
+            students: true
+        }
+    });
+    return bookingsPrisma.map((bookingPrisma) => Booking.from(bookingPrisma));
+};
 
-// // Create
-// export const createBooking = (booking: Booking): Booking => {
-//     bookings.push(booking);
-//     return booking;
-// };
+const getBookingById = async (bookingId: number): Promise<Booking | null> => {
+    const bookingPrisma = await database.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+            trip: true,
+            students: true
+        }
+    });
+    return bookingPrisma ? Booking.from(bookingPrisma) : null;
+};
 
-// // Read
-// export const findAllBookings = (): Booking[] => {
-//     return bookings;
-// };
+const createBooking = async (bookingData: {
+    bookingDate: Date;
+    tripId: number;
+    studentIds: number[];  
+    paymentStatus: PaymentStatus;  
+}): Promise<Booking> => {
+    const bookingPrisma = await database.booking.create({
+        data: {
+            bookingDate: bookingData.bookingDate,
+            paymentStatus: bookingData.paymentStatus,  
+            trip: { connect: { id: bookingData.tripId } },
+            students: {
+                connect: bookingData.studentIds.map((id) => ({ id }))  
+            }
+        },
+        include: {
+            trip: true,
+            students: true  
+        }
+    });
 
-// export const findBookingById = (id: number): Booking | undefined => {
-//     return bookings.find(booking => booking.getId() === id);
-// };
+    return Booking.from(bookingPrisma);
+};
+
+
+export default {
+    getAllBookings,
+    getBookingById,
+    createBooking
+};
