@@ -1,47 +1,44 @@
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
  *   schemas:
  *     Role:
  *       type: string
  *       enum: [admin, parent, child]
  *       description: The role of the user.
- *     User:
+ *     UserInput:
  *       type: object
  *       properties:
  *         name:
  *           type: string
- *           description: User name.
+ *           description: The name of the user.
  *         email:
  *           type: string
- *           description: User email.
+ *           description: The email of the user.
  *         password:
  *           type: string
- *           description: User Password
+ *           description: The password of the user.
  *         role:
  *           $ref: '#/components/schemas/Role'
- *     Family:
+ *           description: The role of the user.
+ *     FamilyInput:
  *       type: object
  *       properties:
  *         name:
  *           type: string
- *           description: Family name.
+ *           description: The name of the family.
  *         familyList:
- *           type: Array
+ *           type: array
  *           items:
- *             $ref: '#/components/schemas/User'
- *           description: Family member list.
+ *             $ref: '#/components/schemas/UserInput'
+ *           description: The list of family members.
  *         owner:
- *           type: User
- *           description: The Person who created the family.
+ *           $ref: '#/components/schemas/UserInput'
+ *           description: The owner of the family.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import familyService from '../service/family.service';
+import { FamilyInput } from '../types';
 
 const familyRouter = express.Router();
 
@@ -65,6 +62,39 @@ familyRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
         const families = await familyService.getAllFamilies();
         res.status(200).json(families);
     } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        } else {
+            res.status(400).json({ status: "error", errorMessage: "An unknown error occurred" });
+        }
+    }
+});
+
+/**
+ * @swagger
+ * /families:
+ *   post:
+ *     summary: Create a new family.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Family'
+ *     responses:
+ *       200:
+ *         description: The created family.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Family'
+ */
+familyRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const family = <FamilyInput>req.body;
+        const result = await familyService.createFamily(family);
+        res.status(200).json(result);
+    } catch (error){
         if (error instanceof Error) {
             res.status(400).json({ status: "error", errorMessage: error.message });
         } else {
