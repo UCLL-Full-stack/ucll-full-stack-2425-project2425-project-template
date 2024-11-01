@@ -3,19 +3,25 @@ import ActiviteitenOverviewTable from '@/components/activiteiten/ActiviteitenOve
 import { useEffect, useState } from 'react';
 import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
+import { useRouter } from 'next/router';
 
 const Activiteiten: React.FC = () => {
     const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>();
 
-    const getActiviteiten = async () => {
-        const response = await ActiviteitService.getAllActiviteiten();
-        const activiteiten = await response.json();
+    const router = useRouter();
+    const { groepNaam } = router.query;
+
+    const getActiviteitenByGroupName = async () => {
+        const [activiteitenResponse] = await Promise.all([ActiviteitService.getActiviteitenByGroupName(groepNaam as string)]);
+        const [activiteiten] = await Promise.all([activiteitenResponse.json()]);
         setActiviteiten(activiteiten);
-    }
+    };
 
     useEffect(() => {
-        getActiviteiten()
-    }, []);
+        if (groepNaam) {
+            getActiviteitenByGroupName();
+        }
+    });
 
     return (
         <>
@@ -23,7 +29,7 @@ const Activiteiten: React.FC = () => {
                 <title>Activiteiten</title>
             </Head>
             <main>
-                <h1>Alle Activiteiten</h1>
+                <h1>Activiteiten {groepNaam}</h1>
                 <section>
                     {activiteiten && (
                         <ActiviteitenOverviewTable activiteiten={activiteiten} />
