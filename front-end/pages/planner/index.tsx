@@ -1,24 +1,37 @@
 import CalendarGrid from "@/components/planner/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
 import ShoppingList from "@/components/planner/ShoppingListSidebar";
+import Head from "next/head";
 
 const MealPlanner: React.FC = () => {
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <main className="p-6">
-          <Greeting />
-          <h1 className="text-2xl font-bold mb-3">Meal Planner</h1>
-          <CalendarGrid />
-        </main>
-      </div>
+    <>
+      <Head>
+        <title>Plateful</title>
+        <meta
+          name="description"
+          content="Plateful - Your personal meal planning and shopping list app"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-      {/* Shopping List Sidebar */}
-      <div className="w-80 flex-shrink-0">
-        <ShoppingList />
-      </div>
-    </div>
+      <main className="flex h-screen overflow-hidden">
+        {/* Main Content */}
+        <section className="flex-1 overflow-auto">
+          <section className="p-6">
+            <Greeting />
+            <h1 className="text-2xl font-bold mb-3">Meal Planner</h1>
+            <CalendarGrid />
+          </section>
+        </section>
+
+        {/* Shopping List Sidebar */}
+        <section className="w-80 flex-shrink-0">
+          <ShoppingList />
+        </section>
+      </main>
+    </>
   );
 };
 
