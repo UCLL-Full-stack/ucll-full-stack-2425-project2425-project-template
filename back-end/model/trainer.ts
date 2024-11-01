@@ -43,4 +43,8 @@ export class Trainer {
     getGymBattles(): GymBattle[] {
         return this.gymBattles;
     }
+    
+    getPokemons(): Pokemon[] { // Getter method for pokemon
+        return this.pokemon;
+    }
 }
