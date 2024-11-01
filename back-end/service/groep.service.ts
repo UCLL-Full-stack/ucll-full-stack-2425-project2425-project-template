@@ -5,4 +5,8 @@ const getGroepByNaam = async (naam: string): Promise<Groep | undefined> => {
     return await groepDB.getGroepByNaam(naam);
 }
 
-export default {getGroepByNaam}
+const getAllGroepen = async (): Promise<Groep[] | undefined> => {
+    return await groepDB.getAllGroepen();
+}
+
+export default {getGroepByNaam, getAllGroepen}

@@ -65,4 +65,28 @@ activiteitRouter.get("/:groepid", async (req: Request, res: Response, next: Next
     }
 });
 
+/**
+ * @swagger
+ * /activiteit:
+ *  get:
+ *     summary: Geeft alle activiteiten
+ *     responses:
+ *         200:
+ *            description: Een array van activiteiten
+ *            content:
+ *                application/json:
+ *                   schema:
+ *                     type: array
+ *                     items:
+ *                        $ref: "#/components/schemas/Activiteit"
+ */
+activiteitRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const activiteiten = await activiteitService.getAllActiviteiten();
+        res.status(200).json(activiteiten);
+    } catch (e) {
+        next(e);
+    }
+});
+
 export {activiteitRouter};

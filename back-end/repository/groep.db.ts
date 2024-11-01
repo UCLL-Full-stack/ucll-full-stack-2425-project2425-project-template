@@ -23,4 +23,8 @@ const getGroepByNaam = async (naam: string): Promise<Groep | undefined> => {
     return groepen.find((g) => g.getNaam().toLowerCase() === naam.toLowerCase());
 }
 
-export default {getGroepByNaam}
+const getAllGroepen = async (): Promise<Groep[] | undefined> => {
+    return groepen;
+}
+
+export default {getGroepByNaam, getAllGroepen}
