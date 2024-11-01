@@ -1,6 +1,6 @@
 import { Admin } from '../model/Admin';
 
-const admins = [
+export const admins = [
     new Admin({
         id: 1,
         username: 'John Doe',

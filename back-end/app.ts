@@ -6,6 +6,8 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { submissionFormRouter } from './controller/Submission_form.routes';
 import { raceRouter } from './controller/Race.routes';
+// import authRoutes from './controller/Auth.routes';
+
 
 const app = express();
 dotenv.config();
@@ -20,6 +22,7 @@ app.get('/status', (req, res) => {
 
 app.use('/submission_forms', submissionFormRouter);
 app.use('/races', raceRouter);
+// app.use('/login', authRoutes);
 
 const swaggerOpts = {
     definition: {
