@@ -3,11 +3,11 @@ import { User } from '../model/user';
 
 const users = [
     new User({
-        id: 0,
+        id: 1,
         username: 'annie',
         password: '@nnie1234',
         profile: new Profile({
-            id: 0,
+            id: 1,
             firstName: 'Anette',
             lastName: 'Hardy',
             email: 'annie@ucll.be',
@@ -15,11 +15,11 @@ const users = [
         }),
     }),
     new User({
-        id: 1,
+        id: 2,
         username: 'shulin',
         password: 'shul!n1234',
         profile: new Profile({
-            id: 1,
+            id: 2,
             firstName: 'Shulin',
             lastName: 'Xu',
             email: 'shulin@ucll.be',
@@ -27,11 +27,11 @@ const users = [
         }),
     }),
     new User({
-        id: 2,
+        id: 3,
         username: 'amelie',
         password: 'h0tchocol@te101',
         profile: new Profile({
-            id: 2,
+            id: 3,
             firstName: 'Amelie',
             lastName: 'Lammens',
             email: 'amelie@ucll.be',
