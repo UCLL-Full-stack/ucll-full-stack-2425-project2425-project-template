@@ -23,8 +23,8 @@ const ActiviteitenOverviewTable: React.FC<Props> = ({activiteiten}: Props) => {
                             <tr key={index}>
                                 <td>{activiteit.naam}</td>
                                 <td>{activiteit.beschrijving}</td>
-                                <td>{activiteit.begindatum}</td>
-                                <td>{activiteit.einddatum}</td>
+                                <td>{new Date(activiteit.begindatum).toLocaleDateString()} {new Date(activiteit.begindatum).toLocaleTimeString()}</td>
+                                <td>{new Date(activiteit.einddatum).toLocaleDateString()} {new Date(activiteit.einddatum).toLocaleTimeString()}</td>
                             </tr>
                         ))}
                     </tbody>
