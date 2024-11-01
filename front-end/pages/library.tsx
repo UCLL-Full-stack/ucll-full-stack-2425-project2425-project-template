@@ -3,17 +3,24 @@ import Header from '@components/header';
 import styles from '@styles/home.module.css';
 import LibraryTable from '@components/libraryTable';
 import { Game } from '@types';
+import { useEffect, useState } from 'react';
+import GameService from '@services/GameService';
+import LibraryService from '@services/LibraryService';
 
 const Library: React.FC = () => {
-    let game1: Game = {
-        id: 0,
-        title: "Game 1",
-        image: "/images/placeholder.png",
-        categories: ["Action", "Adventure"],
-        price: 49.99,
-        discount: 10
-    };
-    const games = [game1];
+    const [games, setGames] = useState<Array<Game>>([]);
+
+    const getGames = async () => {
+        const response = await LibraryService.getAllLibraryGames();
+        const games = await response.json();
+        setGames(games);
+    }
+
+    useEffect(() => {
+            getGames()
+        },
+        []
+    )
 
     return (
         <>
