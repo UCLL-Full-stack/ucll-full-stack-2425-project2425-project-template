@@ -1,7 +1,6 @@
-import { Achievement } from "./achievement";
-import { Category } from "./category";
-import { Game } from "./game";
-import { User } from "./user";
+import { Category } from './category';
+import { Game } from './game';
+import { User } from './user';
 
 export class Speedrun {
     private id?: number;
@@ -14,7 +13,6 @@ export class Speedrun {
     private isValidated: boolean;
     private validator?: User;
     private game: Game;
-    private achievements: Array<Achievement>;
 
     constructor(speedrun: {
         id?: number;
@@ -26,7 +24,6 @@ export class Speedrun {
         speedrunner: User;
         validator?: User;
         game: Game;
-        achievements: Array<Achievement>;
     }) {
         this.validate(speedrun);
 
@@ -39,11 +36,20 @@ export class Speedrun {
         this.isValidated = speedrun.isValidated;
         this.validator = speedrun.validator;
         this.game = speedrun.game;
-        this.achievements = speedrun.achievements || [];
     }
 
-    validate(speedrun: { id?: number; time: number; submitDate: Date; videoLink: string; category: Category; isValidated: boolean; speedrunner: User; validator?: User; game: Game; achievements: Array<Achievement>; }) {
-        throw new Error("Method not implemented.");
+    validate(speedrun: {
+        id?: number;
+        time: number;
+        submitDate: Date;
+        videoLink: string;
+        category: Category;
+        isValidated: boolean;
+        speedrunner: User;
+        validator?: User;
+        game: Game;
+    }) {
+        throw new Error('Method not implemented.');
     }
 
     getId(): number | undefined {
@@ -82,10 +88,6 @@ export class Speedrun {
         return this.game;
     }
 
-    getAchievements(): Array<Achievement> {
-        return this.achievements;
-    }
-
     equals(speedrun: Speedrun): boolean {
         return (
             this.id === speedrun.getId() &&
@@ -95,15 +97,9 @@ export class Speedrun {
             this.category.equals(speedrun.getCategory()) &&
             this.speedrunner.equals(speedrun.getSpeedrunner()) &&
             this.isValidated === speedrun.getIsValidated() &&
-            (
-                (
-                    this.validator === undefined &&
-                    speedrun.getValidator() === undefined
-                ) ||
-                this.validator!.equals(speedrun.getValidator()!)
-            ) &&
-            this.game.equals(speedrun.getGame()) &&
-            this.achievements.every((achievement, index) => achievement.equals(speedrun.getAchievements()[index]))
+            ((this.validator === undefined && speedrun.getValidator() === undefined) ||
+                this.validator!.equals(speedrun.getValidator()!)) &&
+            this.game.equals(speedrun.getGame())
         );
     }
 }

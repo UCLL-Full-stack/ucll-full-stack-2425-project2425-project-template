@@ -1,5 +1,3 @@
-import { Achievement } from "./achievement";
-
 export class Game {
     private id?: number;
     private name: string;
@@ -23,8 +21,14 @@ export class Game {
         this.releaseDate = game.releaseDate;
     }
 
-    validate(game: { id?: number; name: string; genre: string; description: string; releaseDate: Date; }) {
-        throw new Error("Method not implemented.");
+    validate(game: {
+        id?: number;
+        name: string;
+        genre: string;
+        description: string;
+        releaseDate: Date;
+    }) {
+        throw new Error('Method not implemented.');
     }
 
     getId(): number | undefined {
