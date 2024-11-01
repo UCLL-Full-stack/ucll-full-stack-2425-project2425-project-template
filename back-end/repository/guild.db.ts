@@ -1,4 +1,5 @@
 // repository/guildRepository.ts
+import { gu } from 'date-fns/locale';
 import { Guild } from '../model/guild';
 import { Role } from '../model/role';
 import { PermissionEntry, KanbanPermission, DiscordPermission } from '../types';
@@ -10,6 +11,20 @@ const role2_1 = roleDb.getRoleById("role2-1")!;
 const role2_2 = roleDb.getRoleById("role2-2")!;
 const role3_1 = roleDb.getRoleById("role3-1")!;
 const role3_2 = roleDb.getRoleById("role3-2")!;
+
+const guild1Members = [
+    { userId: "user1", roleIds: ["role1-1", "role1-2"] },
+    { userId: "user3", roleIds: ["role1-2"] }
+];
+
+const guild2Members = [
+    { userId: "user1", roleIds: ["role2-1"] },
+    { userId: "user2", roleIds: ["role2-2"] }
+];
+
+const guild3Members = [
+    { userId: "user3", roleIds: ["role3-2"] }
+];
 
 // static data
 const guilds: Guild[] = [
@@ -24,7 +39,8 @@ const guilds: Guild[] = [
         ],
         [
             role1_1, role1_2
-        ]
+        ],
+        guild1Members
     ),
     new Guild(
         "guild2",
@@ -37,7 +53,8 @@ const guilds: Guild[] = [
         ],
         [
             role2_1, role2_2
-        ]
+        ],
+        guild2Members
     ),
     new Guild(
         "guild3",
@@ -51,7 +68,8 @@ const guilds: Guild[] = [
         ],
         [
             role3_1, role3_2
-        ]
+        ],
+        guild3Members
     ),
 ];
 

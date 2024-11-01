@@ -1,18 +1,25 @@
 import { PermissionEntry } from "../types";
 import { Role } from "./role";
 
+interface Member {
+    userId: string;
+    roleIds: string[];
+}
+
 export class Guild{
     private guildId: string;
     private guildName: string;
     private settings: PermissionEntry[];
     private roles: Role[];
+    private members: Member[];
 
-    constructor(guildId: string, guildName: string, settings: PermissionEntry[], roles: Role[]){
+    constructor(guildId: string, guildName: string, settings: PermissionEntry[], roles: Role[], members: Member[]){
         this.validate(guildId, guildName);
         this.guildId = guildId;
         this.guildName = guildName;
         this.settings = settings;
         this.roles = roles;
+        this.members = members;
     }
 
     public setGuildId(guildId: string): void{
@@ -56,7 +63,24 @@ export class Guild{
         return this.roles;
     }
 
-    addSettingsEntry(newEntry: PermissionEntry): void {
+    public addMember(userId: string, roleIds: string[]): void {
+        const existingMember = this.members.find(member => member.userId === userId);
+        if (existingMember) {
+            existingMember.roleIds = Array.from(new Set([...existingMember.roleIds, ...roleIds]));
+        } else {
+            this.members.push({ userId, roleIds });
+        }
+    }
+
+    public removeMember(userId: string): void {
+        this.members = this.members.filter(member => member.userId !== userId);
+    }
+
+    public getMembers(): Member[] {
+        return this.members;
+    }
+
+    public addSettingsEntry(newEntry: PermissionEntry): void {
         const existingEntry = this.settings.find(entry => entry.identifier === newEntry.identifier);
         if (existingEntry) {
             newEntry.kanbanPermission.forEach(permission => {
@@ -69,7 +93,7 @@ export class Guild{
         }
     }
 
-    setSettingsEntries(newEntries: PermissionEntry[]): void {
+    public setSettingsEntries(newEntries: PermissionEntry[]): void {
         newEntries.forEach(newEntry => {
             const existingEntryIndex = this.settings.findIndex(entry => entry.identifier === newEntry.identifier);
             if (existingEntryIndex !== -1) {
@@ -80,7 +104,7 @@ export class Guild{
         });
     }
 
-    removeSettingsEntry(identifier: string): void {
+    public removeSettingsEntry(identifier: string): void {
         this.settings = this.settings.filter(entry => entry.identifier !== identifier);
     }
 
