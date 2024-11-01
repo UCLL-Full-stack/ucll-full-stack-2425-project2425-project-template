@@ -1,4 +1,3 @@
-import { stat } from "fs";
 import { Status } from "./status";
 
 export class Board {
