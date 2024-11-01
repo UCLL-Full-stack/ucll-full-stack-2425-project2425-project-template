@@ -17,16 +17,8 @@ const Header: React.FC = () => {
         >
           Vehicles
         </Link>
-
         <Link
-          href="/skills"
-          className="flex items-center px-4 text-xl text-black  hover:bg-gray-400 rounded-lg"
-        >
-          Skills
-        </Link>
-
-        <Link
-          href="/user"
+          href="/users"
           className=" flex items-center px-4 text-xl text-black  hover:bg-gray-400 rounded-lg"
         >
           User

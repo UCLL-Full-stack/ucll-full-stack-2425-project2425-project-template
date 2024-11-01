@@ -15,7 +15,7 @@ vehicleRouter.get('/', async (req: Request, res: Response) => {
 
 vehicleRouter.post('/', async (req: Request, res: Response) => {
     try{
-        const vehicle = await vehicleService.createVehicle(req.body);
+        const vehicle = await vehicleService.addVehicle(req.body);
         res.status(201).json(vehicle);
     }catch(error){
         res.status(400).json({ status: 'error' });

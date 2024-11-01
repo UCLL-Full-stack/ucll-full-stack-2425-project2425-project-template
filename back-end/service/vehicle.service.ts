@@ -3,7 +3,7 @@ import { VehicleInput } from "../types";
 import vehicleDB from "../repository/vehicle.db";
 
 
-const createVehicle = async (input: VehicleInput): Promise<Vehicle> => {
+const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
     if (!input.manufacturer || !input.model_name || !input.price ||
         !input.fuel_type || !input.transmission_type || !input.year ||
         !input.vehicle_type) {
@@ -27,5 +27,5 @@ const getAllCars = async (): Promise<Vehicle[]> => vehicleDB.getAllCars();
 
 export default {
     getAllCars,
-    createVehicle
+    addVehicle
 }

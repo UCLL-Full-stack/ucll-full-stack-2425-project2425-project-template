@@ -13,7 +13,7 @@ export class Vehicle{
         model_name: string, price: number, fuel_type: string, 
         transmission_type: string, year: number, vehicle_type: string
     }) {
-        this.id == vehicle.id;
+        this.id = vehicle.id;
         this.manufacturer = vehicle.manufacturer;
         this.model_name = vehicle.model_name;
         this.price = vehicle.price;
