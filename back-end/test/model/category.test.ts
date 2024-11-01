@@ -26,3 +26,48 @@ test(`given: valid values for category, when: category is created, then: categor
     expect(category.getDescription()).toEqual(description);
     expect(category.getGame()).toEqual(game);
 });
+
+test(`given: invalid name, when: category is created, then: an error is thrown`, () => {
+    // given
+    const invalidName = ' ';
+    // when
+    const createCategory = () => {
+        new Category({
+            name: invalidName,
+            description,
+            game,
+        });
+    };
+    // then
+    expect(createCategory).toThrow('Name is required.');
+});
+
+test(`given: invalid description, when: category is created, then: an error is thrown`, () => {
+    // given
+    const invalidDescription = ' ';
+    // when
+    const createCategory = () => {
+        new Category({
+            name,
+            description: invalidDescription,
+            game,
+        });
+    };
+    // then
+    expect(createCategory).toThrow('Description is required.');
+});
+
+test(`given: invalid game, when: category is created, then: an error is thrown`, () => {
+    // given
+    const invalidGame: Game = null as any;
+    // when
+    const createCategory = () => {
+        new Category({
+            name,
+            description,
+            game: invalidGame,
+        });
+    };
+    // then
+    expect(createCategory).toThrow('Game is required.');
+});
