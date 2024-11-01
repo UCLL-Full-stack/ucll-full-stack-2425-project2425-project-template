@@ -11,11 +11,11 @@ export class Recipe {
     private category: string; // flexible for custom categories
     private ingredients?: RecipeIngredient[]; // do i make it optional? '?'
     private user: User;
-    private schedules?: Schedule[];
     private imageUrl?: string;
     private isFavorite?: boolean;
     private notes?: string;
     private source?: string;
+    private schedule?: Schedule;
 
     constructor(recipe: {
         id?: number;
@@ -25,11 +25,11 @@ export class Recipe {
         category: string;
         ingredients: RecipeIngredient[];
         user: User;
-        schedules?: Schedule[];
         imageUrl?: string;
         isFavorite?: boolean;
         notes?: string;
         source?: string;
+        schedule?: Schedule;
     }) {
         if (!recipe.title) {
             throw new Error('Title is required');
@@ -54,11 +54,11 @@ export class Recipe {
         this.category = recipe.category;
         this.ingredients = recipe.ingredients;
         this.user = recipe.user;
-        this.schedules = recipe.schedules;
         this.imageUrl = recipe.imageUrl;
         this.isFavorite = recipe.isFavorite;
         this.notes = recipe.notes;
         this.source = recipe.source;
+        this.schedule = recipe.schedule;
     }
 
     getId(): number | undefined {
@@ -176,24 +176,12 @@ export class Recipe {
         this.source = source ? source.trim() : undefined;
     }
 
-    getSchedules(): Schedule[] | undefined {
-        return this.schedules;
+    getSchedule(): Schedule | undefined {
+        return this.schedule;
     }
 
-    setSchedules(schedules: Schedule[]) {
-        this.schedules = schedules;
-    }
-
-    addSchedule(schedule: Schedule) {
-        this.schedules?.push(schedule);
-    }
-
-    removeSchedule(schedule: Schedule) {
-        // returns -1 if index not found
-        const index = this.schedules?.findIndex((s) => s === schedule);
-        if (index !== undefined && index !== -1) {
-            this.schedules?.splice(index, 1);
-        }
+    setSchedule(schedule: Schedule) {
+        this.schedule = schedule;
     }
 
     private isValidUrl(url: string): boolean {

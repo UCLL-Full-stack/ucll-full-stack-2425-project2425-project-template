@@ -8,7 +8,7 @@ export class User {
     private password: string;
     private profile: Profile;
     private recipes?: Recipe[];
-    private schedules?: Schedule[];
+    private schedule?: Schedule;
 
     constructor(user: {
         id?: number;
@@ -16,14 +16,14 @@ export class User {
         password: string;
         profile: Profile;
         recipes?: Recipe[];
-        schedules?: Schedule[];
+        schedule?: Schedule;
     }) {
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
         this.profile = user.profile;
         this.recipes = user.recipes || [];
-        this.schedules = user.schedules || [];
+        this.schedule = user.schedule;
     }
 
     getId(): number | undefined {
@@ -42,23 +42,31 @@ export class User {
         return this.profile;
     }
 
+    setProfile(profile: Profile) {
+        this.profile = profile;
+    }
+
     getRecipes(): Recipe[] | undefined {
         return this.recipes;
     }
 
-    getSchedules(): Schedule[] | undefined {
-        return this.schedules;
+    getSchedules(): Schedule | undefined {
+        return this.schedule;
     }
 
     addRecipe(recipe: Recipe): void {
         this.recipes?.push(recipe);
     }
 
-    addSchedule(schedule: Schedule): void {
-        this.schedules?.push(schedule);
-    }
-
     equals(user: User): boolean {
         return this.username === user.getUsername() && this.password === user.getPassword();
+    }
+
+    getSchedule(): Schedule | undefined {
+        return this.schedule;
+    }
+
+    setSchedule(schedule: Schedule) {
+        this.schedule = schedule;
     }
 }

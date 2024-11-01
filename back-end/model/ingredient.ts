@@ -42,6 +42,10 @@ export class Ingredient {
         return this.recipes;
     }
 
+    setRecipes(recipes: RecipeIngredient[]) {
+        this.recipes = recipes;
+    }
+
     equals(ingredient: Ingredient): boolean {
         return (
             this.name === ingredient.getName() &&

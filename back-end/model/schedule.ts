@@ -22,6 +22,10 @@ export class Schedule {
         return this.user;
     }
 
+    setUser(user: User) {
+        this.user = user;
+    }
+
     getDate(): Date {
         return this.date;
     }
@@ -39,7 +43,6 @@ export class Schedule {
         }
 
         this.recipes?.push(recipe);
-        recipe.addSchedule(this);
     }
 
     removeRecipe(recipe: Recipe) {
@@ -47,7 +50,6 @@ export class Schedule {
         const index = this.recipes?.findIndex((r) => r.getId() === recipe.getId());
         if (index !== undefined && index !== -1) {
             this.recipes?.splice(index, 1);
-            recipe.removeSchedule(this);
         }
     }
 

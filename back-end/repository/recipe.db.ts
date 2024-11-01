@@ -37,7 +37,6 @@ const recipes: Recipe[] = [
             password: '@nnie1234',
             profile: null as unknown as Profile,
         }),
-        schedules: [],
         imageUrl: '',
         isFavorite: true,
         notes: 'Family recipe',
