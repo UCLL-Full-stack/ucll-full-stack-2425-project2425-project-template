@@ -68,7 +68,7 @@ test(`given: valid values for speedrun, when: speedrun is created, then: speedru
 
 test(`given: valid values for speedrun and validator is undefined, when: speedrun is created, then: speedrun is created with those values`, () => {
     // given
-    const undefinedValditor: User | undefined = undefined;
+    const undefinedValidator: User | undefined = undefined;
     // when
     const speedrun = new Speedrun({
         time,
@@ -77,7 +77,7 @@ test(`given: valid values for speedrun and validator is undefined, when: speedru
         category,
         speedrunner,
         isValidated,
-        validator: undefinedValditor,
+        validator: undefinedValidator,
         game,
     });
     // then
@@ -87,6 +87,6 @@ test(`given: valid values for speedrun and validator is undefined, when: speedru
     expect(speedrun.getCategory()).toEqual(category);
     expect(speedrun.getSpeedrunner()).toEqual(speedrunner);
     expect(speedrun.getIsValidated()).toEqual(isValidated);
-    expect(speedrun.getValidator()).toEqual(undefinedValditor);
+    expect(speedrun.getValidator()).toEqual(undefinedValidator);
     expect(speedrun.getGame()).toEqual(game);
 });
