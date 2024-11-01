@@ -4,11 +4,24 @@ import { Review } from "../model/review";
 const products = [
     new Product({
         id: 1,
-        name: "toy train",
+        name: "Toy Train",
         price: 35.10,
-        description: "A toy train from the ABD company suitable for children aged 5-12 years old",
+        description: "A toy train from the ABD company suitable for children aged 5-12 years old.",
         stock: 10,
-        reviews: []
+        reviews: [
+            new Review({
+                id: 1,
+                score: 1,
+                comment: "The toy broke after one use. Very disappointing.",
+                date: new Date('2024-01-10')
+            }),
+            new Review({
+                id: 2,
+                score: 5,
+                comment: "My kids love this toy train! Great quality and fun to play with.",
+                date: new Date('2024-01-15')
+            })
+        ]
     }),
     new Product({
         id: 2,
