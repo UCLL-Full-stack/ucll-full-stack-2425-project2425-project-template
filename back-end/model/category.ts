@@ -16,7 +16,7 @@ export class Category {
     }
 
     validate(category: { id?: number; name: string; description: string; game: Game }) {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     getId(): number | undefined {

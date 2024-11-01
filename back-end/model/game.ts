@@ -28,7 +28,7 @@ export class Game {
         description: string;
         releaseDate: Date;
     }) {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     getId(): number | undefined {

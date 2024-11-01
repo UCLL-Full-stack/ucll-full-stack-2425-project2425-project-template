@@ -49,7 +49,7 @@ export class Speedrun {
         game: Game;
         category: Category;
     }) {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     getId(): number | undefined {

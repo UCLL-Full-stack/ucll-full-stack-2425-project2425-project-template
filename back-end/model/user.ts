@@ -1,4 +1,4 @@
-import { Role } from "../types";
+import { Role } from '../types';
 
 export class User {
     private id?: number;
@@ -7,7 +7,6 @@ export class User {
     private password: string;
     private signUpDate: Date;
     private role: Role;
-
 
     constructor(user: {
         id?: number;
@@ -19,7 +18,6 @@ export class User {
     }) {
         this.validate(user);
 
-
         this.id = user.id;
         this.username = user.username;
         this.email = user.email;
@@ -28,8 +26,14 @@ export class User {
         this.role = user.role;
     }
 
-    validate(user: { id?: number; username: string; password: string; signUpDate: Date; role: Role; }) {
-        throw new Error("Method not implemented.");
+    validate(user: {
+        id?: number;
+        username: string;
+        password: string;
+        signUpDate: Date;
+        role: Role;
+    }) {
+        // throw new Error("Method not implemented.");
     }
 
     getId(): number | undefined {
@@ -65,6 +69,5 @@ export class User {
             this.signUpDate.getTime() === user.getSignUpDate().getTime() &&
             this.role === user.getRole()
         );
-
     }
 }
