@@ -1,6 +1,10 @@
 import { Player } from '../model/player';
 import { User } from '../model/user';
+/* 
 
+SETUP
+
+*/
 const xander = new User({
     name: 'Xander',
     email: 'xander.dhondt@student.ucll.be',
@@ -40,3 +44,26 @@ const players = [
         user: cedric,
     }),
 ];
+
+/* 
+
+FUNCTIONALITY
+
+*/
+
+const getAllPlayers = (): Player[] => {
+    return players;
+};
+
+const getPlayerById = (id: number): Player => {
+    const player = players.find((player) => player.getId() === id);
+    if (!player) {
+        throw new Error(`player with id ${id} does not exist.`);
+    }
+    return player;
+};
+
+export default {
+    getAllPlayers,
+    getPlayerById,
+};
