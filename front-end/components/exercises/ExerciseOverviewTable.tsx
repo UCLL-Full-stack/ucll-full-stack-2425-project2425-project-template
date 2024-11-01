@@ -1,35 +1,23 @@
 import { Exercise } from "@/types";
-import { useState } from "react";
 import { Plus } from "react-feather";
 
 type Props = {
   exercises: Array<Exercise>;
-  onAddExercise: (exercise: Exercise) => void;
+  onAddExercise?: (exercise: Exercise) => void;
+  showAddButton?: boolean;
 };
 
 const ExerciseOverviewTable: React.FC<Props> = ({
   exercises,
   onAddExercise,
+  showAddButton = true,
 }) => {
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null
-  );
-
-  const handleRowClick = (exercise: Exercise) => {
-    setSelectedExercise(exercise);
-  };
-
-  const handleAddExercise = (exercise: Exercise) => {
-    onAddExercise(exercise);
-  };
-
   return (
     <div className="space-y-6">
       {exercises.map((exercise, index) => (
         <div
           key={index}
-          onClick={() => handleRowClick(exercise)}
-          className="bg-white shadow-md rounded-lg border border-gray-200 p-6 cursor-pointer hover:bg-gray-50 transition-colors"
+          className="bg-white shadow-md rounded-lg border border-gray-200 p-6"
         >
           <h2 className="text-lg font-semibold text-gray-800">
             {exercise.name}
@@ -43,15 +31,14 @@ const ExerciseOverviewTable: React.FC<Props> = ({
           >
             Watch Video
           </a>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAddExercise(exercise);
-            }}
-            className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            <Plus className="mr-2" /> Add to Workout
-          </button>
+          {showAddButton && onAddExercise && (
+            <button
+              onClick={() => onAddExercise(exercise)}
+              className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              <Plus className="mr-2" /> Add to Workout
+            </button>
+          )}
         </div>
       ))}
     </div>

@@ -13,7 +13,9 @@ const WorkoutInfo: React.FC<Props> = ({ workout }: Props) => {
         <div className="mt-4 bg-white p-6 shadow-md rounded-lg border border-gray-200">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">{workout.name}</h2>
-            <Link href="/exercises">
+            <Link
+              href={`/exercises?workoutId=${workout.workout_id}&showAddButton=true`}
+            >
               <button className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                 <Plus className="mr-2" /> Add Exercises
               </button>

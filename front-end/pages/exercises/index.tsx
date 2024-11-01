@@ -1,13 +1,17 @@
 import ExerciseOverviewTable from "@/components/exercises/ExerciseOverviewTable";
 import Header from "@/components/header";
 import ExerciseService from "@/services/exercise/ExerciseService";
+import workoutService from "@/services/workout/WorkoutService";
 import { Exercise } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const Exercises: React.FC = () => {
   const [exercises, setExercises] = useState<Array<Exercise>>();
   const [error, setError] = useState<string>();
+  const router = useRouter();
+  const { workoutId, showAddButton } = router.query; 
 
   const getExercises = async () => {
     try {
@@ -19,8 +23,25 @@ const Exercises: React.FC = () => {
     }
   };
 
-  const handleAddExercise = (exercise: Exercise) => {
-    console.log(`Exercise ${exercise.name} added to workout`);
+  const handleAddExercise = async (exercise: Exercise) => {
+    if (!workoutId) {
+      setError("Workout ID is not provided.");
+      return;
+    }
+
+    try {
+      const response = await workoutService.addExerciseToWorkout(
+        parseInt(workoutId as string),
+        exercise.id
+      );
+      if (!response.ok) {
+        throw new Error("Failed to add exercise to workout.");
+      }
+      router.push("/workouts");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to add exercise to workout.");
+    }
   };
 
   useEffect(() => {
@@ -45,6 +66,7 @@ const Exercises: React.FC = () => {
               <ExerciseOverviewTable
                 exercises={exercises}
                 onAddExercise={handleAddExercise}
+                showAddButton={showAddButton === "true"} 
               />
             ) : (
               <p className="text-center text-gray-600">Loading exercises...</p>
