@@ -34,4 +34,17 @@ export class RecipeIngredient {
     getQuantity(): number {
         return this.quantity;
     }
+
+    setRecipe(recipe: Recipe) {
+        this.recipe = recipe;
+    }
+
+    equals(recipeIngredient: RecipeIngredient): boolean {
+        return (
+            this.recipe === recipeIngredient.getRecipe() &&
+            this.ingredient === recipeIngredient.getIngredient() &&
+            this.unit === recipeIngredient.getUnit() &&
+            this.quantity === recipeIngredient.getQuantity()
+        );
+    }
 }

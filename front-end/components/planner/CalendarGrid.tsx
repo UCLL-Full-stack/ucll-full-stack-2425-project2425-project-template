@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import RightClickMenu from "./RightClickMenu";
 
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const months = [
@@ -186,55 +187,67 @@ const CalendarGrid = () => {
           ))}
 
           {getDaysInGrid(currentDate).map((date, index) => (
-            <div
+            <RightClickMenu
               key={index}
-              className={`border p-2 h-24 relative cursor-pointer transition-colors duration-200 ${
-                isOtherMonth(date)
-                  ? isPastDate(date)
-                    ? "bg-gray-100 text-gray-300"
-                    : "bg-gray-100 text-gray-500"
-                  : isPastDate(date)
-                  ? "bg-white text-gray-400"
-                  : "bg-white"
-              } ${
-                selectedDates.some((d) => d.getTime() === date.getTime())
-                  ? "bg-blue-200 ring-1 ring-blue-400"
-                  : ""
-              } hover:bg-blue-100`}
-              onClick={() => handleDateClick(date)}
-              onMouseEnter={() => setHoveredDate(date)}
-              onMouseLeave={() => setHoveredDate(null)}
+              onAddNewMeal={() => console.log("Add New Meal", date)}
+              onAddExistingMeal={() => console.log("Add Existing Meal", date)}
+              onAddFavoriteMeal={() => console.log("Add Favorite Meal", date)}
+              onDeleteMeal={() => console.log("Delete Meal", date)}
+              onCopyMeal={() => console.log("Copy Meal", date)}
+              onPasteMeal={() => console.log("Paste Meal", date)}
             >
-              <span
-                className={`text-sm ${
-                  isToday(date)
-                    ? "rounded-full bg-gray-800 text-white w-6 h-6 absolute flex items-center justify-center"
+              <div
+                key={index}
+                className={`border p-2 h-24 relative cursor-pointer transition-colors duration-200 ${
+                  isOtherMonth(date)
+                    ? isPastDate(date)
+                      ? "bg-gray-100 text-gray-300"
+                      : "bg-gray-100 text-gray-500"
+                    : isPastDate(date)
+                    ? "bg-white text-gray-400"
+                    : "bg-white"
+                } ${
+                  selectedDates.some((d) => d.getTime() === date.getTime())
+                    ? "bg-blue-200 ring-1 ring-blue-400"
                     : ""
-                }`}
+                } hover:bg-blue-100`}
+                onClick={() => handleDateClick(date)}
+                onMouseEnter={() => setHoveredDate(date)}
+                onMouseLeave={() => setHoveredDate(null)}
               >
-                {date.getDate()}
-              </span>
-              {(selectionModeActive ||
-                hoveredDate?.getTime() === date.getTime() ||
-                selectedDates.some((d) => d.getTime() === date.getTime())) && (
-                <Checkbox
-                  checked={selectedDates.some(
+                <span
+                  className={`text-sm ${
+                    isToday(date)
+                      ? "rounded-full bg-gray-800 text-white w-6 h-6 absolute flex items-center justify-center"
+                      : ""
+                  }`}
+                >
+                  {date.getDate()}
+                </span>
+                {(selectionModeActive ||
+                  hoveredDate?.getTime() === date.getTime() ||
+                  selectedDates.some(
                     (d) => d.getTime() === date.getTime()
-                  )}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setSelectedDates((prev) => [...prev, date]);
-                    } else {
-                      setSelectedDates((prev) =>
-                        prev.filter((d) => d.getTime() !== date.getTime())
-                      );
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="absolute top-2 right-2"
-                />
-              )}
-            </div>
+                  )) && (
+                  <Checkbox
+                    checked={selectedDates.some(
+                      (d) => d.getTime() === date.getTime()
+                    )}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedDates((prev) => [...prev, date]);
+                      } else {
+                        setSelectedDates((prev) =>
+                          prev.filter((d) => d.getTime() !== date.getTime())
+                        );
+                      }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute top-2 right-2"
+                  />
+                )}
+              </div>
+            </RightClickMenu>
           ))}
         </section>
       </CardContent>
