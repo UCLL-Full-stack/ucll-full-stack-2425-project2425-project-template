@@ -9,4 +9,14 @@ const getTrainerById = (id: number): Trainer => {
     return trainer
 };
 
-export default {getAllTrainers, getTrainerById}; 
+const getTrainerWithPokemon = (id: number): Trainer | null => {
+    const trainer = trainerDb.getTrainerById({ id });
+    if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);
+    return trainer;
+};
+
+export default {
+    getAllTrainers,
+    getTrainerById,
+    getTrainerWithPokemon,
+};

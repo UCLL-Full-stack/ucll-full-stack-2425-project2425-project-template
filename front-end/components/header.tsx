@@ -8,9 +8,6 @@ const Header: React.FC = () => {
         PokéPal
       </a>
       <nav className="nav justify-content-center">
-      <Link href="/trainers" className="nav-link px-4 fs-5 text-white">
-          trainers
-        </Link>
         <Link href="/pokemons" className="nav-link px-4 fs-5 text-white">
           pokemons
         </Link>

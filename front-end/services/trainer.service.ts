@@ -10,7 +10,7 @@ const TrainerService = {
       throw new Error('Failed to fetch trainers');
     }
     const data = await response.json();
-    return data as Trainer[]; // Assert the type if needed
+    return data as Trainer[]; 
   },
 };
 
