@@ -4,13 +4,9 @@ import EventOverview from '@components/events/EventOverview'
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import styles from '@styles/home.module.css';
+import { EventInput } from "types";
 
-const UpcomingEvents: React.FC = () => {
-    type Event = {
-        date: string;
-        // Add other properties of Event here
-    };
-    
+const UpcomingEvents: React.FC = () => {    
     const [events, setEvents] = useState<Array<Event>>();
 
     useEffect(() => {
@@ -22,7 +18,7 @@ const UpcomingEvents: React.FC = () => {
         const events = await response.json();
 
         // Sort events by date
-        const sortedEvents = events.sort((a: Event, b: Event) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         setEvents(sortedEvents);
     };

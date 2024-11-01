@@ -1,11 +1,19 @@
-import { Event } from "@types";
+import { EventInput } from "@types";
 import styles from '@styles/home.module.css';
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 type Props = {
-    events: Event[];
+    events: EventInput[];
 };
 
 const EventOverview: React.FC<Props> = ({events}: Props) => {
+
+    const router = useRouter();
+
+    const handleEventClick = (eventId: number) => {
+        router.push(`/upcoming-events/${eventId}`);
+    };
 
     return (
         <>
@@ -17,6 +25,8 @@ const EventOverview: React.FC<Props> = ({events}: Props) => {
                     key={index} 
                     className={styles.event}
                     style={{ backgroundImage: `url(${event.backgroundImage})` }}
+                    onClick={() => handleEventClick(event.id)}
+                    role="button"
                   >
                     <div className={styles.overlay}></div>
                     <h3>{event.name}</h3>

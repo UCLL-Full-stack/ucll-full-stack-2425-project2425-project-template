@@ -11,8 +11,18 @@ const getAll = () => {
   });
 };
 
+const getEventById = (eventId: string) => {
+  return fetch(apiUrl + `/events/${eventId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
 const EventService = {
   getAll,
+  getEventById,
 }
 
 export default EventService;
