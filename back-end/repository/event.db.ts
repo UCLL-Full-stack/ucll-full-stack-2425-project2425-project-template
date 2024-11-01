@@ -6,8 +6,6 @@ const createEvent = (event: Event): Event =>{
     return event;
 }
 
-
-
 const events = [
     new Event({
         id: 1,
@@ -91,8 +89,6 @@ const events = [
         category: 'Small-Event',
         backgroundImage: '/images/wine-tasting-evening.jpg',
     }),
-
-
 ];
 
 const getAllEvents = (): Event[] => {
