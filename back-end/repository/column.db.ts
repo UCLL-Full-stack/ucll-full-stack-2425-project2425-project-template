@@ -22,8 +22,9 @@ const getColumnById = (columnId: string): Column | null => {
     return columns.find(column => column.getColumnId() === columnId) || null;
 }
 
-const addColumn = (column: Column): void => {
-    columns.push(column);
+const addColumn = (column: { columnId: string, columnName: string, tasks: Task[]}): void => {
+    const newColumn = new Column(column.columnId, column.columnName, column.tasks);
+    columns.push(newColumn);
 }
 
 const removeColumn = (columnId: string): void => {

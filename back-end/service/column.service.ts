@@ -10,8 +10,12 @@ const getColumn = (columnId: string) => {
     return columnDb.getColumnById(columnId);
 }
 
-const createColumn = (column: Column) => {
-    columnDb.addColumn(column);
+const createColumn = (column: {columnId: string, columnName: string, tasks: Task[]}) => {
+    columnDb.addColumn({
+        columnId: column.columnId,
+        columnName: column.columnName,
+        tasks: column.tasks
+    });
 }
 
 const deleteColumn = (columnId: string) => {

@@ -1,48 +1,66 @@
 import { Request, Response, NextFunction } from 'express';
 import { DiscordPermission, KanbanPermission, Member, PermissionEntry } from '../types';
+import userDb from '../repository/user.db';
+import guildDb from '../repository/guild.db';
 
 export const validateBoard = (req: Request, res: Response, next: NextFunction) => {
     const { boardName, createdByUser, guild, columns, permissions } = req.body;
+    const errors: string[] = [];
     if (!boardName || typeof boardName !== 'string' || boardName.length < 3 || boardName.length > 50) {
-        return res.status(400).json({ error: 'Invalid board name. It must be a string between 3 and 50 characters.' });
+        errors.push('Invalid board name. It must be a string between 3 and 50 characters.');
     }
     if (!createdByUser) {
-        return res.status(400).json({ error: 'Board must have a creator.' });
+        errors.push('Board must have a creator.');
+    } else if (typeof createdByUser === 'string') {
+        const userExists = userDb.getUserById(createdByUser);
+        if (!userExists) {
+            errors.push('User does not exist.');
+        }
+    } else if (typeof createdByUser === 'object' && createdByUser.userId) {
+        const userExists = userDb.getUserById(createdByUser.userId);
+        if (!userExists) {
+            errors.push('User does not exist.');
+        }
     }
     if (!guild) {
-        return res.status(400).json({ error: 'Board must be associated with a guild.' });
+        errors.push('Board must be associated with a guild.');
+    } else if (typeof guild === 'string') {
+        const guildExists = guildDb.getGuildById(guild);
+        if (!guildExists) {
+            errors.push('Guild does not exist.');
+        }
+    } else if (typeof guild === 'object' && guild.guildId) {
+        const guildExists = guildDb.getGuildById(guild.guildId);
+        if (!guildExists) {
+            errors.push('Guild does not exist.');
+        }
     }
     if (!columns || !Array.isArray(columns)) {
-        return res.status(400).json({ error: 'Invalid columns.' });
-    }
-    if (columns.length === 0) {
-        return res.status(400).json({ error: 'Board must have at least one column.' });
+        errors.push('Invalid columns. It must be an array.');
     }
     if (!permissions || !Array.isArray(permissions)) {
-        return res.status(400).json({ error: 'Invalid permissions.' });
-    }
-    if(permissions.length === 0) {
-        return res.status(400).json({ error: 'Board must have at least one permission.' });
+        errors.push('Invalid permissions. It must be an array.');
     }
     for (const permission of permissions) {
         if (!permission || typeof permission !== 'object') {
-            return res.status(400).json({ error: 'Invalid permission entry. It must be an object.' });
-        }
-        if (!permission.identifier || 
-            (typeof permission.identifier !== 'string' && !Object.values(DiscordPermission).includes(permission.identifier))) {
-            return res.status(400).json({ error: 'Invalid permission identifier. It must be a valid DiscordPermission.' });
-        }
-        if (!permission.kanbanPermission || !Array.isArray(permission.kanbanPermission) || permission.kanbanPermission.length === 0) {
-            return res.status(400).json({ error: 'Invalid kanban permissions. It must be a non-empty array of KanbanPermission.' });
-        }
-        for (const perm of permission.kanbanPermission) {
-            if (!Object.values(KanbanPermission).includes(perm)) {
-                return res.status(400).json({ error: `Invalid kanban permission: ${perm}.` });
+            errors.push('Invalid permission entry. It must be an object.');
+        } else {
+            if (!permission.identifier || 
+                (typeof permission.identifier !== 'string' && !Object.values(DiscordPermission).includes(permission.identifier))) {
+                errors.push('Invalid permission identifier. It must be a valid DiscordPermission.');
+            }
+            if (!permission.kanbanPermission || !Array.isArray(permission.kanbanPermission) || permission.kanbanPermission.length === 0) {
+                errors.push('Invalid kanban permissions. It must be a non-empty array of KanbanPermission.');
+            }
+            for (const perm of permission.kanbanPermission) {
+                if (!Object.values(KanbanPermission).includes(perm)) {
+                    errors.push(`Invalid kanban permission: ${perm}.`);
+                }
             }
         }
     }
-    for (const column of columns) {
-        validateColumn({ body: column } as Request, res, next);
+    if (errors.length) {
+        return res.status(400).json({ errors });
     }
     next();
 };
