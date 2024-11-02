@@ -2,20 +2,26 @@ import { Role } from '../types';
 
 export class User {
     private id?: number;
-    private name: string;
+    private firstName: string;
+    private lastName: string;
+    private email: string;
     private password: string;
     private role: Role;
 
     constructor(user: {
         id?: number;
-        name: string;
+        firstName: string;
+        lastName: string;
+        email: string;
         password: string;
         role: Role;
     }) {
         this.validate(user);
 
         this.id = user.id;
-        this.name = user.name;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.email = user.email;
         this.password = user.password;
         this.role = user.role;
     }
@@ -24,8 +30,15 @@ export class User {
         return this.id;
     }
 
-    getName(): string {
-        return this.name;
+    getFirstName(): string {
+        return this.firstName;
+    }
+    getLastName(): string {
+        return this.lastName;
+    }
+
+    getEmail(): string {
+        return this.email;
     }
 
     getPassword(): string {
@@ -37,12 +50,20 @@ export class User {
     }
 
     validate(user: {
-        name: string;
+        firstName: string;
+        lastName: string;
+        email: string;
         password: string;
         role: Role;
     }) {
-        if (!user.name?.trim()) {
-            throw new Error('Name is required');
+        if (!user.firstName?.trim()) {
+            throw new Error('First name is required');
+        }
+        if (!user.lastName?.trim()) {
+            throw new Error('Last name is required');
+        }
+        if (!user.email?.trim()) {
+            throw new Error('Email is required');
         }
         if (!user.password?.trim()) {
             throw new Error('Password is required');
@@ -54,7 +75,9 @@ export class User {
 
     equals(user: User): boolean {
         return (
-            this.name === user.getName() &&
+            this.firstName === user.getFirstName() &&
+            this.lastName === user.getLastName() &&
+            this.email === user.getEmail() &&
             this.password === user.getPassword() &&
             this.role === user.getRole()
         );
