@@ -73,7 +73,11 @@ const deleteBoard = (boardId: string): void => {
     boardDb.removeBoard(boardId);
 }
 
-const addColumnToBoard = (boardId: string, column: Column): void => {
+const addColumnToBoard = (boardId: string, columnData: any): void => {
+    const { columnName } = columnData;
+    const columnId = `column${boardDb.getColumnsByBoardId(boardId).length + 1}-${boardId.slice(5)}`;
+    columnDb.addColumn({ columnId, columnName, tasks: [] as Task[] });
+    const column = columnDb.getColumnById(columnId)!;
     boardDb.addColumnToBoard(boardId, column);
 }
 
