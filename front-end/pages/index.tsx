@@ -41,7 +41,7 @@ const OverviewPage: React.FC = () => {
 
       <section className={styles['navigation-links']}>
         <h2>Plan Your Adventure</h2>
-        <Link href="/destinations">Browse Destinations</Link>
+        <Link href="/trips">Browse Trips</Link>
         <Link href="/bookings">View Bookings</Link>
       </section>
     </div>
