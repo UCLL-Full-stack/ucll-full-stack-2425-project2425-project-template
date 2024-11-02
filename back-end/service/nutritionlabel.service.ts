@@ -15,7 +15,7 @@ const createNutritionlabel = (nutritionlabel: NutritionlabelInput): Nutritionlab
     const newNutritionlabel = new Nutritionlabel(nutritionlabel);
     const createdNutritionLabel = nutritionlabelDb.create(newNutritionlabel);
     if (!createdNutritionLabel) {
-        throw new Error('Could not create nutrition label');
+        throw new Error('Could not create nutritionlabel');
     }
 
     return createdNutritionLabel;

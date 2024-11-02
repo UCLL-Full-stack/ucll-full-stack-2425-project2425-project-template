@@ -32,9 +32,16 @@ const getAll = (): Nutritionlabel[] => {
         throw new Error('Could not get all nutritionlabels');
     }
 };
-
 const create = (nutritionlabel: Nutritionlabel): Nutritionlabel => {
     try {
+        const exists = nutritionlabels.some(
+            (existingNutritionlabel) => existingNutritionlabel.getId() === nutritionlabel.getId()
+        );
+
+        if (exists) {
+            throw new Error('Nutritionlabel already exists');
+        }
+
         nutritionlabels.push(nutritionlabel);
         return nutritionlabel;
     } catch (error) {

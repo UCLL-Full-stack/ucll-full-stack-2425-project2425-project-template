@@ -1,32 +1,45 @@
 /**
  * @swagger
- *   components:
+ * tags:
+ *   - name: Items
+ *     description: Operations for managing items in the store
+ *
+ * components:
  *    schemas:
  *      Category:
  *        type: string
  *        enum: [fruits, vegetables, dairy]
  *        description: The category of the item
+ *        example: fruits
  *      Item:
  *        type: object
+ *        description: Represents a grocery store item with its details
  *        properties:
  *          id:
  *            type: integer
  *            format: int64
+ *            description: Unique identifier for the item
+ *            example: 1
  *          name:
  *            type: string
  *            description: Item name
+ *            example: "Orange"
  *          price:
  *            type: number
- *            description: Item's price
+ *            description: Item's price in dollars
+ *            example: 1.99
+ *            minimum: 0
  *          pathToImage:
  *            type: string
- *            description: Path to the item's image
+ *            description: Path to the item's image in the server
+ *            example: "/images/orange.png"
  *          category:
  *            $ref: '#/components/schemas/Category'
- *          nutritionLabel:
+ *          Nutritionlabel:
  *            $ref: '#/components/schemas/NutritionLabelInput'
  *      ItemInput:
  *        type: object
+ *        description: Input schema for creating a new item
  *        required:
  *          - name
  *          - price
@@ -37,19 +50,23 @@
  *            type: string
  *            description: Item name
  *            example: "Orange"
+ *            minLength: 1
+ *            maxLength: 100
  *          price:
  *            type: number
- *            description: Item's price
+ *            description: Item's price in dollars
  *            example: 1.99
+ *            minimum: 0
  *          pathToImage:
  *            type: string
  *            description: Path to the item's image
  *            example: "/images/orange.png"
+ *            pattern: "^/images/.*\\.(jpg|jpeg|png)$"
  *          category:
  *            $ref: '#/components/schemas/Category'
- *            example: "fruits"
  *      NutritionLabelInput:
  *        type: object
+ *        description: Nutritional information for a food item
  *        required:
  *          - energy
  *          - fat
@@ -61,32 +78,39 @@
  *        properties:
  *          energy:
  *            type: number
- *            description: Energy in kcal
+ *            description: Energy content in kcal
  *            example: 50
+ *            minimum: 0
  *          fat:
  *            type: number
- *            description: Fat in grams
+ *            description: Total fat content in grams
  *            example: 0.3
+ *            minimum: 0
  *          saturatedFats:
  *            type: number
- *            description: Saturated fats in grams
+ *            description: Saturated fats content in grams
  *            example: 0.1
+ *            minimum: 0
  *          carbohydrates:
  *            type: number
- *            description: Carbohydrates in grams
+ *            description: Total carbohydrates in grams
  *            example: 12
+ *            minimum: 0
  *          sugar:
  *            type: number
- *            description: Sugar in grams
+ *            description: Sugar content in grams
  *            example: 10
+ *            minimum: 0
  *          protein:
  *            type: number
- *            description: Protein in grams
+ *            description: Protein content in grams
  *            example: 0.9
+ *            minimum: 0
  *          salts:
  *            type: number
- *            description: Salts in grams
+ *            description: Salt content in grams
  *            example: 0.01
+ *            minimum: 0
  */
 
 import express, { NextFunction, Request, Response } from 'express';
@@ -99,9 +123,12 @@ const itemRouter = express.Router();
  * /items:
  *   get:
  *     summary: Get a list of all items
+ *     description: Retrieve a list of all grocery items available in the store
+ *     tags:
+ *       - Items
  *     responses:
  *       200:
- *         description: A list of items
+ *         description: A list of items retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -110,6 +137,14 @@ const itemRouter = express.Router();
  *                 $ref: '#/components/schemas/Item'
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error occurred"
  */
 
 itemRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -126,22 +161,43 @@ itemRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * /items/{itemId}:
  *   get:
  *     summary: Get an item by ID
+ *     description: Retrieve detailed information about a specific item using its ID
+ *     tags:
+ *       - Items
  *     parameters:
  *       - in: path
  *         name: itemId
  *         required: true
  *         schema:
  *           type: integer
- *         description: The ID of the item
+ *         description: Numeric ID of the item to retrieve
+ *         example: 1
  *     responses:
  *       200:
- *         description: The item
+ *         description: Item retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Item'
+ *       404:
+ *         description: Item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item not found"
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 itemRouter.get('/:itemId', async (req: Request, res: Response, next: NextFunction) => {
@@ -159,6 +215,9 @@ itemRouter.get('/:itemId', async (req: Request, res: Response, next: NextFunctio
  * /items:
  *   post:
  *     summary: Create a new item
+ *     description: Add a new item to the store's inventory
+ *     tags:
+ *       - Items
  *     requestBody:
  *       required: true
  *       content:
@@ -167,13 +226,30 @@ itemRouter.get('/:itemId', async (req: Request, res: Response, next: NextFunctio
  *             $ref: '#/components/schemas/ItemInput'
  *     responses:
  *       201:
- *         description: The created item
+ *         description: Item created successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Item'
+ *       400:
+ *         description: Invalid input
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid input data"
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 itemRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -189,14 +265,18 @@ itemRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  * @swagger
  * /items/{itemId}/addNutritionlabel:
  *   post:
- *     summary: Add a nutrition label to an item
+ *     summary: Add a nutritionlabel to an item
+ *     description: Add or update nutritional information for a specific item
+ *     tags:
+ *       - Items
  *     parameters:
  *       - in: path
  *         name: itemId
  *         required: true
  *         schema:
  *           type: integer
- *         description: The ID of the item
+ *         description: Numeric ID of the item to update
+ *         example: 1
  *     requestBody:
  *       required: true
  *       content:
@@ -205,13 +285,40 @@ itemRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *             $ref: '#/components/schemas/NutritionLabelInput'
  *     responses:
  *       200:
- *         description: The item with the nutrition label added
+ *         description: Nutritionlabel added successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Item'
+ *       404:
+ *         description: Item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item not found"
+ *       400:
+ *         description: Invalid input
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid nutritionlabel data"
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 itemRouter.post(

@@ -31,13 +31,16 @@ const getAll = (): Item[] => {
 
 const create = (item: Item): Item => {
     try {
-        if (items.includes(item)) {
+        const exists = items.find((existingItem) => existingItem.getId() === item.getId());
+
+        if (exists) {
             throw new Error('Item already exists');
         }
+
         items.push(item);
         return item;
     } catch (error) {
-        console.log(error);
+        console.error('Error creating item:', error);
         throw new Error('Could not create item');
     }
 };

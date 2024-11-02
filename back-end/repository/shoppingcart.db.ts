@@ -41,9 +41,14 @@ const getById = (id: number): Shoppingcart | undefined => {
 
 const create = (shoppingcart: Shoppingcart): Shoppingcart => {
     try {
-        if (shoppingcarts.includes(shoppingcart)) {
+        const exists = shoppingcarts.some(
+            (existingShoppingcart) => existingShoppingcart.getId() === shoppingcart.getId()
+        );
+
+        if (exists) {
             throw new Error('Shoppingcart already exists');
         }
+
         shoppingcarts.push(shoppingcart);
         return shoppingcart;
     } catch (error) {

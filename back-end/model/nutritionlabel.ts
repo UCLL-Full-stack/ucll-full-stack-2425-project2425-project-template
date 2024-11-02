@@ -22,6 +22,7 @@ export class Nutritionlabel {
         salts: number;
     }) {
         this.validate(nutritionlabel);
+        this.id = nutritionlabel.id;
         this.energy = nutritionlabel.energy;
         this.fat = nutritionlabel.fat;
         this.saturatedFats = nutritionlabel.saturatedFats;
