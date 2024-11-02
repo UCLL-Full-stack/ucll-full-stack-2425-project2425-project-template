@@ -1,4 +1,4 @@
-import { Account } from "./account";
+import { Account } from './account';
 
 export class Bank {
     private id?: number;
@@ -7,7 +7,13 @@ export class Bank {
     private address: string;
     private accounts: Account[];
 
-    constructor(bank: { id?: number; bankName: string; phoneNumber: string; address: string; accounts: Account[] }) {
+    constructor(bank: {
+        id?: number;
+        bankName: string;
+        phoneNumber: string;
+        address: string;
+        accounts: Account[];
+    }) {
         this.id = bank.id;
         this.bankName = bank.bankName;
         this.phoneNumber = bank.phoneNumber;
