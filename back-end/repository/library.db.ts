@@ -1,23 +1,29 @@
 import { Game } from '../model/game';
+import { Library } from '../model/library';
+import gameDb from './game.db';
 
-const libraryGames = [
-    new Game({
+const libraries = [
+    new Library({
         id: 1,
-        title: "Epic Quest",
-        image: "/images/placeholder.png",
-        categories: ["Adventure", "RPG"],
-        price: 59.99
+        games: [gameDb.getGameById(1)!],
+        achievements: 0,
+        timePlayed: 0
     })
-];
+]
 
-const getAllLibraryGames = (): Game[] => libraryGames;
+const getAllLibraryGames = (library: Library): Game[] => library.getGames();
 
-const addGameToLibrary = (game: Game): Game => {
-    libraryGames.push(game);
+const getLibraryById = (id: number ): Library | null => {
+    return libraries.find((library) => library.getId() === id) || null;
+};
+
+const addGameToLibrary = (library: Library, game: Game): Game => {
+    library.getGames().push(game);
     return game;
 }
 
 export default {
+    getLibraryById,
     getAllLibraryGames,
     addGameToLibrary,
 };

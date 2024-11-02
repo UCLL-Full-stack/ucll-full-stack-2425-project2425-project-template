@@ -3,7 +3,7 @@ import { Game } from '@types';
 const BASE_URL = 'http://localhost:3000';
 
 const getAllLibraryGames = async () => {
-    return fetch(`${BASE_URL}/library`, {
+    return fetch(`${BASE_URL}/libraries/games`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

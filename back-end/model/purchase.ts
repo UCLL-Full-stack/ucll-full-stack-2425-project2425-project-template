@@ -3,14 +3,14 @@ import { Game } from './Game';
 
 export class Purchase {
     private id: number;
-    private date: number;
+    private date: Date;
     private cost: number;
     private user: User;
     private game: Game;
 
     constructor(purchase: {
         id: number;
-        date: number;
+        date: Date;
         cost: number;
         user: User;
         game: Game;
@@ -28,7 +28,7 @@ export class Purchase {
         return this.id;
     }
 
-    getDate(): number {
+    getDate(): Date {
         return this.date;
     }
 
@@ -46,7 +46,7 @@ export class Purchase {
 
     validate(purchase: {
         id: number;
-        date: number;
+        date: Date;
         cost: number;
         user: User;
         game: Game;
@@ -54,8 +54,8 @@ export class Purchase {
         if (!Number.isInteger(purchase.id)) {
             throw new Error('Purchase ID is required and must be an integer');
         }
-        if (purchase.date <= 0) {
-            throw new Error('Date is required and must be a valid timestamp');
+        if (!purchase.date) {
+            throw new Error('Date is required');
         }
         if (purchase.cost < 0) {
             throw new Error('Cost is required and must be a non-negative number');

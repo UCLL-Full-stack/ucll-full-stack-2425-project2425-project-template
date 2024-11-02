@@ -44,9 +44,16 @@ const libraryRouter = express.Router();
 
 /**
  * @swagger
- * /library:
+ * /libraries/games:
  *   get:
- *     summary: Get a list of all games in the library.
+ *     summary: Get a list of games in the library by ID.
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: The ID of the library to retrieve games from.
  *     responses:
  *       200:
  *         description: A list of games in the library.
@@ -56,40 +63,19 @@ const libraryRouter = express.Router();
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Game'
+ *       400:
+ *         description: Missing or invalid `id` parameter.
  */
-libraryRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+libraryRouter.get('/games', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const libraryGames = await libraryService.getAllLibraryGames();
-        res.status(200).json(libraryGames);
-    } catch (error) {
-        next(error);
-    }
-});
+        const { id } = req.query;
 
-/**
- * @swagger
- * /library/addGame:
- *   post:
- *     summary: Add a new game to the library.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Game'
- *     responses:
- *       201:
- *         description: The newly added game object.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Game'
- */
-libraryRouter.post('/addGame', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const gameData = req.body;
-        const newGame = await libraryService.addGameToLibrary(gameData);
-        res.status(201).json(newGame);
+        if (!id || isNaN(Number(id))) {
+            return res.status(400).json({ error: "Missing or invalid `id` parameter" });
+        }
+
+        const libraryGames = await libraryService.getAllLibraryGames(Number(id));
+        res.status(200).json(libraryGames);
     } catch (error) {
         next(error);
     }

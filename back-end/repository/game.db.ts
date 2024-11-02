@@ -47,7 +47,7 @@ const games = [
 
 const getAllGames = (): Game[] => games;
 
-const getGameById = ({ id }: { id: number }): Game | null => {
+const getGameById = (id: number ): Game | null => {
     return games.find((game) => game.getId() === id) || null;
 };
 

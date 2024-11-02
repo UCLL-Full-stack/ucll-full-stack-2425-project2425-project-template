@@ -1,6 +1,5 @@
 import React from 'react';
 import { Game } from '@types';
-import { right } from '@popperjs/core';
 
 type Props = {
     games: Array<Game>;

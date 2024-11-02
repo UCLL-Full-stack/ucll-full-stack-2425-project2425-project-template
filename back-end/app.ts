@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { gameRouter } from './controller/game.routes';
 import { libraryRouter } from './controller/library.routes';
+import { purchaseRouter } from './controller/purchase.routes';
 
 const app = express();
 dotenv.config();
@@ -15,7 +16,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/games', gameRouter);
-app.use('/library', libraryRouter);
+app.use('/libraries', libraryRouter);
+app.use('/purchases', purchaseRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
