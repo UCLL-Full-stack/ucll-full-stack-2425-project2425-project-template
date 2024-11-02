@@ -5,7 +5,7 @@ import { Ingredient } from '../model/ingredient';
 import { Profile } from '../model/profile';
 import { IngredientCategory } from '../types';
 
-// Mock data
+// Mock User
 const user1 = new User({
     id: 1,
     username: 'annie',
@@ -45,38 +45,8 @@ const ingredient4 = new Ingredient({
     recipes: [],
 });
 
+// Mock Recipes
 const recipes: Recipe[] = [
-    new Recipe({
-        id: 0,
-        title: 'Spaghetti Bolognese',
-        instructions: 'Cook pasta, prepare sauce, mix together.',
-        cookingTime: 30,
-        category: 'dinner',
-        ingredients: [
-            new RecipeIngredient({
-                recipe: null as unknown as Recipe,
-                ingredient: new Ingredient({ name: 'Spaghetti', category: 'Pantry', recipes: [] }),
-                unit: 'g',
-                quantity: 200,
-            }),
-            new RecipeIngredient({
-                recipe: null as unknown as Recipe,
-                ingredient: new Ingredient({
-                    name: 'Ground Beef',
-                    category: 'Meat & Fish',
-                    recipes: [],
-                }),
-                unit: 'g',
-                quantity: 300,
-            }),
-        ],
-        user: user1,
-        imageUrl: '',
-        isFavorite: true,
-        notes: 'Family recipe',
-        source: 'YouTube',
-    }),
-
     new Recipe({
         id: 1,
         title: 'Spaghetti Bolognese',
@@ -171,7 +141,7 @@ const recipes: Recipe[] = [
     }),
 ];
 
-// Set recipe reference in ingredients
+// Link recipes to ingredients (Mock data)
 recipes.forEach((recipe) => {
     recipe.getIngredients()?.forEach((ingredient) => {
         ingredient.setRecipe(recipe);
@@ -189,8 +159,34 @@ const addRecipe = (recipe: Recipe): Recipe => {
     return recipe;
 };
 
+const saveRecipe = (recipe: Recipe): Recipe => {
+    const existingRecipeId = recipes.findIndex((r) => r.getId() === recipe.getId());
+
+    if (existingRecipeId >= 0) {
+        recipes[existingRecipeId] = recipe;
+    } else {
+        const newId = recipes.length > 0 ? Math.max(...recipes.map((r) => r.getId() || 0)) + 1 : 1;
+        recipe.setId(newId); // temporary id setting
+        recipes.push(recipe);
+    }
+
+    return recipe;
+};
+
+const deleteRecipe = ({ id }: { id: number }): void => {
+    const recipeIndex = recipes.findIndex((recipe) => recipe.getId() === id);
+
+    if (recipeIndex >= 0) {
+        recipes.splice(recipeIndex, 1);
+    } else {
+        throw new Error(`Recipe with id ${id} does not exist.`);
+    }
+};
+
 export default {
     getAllRecipes,
     getRecipeById,
     addRecipe,
+    saveRecipe,
+    deleteRecipe,
 };

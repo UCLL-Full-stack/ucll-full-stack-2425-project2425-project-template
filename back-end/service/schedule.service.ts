@@ -1,8 +1,7 @@
 import { Recipe } from '../model/recipe';
 import scheduleDb from '../repository/schedule.db';
-import { RecipeUpdateInput } from '../types';
 
-const getMealDetails = (userId: number, date: Date): Recipe[] => {
+const getScheduledRecipeDetails = (userId: number, date: Date): Recipe[] => {
     const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, date);
     if (!schedule) {
         return [];
@@ -10,22 +9,29 @@ const getMealDetails = (userId: number, date: Date): Recipe[] => {
     return schedule.getRecipes() || [];
 };
 
-const editMeal = (
+// Not fully implemented yet
+const updateRecipeDate = (
     userId: number,
-    mealId: number,
-    date: Date,
-    mealData: RecipeUpdateInput
+    recipeId: number,
+    oldDate: Date,
+    newDate: Date
 ): Recipe => {
-    const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, date);
+    const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, oldDate);
     if (!schedule) throw new Error('Schedule not found');
 
-    const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === mealId);
-    if (!recipe) throw new Error('Meal not found');
-    recipe.updateRecipe(mealData);
+    const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
+    if (!recipe) throw new Error('Recipe not found');
+
+    schedule.removeRecipe(recipe);
+    const newSchedule =
+        scheduleDb.getScheduleByUserIdAndDate(userId, newDate) ||
+        scheduleDb.createSchedule(userId, newDate); // TO IMPLEMENT-- FUTURE USER STORY
+    newSchedule.addRecipe(recipe);
+
     return recipe;
 };
 
-const deleteMeal = (userId: number, mealId: number, date: Date) => {
+const deleteRecipe = (userId: number, mealId: number, date: Date) => {
     const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, date);
     if (!schedule) throw new Error('Schedule not found');
 
@@ -34,4 +40,8 @@ const deleteMeal = (userId: number, mealId: number, date: Date) => {
     schedule.removeRecipe(recipe);
 };
 
-export default { getRecipeDetails: getMealDetails, editRecipe: editMeal, deleteRecipe: deleteMeal };
+export default {
+    getScheduledRecipeDetails,
+    updateRecipeDate,
+    deleteRecipe,
+};

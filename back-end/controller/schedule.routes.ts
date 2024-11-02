@@ -9,25 +9,28 @@ const scheduleRouter = express.Router();
 scheduleRouter.get('/:userId/:date', async (req: Request, res: Response, next: NextFunction) => {
     const { userId, date } = req.params;
     try {
-        const recipeDetails = scheduleService.getRecipeDetails(parseInt(userId), new Date(date));
+        const recipeDetails = scheduleService.getScheduledRecipeDetails(
+            parseInt(userId),
+            new Date(date)
+        );
         res.status(200).json(recipeDetails.map((details) => details.toJSON())); // converts each detail to JSON
     } catch (error) {
         next(error);
     }
 });
 
-// Update recipe by userId, recipeId, and date
+// Update only the date of a scheduled recipe (future functionality)
 scheduleRouter.put(
     '/:userId/:recipeId/:date',
     async (req: Request, res: Response, next: NextFunction) => {
         const { userId, recipeId, date } = req.params;
-        const recipeInputData = req.body;
+        const { newDate } = req.body;
         try {
-            const updatedRecipe = scheduleService.editRecipe(
+            const updatedRecipe = scheduleService.updateRecipeDate(
                 parseInt(userId),
                 parseInt(recipeId),
                 new Date(date),
-                recipeInputData
+                new Date(newDate)
             );
             res.status(200).json(updatedRecipe.toJSON());
         } catch (error) {
