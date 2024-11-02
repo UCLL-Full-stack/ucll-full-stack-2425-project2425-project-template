@@ -10,4 +10,5 @@ export type Cocktail = {
     description: string;
     strongness: number;
     ingredientsList: Ingredient[];
+    image: string;
 }
