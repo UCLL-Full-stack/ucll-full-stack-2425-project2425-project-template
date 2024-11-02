@@ -1,14 +1,18 @@
 import { Cocktail } from '../model/cocktail';
-import cocktailDB from '../repository/cocktails.db';
+import cocktailDb from '../repository/cocktail.db';
 
-const getAllCocktails = (): Cocktail[] => cocktailDB.getAllCocktails();
+const getAllCocktails = (): Cocktail[] => cocktailDb.getAllCocktails();
 
 const getCocktailById = ({ id }: { id: number }): Cocktail => {
-    const cocktail = cocktailDB.getCocktailById({ id });
+    const cocktail = cocktailDb.getCocktailById({ id });
     if (!cocktail) {
         throw new Error(`Cocktail with id ${id} not found`);
     }
     return cocktail;
 };
 
-export default { getAllCocktails, getCocktailById };
+const addCocktail = ({ name, description, strongness, imageUrl }: { name: string; description: string; strongness: number; imageUrl: string }): Cocktail => {
+    return cocktailDb.addCocktail({ name, description, strongness, imageUrl });
+};
+
+export default { getAllCocktails, getCocktailById,addCocktail };

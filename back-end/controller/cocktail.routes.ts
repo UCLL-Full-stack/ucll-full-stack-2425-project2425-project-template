@@ -3,7 +3,6 @@ import cocktailService from "../service/cocktail.service";
 
 const cocktailRouter = express.Router();
 
-
 /**
  * @swagger
  * /cocktails:
@@ -27,7 +26,6 @@ cocktailRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
         next(error);
     }
 });
-
 
 /**
  * @swagger
@@ -53,6 +51,62 @@ cocktailRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
     try {
         const cocktail = await cocktailService.getCocktailById({ id: Number(req.params.id) });
         res.status(200).json(cocktail);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /cocktails:
+ *   post:
+ *     summary: Add a new cocktail.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Mojito"
+ *               description:
+ *                 type: string
+ *                 example: "A refreshing Cuban cocktail with lime, mint, and rum."
+ *               strongness:
+ *                 type: integer
+ *                 example: 3
+ *               imageUrl:
+ *                 type: string
+ *                 example: "placeholder.png"
+ *     responses:
+ *       201:
+ *         description: The cocktail has been added.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ingredient_id:
+ *                   type: integer
+ *                   description: The unique identifier for the cocktail.
+ *                 name:
+ *                   type: string
+ *                   description: The name of the cocktail.
+ *       400:
+ *         description: Invalid input.
+ */
+cocktailRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { name, description, strongness, imageUrl } = req.body;
+
+        if (!name || !description || strongness === undefined || !imageUrl) {
+            return res.status(400).json({ message: 'All fields are required: name, description, strongness, imageUrl.' });
+        }
+
+        const newCocktail = cocktailService.addCocktail({ name, description, strongness, imageUrl });
+        res.status(201).json(newCocktail);
     } catch (error) {
         next(error);
     }
