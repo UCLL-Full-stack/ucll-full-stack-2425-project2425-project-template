@@ -62,6 +62,49 @@ purchaseRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
 
 /**
  * @swagger
+ * /purchases/{id}:
+ *   get:
+ *     summary: Retrieve a purchase by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the purchase to retrieve.
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: The purchase object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Purchase'
+ *       404:
+ *         description: Purchase not found.
+ */
+purchaseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+
+        if (isNaN(Number(id))) {
+            return res.status(400).json({ error: "Invalid `id` parameter" });
+        }
+
+        const purchase = await purchaseService.getPurchaseById(Number(id));
+
+        if (!purchase) {
+            return res.status(404).json({ error: "Purchase not found" });
+        }
+
+        res.status(200).json(purchase);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+/**
+ * @swagger
  * /purchases:
  *   post:
  *     summary: Create a new purchase.

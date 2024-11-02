@@ -26,12 +26,13 @@ export type User = {
   password: string;
   library: Library;
   profile: Profile;
+  purchases: Purchase[];
   balance: number;
 };
 
 export type Purchase = {
   id: number;
-  date: number;
+  date: Date;
   cost: number;
   user: User;
   game: Game;

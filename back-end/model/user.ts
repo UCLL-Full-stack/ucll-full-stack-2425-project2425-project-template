@@ -1,5 +1,6 @@
 import { Library } from './Library';
 import { Profile } from './Profile';
+import { Purchase } from './purchase';
 
 export class User {
     private id: number;
@@ -7,6 +8,7 @@ export class User {
     private password: string;
     private library: Library;
     private profile: Profile;
+    private purchases: Purchase[];
     private balance: number;
 
     constructor(user: {
@@ -15,6 +17,7 @@ export class User {
         password: string;
         library: Library;
         profile: Profile;
+        purchases: Purchase[];
         balance: number;
     }) {
         this.validate(user);
@@ -24,6 +27,7 @@ export class User {
         this.password = user.password;
         this.library = user.library;
         this.profile = user.profile;
+        this.purchases = user.purchases;
         this.balance = user.balance;
     }
 
@@ -47,6 +51,10 @@ export class User {
         return this.profile;
     }
 
+    getPurchases(): Purchase[] {
+        return this.purchases;
+    }
+
     getBalance(): number {
         return this.balance;
     }
@@ -57,6 +65,7 @@ export class User {
         password: string;
         library: Library;
         profile: Profile;
+        purchases: Purchase[];
         balance: number;
     }) {
         if (!user.username?.trim()) {
@@ -71,6 +80,9 @@ export class User {
         if (!user.library) {
             throw new Error('Library is required');
         }
+        if (!user.purchases) {
+            throw new Error('Purchases are required');
+        }
         if (!user.profile) {
             throw new Error('Profile is required');
         }
@@ -82,6 +94,7 @@ export class User {
             this.password === user.getPassword() &&
             this.library === user.getLibrary() &&
             this.profile === user.getProfile() &&
+            this.purchases === user.getPurchases() &&
             this.balance === user.getBalance()
         );
     }

@@ -1,7 +1,29 @@
 import Link from 'next/link';
 import styles from '@styles/header.module.css';
+import { useEffect, useState } from 'react';
+import { Game } from '@types';
+import LibraryService from '@services/LibraryService';
+import UserService from '@services/UserService';
+
+const userId = 1;
 
 const Header: React.FC = () => {
+    const [balance, setBalance] = useState<Number>();
+
+    const fetchBalance = async () => {
+        try {
+            const response = await UserService.getUserById(userId);
+            const userData = await response.json();
+            setBalance(userData.balance);
+        } catch (error) {
+            console.error("Error fetching user balance:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchBalance();
+    }, []);
+
     return (
         <header className={styles.header}>
             <div>
@@ -24,7 +46,7 @@ const Header: React.FC = () => {
             </div>
             <div>
                 <Link href="/" className={styles.balance}>
-                    Balance: €99.99
+                    { `Balance: €${balance}` }
                 </Link>
             </div>
         </header>

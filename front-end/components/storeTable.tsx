@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Game } from '@types';
 import LibraryService from '@services/LibraryService';
+import PurchaseService from '@services/PurchaseService';
 
 interface StoreTableProps {
     games?: Array<Game>;
 }
+
+const userId = 1;
 
 const StoreTable: React.FC<StoreTableProps> = ({ games = [] }) => {
     const [libraryGames, setLibraryGames] = useState<Game[]>([]);
 
     const fetchLibraryGames = async () => {
         try {
-            const response = await LibraryService.getAllLibraryGames();
+            const response = await LibraryService.getAllLibraryGames(userId);
             setLibraryGames(await response.json());
         } catch (error) {
             console.error("Error fetching library games:", error);
@@ -25,7 +28,7 @@ const StoreTable: React.FC<StoreTableProps> = ({ games = [] }) => {
     const handlePurchase = async (game: Game) => {
         const confirmPurchase = window.confirm("Are you sure you want to purchase this game?");
         if (confirmPurchase) {
-            await LibraryService.addGameToLibrary(game);
+            await PurchaseService.newPurchase(userId, game.id);
             await fetchLibraryGames();
         }
     };

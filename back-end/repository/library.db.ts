@@ -13,7 +13,7 @@ const libraries = [
 
 const getAllLibraryGames = (library: Library): Game[] => library.getGames();
 
-const getLibraryById = (id: number ): Library | null => {
+const getLibraryById = (id: number): Library | null => {
     return libraries.find((library) => library.getId() === id) || null;
 };
 

@@ -7,11 +7,13 @@ import { useEffect, useState } from 'react';
 import GameService from '@services/GameService';
 import LibraryService from '@services/LibraryService';
 
+const userId = 1;
+
 const Library: React.FC = () => {
     const [games, setGames] = useState<Array<Game>>([]);
 
     const getGames = async () => {
-        const response = await LibraryService.getAllLibraryGames();
+        const response = await LibraryService.getAllLibraryGames(userId);
         const games = await response.json();
         setGames(games);
     }

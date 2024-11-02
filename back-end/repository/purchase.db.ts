@@ -5,17 +5,13 @@ import gameDB from '../repository/game.db'
 import userDb from './user.db';
 import libraryDb from './library.db';
 
-const purchases = [
-    new Purchase({
-        id: 1,
-        date: new Date(1, 1, 2024),
-        cost: 59.99,
-        user: userDb.getUserById(1)!,
-        game: gameDB.getGameById(1)!
-    })
-];
+const purchases: Purchase[] = [];
 
 const getAllPurchases = (): Purchase[] => purchases;
+
+const getPurchaseById = (id: number ): Purchase | null => {
+    return purchases.find((purchase) => purchase.getId() === id) || null;
+};
 
 const newPurchase = (user: User, game: Game): Purchase => {
     libraryDb.addGameToLibrary(user.getLibrary(), game);
@@ -30,5 +26,6 @@ const newPurchase = (user: User, game: Game): Purchase => {
 
 export default {
     getAllPurchases,
+    getPurchaseById,
     newPurchase
 };
