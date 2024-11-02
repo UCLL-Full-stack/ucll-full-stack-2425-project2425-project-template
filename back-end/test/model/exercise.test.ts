@@ -1,5 +1,5 @@
-import { Exercise } from '../model/exercise';
-import { WorkoutExercise } from '../model/workoutexercise';
+import { Exercise } from '../../model/exercise';
+import { WorkoutExercise } from '../../model/workoutexercise';
 
 const validExercise = {
     id: 1,
@@ -98,4 +98,15 @@ test(`given: Exercise equals method called; when: only one field is different; t
             }),
         })
     ).toBe(false);
+});
+
+test(`given: invalid video_link; when: Exercise is created; then: an error is thrown`, () => {
+    //given 
+    const invalidVideoLink = { ...validExercise, video_link: 'invalid link' };
+
+    //when
+    const createInvalidExercise = () => new Exercise(invalidVideoLink);
+
+    //then
+    expect(createInvalidExercise).toThrow('Invalid Video Link: Must be a valid URL');
 });

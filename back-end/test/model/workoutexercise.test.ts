@@ -1,4 +1,4 @@
-import { WorkoutExercise } from "../model/workoutexercise";
+import { WorkoutExercise } from '../../model/workoutexercise';
 
 const validWorkoutExercise = {
     workout_exercise_id: 1,
@@ -73,4 +73,26 @@ test(`given: WorkoutExercise equals method called; when: only one field is diffe
     expect(workoutexercise.equals({ ...validWorkoutExercise, reps: 2 })).toBe(false);
     expect(workoutexercise.equals({ ...validWorkoutExercise, rpe: '8-9' })).toBe(false);
     expect(workoutexercise.equals({ ...validWorkoutExercise, rest_time: '50s' })).toBe(false);
+});
+
+test(`given: invalid sets; when: WorkoutExercise is created; then: an error is thrown`, () => {
+    //given
+    const invalidSets = { ...validWorkoutExercise, sets: -1 };
+
+    //when
+    const workoutExercise = () => new WorkoutExercise(invalidSets);
+
+    //then
+    expect(workoutExercise).toThrow("Invalid Sets: Must be a positive integer");
+});
+
+test(`given: invalid reps; when: WorkoutExercise is created; then: an error is thrown`, () => {
+    //given
+    const invalidReps = { ...validWorkoutExercise, reps: -1 };
+
+    //when
+    const workoutExercise = () => new WorkoutExercise(invalidReps);
+
+    //then
+    expect(workoutExercise).toThrow("Invalid Reps: Must be a positive integer");
 });

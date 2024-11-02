@@ -1,6 +1,6 @@
-import { Exercise } from '../model/exercise';
-import { Workout } from '../model/workout';
-import { WorkoutExercise } from '../model/workoutexercise';
+import { Exercise } from '../../model/exercise';
+import { Workout } from '../../model/workout';
+import { WorkoutExercise } from '../../model/workoutexercise';
 
 const validWorkout = {
     workout_id: 1,
@@ -118,4 +118,15 @@ test(`given: Workout equals method called; when: only one field is different; th
             ],
         })
     ).toBe(false);
+});
+
+test(`given: an empty name; when: Workout is created; then: an error is thrown`, () => {
+    //given 
+    const invalidName = { ...validWorkout, name: '' };
+
+    //when
+    const createInvalidWorkout = () => new Workout(invalidName);
+
+    //then
+    expect(createInvalidWorkout).toThrowError('Workout name is required and cannot be empty.');
 });
