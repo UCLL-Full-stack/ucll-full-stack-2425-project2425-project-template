@@ -31,22 +31,7 @@ export class Recipe {
         source?: string;
         schedule?: Schedule;
     }) {
-        if (!recipe.title) {
-            throw new Error('Title is required');
-        }
-        if (!recipe.instructions) {
-            throw new Error('Instructions are required');
-        }
-        if (recipe.cookingTime <= 0) {
-            throw new Error('Cooking time must be greater than zero');
-        }
-        if (!recipe.category) {
-            throw new Error('Category is required');
-        }
-        if (!recipe.user) {
-            throw new Error('User is required');
-        }
-
+        this.validate(recipe);
         this.id = recipe.id;
         this.title = recipe.title;
         this.instructions = recipe.instructions;
@@ -59,6 +44,58 @@ export class Recipe {
         this.notes = recipe.notes;
         this.source = recipe.source;
         this.schedule = recipe.schedule;
+    }
+
+    validate(recipe: {
+        id?: number;
+        title: string;
+        instructions: string;
+        cookingTime: number;
+        category: string;
+        ingredients: RecipeIngredient[];
+        user: User;
+        imageUrl?: string;
+        isFavorite?: boolean;
+        notes?: string;
+        source?: string;
+        schedule?: Schedule;
+    }): void {
+        if (recipe.id !== undefined && (!Number.isInteger(recipe.id) || recipe.id <= 0)) {
+            throw new Error('ID must be a positive integer');
+        }
+        if (!recipe.title || recipe.title.trim().length === 0) {
+            throw new Error('Title is required and cannot be empty');
+        }
+        if (!recipe.instructions || recipe.instructions.trim().length === 0) {
+            throw new Error('Instructions are required and cannot be empty');
+        }
+        if (recipe.cookingTime <= 0) {
+            throw new Error('Cooking time must be greater than zero');
+        }
+        if (!recipe.category || recipe.category.trim().length === 0) {
+            throw new Error('Category is required and cannot be empty');
+        }
+        if (!recipe.user) {
+            throw new Error('User is required');
+        }
+        if (!recipe.ingredients || recipe.ingredients.length === 0) {
+            throw new Error('Recipe must have at least one ingredient');
+        }
+        if (recipe.imageUrl !== undefined && !this.isValidUrl(recipe.imageUrl)) {
+            throw new Error('Invalid image URL');
+        }
+        if (recipe.isFavorite !== undefined && typeof recipe.isFavorite !== 'boolean') {
+            throw new Error('isFavorite must be a boolean');
+        }
+        if (recipe.notes !== undefined && typeof recipe.notes !== 'string') {
+            throw new Error('Notes must be a string');
+        }
+        if (recipe.source !== undefined && typeof recipe.source !== 'string') {
+            throw new Error('Source must be a string');
+        }
+        if (recipe.schedule !== undefined && !(recipe.schedule instanceof Schedule)) {
+            throw new Error('Schedule must be an instance of Schedule');
+        }
     }
 
     getId(): number | undefined {

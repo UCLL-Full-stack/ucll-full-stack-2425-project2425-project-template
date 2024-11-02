@@ -18,6 +18,7 @@ export class User {
         recipes?: Recipe[];
         schedule?: Schedule;
     }) {
+        this.validate(user);
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
@@ -25,6 +26,35 @@ export class User {
         this.recipes = user.recipes || [];
         this.schedule = user.schedule;
     }
+
+    validate(user: {
+        id?: number;
+        username: string;
+        password: string;
+        profile: Profile;
+        recipes?: Recipe[];
+        schedule?: Schedule;
+    }): void {
+        if (user.id !== undefined && (!Number.isInteger(user.id) || user.id <= 0)) {
+            throw new Error('ID must be a positive integer');
+        }
+        if (!user.username || user.username.trim().length === 0) {
+            throw new Error('Username is required and cannot be empty');
+        }
+        if (!user.password || user.password.trim().length === 0) {
+            throw new Error('Password is required and cannot be empty');
+        }
+        if (!user.profile) {
+            throw new Error('Profile is required');
+        }
+        if (user.recipes !== undefined && !Array.isArray(user.recipes)) {
+            throw new Error('Recipes must be an array');
+        }
+        if (user.schedule !== undefined && !(user.schedule instanceof Schedule)) {
+            throw new Error('Schedule must be an instance of Schedule');
+        }
+    }
+
 
     getId(): number | undefined {
         return this.id;
