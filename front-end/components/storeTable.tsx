@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Game } from '@types';
 import LibraryService from '@services/LibraryService';
 import PurchaseService from '@services/PurchaseService';
-import header from '@components/header';
 
 interface StoreTableProps {
     games?: Array<Game>;
@@ -31,6 +30,12 @@ const StoreTable: React.FC<StoreTableProps> = ({ games = [] }) => {
         if (confirmPurchase) {
             await PurchaseService.newPurchase(userId, game.id);
             await fetchLibraryGames();
+            // if () {
+            //     window.alert("You do not have enough money in your balance.")
+            // }
+            // else {
+                window.location.reload();
+            // }
         }
     };
 
