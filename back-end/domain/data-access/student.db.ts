@@ -7,7 +7,11 @@ const getStudentById = async (studentId: number): Promise<Student | null> => {
     const studentPrisma = await database.student.findUnique({
       where: { id: studentId },
       include: {
-        bookings: true,
+        bookings:{
+          include:{
+            trip: true,
+          },
+        },
         review: true,
       }
     });

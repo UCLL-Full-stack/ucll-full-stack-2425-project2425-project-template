@@ -15,22 +15,19 @@ export class Booking {
     private paymentStatus: PaymentStatus; 
     private students: Student[]; 
     private trip: Trip;
-    private review?: Review; 
 
     constructor(booking: {
         id?: number;
         bookingDate: Date;
         paymentStatus: PaymentStatus;
-        students?: Student[]; 
+        students: Student[]; 
         trip: Trip;
-        review?: Review; 
     }) {
         this.id = booking.id;
         this.bookingDate = booking.bookingDate;
         this.paymentStatus = booking.paymentStatus;
-        this.students = booking.students || []; 
+        this.students = booking.students; 
         this.trip = booking.trip;
-        this.review = booking.review; 
     }
 
     validate() {
@@ -50,16 +47,14 @@ export class Booking {
         bookingDate,
         paymentStatus,
         trip,
-        review,
         students,
-    }: BookingPrisma & { trip: TripPrisma, review?: ReviewPrisma, students: StudentPrisma[] }) : Booking {
+    }: BookingPrisma & { trip: TripPrisma, students: StudentPrisma[] }) : Booking {
         return new Booking({
             id: id ? Number(id) : undefined,
             bookingDate,
             paymentStatus: paymentStatus as PaymentStatus, 
-            trip: Trip.from({ ...trip, bookings: [], reviews: [] }),
-            review: review ? Review.from({ ...review, trip: Trip.from(trip), student: Student.from(students[0]) }) : undefined,
-            students: students.map((student) => Student.from({ ...student, bookings: [], review: null })) 
+            trip: Trip.from(trip),
+            students: students.map((student) => Student.from({ ...student, bookings: [] })) 
         });
     }
 }

@@ -1,10 +1,7 @@
 import { Booking } from './booking';
 import { Review } from './review';
 import {
-    Trip as TripPrisma,
-    Booking as BookingPrisma,
-    Review as ReviewPrisma
-} from '@prisma/client';
+    Trip as TripPrisma} from '@prisma/client';
 
 export class Trip {
     private id?: number; 
@@ -13,8 +10,6 @@ export class Trip {
     private startDate: Date;
     private endDate: Date;
     private price: number;
-    private bookings: Booking[];
-    private reviews: Review[]; 
 
     constructor(trip: { 
         id?: number; 
@@ -23,8 +18,6 @@ export class Trip {
         startDate: Date; 
         endDate: Date; 
         price: number; 
-        bookings?: Booking[]; 
-        reviews?: Review[]; 
     }) {
         this.id = trip.id;
         this.description = trip.description;
@@ -32,8 +25,6 @@ export class Trip {
         this.startDate = trip.startDate;
         this.endDate = trip.endDate;
         this.price = trip.price;
-        this.bookings = trip.bookings || []; 
-        this.reviews = trip.reviews || []; 
     }
 
     validate() {
@@ -64,19 +55,15 @@ export class Trip {
         location,
         startDate,
         endDate,
-        price,
-        bookings,
-        reviews
-    }: TripPrisma & { bookings: BookingPrisma[], reviews: ReviewPrisma[] }) : Trip{
+        price
+    }: TripPrisma ) : Trip{
         return new Trip({
             id: id ? Number(id) : undefined,
             description,
             location,
             startDate,
             endDate,
-            price,
-            bookings: bookings.map((booking) => Booking.from(booking)), 
-            reviews: reviews.map((review) => Review.from(review))
+            price
         });
     }
 }

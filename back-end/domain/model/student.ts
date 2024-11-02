@@ -8,8 +8,7 @@ export class Student {
     private email: string;
     private password: string;
     private studentNumber: string;
-    private bookings: Booking[];
-    private review?: Review | null;
+    private bookings: Booking[] = [];
 
     constructor(student: {
         id?: number;
@@ -25,8 +24,7 @@ export class Student {
         this.email = student.email;
         this.password = student.password;
         this.studentNumber = student.studentNumber;
-        this.bookings = student.bookings || []; // Initialize to empty array if not provided
-        this.review = student.review || null;
+        this.bookings = student.bookings || []; 
     }
 
     validate() {
@@ -60,17 +58,15 @@ export class Student {
         email,
         password,
         studentNumber,
-        bookings,
-        review,
-    }: StudentPrisma & { bookings: BookingPrisma[], review?: ReviewPrisma | null}) : Student{
+        bookings = [],
+    }: StudentPrisma & { bookings: BookingPrisma[]}) : Student{
         return new Student({
             id: id ? Number(id) : undefined,
             username,
             email,
             password,
             studentNumber,
-            bookings: bookings.map((booking) => Booking.from(booking)),
-            review: review ? Review.from(review) : undefined 
+            bookings: bookings.map((booking) => Booking.from({...booking, students: [], trip: booking.tripId})),
         });
     }
 }
