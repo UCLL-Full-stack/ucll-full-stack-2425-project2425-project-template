@@ -6,12 +6,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "../ui/card";
-import { AddIngredientDialog } from "./AddIngredientPopup";
+import { Card, CardContent } from "@/components/ui/card";
 import { Trash, Plus, Minus } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Checkbox } from "../ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { AddIngredientDialog } from "./shopping-list-functionality/AddIngredientPopup";
 
 // This will come from the backend later
 type Ingredient = {
