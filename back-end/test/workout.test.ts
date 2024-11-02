@@ -1,10 +1,29 @@
+import { Exercise } from '../model/exercise';
 import { Workout } from '../model/workout';
+import { WorkoutExercise } from '../model/workoutexercise';
 
 const validWorkout = {
     workout_id: 1,
     user_id: 1,
     name: 'upper-body',
     description: 'lorem ipsum',
+    exercises: [
+        new Exercise({
+            id: 1,
+            name: 'push-ups',
+            description: 'lorem ipsum',
+            video_link: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
+            workoutExercise: new WorkoutExercise({
+                workout_exercise_id: 1,
+                workout_id: 1,
+                exercise_id: 1,
+                sets: 3,
+                reps: 12,
+                rpe: '9-10',
+                rest_time: '00:30',
+            }),
+        }),
+    ],
 };
 
 test(`given: valid values for Workout properties; when: Workout is created; then: properties are set correctly`, () => {
@@ -16,6 +35,7 @@ test(`given: valid values for Workout properties; when: Workout is created; then
     expect(workout.user_id).toEqual(validWorkout.user_id);
     expect(workout.name).toEqual(validWorkout.name);
     expect(workout.description).toEqual(validWorkout.description);
+    expect(workout.exercises).toEqual(validWorkout.exercises);
 });
 
 test(`given: Workout equals method called with matching properties; when: all properties match; then: return true`, () => {
@@ -28,6 +48,7 @@ test(`given: Workout equals method called with matching properties; when: all pr
         user_id: 1,
         name: 'upper-body',
         description: 'lorem ipsum',
+        exercises: validWorkout.exercises,
     });
 
     // then
@@ -44,6 +65,23 @@ test(`given: Workout equals method called with non-matching properties; when: on
         user_id: 2,
         description: 'ipsum lorem',
         name: 'lower-body',
+        exercises: [
+            new Exercise({
+                id: 2,
+                name: 'dips',
+                description: 'ipsum lorem',
+                video_link: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
+                workoutExercise: new WorkoutExercise({
+                    workout_exercise_id: 2,
+                    workout_id: 2,
+                    exercise_id: 2,
+                    sets: 4,
+                    reps: 15,
+                    rpe: '7-8',
+                    rest_time: '00:45',
+                }),
+            }),
+        ],
     });
 
     // then
@@ -58,4 +96,26 @@ test(`given: Workout equals method called; when: only one field is different; th
     expect(workout.equals({ ...validWorkout, user_id: 2 })).toBe(false);
     expect(workout.equals({ ...validWorkout, description: 'ipsum lorem' })).toBe(false);
     expect(workout.equals({ ...validWorkout, name: 'lower-body' })).toBe(false);
+    expect(
+        workout.equals({
+            ...validWorkout,
+            exercises: [
+                new Exercise({
+                    id: 2,
+                    name: 'dips',
+                    description: 'ipsum lorem',
+                    video_link: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
+                    workoutExercise: new WorkoutExercise({
+                        workout_exercise_id: 2,
+                        workout_id: 2,
+                        exercise_id: 2,
+                        sets: 4,
+                        reps: 15,
+                        rpe: '7-8',
+                        rest_time: '00:45',
+                    }),
+                }),
+            ],
+        })
+    ).toBe(false);
 });
