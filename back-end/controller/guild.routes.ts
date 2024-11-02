@@ -3,7 +3,6 @@ import guildService from '../service/guild.service';
 
 const guildRouter = Router();
 
-// GET permissions for a specific guild
 guildRouter.get('/:guildId/permissions', (req, res) => {
     const { guildId } = req.params;
     try {
@@ -30,7 +29,5 @@ guildRouter.get('/', (req, res) => {
         }    
     }
 });
-
-// Other guild-related routes...
 
 export default guildRouter;

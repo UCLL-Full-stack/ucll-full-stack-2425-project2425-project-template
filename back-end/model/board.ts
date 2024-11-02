@@ -135,7 +135,7 @@ export class Board {
             boardName: this.boardName,
             createdByUser: this.createdByUser.getUserId(),
             guild: this.guild.getGuildId(),
-            columns: this.columns.map(column => column.getColumnName()),
+            columns: this.columns.map(column => column.toJSON()),
             permissions: this.permissions
         };
     }

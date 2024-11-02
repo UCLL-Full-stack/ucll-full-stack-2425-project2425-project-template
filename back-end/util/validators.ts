@@ -3,6 +3,7 @@ import { DiscordPermission, KanbanPermission, Member, PermissionEntry } from '..
 import userDb from '../repository/user.db';
 import guildDb from '../repository/guild.db';
 import roleDb from '../repository/role.db';
+import taskDb from '../repository/task.db';
 
 export const validateBoard = (req: Request, res: Response, next: NextFunction) => {
     const { boardName, createdByUser, guild, columns, permissions } = req.body;
@@ -68,15 +69,19 @@ export const validateBoard = (req: Request, res: Response, next: NextFunction) =
 
 export const validateColumn = (req: Request, res: Response, next: NextFunction) => {
     const { columnName, tasks } = req.body;
-    if (!columnName || typeof columnName !== 'string') {
-        return res.status(400).json({ error: 'Invalid column name. It must be a string.' });
+    if (!columnName && (!tasks || !Array.isArray(tasks))) {
+        return res.status(400).json({ error: 'Column must have either a columnName or tasks.' });
     }
-    if (tasks && !Array.isArray(tasks)) {
-        return res.status(400).json({ error: 'Tasks must be an array.' });
+    if (columnName && typeof columnName !== 'string') {
+        return res.status(400).json({ error: 'Invalid column name. It must be a string.' });
     }
     if (tasks) {
         for (const task of tasks) {
-            validateTask({ body: task } as Request, res, next);
+            const taskId = typeof task === 'string' ? task : task.taskId;
+            const taskExists = taskDb.getTaskById(taskId);
+            if (!taskExists) {
+                return res.status(400).json({ error: `Task with ID ${taskId} does not exist.` });
+            }        
         }
     }
     next();
