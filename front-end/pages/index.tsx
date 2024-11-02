@@ -7,8 +7,8 @@ const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Courses</title>
-        <meta name="description" content="Courses app" />
+        <title>RaceForms</title>
+        <meta name="description" content="RaceForms.net" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -17,20 +17,21 @@ const Home: React.FC = () => {
         <span>
           <Image
             src="/images/courses.png"
-            alt="Courses Logo"
+            alt="Website Logo"
             className={styles.vercelLogo}
             width={50}
             height={50}
           />
-          <h1>Welcome!</h1>
+          <h1>Welcome to hell!</h1>
         </span>
 
         <div className={styles.description}>
           <p>
-            Courses lets you see as a lecturer all the courses you are teaching
-            and as a student all the courses you are enrolled in. <br />
-            You can also see when the courses are scheduled and the students
-            enrolled in each course.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. <br></br>
+            Labore cupiditate iste sunt atque distinctio mollitia assumenda
+            numquam corrupti laboriosam magni nobis at impedit et quibusdam,
+            sapiente autem. <br></br>
+            Laudantium, asperiores debitis.
           </p>
         </div>
       </main>
