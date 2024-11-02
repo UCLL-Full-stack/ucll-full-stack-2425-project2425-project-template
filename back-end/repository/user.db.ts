@@ -17,9 +17,7 @@ const getUserById = (id: number): User | null => {
 
 // Function to retrieve a user by firstname
 const getUserByFirstName = (firstName: string): User | null => {
-    console.log("Searching for user with firstName:", firstName);
     const user = users.find((user) => user.getFirstName() === firstName);
-    console.log("Found user:", user);
     return user || null;
 };
 // Function to retrieve a user by lastname

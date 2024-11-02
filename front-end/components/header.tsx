@@ -5,7 +5,7 @@ export default function Header() {
     return (
         <header className="d-flex justify-content-between align-items-center p-3 border-bottom bg-dark">
             <Link href="/" passHref style={{ textDecoration: 'none'}}>
-                <h1 className="h3 m-0 text-white">My App</h1>
+                <h1 className="h3 m-0 text-white">Train tickets</h1>
             </Link>
             <nav>
                 <Link href="/login" passHref>

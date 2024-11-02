@@ -23,7 +23,7 @@ export class User {
         this.lastName = user.lastName;
         this.email = user.email;
         this.password = user.password;
-        this.role = user.role;
+        this.role = user.role ?? 'user';
     }
 
     getId(): number | undefined {
@@ -67,9 +67,6 @@ export class User {
         }
         if (!user.password?.trim()) {
             throw new Error('Password is required');
-        }
-        if (!user.role) {
-            throw new Error('Role is required');
         }
     }
 
