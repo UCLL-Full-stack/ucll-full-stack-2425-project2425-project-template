@@ -1,3 +1,4 @@
+import CocktailList from '@components/CocktailList';
 import Head from 'next/head';
 
 const Home: React.FC = () => {
@@ -19,6 +20,9 @@ const Home: React.FC = () => {
           <p>
             Lets make some cocktails!
           </p>
+        </div>
+        <div>
+            <CocktailList></CocktailList>   
         </div>
       </main>
     </>
