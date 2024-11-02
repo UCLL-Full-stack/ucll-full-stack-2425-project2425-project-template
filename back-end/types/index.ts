@@ -1,9 +1,12 @@
+import { PaymentStatus } from "@prisma/client";
+
 type StudentInput = {
     id?: number;
     username: string;
     email: string;
     password: string;
     studentNumber: string;
+    bookings?: BookingInput;
 }
 
 type TripInput = {
@@ -14,14 +17,16 @@ type TripInput = {
     price: number;
     description: string;
     images: string;
+    location: string;
 }
 
 type BookingInput = {
     id?: number;
-    studentId: number;  
-    trip?: TripInput;   
+    studentIds: number[];  
+    tripId: number;    
     bookingDate?: Date;
-    paymentStatus: 'Pending' | 'Confirmed' | 'Cancelled';
+    students?: StudentInput;
+    paymentStatus: PaymentStatus;
 }
 
 type ReviewInput = {

@@ -1,5 +1,5 @@
 import { Booking } from './booking';
-import { Student as StudentPrisma, Booking as BookingPrisma, Review as ReviewPrisma } from '@prisma/client';
+import { Student as StudentPrisma, Booking as BookingPrisma, Review as ReviewPrisma, Trip as TripPrisma } from '@prisma/client';
 import { Review } from './review';
 
 export class Student {
@@ -59,14 +59,14 @@ export class Student {
         password,
         studentNumber,
         bookings = [],
-    }: StudentPrisma & { bookings: BookingPrisma[]}) : Student{
+    }: StudentPrisma & { bookings: (BookingPrisma & { trip: TripPrisma })[] }) : Student {
         return new Student({
             id: id ? Number(id) : undefined,
             username,
             email,
             password,
             studentNumber,
-            bookings: bookings.map((booking) => Booking.from({...booking, students: [], trip: booking.tripId})),
+            bookings: bookings.map((booking) => Booking.from({...booking, trip: booking.trip, students: []})),
         });
     }
 }

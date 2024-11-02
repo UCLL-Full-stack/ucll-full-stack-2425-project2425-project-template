@@ -1,6 +1,6 @@
+import { PaymentStatus } from '@prisma/client';
 import database from '../../util/database';
 import { Booking } from '../model/booking';
-import { PaymentStatus } from '../model/paymentStatusEnum';
 
 const getAllBookings = async (): Promise<Booking[]> => {
     const bookingsPrisma = await database.booking.findMany({
@@ -32,7 +32,7 @@ const createBooking = async (bookingData: {
     const bookingPrisma = await database.booking.create({
         data: {
             bookingDate: bookingData.bookingDate,
-            paymentStatus: bookingData.paymentStatus,  
+            paymentStatus: bookingData.paymentStatus as unknown as PaymentStatus,  // Type assertion here
             trip: { connect: { id: bookingData.tripId } },
             students: {
                 connect: bookingData.studentIds.map((id) => ({ id }))  
@@ -46,6 +46,7 @@ const createBooking = async (bookingData: {
 
     return Booking.from(bookingPrisma);
 };
+
 
 
 export default {

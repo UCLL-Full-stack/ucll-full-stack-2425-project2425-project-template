@@ -26,9 +26,13 @@ const getAllStudents = async (): Promise<Student[]> => {
   try {
     const studentsPrisma = await database.student.findMany({
       include: {
-        bookings: true,
+        bookings: {
+          include: {
+            trip: true,
+          },
+        },
         review: true,
-      }
+      },
     });
     return studentsPrisma.map((studentPrisma) => Student.from(studentPrisma));
   } catch (error) {
@@ -42,9 +46,13 @@ const getStudentByUsername = async (username: string): Promise<Student | null> =
     const studentPrisma = await database.student.findFirst({
       where: { username },
       include: {
-        bookings: true,
+        bookings: {
+          include: {
+            trip: true,
+          },
+        },
         review: true,
-      }
+      },
     });
     return studentPrisma ? Student.from(studentPrisma) : null;
   } catch (error) {
@@ -53,28 +61,41 @@ const getStudentByUsername = async (username: string): Promise<Student | null> =
   }
 };
 
-const createStudent = async ({ username, email, password, studentNumber }: { username: string, email: string, password: string, studentNumber: string }): Promise<Student> => {
-  try {
-    const studentPrisma = await database.student.create({
-      data: {
-        username,
-        email,
-        password,
-        studentNumber,
-        bookings: { create: [] },
-        review: {},
-      },
-      include: {
-        bookings: true,
-        review: true,
-      }
-    });
-    return Student.from(studentPrisma);
-  } catch (error) {
-    console.error(error);
-    throw new Error("Database error. See server log for details.");
-  }
-};
+  const createStudent = async ({
+    username,
+    email,
+    password,
+    studentNumber,
+  }: {
+    username: string;
+    email: string;
+    password: string;
+    studentNumber: string;
+  }): Promise<Student> => {
+    try {
+      const studentPrisma = await database.student.create({
+        data: {
+          username,
+          email,
+          password,
+          studentNumber,  
+        },
+        include: {
+          bookings: {
+            include: {
+              trip: true, 
+            },
+          },
+          review: true, 
+        },
+      });
+      return Student.from(studentPrisma);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Database error. See server log for details.");
+    }
+  };
+
 
 export default {
   getStudentById,

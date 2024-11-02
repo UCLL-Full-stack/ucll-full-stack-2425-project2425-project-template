@@ -47,6 +47,7 @@ model Booking {
 enum PaymentStatus {
   Pending
   Paid
+  Confirmed
 }
 
 // Review model

@@ -4,10 +4,10 @@ import {
     Booking as BookingPrisma,
     Trip as TripPrisma,
     Review as ReviewPrisma,
-    Student as StudentPrisma
+    Student as StudentPrisma,
+    PaymentStatus,
 } from '@prisma/client';
 import { Student } from './student';
-import { PaymentStatus } from './paymentStatusEnum';
 
 export class Booking {
     private id?: number;

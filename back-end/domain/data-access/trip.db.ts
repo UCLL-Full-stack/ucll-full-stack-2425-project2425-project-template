@@ -47,8 +47,6 @@ const createTrip = async ({
             startDate,
             endDate,
             price,
-            bookings: [],
-            reviews: []
         });
         
         trip.validate();
