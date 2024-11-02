@@ -15,8 +15,8 @@ const Navbar: React.FC = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/destinations">
-                        Destinations
+                    <Link href="/trips">
+                        Trips
                     </Link>
                 </li>
                 <li>
