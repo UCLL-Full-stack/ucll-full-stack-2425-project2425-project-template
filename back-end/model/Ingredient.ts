@@ -23,4 +23,8 @@ export class Ingredient {
     equals(ingredient: Ingredient): boolean {
         return this.name === ingredient.name && this.category === ingredient.category;
     }
+
+    static from (ingredient: { id?: number, name: string, category: string }): Ingredient {
+        return new Ingredient(ingredient);
+    }
 }

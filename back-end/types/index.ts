@@ -1,3 +1,5 @@
+import { RecipeIngredient } from "@prisma/client";
+
 type Ingredient = {
     id?: number;
     name: string;
@@ -13,7 +15,7 @@ type Recipe = {
     id?: number;
     name: string;
     description: string;
-    ingredients: Ingredient[];
+    ingredients: RecipeIngredient[];
     creator: User; 
     reviews: Review[]; 
 };

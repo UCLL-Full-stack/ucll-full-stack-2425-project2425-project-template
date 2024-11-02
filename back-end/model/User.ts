@@ -22,36 +22,19 @@ export class User {
         this.reviews = reviews;
     }
 
-    validate(user: { username: string; password: string; email: string; firstName: string; lastName: string }) {
-        if (!user.username) {
-            throw new Error("Username is required");
-        }
-        if (user.username.length < 3) {
-            throw new Error("Username must be at least 3 characters long");
-        }
-        
-        if (!user.password) {
-            throw new Error("Password is required");
-        }
-        if (user.password.length < 8) {
-            throw new Error("Password must be at least 8 characters long");
-        }
+    private validate(user: { username: string; password: string; email: string; firstName: string; lastName: string }) {
+        if (!user.username) throw new Error("Username is required");
+        if (user.username.length < 3) throw new Error("Username must be at least 3 characters long");
+
+        if (!user.password) throw new Error("Password is required");
+        if (user.password.length < 8) throw new Error("Password must be at least 8 characters long");
 
         const emailRegex = /\S+@\S+\.\S+/;
-        if (!user.email) {
-            throw new Error("Email is required");
-        }
-        if (!emailRegex.test(user.email)) {
-            throw new Error("Invalid email format");
-        }
+        if (!user.email) throw new Error("Email is required");
+        if (!emailRegex.test(user.email)) throw new Error("Invalid email format");
 
-        if (!user.firstName) {
-            throw new Error("First name is required");
-        }
-
-        if (!user.lastName) {
-            throw new Error("Last name is required");
-        }
+        if (!user.firstName) throw new Error("First name is required");
+        if (!user.lastName) throw new Error("Last name is required");
     }
 
     equals(user: User): boolean {
