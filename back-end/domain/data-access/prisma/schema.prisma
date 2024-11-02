@@ -1,3 +1,5 @@
+// File: prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,22 +10,40 @@ datasource db {
 }
 
 model Patient {
-    id                Int @id @default(autoincrement())
-    name              String
-    sex               String
-    dateOfBirth       DateTime
-    age               Int
-    address           String
-    email             String
-    complaints        String[]
-    nationalRegister  String
+  id                Int            @id @default(autoincrement())
+  name              String
+  sex               String
+  dateOfBirth       DateTime
+  age               Int
+  address           String
+  email             String
+  complaints        String[]
+  nationalRegister  String
 }
 
 model Consultation {
-    id                Int @id @default(autoincrement())
-    startDate         DateTime
-    endDate           DateTime
-    name              String
-    patient           Patient
-    doctors           Doctor[]
+  id                Int          @id @default(autoincrement())
+  startDate         DateTime
+  endDate           DateTime
+  name              String
+  patient           Patient
+  doctors           Doctor[]
 }
+
+model Office {
+  id                Int         @id @default(autoincrement())
+  name              String?
+  address           String
+  email             String
+  openingHours      Json         // Use Json for flexibility in opening hours
+  phoneNumber       Number
+  doctors           Doctor[]
+}
+
+model Doctor {
+  id                Int          @id @default(autoincrement())
+  name              String
+  email             String
+  specialization    String       // This can be replaced with a specific enum if you have defined specializations
+  offices           Office[]     // Relation to Office
+  }

@@ -3,14 +3,14 @@ import { Patient as PatientPrisma} from "@prisma/client";
 export class Patient {
 
     readonly id?: number;
-    readonly name: string;
-    readonly sex: string;
-    readonly dateOfBirth: Date;
-    readonly age: number;
-    readonly address: string;
-    readonly email: string;
-    readonly complaints: string[];
-    readonly nationalRegister: string;
+    private name: string;
+    private sex: string;
+    private dateOfBirth: Date;
+    private age: number;
+    private address: string;
+    private email: string;
+    private complaints: string[];
+    private nationalRegister: string;
 
     constructor (patient: {id?: number; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
         this.id = patient.id;
@@ -29,8 +29,6 @@ export class Patient {
         if (patient.name.trim() == "")
             throw new Error("Patient name cannot be empty")
     }
-
-    
 
     static from({
         id,

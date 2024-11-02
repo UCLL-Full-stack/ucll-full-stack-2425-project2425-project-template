@@ -1,4 +1,5 @@
 import { Specialization } from "../../types";
+import { Office } from "./office";
 
 export class Doctor {
     readonly id?: number;
@@ -49,9 +50,6 @@ export class Doctor {
     }
 
     setSpecialisation(value: Specialization) {
-        if (!validSpecializations.includes(value)) {
-            throw new Error("Invalid specialisation.");
-        }
         this.specialisation = value;
     }
 
