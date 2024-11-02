@@ -6,15 +6,13 @@ export class Cocktail {
     private name: string;
     private description: string;
     private strongness: number;
-    private ingredientsList: Ingredient[];
     private image: string;
 
-    constructor(id: number, name: string, description: string, strongness: number, ingredientsList: Ingredient[] = [], image: string) {
+    constructor(id: number, name: string, description: string, strongness: number, image: string) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.strongness = strongness;
-        this.ingredientsList = ingredientsList;
         this.image = image;
     }
 
@@ -37,11 +35,7 @@ export class Cocktail {
         this.description = description
     }
 
-    setIngredientsList(ingredientsList: Ingredient[]): void {
-        this.ingredientsList = ingredientsList;
-    }
   
-
     getDescription(): string {
         return this.description;
     }
@@ -50,21 +44,8 @@ export class Cocktail {
         return this.strongness;
     }
 
-    getIngredientsList(): Ingredient[] {
-        return this.ingredientsList;
-    }
     getImage(): string {
         return this.image;
-    }
-
-    // Method to add an ingredient by name
-    addIngredientByName(name: string): void {
-        this.ingredientsList.push();
-    }
-
-    // Method to remove an ingredient by name
-    removeIngredientByName(name: string): void {
-        this.ingredientsList = this.ingredientsList.filter(ingredient => ingredient.name !== name);
     }
 
 
@@ -73,9 +54,7 @@ export class Cocktail {
         this.id === cocktail.getId() &&
         this.name === cocktail.getName() &&
         this.description === cocktail.getDescription() &&
-        this.strongness === cocktail.getStrongness() &&
-        this.ingredientsList.length === cocktail.getIngredientsList().length &&
-        this.ingredientsList.every((ingredient, index) => ingredient.equals(cocktail.getIngredientsList()[index]))
+        this.strongness === cocktail.getStrongness()
     );
 }
 }
