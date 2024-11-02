@@ -36,7 +36,7 @@ const players = [
         user: cedric,
     }),
     new Player({
-        id: 2,
+        id: 3,
         name: 'Cedinvu2',
         statistics: 'hp: 2000, power: -1',
         class: 'Impostor',
