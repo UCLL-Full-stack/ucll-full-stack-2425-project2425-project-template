@@ -53,7 +53,7 @@
  *              type: array
  *              description: Pokebowl ingredienten.
  *              items:
- *                type: string
+ *                $ref: '#/components/schemas/Ingredient'
  */
 import express, { NextFunction, Request, Response } from 'express';
 import pokebowlService from '../service/pokebowl.service';
@@ -96,11 +96,31 @@ pokebowlRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
  *                  schema:
  *                     $ref: '#/components/schemas/PokebowlInput'
  *                  example:
- *                    naam: "Deluxe tofu bowl"
+ *                    naam: "Deluxe tuna bowl"
  *                    type: "Custom"
- *                    beschrijving: "Fancy deluxe tofu bowl with cucumber"
+ *                    beschrijving: "Fancy deluxe tuna bowl with cucumber"
  *                    maxAantalIngredienten: 7
- *                    ingredienten: ["Cucumber", "Avocado", "Seaweed"]
+ *                    ingredienten:
+ *                      - id: 4
+ *                        naam: "Tuna"
+ *                        type: "Protein"
+ *                        aantal: 50
+ *                        prijs: 3.62
+ *                      - id: 5
+ *                        naam: "Corn"
+ *                        type: "Topping"
+ *                        aantal: 198
+ *                        prijs: 0.54
+ *                      - id: 6
+ *                        naam: "Seaweed"
+ *                        type: "Topping"
+ *                        aantal: 228
+ *                        prijs: 1.09
+ *                      - id: 7
+ *                        naam: "Srirachia"
+ *                        type: "Sauce"
+ *                        aantal: 450
+ *                        prijs: 1.14
  *      responses:
  *        200:
  *           description: 'Create new Pokebowl'
