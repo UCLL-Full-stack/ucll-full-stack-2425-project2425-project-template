@@ -4,6 +4,7 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import { userRouter } from './controller/user.routes';
 import { scheduleRouter } from './controller/schedule.routes';
+import { recipeRouter } from './controller/recipe.routes';
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 
 app.use('/schedule', scheduleRouter);
 app.use('/users', userRouter);
+app.use('/recipes', recipeRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
