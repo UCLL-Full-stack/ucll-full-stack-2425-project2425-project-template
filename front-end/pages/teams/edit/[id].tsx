@@ -1,6 +1,8 @@
+import Header from "@/components/header";
 import TeamEditor from "@/components/teams/TeamEditor";
 import TeamService from "@/services/TeamService";
 import { Team } from "@/types";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -25,10 +27,12 @@ const editTeamPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Edit Team</h1>
-      {team && <TeamEditor team={team} TeamUpdated={handleTeamUpdated} />}
-    </div>
+    <><Head>
+      <title>Edit Team - TeamTrack</title>
+    </Head><Header /><main>
+        <h1>Edit Team</h1>
+        {team && <TeamEditor team={team} TeamUpdated={handleTeamUpdated} />}
+      </main></>
   );
 };
 

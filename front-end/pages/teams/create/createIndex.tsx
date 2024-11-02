@@ -1,7 +1,5 @@
 import Header from "@/components/header";
-import TeamOverviewTable from "@/components/teams/TeamOverviewTable";
 import Head from "next/head";
-import teams from "..";
 import TeamCreator from "@/components/teams/TeamCreator";
 import { useRouter } from "next/router";
 

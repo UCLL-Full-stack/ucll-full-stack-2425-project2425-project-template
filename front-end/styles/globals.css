@@ -105,21 +105,40 @@ h2 {
     font-size: 1.25rem !important;
 }
 
+header {
+  background-color: rgb(211, 98, 0);
+  padding: 1rem;
+}
+
 h1,
 h2,
 p,
-ul {
-    margin: 0;
-}
 
 ul {
-    padding: 0;
+    padding: 1rem;
     list-style: none;
 }
 
 button {
     padding: 0.5rem 1rem;
     font-weight: bold;
+}
+
+nav ul {list-style: none;
+}
+
+li {
+  float: left;
+  font-size: large;
+  padding: 0.5rem;
+}
+
+a:hover {
+  background-color: rgb(168, 86, 13);
+}
+
+main {
+  padding: 1rem;
 }
 
 @media (prefers-color-scheme: dark) {
