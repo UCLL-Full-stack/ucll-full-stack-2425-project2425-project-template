@@ -7,13 +7,15 @@ export class Cocktail {
     private description: string;
     private strongness: number;
     private ingredientsList: Ingredient[];
+    private image: string;
 
-    constructor(id: number, name: string, description: string, strongness: number, ingredientsList: Ingredient[] = []) {
+    constructor(id: number, name: string, description: string, strongness: number, ingredientsList: Ingredient[] = [], image: string) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.strongness = strongness;
         this.ingredientsList = ingredientsList;
+        this.image = image;
     }
 
     // Getters
@@ -50,6 +52,9 @@ export class Cocktail {
 
     getIngredientsList(): Ingredient[] {
         return this.ingredientsList;
+    }
+    getImage(): string {
+        return this.image;
     }
 
     // Method to add an ingredient by name

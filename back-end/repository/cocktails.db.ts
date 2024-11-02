@@ -1,6 +1,7 @@
 import { Cocktail } from "../model/cocktail";
 import { Ingredient } from "../model/ingredient";
 
+
 const ingredientsMojito = [
     new Ingredient(1, "White rum", "50ml"),
     new Ingredient(2, "Mint leaves", "10 leaves"),
@@ -175,33 +176,32 @@ const ingredientsNegroni = [
 ];
 
 const cocktailsList = [
-    new Cocktail(1, "Mojito", "A refreshing Cuban cocktail with lime, mint, and rum.", 3, ingredientsMojito),
-    new Cocktail(2, "Moscow Mule", "A cocktail made with vodka, ginger beer, and lime.", 3, ingredientsMoscowMule),
-    new Cocktail(3, "Amaretto Sour", "A cocktail made with Amaretto liqueur and lemon juice.", 2, ingredientsAmarettoSour),
-    new Cocktail(4, "Pornstar Martini", "A cocktail with passion fruit and vanilla vodka.", 4, ingredientsPornstarMartini),
-    new Cocktail(5, "Caipirinha", "A Brazilian cocktail with cachaça, lime, and sugar.", 4, ingredientsCaipirinha),
-    new Cocktail(6, "Vesper", "A gin and vodka martini with Lillet Blanc.", 4, ingredientsVesper),
-    new Cocktail(7, "Vodka Martini", "A vodka martini served with an olive.", 4, ingredientsVodkaMartini),
-    new Cocktail(8, "Cosmopolitan", "A vodka cocktail with cranberry and lime.", 3, ingredientsCosmopolitan),
-    new Cocktail(9, "Carajillo", "A coffee cocktail with espresso and liqueur.", 2, ingredientsCarajillo),
-    new Cocktail(10, "Gin Basil Smash", "A gin cocktail with lemon and basil.", 3, ingredientsGinBasilSmash),
-    new Cocktail(11, "Pina Colada", "A tropical cocktail with rum and coconut.", 3, ingredientsPinaColada),
-    new Cocktail(12, "Margarita", "A tequila cocktail with lime and salt rim.", 4, ingredientsMargarita),
-    new Cocktail(13, "Zombie", "A strong rum cocktail with fruit juices.", 5, ingredientsZombie),
-    new Cocktail(14, "Mai Tai", "A rum cocktail with curaçao and lime.", 5, ingredientsMaiTai),
-    new Cocktail(15, "Americano", "A Campari and vermouth cocktail with soda.", 2, ingredientsAmericano),
-    new Cocktail(16, "Bloody Mary", "A vodka and tomato juice cocktail.", 3, ingredientsBloodyMary),
-    new Cocktail(17, "Manhattan", "A whiskey cocktail with vermouth and bitters.", 4, ingredientsManhattan),
-    new Cocktail(18, "Penicillin", "A scotch cocktail with honey-ginger syrup.", 4, ingredientsPenicillin),
-    new Cocktail(19, "Aperol Spritz", "A spritz cocktail with Aperol and prosecco.", 2, ingredientsAperolSpritz),
-    new Cocktail(20, "Dry Martini", "A classic gin martini with dry vermouth.", 5, ingredientsDryMartini),
-    new Cocktail(21, "Whiskey Sour", "A whiskey cocktail with lemon juice.", 3, ingredientsWhiskeySour),
-    new Cocktail(22, "Daiquiri", "A rum cocktail with lime juice and syrup.", 3, ingredientsDaiquiri),
-    new Cocktail(23, "Espresso Martini", "A vodka cocktail with espresso and liqueur.", 4, ingredientsEspressoMartini),
-    new Cocktail(24, "Old Fashioned", "A whiskey cocktail with sugar and bitters.", 5, ingredientsOldFashioned),
-    new Cocktail(25, "Negroni", "A gin cocktail with Campari and vermouth.", 4, ingredientsNegroni)
+    new Cocktail(1, "Mojito", "A refreshing Cuban cocktail with lime, mint, and rum.", 3, ingredientsMojito, "../images/mojito.jpg"),
+    new Cocktail(2, "Moscow Mule", "A cocktail made with vodka, ginger beer, and lime.", 3, ingredientsMoscowMule, "../images/moscowMule.jpg"),
+    new Cocktail(3, "Amaretto Sour", "A cocktail made with Amaretto liqueur and lemon juice.", 2, ingredientsAmarettoSour, "../images/amarettoSour.jpg"),
+    new Cocktail(4, "Pornstar Martini", "A cocktail with passion fruit and vanilla vodka.", 4, ingredientsPornstarMartini, "../images/pornstarMartini.jpg"),
+    new Cocktail(5, "Caipirinha", "A Brazilian cocktail with cachaça, lime, and sugar.", 4, ingredientsCaipirinha, "../images/caipirinha.jpg"),
+    new Cocktail(6, "Vesper", "A gin and vodka martini with Lillet Blanc.", 4, ingredientsVesper, "../images/vesper.jpg"),
+    new Cocktail(7, "Vodka Martini", "A vodka martini served with an olive.", 4, ingredientsVodkaMartini, "../images/vodkaMartini.jpg"),
+    new Cocktail(8, "Cosmopolitan", "A vodka cocktail with cranberry and lime.", 3, ingredientsCosmopolitan,";./images/cosmopolitan.jpg"),
+    new Cocktail(9, "Carajillo", "A coffee cocktail with espresso and liqueur.", 2, ingredientsCarajillo, "../images/carajillo.jpg"),
+    new Cocktail(10, "Gin Basil Smash", "A gin cocktail with lemon and basil.", 3, ingredientsGinBasilSmash, "../images/ginBasilSmash.jpg"),
+    new Cocktail(11, "Pina Colada", "A tropical cocktail with rum and coconut.", 3, ingredientsPinaColada, "../images/pinaColada.jpg"),
+    new Cocktail(12, "Margarita", "A tequila cocktail with lime and salt rim.", 4, ingredientsMargarita, "../images/margarita.jpg"),
+    new Cocktail(13, "Zombie", "A strong rum cocktail with fruit juices.", 5, ingredientsZombie, "../images/zombie.jpg"),
+    new Cocktail(14, "Mai Tai", "A rum cocktail with curaçao and lime.", 5, ingredientsMaiTai, "../images/maiTai.jpg"),
+    new Cocktail(15, "Americano", "A Campari and vermouth cocktail with soda.", 2, ingredientsAmericano, "../images/americano.jpg"),
+    new Cocktail(16, "Bloody Mary", "A vodka and tomato juice cocktail.", 3, ingredientsBloodyMary, "../images/bloodyMary.jpg"),
+    new Cocktail(17, "Manhattan", "A whiskey cocktail with vermouth and bitters.", 4, ingredientsManhattan, "../images/manhattan.jpg"),
+    new Cocktail(18, "Penicillin", "A scotch cocktail with honey-ginger syrup.", 4, ingredientsPenicillin, "../images/penicillin.jpg"),
+    new Cocktail(19, "Aperol Spritz", "A spritz cocktail with Aperol and prosecco.", 2, ingredientsAperolSpritz, "../images/aperolSpritz.jpg"),
+    new Cocktail(20, "Dry Martini", "A classic gin martini with dry vermouth.", 5, ingredientsDryMartini, "../images/dryMartini.jpg"),
+    new Cocktail(21, "Whiskey Sour", "A whiskey cocktail with lemon juice.", 3, ingredientsWhiskeySour, "../images/whiskeySour.jpg"),
+    new Cocktail(22, "Daiquiri", "A rum cocktail with lime juice and syrup.", 3, ingredientsDaiquiri, "../images/daiquiri.jpg"),
+    new Cocktail(23, "Espresso Martini", "A vodka cocktail with espresso and liqueur.", 4, ingredientsEspressoMartini, "../images/espressoMartini.jpg"),
+    new Cocktail(24, "Old Fashioned", "A whiskey cocktail with sugar and bitters.", 5, ingredientsOldFashioned, "../images/oldFashioned.jpg"),
+    new Cocktail(25, "Negroni", "A gin cocktail with Campari and vermouth.", 4, ingredientsNegroni, "../images/negroni.jpg"),
 ];
-
 const getAllCocktails = (): Cocktail[] => cocktailsList;
 
 const getCocktailById = ({ id }: { id: number }): Cocktail | null => {
