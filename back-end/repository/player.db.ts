@@ -15,7 +15,7 @@ const cedric = new User({
     name: 'Cedric',
     email: 'cedric.somethingiforgor@student.ucll.be',
     password: '5678',
-    birthday: new Date(2000, 1, 1), // sorry cedric I don't know your bday :(
+    birthday: new Date(2005, 10, 20), // sorry cedric I don't know your bday :(
 });
 
 const players = [
