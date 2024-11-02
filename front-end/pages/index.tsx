@@ -14,6 +14,7 @@ export default function Home() {
       </Head>
       <Header></Header>
       <main>
+        <h1>welcome to the home page</h1>
       </main>
     </>
   );
