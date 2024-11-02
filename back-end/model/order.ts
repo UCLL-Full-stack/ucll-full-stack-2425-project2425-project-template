@@ -6,7 +6,7 @@ export class Order {
     private orderDate: Date;
     private product: string;
     private price: number;
-    private userId: number;
+    private user: User;
     private promotions: Promotion[];
 
     constructor(order: {
@@ -24,7 +24,7 @@ export class Order {
         this.orderDate = order.orderDate;
         this.product = order.product;
         this.price = order.price;
-        this.userId = order.user.getId()!;
+        this.user = order.user;
         this.promotions = order.promotions;
     }
 
@@ -44,8 +44,8 @@ export class Order {
         return this.id;
     }
 
-    getUserId(): number {
-        return this.userId;
+    getUser(): User {
+        return this.user;
     }
 
     getPromotions(): Promotion[] {
@@ -65,10 +65,10 @@ export class Order {
         if (!order.product?.trim()) {
             throw new Error('Product is required');
         }
-        if (order.price <= 0) {
+        if (order.price < 0) {
             throw new Error('Price must be a positive number');
         }
-        if (!order.user.getId()) {
+        if (!order.user) {
             throw new Error('User ID is required');
         }
     }
@@ -77,7 +77,7 @@ export class Order {
         return (
             this.product === order.getProduct() &&
             this.price === order.getPrice() &&
-            this.userId === order.getUserId() &&
+            this.user.getId() === order.getUser().getId() && // Compare by User ID
             this.promotions.every((promotion, index) => promotion.equals(order.getPromotions()[index]))
         );
     }
