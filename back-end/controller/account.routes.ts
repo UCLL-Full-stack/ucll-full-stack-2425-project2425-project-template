@@ -94,18 +94,17 @@ const accountRouter = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/schemas/Account'
  */
 accountRouter.post('/users/:email/accounts', (req: Request, res: Response) => {
     try {
         const { email } = req.params;
         const account = <AccountInput>req.body;
 
-        const currentUser: UserInput = userService.getUserByEmail(email);
+        const currentUser = userService.getUserByEmail(email);
         if (!currentUser) {
-            throw new Error(`User with email ${email} not found`);
+            throw new Error('User not found');
         }
-
         const result = accountService.createAccount(account, currentUser);
         res.status(200).json(result);
     } catch (error) {

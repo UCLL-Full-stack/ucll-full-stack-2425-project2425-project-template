@@ -5,7 +5,7 @@ import { Expense } from '../../model/expense';
 
 test('given: valid values for expense, when: creating a expense, then: expense is created with those values', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const expense = new Expense({
@@ -26,7 +26,7 @@ test('given: valid values for expense, when: creating a expense, then: expense i
 
 test('given: zero amount for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createExpense = () => {
@@ -45,7 +45,7 @@ test('given: zero amount for expense, when: creating a expense, then: an error i
 
 test('given: negative amount for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createExpense = () => {
@@ -64,7 +64,7 @@ test('given: negative amount for expense, when: creating a expense, then: an err
 
 test('given: invalid currency for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createExpense = () => {
@@ -83,7 +83,7 @@ test('given: invalid currency for expense, when: creating a expense, then: an er
 
 test('given: invalid type for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createExpense = () => {

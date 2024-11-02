@@ -5,7 +5,7 @@ import { Income } from '../../model/income';
 
 test('given: valid values for income, when: creating a income, then: income is created with those values', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const income = new Income({
@@ -26,7 +26,7 @@ test('given: valid values for income, when: creating a income, then: income is c
 
 test('given: zero amount for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createIncome = () => {
@@ -45,7 +45,7 @@ test('given: zero amount for income, when: creating a income, then: an error is 
 
 test('given: negative amount for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createIncome = () => {
@@ -64,7 +64,7 @@ test('given: negative amount for income, when: creating a income, then: an error
 
 test('given: invalid currency for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createIncome = () => {
@@ -83,7 +83,7 @@ test('given: invalid currency for income, when: creating a income, then: an erro
 
 test('given: invalid type for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings' });
+    const account = new Account({ isShared: true, type: 'Savings', users: [] });
 
     //When
     const createIncome = () => {

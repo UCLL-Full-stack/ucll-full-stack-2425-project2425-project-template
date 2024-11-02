@@ -6,8 +6,8 @@ import { Budgetgoal } from '../model/budgetgoal';
 
 const accounts: Account[] = [];
 
-const createAccount = ({ isShared, type }: Account): Account => {
-    const account = new Account({ isShared, type });
+const createAccount = ({ isShared, type, users }: Account): Account => {
+    const account = new Account({ isShared, type, users });
     accounts.push(account);
     return account;
 };

@@ -17,7 +17,7 @@ export class Account {
     // public loans: Loan[];
     public budgetgoals: Budgetgoal[];
 
-    constructor(account: { id?: number; isShared: boolean; type: string }) {
+    constructor(account: { id?: number; isShared: boolean; type: string; users: User[] }) {
         this.validate(account);
 
         this.id = account.id;
@@ -29,7 +29,7 @@ export class Account {
         this.endDate = null;
         this.status = 'Active';
         this.transactions = [];
-        this.users = [];
+        this.users = account.users;
         // this.loans = [];
         this.budgetgoals = [];
     }

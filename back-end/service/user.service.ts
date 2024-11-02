@@ -37,4 +37,12 @@ const getUserByEmailAndPassword = (email: string, password: string): User | unde
     return userDb.getUserByEmailAndPassword(email, password);
 };
 
-export default { createUser, getUserByEmailAndPassword };
+const getUserByEmail = (email: string): User | undefined => {
+    const user = userDb.getUserByEmail(email);
+    if (!user) {
+        throw new Error(`User with email ${email} not found.`);
+    }
+    return userDb.getUserByEmail(email);
+};
+
+export default { createUser, getUserByEmailAndPassword, getUserByEmail };
