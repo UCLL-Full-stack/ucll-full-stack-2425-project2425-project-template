@@ -1,14 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Game } from '@types';
+import LibraryService from '@services/LibraryService';
 
 interface StoreTableProps {
     games?: Array<Game>;
 }
 
-const StoreTable: React.FC<StoreTableProps> = ({ games }) => {
+const StoreTable: React.FC<StoreTableProps> = ({ games = [] }) => {
+    const [libraryGames, setLibraryGames] = useState<Game[]>([]);
+
+    const fetchLibraryGames = async () => {
+        try {
+            const response = await LibraryService.getAllLibraryGames();
+            setLibraryGames(await response.json());
+        } catch (error) {
+            console.error("Error fetching library games:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchLibraryGames();
+    }, []);
+
+    const handlePurchase = async (game: Game) => {
+        const confirmPurchase = window.confirm("Are you sure you want to purchase this game?");
+        if (confirmPurchase) {
+            await LibraryService.addGameToLibrary(game);
+            await fetchLibraryGames();
+        }
+    };
+
     return (
         <>
-            {games && (
+            {games.length > 0 && (
                 <table className="table table-hover">
                     <thead>
                     <tr>
@@ -34,7 +58,13 @@ const StoreTable: React.FC<StoreTableProps> = ({ games }) => {
                             <td>{game.categories.join(', ')}</td>
                             <td>{game.discount}%</td>
                             <td>€{game.price.toFixed(2)}</td>
-                            <td><a>PURCHASE</a></td>
+                            <td>
+                                {libraryGames?.some((ownedGame) => ownedGame.id === game.id) ? (
+                                    <span>Purchased</span>
+                                ) : (
+                                    <a href="#" onClick={() => handlePurchase(game)}>PURCHASE</a>
+                                )}
+                            </td>
                         </tr>
                     ))}
                     </tbody>
