@@ -1,7 +1,9 @@
-# Project template
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/twPj_hbU)
 
-To get started, open the Readme.md files in the analysis, back-end and front-end folders.
+# ClinicalLink
 
-Change this readme file to describe your project, change the title and fill in your name below.
+## Project Description
 
-### \<Student 1 name\> / \<Student 2 name\>
+ClinicalLink is an all-in-one digital platform designed to streamline appointment scheduling, patient management, and medical data tracking for healthcare professionals such as doctors, chiropractors, physiotherapists, and other medical specialists. The platform offers robust tools for both healthcare providers and patients, allowing them to collaborate more efficiently in managing health-related activities.
+
+### \<Student 1 Jasper Evens\> / \<Student 2 Elliott Leigh\>
