@@ -17,7 +17,7 @@ const findAllByRequiredCourseId = tryCatcher((id: number): Course[] => {
 });
 
 const deleteCourses = tryCatcher((ids: number[]): void => {
-    DBcourses = DBcourses.filter(course => !ids.includes(course.id));
+    DBcourses = DBcourses.filter(course => course.id && !ids.includes(course.id));
 });
 
 export default {
