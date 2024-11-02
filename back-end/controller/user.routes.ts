@@ -108,7 +108,7 @@ userRouter.get("/:email", async (req: Request, res: Response, next: NextFunction
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/UserInput'
+ *              $ref: '#/components/schemas/User'
  *      responses:
  *         200:
  *            description: The created user.

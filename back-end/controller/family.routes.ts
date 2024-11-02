@@ -6,7 +6,7 @@
  *       type: string
  *       enum: [admin, parent, child]
  *       description: The role of the user.
- *     UserInput:
+ *     User:
  *       type: object
  *       properties:
  *         name:
@@ -21,7 +21,7 @@
  *         role:
  *           $ref: '#/components/schemas/Role'
  *           description: The role of the user.
- *     FamilyInput:
+ *     Family:
  *       type: object
  *       properties:
  *         name:
@@ -30,10 +30,10 @@
  *         familyList:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/UserInput'
+ *             $ref: '#/components/schemas/User'
  *           description: The list of family members.
  *         owner:
- *           $ref: '#/components/schemas/UserInput'
+ *           $ref: '#/components/schemas/User'
  *           description: The owner of the family.
  */
 import express, { NextFunction, Request, Response } from 'express';
