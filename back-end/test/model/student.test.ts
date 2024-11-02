@@ -1,5 +1,6 @@
 import { Student } from '../../model/student';
 import { Course } from '../../model/course';
+
 const mockCourse = new Course({
     id: 1,
     name: 'Intro to Programming',
@@ -12,7 +13,6 @@ const mockCourse = new Course({
 });
 
 test('given: valid student data, when: student is created, then: user fields are set correctly', () => {
-    // when
     const student = new Student({
         id: 2,
         name: 'Alice',
@@ -23,7 +23,6 @@ test('given: valid student data, when: student is created, then: user fields are
         passedCourses: [mockCourse]
     });
 
-    // then
     expect(student.id).toEqual(2);
     expect(student.name).toEqual('Alice');
     expect(student.email).toEqual('alice@example.com');
@@ -31,7 +30,6 @@ test('given: valid student data, when: student is created, then: user fields are
 });
 
 test('given: missing name, when: student is created, then: an error is thrown', () => {
-    // when
     const createStudent = () => new Student({
         id: 3,
         name: '',
@@ -42,12 +40,10 @@ test('given: missing name, when: student is created, then: an error is thrown', 
         passedCourses: []
     });
 
-    // then
     expect(createStudent).toThrow('Name is required.');
 });
 
 test('given: missing email, when: student is created, then: an error is thrown', () => {
-    // when
     const createStudent = () => new Student({
         id: 4,
         name: 'Bob',
@@ -58,12 +54,10 @@ test('given: missing email, when: student is created, then: an error is thrown',
         passedCourses: []
     });
 
-    // then
     expect(createStudent).toThrow('Email is required.');
 });
 
 test('given: missing password, when: student is created, then: an error is thrown', () => {
-    // when
     const createStudent = () => new Student({
         id: 5,
         name: 'Bob',
@@ -74,12 +68,10 @@ test('given: missing password, when: student is created, then: an error is throw
         passedCourses: []
     });
 
-    // then
     expect(createStudent).toThrow('Password is required.');
 });
 
 test('given: invalid start year, when: student is created, then: an error is thrown', () => {
-    // when
     const createStudent = () => new Student({
         id: 6,
         name: 'Charlie',
@@ -90,12 +82,10 @@ test('given: invalid start year, when: student is created, then: an error is thr
         passedCourses: []
     });
 
-    // then
     expect(createStudent).toThrow('Start year should be 4 digit.');
 });
 
 test('given: valid data, when: two students are created, then: equals method returns correct result', () => {
-    // given
     const student1 = new Student({
         id: 7,
         name: 'Diana',
@@ -116,12 +106,10 @@ test('given: valid data, when: two students are created, then: equals method ret
         passedCourses: [mockCourse]
     });
 
-    // then
     expect(student1.equals(student2)).toBe(true);
 });
 
 test('given: different data, when: two students are compared, then: equals method returns false', () => {
-    // given
     const student1 = new Student({
         id: 8,
         name: 'Eve',
@@ -142,6 +130,5 @@ test('given: different data, when: two students are compared, then: equals metho
         passedCourses: []
     });
 
-    // then
     expect(student1.equals(student2)).toBe(false);
 });

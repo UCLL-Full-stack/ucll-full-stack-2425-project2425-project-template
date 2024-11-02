@@ -2,31 +2,28 @@ import { ISP } from "../../model/isp";
 import { Student } from "../../model/student";
 import { Course } from "../../model/course";
 
-// Mock Course and Student instances for testing
 const mockCourse = new Course({
-id: 1,
-name: "Full-stack Development",
-description: "Learn full-stack development",
-phase: 2,
-credits: 6,
-lecturers: ["Dr. Smith"],
-isElective: true,
-requiredPassedCourses: []
+    id: 1,
+    name: "Full-stack Development",
+    description: "Learn full-stack development",
+    phase: 2,
+    credits: 6,
+    lecturers: ["Dr. Smith"],
+    isElective: true,
+    requiredPassedCourses: []
 });
 
 const mockStudent = new Student({
-id: 1,
-name: "Jane Doe",
-email: "jane.doe@example.com",
-password: "password123",
-nationality: "Belgian",
-startYear: 2022,
-passedCourses: []
+    id: 1,
+    name: "Jane Doe",
+    email: "jane.doe@example.com",
+    password: "password123",
+    nationality: "Belgian",
+    startYear: 2022,
+    passedCourses: []
 });
 
-
 test('given: valid values for ISP, when: ISP is created, then: ISP is created with those values', () => {
-    // when
     const isp = new ISP({
         id: 1,
         status: "active",
@@ -36,7 +33,6 @@ test('given: valid values for ISP, when: ISP is created, then: ISP is created wi
         student: mockStudent
     });
 
-    // then
     expect(isp.id).toEqual(1);
     expect(isp.status).toEqual("active");
     expect(isp.totalCredits).toEqual(18);
@@ -46,7 +42,6 @@ test('given: valid values for ISP, when: ISP is created, then: ISP is created wi
 });
 
 test("given: missing status, when: ISP is created, then: an error is thrown", () => {
-    // when
     const createISP = () => new ISP({
         id: 1,
         status: "",
@@ -56,12 +51,10 @@ test("given: missing status, when: ISP is created, then: an error is thrown", ()
         student: mockStudent
     });
 
-    // then
     expect(createISP).toThrow("Description is required.");
 });
 
 test("given: negative totalCredits, when: ISP is created, then: an error is thrown", () => {
-    // when
     const createISP = () => new ISP({
         id: 1,
         status: "active",
@@ -71,12 +64,10 @@ test("given: negative totalCredits, when: ISP is created, then: an error is thro
         student: mockStudent
     });
 
-    // then
     expect(createISP).toThrow("Credits are required and cannot be negative");
 });
 
 test("given: invalid year format, when: ISP is created, then: an error is thrown", () => {
-    // when
     const createISP = () => new ISP({
         id: 1,
         status: "active",
@@ -86,12 +77,10 @@ test("given: invalid year format, when: ISP is created, then: an error is thrown
         student: mockStudent
     });
 
-    // then
     expect(createISP).toThrow("Start year should be 4 digit.");
 });
 
 test("given: no student, when: ISP is created, then: an error is thrown", () => {
-    // when
     const createISP = () => new ISP({
         id: 1,
         status: "active",
@@ -101,12 +90,10 @@ test("given: no student, when: ISP is created, then: an error is thrown", () => 
         student: undefined as any
     });
 
-    // then
     expect(createISP).toThrow("Student is required.");
 });
 
 test("given: two ISPs with same properties, when: equals is called, then: returns true", () => {
-    // given
     const isp1 = new ISP({
         id: 1,
         status: "active",
@@ -125,12 +112,10 @@ test("given: two ISPs with same properties, when: equals is called, then: return
         student: mockStudent
     });
 
-    // then
     expect(isp1.equals(isp2)).toBe(true);
 });
 
 test("given: two ISPs with different properties, when: equals is called, then: returns false", () => {
-    // given
     const isp1 = new ISP({
         id: 1,
         status: "active",
@@ -149,7 +134,5 @@ test("given: two ISPs with different properties, when: equals is called, then: r
         student: mockStudent
     });
 
-    // then
     expect(isp1.equals(isp2)).toBe(false);
 });
-

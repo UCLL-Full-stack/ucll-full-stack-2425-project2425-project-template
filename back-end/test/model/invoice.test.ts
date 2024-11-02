@@ -1,7 +1,6 @@
 import { Invoice } from "../../model/invoice";
 import { ISP } from "../../model/isp";
 import { Student } from "../../model/student";
-// Mock Student and ISP instance for testing
 
 const mockStudent = new Student({
     id: 1,
@@ -23,7 +22,6 @@ const mockISP = new ISP({
 });
 
 test("given: valid values for Invoice, when: Invoice is created, then: Invoice is created with those values", () => {
-    // when
     const invoice = new Invoice({
         id: 1,
         totalAmount: 100,
@@ -32,7 +30,6 @@ test("given: valid values for Invoice, when: Invoice is created, then: Invoice i
         isp: mockISP
     });
 
-    // then
     expect(invoice.id).toEqual(1);
     expect(invoice.totalAmount).toEqual(100);
     expect(invoice.deadline).toEqual(new Date("2024-12-31"));
@@ -41,7 +38,6 @@ test("given: valid values for Invoice, when: Invoice is created, then: Invoice i
 });
 
 test("given: negative totalAmount, when: Invoice is created, then: an error is thrown", () => {
-    // when
     const createInvoice = () => new Invoice({
         id: 2,
         totalAmount: -100,
@@ -50,12 +46,10 @@ test("given: negative totalAmount, when: Invoice is created, then: an error is t
         isp: mockISP
     });
 
-    // then
     expect(createInvoice).toThrow("Total amount cannot be negative.");
 });
 
 test("given: missing deadline, when: Invoice is created, then: an error is thrown", () => {
-    // when
     const createInvoice = () => new Invoice({
         id: 3,
         totalAmount: 100,
@@ -64,12 +58,10 @@ test("given: missing deadline, when: Invoice is created, then: an error is throw
         isp: mockISP
     });
 
-    // then
     expect(createInvoice).toThrow("Deadline is required.");
 });
 
 test("given: negative paidAmount, when: Invoice is created, then: an error is thrown", () => {
-    // when
     const createInvoice = () => new Invoice({
         id: 4,
         totalAmount: 100,
@@ -78,12 +70,10 @@ test("given: negative paidAmount, when: Invoice is created, then: an error is th
         isp: mockISP
     });
 
-    // then
     expect(createInvoice).toThrow("Paid amount cannot be negative.");
 });
 
 test("given: missing ISP, when: Invoice is created, then: an error is thrown", () => {
-    // when
     const createInvoice = () => new Invoice({
         id: 5,
         totalAmount: 100,
@@ -92,12 +82,10 @@ test("given: missing ISP, when: Invoice is created, then: an error is thrown", (
         isp: undefined as any
     });
 
-    // then
     expect(createInvoice).toThrow("ISP is required.");
 });
 
 test("given: two Invoices with the same properties, when: equals is called, then: returns true", () => {
-    // given
     const invoice1 = new Invoice({
         id: 1,
         totalAmount: 100,
@@ -114,12 +102,10 @@ test("given: two Invoices with the same properties, when: equals is called, then
         isp: mockISP
     });
 
-    // then
     expect(invoice1.equals(invoice2)).toBe(true);
 });
 
 test("given: two Invoices with different properties, when: equals is called, then: returns false", () => {
-    // given
     const invoice1 = new Invoice({
         id: 1,
         totalAmount: 100,
@@ -136,6 +122,5 @@ test("given: two Invoices with different properties, when: equals is called, the
         isp: mockISP
     });
 
-    // then
     expect(invoice1.equals(invoice2)).toBe(false);
 });
