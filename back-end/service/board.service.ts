@@ -40,8 +40,8 @@ const createBoard = (boardData: any): void => {
 
     let boardColumns: Column[] = [];
     if (columns && columns.length > 0) {
-        const columnsData = columns.map((column: {columnName: string}) => {
-            const columnId = `column${column.columnName}-${boardIdNumber}-${guildIdNumber}`;
+        const columnsData = columns.map((column: {columnName: string}, index: number) => {
+            const columnId = `column${index+1}-${boardIdNumber}-${guildIdNumber}`;
             return {
                 columnId,
                 columnName: column.columnName,
