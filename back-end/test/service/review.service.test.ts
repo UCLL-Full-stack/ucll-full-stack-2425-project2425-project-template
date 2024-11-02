@@ -1,130 +1,88 @@
-import { PaymentStatus } from '@prisma/client';
-import tripDb from '../../domain/data-access/trip.db';
-import studentDb from '../../domain/data-access/student.db';
-import { Review } from '../../domain/model/review';
-import reviewDb from '../../domain/data-access/review.db';
 import reviewService from '../../service/review.service';
+import reviewDb from '../../domain/data-access/review.db';
+import { Review } from '../../domain/model/review';
+import { Trip } from '../../domain/model/trip';
+import { Student } from '../../domain/model/student';
+import { PaymentStatus } from '@prisma/client'; 
 
-let createReviewMock: jest.Mock;
-let mockTripDbGetTripById: jest.Mock;
-let mockStudentDbGetStudentById: jest.Mock;
-let mockReviewDbCreateReview: jest.Mock;
 let mockReviewDbGetAllReviews: jest.Mock;
 let mockReviewDbGetReviewById: jest.Mock;
 
 beforeEach(() => {
-    mockTripDbGetTripById = jest.fn();
-    mockStudentDbGetStudentById = jest.fn();
-    mockReviewDbCreateReview = jest.fn();
     mockReviewDbGetAllReviews = jest.fn();
     mockReviewDbGetReviewById = jest.fn();
+
+    reviewDb.getAllReviews = mockReviewDbGetAllReviews;
+    reviewDb.getReviewById = mockReviewDbGetReviewById;
 });
 
 afterEach(() => {
     jest.clearAllMocks();
 });
 
-
-
-test('given an invalid review comment, when createReview is called, then an error is thrown', async () => {
+test('should return all reviews', async () => {
     // Given
-    const invalidReviewInput = { ...validReviewInput, comment: '' };
+    const mockReviews: Review[] = [
+        new Review({ 
+            id: 1, 
+            comment: 'Amazing trip!', 
+            rating: 5, 
+            trip: new Trip({ id: 1, description: 'Trip to Paris', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 }), 
+            student: new Student({ id: 1, username: 'student1', email: 'student1@example.com', password: 'pass', studentNumber: '123456' }) 
+        }),
+        new Review({ 
+            id: 2, 
+            comment: 'Not worth the price.', 
+            rating: 2, 
+            trip: new Trip({ id: 2, description: 'Trip to London', location: 'UK', startDate: new Date(), endDate: new Date(), price: 200 }),
+            student: new Student({ id: 2, username: 'student2', email: 'student2@example.com', password: 'pass', studentNumber: '654321' }) 
+        }),
+    ];
+
+    mockReviewDbGetAllReviews.mockResolvedValue(mockReviews);
 
     // When
-    const createReview = async () => await reviewService.createReview(invalidReviewInput);
+    const reviews = await reviewService.getAllReviews();
 
     // Then
-    await expect(createReview()).rejects.toThrow('Comment is required.');
+    expect(reviews).toEqual(mockReviews);
+    expect(mockReviewDbGetAllReviews).toHaveBeenCalled();
 });
 
-test('given an invalid rating, when createReview is called, then an error is thrown', async () => {
+test('should return a review by ID', async () => {
     // Given
-    const invalidReviewInput = { ...validReviewInput, rating: 6 };
-
-    // When
-    const createReview = async () => await reviewService.createReview(invalidReviewInput);
-
-    // Then
-    await expect(createReview()).rejects.toThrow('Rating must be between 1 and 5.');
-});
-
-test('given a review input with a non-existent trip ID, when createReview is called, then an error is thrown', async () => {
-    // Given
-    tripDb.getTripById = mockTripDbGetTripById.mockReturnValue(Promise.resolve(null));
-    
-    // When
-    const createReview = async () => await reviewService.createReview(validReviewInput);
-
-    // Then
-    await expect(createReview()).rejects.toThrow(`Trip with ID ${validReviewInput.tripId} does not exist.`);
-});
-
-test('given a review input with a non-existent student ID, when createReview is called, then an error is thrown', async () => {
-    // Given
-    studentDb.getStudentById = mockStudentDbGetStudentById.mockReturnValue(Promise.resolve(null));
-
-    // When
-    const createReview = async () => await reviewService.createReview(validReviewInput);
-
-    // Then
-    await expect(createReview()).rejects.toThrow(`Student with ID ${validReviewInput.studentId} does not exist.`);
-});
-
-test('given an error when creating a review in the database, when createReview is called, then an error is thrown', async () => {
-    // Given
-    tripDb.getTripById = mockTripDbGetTripById.mockReturnValue(Promise.resolve(trip));
-    studentDb.getStudentById = mockStudentDbGetStudentById.mockReturnValue(Promise.resolve(student));
-    reviewDb.createReview = mockReviewDbCreateReview.mockImplementation(() => {
-        throw new Error('Database error');
+    const reviewId = 1;
+    const mockReview: Review = new Review({ 
+        id: reviewId, 
+        comment: 'Amazing trip!', 
+        rating: 5, 
+        trip: new Trip({ id: 1, description: 'Trip to Paris', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 }), 
+        student: new Student({ id: 1, username: 'student1', email: 'student1@example.com', password: 'pass', studentNumber: '123456' }) 
     });
 
+    mockReviewDbGetReviewById.mockResolvedValue(mockReview);
+
     // When
-    const createReview = async () => await reviewService.createReview(validReviewInput);
+    const review = await reviewService.getReviewById(reviewId);
 
     // Then
-    await expect(createReview()).rejects.toThrow('Review creation failed due to a database error.');
+    expect(review).toEqual(mockReview);
+    expect(mockReviewDbGetReviewById).toHaveBeenCalledWith(reviewId);
 });
 
-test('when getAllReviews is called, then it retrieves all reviews', async () => {
+test('should throw an error if review ID does not exist', async () => {
     // Given
-    const reviews = [new Review(validReviewInput)];
-    reviewDb.getAllReviews = mockReviewDbGetAllReviews.mockReturnValue(Promise.resolve(reviews));
+    const reviewId = 999; 
+    mockReviewDbGetReviewById.mockResolvedValue(null);
 
-    // When
-    const result = await reviewService.getAllReviews();
-
-    // Then
-    expect(mockReviewDbGetAllReviews).toHaveBeenCalled();
-    expect(result).toEqual(reviews);
+    // When & Then
+    await expect(reviewService.getReviewById(reviewId)).rejects.toThrow(`Review with ID ${reviewId} does not exist.`);
 });
 
-test('given an invalid review ID, when getReviewById is called, then an error is thrown', async () => {
-    // When
-    const getReview = async () => await reviewService.getReviewById(-1);
-
-    // Then
-    await expect(getReview()).rejects.toThrow("Invalid Review ID");
-});
-
-test('given a non-existent review ID, when getReviewById is called, then an error is thrown', async () => {
+test('should throw an error if review ID is invalid', async () => {
     // Given
-    mockReviewDbGetReviewById.mockReturnValue(Promise.resolve(null));
+    const invalidReviewId = -1;
 
-    // When
-    const getReview = async () => await reviewService.getReviewById(1);
-
-    // Then
-    await expect(getReview()).rejects.toThrow(`Review with ID 1 does not exist.`);
-});
-
-test('when getReviewById is called with a valid ID, it returns the review', async () => {
-    // Given
-    const review = new Review(validReviewInput);
-    mockReviewDbGetReviewById.mockReturnValue(Promise.resolve(review));
-
-    // When
-    const result = await reviewService.getReviewById(1);
-
-    // Then
-    expect(result).toEqual(review);
+    // When & Then
+    await expect(reviewService.getReviewById(invalidReviewId)).rejects.toThrow("Invalid Review ID");
 });

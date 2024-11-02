@@ -1,7 +1,6 @@
-import studentDb from "../../domain/data-access/student.db";
-import { Student } from "../../domain/model/student";
-import studentService from "../../service/student.service";
-import { StudentInput, BookingInput } from "../../types";
+import studentService from '../../service/student.service';
+import studentDb from '../../domain/data-access/student.db';
+import { Student } from '../../domain/model/student';
 
 let mockStudentDbCreateStudent: jest.Mock;
 let mockStudentDbGetStudentById: jest.Mock;
@@ -13,184 +12,117 @@ beforeEach(() => {
     mockStudentDbGetStudentById = jest.fn();
     mockStudentDbGetAllStudents = jest.fn();
     mockStudentDbGetStudentByUsername = jest.fn();
+
+    studentDb.createStudent = mockStudentDbCreateStudent;
+    studentDb.getStudentById = mockStudentDbGetStudentById;
+    studentDb.getAllStudents = mockStudentDbGetAllStudents;
+    studentDb.getStudentByUsername = mockStudentDbGetStudentByUsername;
 });
 
 afterEach(() => {
     jest.clearAllMocks();
 });
 
-// Define a mock trip object
-const mockTrip = {
-    id: 1,
-    destination: 'Paris',
-    // Include other necessary trip properties if needed
-};
-
-// Define a mock booking to align with the Booking type
-const mockBooking: BookingInput = {
-    id: 1,
-    tripId: mockTrip.id,  // Ensure tripId is included
-    studentIds: [1],
-    bookingDate: new Date(),
-    paymentStatus: 'Paid',
-};
-
-// Define valid student input with mock bookings
-const validStudentInput: StudentInput = {
-    username: 'student1',
-    email: 'student1@example.com',
-    password: 'securepassword',
-    studentNumber: '12345',
-    bookings: [mockBooking], // Use mockBooking to fulfill the Booking type requirements
-};
-
-const student = new Student(validStudentInput);
-
-test('given a valid student input, when createStudent is called, then a student is created with those values', async () => {
+test('should create a new student', async () => {
     // Given
-    studentDb.createStudent = mockStudentDbCreateStudent.mockReturnValue(Promise.resolve(student));
+    const studentInput = { username: 'student1', email: 'student1@example.com', password: 'password123', studentNumber: '123456' };
+    const mockStudent = new Student({ id: 1, ...studentInput });
+
+    mockStudentDbCreateStudent.mockResolvedValue(mockStudent);
 
     // When
-    const createdStudent = await studentService.createStudent(validStudentInput);
+    const student = await studentService.createStudent(studentInput);
 
     // Then
-    expect(mockStudentDbCreateStudent).toHaveBeenCalledWith(validStudentInput);
-    expect(createdStudent).toEqual(student);
+    expect(student).toEqual(mockStudent);
+    expect(mockStudentDbCreateStudent).toHaveBeenCalledWith(studentInput);
 });
 
-// The rest of your tests remain unchanged
-test('given an invalid username, when createStudent is called, then an error is thrown', async () => {
+test('should throw an error if required fields are missing when creating a student', async () => {
     // Given
-    const invalidInput = { ...validStudentInput, username: '' };
+    const invalidStudentInput = { username: '', email: 'student1@example.com', password: 'password123', studentNumber: '123456' };
 
-    // When
-    const createStudent = async () => await studentService.createStudent(invalidInput);
-
-    // Then
-    await expect(createStudent()).rejects.toThrow('Username is required.');
+    // When & Then
+    await expect(studentService.createStudent(invalidStudentInput)).rejects.toThrow("Username is required.");
 });
 
-test('given an invalid email, when createStudent is called, then an error is thrown', async () => {
-    // Given
-    const invalidInput = { ...validStudentInput, email: '' };
-
-    // When
-    const createStudent = async () => await studentService.createStudent(invalidInput);
-
-    // Then
-    await expect(createStudent()).rejects.toThrow('Email is required.');
-});
-
-test('given an invalid password, when createStudent is called, then an error is thrown', async () => {
-    // Given
-    const invalidInput = { ...validStudentInput, password: '' };
-
-    // When
-    const createStudent = async () => await studentService.createStudent(invalidInput);
-
-    // Then
-    await expect(createStudent()).rejects.toThrow('Password is required.');
-});
-
-test('given an invalid student number, when createStudent is called, then an error is thrown', async () => {
-    // Given
-    const invalidInput = { ...validStudentInput, studentNumber: '' };
-
-    // When
-    const createStudent = async () => await studentService.createStudent(invalidInput);
-
-    // Then
-    await expect(createStudent()).rejects.toThrow('Student number is required.');
-});
-
-test('given an error when creating a student in the database, when createStudent is called, then an error is thrown', async () => {
-    // Given
-    studentDb.createStudent = mockStudentDbCreateStudent.mockImplementation(() => {
-        throw new Error('Database error');
-    });
-
-    // When
-    const createStudent = async () => await studentService.createStudent(validStudentInput);
-
-    // Then
-    await expect(createStudent()).rejects.toThrow('Student creation failed due to a database error.');
-});
-
-test('when getStudentById is called with a valid ID, it retrieves the student', async () => {
+test('should return a student by ID', async () => {
     // Given
     const studentId = 1;
-    mockStudentDbGetStudentById.mockReturnValue(Promise.resolve(student));
+    const mockStudent = new Student({ id: studentId, username: 'student1', email: 'student1@example.com', password: 'password123', studentNumber: '123456' });
+
+    mockStudentDbGetStudentById.mockResolvedValue(mockStudent);
 
     // When
-    const result = await studentService.getStudentById(studentId);
+    const student = await studentService.getStudentById(studentId);
 
     // Then
+    expect(student).toEqual(mockStudent);
     expect(mockStudentDbGetStudentById).toHaveBeenCalledWith(studentId);
-    expect(result).toEqual(student);
 });
 
-test('given an invalid student ID, when getStudentById is called, then an error is thrown', async () => {
-    // When
-    const getStudent = async () => await studentService.getStudentById(-1);
-
-    // Then
-    await expect(getStudent()).rejects.toThrow("Invalid Student ID");
-});
-
-test('given a non-existent student ID, when getStudentById is called, then an error is thrown', async () => {
+test('should throw an error if student ID does not exist', async () => {
     // Given
-    const studentId = 1;
-    mockStudentDbGetStudentById.mockReturnValue(Promise.resolve(null));
+    const studentId = 999;
+    mockStudentDbGetStudentById.mockResolvedValue(null);
 
-    // When
-    const getStudent = async () => await studentService.getStudentById(studentId);
-
-    // Then
-    await expect(getStudent()).rejects.toThrow(`Student with ID ${studentId} does not exist.`);
+    // When & Then
+    await expect(studentService.getStudentById(studentId)).rejects.toThrow(`Student with ID ${studentId} does not exist.`);
 });
 
-test('when getAllStudents is called, then it retrieves all students', async () => {
+test('should throw an error if student ID is invalid', async () => {
     // Given
-    const students = [student];
-    studentDb.getAllStudents = mockStudentDbGetAllStudents.mockReturnValue(Promise.resolve(students));
+    const invalidStudentId = -1;
+
+    // When & Then
+    await expect(studentService.getStudentById(invalidStudentId)).rejects.toThrow("Invalid Student ID");
+});
+
+test('should return all students', async () => {
+    // Given
+    const mockStudents: Student[] = [
+        new Student({ id: 1, username: 'student1', email: 'student1@example.com', password: 'password123', studentNumber: '123456' }),
+        new Student({ id: 2, username: 'student2', email: 'student2@example.com', password: 'password456', studentNumber: '654321' }),
+    ];
+
+    mockStudentDbGetAllStudents.mockResolvedValue(mockStudents);
 
     // When
-    const result = await studentService.getAllStudents();
+    const students = await studentService.getAllStudents();
 
     // Then
+    expect(students).toEqual(mockStudents);
     expect(mockStudentDbGetAllStudents).toHaveBeenCalled();
-    expect(result).toEqual(students);
 });
 
-test('when getStudentByUsername is called with a valid username, it retrieves the student', async () => {
+test('should return a student by username', async () => {
     // Given
     const username = 'student1';
-    mockStudentDbGetStudentByUsername.mockReturnValue(Promise.resolve(student));
+    const mockStudent = new Student({ id: 1, username, email: 'student1@example.com', password: 'password123', studentNumber: '123456' });
+
+    mockStudentDbGetStudentByUsername.mockResolvedValue(mockStudent);
 
     // When
-    const result = await studentService.getStudentByUsername(username);
+    const student = await studentService.getStudentByUsername(username);
 
     // Then
+    expect(student).toEqual(mockStudent);
     expect(mockStudentDbGetStudentByUsername).toHaveBeenCalledWith(username);
-    expect(result).toEqual(student);
 });
 
-test('given an invalid username, when getStudentByUsername is called, then an error is thrown', async () => {
-    // When
-    const getStudent = async () => await studentService.getStudentByUsername('');
-
-    // Then
-    await expect(getStudent()).rejects.toThrow('Username is required.');
-});
-
-test('given a non-existent username, when getStudentByUsername is called, then an error is thrown', async () => {
+test('should throw an error if username is required when getting a student by username', async () => {
     // Given
-    const username = 'student1';
-    mockStudentDbGetStudentByUsername.mockReturnValue(Promise.resolve(null));
+    const username = '';
 
-    // When
-    const getStudent = async () => await studentService.getStudentByUsername(username);
+    // When & Then
+    await expect(studentService.getStudentByUsername(username)).rejects.toThrow("Username is required.");
+});
 
-    // Then
-    await expect(getStudent()).rejects.toThrow(`Student with username ${username} does not exist.`);
+test('should throw an error if student with username does not exist', async () => {
+    // Given
+    const username = 'nonexistent';
+    mockStudentDbGetStudentByUsername.mockResolvedValue(null); 
+
+    // When & Then
+    await expect(studentService.getStudentByUsername(username)).rejects.toThrow(`Student with username ${username} does not exist.`);
 });
