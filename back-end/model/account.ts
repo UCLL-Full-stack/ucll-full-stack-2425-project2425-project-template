@@ -4,32 +4,33 @@ import { Loan } from './loan';
 import { Transaction } from './transaction';
 
 export class Account {
-    private id?: number;
-    private accountNumber: string;
-    private balance: number;
-    private isShared: boolean;
-    private startDate: Date;
-    private endDate: Date | null;
-    private status: string;
-    private type: string;
-    private transactions: Transaction[];
-    private users: User[];
-    private loans: Loan[];
-    private budgetgoals: Budgetgoal[];
+    public id?: number;
+    public accountNumber: string;
+    public balance: number;
+    public isShared: boolean;
+    public startDate: Date;
+    public endDate: Date | null;
+    public status: string;
+    public type: string;
+    public transactions: Transaction[];
+    public users: User[];
+    // public loans: Loan[];
+    public budgetgoals: Budgetgoal[];
 
-    constructor(account: { isShared: boolean; type: string; id?: number }) {
+    constructor(account: { id?: number; isShared: boolean; type: string }) {
         this.validate(account);
+
         this.id = account.id;
+        this.type = account.type;
         this.accountNumber = this.generateAccountNumber();
         this.balance = 0;
         this.isShared = account.isShared;
         this.startDate = new Date();
         this.endDate = null;
         this.status = 'Active';
-        this.type = account.type;
         this.transactions = [];
         this.users = [];
-        this.loans = [];
+        // this.loans = [];
         this.budgetgoals = [];
     }
 
@@ -73,9 +74,9 @@ export class Account {
         return this.users;
     }
 
-    getLoans(): Loan[] {
-        return this.loans;
-    }
+    // getLoans(): Loan[] {
+    //     return this.loans;
+    // }
 
     getBudgetgoals(): Budgetgoal[] {
         return this.budgetgoals;
@@ -91,7 +92,7 @@ export class Account {
     }
 
     generateAccountNumber(): string {
-        const today = this.startDate.toISOString().split('T')[0].replace(/-/g, '');
+        const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
         const type = this.type.substring(0, 3).toUpperCase();
         const randomNumbers = Math.floor(100 + Math.random() * 900);
 
