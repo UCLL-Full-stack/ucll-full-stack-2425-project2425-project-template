@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { DiscordPermission, KanbanPermission, Member, PermissionEntry } from '../types';
 import userDb from '../repository/user.db';
 import guildDb from '../repository/guild.db';
+import roleDb from '../repository/role.db';
 
 export const validateBoard = (req: Request, res: Response, next: NextFunction) => {
     const { boardName, createdByUser, guild, columns, permissions } = req.body;
@@ -113,7 +114,7 @@ export const validateGuild = (req: Request, res: Response, next: NextFunction) =
         return res.status(400).json({ error: 'Settings must be an array.' });
     }
     for (const permission of settings) {
-        if (!validatePermission(permission)) {
+        if (!validatePermissionEntry(permission)) {
             return res.status(400).json({ error: 'Invalid permission entry in settings.' });
         }
     }
@@ -175,17 +176,28 @@ export const validateUser = (req: Request, res: Response, next: NextFunction) =>
     next();
 };
 
-export const validatePermission = (permission: PermissionEntry) => {
+
+const validatePermissionEntry = (permission: PermissionEntry) => {
     if (!permission || typeof permission !== 'object') {
         return false;
     }
-    if (!permission.identifier || 
-        (typeof permission.identifier !== 'string' && !Object.values(DiscordPermission).includes(permission.identifier))) {
+    if (!permission.identifier || !permission.kanbanPermission || !Array.isArray(permission.kanbanPermission)) {
         return false;
     }
-    if (!permission.kanbanPermission || !Array.isArray(permission.kanbanPermission) || permission.kanbanPermission.length === 0) {
+    
+    if (typeof permission.identifier === 'string') {
+        const userExists = userDb.getUserById(permission.identifier);
+        const roleExists = roleDb.getRoleById(permission.identifier);
+
+        if (!userExists && !roleExists) {
+            if (!Object.values(DiscordPermission).includes(permission.identifier as DiscordPermission)) {
+                return false;
+            }
+        }
+    } else if (!Object.values(DiscordPermission).includes(permission.identifier)) {
         return false;
     }
+
     for (const perm of permission.kanbanPermission) {
         if (!Object.values(KanbanPermission).includes(perm)) {
             return false;
@@ -194,18 +206,25 @@ export const validatePermission = (permission: PermissionEntry) => {
     return true;
 };
 
+
 export const validatePermissions = (req: Request, res: Response, next: NextFunction) => {
     const permissions = req.body;
-    if (!permissions || !Array.isArray(permissions)) {
-        return res.status(400).json({ error: 'Invalid permissions.' });
+    if (!permissions) {
+        return res.status(400).json({ error: 'Invalid permissions. Request body must not be null.' });
     }
-    for (const permission of permissions) {
-        if (!validatePermission(permission)) {
+    if (Array.isArray(permissions)) {
+        for (const permission of permissions) {
+            if (!validatePermissionEntry(permission)) {
+                return res.status(400).json({ error: 'Invalid permission entry.' });
+            }
+        }
+    } else {
+        if (!validatePermissionEntry(permissions)) {
             return res.status(400).json({ error: 'Invalid permission entry.' });
         }
     }
     next();
-}
+};
 
 const validateMembers = ( members: Member[] ) => {
     if (!members || !Array.isArray(members)) {

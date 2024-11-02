@@ -4,24 +4,24 @@ import { PermissionEntry, KanbanPermission, DiscordPermission } from '../types';
 import  roleDb  from './role.db';
 
 const role1_1 = roleDb.getRoleById("role1-1")!;
-const role1_2 = roleDb.getRoleById("role1-2")!;
 const role2_1 = roleDb.getRoleById("role2-1")!;
+const role1_2 = roleDb.getRoleById("role1-2")!;
 const role2_2 = roleDb.getRoleById("role2-2")!;
-const role3_1 = roleDb.getRoleById("role3-1")!;
-const role3_2 = roleDb.getRoleById("role3-2")!;
+const role1_3 = roleDb.getRoleById("role1-3")!;
+const role2_3 = roleDb.getRoleById("role2-3")!;
 
 const guild1Members = [
-    { userId: "user1", roleIds: ["role1-1", "role1-2"] },
-    { userId: "user3", roleIds: ["role1-2"] }
+    { userId: "user1", roleIds: ["role1-1", "role2-1"] },
+    { userId: "user3", roleIds: ["role2-1"] }
 ];
 
 const guild2Members = [
-    { userId: "user1", roleIds: ["role2-1"] },
+    { userId: "user1", roleIds: ["role1-2"] },
     { userId: "user2", roleIds: ["role2-2"] }
 ];
 
 const guild3Members = [
-    { userId: "user3", roleIds: ["role3-2"] }
+    { userId: "user3", roleIds: ["role2-3"] }
 ];
 
 const guilds: Guild[] = [
@@ -35,7 +35,7 @@ const guilds: Guild[] = [
             { identifier: "role1-1", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.CHANGE_TASK_STATUS]}
         ],
         [
-            role1_1, role1_2
+            role1_1, role2_1
         ],
         guild1Members
     ),
@@ -45,11 +45,11 @@ const guilds: Guild[] = [
         [
             { identifier: DiscordPermission.MANAGE_CHANNELS, kanbanPermission: [KanbanPermission.CREATE_BOARD, KanbanPermission.EDIT_BOARD, KanbanPermission.DELETE_BOARD] },
             { identifier: DiscordPermission.MANAGE_MESSAGES, kanbanPermission: [KanbanPermission.CREATE_TASKS, KanbanPermission.EDIT_TASKS, KanbanPermission.DELETE_TASKS] },
-            { identifier: "role2-1", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.MANAGE_BOARD_PERMISSIONS] },
+            { identifier: "role1-2", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.MANAGE_BOARD_PERMISSIONS] },
             { identifier: "role2-2", kanbanPermission: [KanbanPermission.CREATE_COLUMNS, KanbanPermission.EDIT_COLUMNS] },
         ],
         [
-            role2_1, role2_2
+            role1_2, role2_2
         ],
         guild2Members
     ),
@@ -64,7 +64,7 @@ const guilds: Guild[] = [
             { identifier: "role3-2", kanbanPermission: [KanbanPermission.VIEW_BOARD] },
         ],
         [
-            role3_1, role3_2
+            role1_3, role2_3
         ],
         guild3Members
     ),
