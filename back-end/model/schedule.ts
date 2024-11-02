@@ -8,10 +8,26 @@ export class Schedule {
     private recipes?: Recipe[];
 
     constructor(schedule: { id?: number; user: User; date: Date; recipes?: Recipe[] }) {
+        this.validate(schedule);
         this.id = schedule.id;
         this.user = schedule.user;
         this.date = schedule.date;
         this.recipes = schedule.recipes || [];
+    }
+
+    validate(schedule: { id?: number; user: User; date: Date; recipes?: Recipe[] }): void {
+        if (schedule.id !== undefined && (!Number.isInteger(schedule.id) || schedule.id <= 0)) {
+            throw new Error('ID must be a positive integer');
+        }
+        if (!schedule.user) {
+            throw new Error('User is required');
+        }
+        if (!(schedule.date instanceof Date)) {
+            throw new Error('Date must be a valid Date object');
+        }
+        if (schedule.recipes !== undefined && !Array.isArray(schedule.recipes)) {
+            throw new Error('Recipes must be an array');
+        }
     }
 
     getId(): number | undefined {

@@ -13,13 +13,35 @@ export class Ingredient {
         name: string;
         category: IngredientCategory;
         store?: string;
-        recipes: RecipeIngredient[];
+        recipes?: RecipeIngredient[];
     }) {
+        this.validate(ingredient);
         this.id = ingredient.id;
         this.name = ingredient.name;
         this.category = ingredient.category;
         this.store = ingredient.store;
         this.recipes = ingredient.recipes;
+    }
+
+    validate(ingredient:{
+        id?: number;
+        name: string;
+        category: IngredientCategory;
+        store?: string;
+        recipes?: RecipeIngredient[];
+    }): void {
+        if (ingredient.id !== undefined && (!Number.isInteger(ingredient.id) || ingredient.id <= 0)) {
+            throw new Error('Invalid id');
+        }
+        if (!ingredient.name) {
+            throw new Error('Name is required');
+        }
+        if (ingredient.store !== undefined && typeof ingredient.store !== 'string') {
+            throw new Error('Store must be a string');
+        }
+        if (!ingredient.category) {
+            throw new Error('Category is required');
+        }
     }
 
     getId(): number | undefined {
