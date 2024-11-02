@@ -3,6 +3,10 @@ import { User } from '../model/user';
 
 const users: User[] = [];
 
+const getAllUsers = (): User[] => {
+    return users;
+}
+
 const createUser = ({
     nationalRegisterNumber,
     name,
@@ -43,4 +47,5 @@ export default {
     createUser,
     getUserByNationalRegisterNumber,
     getUserByEmail,
+    getAllUsers
 };
