@@ -14,7 +14,7 @@ const Header: React.FC = () => {
         try {
             const response = await UserService.getUserById(userId);
             const userData = await response.json();
-            setBalance(userData.balance);
+            setBalance(userData.balance.toFixed(2));
         } catch (error) {
             console.error("Error fetching user balance:", error);
         }

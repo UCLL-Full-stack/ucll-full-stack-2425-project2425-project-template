@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Game } from '@types';
 import LibraryService from '@services/LibraryService';
 import PurchaseService from '@services/PurchaseService';
+import header from '@components/header';
 
 interface StoreTableProps {
     games?: Array<Game>;

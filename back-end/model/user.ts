@@ -59,6 +59,10 @@ export class User {
         return this.balance;
     }
 
+    setBalance(balance: number) {
+        this.balance = balance;
+    }
+
     validate(user: {
         id: number;
         username: string;
