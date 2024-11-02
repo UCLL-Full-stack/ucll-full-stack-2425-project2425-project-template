@@ -43,44 +43,163 @@ const ingredientsCaipirinha = [
     new Ingredient(6, "Ice", "as needed"),
 ];
 
+const ingredientsVesper = [
+    new Ingredient(21, "Gin", "60ml"),
+    new Ingredient(22, "Vodka", "15ml"),
+    new Ingredient(23, "Lillet Blanc", "7.5ml"),
+    new Ingredient(24, "Lemon twist", "1 (for garnish)"),
+];
 
+const ingredientsVodkaMartini = [
+    new Ingredient(25, "Vodka", "60ml"),
+    new Ingredient(26, "Dry vermouth", "15ml"),
+    new Ingredient(27, "Olive", "1 (for garnish)"),
+];
+
+const ingredientsCosmopolitan = [
+    new Ingredient(28, "Vodka", "45ml"),
+    new Ingredient(29, "Triple sec", "15ml"),
+    new Ingredient(30, "Cranberry juice", "30ml"),
+    new Ingredient(31, "Lime juice", "10ml"),
+];
+
+const ingredientsCarajillo = [
+    new Ingredient(32, "Coffee liqueur", "45ml"),
+    new Ingredient(33, "Espresso", "30ml"),
+];
+
+const ingredientsGinBasilSmash = [
+    new Ingredient(34, "Gin", "50ml"),
+    new Ingredient(35, "Lemon juice", "25ml"),
+    new Ingredient(36, "Simple syrup", "15ml"),
+    new Ingredient(37, "Basil leaves", "10 leaves"),
+];
+
+const ingredientsPinaColada = [
+    new Ingredient(38, "White rum", "45ml"),
+    new Ingredient(39, "Coconut cream", "30ml"),
+    new Ingredient(40, "Pineapple juice", "90ml"),
+    new Ingredient(41, "Ice", "as needed"),
+];
+
+const ingredientsMargarita = [
+    new Ingredient(42, "Tequila", "50ml"),
+    new Ingredient(43, "Triple sec", "25ml"),
+    new Ingredient(44, "Lime juice", "20ml"),
+    new Ingredient(45, "Salt", "for rim"),
+];
+
+const ingredientsZombie = [
+    new Ingredient(46, "Dark rum", "20ml"),
+    new Ingredient(47, "White rum", "20ml"),
+    new Ingredient(48, "Apricot brandy", "15ml"),
+    new Ingredient(49, "Pineapple juice", "30ml"),
+    new Ingredient(50, "Lime juice", "10ml"),
+];
+
+const ingredientsMaiTai = [
+    new Ingredient(51, "Dark rum", "30ml"),
+    new Ingredient(52, "White rum", "30ml"),
+    new Ingredient(53, "Orange curaçao", "15ml"),
+    new Ingredient(54, "Lime juice", "15ml"),
+];
+
+const ingredientsAmericano = [
+    new Ingredient(55, "Campari", "30ml"),
+    new Ingredient(56, "Sweet vermouth", "30ml"),
+    new Ingredient(57, "Soda water", "to top"),
+];
+
+const ingredientsBloodyMary = [
+    new Ingredient(58, "Vodka", "45ml"),
+    new Ingredient(59, "Tomato juice", "90ml"),
+    new Ingredient(60, "Lemon juice", "15ml"),
+    new Ingredient(61, "Worcestershire sauce", "2 dashes"),
+    new Ingredient(62, "Tabasco", "to taste"),
+    new Ingredient(63, "Salt and pepper", "to taste"),
+];
+
+const ingredientsManhattan = [
+    new Ingredient(64, "Rye whiskey", "60ml"),
+    new Ingredient(65, "Sweet vermouth", "30ml"),
+    new Ingredient(66, "Angostura bitters", "2 dashes"),
+];
+
+const ingredientsPenicillin = [
+    new Ingredient(67, "Blended scotch", "45ml"),
+    new Ingredient(68, "Honey-ginger syrup", "15ml"),
+    new Ingredient(69, "Lemon juice", "20ml"),
+    new Ingredient(70, "Islay scotch", "7.5ml (float)"),
+];
+
+const ingredientsAperolSpritz = [
+    new Ingredient(71, "Aperol", "60ml"),
+    new Ingredient(72, "Prosecco", "90ml"),
+    new Ingredient(73, "Soda water", "30ml"),
+];
+
+const ingredientsDryMartini = [
+    new Ingredient(74, "Gin", "60ml"),
+    new Ingredient(75, "Dry vermouth", "10ml"),
+    new Ingredient(27, "Olive", "1 (for garnish)"),
+];
+
+const ingredientsWhiskeySour = [
+    new Ingredient(76, "Whiskey", "50ml"),
+    new Ingredient(77, "Lemon juice", "20ml"),
+    new Ingredient(78, "Simple syrup", "15ml"),
+];
+
+const ingredientsDaiquiri = [
+    new Ingredient(79, "White rum", "60ml"),
+    new Ingredient(80, "Lime juice", "20ml"),
+    new Ingredient(81, "Simple syrup", "10ml"),
+];
+
+const ingredientsEspressoMartini = [
+    new Ingredient(82, "Vodka", "45ml"),
+    new Ingredient(33, "Espresso", "30ml"),
+    new Ingredient(83, "Coffee liqueur", "15ml"),
+];
+
+const ingredientsOldFashioned = [
+    new Ingredient(84, "Bourbon or rye whiskey", "45ml"),
+    new Ingredient(85, "Sugar cube", "1"),
+    new Ingredient(66, "Angostura bitters", "2 dashes"),
+];
+
+const ingredientsNegroni = [
+    new Ingredient(86, "Gin", "30ml"),
+    new Ingredient(55, "Campari", "30ml"),
+    new Ingredient(56, "Sweet vermouth", "30ml"),
+];
 
 const cocktailsList = [
-    new Cocktail(
-        1,
-        "Mojito",
-        "A refreshing Cuban cocktail with lime, mint, and rum.",
-        3,
-        ingredientsMojito
-    ),
-    new Cocktail(
-        2,
-        "Moscow Mule",
-        "A refreshing cocktail made with vodka, ginger beer, and lime, served in a copper mug.",
-        3,
-        ingredientsMoscowMule
-    ),
-    new Cocktail(
-        3,
-        "Amaretto Sour",
-        "A sweet and sour cocktail made with Amaretto liqueur and lemon juice.",
-        2,
-        ingredientsAmarettoSour
-    ),
-    new Cocktail(
-        4,
-        "Pornstar Martini",
-        "A fruity and exotic cocktail with passion fruit and vanilla vodka.",
-        4,
-        ingredientsPornstarMartini
-    ),
-    new Cocktail(
-        5,
-        "Caipirinha",
-        "A Brazilian cocktail made with cachaça, lime, and sugar.",
-        4,
-        ingredientsCaipirinha
-    )
+    new Cocktail(1, "Mojito", "A refreshing Cuban cocktail with lime, mint, and rum.", 3, ingredientsMojito),
+    new Cocktail(2, "Moscow Mule", "A cocktail made with vodka, ginger beer, and lime.", 3, ingredientsMoscowMule),
+    new Cocktail(3, "Amaretto Sour", "A cocktail made with Amaretto liqueur and lemon juice.", 2, ingredientsAmarettoSour),
+    new Cocktail(4, "Pornstar Martini", "A cocktail with passion fruit and vanilla vodka.", 4, ingredientsPornstarMartini),
+    new Cocktail(5, "Caipirinha", "A Brazilian cocktail with cachaça, lime, and sugar.", 4, ingredientsCaipirinha),
+    new Cocktail(6, "Vesper", "A gin and vodka martini with Lillet Blanc.", 4, ingredientsVesper),
+    new Cocktail(7, "Vodka Martini", "A vodka martini served with an olive.", 4, ingredientsVodkaMartini),
+    new Cocktail(8, "Cosmopolitan", "A vodka cocktail with cranberry and lime.", 3, ingredientsCosmopolitan),
+    new Cocktail(9, "Carajillo", "A coffee cocktail with espresso and liqueur.", 2, ingredientsCarajillo),
+    new Cocktail(10, "Gin Basil Smash", "A gin cocktail with lemon and basil.", 3, ingredientsGinBasilSmash),
+    new Cocktail(11, "Pina Colada", "A tropical cocktail with rum and coconut.", 3, ingredientsPinaColada),
+    new Cocktail(12, "Margarita", "A tequila cocktail with lime and salt rim.", 4, ingredientsMargarita),
+    new Cocktail(13, "Zombie", "A strong rum cocktail with fruit juices.", 5, ingredientsZombie),
+    new Cocktail(14, "Mai Tai", "A rum cocktail with curaçao and lime.", 5, ingredientsMaiTai),
+    new Cocktail(15, "Americano", "A Campari and vermouth cocktail with soda.", 2, ingredientsAmericano),
+    new Cocktail(16, "Bloody Mary", "A vodka and tomato juice cocktail.", 3, ingredientsBloodyMary),
+    new Cocktail(17, "Manhattan", "A whiskey cocktail with vermouth and bitters.", 4, ingredientsManhattan),
+    new Cocktail(18, "Penicillin", "A scotch cocktail with honey-ginger syrup.", 4, ingredientsPenicillin),
+    new Cocktail(19, "Aperol Spritz", "A spritz cocktail with Aperol and prosecco.", 2, ingredientsAperolSpritz),
+    new Cocktail(20, "Dry Martini", "A classic gin martini with dry vermouth.", 5, ingredientsDryMartini),
+    new Cocktail(21, "Whiskey Sour", "A whiskey cocktail with lemon juice.", 3, ingredientsWhiskeySour),
+    new Cocktail(22, "Daiquiri", "A rum cocktail with lime juice and syrup.", 3, ingredientsDaiquiri),
+    new Cocktail(23, "Espresso Martini", "A vodka cocktail with espresso and liqueur.", 4, ingredientsEspressoMartini),
+    new Cocktail(24, "Old Fashioned", "A whiskey cocktail with sugar and bitters.", 5, ingredientsOldFashioned),
+    new Cocktail(25, "Negroni", "A gin cocktail with Campari and vermouth.", 4, ingredientsNegroni)
 ];
 
 const getAllCocktails = (): Cocktail[] => cocktailsList;
