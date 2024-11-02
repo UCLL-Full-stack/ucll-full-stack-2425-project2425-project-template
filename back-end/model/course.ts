@@ -37,8 +37,8 @@ export class Course {
         if (!course.description || course.description.length=== 0){
             throw new Error("Description is required.")
         }
-        if (!course.phase || course.phase >3 || course.phase < 0 ){
-            throw new Error("Phase is required and can be 1 or 2.")
+        if (!course.phase || course.phase < 0 ){
+            throw new Error("Phase is required.")
         }
         if (!course.credits || course.credits <= 0) {
             throw new Error("Credits are required and cannot be negative")

@@ -58,14 +58,14 @@ test('given: phase out of allowed range, when: course is created, then: an error
             id: 1,
             name: 'Course Name',
             description: 'Valid description',
-            phase: 4,
+            phase: -1,
             credits: 5,
             lecturers: ['Dr. Smith'],
             isElective: false,
             requiredPassedCourses: []
         });
 
-    expect(createCourse).toThrow('Phase is required and can be 1 or 2.');
+    expect(createCourse).toThrow('Phase is required.');
 });
 
 test('given: zero credits, when: course is created, then: an error is thrown', () => {
