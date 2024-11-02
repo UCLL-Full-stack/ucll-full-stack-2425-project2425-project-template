@@ -34,4 +34,4 @@ const deleteMeal = (userId: number, mealId: number, date: Date) => {
     schedule.removeRecipe(recipe);
 };
 
-export default { getMealDetails, editMeal, deleteMeal };
+export default { getRecipeDetails: getMealDetails, editRecipe: editMeal, deleteRecipe: deleteMeal };
