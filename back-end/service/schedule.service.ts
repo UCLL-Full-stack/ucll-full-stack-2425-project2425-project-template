@@ -4,7 +4,9 @@ import { RecipeUpdateInput } from '../types';
 
 const getMealDetails = (userId: number, date: Date): Recipe[] => {
     const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, date);
-    if (!schedule) throw new Error('Schedule not found');
+    if (!schedule) {
+        return [];
+    }
     return schedule.getRecipes() || [];
 };
 
