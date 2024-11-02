@@ -38,8 +38,8 @@ const addActiviteitToPool = async (activiteit: Activiteit): Promise<Activiteit> 
     while (notFound) {
         const n = activiteiten.length;
         let amount = 0;
-        for (activiteit of activiteiten) {
-            if (activiteit.getId() !== i) {
+        for (let nActiviteit of activiteiten) {
+            if (nActiviteit.getId() !== i) {
                 amount++;
             }
         }
