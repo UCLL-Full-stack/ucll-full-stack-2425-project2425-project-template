@@ -31,17 +31,39 @@ const getUserByLastName = (lastName: string): User => {
     return user;
 };
 
-const getUserByEmail = (email: string): User => {
+const getUserByEmail = (email: string): User | null => {
     const user = userRepository.getUserByEmail(email);
-    if (!user) {
-        throw new Error(`User with email ${email} does not exist.`);
-    }
-    return user;
+    return user || null; // Return the user if found, otherwise return null
 };
 
+
 const createUser = (userData: { firstName: string; lastName: string; email: string; password: string; role: Role }): User => {
-    return userRepository.saveUser(userData);
+    try {
+        // Attempt to save the user and return the result
+        return userRepository.saveUser(userData);
+    } catch (error) {
+        // Handle known error types
+        if ((error as Error).message.includes('already exists')) {
+            throw new Error(`User creation failed: ${(error as Error).message}`);
+        } else if ((error as Error).message.includes('Validation error')) {
+            throw new Error(`User creation failed: ${(error as Error).message}`);
+        }
+
+        // If it's an unexpected error, rethrow it
+        throw new Error(`An unexpected error occurred: ${(error as Error).message}`);
+    }
 };
+
+async function verifyUserCredentials(email: string, password: string): Promise<boolean> {
+    const user = getUserByEmail(email); // This will now return User or null
+
+    if (user) {
+        return user.getPassword() === password; // Direct comparison (not secure for production)
+    }
+
+    return false; // User not found
+}
+
 
 export default {
     getAllUsers,
@@ -50,4 +72,5 @@ export default {
     getUserByLastName,
     getUserByEmail,
     createUser,
+    verifyUserCredentials,
 };

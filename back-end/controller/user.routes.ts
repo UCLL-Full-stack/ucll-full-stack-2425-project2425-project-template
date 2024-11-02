@@ -105,129 +105,6 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
-// /**
-//  * @swagger
-//  * /users/{firstName}:
-//  *   get:
-//  *     summary: Get a user by first name.
-//  *     description: Returns a JSON object of the user with the specified first name. If the user does not exist, an error is thrown.
-//  *     tags:
-//  *       - Users
-//  *     parameters:
-//  *       - in: path
-//  *         name: firstName
-//  *         required: true
-//  *         description: firstName of the user to retrieve.
-//  *         schema:
-//  *           type: string
-//  *           description: User's first name.
-//  *     responses:
-//  *       200:
-//  *         description: The user object.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               $ref: '#/components/schemas/User'
-//  *       404:
-//  *         description: User not found.
-//  *       500:
-//  *         description: Internal server error.
-//  */
-// userRouter.get('/:firstName', async (req: Request, res: Response, next: NextFunction) => {
-//     const { firstName } = req.params;
-//     try {
-//         const user = userService.getUserByFirstName(String(firstName));
-//         res.status(200).json(user);
-//     } catch (error) {
-//         if ((error as Error).message.includes('does not exist')) {
-//             return res.status(404).json({ message: (error as Error).message });
-//         }
-//         next(error); // For other errors
-//     }
-// });
-
-// /**
-//  * @swagger
-//  * /users/{lastName}:
-//  *   get:
-//  *     summary: Get a user by last name.
-//  *     description: Returns a JSON object of the user with the specified last name. If the user does not exist, an error is thrown.
-//  *     tags:
-//  *       - Users
-//  *     parameters:
-//  *       - in: path
-//  *         name: lastName
-//  *         required: true
-//  *         description: lastName of the user to retrieve.
-//  *         schema:
-//  *           type: string
-//  *           description: User's last name.
-//  *     responses:
-//  *       200:
-//  *         description: The user object.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               $ref: '#/components/schemas/User'
-//  *       404:
-//  *         description: User not found.
-//  *       500:
-//  *         description: Internal server error.
-//  */
-// userRouter.get('/:lastName', async (req: Request, res: Response, next: NextFunction) => {
-//     const { lastName } = req.params;
-//     try {
-//         const user = userService.getUserByLastName(String(lastName));
-//         res.status(200).json(user);
-//     } catch (error) {
-//         if ((error as Error).message.includes('does not exist')) {
-//             return res.status(404).json({ message: (error as Error).message });
-//         }
-//         next(error); // For other errors
-//     }
-// });
-
-// /**
-//  * @swagger
-//  * /users/{email}:
-//  *   get:
-//  *     summary: Get a user by email.
-//  *     description: Returns a JSON object of the user with the specified email. If the user does not exist, an error is thrown.
-//  *     tags:
-//  *       - Users
-//  *     parameters:
-//  *       - in: path
-//  *         name: email
-//  *         required: true
-//  *         description: email of the user to retrieve.
-//  *         schema:
-//  *           type: string
-//  *           description: User's email.
-//  *     responses:
-//  *       200:
-//  *         description: The user object.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               $ref: '#/components/schemas/User'
-//  *       404:
-//  *         description: User not found.
-//  *       500:
-//  *         description: Internal server error.
-//  */
-// userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
-//     const { email } = req.params;
-//     try {
-//         const user = userService.getUserByEmail(String(email));
-//         res.status(200).json(user);
-//     } catch (error) {
-//         if ((error as Error).message.includes('does not exist')) {
-//             return res.status(404).json({ message: (error as Error).message });
-//         }
-//         next(error); // For other errors
-//     }
-// });
-
 /**
  * @swagger
  * /users:
@@ -273,14 +150,74 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { firstName, lastName, email, password, role } = req.body;
+
+        // Create a user using the service
         const newUser = userService.createUser({ firstName, lastName, email, password, role });
-        res.status(201).json(newUser);
+
+        // Respond with the newly created user
+        return res.status(201).json(newUser);
     } catch (error) {
-        if ((error as Error).message.includes('required')) {
-            return res.status(400).json({ message: (error as Error).message });
+        // Handle specific error types
+        if ((error as Error).message.includes('already exists')) {
+            return res.status(409).json({ message: (error as Error).message }); // Conflict error for duplicate users
+        } else if ((error as Error).message.includes('required')) {
+            return res.status(400).json({ message: (error as Error).message }); // Bad request for validation issues
+        } else if ((error as Error).message.includes('Validation error')) {
+            return res.status(422).json({ message: (error as Error).message }); // Unprocessable entity for validation errors
         }
-        next(error);
+
+        // For any other unexpected error, pass it to the next middleware
+        console.error('Unexpected error:', error);
+        return next(error);
     }
 });
+
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Log in a user.
+ *     description: Logs in a user with their email and password.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email.
+ *               password:
+ *                 type: string
+ *                 description: User's password.
+ *     responses:
+ *       200:
+ *         description: User logged in successfully.
+ *       401:
+ *         description: Invalid email or password.
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    try {
+        const isValidUser = await userService.verifyUserCredentials(email, password);
+
+        if (isValidUser) {
+            return res.status(200).json({ message: 'Login successful.' });
+        }
+
+        return res.status(401).json({ message: 'Invalid email or password.' });
+    } catch (error) {
+        console.error('Error logging in:', error);
+        next(error); // Pass to the next error handler
+    }
+});
+
 
 export { userRouter };
