@@ -1,10 +1,6 @@
-import { PermissionEntry } from "../types";
+import { PermissionEntry, Member } from "../types";
 import { Role } from "./role";
 
-interface Member {
-    userId: string;
-    roleIds: string[];
-}
 
 export class Guild{
     private guildId: string;

@@ -16,9 +16,18 @@ const removeSettingsEntryFromGuild = (guildId: string, entryId: string) => {
     guildDb.removeSettingsEntryFromGuildById(guildId, entryId);
 }
 
+const getGuildPermissions = (guildId: string) => {
+    const guild = guildDb.getGuildById(guildId);
+    if (!guild) {
+        throw new Error('Guild not found');
+    }
+    return guild.getSettings();
+}
+
 export default {
     getAllGuilds,
     getGuild,
     addSettingsEntryToGuild,
     removeSettingsEntryFromGuild,
+    getGuildPermissions,
 };

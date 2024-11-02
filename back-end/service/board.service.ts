@@ -1,6 +1,7 @@
 import { Board } from '../model/board';
 import { Column } from '../model/column';
 import boardDb from '../repository/board.db';
+import { PermissionEntry } from '../types';
 
 const getAllBoards = (): Board[] => {
     return boardDb.getBoards();
@@ -30,6 +31,14 @@ const getColumnsForBoard = (boardId: string): Column[] => {
     return boardDb.getColumnsByBoardId(boardId);
 }
 
+const setPermissionsForBoard = (boardId: string, permissions: PermissionEntry[]) => {
+    const board = boardDb.getBoardById(boardId); // Fetch board by ID
+    if (!board) {
+        throw new Error('Board not found');
+    }
+    board.setPermissions(permissions); // Assuming this method sets permissions
+}
+
 export default {
     getAllBoards,
     getBoard,
@@ -38,4 +47,5 @@ export default {
     addColumnToBoard,
     removeColumnFromBoard,
     getColumnsForBoard,
+    setPermissionsForBoard
 };

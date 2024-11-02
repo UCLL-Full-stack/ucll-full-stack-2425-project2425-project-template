@@ -125,4 +125,8 @@ export class Board {
         this.columns = this.columns.filter(column => column.getColumnId() !== columnId);
     }
 
+    public setPermissions(permissions: PermissionEntry[]): void {
+        this.permissions = permissions;
+    }
+
 }

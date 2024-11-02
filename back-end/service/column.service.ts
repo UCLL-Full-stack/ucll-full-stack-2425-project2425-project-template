@@ -30,6 +30,19 @@ const getTasksForColumn = (columnId: string) => {
     return columnDb.getTasksByColumnId(columnId);
 }
 
+const updateColumn = (columnId: string, column: { columnName?: string, tasks?: Task[]}) => {
+    const existingColumn = columnDb.getColumnById(columnId);
+    if (!existingColumn) {
+        throw new Error('Column not found');
+    }
+    if (column.columnName) {
+        existingColumn.setColumnName(column.columnName);
+    }
+    if (column.tasks) {
+        existingColumn.setTasks(column.tasks);
+    }
+}
+
 export default {
     getAllColumns,
     getColumn,
@@ -38,4 +51,5 @@ export default {
     addTaskToColumn,
     removeTaskFromColumn,
     getTasksForColumn,
+    updateColumn,
 };

@@ -72,3 +72,8 @@ export interface PermissionEntry{
     identifier: string | DiscordPermission;
     kanbanPermission: KanbanPermission[];
 }
+
+export interface Member {
+    userId: string;
+    roleIds: string[];
+}
