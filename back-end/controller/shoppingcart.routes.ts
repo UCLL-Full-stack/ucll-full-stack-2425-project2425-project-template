@@ -30,7 +30,7 @@
  *            type: string
  *            format: date
  *            description: Delivery date of the shopping cart
- *            example: "2024-11-01"
+ *            example: "2026-11-01"
  */
 
 import express, { NextFunction, Request, Response } from 'express';

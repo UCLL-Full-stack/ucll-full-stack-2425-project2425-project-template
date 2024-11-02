@@ -121,6 +121,29 @@ itemRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+/**
+ * @swagger
+ * /items/{itemId}:
+ *   get:
+ *     summary: Get an item by ID
+ *     parameters:
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the item
+ *     responses:
+ *       200:
+ *         description: The item
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Item'
+ *       500:
+ *         description: Internal server error
+ */
+
 itemRouter.get('/:itemId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const itemId = parseInt(req.params.itemId);

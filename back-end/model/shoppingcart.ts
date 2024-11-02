@@ -20,11 +20,13 @@ export class Shoppingcart {
             throw new Error('Name is required');
         }
 
-        if (!shoppingcart.deliveryDate || isNaN(shoppingcart.deliveryDate.getTime())) {
+        const deliveryDate = new Date(shoppingcart.deliveryDate);
+
+        if (!deliveryDate || isNaN(deliveryDate.getTime())) {
             throw new Error('Delivery date is required');
         }
 
-        if (shoppingcart.deliveryDate.getTime() < Date.now()) {
+        if (deliveryDate.getTime() < Date.now()) {
             throw new Error('Delivery date should be after today');
         }
     }
