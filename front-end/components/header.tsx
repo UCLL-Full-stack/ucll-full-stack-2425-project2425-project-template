@@ -14,9 +14,8 @@ const Header: React.FC = () => {
           <Image
             src={logo}
             alt="Workout Planner Logo"
-            width={100}
-            height={100}
             className="mr-4"
+            priority
           />
           <h1 className="text-3xl font-bold text-gray-800">Workout Planner</h1>
         </Link>
