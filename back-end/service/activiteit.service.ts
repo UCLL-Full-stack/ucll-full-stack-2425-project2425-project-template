@@ -52,4 +52,4 @@ const addActiviteit = async (activiteit: Activiteit, groepNaam: string): Promise
     }
 }
 
-export default {getActiviteitenByGroepNaam, addActiviteit};
+export default {getActiviteitenByGroepNaam, getAllActiviteiten, addActiviteit};
