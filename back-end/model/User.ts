@@ -1,3 +1,6 @@
+import { Recipe } from './Recipe';
+import { Review } from './Review';
+
 export class User {
     readonly id?: number;
     readonly username: string;
@@ -5,15 +8,17 @@ export class User {
     readonly email: string;
     readonly firstName: string;
     readonly lastName: string;
-    // readonly recipies: Recipe[];
-    // readonly reviews: Review[];
+    readonly recipies: Recipe[];
+    readonly reviews: Review[];
 
-    constructor(username: string, password: string, email: string, firstName: string, lastName: string) {
+    constructor(username: string, password: string, email: string, firstName: string, lastName: string, recipes: Recipe[], reviews: Review[]) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.recipies = recipes;
+        this.reviews = reviews;
     }
 
     equals(user: User): boolean {
