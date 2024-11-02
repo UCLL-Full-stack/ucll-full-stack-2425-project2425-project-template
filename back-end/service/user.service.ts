@@ -45,4 +45,17 @@ const getUserByEmail = (email: string): User | undefined => {
     return userDb.getUserByEmail(email);
 };
 
-export default { createUser, getUserByEmailAndPassword, getUserByEmail };
+const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User | undefined => {
+    const user = userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+    if (!user) {
+        throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
+    }
+    return userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+};
+
+export default {
+    createUser,
+    getUserByEmailAndPassword,
+    getUserByEmail,
+    getUserByNationalRegisterNumber,
+};

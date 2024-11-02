@@ -52,7 +52,7 @@
  *            type: string
  */
 
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 import { UserInput } from '../types/index';
 
@@ -83,14 +83,13 @@ const userRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.post('/', (req: Request, res: Response) => {
+userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
         const result = userService.createUser(user);
         res.status(200).json(result);
-    } catch (error) {
-        const errorMessage = (error as Error).message;
-        res.status(400).json({ status: 'error', errorMessage });
+    } catch (error: any) {
+        next(error);
     }
 });
 
@@ -126,14 +125,13 @@ userRouter.post('/', (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.get('/login', (req: Request, res: Response) => {
+userRouter.get('/login', (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         const result = userService.getUserByEmailAndPassword(email, password);
         res.status(200).json(result);
-    } catch (error) {
-        const errorMessage = (error as Error).message;
-        res.status(400).json({ status: 'error', errorMessage });
+    } catch (error: any) {
+        next(error);
     }
 });
 
