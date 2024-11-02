@@ -4,4 +4,5 @@ const getIngredientsByCocktailId = (cocktailId: number) => {
     return cocktailIngredientDb.getIngredientsByCocktailId(cocktailId);
 };
 
+
 export default {getIngredientsByCocktailId}
