@@ -1,6 +1,9 @@
+import { Activiteit } from "../model/activiteit";
 import { Groep } from "../model/groep";
-import { activiteiten } from "./activiteit.db";
+import activiteitDB from "./activiteit.db";
 import { leiders } from "./leiding.db";
+
+const activiteiten = activiteitDB.activiteiten;
 
 const groepen = [
     new Groep({
@@ -23,4 +26,9 @@ const getGroepByNaam = async (naam: string): Promise<Groep | undefined> => {
     return groepen.find((g) => g.getNaam().toLowerCase() === naam.toLowerCase());
 }
 
-export default {getGroepByNaam}
+const addActiviteitToGroep = async (activiteit: Activiteit, groep: Groep): Promise<Groep> => {
+    groep.addActiviteit(activiteit);
+    return groep;
+}
+
+export default {getGroepByNaam, addActiviteitToGroep};
