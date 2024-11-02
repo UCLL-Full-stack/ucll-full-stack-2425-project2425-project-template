@@ -4,7 +4,7 @@ import tripService from "@/services/tripService";
 import { Trip } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import styles from '../styles/Trips.module.css'; // Import the CSS module
+import styles from '../styles/Trips.module.css';
 
 const Trips: React.FC = () => {
     const [trips, setTrips] = useState<Array<Trip>>([]);
