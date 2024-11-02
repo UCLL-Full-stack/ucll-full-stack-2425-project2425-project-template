@@ -1,0 +1,110 @@
+
+.overview-page {
+    background-color: lightgoldenrodyellow;
+    color: rgb(0, 164, 0);
+    font-family: Arial, sans-serif; 
+    height: 100vh;
+}
+
+.navbar {
+    border-bottom: 2px solid rgb(0, 164, 0);
+    margin-bottom: 1.5rem;
+}
+
+.welcome-section {
+    text-align: center;
+    color: rgb(0, 164, 0);
+    width: 60%;
+    margin: auto;
+    padding: 2em;
+}
+
+.welcome-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.featured-destinations {
+    margin: 1rem;
+    
+}
+
+.featured-destinations h2 {
+    font-size: 2rem;
+    color: rgb(0, 164, 0);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+
+.destinations-grid {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.destination-card {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 200px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.destination-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.destination-card h3 {
+    color: rgb(0, 164, 0);
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+
+.destination-card p {
+    font-size: 1rem;
+    color: #333333;
+}
+
+
+.destination-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.navigation-links {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.navigation-links h2 {
+    font-size: 1.8rem;
+    color: rgb(0, 164, 0);
+    margin-bottom: 1rem;
+}
+
+.navigation-links a {
+    color: rgb(0, 164, 0);
+    font-size: 1.2rem;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navigation-links a:hover {
+    color: #004d00;
+    text-decoration: underline;
+}
