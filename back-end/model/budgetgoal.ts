@@ -1,4 +1,4 @@
-import { Account } from "./account";
+import { Account } from './account';
 
 export class Budgetgoal {
     private id?: number;
@@ -8,8 +8,15 @@ export class Budgetgoal {
     private isActive: boolean;
     private accounts: Account[];
 
-    constructor(budgetgoal: {id?: number; goalName: string; targetAmount: number; currentAmount: number; isActive: boolean; accounts: Account[]}) {
-        this.id = budgetgoal.id
+    constructor(budgetgoal: {
+        id?: number;
+        goalName: string;
+        targetAmount: number;
+        currentAmount: number;
+        isActive: boolean;
+        accounts: Account[];
+    }) {
+        this.id = budgetgoal.id;
         this.goalName = budgetgoal.goalName;
         this.targetAmount = budgetgoal.targetAmount;
         this.currentAmount = budgetgoal.currentAmount;

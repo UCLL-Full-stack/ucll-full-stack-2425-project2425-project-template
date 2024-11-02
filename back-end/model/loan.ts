@@ -1,4 +1,4 @@
-import { Account } from "./account";
+import { Account } from './account';
 
 export class Loan {
     private id?: number;
@@ -9,10 +9,17 @@ export class Loan {
     private endDate: Date;
     private accounts: Account[];
 
-    constructor(loan: {id?: number; type: string; amount: number; startDate: Date; endDate: Date; accounts: Account[]}) {
-        this.validate(loan);
-        this.id = loan.id
-        this.loanID = this.generateLoanId(loan.type, loan.startDate, loan.accounts);
+    constructor(loan: {
+        id?: number;
+        loanID: string;
+        type: string;
+        amount: number;
+        startDate: Date;
+        endDate: Date;
+        accounts: Account[];
+    }) {
+        this.id = loan.id;
+        this.loanID = loan.loanID;
         this.type = loan.type;
         this.amount = loan.amount;
         this.startDate = loan.startDate;
