@@ -14,7 +14,7 @@ const Home: React.FC = () => {
             <Header></Header>
             <main className="text-center md:mt-24 mx-auto md:w-3/5 lg:w-1/2">
                 <span className="flex flex-row justify-center items-center">
-                <p>help bro ee</p>
+                <p></p>
                 </span>
             </main>
         </>

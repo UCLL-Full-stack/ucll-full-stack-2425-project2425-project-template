@@ -1,14 +1,16 @@
 export type User = {
     id?: number;
     name?: string;
-    characters?: Array<Character>;
-    score?: number;
+    password?: string;
+    birthday?: Date;
+    players?: Array<Player>;
   }
 
-
-
-export type Character = {
+export type Player = {
     id?: number;
     name?: string;
-    money?: number;
+    currency: number;
+    statistics?: string; // still needs to be expended upon
+    class?: string; // will later be a Class type
+    user?: User;
 }
