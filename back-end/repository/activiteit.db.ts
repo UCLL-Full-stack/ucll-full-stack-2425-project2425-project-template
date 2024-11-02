@@ -1,4 +1,5 @@
 import { Activiteit } from "../model/activiteit";
+import { Groep } from "../model/groep";
 
 const activiteiten = [
     new Activiteit({
@@ -31,4 +32,32 @@ const activiteiten = [
     })
 ];
 
-export {activiteiten}
+const addActiviteitToPool = async (activiteit: Activiteit): Promise<Activiteit> => {
+    let i = 1;
+    let notFound = true;
+    while (notFound) {
+        const n = activiteiten.length;
+        let amount = 0;
+        for (activiteit of activiteiten) {
+            if (activiteit.getId() !== i) {
+                amount++;
+            }
+        }
+        if (amount === n) {
+            notFound = false;
+            activiteit = new Activiteit({
+                id: i,
+                naam: activiteit.getNaam(),
+                beschrijving: activiteit.getBeschrijving(),
+                begindatum: activiteit.getBegindatum(),
+                einddatum: activiteit.getEinddatum()
+            });
+        } else {
+            i++;
+        }
+    }
+    activiteiten.push(activiteit);
+    return activiteit;
+}
+
+export default {activiteiten, addActiviteitToPool};
