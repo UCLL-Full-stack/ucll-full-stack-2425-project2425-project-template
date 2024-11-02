@@ -13,7 +13,7 @@ export class Ingredient {
         name: string;
         category: IngredientCategory;
         store?: string;
-        recipes: RecipeIngredient[];
+        recipes?: RecipeIngredient[];
     }) {
         this.validate(ingredient);
         this.id = ingredient.id;
@@ -28,7 +28,7 @@ export class Ingredient {
         name: string;
         category: IngredientCategory;
         store?: string;
-        recipes: RecipeIngredient[];
+        recipes?: RecipeIngredient[];
     }): void {
         if (ingredient.id !== undefined && (!Number.isInteger(ingredient.id) || ingredient.id <= 0)) {
             throw new Error('Invalid id');
@@ -42,10 +42,7 @@ export class Ingredient {
         if (!ingredient.category) {
             throw new Error('Category is required');
         }
-        if (!ingredient.recipes || ingredient.recipes.length === 0) {
-            throw new Error('Ingredient must be used in at least one recipe');
-        }
-    } 
+    }
 
     getId(): number | undefined {
         return this.id;
