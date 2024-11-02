@@ -23,14 +23,17 @@ export class Ingredient {
         this.recipes = ingredient.recipes;
     }
 
-    validate(ingredient:{
+    validate(ingredient: {
         id?: number;
         name: string;
         category: IngredientCategory;
         store?: string;
         recipes?: RecipeIngredient[];
-    }): void {
-        if (ingredient.id !== undefined && (!Number.isInteger(ingredient.id) || ingredient.id <= 0)) {
+    }) {
+        if (
+            ingredient.id !== undefined &&
+            (!Number.isInteger(ingredient.id) || ingredient.id <= 0) // temporary Id validation
+        ) {
             throw new Error('Invalid id');
         }
         if (!ingredient.name) {

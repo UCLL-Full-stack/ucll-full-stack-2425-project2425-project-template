@@ -1,3 +1,5 @@
+// We created validate methods to avoid code repetition
+
 import { RecipeCategory, RecipeUpdateInput } from '../types';
 import { RecipeIngredient } from './recipeIngredient';
 import { Schedule } from './schedule';
@@ -8,8 +10,8 @@ export class Recipe {
     private title: string;
     private instructions: string;
     private cookingTime: number;
-    private category: RecipeCategory; // flexible for custom categories
-    private ingredients?: RecipeIngredient[]; // do i make it optional? '?'
+    private category: RecipeCategory;
+    private ingredients: RecipeIngredient[];
     private user: User;
     private imageUrl?: string;
     private isFavorite?: boolean;
@@ -46,6 +48,81 @@ export class Recipe {
         this.schedule = recipe.schedule;
     }
 
+    private validateId(id?: number): void {
+        if (id !== undefined && id <= 0) {
+            throw new Error('ID must be a positive number');
+        }
+    }
+
+    private validateTitle(title: string): void {
+        if (title.trim().length === 0) {
+            throw new Error('Title cannot be empty');
+        }
+        if (title.length > 100) {
+            throw new Error('Title cannot exceed 100 characters');
+        }
+    }
+
+    private validateInstructions(instructions: string): void {
+        if (instructions.trim().length === 0) {
+            throw new Error('Instructions cannot be empty');
+        }
+    }
+
+    private validateCookingTime(cookingTime: number): void {
+        if (cookingTime <= 0) {
+            throw new Error('Cooking time must be greater than zero');
+        }
+    }
+
+    private validateCategory(category: string): void {
+        if (category.trim().length === 0) {
+            throw new Error('Category cannot be empty');
+        }
+    }
+
+    private validateUser(user: User): void {
+        if (!user) {
+            throw new Error('User is required');
+        }
+    }
+
+    private validateIngredients(ingredients: RecipeIngredient[]): void {
+        if (!ingredients || ingredients.length === 0) {
+            throw new Error('Recipe must have at least one ingredient');
+        }
+    }
+
+    private validateImageUrl(imageUrl?: string): void {
+        if (imageUrl !== undefined && !this.isValidUrl(imageUrl)) {
+            throw new Error('Invalid image URL');
+        }
+    }
+
+    private validateIsFavorite(isFavorite?: boolean): void {
+        if (isFavorite !== undefined && typeof isFavorite !== 'boolean') {
+            throw new Error('isFavorite must be a boolean');
+        }
+    }
+
+    private validateNotes(notes?: string): void {
+        if (notes !== undefined && typeof notes !== 'string') {
+            throw new Error('Notes must be a string');
+        }
+    }
+
+    private validateSource(source?: string): void {
+        if (source !== undefined && typeof source !== 'string') {
+            throw new Error('Source must be a string');
+        }
+    }
+
+    private validateSchedule(schedule?: Schedule): void {
+        if (schedule !== undefined && !(schedule instanceof Schedule)) {
+            throw new Error('Schedule must be an instance of Schedule');
+        }
+    }
+
     validate(recipe: {
         id?: number;
         title: string;
@@ -60,42 +137,18 @@ export class Recipe {
         source?: string;
         schedule?: Schedule;
     }): void {
-        if (recipe.id !== undefined && (!Number.isInteger(recipe.id) || recipe.id <= 0)) {
-            throw new Error('ID must be a positive integer');
-        }
-        if (!recipe.title || recipe.title.trim().length === 0) {
-            throw new Error('Title is required and cannot be empty');
-        }
-        if (!recipe.instructions || recipe.instructions.trim().length === 0) {
-            throw new Error('Instructions are required and cannot be empty');
-        }
-        if (recipe.cookingTime <= 0) {
-            throw new Error('Cooking time must be greater than zero');
-        }
-        if (!recipe.category || recipe.category.trim().length === 0) {
-            throw new Error('Category is required and cannot be empty');
-        }
-        if (!recipe.user) {
-            throw new Error('User is required');
-        }
-        if (!recipe.ingredients || recipe.ingredients.length === 0) {
-            throw new Error('Recipe must have at least one ingredient');
-        }
-        if (recipe.imageUrl !== undefined && !this.isValidUrl(recipe.imageUrl)) {
-            throw new Error('Invalid image URL');
-        }
-        if (recipe.isFavorite !== undefined && typeof recipe.isFavorite !== 'boolean') {
-            throw new Error('isFavorite must be a boolean');
-        }
-        if (recipe.notes !== undefined && typeof recipe.notes !== 'string') {
-            throw new Error('Notes must be a string');
-        }
-        if (recipe.source !== undefined && typeof recipe.source !== 'string') {
-            throw new Error('Source must be a string');
-        }
-        if (recipe.schedule !== undefined && !(recipe.schedule instanceof Schedule)) {
-            throw new Error('Schedule must be an instance of Schedule');
-        }
+        this.validateId(recipe.id);
+        this.validateTitle(recipe.title);
+        this.validateInstructions(recipe.instructions);
+        this.validateCookingTime(recipe.cookingTime);
+        this.validateCategory(recipe.category);
+        this.validateUser(recipe.user);
+        this.validateIngredients(recipe.ingredients);
+        this.validateImageUrl(recipe.imageUrl);
+        this.validateIsFavorite(recipe.isFavorite);
+        this.validateNotes(recipe.notes);
+        this.validateSource(recipe.source);
+        this.validateSchedule(recipe.schedule);
     }
 
     getId(): number | undefined {
@@ -103,9 +156,7 @@ export class Recipe {
     }
 
     setId(id?: number) {
-        if (id !== undefined && id <= 0) {
-            throw new Error('ID must be a positive number');
-        }
+        this.validateId(id);
         this.id = id;
     }
 
@@ -114,12 +165,7 @@ export class Recipe {
     }
 
     setTitle(title: string) {
-        if (title.trim().length === 0) {
-            throw new Error('Title cannot be empty');
-        }
-        if (title.length > 100) {
-            throw new Error('Title cannot exceed 100 characters');
-        }
+        this.validateTitle(title);
         this.title = title.trim();
     }
 
@@ -128,9 +174,7 @@ export class Recipe {
     }
 
     setInstructions(instructions: string) {
-        if (instructions.trim().length === 0) {
-            throw new Error('Instructions cannot be empty');
-        }
+        this.validateInstructions(instructions);
         this.instructions = instructions.trim();
     }
 
@@ -139,9 +183,7 @@ export class Recipe {
     }
 
     setCookingTime(cookingTime: number) {
-        if (cookingTime <= 0) {
-            throw new Error('Cooking time must be greater than zero');
-        }
+        this.validateCookingTime(cookingTime);
         this.cookingTime = cookingTime;
     }
 
@@ -150,9 +192,7 @@ export class Recipe {
     }
 
     setCategory(category: RecipeCategory) {
-        if (category.trim().length === 0) {
-            throw new Error('Category cannot be empty');
-        }
+        this.validateCategory(category);
         this.category = category;
     }
 
@@ -161,9 +201,7 @@ export class Recipe {
     }
 
     setIngredients(ingredients: RecipeIngredient[]) {
-        if (ingredients.length === 0) {
-            throw new Error('Recipe must have at least one ingredient');
-        }
+        this.validateIngredients(ingredients);
         this.ingredients = ingredients;
     }
 
@@ -172,9 +210,7 @@ export class Recipe {
     }
 
     setUser(user: User) {
-        if (!user) {
-            throw new Error('User cannot be null or undefined');
-        }
+        this.validateUser(user);
         this.user = user;
     }
 
@@ -183,9 +219,7 @@ export class Recipe {
     }
 
     setImageUrl(imageUrl?: string) {
-        if (imageUrl && !this.isValidUrl(imageUrl)) {
-            throw new Error('Invalid image URL');
-        }
+        this.validateImageUrl(imageUrl);
         this.imageUrl = imageUrl;
     }
 
@@ -194,6 +228,7 @@ export class Recipe {
     }
 
     setIsFavorite(isFavorite: boolean) {
+        this.validateIsFavorite(isFavorite);
         this.isFavorite = isFavorite;
     }
 
@@ -202,6 +237,7 @@ export class Recipe {
     }
 
     setNotes(notes?: string) {
+        this.validateNotes(notes);
         this.notes = notes ? notes.trim() : undefined;
     }
 
@@ -210,6 +246,7 @@ export class Recipe {
     }
 
     setSource(source?: string) {
+        this.validateSource(source);
         this.source = source ? source.trim() : undefined;
     }
 
@@ -218,9 +255,11 @@ export class Recipe {
     }
 
     setSchedule(schedule: Schedule) {
+        this.validateSchedule(schedule);
         this.schedule = schedule;
     }
 
+    // validate URLs
     private isValidUrl(url: string): boolean {
         try {
             new URL(url);
@@ -228,6 +267,11 @@ export class Recipe {
         } catch (error) {
             return false;
         }
+    }
+
+    // separate update favorite as it might be the most frequently used
+    updateFavoriteStatus(isFavorite: boolean) {
+        this.setIsFavorite(isFavorite);
     }
 
     updateRecipe(updateInput: RecipeUpdateInput) {
@@ -269,6 +313,7 @@ export class Recipe {
         }
     }
 
+    // QUESTION: we were getting errors without a toJSON() method
     toJSON() {
         return {
             id: this.id,
