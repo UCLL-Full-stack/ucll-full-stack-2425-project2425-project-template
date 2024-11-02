@@ -19,6 +19,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import trainerService from '../service/trainer.service';
+import { PokemonInput } from '../types';
 
 const trainerRouter = express.Router();
 
@@ -107,6 +108,20 @@ trainerRouter.get('/:id/pokemon', async (req: Request, res: Response, next: Next
         next(error);
     }
 });
+
+trainerRouter.post('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pokemon = <PokemonInput>req.body;
+        const result = await trainerService.addPokemonToTrainerById(Number(req.params.id),pokemon)
+        res.status(200).json(result);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({message:error.message})
+        } else {
+            next(error)         
+        }
+    }
+})
 
 
 export {trainerRouter};

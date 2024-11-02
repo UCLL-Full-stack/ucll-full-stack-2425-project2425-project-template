@@ -100,7 +100,13 @@ const getTrainerById = ({id}: {id:number}): Trainer | null =>{
     return trainers.find((trainer) => trainer.getId() ===id) || null;
 };
 
+const addPokemonToTrainerById = ({id, pokemon}: {id:number, pokemon:Pokemon}): Trainer | null => {
+    trainers.find((trainer) => trainer.getId() ===id)?.addPokemon(pokemon);
+    return trainers.find((trainer) => trainer.getId() ===id) || null;
+}
+
 export default {
     getAllTrainers,
     getTrainerById,
+    addPokemonToTrainerById,
 };

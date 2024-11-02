@@ -1,6 +1,14 @@
 type Role = 'admin' | 'trainer' | 'nurse';
 
 // types/index.ts
+type PokemonInput = {
+  id?: number;
+  name: string;
+  type: string;
+  stats: {hp:number,attack:number,defence:number,specialAttack:number,specialDefence:number,speed:number}
+  health: number;
+  canEvolve: boolean;
+};
 
 export interface User {
     firstName: string;
@@ -32,5 +40,6 @@ export interface User {
   
 
 export {
-    Role
+    Role,
+    PokemonInput,
 };

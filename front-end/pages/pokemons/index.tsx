@@ -36,14 +36,14 @@ const Pokemons: React.FC = () => {
     setSelectedPokemon(pokemon);
   };
 
-  const handleAddPokemon = (newPokemon: Pokemon) => {
-    if (selectedTrainer) {
-      const updatedTrainer = {
-        ...selectedTrainer,
-        pokemon: [...selectedTrainer.pokemon, newPokemon],
-      };
-      setSelectedTrainer(updatedTrainer);
-    }
+  const handleAddPokemon = async (newPokemon: Pokemon) => {
+    try{
+      if (selectedTrainer!=null && selectedTrainer.id!=null) {
+        const updatedTrainer = await TrainerService.addPokemonToTrainerById(selectedTrainer.id,newPokemon);
+        setSelectedTrainer(updatedTrainer);
+      }} catch (error) {
+        console.error(error)
+      }
   };
 
   return (
