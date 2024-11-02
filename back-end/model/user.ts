@@ -22,7 +22,6 @@ export class User {
         password: string;
     }) {
         this.validate(user);
-
         this.id = user.id;
         this.nationalRegisterNumber = user.nationalRegisterNumber;
         this.name = user.name;
@@ -80,29 +79,43 @@ export class User {
         email: string;
         password: string;
     }) {
+        // Validate national register number
+        const nrnPattern =
+            /^([0-9]{2}).([0][1-9]|[1][0-2]).([0-2][0-9]|[3][01])-([0-9]{3}).([0-9]{2})$/;
         if (!user.nationalRegisterNumber) {
             throw new Error('National register number is required.');
-        } else if (!/^\d{2}\.\d{2}\.\d{2}-\d{3}\.\d{2}$/.test(user.nationalRegisterNumber)) {
-            throw new Error('National register number must be in the valid format.');
+        } else if (!nrnPattern.test(user.nationalRegisterNumber)) {
+            throw new Error('Invalid national register number format.');
         }
+
+        // Validate name
         if (!user.name) {
             throw new Error('Name is required.');
         }
+
+        // Validate birth date
         if (!user.birthDate) {
             throw new Error('Birth date is required.');
         } else if (user.birthDate > new Date()) {
             throw new Error('Birth date cannot be in the future.');
         }
+
+        // Validate phone number
+        const phonePattern = /^(?:(?:\+32|0)\s?)?(?:[1-9]{1}\d{1})(?:[\s.-]?\d{2,3}){3}$/;
         if (!user.phoneNumber) {
             throw new Error('Phone number is required.');
-        } else if (!/^\d{9}$/.test(user.phoneNumber)) {
-            throw new Error('Phone number must be exactly 9 digits.');
+        } else if (!phonePattern.test(user.phoneNumber)) {
+            throw new Error('Invalid phone number format.');
         }
+
+        // Validate email
         if (!user.email) {
             throw new Error('Email is required.');
         } else if (!/@.*\./.test(user.email)) {
             throw new Error('Invalid email format: must contain "@" and a ".".');
         }
+
+        // Validate password
         if (!user.password) {
             throw new Error('Password is required.');
         } else if (user.password.length < 8) {

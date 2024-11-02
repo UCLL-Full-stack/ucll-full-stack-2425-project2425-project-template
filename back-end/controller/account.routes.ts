@@ -66,16 +66,16 @@ const accountRouter = express.Router();
 
 /**
  * @swagger
- * /users/{email}/accounts:
+ * /users/{nationalRegisterNumber}/accounts:
  *   post:
  *     summary: Create a new account
  *     parameters:
  *       - in: path
- *         name: email
+ *         name: nationalRegisterNumber
  *         required: true
  *         schema:
  *           type: string
- *         description: The user's email
+ *         description: The user's national register number
  *     requestBody:
  *       required: true
  *       content:
@@ -96,15 +96,25 @@ const accountRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Account'
  */
-accountRouter.post('/users/:email/accounts', (req: Request, res: Response) => {
+accountRouter.post('/:nationalRegisterNumber/accounts', (req: Request, res: Response) => {
     try {
-        const { email } = req.params;
+        const { nationalRegisterNumber } = req.params;
         const account = <AccountInput>req.body;
 
-        const currentUser = userService.getUserByEmail(email);
+        // Find the user by national register number
+        const currentUser = userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
         if (!currentUser) {
-            throw new Error('User not found');
+            throw new Error(
+                `User with national register number ${nationalRegisterNumber} not found`
+            );
         }
+        const user: UserInput = currentUser;
+        if (!currentUser) {
+            throw new Error(
+                `User with national register number ${nationalRegisterNumber} not found`
+            );
+        }
+
         const result = accountService.createAccount(account, currentUser);
         res.status(200).json(result);
     } catch (error) {
