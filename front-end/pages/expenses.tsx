@@ -1,16 +1,16 @@
 import Header from '@components/header';
 import React from 'react';
 
-const Admin: React.FC = () => {
+const Expenses: React.FC = () => {
     return (
         <>
             <Header />
             <div>
-                <h1>Admin Dashboard</h1>
-                <p>nog toe te voegen</p>
+                <h1>Expenses</h1>
+                <p>Expenses will be shown here</p>
             </div>
         </>
     );
 };
 
-export default Admin;
+export default Expenses;
