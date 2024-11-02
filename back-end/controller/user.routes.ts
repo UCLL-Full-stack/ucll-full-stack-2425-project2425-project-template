@@ -93,46 +93,4 @@ userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-/**
- * @swagger
- * /users/login:
- *   post:
- *     summary: Get a user by email and password
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 description: The user's email
- *               password:
- *                 type: string
- *                 description: The user's password
- *     responses:
- *       200:
- *         description: The user was successfully retrieved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       400:
- *         description: The user could not be retrieved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- */
-userRouter.get('/login', (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { email, password } = req.body;
-        const result = userService.getUserByEmailAndPassword(email, password);
-        res.status(200).json(result);
-    } catch (error: any) {
-        next(error);
-    }
-});
-
 export { userRouter };

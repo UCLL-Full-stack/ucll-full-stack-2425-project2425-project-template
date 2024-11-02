@@ -35,10 +35,6 @@ const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User |
     return users.find((user) => user.getNationalRegisterNumber() === nationalRegisterNumber);
 };
 
-const getUserByEmailAndPassword = (email: string, password: string): User | undefined => {
-    return users.find((user) => user.getEmail() === email && user.getPassword() === password);
-};
-
 const getUserByEmail = (email: string): User | undefined => {
     return users.find((user) => user.getEmail() === email);
 };
@@ -46,6 +42,5 @@ const getUserByEmail = (email: string): User | undefined => {
 export default {
     createUser,
     getUserByNationalRegisterNumber,
-    getUserByEmailAndPassword,
     getUserByEmail,
 };

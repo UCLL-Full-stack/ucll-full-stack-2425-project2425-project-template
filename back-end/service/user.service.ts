@@ -29,14 +29,6 @@ const createUser = ({
     return userDb.createUser(user);
 };
 
-const getUserByEmailAndPassword = (email: string, password: string): User | undefined => {
-    const user = userDb.getUserByEmailAndPassword(email, password);
-    if (!user) {
-        throw new Error('Invalid email or password.');
-    }
-    return userDb.getUserByEmailAndPassword(email, password);
-};
-
 const getUserByEmail = (email: string): User | undefined => {
     const user = userDb.getUserByEmail(email);
     if (!user) {
@@ -55,7 +47,6 @@ const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User |
 
 export default {
     createUser,
-    getUserByEmailAndPassword,
     getUserByEmail,
     getUserByNationalRegisterNumber,
 };
