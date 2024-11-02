@@ -42,4 +42,21 @@ type BudgetgoalInput = {
     account: AccountInput;
 };
 
-export { UserInput, AccountInput, TransactionInput, BudgetgoalInput };
+type AuthenticationRequest = {
+    email: string;
+    password: string;
+};
+
+type AuthenticationResponse = {
+    id: number;
+    email: string;
+};
+
+export {
+    UserInput,
+    AccountInput,
+    TransactionInput,
+    BudgetgoalInput,
+    AuthenticationRequest,
+    AuthenticationResponse,
+};
