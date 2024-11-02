@@ -5,8 +5,8 @@ type Props = {
     cocktail: Cocktail;
 }
 const imgStyle = {
-    maxWidth: '300px',
-    maxHeight: '300px',
+    maxWidth: '550px',
+    maxHeight: '400px',
     width: 'auto',
     height: 'auto',
     display: 'block',
@@ -16,7 +16,7 @@ const imgStyle = {
 const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
     return (
         <>
-        <div className="cocktail-container">
+        <div className="cocktail-details">
             <h3>{cocktail.name}</h3>
             <img src={cocktail.image} alt={cocktail.name} style={imgStyle} />
             <p><strong>Strongness :</strong> {cocktail.strongness}</p>
@@ -29,12 +29,12 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {cocktail.ingredientsList.map((ingredient, index) => (
-                        <tr key={index}>
-                            <td>{ingredient.name}</td>
-                            <td>{ingredient.amount}</td>
-                        </tr>
-                    ))}
+             {cocktail.ingredientsList.map((ingredient, index) => (
+              <tr key={index}>
+                  <td className="ingredient-cell">{ingredient.name}</td>
+                   <td className="ingredient-cell">{ingredient.amount}</td>
+              </tr>
+                  ))}
                 </tbody>
             </table>
         </div>

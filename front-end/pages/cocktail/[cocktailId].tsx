@@ -4,7 +4,7 @@ import Header from "@components/header";
 import Head from "next/head";
 import CocktailService from "@services/CocktailService";
 import { Cocktail } from "@types";
-import CocktailDetails from "@components/cocktail/cocktailDetails";
+import CocktailDetails from '@components/cocktail/CocktailDetails';
 
 const CocktailDetailsPage: React.FC = () => {
     const router = useRouter();
@@ -30,7 +30,7 @@ const CocktailDetailsPage: React.FC = () => {
         <Head>
             <title>Cocktail Details</title>
         </Head>
-        <Header />
+        <Header></Header>
         <main>
             {cocktail && <CocktailDetails cocktail={cocktail} />}      
         </main>
@@ -38,5 +38,7 @@ const CocktailDetailsPage: React.FC = () => {
         </>
 );
 };
+
+export default CocktailDetailsPage;
 
 

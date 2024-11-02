@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 const Header: React.FC = () => {
   const banners = [
-    "banners/neonbanner.png",
-    "banners/firebanner.gif",
-    "banners/pinkbanner.gif",
-    "banners/goldbanner.png"
+    "/banners/neonbanner.png",
+    "/banners/firebanner.gif",
+    "/banners/pinkbanner.gif",
+    "/banners/goldbanner.png",
+    "/banners/heartbanner.png",
+    "/banners/neonbanner.png",
+    "/banners/firebanner.gif",
+    "/banners/pinkbanner.gif",
+    "/banners/goldbanner.png",
+    "/banners/heartbanner.png",
+    "/banners/drunkbanner.gif"
   ];
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -22,6 +30,25 @@ const Header: React.FC = () => {
         style={{ maxWidth: '1000px', height: '140px', cursor: 'pointer' }}
         onClick={handleBannerClick}
       />
+      
+      {/* De coole navbar */}
+      <nav style={{ display: 'flex', justifyContent: 'center',paddingTop: '5px'}}>
+        <Link href="http://localhost:8080">
+          <button className="navbarbutton-stylah">
+            Home
+          </button>
+        </Link>
+        <Link href="http://localhost:8080">
+          <button className="navbarbutton-stylah">
+            Home2
+          </button>
+        </Link>
+        <Link href="http://localhost:8080">
+          <button className="navbarbutton-stylah">
+            Home3
+          </button>
+        </Link>
+      </nav>
     </header>
   );
 };
