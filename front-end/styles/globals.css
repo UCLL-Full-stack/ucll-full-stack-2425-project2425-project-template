@@ -1,5 +1,5 @@
 body {
-    background-color: #000;
+    background-color: #1e8088;
     color: #fff;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -16,10 +16,10 @@ body {
   }
   
   .cocktail-container {
-    border: 5px solid #440d33;
+    border: 5px solid #f42cff;
     border-radius: 8px;
     padding: 16px;
-    background-color: #192835;
+    background-color: #2e24b3;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     max-width: 350px;
     max-height: 500px;
