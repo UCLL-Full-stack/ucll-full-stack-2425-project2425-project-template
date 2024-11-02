@@ -1,9 +1,56 @@
-// ---- Used in User Story 2 ----
-
 import express, { NextFunction, Request, Response } from 'express';
 import recipeService from '../service/recipe.service';
 
 const recipeRouter = express.Router();
+
+/**
+ * @swagger
+ * /recipes:
+ *   get:
+ *     summary: Get all recipes
+ *     responses:
+ *       200:
+ *         description: A list of recipes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ */
+
+// Get all recipes
+recipeRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const recipes = recipeService.getAllRecipes();
+        res.status(200).json(recipes.map(recipe => recipe.toJSON()));
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /recipes/{recipeId}:
+ *   get:
+ *     summary: Get a recipe by ID
+ *     parameters:
+ *       - in: path
+ *         name: recipeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the recipe to retrieve
+ *     responses:
+ *       200:
+ *         description: A single recipe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Recipe'
+ *       404:
+ *         description: Recipe not found
+ */
 
 // Get recipe by Id
 recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +63,35 @@ recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFun
     }
 });
 
+/**
+ * @swagger
+ * /recipes/{recipeId}:
+ *   put:
+ *     summary: Update a recipe by ID
+ *     parameters:
+ *       - in: path
+ *         name: recipeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the recipe to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RecipeUpdateInput'
+ *     responses:
+ *       200:
+ *         description: The updated recipe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Recipe'
+ *       404:
+ *         description: Recipe not found
+ */
+
 // Update recipe based on Id
 recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
@@ -27,6 +103,25 @@ recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFun
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /recipes/{recipeId}:
+ *   delete:
+ *     summary: Delete a recipe by ID
+ *     parameters:
+ *       - in: path
+ *         name: recipeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the recipe to delete
+ *     responses:
+ *       204:
+ *         description: Recipe deleted successfully
+ *       404:
+ *         description: Recipe not found
+ */
 
 // Delete recipe based on Id
 recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {

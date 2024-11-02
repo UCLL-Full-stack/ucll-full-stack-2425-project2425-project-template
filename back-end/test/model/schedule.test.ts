@@ -4,7 +4,7 @@ import { User } from '../../model/user';
 import { Profile } from '../../model/profile';
 import { Ingredient } from '../../model/ingredient';
 import { RecipeIngredient } from '../../model/recipeIngredient';
-import { IngredientCategory } from '../../types';
+import { IngredientCategory, RecipeCategory } from '../../types';
 
 describe('Schedule Class', () => {
     let user: User;
@@ -46,7 +46,7 @@ describe('Schedule Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast' as RecipeCategory,
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -94,7 +94,7 @@ describe('Schedule Class', () => {
             title: 'Waffles',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 20,
-            category: 'Breakfast',
+            category: 'breakfast' as RecipeCategory,
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -122,7 +122,7 @@ describe('Schedule Class', () => {
             title: 'Waffles',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 20,
-            category: 'Breakfast',
+            category: 'breakfast' as RecipeCategory,
             ingredients: [recipeIngredient],
             user: user,
         });

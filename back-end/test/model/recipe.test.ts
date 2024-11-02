@@ -52,7 +52,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -60,7 +60,7 @@ describe('Recipe Class', () => {
         expect(recipe.getTitle()).toBe('Pancakes');
         expect(recipe.getInstructions()).toBe('Mix ingredients and cook.');
         expect(recipe.getCookingTime()).toBe(15);
-        expect(recipe.getCategory()).toBe('Breakfast');
+        expect(recipe.getCategory()).toBe('breakfast');
         expect(recipe.getIngredients()).toEqual([recipeIngredient]);
         expect(recipe.getUser()).toBe(user);
     });
@@ -71,11 +71,11 @@ describe('Recipe Class', () => {
                 title: '',
                 instructions: 'Mix ingredients and cook.',
                 cookingTime: 15,
-                category: 'Breakfast',
+                category: 'breakfast',
                 ingredients: [recipeIngredient],
                 user: user,
             });
-        }).toThrow('Title is required and cannot be empty');
+        }).toThrow('Title cannot be empty');
     });
 
     test('should update the recipe title', () => {
@@ -83,7 +83,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -97,7 +97,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
             imageUrl: 'http://example.com/image.jpg',
@@ -112,7 +112,7 @@ describe('Recipe Class', () => {
                 title: 'Pancakes',
                 instructions: 'Mix ingredients and cook.',
                 cookingTime: 15,
-                category: 'Breakfast',
+                category: 'breakfast',
                 ingredients: [recipeIngredient],
                 user: user,
                 imageUrl: 'invalid-url',
@@ -125,7 +125,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -134,7 +134,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -147,7 +147,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -156,7 +156,7 @@ describe('Recipe Class', () => {
             title: 'Waffles',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -169,7 +169,7 @@ describe('Recipe Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -178,7 +178,7 @@ describe('Recipe Class', () => {
             title: 'Waffles',
             instructions: 'Mix ingredients and cook thoroughly.',
             cookingTime: 20,
-            category: 'Brunch',
+            category: 'brunch',
             ingredients: [
                 {
                     ingredient: ingredient,
@@ -197,7 +197,7 @@ describe('Recipe Class', () => {
         expect(recipe.getTitle()).toBe('Waffles');
         expect(recipe.getInstructions()).toBe('Mix ingredients and cook thoroughly.');
         expect(recipe.getCookingTime()).toBe(20);
-        expect(recipe.getCategory()).toBe('Brunch');
+        expect(recipe.getCategory()).toBe('brunch');
         expect(recipe.getIngredients()?.[0].getUnit()).toBe('grams');
         expect(recipe.getIngredients()?.[0].getQuantity()).toBe(300);
         expect(recipe.getImageUrl()).toBe('http://example.com/new-image.jpg');
