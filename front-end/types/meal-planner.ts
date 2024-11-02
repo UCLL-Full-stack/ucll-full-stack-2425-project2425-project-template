@@ -18,12 +18,21 @@ type Ingredient = {
   store?: string;
 };
 
-type Meal = {
+type MealDay = {
   id: string;
-  name: string;
-  ingredients: Ingredient[];
-  date: Date;
+  title: string;
+  category: MealCategory;
+  description: string;
+  imageUrl: string;
+  isFavorite: boolean;
+  instructions?: string;
+  cookingTime?: number;
+  ingredients?: Ingredient[];
+  notes?: string;
+  source?: string;
 };
 
-export type { Ingredient, Meal };
+type MealCategory = "breakfast" | "lunch" | "dinner" | "snack" | "other";
+
+export type { Ingredient, MealDay, MealCategory };
 export { IngredientCategory };
