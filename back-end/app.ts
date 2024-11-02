@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction }  from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -31,9 +31,16 @@ const swaggerOpts = {
     },
     apis: ['./controller/*.ts'],
 };
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-const swaggerDocs = swaggerJSDoc(swaggerOpts);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// Generic error handler
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+    res.status(400).json({
+        status: 'application error',
+        message: error.message
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

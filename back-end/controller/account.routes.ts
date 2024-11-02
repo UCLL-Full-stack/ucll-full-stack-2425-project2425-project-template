@@ -57,7 +57,7 @@
  *           items:
  *             $ref: '#/components/schemas/Budgetgoal'
  */
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import accountService from '../service/account.service';
 import userService from '../service/user.service';
 import { AccountInput, UserInput } from '../types/index';
@@ -96,7 +96,7 @@ const accountRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Account'
  */
-accountRouter.post('/:nationalRegisterNumber/accounts', (req: Request, res: Response) => {
+accountRouter.post('/users/:email/accounts', (req: Request, res: Response, next: NextFunction) => {
     try {
         const { nationalRegisterNumber } = req.params;
         const account = <AccountInput>req.body;
@@ -118,9 +118,38 @@ accountRouter.post('/:nationalRegisterNumber/accounts', (req: Request, res: Resp
         const result = accountService.createAccount(account, currentUser);
         res.status(200).json(result);
     } catch (error) {
-        const errorMessage = (error as Error).message;
-        res.status(400).json({ status: 'error', errorMessage });
+        next(error);
     }
 });
 
+/**
+ * @swagger
+ * /account/{id}:
+ *   get:
+ *     summary: Get account by id.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *           required: true
+ *           description: The lecturer id.
+ *     responses:
+ *       200:
+ *         description: JSON consisting of an account object
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/Account'
+ */
+accountRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = Number(req.params.id);
+        const account = accountService.getAccountById({ id });
+        res.status(200).json(account);
+    } catch(error: any) {
+        next(error);
+    }
+});
 export { accountRouter };

@@ -33,4 +33,13 @@ const createAccount = (accountInput: AccountInput, currentUser: UserInput): Acco
     return accountDb.createAccount(account);
 };
 
-export default { createAccount };
+const getAccountById = ({ id }: { id: number}): Account => {
+    const account = accountDb.getAccountById({ id });
+    if (account === null) {
+        throw new Error(`Account with id: ${id} was not found.`);
+    }
+
+    return account;
+}
+
+export default { createAccount, getAccountById };
