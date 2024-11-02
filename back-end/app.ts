@@ -5,6 +5,10 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import boardRouter from './controller/board.routes';
+import columnRouter from './controller/column.routes';
+import guildRouter from './controller/guild.routes';
+import taskRouter from './controller/task.routes';
 
 const app = express();
 dotenv.config();
@@ -12,6 +16,11 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use('/api/boards', boardRouter);
+app.use('/api/columns', columnRouter);
+app.use('api/guilds', guildRouter);
+app.use('/api/tasks', taskRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
