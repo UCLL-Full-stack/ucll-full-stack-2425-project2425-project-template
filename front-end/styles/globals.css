@@ -4,28 +4,50 @@
 
 @layer base {
   body {
-    @apply bg-white;
+    background-color: theme('colors.white');
   }
 }
 
 @layer components {
   .modal-overlay {
-    @apply fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4;
+    background-color: theme('colors.black');
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: theme('spacing.4');
   }
 
   .modal-content {
-    @apply bg-white rounded-lg w-full max-w-md p-6;
+    background-color: theme('colors.white');
+    border-radius: theme('borderRadius.lg');
+    width: 100%;
+    max-width: theme('maxWidth.md');
+    padding: theme('spacing.6');
+    position: relative;
   }
 
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500;
+    width: 100%;
+    padding: theme('spacing.2');
+    border: 1px solid theme('colors.gray.300');
+    border-radius: theme('borderRadius.md');
+  }
+
+  .input-field:focus {
+    outline: none;
+    ring: 2px theme('colors.blue.500');
+    border-color: transparent;
   }
 
   .btn-primary {
-    @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700;
+    background-color: theme('colors.primary');
+    color: theme('colors.white');
+    padding: theme('spacing.2') theme('spacing.4');
+    border-radius: theme('borderRadius.md');
   }
 
-  .btn-cancel {
-    @apply px-4 py-2 text-gray-600 hover:text-gray-800;
+  .btn-primary:hover {
+    background-color: theme('colors.blue.700');
   }
 }

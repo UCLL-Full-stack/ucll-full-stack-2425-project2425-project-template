@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
-import { BoardService } from '../service/board.service';
+import * as BoardService from '../service/board.service';
 import { User } from '../model/user';
 import { Guild } from '../model/guild';
 
 const router = express.Router();
-const boardService = new BoardService();
+const boardService = BoardService;
 
 // Middleware to validate board creation request
 const validateBoardCreation = (req: Request, res: Response, next: express.NextFunction) => {
