@@ -66,11 +66,11 @@ export class Player {
         if (!player.class) {
             throw new Error('Class is required.');
         }
-        if (!player.currency) {
-            throw new Error('Currency is required.');
+        if (player.currency < 0) {
+            throw new Error('Currency cannot be negative.');
         }
         if (!player.user) {
-            throw new Error('A user is required.');
+            throw new Error('A correct user is required.');
         }
     }
 }
