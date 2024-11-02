@@ -1,7 +1,6 @@
 import { Role } from "../model/role";
 import { DiscordPermission } from "../types";
 
-// Static roles data
 const roles: Role[] = [
     new Role("role1-1", "Role 1-1", [DiscordPermission.ADMINISTRATOR]),
     new Role("role1-2", "Role 1-2", [DiscordPermission.MANAGE_CHANNELS, DiscordPermission.BAN_MEMBERS]),
@@ -11,7 +10,6 @@ const roles: Role[] = [
     new Role("role3-2", "Role 3-2", [DiscordPermission.KICK_MEMBERS, DiscordPermission.TIMEOUT_MEMBERS]),
 ];
 
-// CRUD methods
 const getAllRoles = (): Role[] => {
     return roles;
 };

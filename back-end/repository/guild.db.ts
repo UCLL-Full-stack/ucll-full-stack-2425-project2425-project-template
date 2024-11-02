@@ -1,5 +1,3 @@
-// repository/guildRepository.ts
-import { gu } from 'date-fns/locale';
 import { Guild } from '../model/guild';
 import { Role } from '../model/role';
 import { PermissionEntry, KanbanPermission, DiscordPermission } from '../types';
@@ -26,7 +24,6 @@ const guild3Members = [
     { userId: "user3", roleIds: ["role3-2"] }
 ];
 
-// static data
 const guilds: Guild[] = [
     new Guild(
         "guild1",
