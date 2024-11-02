@@ -15,14 +15,26 @@ const getUserById = (id: number): User | null => {
     return user || null;
 };
 
-// Function to retrieve a user by name
-const getUserByName = (name: string): User | null => {
-    const user = users.find((user) => user.getName() === name);
+// Function to retrieve a user by firstname
+const getUserByFirstName = (firstName: string): User | null => {
+    console.log("Searching for user with firstName:", firstName);
+    const user = users.find((user) => user.getFirstName() === firstName);
+    console.log("Found user:", user);
+    return user || null;
+};
+// Function to retrieve a user by lastname
+const getUserByLastName = (lastName: string): User | null => {
+    const user = users.find((user) => user.getLastName() === lastName);
+    return user || null;
+};
+// Function to retrieve a user by email
+const getUserByEmail = (email: string): User | null => {
+    const user = users.find((user) => user.getEmail() === email);
     return user || null;
 };
 
 // Function to save a new user
-const saveUser = (userData: { name: string; password: string; role: Role }): User => {
+const saveUser = (userData: { firstName: string; lastName: string; email: string; password: string; role: Role }): User => {
     const newUser = new User({ id: users.length + 1, ...userData });
     users.push(newUser);
     return newUser;
@@ -32,6 +44,8 @@ const saveUser = (userData: { name: string; password: string; role: Role }): Use
 export default {
     getAllUsers,
     getUserById,
-    getUserByName,
+    getUserByFirstName,
+    getUserByLastName,
+    getUserByEmail,
     saveUser,
 };

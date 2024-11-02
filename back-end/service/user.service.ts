@@ -15,21 +15,39 @@ const getUserById = (id: number): User => {
     return user;
 };
 
-const getUserByName = (name: string): User => {
-    const user = userRepository.getUserByName(name);
+const getUserByFirstName = (firstName: string): User => {
+    const user = userRepository.getUserByFirstName(firstName);
     if (!user) {
-        throw new Error(`User with name ${name} does not exist.`);
+        throw new Error(`User with first name ${firstName} does not exist.`);
     }
     return user;
 };
 
-const createUser = (userData: { name: string; password: string; role: Role }): User => {
+const getUserByLastName = (lastName: string): User => {
+    const user = userRepository.getUserByLastName(lastName);
+    if (!user) {
+        throw new Error(`User with last name ${lastName} does not exist.`);
+    }
+    return user;
+};
+
+const getUserByEmail = (email: string): User => {
+    const user = userRepository.getUserByEmail(email);
+    if (!user) {
+        throw new Error(`User with email ${email} does not exist.`);
+    }
+    return user;
+};
+
+const createUser = (userData: { firstName: string; lastName: string; email: string; password: string; role: Role }): User => {
     return userRepository.saveUser(userData);
 };
 
 export default {
     getAllUsers,
     getUserById,
-    getUserByName,
+    getUserByFirstName,
+    getUserByLastName,
+    getUserByEmail,
     createUser,
 };

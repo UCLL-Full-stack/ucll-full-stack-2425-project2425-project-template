@@ -13,9 +13,18 @@
  *         id:
  *           type: number
  *           format: int64
- *         name:
+ *         firstName:
  *           type: string
- *           description: User name.
+ *           description: User's first name.
+ *         lastName:
+ *           type: string
+ *           description: User's last name.
+ *         email:
+ *           type: string
+ *           description: User's email.
+ *         password:
+ *           type: string
+ *           description: User's password.
  *         role:
  *           type: string
  *           description: User role.
@@ -96,6 +105,129 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+// /**
+//  * @swagger
+//  * /users/{firstName}:
+//  *   get:
+//  *     summary: Get a user by first name.
+//  *     description: Returns a JSON object of the user with the specified first name. If the user does not exist, an error is thrown.
+//  *     tags:
+//  *       - Users
+//  *     parameters:
+//  *       - in: path
+//  *         name: firstName
+//  *         required: true
+//  *         description: firstName of the user to retrieve.
+//  *         schema:
+//  *           type: string
+//  *           description: User's first name.
+//  *     responses:
+//  *       200:
+//  *         description: The user object.
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               $ref: '#/components/schemas/User'
+//  *       404:
+//  *         description: User not found.
+//  *       500:
+//  *         description: Internal server error.
+//  */
+// userRouter.get('/:firstName', async (req: Request, res: Response, next: NextFunction) => {
+//     const { firstName } = req.params;
+//     try {
+//         const user = userService.getUserByFirstName(String(firstName));
+//         res.status(200).json(user);
+//     } catch (error) {
+//         if ((error as Error).message.includes('does not exist')) {
+//             return res.status(404).json({ message: (error as Error).message });
+//         }
+//         next(error); // For other errors
+//     }
+// });
+
+// /**
+//  * @swagger
+//  * /users/{lastName}:
+//  *   get:
+//  *     summary: Get a user by last name.
+//  *     description: Returns a JSON object of the user with the specified last name. If the user does not exist, an error is thrown.
+//  *     tags:
+//  *       - Users
+//  *     parameters:
+//  *       - in: path
+//  *         name: lastName
+//  *         required: true
+//  *         description: lastName of the user to retrieve.
+//  *         schema:
+//  *           type: string
+//  *           description: User's last name.
+//  *     responses:
+//  *       200:
+//  *         description: The user object.
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               $ref: '#/components/schemas/User'
+//  *       404:
+//  *         description: User not found.
+//  *       500:
+//  *         description: Internal server error.
+//  */
+// userRouter.get('/:lastName', async (req: Request, res: Response, next: NextFunction) => {
+//     const { lastName } = req.params;
+//     try {
+//         const user = userService.getUserByLastName(String(lastName));
+//         res.status(200).json(user);
+//     } catch (error) {
+//         if ((error as Error).message.includes('does not exist')) {
+//             return res.status(404).json({ message: (error as Error).message });
+//         }
+//         next(error); // For other errors
+//     }
+// });
+
+// /**
+//  * @swagger
+//  * /users/{email}:
+//  *   get:
+//  *     summary: Get a user by email.
+//  *     description: Returns a JSON object of the user with the specified email. If the user does not exist, an error is thrown.
+//  *     tags:
+//  *       - Users
+//  *     parameters:
+//  *       - in: path
+//  *         name: email
+//  *         required: true
+//  *         description: email of the user to retrieve.
+//  *         schema:
+//  *           type: string
+//  *           description: User's email.
+//  *     responses:
+//  *       200:
+//  *         description: The user object.
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               $ref: '#/components/schemas/User'
+//  *       404:
+//  *         description: User not found.
+//  *       500:
+//  *         description: Internal server error.
+//  */
+// userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
+//     const { email } = req.params;
+//     try {
+//         const user = userService.getUserByEmail(String(email));
+//         res.status(200).json(user);
+//     } catch (error) {
+//         if ((error as Error).message.includes('does not exist')) {
+//             return res.status(404).json({ message: (error as Error).message });
+//         }
+//         next(error); // For other errors
+//     }
+// });
+
 /**
  * @swagger
  * /users:
@@ -111,9 +243,15 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               firstName:
  *                 type: string
- *                 description: User name.
+ *                 description: User first name.
+ *               lastName:
+ *                 type: string
+ *                 description: User last name.
+ *               email:
+ *                 type: string
+ *                 description: User email.
  *               password:
  *                 type: string
  *                 description: User password.
@@ -134,8 +272,8 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, password, role } = req.body;
-        const newUser = userService.createUser({ name, password, role });
+        const { firstName, lastName, email, password, role } = req.body;
+        const newUser = userService.createUser({ firstName, lastName, email, password, role });
         res.status(201).json(newUser);
     } catch (error) {
         if ((error as Error).message.includes('required')) {
