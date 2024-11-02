@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Image from "next/image"; // Import Image component from next/image
-import logo from "../public/SCR-20241102-bsdc (1).png"; // Import your logo image
+import Image from "next/image";
+import logo from "../public/SCR-20241102-bsdc (1).png";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -10,17 +10,16 @@ const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-md py-4 sticky top-0 z-50">
       <div className="max-w-screen-xl mx-auto px-4 flex justify-between items-center">
-        <div className="flex items-center">
+        <Link href="/" className="flex items-center">
           <Image
             src={logo}
             alt="Workout Planner Logo"
-            width={100} // Increased width for a larger logo
-            height={100} // Increased height for a larger logo
+            width={100}
+            height={100}
             className="mr-4"
           />
-          <h1 className="text-3xl font-bold text-gray-800">Workout Planner</h1>{" "}
-          {/* Made the text larger */}
-        </div>
+          <h1 className="text-3xl font-bold text-gray-800">Workout Planner</h1>
+        </Link>
         <nav className="flex space-x-6">
           <Link
             href="/"

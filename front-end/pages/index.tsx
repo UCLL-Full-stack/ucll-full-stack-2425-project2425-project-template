@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     <>
       <Header />
       <main className="py-4 bg-gray-50 min-h-screen">
-        <MaxWidthWrapper className="mb-8 mt-10 sm:mt-16 flex flex-col items-center justify-center text-center">
+        <MaxWidthWrapper className="mb-8 mt-20 sm:mt-24 flex flex-col items-center justify-center text-center">
           <div className="mx-auto mb-2 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
             <p className="text-sm font-semibold text-gray-700">
               The Workout Planner is now live!
