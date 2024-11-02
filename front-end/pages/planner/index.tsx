@@ -1,4 +1,4 @@
-import CalendarGrid from "@/components/planner/CalendarGrid";
+import CalendarGrid from "@/components/planner/calendar/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
 import ShoppingList from "@/components/planner/ShoppingListSidebar";
 import Head from "next/head";
