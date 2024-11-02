@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import userRouter from './controller/user.routes';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { cocktailRouter } from './controller/cocktail.routes';
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/users', userRouter);
+app.use('/cocktails', cocktailRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

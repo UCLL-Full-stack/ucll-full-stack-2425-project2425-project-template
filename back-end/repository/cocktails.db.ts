@@ -43,6 +43,8 @@ const ingredientsCaipirinha = [
     new Ingredient(6, "Ice", "as needed"),
 ];
 
+
+
 const cocktailsList = [
     new Cocktail(
         1,
@@ -91,4 +93,4 @@ const getCocktailByName = ({ name }: { name: string }): Cocktail | null => {
     return cocktailsList.find((cocktail) => cocktail.getName() === name) || null;
 }
 
-export { getAllCocktails, getCocktailById, getCocktailByName };
+export default { getAllCocktails, getCocktailById, getCocktailByName };
