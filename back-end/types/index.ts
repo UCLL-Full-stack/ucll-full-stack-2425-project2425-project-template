@@ -1,3 +1,5 @@
+import { User } from "../model/user";
+
 type Role = 'admin' | 'parent' | 'child';
 
 type UserInput = {
@@ -6,7 +8,15 @@ type UserInput = {
     password?: string;
     role?: Role;
 }
+
+type FamilyInput = {
+    name?: string;
+    familyList?: User[];
+    owner?: User;
+}
+
 export {
     Role,
     UserInput,
+    FamilyInput,
 }

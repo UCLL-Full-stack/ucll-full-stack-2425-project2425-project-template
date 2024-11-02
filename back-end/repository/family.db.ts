@@ -17,6 +17,12 @@ const getAllFamilies = (): Family[] => {
     return families;
 }
 
+// Post
+const createFamily = (family: Family) => {
+    families.push(family);
+}
+
 export default {
     getAllFamilies,
+    createFamily,
 }

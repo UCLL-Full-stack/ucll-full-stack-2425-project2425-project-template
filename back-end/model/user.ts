@@ -36,7 +36,7 @@ export class User {
         return this.name;
     }
 
-    getEmail(): String {
+    getEmail(): string {
         return this.email;
     }
 
