@@ -78,4 +78,14 @@ export class Task{
             throw new Error("Task Due Date is required");
         }
     }
+
+    public toJSON(){
+        return {
+            taskId: this.taskId,
+            title: this.title,
+            description: this.description,
+            dueDate: this.dueDate,
+            assignees: this.assignees.map(assignee => assignee.getUserId())
+        }
+    }
 }

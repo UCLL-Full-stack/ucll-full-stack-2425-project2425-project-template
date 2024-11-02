@@ -17,7 +17,7 @@ describe('Board Entity', () => {
         mockColumns = [new Column('col1', 'Todo', [])];
         mockPermissions = [{
             identifier: 'user1',
-            kanbanPermission: KanbanPermission.ADMINISTRATOR
+            kanbanPermission: [KanbanPermission.ADMINISTRATOR]
         }];
     });
 

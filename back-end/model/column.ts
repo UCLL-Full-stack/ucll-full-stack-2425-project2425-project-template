@@ -51,4 +51,12 @@ export class Column{
             throw new Error("Column Name is required");
         }
     }
+
+    public toJSON(){
+        return {
+            columnId: this.columnId,
+            columnName: this.columnName,
+            tasks: this.tasks.map(task => task.getTaskId())
+        }
+    }
 }

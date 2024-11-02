@@ -113,4 +113,14 @@ export class Guild{
             throw new Error("Guild Name is required");
         }
     }
+
+    public toJSON(){
+        return {
+            guildId: this.guildId,
+            guildName: this.guildName,
+            settings: this.settings,
+            roles: this.roles.map(role => role.getRoleId()),
+            members: this.members
+        }
+    }
 }

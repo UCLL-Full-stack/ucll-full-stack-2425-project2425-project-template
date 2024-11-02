@@ -65,4 +65,13 @@ export class User{
             throw new Error("User Tag is required");
         }
     }
+
+    public toJSON(){
+        return {
+            userId: this.userId,
+            username: this.username,
+            userTag: this.userTag,
+            guilds: this.guilds.map(guild => guild.getGuildId())
+        }
+    }
 }
