@@ -30,7 +30,16 @@ const deleteCourses = DBtryCatcher((ids: number[]): void => {
 
 const save = DBtryCatcher((course: Course): Course => {
     if (course.id == undefined) {
-        course.id = DBcourses.length + 1;
+        course = new Course({
+            id: DBcourses.length + 1,
+            name: course.name,
+            description: course.description,
+            phase: course.phase,
+            credits: course.credits,
+            lecturers: course.lecturers,
+            isElective: course.isElective,
+            requiredPassedCourses: course.requiredPassedCourses,
+        });
     }
     const index = DBcourses.findIndex(c => c.id === course.id);
     if (index === -1) {

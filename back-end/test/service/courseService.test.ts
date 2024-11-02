@@ -91,14 +91,32 @@ describe('Course Service', () => {
             mockDBFindByNameAndPhase.mockImplementation((name, phase) => null);
             mockDBSave.mockImplementation((course) => {
                 if (course.id == undefined) {
-                    course.id = dummyCourses.length + 1;
+                    course = new Course({
+                        id: dummyCourses.length + 1,
+                        name: course.name,
+                        description: course.description,
+                        phase: course.phase,
+                        credits: course.credits,
+                        lecturers: course.lecturers,
+                        isElective: course.isElective,
+                        requiredPassedCourses: course.requiredPassedCourses,
+                    });
                 }
                 return course;
             });
         });  
         test('given a course, when createCourse is called, then it should create the course', () => {
-            const expectedCourse = new Course(dummyCourses[0]);
-            expectedCourse.id = dummyCourses.length + 1;
+            let expectedCourse = new Course(dummyCourses[0]);
+            expectedCourse = new Course({
+                id: dummyCourses.length + 1,
+                name: expectedCourse.name,
+                description: expectedCourse.description,
+                phase: expectedCourse.phase,
+                credits: expectedCourse.credits,
+                lecturers: expectedCourse.lecturers,
+                isElective: expectedCourse.isElective,
+                requiredPassedCourses: [],
+            });
             const inputInfo = new CourseUpdateView({
                 name: expectedCourse.name,
                 description: expectedCourse.description,
