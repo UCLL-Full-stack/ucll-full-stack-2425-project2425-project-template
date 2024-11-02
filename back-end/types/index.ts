@@ -47,6 +47,8 @@ type RecipeUpdateInput = {
     source?: string;
 };
 
+type RecipeCategory = 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'other';
+
 type IngredientCategory =
     | 'Produce' // Combines Vegetables & Fruits
     | 'Meat & Fish' // Combines Meats & Seafood
@@ -64,4 +66,5 @@ export {
     ProfileUpdateInput,
     NewRecipeInput,
     RecipeUpdateInput,
+    RecipeCategory,
 };
