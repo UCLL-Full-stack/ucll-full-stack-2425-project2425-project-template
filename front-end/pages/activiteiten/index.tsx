@@ -23,7 +23,7 @@ const Activiteiten: React.FC = () => {
                 <title>Activiteiten</title>
             </Head>
             <main>
-                <h1>Alle Activiteiten</h1>
+                <h1 className="text-5xl font-extrabold text-center text-blue-700 mb-8">Alle Activiteiten</h1>
                 <section>
                     {activiteiten && (
                         <ActiviteitenOverviewTable activiteiten={activiteiten} />

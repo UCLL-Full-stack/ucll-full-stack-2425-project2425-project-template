@@ -41,7 +41,7 @@ const addActiviteit = async (activiteit: Activiteit, groepNaam: string): Promise
     if (groep === undefined) {
         throw new Error(`Groep met naam ${groepNaam} werd niet gevonden`);
     }else{
-        if (activiteit === undefined || activiteit.getNaam() === undefined || activiteit.getBeschrijving() === undefined || activiteit.getBegindatum() === undefined || activiteit.getEinddatum() === undefined) {
+        if (!activiteit || !activiteit.getNaam() || !activiteit.getBeschrijving() || !activiteit.getBegindatum() || !activiteit.getEinddatum()) {
             throw new Error(`Activiteit is niet correct`);
         } else if (activiteit.getBegindatum() > activiteit.getEinddatum()) {
             throw new Error(`Begindatum moet voor einddatum zijn`);

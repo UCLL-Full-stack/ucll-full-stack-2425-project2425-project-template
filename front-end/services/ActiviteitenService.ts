@@ -16,7 +16,7 @@ const getActiviteitenByGroupName = async (groepNaam: string) => {
     })
 };
 
-const addActiviteit = async (groepNaam: string, naam: string, beschrijving: string) => {
+const addActiviteit = async (groepNaam: string, naam: string, beschrijving: string, beginDatum: Date, eindDatum: Date) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/activiteit/${groepNaam}`, {
         method: 'POST',
         headers: {
@@ -25,6 +25,8 @@ const addActiviteit = async (groepNaam: string, naam: string, beschrijving: stri
         body: JSON.stringify({
             "naam": naam,
             "beschrijving": beschrijving,
+            "begindatum": beginDatum,
+            "einddatum": eindDatum
         })
     })
 };

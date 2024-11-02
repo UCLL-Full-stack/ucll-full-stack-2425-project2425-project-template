@@ -131,9 +131,9 @@ activiteitRouter.get("/:groepNaam", async (req: Request, res: Response, next: Ne
  *             schema:
  *               $ref: "#/components/schemas/Activiteit"
  *   responses:
- *     201:
+ *     200:
  *      description: De toegevoegde activiteit
- *     content:
+ *      content:
  *       application/json:
  *        schema:
  *         $ref: "#/components/schemas/Groep"
