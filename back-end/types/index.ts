@@ -1,5 +1,3 @@
-
-
 type PatientInput = {
    id?: number
    name: string;
