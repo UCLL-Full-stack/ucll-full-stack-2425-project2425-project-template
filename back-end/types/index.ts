@@ -6,7 +6,7 @@ type StudentInput = {
     email: string;
     password: string;
     studentNumber: string;
-    bookings?: BookingInput;
+    bookings?: BookingInput[];
 }
 
 type TripInput = {
@@ -25,7 +25,7 @@ type BookingInput = {
     studentIds: number[];  
     tripId: number;    
     bookingDate?: Date;
-    students?: StudentInput;
+    students?: StudentInput[];
     paymentStatus: PaymentStatus;
 }
 
