@@ -1,4 +1,4 @@
-import { RecipeUpdateInput } from '../types';
+import { RecipeCategory, RecipeUpdateInput } from '../types';
 import { RecipeIngredient } from './recipeIngredient';
 import { Schedule } from './schedule';
 import { User } from './user';
@@ -8,7 +8,7 @@ export class Recipe {
     private title: string;
     private instructions: string;
     private cookingTime: number;
-    private category: string; // flexible for custom categories
+    private category: RecipeCategory; // flexible for custom categories
     private ingredients?: RecipeIngredient[]; // do i make it optional? '?'
     private user: User;
     private imageUrl?: string;
@@ -22,7 +22,7 @@ export class Recipe {
         title: string;
         instructions: string;
         cookingTime: number;
-        category: string;
+        category: RecipeCategory;
         ingredients: RecipeIngredient[];
         user: User;
         imageUrl?: string;
@@ -112,11 +112,11 @@ export class Recipe {
         return this.category;
     }
 
-    setCategory(category: string) {
+    setCategory(category: RecipeCategory) {
         if (category.trim().length === 0) {
             throw new Error('Category cannot be empty');
         }
-        this.category = category.trim();
+        this.category = category;
     }
 
     getIngredients(): RecipeIngredient[] | undefined {
@@ -204,7 +204,7 @@ export class Recipe {
             this.setCookingTime(updateInput.cookingTime);
         }
         if (updateInput.category !== undefined) {
-            this.setCategory(updateInput.category);
+            this.setCategory(updateInput.category as RecipeCategory);
         }
         if (updateInput.ingredients !== undefined) {
             const ingredients = updateInput.ingredients.map(
