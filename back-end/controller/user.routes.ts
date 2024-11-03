@@ -28,6 +28,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { User } from '../model/user';
 
 const userRouter = express.Router();
 
@@ -84,6 +85,56 @@ userRouter.get('/email/:email', async (req: Request, res: Response, next: NextFu
     try {
         const user = await userService.getUserByEmail(String(req.params.email));
         res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/register:
+ *  post:
+ *      summary: Register a user.
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          name:
+ *                              type: string
+ *                              description: The user's name
+ *                          email:
+ *                              type: string
+ *                              description: The user's email
+ *                              example: "john.doe@gmail.com"
+ *                          password:
+ *                              type: string
+ *                              description: The user's password
+ *                              example: "passwordWith8Characters"
+ *                          address:
+ *                              type: string
+ *                              description: The user's address
+ *      responses:
+ *          201:
+ *              description: A user object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ */
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newUser = new User({
+            name: req.body.name,
+            email: req.body.email.toLowerCase(),
+            password: req.body.password,
+            address: req.body.address,
+        });
+
+        const registeredUser = await userService.registerUser(newUser);
+        res.status(201).json(registeredUser);
     } catch (error) {
         next(error);
     }

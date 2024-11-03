@@ -1,4 +1,4 @@
-import { User } from "../model/user";
+import { User } from '../model/user';
 
 const users = [
     new User({
@@ -44,8 +44,19 @@ const getUserByEmail = ({ email }: { email: string }): User | null => {
     }
 };
 
+const registerUser = ({ newUser }: { newUser: User }): User => {
+    try {
+        users.push(newUser);
+        return newUser;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllUsers,
     getUserById,
     getUserByEmail,
+    registerUser,
 };
