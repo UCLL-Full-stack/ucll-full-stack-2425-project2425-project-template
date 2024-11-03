@@ -1,0 +1,103 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+  color: rgb(46, 50, 117);
+  margin-bottom: 2rem !important;
+}
+
+h2 {
+  font-size: 1.25rem !important;
+}
+
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+}
+
+/* Reset some default styles */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Header styles */
+header {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #343a40;
+  background: linear-gradient(180deg, #343a40, #495057);
+}
+
+header a {
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+}
+
+header nav a {
+  padding: 0 1rem;
+  font-size: 1.25rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+header nav a:hover {
+  color: #adb5bd;
+}
