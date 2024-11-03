@@ -4,11 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
 import { useRouter } from 'next/router';
-import header from '@/components/header';
 import Header from '@/components/header';
 
 const Activiteiten: React.FC = () => {
-    const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>();
+    const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [newActiviteit, setNewActiviteit] = useState({
         name: '',
@@ -22,13 +21,16 @@ const Activiteiten: React.FC = () => {
 
     const getActiviteitenByGroupName = async () => {
         const [activiteitenResponse] = await Promise.all([ActiviteitService.getActiviteitenByGroupName(groepNaam as string)]);
-        const [activiteiten] = await Promise.all([activiteitenResponse.json()]);
+        const activiteiten = await activiteitenResponse.json();
 
-        activiteiten.sort((a: Activiteit, b: Activiteit) => {
-            return new Date(a.begindatum).getTime() - new Date(b.begindatum).getTime();
-        });
-
-        setActiviteiten(activiteiten);
+        if (Array.isArray(activiteiten)) {
+            activiteiten.sort((a: Activiteit, b: Activiteit) => {
+                return new Date(a.begindatum).getTime() - new Date(b.begindatum).getTime();
+            });
+            setActiviteiten(activiteiten);
+        } else {
+            setActiviteiten([]);
+        }
     };
 
     useEffect(() => {
@@ -65,9 +67,11 @@ const Activiteiten: React.FC = () => {
                     </button>
                 </div>
 
-                <section className="relative">
-                    {activiteiten && (
+                <section className="relative mt-8">
+                    {activiteiten && activiteiten.length > 0 ? (
                         <ActiviteitenOverviewTable activiteiten={activiteiten} />
+                    ) : (
+                        <p className="text-center text-gray-600">Geen geplande activiteiten.</p>
                     )}
                 </section>
 
