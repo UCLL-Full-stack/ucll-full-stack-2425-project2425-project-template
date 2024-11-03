@@ -45,6 +45,7 @@ const SubmissionForms: React.FC = () => {
           <br/><br/>
           <input type="submit" id="submit" value="Submit"></input>
         </form>
+        <h2>Submission Forms</h2>
         <ul>
           {submissionForms.map((form) => (
             <li key={form.id}>
