@@ -3,8 +3,9 @@ import Header from "@/components/header";
 import TeamOverviewTable from "@/components/teams/teamOverviewTable";
 import CompetitionService from "@/services/CompetitionService";
 import { Competition } from "@/types";
-import { Head } from "next/document";
+import Head from "next/head";
 import { useEffect, useState } from "react";
+import styles from "@/styles/Home.module.css";
 
 const Competitions: React.FC = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([]);
@@ -25,14 +26,13 @@ const Competitions: React.FC = () => {
 
     return (
         <>
-            <Header />
             <Head>
                 <title>Competitions</title>
             </Head>
-            <main>
+            <Header />
+            <main className={styles.main}>
                 <h1>Competitions</h1>
                 <section>
-                    <h2>Competitions overview</h2>
                     <CompetitionOverviewTable competitions={competitions} selectCompetition={setSelectedCompetition} />
                 </section>
                 {selectedCompetition && (
