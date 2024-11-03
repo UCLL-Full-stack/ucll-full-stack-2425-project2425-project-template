@@ -101,12 +101,12 @@ export const validateTask = (req: Request, res: Response, next: NextFunction) =>
             return res.status(400).json({ error: 'Task due date must be a valid date string.' });
         }
     }
-    if (assignees && !Array.isArray(assignees)) {
-        return res.status(400).json({ error: 'Assignees must be an array.' });
-    }
-    for (const assignee of assignees){
-        validateUser({ body: assignee } as Request, res, next);
-    }
+    // if (assignees && !Array.isArray(assignees)) {
+    //     return res.status(400).json({ error: 'Assignees must be an array.' });
+    // }
+    // for (const assignee of assignees){
+    //     validateUser({ body: assignee } as Request, res, next);
+    // }
     next();
 };
 

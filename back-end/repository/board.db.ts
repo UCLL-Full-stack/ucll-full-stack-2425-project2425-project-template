@@ -3,6 +3,7 @@ import { Column } from '../model/column';
 import userDb from './user.db';
 import guildDb from './guild.db';
 import columnDb from './column.db';
+import { Task } from '../model/task';
 
 const columns: Column[] = columnDb.getColumns();
 
@@ -74,6 +75,12 @@ const removeColumnFromBoard = (boardId: string, columnId: string): void => {
     board.removeColumn(columnId);
 }
 
+const getAllTasksForBoard = (boardId: string): Task[] => {
+    const board = boards.find(board => board.getBoardId() === boardId);
+    if (!board) throw new Error("Board not found");
+    return board.getColumns().map(column => column.getTasks()).flat();
+}
+
 
 export default {
     getBoards,
@@ -83,4 +90,5 @@ export default {
     getColumnsByBoardId,
     addColumnToBoard,
     removeColumnFromBoard,
+    getAllTasksForBoard
 };

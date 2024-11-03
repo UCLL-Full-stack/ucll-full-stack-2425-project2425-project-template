@@ -1,8 +1,10 @@
+import { ta } from 'date-fns/locale';
 import { Column } from '../model/column';
 import { Task } from '../model/task';
 import boardDb from '../repository/board.db';
 import columnDb from '../repository/column.db';
 import taskDb from '../repository/task.db';
+import { User } from '../model/user';
 
 const getAllColumns = () => {
     return columnDb.getColumns();
@@ -37,8 +39,17 @@ const deleteColumn = (columnId: string) => {
     board.removeColumn(columnId);
 }
 
-const addTaskToColumn = (columnId: string, task: Task) => {
-    columnDb.addTaskToColumn(columnId, task);
+const addTaskToColumn = (columnId: string, task: any) => {
+    const column = columnDb.getColumnById(columnId);
+    if (!column) {
+        throw new Error('Column not found');
+    }
+    const boardId = `board${columnId.split('-').slice(1).join('-')}`;
+    const existingTasks = boardDb.getAllTasksForBoard(boardId);
+    const taskNumber = existingTasks.length + 1;
+    const newTask = new Task(`task${taskNumber}-${columnId.slice(6)}`, task.title, task.description, new Date(task.dueDate), [] as User[]);
+    taskDb.addTask(newTask);
+    columnDb.addTaskToColumn(columnId, newTask);
 }
 
 const removeTaskFromColumn = (columnId: string, taskId: string) => {
