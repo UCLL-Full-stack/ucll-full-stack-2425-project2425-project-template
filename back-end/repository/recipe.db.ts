@@ -1,6 +1,7 @@
 import { scheduler } from "timers/promises";
 import { Recipe } from "../model/recipe";
 import { User } from "../model/user";
+import {RecipeIngredient} from "../model/recipeingredient";
 
 const recipes = [
     new Recipe({
@@ -30,11 +31,16 @@ const getAllRecipes = async (): Promise<Recipe[]> => {
     return recipes;
 }
 
+const getRecipeByTitle = ({title}: {title:string}): Recipe | null => {
+    return recipes.find((recipe) => recipe.getTitle() === title) || null ;
+}
+
 const createRecipe = (recipe: Recipe): void => {
     recipes.push(recipe);
 }
 
 export default {
     getAllRecipes,
+    getRecipeByTitle,
     createRecipe,
 }

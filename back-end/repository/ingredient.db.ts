@@ -9,16 +9,10 @@ const recipeIngredients: RecipeIngredient[] = [
     quantity: 250,
     })
 ];
-const getRecipeById = ({ id }: { id: number }): RecipeIngredient | null => {
-    try{
-        return recipeIngredients.find((r) => r.getRecipeIngredientId() === id) || null;
-    }catch(error){
-
-    }
-
-
+const getRecipeIngredientById = ({ id }: { id: number }): RecipeIngredient | null => {
+    return recipeIngredients.find((r) => r.getRecipeIngredientId() === id) || null
 };
 
 export default {
-    getRecipeById
+    getRecipeIngredientById
 }

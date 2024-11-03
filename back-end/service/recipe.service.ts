@@ -1,6 +1,7 @@
 import recipeDb from "../repository/recipe.db"
+import recipeIngredientDb from "../repository/ingredient.db"
 import { Recipe } from "../model/recipe";
-import {RecipeIngredientInput, RecipeInput} from "../types";
+import { RecipeInput} from "../types";
 
 const getAllRecipes = async (): Promise<Recipe[]> => {
     return recipeDb.getAllRecipes();
@@ -8,50 +9,52 @@ const getAllRecipes = async (): Promise<Recipe[]> => {
 
 const createRecipe = ({
                           user: userInput,
-                          ingredients: RecipeIngredientInput,
+                          ingredients: recipeIngredientInputs,
                           title,
                           description,
                           instructions
 }: RecipeInput) => {
-    if(!userInput.getUserId()){throw new Error(`User with id ${userInput.getUserId()}`)}
+    // Check if the user exists
+    if(!userInput.getUserId()){throw new Error(`User with id ${userInput.getUserId()} does not exit` )}
 
-    RecipeIngredientInput.map((ingredient, index) => {
-        const ingededient = ingredientdb
-    })
+    // Validate each ingredient
+    recipeIngredientInputs.forEach((ingredientInput, index) => {
+        const ingredient = recipeIngredientDb.getRecipeIngredientById({ id: ingredientInput.recipeingredientId ?? -1 });
+
+        if (!ingredient) {
+            throw new Error(`RecipeIngredient at index ${index} with ID ${ingredientInput.recipeingredientId} not found`);
+        }
+    });
+
+    //check if the other feels are filled in
+    if(!title || !description || !instructions){
+        throw new Error('We require all the feels to be filled in.')
+    }
+
+    //we will now check if we already have the same recipe saved
+    const existingRecipe = recipeDb.getRecipeByTitle({title: title})
+
+    if(existingRecipe){throw new Error(`We already have a recipe by this tile: ${title}`)}
+
+    //we need to creat a new recipe to go true that validation logic
+    let recipe;
+    try {
+        recipe = new Recipe({
+            user: userInput,
+            title,
+            description,
+            instructions,
+            nutritionFacts: "",
+            cookingTips: "",
+            extraNotes: "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tags: []})
+    }catch (error){
+        throw new Error(`you did not provide use with a valid Recipe error: ${error}`)
+    }
+
+    return recipeDb.createRecipe(recipe)
 }
 
-export default { getAllRecipes }
-
-
-
-// const createSchedule = ({
-//                             start,
-//                             end,
-//                             course: courseInput,
-//                             lecturer: lecturerInput,
-//                         }: ScheduleInput): Schedule => {
-//     if (!courseInput.id) throw new Error('Course id is required');
-//     if (!lecturerInput.id) throw new Error('Lecturer id is required');
-//
-//     if (!start || !end) {
-//         throw new Error('Start and end date are required');
-//     }
-//
-//     const course = courseDb.getCourseById({ id: courseInput.id });
-//     const lecturer = lecturerDb.getLecturerById({ id: lecturerInput.id });
-//
-//     if (!course) throw new Error('Course not found');
-//     if (!lecturer) throw new Error('Lecturer not found');
-//
-//     const existingSchedule = scheduleDb.getScheduleByCourseAndLecturer({
-//         courseId: courseInput.id,
-//         lecturerId: lecturerInput.id,
-//     });
-//
-//     if (existingSchedule) throw new Error('This course is already scheduled for this lecturer.');
-//
-//     const schedule = new Schedule({ start, end, course, lecturer, students: [] });
-//     return scheduleDb.createSchedule(schedule);
-// };
-//
-// export default { createSchedule };
+export default { createRecipe, getAllRecipes }
