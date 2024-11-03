@@ -8,4 +8,6 @@ const courses = [
     new Course({ id: 5, name: 'Artificial Intelligence', description: 'Introduction to AI concepts and techniques.', phase: 4, credits: 4, lecturers: ['Prof. Green'], isElective: true, requiredPassedCourses: [] }),
 ];
 
+courses.push(new Course({ id: 6, name: 'Software Engineering', description: 'Learn about software development processes.', phase: 3, credits: 4, lecturers: ['Dr. Black'], isElective: false, requiredPassedCourses: [courses[0], courses[1]] }));
+
 export default courses;
