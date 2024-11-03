@@ -4,7 +4,7 @@ import { Product } from "@types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ProductService from "@services/ProductService";
-import ProductInfo from "@components/productInfo";
+import ProductInfo from "@components/product/productInfo";
 
 const ReadProductById = () => {
   const [product, setProduct] = useState<Product | null>(null);
