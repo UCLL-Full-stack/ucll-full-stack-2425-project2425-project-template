@@ -1,4 +1,4 @@
-import { Team } from "./team";
+import { Team } from './team';
 
 export class Competition {
     private id?: number;
@@ -26,6 +26,10 @@ export class Competition {
 
     getTeams(): Team[] {
         return this.teams;
+    }
+
+    public addTeam(team: Team): void {
+        this.teams.push(team);
     }
 
     equals(competition: Competition): boolean {

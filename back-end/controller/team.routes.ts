@@ -29,7 +29,7 @@ const teamRouter = express.Router();
 
 /**
  * @swagger
- * /teams/teams:
+ * /teams:
  *   get:
  *     summary: Get all teams
  *     description: Retrieve a list of all teams.
@@ -43,9 +43,42 @@ const teamRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Team'
  */
-teamRouter.get('/teams', (req: Request, res: Response, next: NextFunction) => {
+teamRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
     try {
         const teams = teamService.getAllTeams();
+        res.status(200).json(teams);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /teams/competition/{id}:
+ *   get:
+ *     summary: Get teams by competition ID
+ *     description: Retrieve a list of teams in a specific competition.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The competition ID
+ *     responses:
+ *       200:
+ *         description: A list of teams in the competition.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Team'
+ */
+teamRouter.get('/competition/:id', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const competitionId = parseInt(req.params.id, 10);
+        const teams = teamService.getTeamsByCompetition(competitionId);
         res.status(200).json(teams);
     } catch (error) {
         next(error);

@@ -2,26 +2,35 @@ import { User } from './user';
 import { Competition } from './competition';
 
 export class Team {
-    private id?: number;
+    private id: number;
     private name: string;
     private points: number;
     private owner: User;
-    private competition: Competition;
+    private competitionId: number;
 
-    constructor(team: {
-        id?: number;
+    constructor({
+        id,
+        name,
+        points,
+        owner,
+        competitionId,
+    }: {
+        id: number;
         name: string;
         points: number;
         owner: User;
-        competition: Competition;
+        competitionId: number;
     }) {
-        this.id = team.id;
-        this.name = team.name;
-        this.points = team.points;
-        this.owner = team.owner;
-        this.competition = team.competition;
+        this.id = id;
+        this.name = name;
+        this.points = points;
+        this.owner = owner;
+        this.competitionId = competitionId;
     }
 
+    public getCompetitionId(): number {
+        return this.competitionId;
+    }
     getId(): number | undefined {
         return this.id;
     }
@@ -38,17 +47,13 @@ export class Team {
         return this.owner;
     }
 
-    getCompetition(): Competition {
-        return this.competition;
-    }
-
     equals(team: Team): boolean {
         return (
             this.id === team.getId() &&
             this.name === team.getName() &&
             this.points === team.getPoints() &&
             this.owner.equals(team.getOwner()) &&
-            this.competition.equals(team.getCompetition())
+            this.competitionId === team.getCompetitionId()
         );
     }
 }
