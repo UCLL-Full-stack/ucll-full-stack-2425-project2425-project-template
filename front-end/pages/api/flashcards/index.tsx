@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Flashcard } from '../../../services/types';
+import { Flashcard } from '../../../types';
 
 const flashcards: Flashcard[] = [
   {
