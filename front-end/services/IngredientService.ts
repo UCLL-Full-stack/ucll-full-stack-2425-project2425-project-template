@@ -1,5 +1,18 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+async function getIngredientById(IngredientId : number) {
+    try {
+        const response = await fetch(`${apiUrl}/ingredients/${IngredientId}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching ingredient with ID ${IngredientId}: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching ingredient:", error);
+        throw error;
+    }
+}
+
 async function getAllIngredients() {
   try {
     const response = await fetch(`${apiUrl}/ingredients`);
@@ -12,18 +25,6 @@ async function getAllIngredients() {
     throw error;
   }
 }
-
-async function getIngredientById(id: number) {
-    try {
-       const response = await fetch(`http://localhost:3000/ingredient/${id}`);
-       if (!response.ok) {
-          throw new Error(`Error fetching ingredient with ID ${id}: ${response.statusText}`);
-       }
-       return await response.json();
-    } catch (error) {
-       console.error("Error fetching ingredient:", error);
-    }
- }
 
 export const IngredientService = {
   getAllIngredients,
