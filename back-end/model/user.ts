@@ -79,14 +79,14 @@ export class User {
         email: string;
         password: string;
     }) {
-        if (!user.nationalRegisterNumber) {
+        if (!user.nationalRegisterNumber?.trim()) {
             throw new Error('National register number is required.');
         } else if (!this.validateNRN(user.nationalRegisterNumber)) {
-            throw new Error('Nationalregisternumber is not correct.')
+            throw new Error('Nationalregisternumber is not correct.');
         }
 
         // Validate name
-        if (!user.name) {
+        if (!user.name?.trim()) {
             throw new Error('Name is required.');
         }
 
@@ -97,20 +97,20 @@ export class User {
             throw new Error('Birth date cannot be in the future.');
         }
 
-        if (!user.phoneNumber) {
+        if (!user.phoneNumber?.trim()) {
             throw new Error('Phone number is required.');
         } else if (!this.validatePhone(user.phoneNumber)) {
-            throw new Error('Phone pattern is not valid.')
+            throw new Error('Phone pattern is not valid.');
         }
-        
-        if (!user.email) {
+
+        if (!user.email?.trim()) {
             throw new Error('Email is required.');
         } else if (!this.emailPattern(user.email)) {
-            throw new Error('Email pattern is not valid.')
+            throw new Error('Email pattern is not valid.');
         }
 
         // Validate password
-        if (!user.password) {
+        if (!user.password?.trim()) {
             throw new Error('Password is required.');
         } else if (user.password.length < 8) {
             throw new Error('Password must be at least 8 characters long.');
@@ -125,20 +125,21 @@ export class User {
         }
     }
 
-    validateNRN(nrn: string):boolean {
+    validateNRN(nrn: string): boolean {
         // Dagen en maand moet nog gecorrigeerd worden
-        const nrnPattern = /^([0-9]{2})\.([0][1-9]|[1][1_2])\.([0-2][0-9]|[3][01])\-([0-9]{3})\.([0-9]{2})$/;
-        
+        const nrnPattern =
+            /^([0-9]{2})\.([0][1-9]|[1][1_2])\.([0-2][0-9]|[3][01])\-([0-9]{3})\.([0-9]{2})$/;
+
         return nrnPattern.test(nrn);
     }
 
     validatePhone(phone: string): boolean {
-        const phonePattern = /^(?:(?:\+32|0)\s?)?(?:[1-9]{1}\d{1})(?:[\s.-]?\d{2,3}){3}$/
+        const phonePattern = /^(?:(?:\+32|0)\s?)?(?:[1-9]{1}\d{1})(?:[\s.-]?\d{2,3}){3}$/;
 
         return phonePattern.test(phone);
     }
 
-    emailPattern(email: string): boolean  {
+    emailPattern(email: string): boolean {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         return emailPattern.test(email);

@@ -9,12 +9,13 @@ const users: User[] = [
         isAdministrator: false,
         phoneNumber: '+32 12 34 56 78',
         email: 'john.doe@example.com',
-        password: 'P@ssw0rd!'
-    })];
+        password: 'P@ssw0rd!',
+    }),
+];
 
 const getAllUsers = (): User[] => {
     return users;
-}
+};
 
 const createUser = ({
     nationalRegisterNumber,
@@ -61,5 +62,5 @@ export default {
     getUserByNationalRegisterNumber,
     getUserByEmailAndPassword,
     getUserByEmail,
-    getAllUsers
+    getAllUsers,
 };

@@ -1,4 +1,5 @@
 import { Account } from './account';
+import { TransactionType } from '../types';
 
 export abstract class Transaction {
     private id?: number;
@@ -6,19 +7,19 @@ export abstract class Transaction {
     private date: Date;
     private amount: number;
     private currency: string;
-    private type: string;
+    private transactionType: TransactionType;
     private account: Account;
 
     constructor(transaction: {
         amount: number;
         currency: string;
-        type: string;
+        transactionType: TransactionType;
         account: Account;
         id?: number;
     }) {
         this.validate(transaction);
         this.id = transaction.id;
-        this.type = transaction.type;
+        this.transactionType = transaction.transactionType;
         this.account = transaction.account;
         this.date = new Date();
         this.referenceNumber = this.generateReferenceNumber();
@@ -46,15 +47,20 @@ export abstract class Transaction {
         return this.currency;
     }
 
-    getType(): string {
-        return this.type;
+    getTransactionType(): TransactionType {
+        return this.transactionType;
     }
 
     getAccount(): Account {
         return this.account;
     }
 
-    validate(transaction: { amount: number; currency: string; type: string; id?: number }) {
+    validate(transaction: {
+        amount: number;
+        currency: string;
+        transactionType: TransactionType;
+        id?: number;
+    }) {
         if (transaction.amount <= 0) {
             throw new Error('Amount must be greater than 0.');
         }
@@ -65,14 +71,14 @@ export abstract class Transaction {
         ) {
             throw new Error('Currency must be either USD, EUR or GBP.');
         }
-        if (transaction.type !== 'income' && transaction.type !== 'expense') {
+        if (transaction.transactionType !== 'income' && transaction.transactionType !== 'expense') {
             throw new Error('Type must be either income or expense.');
         }
     }
 
     generateReferenceNumber(): string {
         const lastThreeNumbers = this.account.getAccountNumber().slice(-3).split('').join(' ');
-        const firstTwoLettType = this.type.substring(0, 3).toUpperCase();
+        const firstTwoLettType = this.transactionType.substring(0, 3).toUpperCase();
         const year = this.date.getUTCFullYear().toString();
         const uniqueNumber =
             Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5);
