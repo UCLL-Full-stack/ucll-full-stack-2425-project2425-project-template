@@ -1,3 +1,5 @@
+import { Recipe } from "@/types/recipes";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const fetchRecipeById = async (recipeId: number) => {
@@ -9,13 +11,56 @@ const fetchRecipeById = async (recipeId: number) => {
       },
     });
 
-    const data = await response.json();
-    return data;
+    if (!response.ok) {
+      throw new Error("Failed to fetch recipe");
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("Error fetching recipe:", error);
+    throw error;
   }
 };
 
-const RecipeService = { fetchRecipeById };
+const updateRecipe = async (recipeId: number, updateData: Partial<Recipe>) => {
+  try {
+    const response = await fetch(`${apiUrl}/recipes/${recipeId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update recipe");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+    throw error;
+  }
+};
+
+const deleteRecipe = async (recipeId: number) => {
+  try {
+    const response = await fetch(`${apiUrl}/recipes/${recipeId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete recipe");
+    }
+  } catch (error) {
+    console.error("Error deleting recipe:", error);
+    throw error;
+  }
+};
+
+const RecipeService = { fetchRecipeById, updateRecipe, deleteRecipe };
 
 export default RecipeService;
