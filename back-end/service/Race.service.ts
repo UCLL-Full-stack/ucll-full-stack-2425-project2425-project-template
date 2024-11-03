@@ -9,6 +9,7 @@ import racecarDb from '../repository/Racecar.db';
 import crashDb from '../repository/Crash.db';
 import adminDb from '../repository/Admin.db';
 import { RaceInput, DriverInput, CrashInput } from '../types';
+import RaceDb from '../repository/Race.db';
 
 const getAllRaces = (): Race[] => {
     return raceDb.getAllRaces();
@@ -172,6 +173,14 @@ const createDriver = (driverInput: any): Driver => {
     return newDriver;
 };
 
+const updateRace = (id: number, raceInput: RaceInput) => {
+    const oldRace = getRaceById(id);
+    if (!oldRace) {
+        throw new Error(`Race not found with ID ${id}`);
+    }
+    createRace(raceInput);
+}
+
 export default {
     getAllRaces,
     getRaceById,
@@ -182,4 +191,5 @@ export default {
     createRacecar,
     getAllDrivers,
     createDriver,
+    updateRace,
 };
