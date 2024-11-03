@@ -26,7 +26,7 @@ const updateRecipeDate = (
     const newSchedule =
         scheduleDb.getScheduleByUserIdAndDate(userId, newDate) ||
         scheduleDb.createSchedule(userId, newDate); // TO IMPLEMENT-- FUTURE USER STORY
-    newSchedule.addRecipe(recipe);
+    // newSchedule.addRecipe(recipe);
 
     return recipe;
 };
