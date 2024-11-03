@@ -7,13 +7,13 @@ export type Cocktail = {
 }
 
 export type Ingredient = {
-    _id: number;          
-    _cocktailId: number;   
-    _ingredientId: number;
-    _amount: string;       
+    id: number;          
+    cocktailId: number;   
+    ingredientId: number;
+    amount: string;       
 }
 
 export type CocktailIngredient = {
-    _ingredientId: number;
-    _amount: string;
+    ingredientId: number;
+    amount: string;
 };

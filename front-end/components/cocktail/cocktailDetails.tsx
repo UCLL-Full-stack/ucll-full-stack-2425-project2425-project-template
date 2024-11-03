@@ -21,7 +21,7 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
             <img src={cocktail.image} alt={cocktail.name} style={imgStyle} />
             <p><strong>Strongness :</strong> {cocktail.strongness}</p>
             <p><strong>Description :</strong> {cocktail.description}</p>
-            <table>
+            {/* <table>
                 <thead>
                     <tr>
                         <th>Ingredient</th>
@@ -36,7 +36,7 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
               </tr>
                   ))}
                 </tbody>
-            </table>
+            </table> */}
         </div>
         
         
