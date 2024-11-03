@@ -6,7 +6,8 @@ interface Product {
     id: number;
     name: string;
     price: number;
-    quantity: number;
+    description: string;
+    rating: number;
 }
 
 interface Cart {
@@ -22,7 +23,7 @@ const CartPage = () => {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const response = await axios.get<Cart[]>('http://localhost:3000/carts');
+                const response = await axios.get<Cart[]>(`${process.env.NEXT_PUBLIC_API_URL}/carts`);
                 console.log('Fetched cart items:', response.data);
                 const cart = response.data[0]; 
                 const products = cart.products || []; 

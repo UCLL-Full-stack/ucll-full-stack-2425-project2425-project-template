@@ -16,7 +16,7 @@ interface ProductsTableProps {
 
 const ProductsTable: FC<ProductsTableProps> = ({ products }) => {
   const addToCart = (product: Product) => {
-      axios.put(`http://localhost:3000/carts/1`, { productId: product.id })
+      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/carts/1`, { productId: product.id })
         .then(response => alert(`${product.name} added to cart`))
         .catch(error => console.error("Error adding product to cart:", error));
     };

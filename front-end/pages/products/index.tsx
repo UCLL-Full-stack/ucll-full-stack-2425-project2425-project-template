@@ -7,7 +7,7 @@ const ProductsPage = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/products")
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`)
       .then(response => setProducts(response.data))
       .catch(error => console.error("Error fetching products:", error));
   }, []);
