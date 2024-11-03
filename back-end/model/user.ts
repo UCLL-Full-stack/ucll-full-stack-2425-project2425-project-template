@@ -1,5 +1,5 @@
-import { Library } from './Library';
-import { Profile } from './Profile';
+import { Library } from '../model/library';
+import { Profile } from '../model/profile';
 import { Purchase } from './purchase';
 
 export class User {

@@ -1,4 +1,6 @@
-import { Game } from './Game';
+// import { Game } from './Game';
+import { Game } from '../model/game';
+
 
 export class Library {
     private id: number;

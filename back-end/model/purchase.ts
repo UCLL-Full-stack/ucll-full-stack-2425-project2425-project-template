@@ -1,5 +1,6 @@
-import { User } from './User';
-import { Game } from './Game';
+import { User } from '../model/user';
+// import { Game } from './Game';
+import { Game } from '../model/game';
 
 export class Purchase {
     private id: number;
