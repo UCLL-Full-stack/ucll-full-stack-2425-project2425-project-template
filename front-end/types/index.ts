@@ -1,5 +1,5 @@
 export type Competition = {
-    id: number;
+    id?: number;
     name: string;
     teams: Team[];
 };

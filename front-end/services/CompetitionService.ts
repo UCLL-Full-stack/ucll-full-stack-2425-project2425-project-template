@@ -50,8 +50,30 @@ const editCompetition = async (competition: Competition) => {
     }
 }
 
+const addCompetition = async (competition: Competition) => {
+    try {
+        const response = await fetch(`${API_URL}/competitions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(competition),
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Competition added:', data);
+        return data;
+    } catch (error) {
+        console.error('Error adding competition:', error);
+        throw error;
+    }
+}
+
 export default {
     getAllCompetitions,
     getCompetitionById,
     editCompetition,
+    addCompetition,
 };

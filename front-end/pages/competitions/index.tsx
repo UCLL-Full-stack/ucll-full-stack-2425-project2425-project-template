@@ -5,11 +5,13 @@ import CompetitionService from "@/services/CompetitionService";
 import { Competition } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styles from "@/styles/Home.module.css";
 
 const Competitions: React.FC = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([]);
     const [selectedCompetition, setSelectedCompetition] = useState<Competition | null>(null);
+    const router = useRouter();
 
     const getCompetitions = async () => {
         try {
@@ -23,6 +25,10 @@ const Competitions: React.FC = () => {
     useEffect(() => {
         getCompetitions();
     }, []);
+
+    const handleAddCompetition = () => {
+        router.push('/competitions/addCompetition');
+    };
 
     return (
         <>
@@ -41,7 +47,7 @@ const Competitions: React.FC = () => {
                         <TeamOverviewTable competition={selectedCompetition} />
                     </section>
                 )}
-                <button onClick={() => setSelectedCompetition(null)}>Add competition</button>
+                <button onClick={handleAddCompetition}>Add competition</button>
             </main>
         </>
     );
