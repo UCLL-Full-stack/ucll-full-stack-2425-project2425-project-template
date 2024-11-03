@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import styles from "../styles/Login.module.css";
+import logo from "../components/logo.png";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -21,6 +23,7 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
+      <Image src={logo} alt="Logo" className={styles.logo} width={150} height={150} /> {/* Use the Image component */}
       <h1 className={styles.title}>Login</h1>
       <form onSubmit={handleLogin} className={styles.form}>
         <label className={styles.label}>Username</label>
@@ -39,9 +42,9 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           className={styles.input}
         />
+        {error && <p className={styles.error}>{error}</p>}
         <button type="submit" className={styles.button}>Login</button>
       </form>
-      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 };

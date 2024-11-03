@@ -1,18 +1,18 @@
 import Link from 'next/link';
+import styles from "../styles/Home.module.css";
 
 const Header: React.FC = () => {
-    return (
-        <header className="p-3 mb-3 border-bottom bg-dark bg-gradient">
-            <nav className="nav justify-content-center">
-                <Link href="/" className="nav-link px-4 fs-5 text-white">
-                    Home
-                </Link>
-                <Link href="/expenses" className="nav-link px-4 fs-5 text-white">
-                    Expenses
-                </Link>
+    const handleLogoutClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        if (!window.confirm("Are you sure you want to log out?")) {
+            e.preventDefault();
+        }
+    };
 
-                <Link href="/animals" className="nav-link px-4 fs-5 text-white">
-                    Animals
+    return (
+        <header className={styles.navbar}>
+            <nav className={styles.nav}>
+                <Link href="/" className={styles.navLink} onClick={handleLogoutClick}>
+                    Logout
                 </Link>
             </nav>
         </header>
