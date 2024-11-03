@@ -1,5 +1,7 @@
 import submissionFormDb from '../repository/Submission_form.db';
 import { SubmissionForm } from '../model/Submission_form';
+import RaceService from './Race.service';
+import { RaceInput } from '../types';
 
 const getAllSubmissionForms = (): SubmissionForm[] => {
     return submissionFormDb.getAllSubmission_forms();
@@ -30,7 +32,13 @@ const createSubmissionForm = (submissionFormInput: any): SubmissionForm => {
     return newSubmissionForm;
 };
 
+const acceptSubmissionForm = (submissionFormId: number): SubmissionForm => {
+    // todo
+    throw new Error('Not implemented');
+}
+
 export default {
     getAllSubmissionForms,
     createSubmissionForm,
+    acceptSubmissionForm,
 };

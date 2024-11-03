@@ -5,6 +5,7 @@ import { Admin } from '../model/Admin';
 import { Driver } from '../model/Driver';
 import { Racecar } from '../model/Racecar';
 import { Crash } from '../model/Crash';
+import { get } from 'http';
 
 const submissionForms = [
     new SubmissionForm({
@@ -99,6 +100,10 @@ const getAllSubmission_forms = (): SubmissionForm[] => {
 
 const createSubmission_form = (submission_form: SubmissionForm): void => {
     submissionForms.push(submission_form);
-};
+}; 
 
-export default { getAllSubmission_forms, createSubmission_form };
+const getSubmission_formById = (id: number): SubmissionForm | undefined => {
+    return submissionForms.find(submission_form => submission_form.id === id);
+}
+
+export default { getAllSubmission_forms, createSubmission_form, getSubmission_formById };

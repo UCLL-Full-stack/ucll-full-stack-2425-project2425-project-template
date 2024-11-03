@@ -2,7 +2,7 @@ import { Gebruiker } from './Gebruiker';
 import { Race } from './Race';
 
 export class SubmissionForm {
-    private id?: number;
+    public id?: number;
     private title: string;
     private content: string;
     private user: Gebruiker;
