@@ -29,9 +29,9 @@ export class Ingredient {
         if (!ingredient.type) {
             throw new Error("Type cannot be empty");
         }
-        if (!ingredient.aantal) {
-            throw new Error("Aantal cannot be empty");
-        }
+        // if (!ingredient.aantal) {
+        //     throw new Error("Aantal cannot be empty");
+        // }
         if (!ingredient.prijs) {
             throw new Error("Prijs cannot be empty");
         }

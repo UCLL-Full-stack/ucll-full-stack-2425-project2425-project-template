@@ -98,10 +98,13 @@ export class Pokebowl {
         console.log(aantalIngredienten);
 
         if (this.ingredienten.length >= this.maxAantalIngredienten) {
-            throw new Error('Cannot add more ingredienten');
+            throw new Error('Cannot add more ingredienten.');
         }
         if (aantalIngredienten >= ingredient.getIngredientLimit()) {
-            throw new Error(`Cannot add more ${ingredient.getNaam()} `);
+            throw new Error(`Cannot add more ${ingredient.getNaam()}.`);
+        }
+        if (ingredient.getAantal() <= 0) {
+            throw new Error(`${ingredient.getNaam()} is out of stock.`)
         }
 
         let aantal = ingredient.getAantal();

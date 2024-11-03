@@ -17,4 +17,13 @@ const addIngredient = async ({ naam, type, aantal, prijs }: IngredientInput): Pr
     return ingredient;
 };
 
-export default { getAllIngredienten, addIngredient }
+const getIngredientById = async (id: number): Promise<Ingredient | null> => {
+    const ingredient = ingredientDb.getIngredientById({ id: id });
+    if (!ingredient) {
+        throw new Error(`Ingredient with id ${id} does not exist.`);
+    } else {
+        return ingredient;
+    }
+}
+
+export default { getAllIngredienten, addIngredient, getIngredientById }
