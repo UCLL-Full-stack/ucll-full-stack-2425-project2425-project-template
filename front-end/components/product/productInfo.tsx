@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 import { Product } from '@types';
 
+
 interface ProductInfoProps {
   product: Product;
 }
@@ -46,17 +47,19 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           <ul className="space-y-2">
             {product.reviews.map(review => (
               <li key={review.id} className="border-b pb-2">
-                <div className="flex items-center mb-1">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <FontAwesomeIcon 
-                      key={index} 
-                      icon={solidStar} 
-                      className={`text-xl ${index < review.score ? 'text-yellow-500' : 'text-gray-300'}`} 
-                    />
-                  ))}
-                  <span className="text-sm text-gray-500 ml-2"> {review.score}/5 </span>
-                  <span className="text-sm text-gray-500 ml-2">{new Date(review.date).toLocaleDateString()}</span>
-                </div>
+                  <div className="flex items-center mb-1">
+                    {[...Array(5)].map((_, index) => ( 
+                      <FontAwesomeIcon 
+                        key={index} 
+                        icon={solidStar} 
+                        className={`text-xl ${index < review.score ? 'text-yellow-500' : 'text-gray-300'} ${
+                          index >= review.score ? 'opacity-50' : 'opacity-100'
+                        }`}
+                      />
+                    ))}
+                    <span className="text-sm text-gray-500 ml-2"> {review.score}/5 </span>
+                    <span className="text-sm text-gray-500 ml-2">{new Date(review.date).toLocaleDateString()}</span>
+                  </div>
                 <p className="text-gray-700">{review.comment}</p>
               </li>
             ))}
