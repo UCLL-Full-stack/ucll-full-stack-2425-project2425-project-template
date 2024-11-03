@@ -130,6 +130,26 @@ const recipes: Recipe[] = [
                 tagId: 2,
                 name: 'Vegetarian',
                 description: 'Dishes that do not contain meat or fish.',
+            }),
+            new Tag({
+                tagId: 1,
+                name: 'Dessert',
+                description: 'Sweet dishes typically served as the last course of a meal.',
+            }),
+            new Tag({
+                tagId: 2,
+                name: 'Vegetarian',
+                description: 'Dishes that do not contain meat or fish.',
+            }),
+            new Tag({
+                tagId: 1,
+                name: 'Dessert',
+                description: 'Sweet dishes typically served as the last course of a meal.',
+            }),
+            new Tag({
+                tagId: 2,
+                name: 'Vegetarian',
+                description: 'Dishes that do not contain meat or fish.',
             })
         ]
     })
@@ -143,6 +163,10 @@ const getRecipeByTitle = ({title}: {title:string}): Recipe | null => {
     return recipes.find((recipe) => recipe.getTitle() === title) || null ;
 }
 
+const getRecipeById = ({id}: {id: number}): Recipe | null => {
+    return recipes.find((recipe) => recipe.getRecipeId() === id) || null;
+}
+
 const createRecipe = (recipe: Recipe): Recipe => {
     recipes.push(recipe);
     return recipe
@@ -152,4 +176,5 @@ export default {
     getAllRecipes,
     getRecipeByTitle,
     createRecipe,
+    getRecipeById
 }

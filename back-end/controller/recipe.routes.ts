@@ -125,13 +125,45 @@ recipeRouter.post('/', async (req: Request, res: Response, next: NextFunction) =
  *                 $ref: '#/components/schemas/Recipe'
  */
 
-recipeRouter.get('/',async (req: Request, res: Response, next: NextFunction)=>{
-    try{
+recipeRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const result = recipeService.getAllRecipes()
         res.status(200).json(result)
-    }catch (error){
+    } catch (error) {
         next(error)
     }
 })
 
-export { recipeRouter };
+/**
+ * @swagger
+ * /recipes/{id}:
+ *   get:
+ *     summary: Retrieve a recipe by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The recipe ID
+ *     responses:
+ *       200:
+ *         description: A recipe object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Recipe'
+ */
+recipeRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const recipe = recipeService.getRecipeById({id: Number(req.params.id)});
+        res.status(200).json(recipe);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+
+export {recipeRouter};

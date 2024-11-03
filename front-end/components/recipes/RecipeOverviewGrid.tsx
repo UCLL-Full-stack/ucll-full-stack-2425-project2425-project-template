@@ -13,7 +13,7 @@ const RecipeGrid: React.FC<Props> = ({ recipes }:Props) => {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-[5%]">
             {recipes.map((recipe: Recipe) => (
                 <RecipeCard
-                    key={recipe.recipeId}
+                    key={recipe._recipeId}
                     recipe={recipe}
                 />
             ))}
