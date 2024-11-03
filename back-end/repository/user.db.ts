@@ -24,6 +24,8 @@ const users = [
     }),
 ]
 
+const getAllUsers = (): User[] => users;
+
 const getUserById = ({ id }: { id: number }): User | null => {
     try {
         return users.find((user) => user.getId() === id) || null;
@@ -33,4 +35,17 @@ const getUserById = ({ id }: { id: number }): User | null => {
     }
 };
 
-export default { getUserById };
+const getUserByEmail = ({ email }: { email: string }): User | null => {
+    try {
+        return users.find((user) => user.getEmail() === email) || null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default {
+    getAllUsers,
+    getUserById,
+    getUserByEmail,
+};

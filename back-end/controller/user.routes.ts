@@ -60,4 +60,33 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+/**
+ * @swagger
+ * /users/email/{email}:
+ *  get:
+ *      summary: Get a user by email.
+ *      parameters:
+ *          - in: path
+ *            name: email
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The user email.
+ *      responses:
+ *          200:
+ *              description: A user object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ */
+userRouter.get('/email/:email', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.getUserByEmail(String(req.params.email));
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userRouter };
