@@ -21,6 +21,14 @@ const accounts: Account[] = [
     }),
 ];
 
+accounts.forEach((account) => {
+    account.users.forEach((user) => {
+        if (!user.accounts.includes(account)) {
+            user.accounts.push(account);
+        }
+    });
+});
+
 const createAccount = ({
     isShared,
     type,
