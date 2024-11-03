@@ -11,6 +11,6 @@ const getParticipantByEmail = (email: string): Participant => {
     return participant;
 };
 
-export default { 
+export default {
     getParticipantByEmail,
 };

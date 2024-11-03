@@ -105,6 +105,31 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
+/**
+ * @swagger
+ * /events/{id}/{email}:
+ *   put:
+ *     summary: Add a participant to an event.
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: email
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Participant added successfully.
+ *       400:
+ *         description: Error adding participant.
+ */
+
 eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
     const eventId = parseInt(req.params.id, 10);
     const email = req.params.email;
