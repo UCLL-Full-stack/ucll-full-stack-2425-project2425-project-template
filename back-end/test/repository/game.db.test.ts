@@ -4,14 +4,14 @@ import { Game } from '../../model/game';
 describe('Game Repository', () => {
   it('should return all games when getAllGames is called', () => {
     const games = gameRepository.getAllGames();
-    expect(games.length).toBe(5);  // 5 adet oyun olmasını bekleriz
-    expect(games[0]).toBeInstanceOf(Game);  // İlk oyun nesnesi Game sınıfından olmalı
+    expect(games.length).toBe(5);
+    expect(games[0]).toBeInstanceOf(Game);
   });
 
   it('should return the correct game when getGameById is called with a valid ID', () => {
-    const game = gameRepository.getGameById(1);  // ID'si 1 olan oyunu arıyoruz
+    const game = gameRepository.getGameById(1); 
     expect(game).toBeDefined();
-    expect(game?.getTitle()).toBe('Epic Quest');  // Bu oyunun başlığının "Epic Quest" olmasını bekleriz
+    expect(game?.getTitle()).toBe('Epic Quest');
   });
 
   it('should return null when getGameById is called with an invalid ID', () => {
@@ -25,8 +25,8 @@ describe('Game Repository', () => {
 
     expect(game).toBeDefined();
     expect(game?.getTitle()).toBe('Battle Arena');
-    expect(game?.getCategories()).toEqual(['Fighting', 'Action']);  // Kategorilerin doğru ayarlandığını doğrula
-    expect(game?.getPrice()).toBe(39.99);  // Fiyat doğrulaması
-    expect(game?.getDiscount()).toBe(10);  // İndirim doğrulaması
+    expect(game?.getCategories()).toEqual(['Fighting', 'Action']); 
+    expect(game?.getPrice()).toBe(39.99);
+    expect(game?.getDiscount()).toBe(10);
   });
 });
