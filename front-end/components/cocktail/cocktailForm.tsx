@@ -11,19 +11,18 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
   const [description, setDescription] = useState<string>('');
   const [strongness, setStrongness] = useState<number>(0);
   const [imageUrl, setImage] = useState<string>('');
+  
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const newCocktail = { id, name, description, strongness, imageUrl };
     onSubmit(newCocktail);
 
-    window.location.href = '/';
+
   };
 
-
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div> 
+    <form onSubmit={handleSubmit} className="cocktail-details">
+      <div>
         <label htmlFor="id">ID:</label>
         <input
           type="number"

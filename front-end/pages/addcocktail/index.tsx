@@ -17,6 +17,7 @@ const Home: React.FC = () => {
 
         <CocktailForm onSubmit={function (cocktail: { id: number; name: string; description: string; strongness: number; imageUrl: string; }): void {
                   CocktailService.addCocktail(cocktail)
+                  window.location.href = '/';
               } }></CocktailForm>
       </main>
     </>
