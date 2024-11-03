@@ -6,129 +6,127 @@ import { Ingredient } from '../../model/ingredient';
 import { RecipeIngredient } from '../../model/recipeIngredient';
 import { IngredientCategory } from '../../types';
 
-describe('Schedule Class', () => {
-    let user: User;
-    let recipe: Recipe;
-    let schedule: Schedule;
-    let ingredient: Ingredient;
-    let recipeIngredient: RecipeIngredient;
+const profile = new Profile({
+    id: 1,
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'test@example.com',
+});
 
-    beforeEach(() => {
-        const profile = new Profile({
+const user = new User({
+    id: 1,
+    username: 'testuser',
+    password: 'password',
+    profile: profile,
+});
+
+const ingredient = new Ingredient({
+    id: 1,
+    name: 'Flour',
+    category: 'Pantry' as IngredientCategory,
+});
+
+const recipeIngredient = new RecipeIngredient({
+    recipe: {} as Recipe,
+    ingredient: ingredient,
+    unit: 'cups',
+    quantity: 2,
+});
+
+const recipe = new Recipe({
+    id: 1,
+    title: 'Pancakes',
+    instructions: 'Mix ingredients and cook.',
+    cookingTime: 15,
+    category: 'breakfast',
+    ingredients: [recipeIngredient],
+    user: user,
+});
+
+const schedule = new Schedule({
+    id: 1,
+    user: user,
+    date: new Date(),
+    recipes: [recipe],
+});
+
+test('given: valid values for schedule, when: schedule is created, then: schedule is created with those values', () => {
+    expect(schedule.getId()).toBe(1);
+    expect(schedule.getUser()).toBe(user);
+    expect(schedule.getDate()).toBeInstanceOf(Date);
+    expect(schedule.getRecipes()).toEqual([recipe]);
+});
+
+test('given: missing user, when: schedule is created, then: error is thrown', () => {
+    expect(() => {
+        new Schedule({
             id: 1,
-            firstName: 'Test',
-            lastName: 'User',
-            email: 'test@example.com',
-        });
-
-        user = new User({
-            id: 1,
-            username: 'testuser',
-            password: 'password',
-            profile: profile,
-        });
-
-        ingredient = new Ingredient({
-            id: 1,
-            name: 'Flour',
-            category: 'Pantry' as IngredientCategory,
-        });
-
-        recipeIngredient = new RecipeIngredient({
-            recipe: {} as Recipe, // Placeholder, will be set later
-            ingredient: ingredient,
-            unit: 'cups',
-            quantity: 2,
-        });
-
-        recipe = new Recipe({
-            id: 1,
-            title: 'Pancakes',
-            instructions: 'Mix ingredients and cook.',
-            cookingTime: 15,
-            category: 'breakfast',
-            ingredients: [recipeIngredient],
-            user: user,
-        });
-
-        schedule = new Schedule({
-            id: 1,
-            user: user,
+            user: undefined as unknown as User,
             date: new Date(),
             recipes: [recipe],
         });
-    });
+    }).toThrow('User is required');
+});
 
-    test('should create a Schedule instance', () => {
-        expect(schedule.getId()).toBe(1);
-        expect(schedule.getUser()).toBe(user);
-        expect(schedule.getDate()).toBeInstanceOf(Date);
-        expect(schedule.getRecipes()).toEqual([recipe]);
-    });
-
-    test('should throw an error if user is missing', () => {
-        expect(() => {
-            new Schedule({
-                id: 1,
-                user: undefined as unknown as User,
-                date: new Date(),
-                recipes: [recipe],
-            });
-        }).toThrow('User is required');
-    });
-
-    test('should throw an error if date is invalid', () => {
-        expect(() => {
-            new Schedule({
-                id: 1,
-                user: user,
-                date: 'invalid-date' as unknown as Date,
-                recipes: [recipe],
-            });
-        }).toThrow('Date must be a valid Date object');
-    });
-
-    test('should add a recipe to the schedule', () => {
-        const newRecipe = new Recipe({
-            id: 2,
-            title: 'Waffles',
-            instructions: 'Mix ingredients and cook.',
-            cookingTime: 20,
-            category: 'breakfast',
-            ingredients: [recipeIngredient],
+test('given: invalid date, when: schedule is created, then: error is thrown', () => {
+    expect(() => {
+        new Schedule({
+            id: 1,
             user: user,
+            date: 'invalid-date' as unknown as Date,
+            recipes: [recipe],
         });
+    }).toThrow('Date must be a valid Date object');
+});
 
-        schedule.addRecipe(newRecipe);
-        expect(schedule.getRecipes()).toContain(newRecipe);
+test('given: new recipe, when: recipe is added to schedule, then: recipe is added', () => {
+    const newRecipe = new Recipe({
+        id: 2,
+        title: 'Waffles',
+        instructions: 'Mix ingredients and cook.',
+        cookingTime: 20,
+        category: 'breakfast',
+        ingredients: [recipeIngredient],
+        user: user,
     });
 
-    test('should throw an error if adding a duplicate recipe', () => {
-        expect(() => {
-            schedule.addRecipe(recipe);
-        }).toThrow(
-            `A recipe with the name "${recipe.getTitle()}" is already scheduled for this date`
-        );
+    schedule.addRecipe(newRecipe);
+    expect(schedule.getRecipes()).toContain(newRecipe);
+});
+
+test('given: duplicate recipe, when: recipe is added to schedule, then: error is thrown', () => {
+    expect(() => {
+        schedule.addRecipe(recipe);
+    }).toThrow(`A recipe with the name "${recipe.getTitle()}" is already scheduled for this date`);
+});
+
+test('given: existing recipe, when: recipe is removed from schedule, then: recipe is removed', () => {
+    schedule.removeRecipe(recipe);
+    expect(schedule.getRecipes()).not.toContain(recipe);
+});
+
+test('given: existing recipe, when: checking if recipe is in schedule, then: returns true', () => {
+    schedule.addRecipe(recipe);
+    expect(schedule.hasRecipe(recipe)).toBe(true);
+});
+
+test('given: new recipe, when: checking if recipe is in schedule, then: returns false', () => {
+    const newSchedule = new Schedule({
+        id: 2,
+        user: user,
+        date: new Date(),
+        recipes: [],
     });
 
-    test('should remove a recipe from the schedule', () => {
-        schedule.removeRecipe(recipe);
-        expect(schedule.getRecipes()).not.toContain(recipe);
+    const newRecipe = new Recipe({
+        id: 2,
+        title: 'Waffles',
+        instructions: 'Mix ingredients and cook.',
+        cookingTime: 20,
+        category: 'breakfast',
+        ingredients: [recipeIngredient],
+        user: user,
     });
 
-    test('should check if a recipe is in the schedule', () => {
-        expect(schedule.hasRecipe(recipe)).toBe(true);
-
-        const newRecipe = new Recipe({
-            id: 2,
-            title: 'Waffles',
-            instructions: 'Mix ingredients and cook.',
-            cookingTime: 20,
-            category: 'breakfast',
-            ingredients: [recipeIngredient],
-            user: user,
-        });
-
-        expect(schedule.hasRecipe(newRecipe)).toBe(false);
-    });
+    expect(newSchedule.hasRecipe(newRecipe)).toBe(false);
 });
