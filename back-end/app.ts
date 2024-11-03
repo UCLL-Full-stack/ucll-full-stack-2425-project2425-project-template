@@ -19,7 +19,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/schedule', scheduleRouter);
+app.use('/schedules', scheduleRouter);
 app.use('/users', userRouter);
 app.use('/recipes', recipeRouter);
 
