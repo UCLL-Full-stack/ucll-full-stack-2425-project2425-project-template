@@ -33,17 +33,17 @@ const Header: React.FC = () => {
       
       {/* De coole navbar */}
       <nav style={{ display: 'flex', justifyContent: 'center',paddingTop: '5px'}}>
-        <Link href="http://localhost:8080">
+        <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
             Home
           </button>
         </Link>
-        <Link href="http://localhost:8080">
+        <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
             Home2
           </button>
         </Link>
-        <Link href="http://localhost:8080">
+        <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
             Home3
           </button>
