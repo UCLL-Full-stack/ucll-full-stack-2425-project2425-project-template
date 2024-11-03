@@ -6,18 +6,33 @@ import GuildCard from '@/components/GuildCard';
 import { Guild, Board, User } from '@/types';
 import BoardService from '@/services/BoardService';
 import BoardCard from '@/components/BoardCard';
+import CreateBoardForm from '@/components/CreateBoardForm';
 
 const Home: FC = () => {
   const [user, setUser] = useState<User>();
   const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGuildId, setSelectedGuildId] = useState<string | null>(null);
+  const [selectedGuildForBoardCreation, setSelectedGuildForBoardCreation] = useState<string | null>(null);
   const [boards, setBoards] = useState<Board[]>([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const handleCreateClick = () => {
-    //decorative for now
-      console.log('Create button clicked!');
+  const handleCreateClick = (guildId?: string) => {
+    if(guildId) {
+      setSelectedGuildForBoardCreation(guildId);
+    }
+    setIsFormOpen(true);
+    console.log('Create button clicked!');
   };
+
+  const handleFormClose = () => {
+    setIsFormOpen(false);
+  }
+
+  const handleFormSubmit = (boardData: { boardName: string; columns: string }) => {
+    console.log('Form submitted with data:', boardData);
+    handleFormClose();
+  }
 
   const fetchUserData = async () => {
     try {
@@ -63,7 +78,7 @@ const Home: FC = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {guilds.map(guild => (
-                            <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} user={user!}/>
+                            <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick} user={user!}/>
                         ))}
                     </div>
                 )}
@@ -83,6 +98,14 @@ const Home: FC = () => {
                 </div>
             )}
           </main>
+          <CreateBoardForm 
+                isOpen={isFormOpen} 
+                onClose={handleFormClose} 
+                onSubmit={handleFormSubmit} 
+                selectedGuildId={selectedGuildForBoardCreation}
+                user={user!}
+                guilds={guilds}
+            />
       </div>
   );
 };

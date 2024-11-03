@@ -4,10 +4,11 @@ import { Guild, KanbanPermission, User,DiscordPermission } from '@/types';
 interface GuildCardProps {
     guild: Guild;
     onClick: (guildId: string) => void;
+    onCreateClick: (guildId: string) => void;
     user: User;
 }
 
-const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, user }) => {
+const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, user }) => {
 
     const canCreateBoard = () => {
         for (const permission of guild.settings) {
@@ -55,6 +56,7 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, user }) => {
                         className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 focus:outline-none"
                         onClick={(e) => {
                             e.stopPropagation();
+                            onCreateClick(guild.guildId);
                             console.log('Create button clicked for:', guild.guildName);
                         }}
                     >
