@@ -5,7 +5,32 @@ import recipeService from '../service/recipe.service';
 
 const recipeRouter = express.Router();
 
-// Get recipe by Id
+/**
+ * @swagger
+ * tags:
+ *   name: Recipes
+ *   description: Recipe management
+ */
+
+/**
+ * @swagger
+ * /recipes/{recipeId}:
+ *   get:
+ *     summary: Get a recipe by ID
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: recipeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The recipe ID
+ *     responses:
+ *       200:
+ *         description: A recipe object
+ *       404:
+ *         description: Recipe not found
+ */
 recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
     try {
@@ -16,7 +41,38 @@ recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFun
     }
 });
 
-// Update recipe based on Id
+/**
+ * @swagger
+ * /recipes/{recipeId}:
+ *   put:
+ *     summary: Update a recipe by ID
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: recipeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The recipe ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               ingredients:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: The updated recipe object
+ *       404:
+ *         description: Recipe not found
+ */
 recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
     const recipeInputData = req.body;
@@ -28,7 +84,25 @@ recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFun
     }
 });
 
-// Delete recipe based on Id
+/**
+ * @swagger
+ * /recipes/{recipeId}:
+ *   delete:
+ *     summary: Delete a recipe by ID
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: recipeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The recipe ID
+ *     responses:
+ *       204:
+ *         description: No content
+ *       404:
+ *         description: Recipe not found
+ */
 recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
     try {
