@@ -3,7 +3,7 @@
  * It manages the state for the current date, view mode, selected dates, and other interactions.
  */
 
-// QUESTION: Is this component correct? Or the fetch logic should go in the planner index.tsx page?
+// QUESTION: Is this component correct? Or the fetch logic should be in the planner index.tsx page?
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import PlannerService from "@/services/PlannerService";
@@ -26,6 +26,16 @@ const CalendarGrid: React.FC = () => {
     {}
   );
 
+  // To fix issues with dates
+  const toUTCDate = (date: Date) => {
+    return new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+  };
+  const formatDateUTC = (date: Date) => {
+    return toUTCDate(date).toISOString().split("T")[0];
+  };
+
   useEffect(() => {
     const fetchMonthRecipes = async () => {
       const startDate = new Date(
@@ -39,8 +49,12 @@ const CalendarGrid: React.FC = () => {
         0
       );
 
-      for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
-        const dateString = i.toLocaleDateString("en-CA");
+      for (
+        let i = new Date(startDate);
+        i <= endDate;
+        i.setDate(i.getDate() + 1)
+      ) {
+        const dateString = formatDateUTC(i);
         try {
           const response = await PlannerService.fetchMealDetails(1, dateString); // userId is 1 for testing -- temporary
           if (response.ok) {
@@ -166,7 +180,7 @@ const CalendarGrid: React.FC = () => {
               )}
               isHovered={hoveredDate?.getTime() === date.getTime()}
               selectionModeActive={selectionModeActive}
-              recipes={recipeByDate[date.toISOString().split("T")[0]] || []}
+              recipes={recipeByDate[formatDateUTC(date)] || []}
               onDateClick={handleDateClick}
               onCheckboxChange={(checked, date) => {
                 if (checked) {

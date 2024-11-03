@@ -4,13 +4,14 @@
  * It fetches meal details based on the user ID and date, and provides actions for deleting meals.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PlannerService from "@/services/PlannerService";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import DailyMealsView from "./DailyMealsView";
 import SingleMealView from "./SingleMealCard";
 import { Recipe } from "@/types/recipes";
+import RecipeService from "@/services/RecipeService";
 
 type Props = {
   userId: number;
@@ -30,31 +31,37 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
   const [meals, setMeals] = useState<Recipe[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchMeals = async () => {
-      try {
-        const response = await PlannerService.fetchMealDetails(
-          userId,
-          date.toISOString().split("T")[0]
-        );
-        const meals = await response.json();
-        setMeals(meals);
-      } catch (error) {
-        setError("Error fetching meals");
-      }
-    };
+  // Convert date to UTC and format as YYYY-MM-DD --> to handle date issues
+  const formatDateUTC = (date: Date) => {
+    const utcDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    return utcDate.toISOString().split("T")[0];
+  };
 
-    fetchMeals();
+  // to refresh after changes (delete or update) --> useCallback: only changes if one of the inputs has changed
+  const fetchMeals = useCallback(async () => {
+    try {
+      const dateString = formatDateUTC(date);
+      const response = await PlannerService.fetchMealDetails(
+        userId,
+        dateString
+      );
+      const meals = await response.json();
+      setMeals(meals);
+    } catch (error) {
+      setError("Error fetching meals");
+    }
   }, [userId, date]);
+
+  useEffect(() => {
+    fetchMeals();
+  }, [fetchMeals]);
 
   const handleDelete = async (mealId: number) => {
     try {
-      await PlannerService.deleteMeal(
-        userId,
-        mealId,
-        date.toISOString().split("T")[0] // to check if this is the best way
-      );
-      setMeals(meals.filter((meal) => meal.id !== mealId));
+      await PlannerService.deleteMeal(userId, mealId, formatDateUTC(date));
+      await fetchMeals(); // fetch again after deleting
     } catch (error) {
       setError("Error deleting meal");
     }
@@ -62,17 +69,10 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
 
   const handleToggleFavorite = async (mealId: number, isFavorite: boolean) => {
     try {
-      await PlannerService.updateMeal(
-        userId,
-        mealId,
-        date.toISOString().split("T")[0],
-        { isFavorite: !isFavorite }
-      );
-      setMeals(
-        meals.map((meal) =>
-          meal.id === mealId ? { ...meal, isFavorite: !isFavorite } : meal
-        )
-      );
+      await RecipeService.updateRecipe(mealId, {
+        isFavorite: !isFavorite,
+      });
+      await fetchMeals(); // fetch again after updating
     } catch (error) {
       setError("Error updating meal");
     }

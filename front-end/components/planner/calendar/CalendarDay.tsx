@@ -59,7 +59,7 @@ const CalendarDay: React.FC<Props> = ({
       onPasteMeal={() => console.log("Paste Meal", date)}
     >
       <section
-        className={`border rounded-lg p-2 h-24 relative cursor-pointer transition-colors duration-200 ${
+        className={`border rounded-lg p-2 min-h-[8rem] relative cursor-pointer transition-colors duration-200 flex flex-col  ${
           isOtherMonth
             ? isPastDate(date)
               ? "bg-gray-100 text-gray-300"
@@ -74,7 +74,7 @@ const CalendarDay: React.FC<Props> = ({
         onMouseEnter={() => onMouseEnter(date)}
         onMouseLeave={() => onMouseLeave()}
       >
-        <section className="absolute top-1.5 left-2">
+        <section className="flex justify-between items-start mb-2">
           <span
             className={`text-sm font-medium ${
               isToday(date)
@@ -96,14 +96,14 @@ const CalendarDay: React.FC<Props> = ({
         )}
 
         {recipes.length > 0 && (
-          <section className="absolute top-8 left-0 right-0 px-2">
+          <section className="flex-1 overflow-y-auto">
             <article className="space-y-1">
               {/* show a max of 2 recipe per day in calendar :) */}
               {recipes.slice(0, 2).map((recipe, i) => (
                 <Badge
                   key={i}
                   variant="outline"
-                  className={`w-full justify-start truncate text-xs ${
+                  className={`block w-full justify-start truncate text-xs ${
                     isOtherMonth || isPastDate(date)
                       ? "bg-gray-50 border-gray-100 text-gray-400"
                       : "bg-blue-50 border-blue-100 text-blue-700"
@@ -115,7 +115,7 @@ const CalendarDay: React.FC<Props> = ({
               {recipes.length > 2 && (
                 <Badge
                   variant="outline"
-                  className={`w-full justify-start text-xs ${
+                  className={`block w-full justify-start text-xs ${
                     isOtherMonth || isPastDate(date)
                       ? "bg-gray-50 border-gray-100 text-gray-400"
                       : "bg-blue-50 border-blue-100 text-blue-700"
