@@ -132,13 +132,9 @@
 };
 
 .participants {
-    margin-top: 2rem;
+    margin-top: 4rem;
 }
 
-.participants {
-    margin-top: 20px;
-  }
-  
   .participantsTable {
     width: 100%;
     border-collapse: collapse;
@@ -193,6 +189,25 @@
 
 .addParticipantForm button:hover {
     background-color: #005bb5;
+}
+
+.addParticipantButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .addParticipantButton:hover {
+    background-color: #0056b3;
+  }
+
+.errorMessage {
+    color: red;
 }
 
 .description {

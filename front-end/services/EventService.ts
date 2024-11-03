@@ -18,13 +18,20 @@ const getEventById = (eventId: string) => {
   });
 };
 
-const addParticipantToEvent = (email: string, eventId: string) => {
-  return fetch(apiUrl + `/events/${eventId}/${email}`, {
+const addParticipantToEvent = async (email: string, eventId: string) => {
+  const response = await fetch(apiUrl + `/events/${eventId}/${email}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     }
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to add participant to event');
+  }
+
+  return response.json();
 };
 
 const EventService = {

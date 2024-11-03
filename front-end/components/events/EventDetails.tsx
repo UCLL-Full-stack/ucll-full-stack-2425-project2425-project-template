@@ -12,8 +12,6 @@ const EventDetails: React.FC<Props> = ({event}: Props) => {
         return <p>Loading...</p>;
     };
 
-    console.log(event);
-
     return (
         <>
             <h2>Event name: {event.name}</h2>

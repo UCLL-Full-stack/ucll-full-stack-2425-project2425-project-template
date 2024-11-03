@@ -15,8 +15,8 @@ const RenderEventDetailsById: React.FC = () => {
     const [email, setEmail] = useState("");
 
     // Show error message
-    // const [showError, setShowError] = useState(false);
-    // const [errorMessage, setErrorMessage] = useState("");
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const router = useRouter();
     const { eventId } = router.query;
@@ -31,22 +31,40 @@ const RenderEventDetailsById: React.FC = () => {
         }
     };
 
+    const addParticipantToEvent = async () => {
+        try {
+            setShowError(false);
+            setEmail("");
+            setShowForm(false);
+            setShowAddButton(true);
+            const response = await EventService.addParticipantToEvent(email, eventId as string);
+            const eventRes = await response.json();
+            setEvent(eventRes);
+        } catch (error) {
+            console.log(1);
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("An unknown error occurred");
+            }
+            setShowError(true);
+        }
+    };
+
     useEffect(() => {
             getEventById();
-    }, [eventId, event]);
+    }, [event]);
 
     const handleAddParticipant = () => {
+        setShowError(false);
         setShowForm(true);
         setShowAddButton(false);
     };
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        EventService.addParticipantToEvent(email, eventId as string);
-        getEventById();
-        setEmail("");
-        setShowForm(false);
-        setShowAddButton(true);
+        addParticipantToEvent();
+
     };
 
     return (
@@ -67,17 +85,24 @@ const RenderEventDetailsById: React.FC = () => {
                 ) : (
                     <p>Loading event details...</p>
                 )}
-
-                {/* {showError && (
+                
+                {showError && (
                     <p className={styles.errorMessage}>{errorMessage}</p>
-                )} */}
+                )}
 
                 {showAddButton && (
-                    <button onClick={handleAddParticipant}>Add participant</button>
+                    <button 
+                        onClick={handleAddParticipant}
+                        className={styles.addParticipantButton}
+                    >
+                        Add participant
+                    </button>
                 )}
 
                 {showForm && (
-                    <form onSubmit={handleFormSubmit} className={styles.addParticipantForm}>
+                    <form 
+                        onSubmit={handleFormSubmit} 
+                        className={styles.addParticipantForm}>
                         <label htmlFor="email">Email:</label>
                         <input
                             type="email"
