@@ -1,12 +1,13 @@
 import Link from 'next/link';
 
-const Header: React.FC = () => {
+const Footer: React.FC = () => {
     return (
-        <header className="bg-primary text-white flex justify-between uppercase py-6">
-            <div className="max-w-7xl px-8 mx-auto flex justify-between w-full">
-                <h1 className="text-lg font-bold">Shoppingcart app</h1>
+        <footer className="bg-primary text-white py-8 mt-10">
+            <div className="max-w-5xl px-8 mx-auto flex justify-between items-center w-full">
+                <p className="text-sm">&copy; {new Date().getFullYear()} Shoppingcart app</p>
                 <nav className="">
-                    <ul className="flex gap-4">
+                    <h3>Navigation</h3>
+                    <ul className="flex flex-col gap-2">
                         <li>
                             <Link href="/">Home</Link>
                         </li>
@@ -19,8 +20,8 @@ const Header: React.FC = () => {
                     </ul>
                 </nav>
             </div>
-        </header>
+        </footer>
     );
 };
 
-export default Header;
+export default Footer;

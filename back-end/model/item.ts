@@ -46,6 +46,10 @@ export class Item {
         }
     }
 
+    setId(id: number) {
+        this.id = id;
+    }
+
     getId(): number | undefined {
         return this.id;
     }
