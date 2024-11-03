@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Header from '@components/header';
+import RegisterForm from '@components/registerForm';
 import styles from '@styles/home.module.css';
 
 
@@ -7,14 +8,13 @@ const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Kanben Esoteric Edition</title>
-        <meta name="description" content="Kanben Esoteric Edition" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Register</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
       <main className={styles.main}>
-          <h1>Welcome!</h1>
+          <h1>Register</h1>
+          <RegisterForm />
       </main>
     </>
   );
