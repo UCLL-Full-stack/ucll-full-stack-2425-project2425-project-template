@@ -9,7 +9,7 @@ const recipeRouter = express.Router();
 recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
     try {
-        const recipe = recipeService.getRecipeById(parseInt(recipeId));
+        const recipe = await recipeService.getRecipeById(parseInt(recipeId));
         res.status(200).json(recipe.toJSON());
     } catch (error) {
         next(error); // passes the error to the error-handling middleware in app.ts
@@ -21,7 +21,7 @@ recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFun
     const { recipeId } = req.params;
     const recipeInputData = req.body;
     try {
-        const updatedRecipe = recipeService.updateRecipe(parseInt(recipeId), recipeInputData);
+        const updatedRecipe = await recipeService.updateRecipe(parseInt(recipeId), recipeInputData);
         res.status(200).json(updatedRecipe.toJSON());
     } catch (error) {
         next(error);
@@ -32,7 +32,7 @@ recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFun
 recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
     try {
-        recipeService.deleteRecipe(parseInt(recipeId));
+        await recipeService.deleteRecipe(parseInt(recipeId));
         res.status(204).send(); // server processed the request but there's no response body
     } catch (error) {
         next(error);

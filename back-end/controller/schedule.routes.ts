@@ -9,11 +9,11 @@ const scheduleRouter = express.Router();
 scheduleRouter.get('/:userId/:date', async (req: Request, res: Response, next: NextFunction) => {
     const { userId, date } = req.params;
     try {
-        const recipeDetails = scheduleService.getScheduledRecipeDetails(
+        const recipeDetails = await scheduleService.getScheduledRecipeDetails(
             parseInt(userId),
             new Date(date)
         );
-        res.status(200).json(recipeDetails.map((details) => details.toJSON())); // converts each detail to JSON
+        res.status(200).json(recipeDetails.map((details) => details.toJSON()));
     } catch (error) {
         next(error);
     }
@@ -26,13 +26,13 @@ scheduleRouter.put(
         const { userId, recipeId, date } = req.params;
         const { newDate } = req.body;
         try {
-            const updatedRecipe = scheduleService.updateRecipeDate(
+            const updatedSchedule = await scheduleService.updateRecipeDate(
                 parseInt(userId),
                 parseInt(recipeId),
                 new Date(date),
                 new Date(newDate)
             );
-            res.status(200).json(updatedRecipe.toJSON());
+            res.status(200).json(updatedSchedule.toJSON());
         } catch (error) {
             next(error);
         }
@@ -45,7 +45,11 @@ scheduleRouter.delete(
     async (req: Request, res: Response, next: NextFunction) => {
         const { userId, recipeId, date } = req.params;
         try {
-            scheduleService.deleteRecipe(parseInt(userId), parseInt(recipeId), new Date(date));
+            await scheduleService.deleteScheduledRecipe(
+                parseInt(userId),
+                parseInt(recipeId),
+                new Date(date)
+            );
             res.status(204).send(); // server processed the request but there's no response body
         } catch (error) {
             next(error);
