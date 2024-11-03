@@ -10,38 +10,47 @@ const getScheduledRecipeDetails = (userId: number, date: Date): Recipe[] => {
 };
 
 // Not fully implemented yet
-const updateRecipeDate = (
+const updateRecipeDate = async (
     userId: number,
     recipeId: number,
     oldDate: Date,
     newDate: Date
-): Recipe => {
-    const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, oldDate);
-    if (!schedule) throw new Error('Schedule not found');
+): Promise<Recipe> => {
+    const oldSchedule = await scheduleDb.getScheduleByUserIdAndDate(userId, oldDate);
+    if (!oldSchedule) throw new Error('Schedule not found');
 
-    const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
+    const recipe = oldSchedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
     if (!recipe) throw new Error('Recipe not found');
 
-    schedule.removeRecipe(recipe);
+    oldSchedule.removeRecipe(recipe);
     const newSchedule =
-        scheduleDb.getScheduleByUserIdAndDate(userId, newDate) ||
-        scheduleDb.createSchedule(userId, newDate); // TO IMPLEMENT-- FUTURE USER STORY
-    // newSchedule.addRecipe(recipe);
+        (await scheduleDb.getScheduleByUserIdAndDate(userId, newDate)) ||
+        (await scheduleDb.createSchedule(userId, newDate));
+    newSchedule.addRecipe(recipe);
+
+    await scheduleDb.saveSchedule(oldSchedule);
+    await scheduleDb.saveSchedule(newSchedule);
 
     return recipe;
 };
 
-const deleteRecipe = (userId: number, mealId: number, date: Date) => {
-    const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, date);
+const deleteScheduledRecipe = async (
+    userId: number,
+    recipeId: number,
+    date: Date
+): Promise<void> => {
+    const schedule = await scheduleDb.getScheduleByUserIdAndDate(userId, date);
     if (!schedule) throw new Error('Schedule not found');
 
-    const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === mealId);
-    if (!recipe) throw new Error('Meal not found');
+    const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
+    if (!recipe) throw new Error('Recipe not found in schedule');
+
     schedule.removeRecipe(recipe);
+    await scheduleDb.saveSchedule(schedule);
 };
 
 export default {
     getScheduledRecipeDetails,
     updateRecipeDate,
-    deleteRecipe,
+    deleteScheduledRecipe,
 };
