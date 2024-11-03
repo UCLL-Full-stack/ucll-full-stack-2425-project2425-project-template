@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // Import useRouter from Next.js
+import { useRouter } from "next/router"; 
 import ProductService from "@services/ProductService";
 import { Product } from "@types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +10,7 @@ const ProductsOverview = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const image = "https://placehold.co/600x400";
-  const router = useRouter(); // Initialize the useRouter hook
+  const router = useRouter(); 
 
   const fetchProducts = async () => {
     try {
