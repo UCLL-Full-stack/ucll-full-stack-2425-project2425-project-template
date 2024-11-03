@@ -16,11 +16,11 @@ module.exports = {
         secondary: "#4D4861",
         success: "#DE9151",
         danger: "#E00049",
-        safe: "#5CDE51",
+        safe: "#49B540",
         alter: "#C251DE",
       },
       boxShadow: {
-        button: "1px 2px 4px rgba(0, 0, 0, 0.8)",
+        regular: "1px 2px 2px rgba(0, 0, 0, 0.8)",
         button_pressed: "inset 1px 2px 4px rgba(0, 0, 0, 0.8)"
       },
     },
