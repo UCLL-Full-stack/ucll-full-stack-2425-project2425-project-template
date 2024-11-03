@@ -38,7 +38,7 @@ const Header: React.FC = () => {
             Home
           </button>
         </Link>
-        <Link href="http://localhost:8080/">
+        <Link href="http://localhost:8080/addcocktail/">
           <button className="navbarbutton-stylah">
             Add Cocktail
           </button>
