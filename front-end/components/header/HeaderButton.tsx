@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
+import { HOME_URL, LOGIN_URL } from '@/utils/urls';
 
 enum ButtonType {
     Home = 'home',
@@ -16,24 +17,24 @@ interface HeaderButtonProps {
     buttonStatus: ButtonStatus;
 }
 
-const sharedClassOptions = 'shadow-button p-1';
+const sharedClassOptions = 'p-1 rounded';
 
     const typeOptions = {
         home: {
             text: 'Home',
             class: 'mr-3',
-            href: '/',
+            href: HOME_URL,
         },
         login: {
             text: 'Log in',
             class: '',
-            href: '/login',
+            href: LOGIN_URL,
         },
     };
 
     const statusOptions = {
         active: {
-            class: 'bg-danger hover:shadow-success',
+            class: 'shadow-regular bg-danger hover:shadow-success',
             attributes: {},
         },
         inactive: {
