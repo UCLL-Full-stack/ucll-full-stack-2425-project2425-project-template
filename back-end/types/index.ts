@@ -1,3 +1,13 @@
+import { User } from "../model/user";
+
 type Role = 'admin' | 'user' | 'guest';
 
-export { Role };
+type RecipeInput = {
+    id?: number;
+    user: User;
+    title: string;
+    description: string;
+    instructions: string;
+}
+
+export { Role, RecipeInput };
