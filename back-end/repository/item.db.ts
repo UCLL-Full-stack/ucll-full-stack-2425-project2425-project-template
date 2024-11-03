@@ -31,6 +31,8 @@ const getAll = (): Item[] => {
 
 const create = (item: Item): Item => {
     try {
+        item.setId(items.length);
+
         const exists = items.find((existingItem) => existingItem.getId() === item.getId());
 
         if (exists) {
