@@ -34,6 +34,7 @@ const createSubmissionForm = (submissionFormInput: any): SubmissionForm => {
 
 const acceptSubmissionForm = (submissionFormId: number): SubmissionForm => {
     // todo
+    throw new Error('Not implemented');
 }
 
 export default {
