@@ -7,11 +7,8 @@ const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Welcome</title>
-        <meta name="description" content="Home" />
         <title>RaceForms</title>
         <meta name="description" content="RaceForms.net" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Header />
       <main className={styles.main}>
