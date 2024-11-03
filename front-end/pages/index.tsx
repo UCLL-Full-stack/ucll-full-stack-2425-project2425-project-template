@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// For now my home page will be /planner -- so I moved the <Head/> to the planner page
+// For now the home page is /planner -- so I moved the <Head/> to the planner page
 export default function Home() {
   return (
     <>
