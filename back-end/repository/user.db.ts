@@ -49,7 +49,6 @@ const saveUser = (userData: { firstName: string; lastName: string; email: string
             lastName: userData.lastName,
             email: userData.email,
             password: userData.password,
-            role: userData.role,
         });
     } catch (validationError) {
         throw new Error(`Validation error: ${(validationError as Error).message}`);

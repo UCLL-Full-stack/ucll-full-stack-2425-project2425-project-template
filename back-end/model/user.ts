@@ -6,7 +6,7 @@ export class User {
     private lastName: string;
     private email: string;
     private password: string;
-    private role: Role;
+    private role?: Role;
 
     constructor(user: {
         id?: number;
@@ -14,7 +14,7 @@ export class User {
         lastName: string;
         email: string;
         password: string;
-        role: Role;
+        role?: Role;
     }) {
         this.validate(user);
 
@@ -45,7 +45,7 @@ export class User {
         return this.password;
     }
 
-    getRole(): Role {
+    getRole(): Role | undefined {
         return this.role;
     }
 
@@ -54,7 +54,6 @@ export class User {
         lastName: string;
         email: string;
         password: string;
-        role: Role;
     }) {
         if (!user.firstName?.trim()) {
             throw new Error('First name is required');
@@ -75,8 +74,7 @@ export class User {
             this.firstName === user.getFirstName() &&
             this.lastName === user.getLastName() &&
             this.email === user.getEmail() &&
-            this.password === user.getPassword() &&
-            this.role === user.getRole()
+            this.password === user.getPassword()
         );
     }
 }
