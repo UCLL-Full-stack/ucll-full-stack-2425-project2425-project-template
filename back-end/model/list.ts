@@ -1,25 +1,39 @@
 import { Album } from "./album";
-import { User } from "./user";
 
 export class List{
     private readonly id?: number;
-    private readonly user: User;
     private readonly createdAt: number;
     private title: string;
     private description: string;
     private albums: Album[];
 
     constructor(list: {
-        user: User,
+        id?: number,
         title: string, 
         description: string,
         albums: Album[]
     }){
-        this.user = list.user;
+        this.validate(list);
+        this.id = list.id;
         this.title = list.title;
         this.description = list.description;
         this.albums = list.albums;
         this.createdAt = Date.now();
+    }
+
+    validate(list: {
+        title: string,
+        description: string,
+        albums: Album[]
+    }){
+
+        if(!list.title || !list.description){
+            throw new Error('title and description cannot be empty');
+        }
+
+        if(!list.albums || list.albums.length == 0){
+            throw new Error('list albums cannot be empty');
+        }
     }
 
     getId(): number | undefined{
@@ -34,43 +48,19 @@ export class List{
         return this.description;
     }
 
+    getAlbums(): Album[]{
+        return this.albums;
+    }
+
     getCreatedAt(): number{
         return this.createdAt;
     }
 
-    setTitle(title: string){
-        this.title = title;
-    }
-
-    setDescription(description: string){
-        this.description = description;
-    }
-
-    addAlbums(albums: Album[]){
-        this.checkDuplicateAlbums(albums);
-        this.albums = [
-            ...this.albums, 
-            ...albums
-        ];
-    }
-
-    private checkDuplicateAlbums(albums: Album[]){
-        albums.forEach((newAlbum)=>{
-            if(this.albums.find((album)=> album.equals(newAlbum))){
-                throw new Error(`album "${newAlbum.getTitle}" already exists in list`);
-            }
-        });
-    }
-
-    equals(list: {
-        title: string, 
-        description: string, 
-        user: User
-    }){
+    equals(list: List){
         return (
-            this.title == list.title &&
-            this.description == list.description &&
-            this.user == list.user
+            this.title === list.title &&
+            this.description === list.description &&
+            this.albums.toString() === list.albums.toString()
         )
     }
 };

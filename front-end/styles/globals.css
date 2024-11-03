@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Pacifico&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main-font{
+  font-family: "Montserrat", serif;
+  font-weight: 800;
+}
+
+.main-thin{
+  font-family: "Montserrat", serif;
+  font-weight: 500;
+}
+
+.yadig-italic {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+

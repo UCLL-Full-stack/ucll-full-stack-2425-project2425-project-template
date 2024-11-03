@@ -41,17 +41,12 @@ export class Song{
         return this.artists;
     }
 
-    equals(song:{
-        title: string,
-        duration: Duration,
-        album: Album,
-        artists: Artist[]
-    }){
+    equals(song: Song){
         return (
             this.title == song.title &&
             this.duration == song.duration &&
             this.album == song.album &&
-            this.artists == song.artists
+            this.artists.toString() == song.artists.toString()
         )
     }
 };

@@ -3,17 +3,26 @@ import { Album } from "./album";
 export class Artist{
     private readonly id?: number;
     private readonly name: string;
-    private bio: string;
-    private albums: Album[];
+    private bio?: string;
+    private albums?: Album[];
 
     constructor(artist: {
         name: string,
-        bio: string,
-        albums: Album[]
+        bio?: string,
+        albums?: Album[]
     }){
+        this.validate(artist);
         this.name = artist.name;
         this.bio = artist.bio;
         this.albums = artist.albums;
+    }
+
+    validate(artist: {
+        name: string
+    }){
+        if(!artist.name){
+            throw new Error('artist name cannot be empty');
+        }
     }
 
     getId(): number | undefined{
@@ -24,30 +33,19 @@ export class Artist{
         return this.name;
     }
 
-    getBio(): string{
+    getBio(): string | undefined{
         return this.bio;
     }
 
-    getAlbums(): Album[] {
+    getAlbums(): Album[] | undefined{
         return this.albums;
     }
 
-    addAlbum(newAlbum: Album){
-        if(this.albums.find((album)=>album.equals(newAlbum))){
-            throw new Error(`album "${newAlbum.getTitle}" is already registered`);
-        }
-        this.albums.push(newAlbum);
-    }
-
-    equals(artist: {
-        name: string,
-        bio: string,
-        albums: Album[]
-    }): boolean{
+    equals(artist: Artist): boolean{
         return(
             this.name == artist.name &&
             this.bio == artist.bio &&
-            this.albums == artist.albums
+            this.albums?.toString() == artist.albums?.toString()
         )
     }
 };

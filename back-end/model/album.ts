@@ -11,17 +11,43 @@ export class Album{
     private readonly releaseDate: Date;
     
     constructor(album: {
+        id?: number,
         title: string,
         duration: Duration,
         artists: Artist[],
+        releaseDate: Date,
         songs: Song[],
-        releaseDate: Date
     }){
+        this.validate(album);
+        this.id= album.id;
         this.title = album.title;
         this.duration = album.duration;
         this.artists = album.artists;
         this.songs = album.songs;
         this.releaseDate = album.releaseDate;
+    }
+
+    validate(album: {
+        title: string,
+        duration: Duration,
+        artists: Artist[],
+        releaseDate: Date,
+    }){
+        if(!album.title){
+            throw new Error('album title cannot be empty');
+        }
+
+        if(!album.duration){
+            throw new Error('album duration cannot be empty');
+        }
+
+        if(!album.artists || album.artists.length == 0){
+            throw new Error('album must have at least 1 artist');
+        }
+
+        if(!album.releaseDate){
+            throw new Error('release date cannot be empty');
+        }
     }
 
     getId(): number | undefined{
@@ -40,7 +66,7 @@ export class Album{
         return this.artists;
     }
 
-    getSongs(): Song[]{
+    getSongs(): Song[] | undefined{
         return this.songs;
     }
 
@@ -50,11 +76,11 @@ export class Album{
 
     equals(album: Album){
         return (
-            this.title == album.title &&
-            this.duration == album.duration &&
-            this.artists == album.artists &&
-            this.songs == album.songs &&
-            this.releaseDate == album.releaseDate
+            this.title === album.title &&
+            this.duration === album.duration &&
+            this.artists.toString() === album.artists.toString() &&
+            this.songs.toString() === album.songs.toString() &&
+            this.releaseDate === album.releaseDate
         )
     }
 }
