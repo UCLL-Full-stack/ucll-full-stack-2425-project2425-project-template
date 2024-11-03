@@ -108,3 +108,16 @@
     color: #004d00;
     text-decoration: underline;
 }
+
+.hero-image {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.hero-image img {
+    max-width: 25%; /* Set maximum width to 50% of the container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for effect */
+}

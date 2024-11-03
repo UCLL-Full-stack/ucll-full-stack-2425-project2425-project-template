@@ -18,7 +18,14 @@ const OverviewPage: React.FC = () => {
         </p>
       </section>
 
-      <section className={styles['featured-destinations']}>
+      {/* I want the image from the public folder here */}
+      <section className={styles['hero-image']}>
+        <img src="/europe-buildings-travel-illustration-card_1284-35665.avif" alt="Image of Europe" />
+      </section>
+
+
+
+      {/* <section className={styles['featured-destinations']}>
         <h2>Popular Destinations</h2>
         <div className={styles['destinations-grid']}>
           <div className={styles['destination-card']}>
@@ -37,7 +44,7 @@ const OverviewPage: React.FC = () => {
             <p>Explore ancient Rome and its iconic landmarks.</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className={styles['navigation-links']}>
         <h2>Plan Your Adventure</h2>
