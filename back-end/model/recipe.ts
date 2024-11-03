@@ -27,6 +27,8 @@ export class Recipe {
         updatedAt: Date;
         tags: Tag[];
     }) {
+        this.validate(recipe);
+
         this._recipeId = recipe.recipeId;
         this._user = recipe.user;
         this._title = recipe.title;
@@ -124,6 +126,50 @@ export class Recipe {
 
     public setTags(tags: Tag[]): void {
         this._tags = tags;
+    }
+
+    private validate(recipe: {
+        user: User;
+        title: string;
+        description: string;
+        instructions: string;
+        nutritionFacts: string;
+        cookingTips: string;
+        extraNotes: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tags: Tag[];
+    }) {
+        if (!recipe.user) {
+            throw new Error('User is required');
+        }
+        if (!recipe.title) {
+            throw new Error('Title is required');
+        }
+        if (!recipe.description) {
+            throw new Error('Description is required');
+        }
+        if (!recipe.instructions) {
+            throw new Error('Instructions are required');
+        }
+        if (!recipe.nutritionFacts) {
+            throw new Error('Nutrition facts are required');
+        }
+        if (!recipe.cookingTips) {
+            throw new Error('Cooking tips are required');
+        }
+        if (!recipe.extraNotes) {
+            throw new Error('Extra notes are required');
+        }
+        if (!recipe.createdAt) {
+            throw new Error('Creation date is required');
+        }
+        if (!recipe.updatedAt) {
+            throw new Error('Update date is required');
+        }
+        if (!recipe.tags || recipe.tags.length === 0) {
+            throw new Error('At least one tag is required');
+        }
     }
 
     equals(recipe: Recipe): boolean {
