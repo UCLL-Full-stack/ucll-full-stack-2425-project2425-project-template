@@ -55,14 +55,14 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">{song.title}</td>
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">{song.genre}</td>
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">
-                                        <button onClick={() => togglePopup(index)} className="text-blue-600">...</button>
+                                        <button onClick={() => togglePopup(index)} className="text-blue-600">Add song to playlist</button>
                                         {isPopupVisible === index && (
                                             <div className="absolute mt-2 w-48 bg-white shadow-md rounded-md border border-gray-200 z-10">
                                                 <ul>
                                                     {playlists.map(playlist => (
                                                         <li
                                                             key={playlist.id}
-                                                            onClick={() => handleAddSongToPlaylist(song.id, playlist.id)}
+                                                            onClick={() => song.id && handleAddSongToPlaylist(song.id, playlist.id)}
                                                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                                         >
                                                             {playlist.name}
