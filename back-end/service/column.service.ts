@@ -1,5 +1,6 @@
 import { Column } from '../model/column';
 import { Task } from '../model/task';
+import boardDb from '../repository/board.db';
 import columnDb from '../repository/column.db';
 import taskDb from '../repository/task.db';
 
@@ -20,7 +21,20 @@ const createColumn = (column: {columnId: string, columnName: string, tasks: Task
 }
 
 const deleteColumn = (columnId: string) => {
+    const column = columnDb.getColumnById(columnId);
+    if (!column) {
+        throw new Error('Column not found');
+    }
+    const tasks = column.getTasks();
+    if (tasks.length > 0) {
+        tasks.forEach(task => taskDb.removeTask(task.getTaskId()));
+    }
     columnDb.removeColumn(columnId);
+    // in actual production, we would have another property that is essentially the path, which is the combination of the parent board id and column id, or use an actual database table to store the relationships between boards and columns
+    // We are basically brute forcing this lmao.
+    const boardId = `board${columnId.split('-').slice(1).join('-')}`;
+    const board = boardDb.getBoardById(boardId)!;
+    board.removeColumn(columnId);
 }
 
 const addTaskToColumn = (columnId: string, task: Task) => {
