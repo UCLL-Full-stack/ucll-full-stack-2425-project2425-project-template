@@ -18,6 +18,7 @@ const CompetitionOverviewTable: React.FC<CompetitionOverviewTableProps> = ({ com
     const handleEditClick = (competition: Competition) => {
         setSelectedCompetition(competition);
         setIsModalOpen(true);
+        router.push(`/competitions`);
     };
 
     const handleSave = async (updatedCompetition: Competition) => {
@@ -25,9 +26,9 @@ const CompetitionOverviewTable: React.FC<CompetitionOverviewTableProps> = ({ com
             const savedCompetition = await CompetitionService.editCompetition(updatedCompetition);
             setCompetitions(competitions.map(comp => comp.id === savedCompetition.id ? savedCompetition : comp));
             setIsModalOpen(false);
+            router.push(`/competitions`);
         } catch (error) {
             console.error('Failed to save competition:', error);
-            // Optionally show an error message to the user
         }
     };
 
