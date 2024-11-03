@@ -92,4 +92,44 @@ submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFun
     }
 });
 
+/**
+ * @swagger
+ * /submission_forms/accept/{raceId}:
+ *   post:
+ *     summary: Accept a submission form by race ID
+ *     tags: [Submission_form]
+ *     description: Accept a submission form by providing the race ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               raceId:
+ *                 type: number
+ *                 format: int64
+ *     responses:
+ *       200:
+ *         description: Submission form accepted.
+ *       400:
+ *         description: Invalid input.
+ *       500:
+ *         description: Internal server error.
+ */
+submissionFormRouter.post('/accept/:raceId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const raceId = parseInt(req.params.raceId);
+        submissionFormService.acceptSubmissionForm(raceId);
+        res.status(200).json({ message: 'Submission form accepted.' });
+    } catch (error) {
+        const err = error as Error;
+        if (err.message.includes('required')) {
+            res.status(404).json({ error: err.message });
+        } else {
+            next(err);
+        }
+    }
+});
+
 export { submissionFormRouter };
