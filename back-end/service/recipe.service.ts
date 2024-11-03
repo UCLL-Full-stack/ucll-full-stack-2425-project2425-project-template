@@ -13,12 +13,19 @@ const getRecipeById = (id: number): Recipe => {
 const updateRecipe = (id: number, recipeData: RecipeUpdateInput): Recipe => {
     const recipe = recipeDb.getRecipeById({ id });
     if (!recipe) throw new Error(`Recipe with id ${id} does not exist.`);
+
+    if (recipeData.title !== undefined && recipeData.title.trim() === '') {
+        throw new Error('Invalid title');
+    }
+
     recipe.updateRecipe(recipeData);
     recipeDb.saveRecipe(recipe);
     return recipe;
 };
 
 const deleteRecipe = (id: number): void => {
+    if (id <= 0) throw new Error('Invalid recipe ID');
+
     const recipe = recipeDb.getRecipeById({ id });
     if (!recipe) throw new Error(`Recipe with id ${id} does not exist.`);
     recipeDb.deleteRecipe({ id });

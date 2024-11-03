@@ -17,7 +17,7 @@ const user1 = new User({
     }),
 });
 
-// Mock Ingredients (including new ones)
+// Mock Ingredients
 const ingredient1 = new Ingredient({ id: 1, name: 'Spaghetti', category: 'Pantry' });
 const ingredient2 = new Ingredient({ id: 2, name: 'Tomato Sauce', category: 'Pantry' });
 const ingredient3 = new Ingredient({ id: 3, name: 'Chicken Breast', category: 'Meat & Fish' });
@@ -32,7 +32,7 @@ const ingredient11 = new Ingredient({ id: 11, name: 'Flour', category: 'Pantry' 
 const ingredient12 = new Ingredient({ id: 12, name: 'Sugar', category: 'Pantry' });
 const ingredient13 = new Ingredient({ id: 13, name: 'Chocolate Chips', category: 'Pantry' });
 
-// Create RecipeIngredient instances (including new ones)
+// Create RecipeIngredient instances
 const recipe1Ingredients = [
     new RecipeIngredient({
         recipe: {} as Recipe,
@@ -135,7 +135,7 @@ const recipe6Ingredients = [
     }),
 ];
 
-// Mock Recipes (including new ones)
+// Mock Recipes
 const recipe1 = new Recipe({
     id: 1,
     title: 'Spaghetti Bolognese',
@@ -218,7 +218,6 @@ const recipe6 = new Recipe({
     isFavorite: false,
 });
 
-// Set the recipe property for each RecipeIngredient instance
 recipe1Ingredients.forEach((ingredient) => ingredient.setRecipe(recipe1));
 recipe2Ingredients.forEach((ingredient) => ingredient.setRecipe(recipe2));
 recipe3Ingredients.forEach((ingredient) => ingredient.setRecipe(recipe3));
@@ -226,7 +225,6 @@ recipe4Ingredients.forEach((ingredient) => ingredient.setRecipe(recipe4));
 recipe5Ingredients.forEach((ingredient) => ingredient.setRecipe(recipe5));
 recipe6Ingredients.forEach((ingredient) => ingredient.setRecipe(recipe6));
 
-// Mock Data Export
 const recipes = [recipe1, recipe2, recipe3, recipe4, recipe5, recipe6];
 
 export default {
