@@ -1,7 +1,5 @@
-import { Review } from "../model/review";
-import productDb from "./product.db";
-
-
+import { Review } from '../model/review';
+import productDb from './product.db';
 
 const createReviewForProduct = async (productId: number, review: Review): Promise<Review> => {
     const product = await productDb.getProductById({ id: productId });
@@ -10,6 +8,6 @@ const createReviewForProduct = async (productId: number, review: Review): Promis
     }
     product.addReviewToProduct(review);
     return review;
-}
+};
 
-export default { createReviewForProduct }
+export default { createReviewForProduct };
