@@ -125,7 +125,7 @@ userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.get('/login', (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/login', (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         const result = userService.getUserByEmailAndPassword(email, password);
