@@ -1,6 +1,5 @@
-import { appWithTranslation } from "next-i18next";
 import { AppProps } from "next/app";
-import Sidebar from "@/components/app/Sidebar";
+import Sidebar from "@/components/Sidebar";
 import "@/styles/globals.css";
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -14,4 +13,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default appWithTranslation(App);
+export default App;
