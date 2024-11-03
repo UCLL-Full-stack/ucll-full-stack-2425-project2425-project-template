@@ -1,3 +1,5 @@
+import { Trip } from "@/types";
+
 const getAllTrips = async () => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/trips", {
       method: "GET",
@@ -15,10 +17,19 @@ const getAllTrips = async () => {
       },
     });
   }
-  
+  const createTrip = (trip: Trip) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/trips`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(trip),
+    })
+};
   const TripService = {
     getAllTrips,
-    getTripById
+    getTripById,
+    createTrip
   };
   
   export default TripService;
