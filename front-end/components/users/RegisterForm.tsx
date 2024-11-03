@@ -45,7 +45,7 @@ const RegisterForm: React.FC<Props> = ({ user, handleSubmit, handleInputChange }
                 />
 
 
-                <label htmlFor="birthdate"></label>
+                <label htmlFor="birthdate">Birth date</label>
                 <input 
                     type="date" 
                     value={user.birthDate ? user.birthDate.toISOString().split("T")[0] : ""} 

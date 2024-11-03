@@ -17,21 +17,28 @@ export class Account {
     // public loans: Loan[];
     // public budgetgoals: Budgetgoal[];
 
-    constructor(account: { id?: number; isShared: boolean; type: string; users: User[] }) {
+    constructor(account: {
+        id?: number;
+        isShared: boolean;
+        type: string;
+        users: User[];
+        balance?: number;
+        startDate?: Date;
+        endDate?: Date | null;
+        status?: string;
+    }) {
         this.validate(account);
 
         this.id = account.id;
         this.type = account.type;
         this.accountNumber = this.generateAccountNumber();
-        this.balance = 0;
+        this.balance = account.balance || 0; // Set default balance
         this.isShared = account.isShared;
-        this.startDate = new Date();
-        this.endDate = null;
-        this.status = 'Active';
+        this.startDate = account.startDate || new Date(); // Set default to now
+        this.endDate = account.endDate || null; // Default to null
+        this.status = account.status || 'Active'; // Default to 'Active'
         this.transactions = [];
         this.users = account.users;
-        // this.loans = [];
-        // this.budgetgoals = [];
     }
 
     getId(): number | undefined {

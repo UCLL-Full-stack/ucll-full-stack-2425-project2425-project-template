@@ -135,4 +135,40 @@ userRouter.post('/login', (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+/**
+ * @swagger
+ * /users/{nationalRegisterNumber}:
+ *   get:
+ *     summary: Get a user by national register number
+ *     parameters:
+ *       - in: path
+ *         name: nationalRegisterNumber
+ *         required: true
+ *         description: The user's national register number
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The user was successfully retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: The user could not be retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+userRouter.get('/:nationalRegisterNumber', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const nationalRegisterNumber = req.params.nationalRegisterNumber;
+        const result = userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
+        res.status(200).json(result);
+    } catch (error: any) {
+        next(error);
+    }
+});
+
 export { userRouter };

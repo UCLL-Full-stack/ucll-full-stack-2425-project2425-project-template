@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Account } from '../../types';
+import { User } from '@/types';
 
 type AccountOverviewTableProps = {
   user: User;
@@ -19,17 +19,23 @@ const AccountOverviewTable: React.FC<AccountOverviewTableProps> = ({ user }) => 
         </tr>
       </thead>
       <tbody>
-      {user.accounts && user.accounts.map((account, index) => (
-          <tr key={index}>
-            <td>{account.accountNumber}</td>
-            <td>{account.balance}</td>
-            <td>{account.type}</td>
-            <td>{account.status}</td>
-            <td>{account.startDate?.toLocaleDateString()}</td>
-            <td>{account.endDate ? account.endDate.toLocaleDateString() : 'N/A'}</td>
-          </tr>
-        ))}
-      </tbody>
+  {user.accounts && user.accounts.length > 0 ? (
+    user.accounts.map((account) => (
+      <tr key={account.id}>
+        <td>{account.accountNumber}</td>
+        <td>{account.balance}</td>
+        <td>{account.type}</td>
+        <td>{account.status}</td>
+        <td>{account.startDate ? new Date(account.startDate).toLocaleDateString() : 'N/A'}</td>
+        <td>{account.endDate ? new Date(account.endDate).toLocaleDateString() : 'N/A'}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={6}>No accounts available.</td>
+    </tr>
+  )}
+</tbody>
     </table>
   );
 };

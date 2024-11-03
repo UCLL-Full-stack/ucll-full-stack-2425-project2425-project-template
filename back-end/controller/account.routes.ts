@@ -96,31 +96,34 @@ const accountRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Account'
  */
-accountRouter.post('/users/:email/accounts', (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { nationalRegisterNumber } = req.params;
-        const account = <AccountInput>req.body;
+accountRouter.post(
+    '/users/:nationalRegisterNumber/accounts',
+    (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { nationalRegisterNumber } = req.params;
+            const account = <AccountInput>req.body;
 
-        // Find the user by national register number
-        const currentUser = userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
-        if (!currentUser) {
-            throw new Error(
-                `User with national register number ${nationalRegisterNumber} not found`
-            );
-        }
-        const user: UserInput = currentUser;
-        if (!currentUser) {
-            throw new Error(
-                `User with national register number ${nationalRegisterNumber} not found`
-            );
-        }
+            // Find the user by national register number
+            const currentUser = userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
+            if (!currentUser) {
+                throw new Error(
+                    `User with national register number ${nationalRegisterNumber} not found`
+                );
+            }
+            const user: UserInput = currentUser;
+            if (!currentUser) {
+                throw new Error(
+                    `User with national register number ${nationalRegisterNumber} not found`
+                );
+            }
 
-        const result = accountService.createAccount(account, currentUser);
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
+            const result = accountService.createAccount(account, currentUser);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 /**
  * @swagger
@@ -148,7 +151,7 @@ accountRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
         const id = Number(req.params.id);
         const account = accountService.getAccountById({ id });
         res.status(200).json(account);
-    } catch(error: any) {
+    } catch (error: any) {
         next(error);
     }
 });

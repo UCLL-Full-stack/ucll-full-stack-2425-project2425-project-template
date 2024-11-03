@@ -8,9 +8,13 @@ const Header: React.FC = () => {
         Personal Finance Tracker
       </a>
       <nav className="nav justify-content-center">
-        <Link href="/" className="nav-link px-4 fs-5 text-white">
+      <Link href="/users/register" className="nav-link px-4 fs-5 text-white">
+      Register</Link>
+        <Link href="/users/login" className="nav-link px-4 fs-5 text-white">
+        Log in</Link>
+        {/* <Link href="/" className="nav-link px-4 fs-5 text-white">
           Accounts
-        </Link>
+        </Link> */}
       </nav>
     </header>
   );

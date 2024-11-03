@@ -1,11 +1,9 @@
 import { Authentication, User } from "@/types";
-
 type Props = {
     credentials: Authentication
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
     handleInputChange: (field: keyof User, value: any) => void;
 }
-
 const LoginForm: React.FC<Props> = ({ credentials, handleSubmit, handleInputChange}) => {
     return (
         <>
@@ -17,7 +15,6 @@ const LoginForm: React.FC<Props> = ({ credentials, handleSubmit, handleInputChan
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     placeholder="Email"
                 />
-
                 <label htmlFor="Password">Password <sup>*</sup></label>
                 <input 
                     type="password" 
@@ -30,5 +27,4 @@ const LoginForm: React.FC<Props> = ({ credentials, handleSubmit, handleInputChan
         </>
     );
 };
-
 export default LoginForm;

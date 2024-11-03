@@ -11,7 +11,7 @@ const RegisterUser: React.FC = () => {
         name: "",
         email: "",
         password: "",
-        birthDate: null,
+        birthDate: undefined,
         isAdministrator: false,
         phoneNumber: ""
     });
