@@ -1,40 +1,27 @@
-import { Recipe } from '../../model/recipe';
-import { User } from '../../model/user';
-import { Tag } from '../../model/tags';
+import {Recipe} from '../../model/recipe';
+import {User} from '../../model/user';
+import {Tag} from '../../model/tags';
 
-let recipeId: number | undefined;
-let user: User;
-let title: string;
-let description: string;
-let instructions: string;
-let nutritionFacts: string;
-let cookingTips: string;
-let extraNotes: string;
-let createdAt: Date;
-let updatedAt: Date;
-let tags: Tag[];
 
-beforeEach(() => {
-    user = new User({
-        id: undefined,
-        username: '@BobHope',
-        firstName: 'Bob',
-        lastName: 'Hope',
-        email: 'bobhope@gmail.com',
-        password: 'bob123',
-        role: 'user',
-    });
-    tags = [new Tag({ name: 'Italian', description: 'Food from Italy', recipes: [] })];
-    recipeId = undefined;
-    title = 'spaghetti';
-    description = 'A delicious spaghetti recipe.';
-    instructions = '1. Boil water. 2. Cook pasta. 3. Prepare sauce. 4. Mix pasta and sauce.';
-    nutritionFacts = 'Calories: 200, Protein: 7g, Carbs: 30g, Fat: 5g';
-    cookingTips = 'Use fresh tomatoes for the sauce.';
-    extraNotes = 'Can be stored in the fridge for up to 3 days.';
-    createdAt = new Date('2023-01-01T00:00:00Z');
-    updatedAt = new Date('2023-01-02T00:00:00Z');
+const recipeId: number | undefined = undefined;
+const user = new User({
+    id: undefined,
+    username: '@BobHope',
+    firstName: 'Bob',
+    lastName: 'Hope',
+    email: 'bobhope@gmail.com',
+    password: 'bob123',
+    role: 'user',
 });
+const title: string = 'spaghetti';
+const description: string = 'A delicious spaghetti recipe.';
+const instructions: string = '1. Boil water. 2. Cook pasta. 3. Prepare sauce. 4. Mix pasta and sauce.';
+const nutritionFacts: string = 'Calories: 200, Protein: 7g, Carbs: 30g, Fat: 5g';
+const cookingTips: string = 'Use fresh tomatoes for the sauce.';
+const extraNotes: string = 'Can be stored in the fridge for up to 3 days.';
+const createdAt: Date = new Date('2023-01-01T00:00:00Z');
+const updatedAt: Date = new Date('2023-01-02T00:00:00Z');
+const tags: Tag[] = [new Tag({name: 'Italian', description: 'Food from Italy'})];
 
 test(`given: valid values for recipe, when: recipe is created, then: recipe is created with those values`, () => {
     // given
@@ -50,12 +37,12 @@ test(`given: valid values for recipe, when: recipe is created, then: recipe is c
         extraNotes,
         createdAt,
         updatedAt,
-        tags: [],
+        tags,
     });
 
     // then
     expect(recipe.getRecipeId()).toBe(recipeId);
-    expect(recipe.getUser()).toEqual(user); 
+    expect(recipe.getUser()).toEqual(user);
     expect(recipe.getTitle()).toBe(title);
     expect(recipe.getDescription()).toBe(description);
     expect(recipe.getInstructions()).toBe(instructions);
