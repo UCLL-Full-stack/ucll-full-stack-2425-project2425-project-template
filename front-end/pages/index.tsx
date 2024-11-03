@@ -29,7 +29,7 @@ const Home: FC = () => {
     setIsFormOpen(false);
   }
 
-  const handleFormSubmit = (boardData: { boardName: string; columns: string }) => {
+  const handleFormSubmit = (boardData: { boardName: string; columns: string[]; guild: string }) => {
     console.log('Form submitted with data:', boardData);
     handleFormClose();
   }

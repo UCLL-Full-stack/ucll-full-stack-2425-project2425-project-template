@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 interface CreateBoardFormProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (data: { boardName: string; columns: string; guild: string }) => void;
+    onSubmit: (data: { boardName: string; columns: string[]; guild: string }) => void;
     selectedGuildId?: string | null;
     user: User;
     guilds: Guild[];
@@ -24,7 +24,6 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // checks if selectedGuildId is of type string
         if (typeof selectedGuildId === 'string') {
             setSelectedGuild(selectedGuildId);
         }
@@ -37,10 +36,11 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
             return;
         }
         setError(null);
+        const columnsArray = columns.split(',').map(column => column.trim()).filter(column => column !== '');
         onSubmit({
             boardName,
             guild: selectedGuild || '',
-            columns,
+            columns: columnsArray
         });
         setBoardName('');
         setColumns('');
