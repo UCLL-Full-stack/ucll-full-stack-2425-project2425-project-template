@@ -7,33 +7,33 @@ export type RecipeIngredient = {
 };
 
 export type Recipe = {
-    id?: number;
+    _recipeId?: number;
     ingredients: RecipeIngredient[];
-    user: User;
-    title: string;
-    description: string;
-    instructions: string;
-    nutritionFacts: string,
-    cookingTips: string,
-    extraNotes: string,
-    createdAt: Date,
-    updatedAt: Date,
-    tags: Tag[]
+    _user: User;
+    _title: string;
+    _description: string;
+    _instructions: string;
+    _nutritionFacts: string;
+    _cookingTips: string;
+    _extraNotes: string;
+    _createdAt: Date;
+    _updatedAt: Date;
+    _tags: Tag[];
 }
 
 export type Role = 'admin' | 'user' | 'guest';
 
 export type User = {
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    role: Role;
+    _username: string;
+    _firstName: string;
+    _lastName: string;
+    _email: string;
+    _password: string;
+    _role: Role;
 }
 
 export type Tag = {
-    tagId?: number
-    name: string
-    description: string
+    _tagId?: number;
+    _name: string;
+    _description: string;
 }

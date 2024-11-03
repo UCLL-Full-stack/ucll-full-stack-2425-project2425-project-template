@@ -2,7 +2,7 @@ import Head from "next/head";
 import Header from "@components/header";
 import RecipeOverviewGrid from "@components/recipes/RecipeOverviewGrid";
 import recipeService from "@services/recipeService";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Recipe} from "@types";
 
 const RecipeOverview: React.FC = () => {
@@ -11,6 +11,7 @@ const RecipeOverview: React.FC = () => {
 
     const getRecipes = async () => {
         const response = await recipeService.getAllRecipes();
+        console.log(response)
         if (!response.ok) {
             return null
         }

@@ -9,6 +9,14 @@ const getAllRecipes =  (): Recipe[] => {
     return recipeDb.getAllRecipes();
 }
 
+const getRecipeById = ({id}: {id: number}) =>{
+    const recipe = recipeDb.getRecipeById({id: id})
+    if(!recipe){
+        throw new Error(`We could not find a recipe with the id: ${id}`)
+    }
+    return recipe
+}
+
 const createRecipe = ({
                           user: userInput,
                           ingredients: recipeIngredientInputs,
@@ -72,4 +80,4 @@ const createRecipe = ({
     return recipeDb.createRecipe(recipe)
 }
 
-export default {createRecipe, getAllRecipes}
+export default {createRecipe, getAllRecipes, getRecipeById}
