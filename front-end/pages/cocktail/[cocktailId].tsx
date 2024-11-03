@@ -4,7 +4,7 @@ import Header from "@components/header";
 import Head from "next/head";
 import CocktailService from "@services/CocktailService";
 import { Cocktail } from "@types";
-import CocktailDetails from '@components/cocktail/CocktailDetails';
+import CocktailDetails from '@components/cocktail/cocktailDetails';
 
 const CocktailDetailsPage: React.FC = () => {
     const router = useRouter();
