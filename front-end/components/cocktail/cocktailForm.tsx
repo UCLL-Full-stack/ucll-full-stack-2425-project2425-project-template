@@ -53,7 +53,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div>
-        <label htmlFor="strongness">Strongness (0-100):</label>
+        <label htmlFor="strongness">Strongness (0-5):</label>
         <input
           type="number"
           id="strongness"
