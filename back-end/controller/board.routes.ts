@@ -3,8 +3,7 @@ import boardService from '../service/board.service';
 
 const boardRouter = Router();
 
-/**
- * @swagger
+
 /**
  * @swagger
  * components:

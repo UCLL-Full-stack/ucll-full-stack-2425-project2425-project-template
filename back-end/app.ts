@@ -9,6 +9,7 @@ import boardRouter from './controller/board.routes';
 import columnRouter from './controller/column.routes';
 import guildRouter from './controller/guild.routes';
 import taskRouter from './controller/task.routes';
+import userRouter from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -52,6 +53,7 @@ app.use('/api/boards', boardRouter);
 app.use('/api/columns', columnRouter);
 app.use('/api/guilds', guildRouter);
 app.use('/api/tasks', taskRouter);
+app.use('/api/users', userRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
