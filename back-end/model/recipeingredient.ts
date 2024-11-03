@@ -1,16 +1,43 @@
 export class RecipeIngredient {
-    private recipeingredientId?: number;
-    private recipeId: number;
-    private ingredientId: number;
-    private unit: string;
-    private quantity: number;
+    private _recipeingredientId?: number;
+    private _recipeId: number;
+    private _ingredientId: number;
+    private _unit: string;
+    private _quantity: number;
 
-    constructor(recipeingredient: { recipeingredientId?: number; recipeId: number; ingredientId: number; unit: string; quantity: number; }) {
-        this.recipeingredientId = recipeingredient.ingredientId;
-        this.recipeId = recipeingredient.recipeId;
-        this.ingredientId = recipeingredient.ingredientId;
-        this.unit = recipeingredient.unit;
-        this.quantity = recipeingredient.quantity;
+
+    constructor(recipeIngredient: {
+        recipeingredientId?: number;
+        recipeId: number;
+        ingredientId: number;
+        unit: string;
+        quantity: number;
+    }) {
+        this._recipeingredientId = recipeIngredient.recipeingredientId;
+        this._recipeId = recipeIngredient.recipeId;
+        this._ingredientId = recipeIngredient.ingredientId;
+        this._unit = recipeIngredient.unit;
+        this._quantity = recipeIngredient.quantity;
+    }
+
+    getRecipeIngredientId(): number| undefined {
+        return this._recipeingredientId;
+    }
+
+    getRecipeId(): number {
+        return this._recipeId;
+    }
+
+    getIngredientId(): number {
+        return this._ingredientId;
+    }
+
+    getUnit(): string {
+        return this._unit;
+    }
+
+    getQuantity(): number {
+        return this._quantity;
     }
 
     /**
