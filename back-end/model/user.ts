@@ -40,6 +40,27 @@ export class User {
     }
 
     validate(user: { name: string; email: string; password: string; birthday: Date }) {
-        // will be implemented later
+        if (!user.name) {
+            throw new Error('Name is required.');
+        }
+        if (!user.email) {
+            throw new Error('E-mail is required');
+        }
+
+        if (!this.emailRegex(user.email)) {
+            throw new Error('E-mail is incorrect.');
+        }
+
+        if (!user.password) {
+            throw new Error('Password is required');
+        }
+        if (!user.birthday) {
+            throw new Error('Birthday is required');
+        }
+    }
+
+    emailRegex(email: string) {
+        const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        return expression.test(email);
     }
 }

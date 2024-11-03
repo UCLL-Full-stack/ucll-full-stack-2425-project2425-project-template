@@ -84,7 +84,8 @@ const players = [
         class: 'Skier',
         currency: 457532,
         user: milan,
-    }),    new Player({
+    }),
+    new Player({
         id: 7,
         name: 'Wild',
         statistics: 'hp: 87, power: 147',
@@ -124,7 +125,6 @@ const players = [
         currency: 4,
         user: dean,
     }),
-
 ];
 
 /* 

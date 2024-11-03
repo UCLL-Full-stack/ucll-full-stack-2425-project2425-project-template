@@ -57,6 +57,20 @@ export class Player {
         currency: number;
         user: User;
     }) {
-        // will be implemented later.
+        if (!player.name) {
+            throw new Error('Name is required.');
+        }
+        if (!player.statistics) {
+            throw new Error('Statistics are required.');
+        }
+        if (!player.class) {
+            throw new Error('Class is required.');
+        }
+        if (player.currency < 0) {
+            throw new Error('Currency cannot be negative.');
+        }
+        if (!player.user) {
+            throw new Error('A correct user is required.');
+        }
     }
 }
