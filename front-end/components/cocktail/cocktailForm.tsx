@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Cocktail } from '@types';
 
 type CocktailFormProps = {
-  onSubmit: (cocktail: { id: number; name: string; description: string; strongness: number; image: string }) => void;
+  onSubmit: (cocktail: { id: number; name: string; description: string; strongness: number; imageUrl: string }) => void;
 };
 
 const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
@@ -10,19 +10,16 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [strongness, setStrongness] = useState<number>(0);
-  const [image, setImage] = useState<string>('');
-
-  setImage('/example.png');
-
+  const [imageUrl, setImage] = useState<string>('');
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const newCocktail = { id, name, description, strongness, image };
+    const newCocktail = { id, name, description, strongness, imageUrl };
     onSubmit(newCocktail);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
+      <div> 
         <label htmlFor="id">ID:</label>
         <input
           type="number"
@@ -61,6 +58,16 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
           required
           min="0"
           max="100"
+        />
+      </div>
+      <div>
+        <label htmlFor="image">Image URL:</label>
+        <input
+          type="text"
+          id="image"
+          value={imageUrl}
+          onChange={(e) => setImage(e.target.value)}
+          required
         />
       </div>
       <button type="submit">Add Cocktail</button>

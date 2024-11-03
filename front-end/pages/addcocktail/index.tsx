@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import Header from '@components/header';
+import CocktailForm from '@components/cocktail/cocktailForm';
+import CocktailService from '@services/CocktailService';
 
 const Home: React.FC = () => {
   return (
@@ -12,6 +14,10 @@ const Home: React.FC = () => {
       </Head>
       <main>
         <Header></Header>
+
+        <CocktailForm onSubmit={function (cocktail: { id: number; name: string; description: string; strongness: number; imageUrl: string; }): void {
+                  CocktailService.addCocktail(cocktail)
+              } }></CocktailForm>
       </main>
     </>
   );
