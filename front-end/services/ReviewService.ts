@@ -24,9 +24,9 @@ const addReviewToProduct = async (productId:String, reviewData:Review) => {
   
   
   
-  const LecturerService = {
+  const ReviewService = {
     addReviewToProduct,
   };
   
-  export default LecturerService;
+  export default ReviewService;
   

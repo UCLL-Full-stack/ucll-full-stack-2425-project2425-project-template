@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ProductService from "@services/ProductService";
 import ProductInfo from "@components/product/productInfo";
+import ReviewForm from "@components/review/addReviewForm";
 
 const ReadProductById = () => {
   const [product, setProduct] = useState<Product | null>(null);
@@ -36,6 +37,16 @@ const ReadProductById = () => {
         {!product && <p>Loading...</p>}
         <section>
           {product && <ProductInfo product={product} />}
+          {product && product.id !== undefined && (
+            <ReviewForm 
+              productId={product.id} 
+              onAddReview={async (reviewData) => {
+                setTimeout(async () => {
+                  await getProductById();
+                }, 1500);
+              }} 
+            />
+          )}
         </section>
       </main>
     </>
