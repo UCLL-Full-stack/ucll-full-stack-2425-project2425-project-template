@@ -101,14 +101,66 @@ export const validateTask = (req: Request, res: Response, next: NextFunction) =>
             return res.status(400).json({ error: 'Task due date must be a valid date string.' });
         }
     }
-    // if (assignees && !Array.isArray(assignees)) {
-    //     return res.status(400).json({ error: 'Assignees must be an array.' });
-    // }
-    // for (const assignee of assignees){
-    //     validateUser({ body: assignee } as Request, res, next);
-    // }
+    if(assignees){
+        if (!Array.isArray(assignees)) {
+            return res.status(400).json({ error: 'Assignees must be an array.' });
+        }
+        for (const assignee of assignees){
+            if (!assignee || typeof assignee !== 'object') {
+                return res.status(400).json({ error: 'Assignee must be an object.' });
+            }
+            if (!assignee.userId || typeof assignee.userId !== 'string') {
+                return res.status(400).json({ error: 'Assignee must have a userId.' });
+            }
+            const userExists = userDb.getUserById(assignee.userId);
+            if (!userExists) {
+                return res.status(400).json({ error: 'Assignee does not exist.' });
+            }
+        }
+    }
     next();
 };
+
+export const validatePartialTask = (req: Request, res: Response, next: NextFunction) => {
+    const { title, description, dueDate, assignees } = req.body;
+    if (title && typeof title !== 'string') {
+        return res.status(400).json({ error: 'Task title must be a string.' });
+    }
+
+    if (description && typeof description !== 'string') {
+        return res.status(400).json({ error: 'Task description must be a string.' });
+    }
+
+    if (dueDate) {
+        const checkDueDate = new Date(dueDate);
+        if (isNaN(checkDueDate.getTime())) {
+            return res.status(400).json({ error: 'Task due date must be a valid date string.' });
+        }
+    }
+
+    if (assignees) {
+        if (!Array.isArray(assignees)) {
+            return res.status(400).json({ error: 'Assignees must be an array.' });
+        }
+        for (const assignee of assignees) {
+            if (typeof assignee === 'string') {
+                const userExists = userDb.getUserById(assignee);
+                if (!userExists) {
+                    return res.status(400).json({ error: `Assignee with userId ${assignee} does not exist.` });
+                }
+            } else if (typeof assignee === 'object' && assignee.userId) {
+                const userExists = userDb.getUserById(assignee.userId);
+                if (!userExists) {
+                    return res.status(400).json({ error: `Assignee with userId ${assignee.userId} does not exist.` });
+                }
+            } else {
+                return res.status(400).json({ error: 'Assignee must be a userId string or an object with a userId property.' });
+            }
+        }
+    }
+
+    next();
+}
 
 export const validateGuild = (req: Request, res: Response, next: NextFunction) => {
     const { guildName, settings, roles, members } = req.body;

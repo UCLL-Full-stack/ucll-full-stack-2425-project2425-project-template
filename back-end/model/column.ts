@@ -56,7 +56,7 @@ export class Column{
         return {
             columnId: this.columnId,
             columnName: this.columnName,
-            tasks: this.tasks.map(task => task.getTaskId())
+            tasks: this.tasks.map(task => task.toJSON())
         }
     }
 }
