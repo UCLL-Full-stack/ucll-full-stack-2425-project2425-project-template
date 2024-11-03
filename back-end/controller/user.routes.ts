@@ -22,6 +22,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
@@ -66,6 +67,12 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  */
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json(await userService.getUserById(parseInt(req.params.id)));
+});
+
+userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.body as UserInput;
+    const result = await userService.createUser(user);
+    res.status(200).json(result);
 });
 
 

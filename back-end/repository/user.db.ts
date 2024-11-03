@@ -25,7 +25,13 @@ const getUserById = ({ id }: { id: number }): User | null => {
     return user; 
 }
 
+const createUser = (user: User): User => {
+    users.push(user);
+    return user;
+};
+
 export default {
     getAllUsers,
     getUserById,
+    createUser,
 };

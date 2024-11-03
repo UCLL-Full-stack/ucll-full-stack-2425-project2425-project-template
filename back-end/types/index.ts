@@ -37,10 +37,10 @@ type TaskInput = {
 
 type ProfileInput = {
     id?: number;
+    email?: string;
     firstName?: string;
     lastName?: string;
-    email?: string;
-    phoneNumber?: string;
-    address?: string;
-    createdAt?: Date;
+    bio?: string;
 };
+
+export { UserInput, GroupInput, BoardInput, TaskInput, ProfileInput };

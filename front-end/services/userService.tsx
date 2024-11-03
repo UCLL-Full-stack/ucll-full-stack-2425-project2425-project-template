@@ -3,7 +3,7 @@ import { Profile } from "@/types";
 const createUser = (name: string, password: string, profile?: Profile) => {
     const data = {
         username: name,
-        password: password,
+        hashedPassword: password,
         profile: profile
     };
 

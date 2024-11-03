@@ -1,4 +1,4 @@
-import UserService from '@/services/UserService';
+import UserService from '@/services/userService';
 import router from 'next/router';
 import React, { useState } from 'react';
 import { Profile } from '@/types';
