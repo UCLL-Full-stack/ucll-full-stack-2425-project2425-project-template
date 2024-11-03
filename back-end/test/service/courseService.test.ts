@@ -159,7 +159,6 @@ describe('Course Service', () => {
     describe('update course', () => {
         beforeEach(() => {
             mockDBFindById.mockImplementation((id) => dummyCourses[id-1]);
-            mockDBFindByNameAndPhase.mockImplementation((name, phase) => null);
             mockISPServiceGetAllByCourseId.mockImplementation((id) => []);
             mockDBSave.mockImplementation((course) => course);
         });  
@@ -179,29 +178,8 @@ describe('Course Service', () => {
     
             expect(result).toEqual(expectedCourse);
             expect(mockDBFindById).toHaveBeenCalledTimes(1);
-            expect(mockDBFindByNameAndPhase).toHaveBeenCalledTimes(1);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(0);
             expect(mockDBSave).toHaveBeenCalledTimes(1);
-        });
-        test('given a course that already exists with given phase and name, when updateCourse is called, then it should throw an exception', () => {
-            const expectedCourse = dummyCourses[0];
-            const inputInfo = new CourseUpdateView({
-                name: expectedCourse.name,
-                description: expectedCourse.description,
-                phase: expectedCourse.phase,
-                credits: expectedCourse.credits,
-                lecturers: expectedCourse.lecturers,
-                isElective: expectedCourse.isElective,
-                requiredPassedCourses: [],
-            });
-    
-            mockDBFindByNameAndPhase.mockImplementation((name, phase) => expectedCourse);
-    
-            expect(() => courseService.updateCourse(1, inputInfo)).toThrow(errorMessages.ERROR_COURSE_EXIST(expectedCourse.name, expectedCourse.phase));
-            expect(mockDBFindById).toHaveBeenCalledTimes(1);
-            expect(mockDBFindByNameAndPhase).toHaveBeenCalledTimes(1);
-            expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(0);
-            expect(mockDBSave).toHaveBeenCalledTimes(0);
         });
         test('given a course that is chosen in ISP, when updateCourse is called with new phase or credits, then it should throw an exception', () => {
             const expectedCourse = dummyCourses[0];
@@ -219,7 +197,6 @@ describe('Course Service', () => {
     
             expect(() => courseService.updateCourse(1, inputInfo)).toThrow(errorMessages.ERROR_COURSE_PHASE_CREDITS_CHANGE);
             expect(mockDBFindById).toHaveBeenCalledTimes(1);
-            expect(mockDBFindByNameAndPhase).toHaveBeenCalledTimes(1);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(1);
             expect(mockDBSave).toHaveBeenCalledTimes(0);
         });
@@ -237,7 +214,6 @@ describe('Course Service', () => {
     
             expect(() => courseService.updateCourse(1, inputInfo)).toThrow(errorMessages.ERROR_COURSE_REQUIRE_ITSELF);
             expect(mockDBFindById).toHaveBeenCalledTimes(1);
-            expect(mockDBFindByNameAndPhase).toHaveBeenCalledTimes(1);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(0);
             expect(mockDBSave).toHaveBeenCalledTimes(0);
         });
