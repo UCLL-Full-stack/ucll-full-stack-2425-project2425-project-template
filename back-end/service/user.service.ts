@@ -17,7 +17,7 @@ const getUserByEmail = (email: string): User => {
 
 const registerUser = ( newUser: User ): User => {
     if (userDB.getUserByEmail({ email: newUser.getEmail().toLowerCase()})) { // Checking for duplicate accounts
-        throw new Error(`User with email ${newUser.getEmail()} does not exist`);
+        throw new Error(`User with email ${newUser.getEmail()} already exist`);
     }
 
     return userDB.registerUser({ newUser });
