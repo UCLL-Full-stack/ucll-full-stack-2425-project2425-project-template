@@ -104,15 +104,15 @@ const Home: FC = () => {
             {selectedGuildId && (
                 <div className="mt-8 p-4 bg-gray-800 rounded-lg m-4">
                     <h2 className="text-white text-xl font-bold">Boards</h2>
-                    <div className="mt-4">
-                        {boards.length === 0 ? (
-                            <p>No boards available for this guild.</p>
-                        ) : (
-                            boards.map(board => (
-                                <BoardCard key={board.boardId} board={board} />
-                            ))
-                        )}
-                    </div>
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {boards.length === 0 ? (
+                          <p>No boards available for this guild.</p>
+                      ) : (
+                          boards.map(board => (
+                              <BoardCard key={board.boardId} board={board} />
+                          ))
+                      )}
+                      </div>
                 </div>
             )}
           </main>
