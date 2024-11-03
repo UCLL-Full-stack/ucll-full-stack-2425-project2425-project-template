@@ -60,7 +60,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
           onChange={(e) => setStrongness(Number(e.target.value))}
           required
           min="0"
-          max="100"
+          max="5"
         />
       </div>
       <div>
