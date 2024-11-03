@@ -20,7 +20,7 @@ const getAllShort = () : CourseShortView[] => {
 const getCourseById = (id: number): Course => {
     let res: Course | null = CourseRepository.findById(id);
     if (res === null) {
-        throw new Error(ERROR_COURSE_NOT_EXIST(id));
+        throw new Error(ERROR_COURSE_NOT_EXIST);
     }
     return res;
 }
@@ -35,6 +35,7 @@ const createCourse = (courseInfo: CourseUpdateView) : Course => {
     });
     
     let course = new Course({
+        id: undefined,
         name: courseInfo.name,
         description: courseInfo.description,
         phase: courseInfo.phase,
@@ -91,7 +92,7 @@ const deleteCourses = (ids: number[]) : String => {
 const throwErrorIfNotExist = (id: number) : void => {
     let res: Course | null = CourseRepository.findById(id);
     if (res === null) {
-        throw new Error(ERROR_COURSE_NOT_EXIST(id));
+        throw new Error(ERROR_COURSE_NOT_EXIST);
     }
 }
 
@@ -105,29 +106,29 @@ const throwErrorIfExist = (name: string, phase: number) : void => {
 const throwErrorIfChosenInIsp = (id: number, errorMessage?: string) : void => {
     let res: ISP[] = ISPService.getAllByCourseId(id);
     if (res.length > 0) {
-        throw new Error(errorMessage || ERROR_COURSE_CHOSEN_IN_ISP(id));
+        throw new Error(errorMessage || ERROR_COURSE_CHOSEN_IN_ISP);
     }
 }
 
 const throwErrorIfPassedByStudent = (id: number) : void => {
     let res: Student[] = StudentService.getAllByPassedCourseId(id);
     if (res.length > 0) {
-        throw new Error(ERROR_COURSE_PASSED_BY_STUDENT(id));
+        throw new Error(ERROR_COURSE_PASSED_BY_STUDENT);
     }
 }
 
 const throwErrorIfRequiredByCourse = (id: number) : void => {
     let res: Course[] = CourseRepository.findAllByRequiredCourseId(id);
     if (res.length > 0) {
-        throw new Error(ERROR_COURSE_REQUIRED_BY_COURSE(id));
+        throw new Error(ERROR_COURSE_REQUIRED_BY_COURSE);
     }
 }
 
-const ERROR_COURSE_NOT_EXIST = (id: number) => `Course with id ${id} does not exist`;
+const ERROR_COURSE_NOT_EXIST =`This course does not exist`;
 const ERROR_COURSE_EXIST = (name: string, phase: number) => `Course with name ${name} and semester ${phase} already exists`;
-const ERROR_COURSE_CHOSEN_IN_ISP = (id: number) => `Course with id ${id} is chosen in ISP`;
-const ERROR_COURSE_PASSED_BY_STUDENT = (id: number) => `Course with id ${id} is passed by student`;
-const ERROR_COURSE_REQUIRED_BY_COURSE = (id: number) => `Course with id ${id} is required by course`;
+const ERROR_COURSE_CHOSEN_IN_ISP = `This course is chosen in ISP`;
+const ERROR_COURSE_PASSED_BY_STUDENT = `This course is passed by student`;
+const ERROR_COURSE_REQUIRED_BY_COURSE = `This course is required by course`;
 const ERROR_COURSE_REQUIRE_ITSELF = "Course cannot require itself";
 const ERROR_COURSE_PHASE_CREDITS_CHANGE = "Course's phase or credits cannot be changed, because it is chosen in ISP";
 

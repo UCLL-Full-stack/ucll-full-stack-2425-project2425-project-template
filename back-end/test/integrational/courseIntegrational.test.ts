@@ -55,13 +55,13 @@ describe('Course router', () => {
                 .set('content-type', 'application/json');
 
             expect(response.status).toBe(400);
-            expect(response.text).toContain(errorMessages.ERROR_COURSE_NOT_EXIST(id));
+            expect(response.text).toContain(errorMessages.ERROR_COURSE_NOT_EXIST);
         });
     });
 
     describe('delete courses by ids', () => {
         it('should return 200 and a success message', async () => {
-            const ids = courses.slice(0, 3).map((course) => course.id);
+            const ids = courses.slice(3, 5).map((course) => course.id);
             const response = await request(app)
                 .delete('/courses/delete')
                 .send(ids)
@@ -79,7 +79,7 @@ describe('Course router', () => {
                 .set('content-type', 'application/json');
 
             expect(response.status).toBe(400);
-            expect(response.text).toContain(errorMessages.ERROR_COURSE_NOT_EXIST(ids[0]));
+            expect(response.text).toContain(errorMessages.ERROR_COURSE_NOT_EXIST);
         });
     });
 

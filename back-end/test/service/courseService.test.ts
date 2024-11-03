@@ -80,7 +80,7 @@ describe('Course Service', () => {
         test("given a list of courses and wrong ID, when getCourseById is called, then it should throw an exception", () => {
             mockDBFindById.mockReturnValue(null);
     
-            expect(() => courseService.getCourseById(1)).toThrow(errorMessages.ERROR_COURSE_NOT_EXIST(1));
+            expect(() => courseService.getCourseById(1)).toThrow(errorMessages.ERROR_COURSE_NOT_EXIST);
             expect(mockDBFindById).toHaveBeenCalledTimes(1);
         });
     });
@@ -271,7 +271,7 @@ describe('Course Service', () => {
             
             const ids = [1, 2, 3];
     
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_NOT_EXIST(2));
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_NOT_EXIST);
             expect(mockDBFindById).toHaveBeenCalledTimes(2);
             expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(1);
@@ -283,7 +283,7 @@ describe('Course Service', () => {
     
             const ids = [1, 2, 3];
     
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_CHOSEN_IN_ISP(2));
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_CHOSEN_IN_ISP);
             expect(mockDBFindById).toHaveBeenCalledTimes(2);
             expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
@@ -295,7 +295,7 @@ describe('Course Service', () => {
     
             const ids = [1, 2, 3];
     
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_PASSED_BY_STUDENT(2));
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_PASSED_BY_STUDENT);
             expect(mockDBFindById).toHaveBeenCalledTimes(2);
             expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(1);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);
@@ -307,7 +307,7 @@ describe('Course Service', () => {
     
             const ids = [1, 2, 3];
     
-            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_REQUIRED_BY_COURSE(2));
+            expect(() => courseService.deleteCourses(ids)).toThrow(errorMessages.ERROR_COURSE_REQUIRED_BY_COURSE);
             expect(mockDBFindById).toHaveBeenCalledTimes(2);
             expect(mockDBFindAllByRequiredCourseId).toHaveBeenCalledTimes(2);
             expect(mockISPServiceGetAllByCourseId).toHaveBeenCalledTimes(2);

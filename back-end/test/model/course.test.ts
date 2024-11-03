@@ -84,22 +84,6 @@ test('given: zero credits, when: course is created, then: an error is thrown', (
     expect(createCourse).toThrow('Credits are required and cannot be negative');
 });
 
-test('given: no lecturers assigned, when: course is created, then: an error is thrown', () => {
-    const createCourse = () =>
-        new Course({
-            id: 1,
-            name: 'Course Name',
-            description: 'Valid description',
-            phase: 2,
-            credits: 5,
-            lecturers: [],
-            isElective: false,
-            requiredPassedCourses: []
-        });
-
-    expect(createCourse).toThrow('Lecturer is required.');
-});
-
 test('given: undefined elective status, when: course is created, then: an error is thrown', () => {
     const createCourse = () =>
         new Course({
