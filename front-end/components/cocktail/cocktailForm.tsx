@@ -15,7 +15,11 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
     event.preventDefault();
     const newCocktail = { id, name, description, strongness, imageUrl };
     onSubmit(newCocktail);
+
+    window.location.href = '/';
   };
+
+
 
   return (
     <form onSubmit={handleSubmit}>
