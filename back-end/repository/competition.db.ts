@@ -4,29 +4,29 @@ import Team from "../model/team";
 const competitions = [
     new Competition({
         id: 1,
-        name: "La Liga",
+        name: "NBA",
         teams: [
             new Team({
                 id: 1,
-                name: "Real Madrid"
+                name: "Los Angeles Lakers"
             }),
             new Team({
                 id: 2,
-                name: "Barcelona"
+                name: "Golden State Warriors"
             }),
         ]
     }),
     new Competition({
         id: 2,
-        name: "Premier League",
+        name: "BNXT League",
         teams: [
             new Team({
                 id: 3,
-                name: "Manchester United"
+                name: "Leuven Bears"
             }),
             new Team({
                 id: 4,
-                name: "Manchester City"
+                name: "Antwerp Giants"
             }),
         ]
     }),
