@@ -1,17 +1,19 @@
-import Header from "../../components/header";
+import React, { useEffect, useState } from "react";
 import RecipeOverviewTable from "../../components/recipes/RecipeOverviewTable";
+import RecipeDetails from "../../components/recipes/RecipeDetail";
 import RecipeService from "../../services/RecipeService";
 import { Recipe } from "../../types";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import Header from "@/components/header";
 
 const Recipes: React.FC = () => {
-  const [recipes, setRecipe] = useState<Array<Recipe>>([]);
+  const [recipes, setRecipes] = useState<Array<Recipe>>([]);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   const getRecipes = async () => {
     const response = await RecipeService.getAllRecipes();
     const data = await response.json();
-    setRecipe(data);
+    setRecipes(data);
   };
 
   useEffect(() => {
@@ -23,19 +25,29 @@ const Recipes: React.FC = () => {
       <Head>
         <title>Recipes</title>
       </Head>
-      <Header />
+      <Header></Header>
       <main className="d-flex flex-column justify-content-center align-items-center">
-        <h1>recipes</h1>
+        <h1>Recipes</h1>
         <section>
-          <h2>recipes overview</h2>
+          <h2>Recipes Overview</h2>
         </section>
         {recipes.length > 0 ? (
-          <RecipeOverviewTable recipes={recipes} />
+          <RecipeOverviewTable
+            recipes={recipes}
+            selectRecipe={setSelectedRecipe}
+          />
         ) : (
           <p>No recipes available</p>
+        )}
+        {selectedRecipe && (
+          <>
+            <h2>Details for {selectedRecipe.name}</h2>
+            <RecipeDetails recipe={selectedRecipe} />
+          </>
         )}
       </main>
     </>
   );
 };
+
 export default Recipes;

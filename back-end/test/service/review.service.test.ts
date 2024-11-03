@@ -7,7 +7,15 @@ import { User } from '../../model/User';
 jest.mock('../../repository/Recipe.db');
 
 // Create an empty User instance for testing
-const mockUser = new User('test', 'te2321st', 'test@gmail.com', 'test', 'test', [], []);
+const mockUser = new User({
+    username: 'test',
+    password: 'password123',
+    email: 'test@example.com',
+    firstName: 'test',
+    lastName: 'test',
+    recipes: [],
+    reviews: [],
+});
 
 // Create an empty Recipe instance for testing
 const mockRecipe = new Recipe({

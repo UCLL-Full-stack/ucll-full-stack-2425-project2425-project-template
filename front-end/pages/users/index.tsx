@@ -29,7 +29,7 @@ const Users: React.FC = () => {
         <section>
           <h2>Users overview</h2>
         </section>
-        {Users.length > 0 ? (
+        {users.length > 0 ? (
           <UserOverviewTable users={users} />
         ) : (
           <p>No Users available</p>

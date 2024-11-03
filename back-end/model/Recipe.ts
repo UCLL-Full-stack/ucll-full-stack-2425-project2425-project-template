@@ -7,7 +7,7 @@ export class Recipe {
     name: string;
     description: string;
     recipeIngredients: RecipeIngredient[];
-    creator: User;
+    creator?: User;
     reviews: Review[];
 
     constructor(data: {
@@ -15,7 +15,7 @@ export class Recipe {
         name: string;
         description: string;
         recipeIngredients: RecipeIngredient[];
-        creator: User;
+        creator?: User;
         reviews?: Review[];
     }) {
         this.id = data.id;
@@ -28,20 +28,20 @@ export class Recipe {
 
     validate() {
         if (!this.name) {
-            throw new Error("Recipe name is required");
+            throw new Error('Recipe name is required');
         }
         if (this.name.length < 3) {
-            throw new Error("Recipe name needs to be at least 3 characters long");
+            throw new Error('Recipe name needs to be at least 3 characters long');
         }
         if (!this.description) {
-            throw new Error("Description is required");
+            throw new Error('Description is required');
         }
-        this.recipeIngredients.forEach(ingredient => {
+        this.recipeIngredients.forEach((ingredient) => {
             if (!ingredient.amount) {
-                throw new Error("Ingredient amount is required");
+                throw new Error('Ingredient amount is required');
             }
             if (!ingredient.measurementType) {
-                throw new Error("Ingredient measurement type is required");
+                throw new Error('Ingredient measurement type is required');
             }
         });
     }
@@ -50,7 +50,8 @@ export class Recipe {
         return this.name === recipe.name && this.description === recipe.description;
     }
 
-    static from = (recipePrisma: any): Recipe => { // Temporarily set type to `any` for debugging
+    static from = (recipePrisma: any): Recipe => {
+        // Temporarily set type to `any` for debugging
         return new Recipe({
             id: recipePrisma.id,
             name: recipePrisma.name,

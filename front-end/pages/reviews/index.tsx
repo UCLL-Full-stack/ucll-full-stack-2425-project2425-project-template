@@ -29,7 +29,7 @@ const Reviews: React.FC = () => {
         <section>
           <h2>Reviews overview</h2>
         </section>
-        {Reviews.length > 0 ? (
+        {reviews.length > 0 ? (
           <ReviewOverviewTable reviews={reviews} />
         ) : (
           <p>No Reviews available</p>

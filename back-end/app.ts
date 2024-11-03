@@ -4,14 +4,12 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import userRouter from './controller/User.routes'
-import recipeRouter from './controller/Recipe.routes'
-import ingredientRouter from './controller/Ingredient.routes'
-import reviewRouter from './controller/Review.routes'
+import userRouter from './controller/User.routes';
+import recipeRouter from './controller/Recipe.routes';
+import ingredientRouter from './controller/Ingredient.routes';
+import reviewRouter from './controller/Review.routes';
 import { expressjwt } from 'express-jwt';
 import { Request, Response, NextFunction } from 'express';
-
-
 
 const app = express();
 dotenv.config();
@@ -20,10 +18,10 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/user', userRouter);
-app.use('/recipe', recipeRouter);
-app.use('/ingredient', ingredientRouter);
-app.use('/review', reviewRouter);
+app.use('/users', userRouter);
+app.use('/recipes', recipeRouter);
+app.use('/ingredients', ingredientRouter);
+app.use('/reviews', reviewRouter);
 
 const swaggerOpts = {
     definition: {
@@ -38,7 +36,6 @@ const swaggerOpts = {
 
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

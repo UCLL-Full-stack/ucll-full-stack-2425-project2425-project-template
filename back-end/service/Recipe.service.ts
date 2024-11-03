@@ -1,15 +1,15 @@
-import RecipeDb from "../repository/Recipe.db";
-import { Recipe } from "../model/Recipe";
+import RecipeDb from '../repository/Recipe.db';
+import { Recipe } from '../model/Recipe';
 
-const getAllRecipes = async (): Promise<Recipe[]> => {
+const getAllRecipes = (): Recipe[] => {
     return RecipeDb.getAllRecipes();
 };
 
-const getRecipeById = async (id: number): Promise<Recipe | null> => {
+const getRecipeById = (id: number): Recipe => {
     return RecipeDb.getRecipeById(id);
 };
 
-const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
+const createRecipe = (recipe: Recipe): Recipe => {
     return RecipeDb.createRecipe(recipe);
 };
 

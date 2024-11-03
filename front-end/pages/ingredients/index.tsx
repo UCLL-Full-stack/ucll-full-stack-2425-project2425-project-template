@@ -11,6 +11,7 @@ const Ingredients: React.FC = () => {
   const getIngredients = async () => {
     const response = await IngredientService.getAllIngredients();
     const data = await response.json();
+    console.log(data);
     setIngredient(data);
   };
 

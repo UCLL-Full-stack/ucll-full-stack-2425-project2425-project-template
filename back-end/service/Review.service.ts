@@ -1,15 +1,15 @@
-import ReviewDb from "../repository/Review.db";
-import { Review } from "../model/Review";
+import ReviewDb from '../repository/Review.db';
+import { Review } from '../model/Review';
 
-const getAllReviews = async (): Promise<Review[]> => {
+const getAllReviews = (): Review[] => {
     return ReviewDb.getAllReviews();
 };
 
-const getReviewById = async (id: number): Promise<Review | null> => {
+const getReviewById = (id: number): Review => {
     return ReviewDb.getReviewById(id);
 };
 
-const createReview = async (review: Review): Promise<Review> => {
+const createReview = (review: Review): Review => {
     return ReviewDb.createReview(review);
 };
 

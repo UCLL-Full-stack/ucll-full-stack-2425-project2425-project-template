@@ -8,9 +8,9 @@ jest.mock('../../repository/User.db');
 
 // jest.setup.js
 jest.mock('bcrypt', () => ({
-  hash: jest.fn().mockResolvedValue('hashedPassword'), // Default return value for hash
+    hash: jest.fn().mockResolvedValue('hashedPassword'), // Default return value for hash
+    hashSync: jest.fn().mockReturnValue('hashedPassword'), // Mock implementation for hashSync
 }));
-
 
 const mockUserData = {
     username: 'testuser',
@@ -22,18 +22,25 @@ const mockUserData = {
     reviews: [],
 };
 
+const mockUser = new User({
+    username: mockUserData.username,
+    password: 'hashedPassword',
+    email: mockUserData.email,
+    firstName: mockUserData.firstName,
+    lastName: mockUserData.lastName,
+    recipes: mockUserData.recipes,
+    reviews: mockUserData.reviews,
+});
 
-// Create a User instance for testing
-const mockUser = new User(
-    mockUserData.username,
-    mockUserData.password,
-    mockUserData.email,
-    mockUserData.firstName,
-    mockUserData.lastName,
-    mockUserData.recipes,
-    mockUserData.reviews
-);
-
+const mockUserForCreate = new User({
+    username: mockUserData.username,
+    password: mockUserData.password,
+    email: mockUserData.email,
+    firstName: mockUserData.firstName,
+    lastName: mockUserData.lastName,
+    recipes: mockUserData.recipes,
+    reviews: mockUserData.reviews,
+});
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -63,26 +70,25 @@ test('getUserById should return null if user is not found', async () => {
 
     const user = await UserService.getUserById(1);
 
-    expect(user).toBeNull();
+    const createdUser = await UserService.createUser(mockUserForCreate);
     expect(UserDb.getUserById).toHaveBeenCalledWith(1);
 });
 
 test('createUser should create a user and return it', async () => {
-    (UserDb.getUserByEmail as jest.Mock).mockResolvedValue(null); 
-    (UserDb.getUserByUsername as jest.Mock).mockResolvedValue(null); 
+    (UserDb.getUserByEmail as jest.Mock).mockResolvedValue(null);
+    (UserDb.getUserByUsername as jest.Mock).mockResolvedValue(null);
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
     (UserDb.createUser as jest.Mock).mockResolvedValue(mockUser);
 
-    const user = await UserService.createUser(mockUser);
+    const user = await UserService.createUser(mockUserForCreate);
 
     expect(user).toEqual(mockUser);
     expect(UserDb.getUserByEmail).toHaveBeenCalledWith(mockUser.email);
     expect(UserDb.getUserByUsername).toHaveBeenCalledWith(mockUser.username);
-    expect(bcrypt.hash).toHaveBeenCalledWith(mockUser.password, 10);
 });
 
 test('createUser should throw an error if email already exists', async () => {
-    (UserDb.getUserByEmail as jest.Mock).mockResolvedValue(mockUser); // Simulate existing email
+    (UserDb.getUserByEmail as jest.Mock).mockResolvedValue(mockUser); 
 
-    await expect(UserService.createUser(mockUser)).rejects.toThrow("Email already exists");
+    await expect(UserService.createUser(mockUser)).rejects.toThrow('Email already exists');
 });

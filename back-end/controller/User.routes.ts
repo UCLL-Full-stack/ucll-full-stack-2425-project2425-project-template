@@ -1,19 +1,39 @@
-import UserService from "../service/User.service";
-import { User } from "../model/User";
-import express, { NextFunction, Request, Response } from "express";
+import UserService from '../service/User.service';
+import { User } from '../model/User';
+import express, { NextFunction, Request, Response } from 'express';
 
 const userRouter = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Users
- *   description: User management
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 2
+ *         username:
+ *           type: string
+ *           example: "john_doe"
+ *         email:
+ *           type: string
+ *           example: "john@example.com"
+ *         password:
+ *           type: string
+ *           example: "securePassword123"
+ *         firstName:
+ *           type: string
+ *           example: "John"
+ *         lastName:
+ *           type: string
+ *           example: "Doe"
  */
 
 /**
  * @swagger
- * /user:
+ * /users:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
@@ -40,7 +60,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /user/{id}:
+ * /users/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags: [Users]
@@ -78,7 +98,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 
 /**
  * @swagger
- * /user/email/{email}:
+ * /users/email/{email}:
  *   get:
  *     summary: Get a user by email
  *     tags: [Users]
@@ -116,7 +136,7 @@ userRouter.get('/email/:email', async (req: Request, res: Response, next: NextFu
 
 /**
  * @swagger
- * /user/username/{username}:
+ * /users/username/{username}:
  *   get:
  *     summary: Get a user by username
  *     tags: [Users]
@@ -154,7 +174,7 @@ userRouter.get('/username/:username', async (req: Request, res: Response, next: 
 
 /**
  * @swagger
- * /user:
+ * /users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -178,59 +198,25 @@ userRouter.get('/username/:username', async (req: Request, res: Response, next: 
  */
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(req.body); // Log the entire request body to check for firstName and lastName
+        console.log(req.body);
         const userData = req.body as User;
 
-        // Ensure that firstName and lastName are included in the request body
         console.log('First Name:', userData.firstName);
         console.log('Last Name:', userData.lastName);
 
-        const newUser = new User(
-            userData.username,
-            userData.password,
-            userData.email,
-            userData.firstName, // Check if this is being passed correctly
-            userData.lastName,  // Check if this is being passed correctly
-            userData.recipes || [],
-            userData.reviews || []
-        );
+        const newUser = new User({
+            username: userData.username,
+            password: userData.password,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName
+        });
 
-        // Create the user using the UserService
         const createdUser = await UserService.createUser(newUser);
         res.status(201).json(createdUser);
     } catch (error) {
         next(error);
     }
 });
-
-
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         username:
- *           type: string
- *           example: "john_doe"
- *         email:
- *           type: string
- *           example: "john@example.com"
- *         password:
- *           type: string
- *           example: "securePassword123"
- *         firstName:
- *           type: string
- *           example: "John"
- *         lastName:
- *           type: string
- *           example: "Doe"
- */
-
 
 export default userRouter;

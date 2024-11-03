@@ -1,15 +1,15 @@
-import IngredientDb from "../repository/Ingredient.db";
-import { Ingredient } from "../model/Ingredient";
+import IngredientDb from '../repository/Ingredient.db';
+import { Ingredient } from '../model/Ingredient';
 
-const getAllIngredients = async (): Promise<Ingredient[]> => {
+const getAllIngredients = (): Ingredient[] => {
     return IngredientDb.getAllIngredients();
 };
 
-const getIngredientById = async (id: number): Promise<Ingredient | null> => {
+const getIngredientById = (id: number): Ingredient => {
     return IngredientDb.getIngredientById(id);
 };
 
-const createIngredient = async (ingredient: Ingredient): Promise<Ingredient> => {
+const createIngredient = (ingredient: Ingredient): Ingredient => {
     return IngredientDb.createIngredient(ingredient);
 };
 

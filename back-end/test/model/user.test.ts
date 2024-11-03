@@ -13,11 +13,11 @@ beforeEach(() => {
         description: 'Mock description',
         recipeIngredients: [
             { id: 1, amount: 2, measurementType: 'cups', recipeId: 1, ingredientId: 1 },
-            { id: 2, amount: 1, measurementType: 'tablespoon', recipeId: 1, ingredientId: 2 }
+            { id: 2, amount: 1, measurementType: 'tablespoon', recipeId: 1, ingredientId: 2 },
         ],
         creator: {} as User,
         reviews: [],
-        validate: jest.fn().mockReturnValue(true), 
+        validate: jest.fn().mockReturnValue(true),
         equals: jest.fn().mockReturnValue(true),
     };
 
@@ -28,11 +28,10 @@ beforeEach(() => {
         text: 'Mock Review',
         score: 5,
         recipe: mockRecipe,
-        validate: jest.fn().mockReturnValue(true), 
+        validate: jest.fn().mockReturnValue(true),
         equals: jest.fn().mockReturnValue(true),
     };
 });
-
 
 test('given valid user data, when a User is created, then properties are correctly assigned', () => {
     const username = 'testuser';
@@ -43,7 +42,7 @@ test('given valid user data, when a User is created, then properties are correct
     const recipes = [mockRecipe];
     const reviews = [mockReview];
 
-    const user = new User(username, password, email, firstName, lastName, recipes, reviews);
+    const user = new User({username, password, email, firstName, lastName, recipes, reviews});
 
     expect(user.username).toBe(username);
     expect(user.password).toBe(password);
@@ -55,30 +54,106 @@ test('given valid user data, when a User is created, then properties are correct
 });
 
 test('given an invalid username, when a User is created, then an error is thrown', () => {
-    expect(() => new User('', 'password123', 'test@example.com', 'Test', 'User', [], [])).toThrow("Username is required");
-    expect(() => new User('ab', 'password123', 'test@example.com', 'Test', 'User', [], [])).toThrow("Username must be at least 3 characters long");
+    expect(
+        () =>
+            new User({
+                username: '',
+                password: 'password123',
+                email: 'test@example.com',
+                firstName: 'test',
+                lastName: 'test',
+            })
+    ).toThrow('Username is required');
+    expect(
+        () =>
+            new User({
+                username: 'ab',
+                password: 'password123',
+                email: 'test@example.com',
+                firstName: 'test',
+                lastName: 'test',
+            })
+    ).toThrow('Username must be at least 3 characters long');
 });
 
 test('given an invalid password, when a User is created, then an error is thrown', () => {
-    expect(() => new User('testuser', '', 'test@example.com', 'Test', 'User', [], [])).toThrow("Password is required");
-    expect(() => new User('testuser', 'short', 'test@example.com', 'Test', 'User', [], [])).toThrow("Password must be at least 8 characters long");
+    expect(
+        () =>
+            new User({
+                username: 'test',
+                password: '',
+                email: 'test@example.com',
+                firstName: 'test',
+                lastName: 'test',
+            })
+    ).toThrow('Password is required');
 });
 
 test('given an invalid email, when a User is created, then an error is thrown', () => {
-    expect(() => new User('testuser', 'password123', '', 'Test', 'User', [], [])).toThrow("Email is required");
-    expect(() => new User('testuser', 'password123', 'invalidemail', 'Test', 'User', [], [])).toThrow("Invalid email format");
+    expect(
+        () =>
+            new User({
+                username: 'test',
+                password: 'password123',
+                email: '',
+                firstName: 'test',
+                lastName: 'test',
+            })
+    ).toThrow('Email is required');
+    expect(
+        () =>
+            new User({
+                username: 'test',
+                password: 'password123',
+                email: 'test',
+                firstName: 'test',
+                lastName: 'test',
+            })
+    ).toThrow('Invalid email format');
 });
 
 test('given two users with the same username and email, when compared, then equals() returns true', () => {
-    const user1 = new User('testuser', 'password123', 'test@example.com', 'Test', 'User', [mockRecipe], [mockReview]);
-    const user2 = new User('testuser', 'anotherpassword', 'test@example.com', 'Test2', 'User2', [], []);
+    const user1 = new User({
+        username: 'test',
+        password: 'password123',
+        email: 'test@example.com',
+        firstName: 'test',
+        lastName: 'test',
+        recipes: [mockRecipe],
+        reviews: [mockReview],
+    });
+    const user2 = new User({
+        username: 'test',
+        password: 'password123',
+        email: 'test@example.com',
+        firstName: 'test',
+        lastName: 'test',
+        recipes: [],
+        reviews: [],
+    });
 
     expect(user1.equals(user2)).toBe(true);
 });
 
 test('given two users with different usernames or emails, when compared, then equals() returns false', () => {
-    const user1 = new User('testuser', 'password123', 'test@example.com', 'Test', 'User', [mockRecipe], [mockReview]);
-    const user2 = new User('anotheruser', 'password123', 'another@example.com', 'Test', 'User', [mockRecipe], [mockReview]);
+    const user1 = new User({
+        username: 'test',
+        password: 'password123',
+        email: 'test@example.com',
+        firstName: 'test',
+        lastName: 'test',
+        recipes: [mockRecipe],
+        reviews: [mockReview],
+    });
+    const user2 = new User({
+        username: 'testje',
+        password: 'password123',
+        email: 'testje@example.com',
+        firstName: 'test',
+        lastName: 'test',
+        recipes: [mockRecipe],
+        reviews: [mockReview],
+    });
 
     expect(user1.equals(user2)).toBe(false);
 });

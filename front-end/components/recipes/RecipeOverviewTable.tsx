@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Recipe } from "../../types";
-import RecipeService from "../../services/RecipeService";
+import React from 'react';
+import { Recipe } from '../../types';
 
 type Props = {
   recipes: Array<Recipe>;
+  selectRecipe: (recipe: Recipe) => void; // Function to select a recipe
 };
 
-const RecipeOverviewTable: React.FC<Props> = ({ recipes }: Props) => {
+const RecipeOverviewTable: React.FC<Props> = ({ recipes, selectRecipe }: Props) => {
   return (
     <>
       {recipes && (
@@ -19,7 +19,11 @@ const RecipeOverviewTable: React.FC<Props> = ({ recipes }: Props) => {
           </thead>
           <tbody>
             {recipes.map((recipe, index) => (
-              <tr key={index} role="button">
+              <tr
+                key={index}
+                onClick={() => selectRecipe(recipe)}
+                role="button"
+              >
                 <td>{recipe.name}</td>
                 <td>{recipe.description}</td>
               </tr>
