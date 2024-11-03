@@ -1,6 +1,6 @@
 import { Competition } from '@/types';
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import EditCompetitionModal from './EditCompetitionModal';
 import CompetitionService from '@/services/CompetitionService';
 
@@ -26,7 +26,7 @@ const CompetitionOverviewTable: React.FC<CompetitionOverviewTableProps> = ({ com
             const savedCompetition = await CompetitionService.editCompetition(updatedCompetition);
             setCompetitions(competitions.map(comp => comp.id === savedCompetition.id ? savedCompetition : comp));
             setIsModalOpen(false);
-            router.push(`/competitions`);
+            router.refresh();
         } catch (error) {
             console.error('Failed to save competition:', error);
         }
