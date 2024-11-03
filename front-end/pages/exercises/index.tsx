@@ -6,10 +6,11 @@ import { Exercise } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { Toaster, toast } from "sonner";
 
 const Exercises: React.FC = () => {
-  const [exercises, setExercises] = useState<Array<Exercise>>();
-  const [error, setError] = useState<string>();
+  const [exercises, setExercises] = useState<Array<Exercise>>([]);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { workoutId, showAddButton } = router.query;
 
@@ -25,7 +26,7 @@ const Exercises: React.FC = () => {
 
   const handleAddExercise = async (exercise: Exercise) => {
     if (!workoutId) {
-      setError("Workout ID is not provided.");
+      toast.error("Workout ID is not provided.");
       return;
     }
 
@@ -37,10 +38,11 @@ const Exercises: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to add exercise to workout.");
       }
+      toast.success("Exercise added successfully!");
       router.push("/workouts");
     } catch (err) {
       console.error(err);
-      setError("Failed to add exercise to workout.");
+      toast.error("This exercise is already part of your workout");
     }
   };
 
@@ -62,7 +64,7 @@ const Exercises: React.FC = () => {
           <section className="space-y-4">
             {error ? (
               <p className="text-red-500 text-center">{error}</p>
-            ) : exercises ? (
+            ) : exercises.length > 0 ? (
               <ExerciseOverviewTable
                 exercises={exercises}
                 onAddExercise={handleAddExercise}
@@ -73,6 +75,7 @@ const Exercises: React.FC = () => {
             )}
           </section>
         </div>
+        <Toaster richColors />
       </main>
     </>
   );
