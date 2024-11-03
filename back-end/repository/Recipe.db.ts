@@ -1,68 +1,6 @@
-// import database from "../util/database";
-// import { Recipe } from "../model/Recipe";
-
-// const getAllRecipes = async (): Promise<Recipe[]> => {
-//     const recipePrisma = await database.recipe.findMany({
-//         include: {
-//             creator: true,
-//             ingredients: true, // Adjusted relation name (this is acctually the recipeIngredients relation but is called ingredients in the prisma schema)
-//             reviews: true
-//         },
-//     });
-
-//     if (!recipePrisma || recipePrisma.length === 0) {
-//         return [];
-//     }
-
-//     return recipePrisma.map((recipePrisma) => Recipe.from(recipePrisma));
-// };
-
-// const getRecipeById = async (id: number): Promise<Recipe | null> => {
-//     const recipePrisma = await database.recipe.findUnique({
-//         where: {
-//             id: id,
-//         },
-//     });
-
-//     if (!recipePrisma) {
-//         return null;
-//     }
-
-//     return Recipe.from(recipePrisma);
-// };
-
-// const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
-//     const recipePrisma = await database.recipe.create({
-//         data: {
-//             name: recipe.name,
-//             description: recipe.description,
-//             creatorId: recipe.creator.id!, // Use non-null assertion to guarantee creatorId is defined
-//             ingredients: {
-//                 create: recipe.recipeIngredients.map((ingredient) => ({
-//                     amount: ingredient.amount,
-//                     measurementType: ingredient.measurementType,
-//                     ingredientId: ingredient.ingredientId,
-//                 })),
-//             },
-//         },
-//         include: {
-//             ingredients: true,
-//             creator: true,
-//             reviews: true,
-//         },
-//     });
-
-//     return Recipe.from(recipePrisma);
-// };
-
-// export default {
-//     getAllRecipes,
-//     getRecipeById,
-//     createRecipe,
-// };
-
 import { Recipe } from '../model/Recipe';
 import { User } from '../model/User';
+import { Review } from '../model/Review';
 
 // Sample in-memory array to hold recipes
 const recipes: Recipe[] = [
@@ -77,6 +15,55 @@ const recipes: Recipe[] = [
                 ingredientId: 1,
                 id: 0,
                 recipeId: 0,
+            },
+        ],
+        reviews: [
+            new Review({
+                id: 1,
+                writer: new User({
+                    id: 1,
+                    username: 'sampleUser',
+                    password: 'samplePassword',
+                    email: 'sample@example.com',
+                    firstName: 'Sample',
+                    lastName: 'User',
+                }),
+                text: 'I love you, this is the best',
+                score: 5,
+            }),
+            new Review({
+                id: 1,
+                writer: new User({
+                    id: 1,
+                    username: 'sampleUser',
+                    password: 'samplePassword',
+                    email: 'sample@example.com',
+                    firstName: 'Sample',
+                    lastName: 'User',
+                }),
+                text: 'Ew what is this',
+                score: 2,
+            }),
+        ],
+    }),
+    new Recipe({
+        id: 2,
+        name: 'Chicken Curry',
+        description: 'A flavorful Indian dish with chicken and spices.',
+        recipeIngredients: [
+            {
+                amount: 300,
+                measurementType: 'grams',
+                ingredientId: 2,
+                id: 1,
+                recipeId: 1,
+            },
+            {
+                amount: 100,
+                measurementType: 'ml',
+                ingredientId: 3,
+                id: 2,
+                recipeId: 1,
             },
         ],
         reviews: [],
@@ -103,7 +90,7 @@ const createRecipe = (recipe: Recipe): Recipe => {
         description: recipe.description,
         creator: recipe.creator, // Assume creator is passed in with the recipe
         recipeIngredients: recipe.recipeIngredients,
-        reviews: [],
+        reviews: recipe.reviews,
     });
     recipes.push(newRecipe);
     return newRecipe;

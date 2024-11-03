@@ -5,31 +5,40 @@ import RecipeService from "../../services/RecipeService";
 import { Recipe } from "../../types";
 import Head from "next/head";
 import Header from "@/components/header";
+import styles from "../../styles/Home.module.css";
 
 const Recipes: React.FC = () => {
-  const [recipes, setRecipes] = useState<Array<Recipe>>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   const getRecipes = async () => {
-    const response = await RecipeService.getAllRecipes();
-    const data = await response.json();
-    setRecipes(data);
+    try {
+      const response = await RecipeService.getAllRecipes();
+      const data = await response.json();
+      setRecipes(data);
+    } catch (error) {
+      console.error("Failed to fetch recipes", error);
+    }
   };
 
   useEffect(() => {
     getRecipes();
   }, []);
 
+  const closeRecipeDetails = () => {
+    setSelectedRecipe(null);
+  };
+
   return (
     <>
       <Head>
         <title>Recipes</title>
       </Head>
-      <Header></Header>
-      <main className="d-flex flex-column justify-content-center align-items-center">
-        <h1>Recipes</h1>
+      <Header />
+      <main className={styles.mainContainer}>
+        <h1 className={styles.title}>Recipes</h1>
         <section>
-          <h2>Recipes Overview</h2>
+          <h2 className={styles.sectionTitle}>Recipes Overview</h2>
         </section>
         {recipes.length > 0 ? (
           <RecipeOverviewTable
@@ -37,12 +46,17 @@ const Recipes: React.FC = () => {
             selectRecipe={setSelectedRecipe}
           />
         ) : (
-          <p>No recipes available</p>
+          <p className={styles.noRecipes}>No recipes available</p>
         )}
         {selectedRecipe && (
           <>
-            <h2>Details for {selectedRecipe.name}</h2>
-            <RecipeDetails recipe={selectedRecipe} />
+            <h2 className={styles.recipeDetailsTitle}>
+              Details for {selectedRecipe.name}
+            </h2>
+            <RecipeDetails
+              recipe={selectedRecipe}
+              onClose={closeRecipeDetails}
+            />
           </>
         )}
       </main>

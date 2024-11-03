@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Ingredient } from "../../types";
-import IngredientService from "../../services/IngredientService";
+import styles from "../../styles/Home.module.css";
 
 type Props = {
   ingredients: Array<Ingredient>;
@@ -8,9 +8,9 @@ type Props = {
 
 const IngredientOverviewTable: React.FC<Props> = ({ ingredients }: Props) => {
   return (
-    <>
+    <div className={styles.tableContainer}>
       {ingredients && (
-        <table className="table table-hover">
+        <table className={styles.recipeTable}>
           <thead>
             <tr>
               <th scope="col">Name</th>
@@ -19,7 +19,7 @@ const IngredientOverviewTable: React.FC<Props> = ({ ingredients }: Props) => {
           </thead>
           <tbody>
             {ingredients.map((ingredient, index) => (
-              <tr key={index} role="button">
+              <tr key={index}>
                 <td>{ingredient.name}</td>
                 <td>{ingredient.category}</td>
               </tr>
@@ -27,7 +27,7 @@ const IngredientOverviewTable: React.FC<Props> = ({ ingredients }: Props) => {
           </tbody>
         </table>
       )}
-    </>
+    </div>
   );
 };
 

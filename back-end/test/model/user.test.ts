@@ -42,7 +42,7 @@ test('given valid user data, when a User is created, then properties are correct
     const recipes = [mockRecipe];
     const reviews = [mockReview];
 
-    const user = new User({username, password, email, firstName, lastName, recipes, reviews});
+    const user = new User({ username, password, email, firstName, lastName, recipes, reviews });
 
     expect(user.username).toBe(username);
     expect(user.password).toBe(password);

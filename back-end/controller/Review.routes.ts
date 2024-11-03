@@ -20,9 +20,6 @@ const reviewRouter = express.Router();
  *         rating:
  *           type: integer
  *           description: The rating given in the review (1-5).
- *         recipeId:
- *           type: integer
- *           description: The ID of the recipe being reviewed.
  *         userId:
  *           type: integer
  *           description: The ID of the user who wrote the review.
@@ -112,12 +109,6 @@ reviewRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
  *               score:
  *                 type: integer
  *                 example: 5
- *               recipe:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 1
  *               writer:
  *                 type: object
  *                 properties:

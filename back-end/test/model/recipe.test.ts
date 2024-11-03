@@ -3,11 +3,23 @@ import { Recipe } from '../../model/Recipe';
 import { Review } from '../../model/Review';
 import { RecipeIngredient } from '@prisma/client';
 
-let mockUser: User; // lege User object
+let mockUser: User;
 let mockReview: Review;
 
 beforeEach(() => {
-    // Mock Review
+    // Initialize mockUser
+    mockUser = {
+        id: 1,
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'securepassword',
+        firstName: 'Test',
+        lastName: 'User',
+        validate: jest.fn(),
+        equals: jest.fn(),
+    } as unknown as User;
+
+    // Initialize mockReview
     mockReview = {
         id: 1,
         writer: mockUser,
@@ -44,7 +56,7 @@ test('given valid recipe data, when a Recipe is created, then properties are cor
                 measurementType: 'ml',
                 recipeId: 1,
                 ingredientId: 3,
-            } as RecipeIngredient
+            } as RecipeIngredient,
         ],
         creator: mockUser,
         reviews: [],

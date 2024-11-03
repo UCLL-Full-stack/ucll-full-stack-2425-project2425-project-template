@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { User } from "../../types";
-import UserService from "../../services/UserService";
+import styles from "../../styles/Home.module.css";
 
 type Props = {
   users: Array<User>;
@@ -8,9 +8,9 @@ type Props = {
 
 const UserOverviewTable: React.FC<Props> = ({ users }: Props) => {
   return (
-    <>
+    <div className={styles.tableContainer}>
       {users && (
-        <table className="table table-hover">
+        <table className={styles.recipeTable}>
           <thead>
             <tr>
               <th scope="col">Firstname</th>
@@ -19,7 +19,7 @@ const UserOverviewTable: React.FC<Props> = ({ users }: Props) => {
           </thead>
           <tbody>
             {users.map((user, index) => (
-              <tr key={index} role="button">
+              <tr key={index}>
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
               </tr>
@@ -27,7 +27,7 @@ const UserOverviewTable: React.FC<Props> = ({ users }: Props) => {
           </tbody>
         </table>
       )}
-    </>
+    </div>
   );
 };
 

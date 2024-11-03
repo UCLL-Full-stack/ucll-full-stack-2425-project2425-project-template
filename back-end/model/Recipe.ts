@@ -8,7 +8,7 @@ export class Recipe {
     description: string;
     recipeIngredients: RecipeIngredient[];
     creator?: User;
-    reviews: Review[];
+    reviews?: Review[];
 
     constructor(data: {
         id?: number;

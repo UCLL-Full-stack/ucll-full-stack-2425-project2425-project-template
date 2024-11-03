@@ -6,9 +6,9 @@ export class Review {
     readonly writer: User;
     readonly text: string;
     readonly score: number;
-    readonly recipe: Recipe;
+    readonly recipe?: Recipe;
 
-    constructor(review: { id?: number, writer: User, text: string, score: number, recipe: Recipe }) {
+    constructor(review: { id?: number, writer: User, text: string, score: number, recipe?: Recipe }) {
         this.validate(review);
         this.id = review.id;
         this.writer = review.writer;
@@ -17,7 +17,7 @@ export class Review {
         this.recipe = review.recipe;
     }
 
-    validate(review: { id?: number, writer: User, text: string, score: number, recipe: Recipe }) {
+    validate(review: { id?: number, writer: User, text: string, score: number, recipe?: Recipe }) {
         if (!review.text) {
             throw new Error("Review text is required");
         }
@@ -28,7 +28,7 @@ export class Review {
     }
 
     equals(review: Review): boolean {
-        return this.text === review.text && this.score === review.score && this.writer.equals(review.writer) && this.recipe.equals(review.recipe);
+        return this.text === review.text && this.score === review.score && this.writer.equals(review.writer) ;
     }
 
     static from(reviewPrisma: any): Review {
