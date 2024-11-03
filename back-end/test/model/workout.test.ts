@@ -130,3 +130,14 @@ test(`given: an empty name; when: Workout is created; then: an error is thrown`,
     //then
     expect(createInvalidWorkout).toThrowError('Workout name is required and cannot be empty.');
 });
+
+test(`given: an existing Workout; when: removing a exercise from workout that is not added; then: an error is thrown`, () => {
+    //given
+    const workout = new Workout(validWorkout);
+
+    //when
+    const removeExercise = () => workout.removeExercise(2);
+
+    //then
+    expect(removeExercise).toThrow('Exercise does not exist in this workout.');
+});

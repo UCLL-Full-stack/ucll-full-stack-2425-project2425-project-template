@@ -3,6 +3,9 @@ import { Exercise } from '../model/exercise';
 
 const getAllExercises = (): Exercise[] => {
     const exercises = exerciseDb.getAllExercises();
+    if (!exercises) {
+        throw new Error('No exercises found');
+    }
     return exercises;
 };
 

@@ -1,9 +1,12 @@
-import workoutexerciseDb from "../model/data-access/workoutexercise.db"
+                import workoutexerciseDb from "../model/data-access/workoutexercise.db"
 import { WorkoutExercise } from "../model/workoutexercise";
 import { WorkoutExerciseInput } from "../types";
 
 const getAllWorkoutExercises =(): WorkoutExercise[] => {
     const workoutExercises = workoutexerciseDb.getAllWorkoutExercises();
+    if (!workoutExercises) {
+        throw new Error('No workout exercises found');
+    };
     return workoutExercises;
 }
 

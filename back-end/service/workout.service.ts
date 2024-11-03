@@ -1,23 +1,24 @@
-import userDb from "../model/data-access/user.db";
-import workoutDb from "../model/data-access/workout.db";
-import { Workout } from "../model/workout";
-import { WorkoutInput } from "../types";
-import exerciseService from "./exercise.service";
-
+import userDb from '../model/data-access/user.db';
+import workoutDb from '../model/data-access/workout.db';
+import { Workout } from '../model/workout';
+import { WorkoutInput } from '../types';
+import exerciseService from './exercise.service';
 
 const getAllWorkouts = (): Workout[] => {
     const workouts = workoutDb.getAllWorkouts();
+    if (!workouts) {
+        throw new Error('No workouts found');
+    }
     return workouts;
-}
+};
 
 const getWorkoutById = (id: number): Workout => {
-    const workout = workoutDb.getWorkoutById(id)
+    const workout = workoutDb.getWorkoutById(id);
     if (!workout) {
         throw new Error(`Workout with ID ${id} not found`);
     }
-    return workout
-}
-
+    return workout;
+};
 
 const getWorkoutsByUserId = (id: number): Workout[] => {
     const user = userDb.getUserById(id);
@@ -53,8 +54,8 @@ const removeExerciseFromWorkout = (workoutId: number, exerciseId: number): Worko
         throw new Error(`Workout with ID ${workoutId} not found`);
     }
 
-    const exerciseExists = workout.exercises.some((exercise) => exercise.id === exerciseId);
-    if (!exerciseExists) {
+    const exerciseIndex = workout.exercises.findIndex((ex) => ex.id === exerciseId);
+    if (exerciseIndex === -1) {
         throw new Error(`Exercise with ID ${exerciseId} not found in the workout`);
     }
 
@@ -74,12 +75,17 @@ const removeWorkout = (workoutId: number): Workout => {
     return workout;
 };
 
-
-const createWorkout = ({ workout_id, user_id, name, description,}: WorkoutInput): Workout => {
-    const workout = new Workout ({ workout_id, user_id, name, description, exercises: [] });
+const createWorkout = ({ workout_id, user_id, name, description }: WorkoutInput): Workout => {
+    const workout = new Workout({ workout_id, user_id, name, description, exercises: [] });
     return workoutDb.createWorkout(workout);
-} 
+};
 
-
-
-export default { getAllWorkouts, getWorkoutById, getWorkoutsByUserId, createWorkout, addExerciseToWorkout, removeExerciseFromWorkout, removeWorkout };
+export default {
+    getAllWorkouts,
+    getWorkoutById,
+    getWorkoutsByUserId,
+    createWorkout,
+    addExerciseToWorkout,
+    removeExerciseFromWorkout,
+    removeWorkout,
+};

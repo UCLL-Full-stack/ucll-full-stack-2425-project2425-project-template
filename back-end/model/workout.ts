@@ -1,4 +1,4 @@
-import { Exercise } from "./exercise";
+import { Exercise } from './exercise';
 
 export class Workout {
     readonly workout_id: number;
@@ -7,7 +7,13 @@ export class Workout {
     readonly description: string;
     readonly exercises: Exercise[];
 
-    constructor(workout: { workout_id: number; user_id: number; name: string; description: string; exercises: Exercise[] }) {
+    constructor(workout: {
+        workout_id: number;
+        user_id: number;
+        name: string;
+        description: string;
+        exercises: Exercise[];
+    }) {
         this.validate(workout);
         this.workout_id = workout.workout_id;
         this.user_id = workout.user_id;
@@ -15,25 +21,39 @@ export class Workout {
         this.description = workout.description;
         this.exercises = workout.exercises || [];
     }
-    validate(workout: { workout_id: number; user_id: number; name: string; description: string; }) {
+    validate(workout: { workout_id: number; user_id: number; name: string; description: string }) {
         if (!workout.name || typeof workout.name !== 'string' || workout.name.trim().length === 0) {
-            throw new Error("Workout name is required and cannot be empty.");
+            throw new Error('Workout name is required and cannot be empty.');
         }
     }
 
     addExercise(exercise: Exercise): void {
-            this.exercises.push(exercise);
+        this.exercises.push(exercise);
     }
 
     removeExercise(exerciseId: number): void {
-        const index = this.exercises.findIndex(exercise => exercise.id === exerciseId);
+        const index = this.exercises.findIndex((exercise) => exercise.id === exerciseId);
+        if (index === -1) {
+            throw new Error('Exercise does not exist in this workout.');
+        }
         if (index !== -1) {
-            this.exercises.splice(index, 1); 
+            this.exercises.splice(index, 1);
         }
     }
 
-
-    equals({ workout_id, user_id, name, description, exercises }: { workout_id: number; user_id: number; name: string; description: string; exercises: Exercise[] }): boolean {
+    equals({
+        workout_id,
+        user_id,
+        name,
+        description,
+        exercises,
+    }: {
+        workout_id: number;
+        user_id: number;
+        name: string;
+        description: string;
+        exercises: Exercise[];
+    }): boolean {
         return (
             this.workout_id === workout_id &&
             this.user_id === user_id &&
