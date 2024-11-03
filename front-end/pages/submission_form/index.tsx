@@ -28,7 +28,23 @@ const SubmissionForms: React.FC = () => {
       </Head>
       <Header />
       <main className="d-flex flex-column justify-content-center align-items-center">
-        <h1>Submission Forms</h1>
+        <h1>Request to add new record</h1>
+        <form action="/imput_from">
+          <div className="center">
+            <label htmlFor="value1"> Please insert 1: </label>
+            <input type="text" id="value1" name="value1" placeholder="some value here" />
+          </div>
+          <div className="center">
+            <label htmlFor="value1"> Please insert value 2: </label>
+            <input type="text" id="value1" name="value1" placeholder="some value here" />
+          </div>
+          <div className="center">
+            <label htmlFor="value1"> Please insert value 3: </label>
+            <input type="text" id="value1" name="value1" placeholder="some value here" />
+          </div>
+          <br/><br/>
+          <input type="submit" id="submit" value="Submit"></input>
+        </form>
         <ul>
           {submissionForms.map((form) => (
             <li key={form.id}>

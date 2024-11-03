@@ -46,3 +46,32 @@ button {
     padding: 0.5rem 1rem;
     font-weight: bold;
 }
+
+form {
+    gap: 1rem;
+    width: 800px;
+}
+
+label {
+    text-align: left; 
+    margin-right: auto;
+}
+
+input {
+    width: 400px;
+    float: right;
+}
+
+#submit {
+    display: block;
+    width: 120px;
+    height: 40px;
+    float: none;
+    margin: auto;
+}
+
+.center {
+    width: 600px;
+    margin: auto;
+    margin-bottom: 10px;
+}
