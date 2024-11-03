@@ -11,3 +11,7 @@ h6 {
     font-weight: 700;
     font-size: 1.5rem;
 }
+
+select option {
+    font-family: '__Lexend_86777a', '__Lexend_Fallback_86777a', sans-serif;
+}

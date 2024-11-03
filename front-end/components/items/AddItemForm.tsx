@@ -90,11 +90,17 @@ const AddItemForm: React.FC = () => {
                         name="category"
                         value={item.category}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
                     >
-                        <option value="fruits">Fruits</option>
-                        <option value="vegetables">Vegetables</option>
-                        <option value="dairy">Dairy</option>
+                        <option className="text-sm" value="fruits">
+                            Fruits
+                        </option>
+                        <option className="text-sm" value="vegetables">
+                            Vegetables
+                        </option>
+                        <option className="text-sm" value="dairy">
+                            Dairy
+                        </option>
                     </select>
                 </div>
 

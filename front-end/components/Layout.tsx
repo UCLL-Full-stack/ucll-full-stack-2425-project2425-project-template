@@ -3,6 +3,7 @@ import Header from './Header';
 import { ReactNode } from 'react';
 
 import { useEffect } from 'react';
+import Footer from './Footer';
 
 const Layout: React.FC<{ children: ReactNode; className: string }> = ({ children, className }) => {
     useEffect(() => {
@@ -22,6 +23,7 @@ const Layout: React.FC<{ children: ReactNode; className: string }> = ({ children
             </Head>
             <Header />
             <main className={'max-w-5xl mt-8 mx-auto px-8'}>{children}</main>
+            <Footer />
         </>
     );
 };
