@@ -1,12 +1,15 @@
 import { Trip } from '@/types';
 import React from 'react';
-import styles from '../styles/Trips.module.css'; // Import the CSS module
+import styles from '../styles/Trips.module.css';
 
 type Props = {
     trips: Array<Trip>;
 };
 
 const TripOverviewTable: React.FC<Props> = ({ trips }) => {
+  if (!trips) {
+    return <div className={styles['bookings-table-container']}>Loading...</div>;
+  }
     return (
         <div className={styles['trips-table-container']}>
             {trips && (
@@ -24,6 +27,10 @@ const TripOverviewTable: React.FC<Props> = ({ trips }) => {
                         {trips.map((trip, index) => (
                             <tr key={index}>
                                 <td>{trip.destination}</td>
+                                <td>{new Date(trip.startDate).toDateString()}</td>
+                                <td>{new Date(trip.endDate).toDateString()}</td>
+                                <td>{trip.price}</td>
+                                <td>{trip.description}</td>
                             </tr>
                         ))}
                     </tbody>

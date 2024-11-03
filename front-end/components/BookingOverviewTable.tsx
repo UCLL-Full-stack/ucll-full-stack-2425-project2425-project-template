@@ -1,6 +1,6 @@
 import { Booking } from '@/types';
 import React from 'react';
-import styles from '../styles/bookings.module.css';
+import styles from '../styles/Bookings.module.css';
 
 type Props = {
     bookings: Array<Booking>;
@@ -24,7 +24,7 @@ const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
                     {bookings.map((booking, index) => (
                         <tr key={index}>
                             <td>{booking.tripId}</td>
-                            <td>{booking.bookingDate.toLocaleDateString()}</td>
+                            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
                             <td>{booking.paymentStatus}</td>
                         </tr>
                     ))}

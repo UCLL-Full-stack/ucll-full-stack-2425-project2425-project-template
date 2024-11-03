@@ -3,7 +3,7 @@ import { Trip } from "../domain/model/trip";
 import { TripInput } from "../types";
 
 const createTrip = async (input: TripInput): Promise<Trip> => {
-    const { description, location, startDate, endDate, price } = input;
+    const { description, location, startDate, endDate, price, destination } = input;
 
     if (!description || description.trim().length === 0) {
         throw new Error("Description is required.");
@@ -25,7 +25,7 @@ const createTrip = async (input: TripInput): Promise<Trip> => {
         throw new Error("Price must be a positive number.");
     }
 
-    const newTrip = new Trip({ description, location, startDate, endDate, price });
+    const newTrip = new Trip({ description, location, startDate, endDate, price, });
     newTrip.validate();
 
     try {
