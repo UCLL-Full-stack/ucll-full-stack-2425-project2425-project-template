@@ -1,4 +1,15 @@
+import { Build } from '../model/build';
+import { Order } from '../model/order';
+import { Part } from '../model/part';
 import { User } from '../model/user';
+
+const parts = [
+    new Part({ id: 1, name: 'Ryzen 5600X', brand: 'AMD', type: 'CPU', price: 150}),
+    new Part({ id: 2, name: 'Geforce RTX4060', brand: 'Nvidia', type: 'GPU', price: 300}),
+]
+
+const build = new Build({ id: 1, parts, price: 700, preBuild: true })
+const order = new Order({ id: 1, builds: [build], price: 700, orderStatus: 'shipping', orderDate: new Date() })
 
 const users = [
     new User({
@@ -23,6 +34,8 @@ const users = [
         address: 'University of Cambridge, Cambridge, UK'
     }),
 ]
+
+users[0].addOrder(order);
 
 const getAllUsers = (): User[] => users;
 

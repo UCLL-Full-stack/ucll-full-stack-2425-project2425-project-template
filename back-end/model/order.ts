@@ -42,6 +42,16 @@ export class Order {
         }
     }
 
+    public getSummary() {
+        return {
+            id: this.id,
+            buildsAmount: this.builds.length,
+            price: this.price,
+            orderStatus: this.orderStatus,
+            orderDate: this.orderDate,
+        }
+    }
+
     getId(): number | undefined {
         return this.id;
     }

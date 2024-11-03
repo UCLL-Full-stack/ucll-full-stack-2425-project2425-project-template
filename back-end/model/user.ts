@@ -1,3 +1,4 @@
+import { Order } from "./order";
 
 
 export class User {
@@ -6,6 +7,7 @@ export class User {
     private email: string;
     private password: string;
     private address: string;
+    private orders: Order[] = [];
 
     constructor(user: {
         id?: number;
@@ -45,6 +47,25 @@ export class User {
     private validateEmail(email: string): boolean {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
+    }
+
+    public getOrderSummaries() {
+        return this.orders.map(order => order.getSummary());
+    }
+
+
+    public addOrder(order: Order) {
+        this.orders.push(order);
+    }
+
+    public toJson() {
+        return {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            address: this.address,
+            orderSummaries: this.getOrderSummaries(),
+        }
     }
 
     getId(): number | undefined {
