@@ -76,7 +76,7 @@ const Activiteiten: React.FC = () => {
                                 Naam:
                                 <input
                                     type="text"
-                                    className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md shadow-md"
+                                    className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md"
                                     value={newActiviteit.name}
                                     onChange={(e) => setNewActiviteit({ ...newActiviteit, name: e.target.value })}
                                 />
