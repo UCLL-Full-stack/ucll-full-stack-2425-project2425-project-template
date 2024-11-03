@@ -47,10 +47,11 @@ const getScheduleByUserIdAndDate = (userId: number, date: Date): Schedule | null
     );
 };
 
-const createSchedule = (id: number, date: Date) => {
+const createSchedule = (userId: number, date: Date): Schedule => {
+    const newId = Math.max(...schedules.map((s) => s.getId() || 0)) + 1;
     const newSchedule = new Schedule({
-        id,
-        user: user1,
+        id: newId,
+        user: user1, // TEMPORARILY --> should change to the actual user
         date,
         recipes: [],
     });
@@ -58,4 +59,14 @@ const createSchedule = (id: number, date: Date) => {
     return newSchedule;
 };
 
-export default { getScheduleByUserIdAndDate, createSchedule };
+const saveSchedule = (schedule: Schedule): Schedule => {
+    const index = schedules.findIndex((s) => s.getId() === schedule.getId());
+    if (index !== -1) {
+        schedules[index] = schedule;
+    } else {
+        schedules.push(schedule);
+    }
+    return schedule;
+};
+
+export default { getScheduleByUserIdAndDate, createSchedule, saveSchedule };
