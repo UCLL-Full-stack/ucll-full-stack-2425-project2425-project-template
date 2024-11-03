@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import ItemService from '@services/ItemsService';
 import AddNutritionLabelForm from '@components/nutritionlabel/AddNutritionlabelForm';
+import Head from 'next/head';
 
 const NutritionlabelForm: React.FC = () => {
     const params = useParams<{ itemId?: string }>();
@@ -27,6 +28,9 @@ const NutritionlabelForm: React.FC = () => {
 
     return (
         <>
+            <Head>
+                <title>Add Nutritionlabel To Item</title>
+            </Head>
             <section>{item && <AddNutritionLabelForm item={item} />}</section>
         </>
     );

@@ -42,7 +42,7 @@ const NutritionLabel: React.FC<Props> = ({ item }: Props) => {
                 </section>
             ) : (
                 <h2 className="text-lg font-semibold text-gray-700">
-                    This product has no nutrition label yet
+                    {item.name} has no nutrition label yet
                 </h2>
             )}
         </>

@@ -1,7 +1,7 @@
 export type Category = 'fruits' | 'vegetables' | 'dairy';
 
 export type Item = {
-    id?: number;
+    id: number;
     name: string;
     price: number;
     pathToImage: string;

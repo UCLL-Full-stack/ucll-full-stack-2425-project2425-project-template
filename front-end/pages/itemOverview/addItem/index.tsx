@@ -1,17 +1,13 @@
-import { Item } from '@types';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-import ItemService from '@services/ItemsService';
-import AddNutritionLabelForm from '@components/nutritionlabel/AddNutritionlabelForm';
 import AddItemForm from '@components/items/AddItemForm';
+import Head from 'next/head';
 
 const NutritionlabelForm: React.FC = () => {
     return (
         <>
-            <section>
-                <AddItemForm />
-            </section>
+            <Head>
+                <title>Add Item</title>
+            </Head>
+            <AddItemForm />
         </>
     );
 };

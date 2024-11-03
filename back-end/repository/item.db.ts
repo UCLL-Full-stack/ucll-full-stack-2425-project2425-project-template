@@ -5,7 +5,7 @@ const items = [
     new Item({
         id: 0,
         name: 'Strawberry',
-        price: 0.99,
+        price: 4.19,
         pathToImage:
             'https://www.health.com/thmb/zvfL1rCWAPg3XzidfAqURuCmttk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Strawberries-c5f434e7729e47c5b32c0deaa029386c.jpg',
         category: 'fruits',
@@ -21,7 +21,7 @@ const items = [
     new Item({
         id: 2,
         name: 'Banana',
-        price: 0.49,
+        price: 2.59,
         pathToImage:
             'https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2018/08/bananas-1354785_1920.jpg',
         category: 'fruits',
@@ -45,7 +45,7 @@ const items = [
     new Item({
         id: 5,
         name: 'Plum',
-        price: 0.79,
+        price: 1.29,
         pathToImage:
             'https://assets.idahopreferred.com/uploads/2023/09/07170427/Plums-scaled-1.jpg',
         category: 'fruits',
@@ -61,7 +61,7 @@ const items = [
     new Item({
         id: 7,
         name: 'Coconut',
-        price: 2.99,
+        price: 6.79,
         pathToImage:
             'https://www.jiomart.com/images/product/original/590000086/big-coconut-1-pc-approx-350-g-600-g-product-images-o590000086-p590000086-0-202408070949.jpg?im=Resize=(420,420)',
         category: 'fruits',

@@ -32,6 +32,10 @@ export class Nutritionlabel {
         this.salts = nutritionlabel.salts;
     }
 
+    setId(id: number) {
+        this.id = id;
+    }
+
     getId(): number | undefined {
         return this.id;
     }
