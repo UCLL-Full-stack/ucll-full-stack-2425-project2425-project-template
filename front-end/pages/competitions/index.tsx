@@ -39,7 +39,11 @@ const Competitions: React.FC = () => {
             <main className={styles.main}>
                 <h1>Competitions</h1>
                 <section>
-                    <CompetitionOverviewTable competitions={competitions} selectCompetition={setSelectedCompetition} />
+                    <CompetitionOverviewTable
+                        competitions={competitions}
+                        setCompetitions={setCompetitions}
+                        selectCompetition={setSelectedCompetition}
+                    />
                 </section>
                 {selectedCompetition && (
                     <section>

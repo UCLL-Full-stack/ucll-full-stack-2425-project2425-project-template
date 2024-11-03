@@ -6,10 +6,11 @@ import CompetitionService from '@/services/CompetitionService';
 
 interface CompetitionOverviewTableProps {
     competitions: Competition[];
+    setCompetitions: (competitions: Competition[]) => void;
     selectCompetition: (competition: Competition) => void;
 }
 
-const CompetitionOverviewTable: React.FC<CompetitionOverviewTableProps> = ({ competitions, selectCompetition }) => {
+const CompetitionOverviewTable: React.FC<CompetitionOverviewTableProps> = ({ competitions, setCompetitions, selectCompetition }) => {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCompetition, setSelectedCompetition] = useState<Competition | null>(null);
@@ -19,9 +20,15 @@ const CompetitionOverviewTable: React.FC<CompetitionOverviewTableProps> = ({ com
         setIsModalOpen(true);
     };
 
-    const handleSave = (updatedCompetition: Competition) => {
-        CompetitionService.editCompetition(updatedCompetition);
-        setIsModalOpen(false);
+    const handleSave = async (updatedCompetition: Competition) => {
+        try {
+            const savedCompetition = await CompetitionService.editCompetition(updatedCompetition);
+            setCompetitions(competitions.map(comp => comp.id === savedCompetition.id ? savedCompetition : comp));
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Failed to save competition:', error);
+            // Optionally show an error message to the user
+        }
     };
 
     return (
