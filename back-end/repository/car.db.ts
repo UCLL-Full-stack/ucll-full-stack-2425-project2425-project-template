@@ -1,6 +1,6 @@
 import { Car } from "../model/Car";
 
-const cars = [
+let cars = [
     new Car({
         id: 1,
         model: "Model S",
@@ -11,4 +11,8 @@ const cars = [
     }),
 ]
 const getAllCars = (): Car[] => cars;
-export default {getAllCars};
+const deleteCarById = (id: number): Car[] => {
+    const newCars = cars.filter((car) => car.getId() !== id);
+    return cars = newCars
+};
+export default {getAllCars, deleteCarById};

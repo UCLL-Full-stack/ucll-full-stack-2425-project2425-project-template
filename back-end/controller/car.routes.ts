@@ -11,4 +11,13 @@ carRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         next(error);
     }
 });
+carRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const carId = parseInt(req.params.id, 10);
+        await carService.deleteCarById(carId);
+        res.status(200).json({ message: 'Car deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
 export { carRouter };
