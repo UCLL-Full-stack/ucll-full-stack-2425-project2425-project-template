@@ -29,8 +29,26 @@ const Home: FC = () => {
     setIsFormOpen(false);
   }
 
-  const handleFormSubmit = (boardData: { boardName: string; columns: string[]; guild: string }) => {
-    console.log('Form submitted with data:', boardData);
+  const handleFormSubmit = async (boardData: { boardName: string; columns: string[]; guild: string }) => {
+    const boardPayload = {
+      boardName: boardData.boardName,
+      createdByUser: user!.userId,
+      guild: boardData.guild,
+      columns: boardData.columns.map(column => ({ columnName: column.trim() })),
+      permissions: []
+    };
+
+    try {
+      await BoardService.createBoard(boardPayload);
+      console.log('Created board with data:', boardPayload);
+      if (selectedGuildId) {
+        const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId);
+        setBoards(fetchedBoards);
+    }
+    } catch (error) {
+      console.error('Error creating board', error);
+      
+    }
     handleFormClose();
   }
 
