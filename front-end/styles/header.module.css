@@ -1,0 +1,54 @@
+
+.header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    background-color: #940000;
+    padding: 10px 20px ;
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.titleLink {
+    text-decoration: none;
+    color: white;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.titleLink:hover {
+    color: white;
+}
+
+.registerLink {
+    text-decoration: none;
+}
+
+
+.registerButton {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #940000;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 20px; 
+    text-decoration: none;
+}
+
+.registerButton:hover {
+    background-color: #f5f5f5;
+    text-decoration: none;
+}
