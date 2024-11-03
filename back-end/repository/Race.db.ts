@@ -84,19 +84,23 @@ const getAllRaces = (): Race[] => {
 }
 
 const getAllRacesByNameDriver = (driverName: string) => {
-    return races.filter(race => race.getDrivers().some(driver => driver.getName() === driverName));
+    return races.filter(race => (race.getDrivers() ?? []).some(driver => driver.getName() === driverName));
 }
+
+const getRaceById = (id: number): Race | null => {
+    return races.find(race => race.getId() === id) || null;
+};
 
 const getAllRacesByTypeCrash = (crashType: string) => {
     return races.filter(race => (race.getCrashes() ?? []).some(crash => crash.getType() === crashType));
 }
 
 const getAllRacesByCar_nameRacecar = (racecarName: string) => {
-    return races.filter(race => race.getDrivers().some(driver => driver.getRacecar().getCarName() === racecarName));
+    return races.filter(race => (race.getDrivers() ?? []).some(driver => driver.getRacecar().getCarName() === racecarName));
 }
 
 const createRace = (race: Race): void => {
     races.push(race);
 };
 
-export default { getAllRaces, getAllRacesByNameDriver, getAllRacesByTypeCrash, getAllRacesByCar_nameRacecar, createRace };
+export default { getAllRaces, getAllRacesByNameDriver, getRaceById, getAllRacesByTypeCrash, getAllRacesByCar_nameRacecar, createRace };

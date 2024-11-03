@@ -195,4 +195,38 @@ raceRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
+/**
+ * @swagger
+ * /races/{id}:
+ *   get:
+ *     summary: Retrieve a race by ID
+ *     description: Retrieve a race by its ID from the database.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The race ID
+ *     responses:
+ *       200:
+ *         description: A race object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Race'
+ *       404:
+ *         description: Race not found
+ */
+
+raceRouter.get('/:id', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10);
+    const race = raceService.getRaceById(id);
+    if (race) {
+      res.json(race);
+    } else {
+      res.status(404).json({ message: 'Race not found' });
+    }
+  });
+
 export { raceRouter };

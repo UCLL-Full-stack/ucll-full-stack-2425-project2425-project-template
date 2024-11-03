@@ -32,7 +32,7 @@ export type Race = {
   type: string;
   description: string;
   location: string;
-  drivers: Driver[];
+  drivers?: Driver[];
   crashes?: Crash[];
   admin?: Admin;
   id?: number;

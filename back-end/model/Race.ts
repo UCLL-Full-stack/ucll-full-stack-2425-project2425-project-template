@@ -10,10 +10,10 @@ export class Race {
     private description: string;
     private location: string;
     private crashes?: Crash[];
-    private drivers: Driver[];
+    private drivers?: Driver[];
     private admin?: Admin;
 
-    constructor(race: { name: string, type: string, description: string, location: string, drivers: Driver[], crashes?: Crash[], admin?: Admin, id?: number }) {
+    constructor(race: { name: string, type: string, description: string, location: string, drivers?: Driver[], crashes?: Crash[], admin?: Admin, id?: number }) {
         this.validate(race);
 
         this.name = race.name;
@@ -26,7 +26,7 @@ export class Race {
         if (race.id) this.id = race.id;
     }
 
-    private validate(race: { name: string, type: string, description: string, location: string, drivers: Driver[], crashes?: Crash[], admin?: Admin, id?: number }): void {
+    private validate(race: { name: string, type: string, description: string, location: string, drivers?: Driver[], crashes?: Crash[], admin?: Admin, id?: number }): void {
         if (!race.name) {
             throw new Error('Name is required');
         }
@@ -38,9 +38,6 @@ export class Race {
         }
         if (!race.location) {
             throw new Error('Location is required');
-        }
-        if (!race.drivers || race.drivers.length === 0) {
-            throw new Error('At least one driver is required');
         }
     }
 
@@ -68,7 +65,7 @@ export class Race {
         return this.crashes;
     }
 
-    getDrivers(): Driver[] {
+    getDrivers(): Driver[] | undefined{
         return this.drivers;
     }
 

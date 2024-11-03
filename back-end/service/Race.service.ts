@@ -14,6 +14,10 @@ const getAllRaces = (): Race[] => {
     return raceDb.getAllRaces();
 }
 
+const getRaceById = (id: number): Race | null => {
+    return raceDb.getRaceById(id);
+};
+
 const createRace = (raceInput: RaceInput): Race => {
     // error handling
     if (!raceInput.name) {
@@ -170,6 +174,7 @@ const createDriver = (driverInput: any): Driver => {
 
 export default {
     getAllRaces,
+    getRaceById,
     createRace,
     getAllCrashes,
     createCrash,
