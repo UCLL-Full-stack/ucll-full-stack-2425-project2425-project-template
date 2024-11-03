@@ -1,7 +1,6 @@
 import { FC, useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { FlashcardInput, Category } from '../types';
 import { getCategories } from '../services/categoryService';
-
 import styles from './FlashcardForm.module.css';
 
 interface FlashcardFormProps {
@@ -13,9 +12,9 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit }) => {
   const [answer, setAnswer] = useState('');
   const [categoryId, setCategoryId] = useState<number | undefined>();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch categories when the component mounts
     getCategories()
       .then((data) => setCategories(data))
       .catch((error) => {
@@ -25,6 +24,11 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (!categoryId) {
+      setError('Please select a category.');
+      return;
+    }
+    setError(null);
     onSubmit({ question, answer, categoryId });
   };
 
@@ -59,6 +63,7 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit }) => {
             const value = e.target.value;
             setCategoryId(value ? Number(value) : undefined);
           }}
+          required
         >
           <option value="">Select a Category</option>
           {categories.map((category) => (
@@ -68,12 +73,12 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit }) => {
           ))}
         </select>
       </div>
+      {error && <div className={styles.error}>{error}</div>}
       <button type="submit" className={styles.button}>
         Create Flashcard
       </button>
     </form>
   );
 };
-
 
 export default FlashcardForm;
