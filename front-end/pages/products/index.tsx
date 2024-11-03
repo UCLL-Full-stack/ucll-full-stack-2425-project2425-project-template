@@ -1,9 +1,11 @@
 import Head from "next/head";
 import ProductsOverview from "@components/product/productsOverview";
+import Header from "@components/header";
 
 const ProductIndexPage = () => {
   return (
     <>
+    <Header />
       <Head>
         <title>Product List</title>
       </Head>

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import ProductService from "@services/ProductService";
 import ProductInfo from "@components/product/productInfo";
 import ReviewForm from "@components/review/addReviewForm";
+import Header from "@components/header";
 
 const ReadProductById = () => {
   const [product, setProduct] = useState<Product | null>(null);
@@ -28,7 +29,8 @@ const ReadProductById = () => {
 
   return (
     <>
-      <Head>
+    <Header />
+    <Head>
         <title>Product Info</title>
       </Head>
 
