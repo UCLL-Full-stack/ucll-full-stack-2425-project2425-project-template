@@ -26,6 +26,15 @@ const Header: React.FC = () => {
                 <Link href="/" className={styles.card}>
                     Homepage
                 </Link>
+                <Link href="/training" className={styles.card}>
+                    Trainings
+                </Link>
+                <Link href="/team" className={styles.card}>
+                    Teams
+                </Link>
+                <Link href="/match" className={styles.card}>
+                    Matches
+                </Link>
 
                 {!loggedInUser && (
                     <Link
@@ -37,7 +46,7 @@ const Header: React.FC = () => {
 
                 {loggedInUser && (
                     <>
-                        <Link href="/training" className={styles.card}>
+                        {/* <Link href="/training" className={styles.card}>
                             Trainings
                         </Link>
                         <Link href="/team" className={styles.card}>
@@ -45,26 +54,18 @@ const Header: React.FC = () => {
                         </Link>
                         <Link href="/match" className={styles.card}>
                             Matches
-                        </Link>
+                        </Link> */}
                                 
                         <a
                             href="#"
                             onClick={handleClick}
                             className={styles.card}
                         > Logout </a>
+                        <a
+                            href="/user"
+                            className={styles.card}
+                        > Profile </a>
                     </>
-                )}
-                
-                {loggedInUser && (
-                    <a
-                        href="/user"
-                        className={styles.card}>
-                        Profile
-                    </a>
-                )}
-
-                {loggedInUser && (
-                    <p>|</p>
                 )}
 
             </nav>
