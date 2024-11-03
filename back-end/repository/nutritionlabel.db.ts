@@ -1,28 +1,6 @@
 import { Nutritionlabel } from '../model/nutritionlabel';
 
-const nutritionlabels = [
-    new Nutritionlabel({
-        id: 0,
-        energy: 100,
-        fat: 10,
-        saturatedFats: 5,
-        carbohydrates: 20,
-        sugar: 10,
-        protein: 5,
-        salts: 0.5,
-    }),
-
-    new Nutritionlabel({
-        id: 1,
-        energy: 200,
-        fat: 20,
-        saturatedFats: 10,
-        carbohydrates: 40,
-        sugar: 20,
-        protein: 10,
-        salts: 1,
-    }),
-];
+const nutritionlabels: Nutritionlabel[] = [];
 
 const getAll = (): Nutritionlabel[] => {
     try {
@@ -34,6 +12,7 @@ const getAll = (): Nutritionlabel[] => {
 };
 const create = (nutritionlabel: Nutritionlabel): Nutritionlabel => {
     try {
+        nutritionlabel.setId(nutritionlabels.length);
         nutritionlabels.push(nutritionlabel);
         return nutritionlabel;
     } catch (error) {

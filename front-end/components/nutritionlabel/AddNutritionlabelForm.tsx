@@ -32,14 +32,21 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            if (item.id) {
-                await ItemService.addNutritionlabelToItem(item.id, nutritionlabel);
+            if (item.id === undefined || item.id === null) {
+                throw new Error('Item id is missing in form');
             }
-        } catch (error) {
-            console.error('Error adding nutrition label:', error);
-        }
 
-        router.push('/itemOverview');
+            const response = await ItemService.addNutritionlabelToItem(item.id, nutritionlabel);
+            console.log('Service response:', response);
+
+            router.push('/itemOverview');
+        } catch (error) {
+            console.error('Error details:', {
+                error,
+                itemState: item,
+                nutritionLabelState: nutritionlabel,
+            });
+        }
     };
 
     return (
