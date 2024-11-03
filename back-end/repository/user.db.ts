@@ -3,13 +3,13 @@ import { User } from '../model/user';
 
 const users: User[] = [
     new User({
-        nationalRegisterNumber: '01.01.01-001.01',
+        nationalRegisterNumber: '99.01.01-123.45', // Example valid NRN
         name: 'John Doe',
-        birthDate: new Date('1990-01-01T00:00:00.000Z'),
-        isAdministrator: true,
-        phoneNumber: '012345678',
-        email: 'john.doe@gmail.com',
-        password: 'Password1!',
+        birthDate: new Date('1990-01-01'),
+        isAdministrator: false,
+        phoneNumber: '+32 12 34 56 78',
+        email: 'john.doe@example.com',
+        password: 'P@ssw0rd!',
     }),
 ];
 

@@ -21,7 +21,7 @@ type Account = {
   type: string;
   transactions?: Transaction[];
   users: User[];
-  budgetgoals?: BudgetgoalInput[];
+  budgetgoals?: Budgetgoal[];
 };
 
 type Transaction = {
@@ -34,7 +34,7 @@ type Transaction = {
   account: Account;
 };
 
-type BudgetgoalInput = {
+type Budgetgoal = {
   id?: number;
   name: string;
   amount: number;
@@ -43,4 +43,9 @@ type BudgetgoalInput = {
   account: Account;
 };
 
-export type { User, Transaction, BudgetgoalInput, Account };
+type Authentication = {
+  email: string;
+  password: string;
+};
+
+export type { User, Transaction, Budgetgoal, Account, Authentication };
