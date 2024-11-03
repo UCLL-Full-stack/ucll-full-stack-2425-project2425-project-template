@@ -32,11 +32,21 @@ const createUser = async (user: User): Promise<User> => {
         throw new Error("Username already exists");
     }
 
-    // If checks pass, hash the password and create the user
+    // Ensure the password is provided
+    if (!user.password) {
+        throw new Error("Password is required");
+    }
+
+    // Hash the password
     const hashedPassword = await bcrypt.hash(user.password, 10);
+
+    // Create the new user object with the hashed password
     const newUser = new User(user.username, hashedPassword, user.email, user.firstName, user.lastName, [], []);
+
+    // Save the new user to the database
     return UserDb.createUser(newUser);
 };
+
 
 export default {
     getAllUsers,
