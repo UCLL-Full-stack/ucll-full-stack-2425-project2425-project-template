@@ -1,23 +1,24 @@
 import { Course } from '../types/index';
+import { BACKEND_APP_URL } from '@/utils/urls';
 
-const URL = process.env.NEXT_PUBLIC_API_URL + '/courses';
+const URL = BACKEND_APP_URL + '/courses';
 
-const getAllCourses = async (): Promise<Course[]> => {
+const getAllCourses = async () => {
   const response = await fetch(URL);
-  return await response.json();
+  return response;
 }
 
-const getAllShortCourses = async (): Promise<Course[]> => {
+const getAllShortCourses = async () => {
   const response = await fetch(`${URL}/short`);
-  return await response.json();
+  return response;
 }
 
-const getCourseById = async (id: number): Promise<Course> => {
+const getCourseById = async (id: number) => {
   const response = await fetch(`${URL}/${id}`);
-  return await response.json();
+  return response;
 }
 
-const createCourse = async (course: Course): Promise<Course> => {
+const createCourse = async (course: Course) => {
   const response = await fetch(URL, {
     method: 'POST',
     headers: {
@@ -25,10 +26,10 @@ const createCourse = async (course: Course): Promise<Course> => {
     },
     body: JSON.stringify(course),
   });
-  return await response.json();
+  return response;
 }
 
-const updateCourse = async (id: number, course: Course): Promise<Course> => {
+const updateCourse = async (id: number, course: Course) => {
   const response = await fetch(`${URL}/${id}`, {
     method: 'PUT',
     headers: {
@@ -36,10 +37,10 @@ const updateCourse = async (id: number, course: Course): Promise<Course> => {
     },
     body: JSON.stringify(course),
   });
-  return await response.json();
+  return response;
 }
 
-const deleteCourses = async (courseIds: number[]): Promise<string> => {
+const deleteCourses = async (courseIds: number[]) => {
   const response = await fetch(`${URL}/delete`, {
     method: 'DELETE',
     headers: {
@@ -47,7 +48,7 @@ const deleteCourses = async (courseIds: number[]): Promise<string> => {
     },
     body: JSON.stringify(courseIds),
   });
-  return await response.text();
+  return response;
 }
 
 const CourseService = {
