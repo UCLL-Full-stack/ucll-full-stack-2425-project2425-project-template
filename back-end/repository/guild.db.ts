@@ -45,7 +45,7 @@ const guilds: Guild[] = [
         [
             { identifier: DiscordPermission.MANAGE_CHANNELS, kanbanPermission: [KanbanPermission.CREATE_BOARD, KanbanPermission.EDIT_BOARD, KanbanPermission.DELETE_BOARD] },
             { identifier: DiscordPermission.MANAGE_MESSAGES, kanbanPermission: [KanbanPermission.CREATE_TASKS, KanbanPermission.EDIT_TASKS, KanbanPermission.DELETE_TASKS] },
-            { identifier: "role1-2", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.MANAGE_BOARD_PERMISSIONS] },
+            { identifier: "role1-2", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.CREATE_BOARD] },
             { identifier: "role2-2", kanbanPermission: [KanbanPermission.CREATE_COLUMNS, KanbanPermission.EDIT_COLUMNS] },
         ],
         [

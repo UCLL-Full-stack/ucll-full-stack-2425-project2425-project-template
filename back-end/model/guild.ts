@@ -40,7 +40,11 @@ export class Guild{
     }
 
     public removeRole(roleId: string): void{
-        this.roles = this.roles.filter(role => role.getRoleId() !== roleId);
+        const roleIndex = this.roles.findIndex(role => role.getRoleId() === roleId);
+        if (roleIndex === -1) {
+            throw new Error('Role not found');
+        }
+        this.roles.splice(roleIndex, 1);
     }
 
     public getGuildId(): string{
@@ -119,7 +123,7 @@ export class Guild{
             guildId: this.guildId,
             guildName: this.guildName,
             settings: this.settings,
-            roles: this.roles.map(role => role.getRoleId()),
+            roles: this.roles.map(role => role.toJSON()),
             members: this.members
         }
     }

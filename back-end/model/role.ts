@@ -65,4 +65,12 @@ export class Role{
             throw new Error("Role Name is required");
         }
     }
+
+    public toJSON(){
+        return {
+            roleId: this.roleId,
+            roleName: this.roleName,
+            permissions: this.permissions
+        }
+    }
 }

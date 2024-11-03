@@ -34,8 +34,12 @@ export class User{
         this.guilds.push(guild);
     }
 
-    public removeGuild(guildId: string): void{
-        this.guilds = this.guilds.filter(guild => guild.getGuildId() !== guildId);
+    public removeGuild(guildId: string): void {
+        const guildIndex = this.guilds.findIndex(guild => guild.getGuildId() === guildId);
+        if (guildIndex === -1) {
+            throw new Error('Guild not found');
+        }
+        this.guilds.splice(guildIndex, 1);
     }
 
     public getUserId(): string{
@@ -71,7 +75,7 @@ export class User{
             userId: this.userId,
             username: this.username,
             userTag: this.userTag,
-            guilds: this.guilds.map(guild => guild.getGuildId())
+            guilds: this.guilds.map(guild => guild.toJSON())
         }
     }
 }

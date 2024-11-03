@@ -27,8 +27,12 @@ export class Column{
         this.tasks.push(task);
     }
 
-    public removeTask(taskId: string): void{
-        this.tasks = this.tasks.filter(task => task.getTaskId() !== taskId);
+    public removeTask(taskId: string): void {
+        const taskIndex = this.tasks.findIndex(task => task.getTaskId() === taskId);
+        if (taskIndex === -1) {
+            throw new Error("Task not found");
+        }
+        this.tasks.splice(taskIndex, 1);
     }
 
     public getColumnId(): string{

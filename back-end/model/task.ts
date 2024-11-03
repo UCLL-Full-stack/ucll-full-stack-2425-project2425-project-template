@@ -41,7 +41,11 @@ export class Task{
     }
 
     public removeAssignee(userId: string): void{
-        this.assignees = this.assignees.filter(assignee => assignee.getUserId() !== userId);
+        const assigneeIndex = this.assignees.findIndex(assignee => assignee.getUserId() === userId);
+        if (assigneeIndex === -1) {
+            throw new Error('Assignee not found');
+        }
+        this.assignees.splice(assigneeIndex, 1);
     }
 
     public getTaskId(): string{
