@@ -25,7 +25,7 @@
  *              description: Role of the user (e.g., 'admin', 'user', etc.)
  */
 
-import express, {NextFunction, Request, Response} from "express";
+import express from "express";
 
 const userRouter = express.Router()
 
