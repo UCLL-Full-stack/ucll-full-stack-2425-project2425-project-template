@@ -30,6 +30,16 @@ export class Review {
     equals(review: Review): boolean {
         return this.text === review.text && this.score === review.score && this.writer.equals(review.writer) && this.recipe.equals(review.recipe);
     }
+
+    static from(reviewPrisma: any): Review {
+        return new Review({
+            id: reviewPrisma.id,
+            writer: reviewPrisma.writer,
+            text: reviewPrisma.text,
+            score: reviewPrisma.score,
+            recipe: reviewPrisma.recipe,
+        });
+    }
 }
 
 export default { Review };

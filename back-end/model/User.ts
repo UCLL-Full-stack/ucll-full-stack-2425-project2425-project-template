@@ -40,4 +40,8 @@ export class User {
     equals(user: User): boolean {
         return this.username === user.username && this.email === user.email;
     }
+
+    static from(userPrisma: any): User {
+        return new User(userPrisma.username, userPrisma.password, userPrisma.email, userPrisma.firstName, userPrisma.lastName, userPrisma.recipes, userPrisma.reviews);
+    }
 }
