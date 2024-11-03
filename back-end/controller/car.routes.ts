@@ -20,4 +20,14 @@ carRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction)
         next(error);
     }
 });
+carRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const carData = req.body;
+        const newCar = await carService.addCar(carData);
+        res.status(200).json(newCar);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { carRouter };

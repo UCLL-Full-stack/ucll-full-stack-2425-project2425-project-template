@@ -11,8 +11,23 @@ let cars = [
     }),
 ]
 const getAllCars = (): Car[] => cars;
+const addCar = (carData: {
+    model: string;
+    brand: string;
+    year: number;
+    licensePlate: string;
+    price: number;
+}): Car => {
+    const newId = cars.length > 0 ? cars.length + 1 : 1;
+    const newCar = new Car({
+        id: newId,
+        ...carData,
+    });
+    cars.push(newCar);
+    return newCar;
+};
 const deleteCarById = (id: number): Car[] => {
     const newCars = cars.filter((car) => car.getId() !== id);
     return cars = newCars
 };
-export default {getAllCars, deleteCarById};
+export default {getAllCars, deleteCarById, addCar,};
