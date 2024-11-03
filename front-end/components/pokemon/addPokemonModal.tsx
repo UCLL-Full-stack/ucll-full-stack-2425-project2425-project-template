@@ -1,6 +1,6 @@
-// components/pokemons/AddPokemonModal.tsx
+
 import React, { useState } from 'react';
-import { Pokemon } from '@types'; // Make sure this points to the correct location
+import { Pokemon } from '@types'; 
 import styles from '../../styles/AddPokemonModal.module.css';
 
 interface AddPokemonModalProps {
@@ -20,19 +20,19 @@ const AddPokemonModal: React.FC<AddPokemonModalProps> = ({ onClose, onAddPokemon
     specialDefence: 0,
     speed: 0,
   });
-  const [canEvolve, setCanEvolve] = useState(false); // Add canEvolve state
+  const [canEvolve, setCanEvolve] = useState(false); 
 
   const handleAdd = () => {
     const newPokemon: Pokemon = {
-      id: Math.random(), // Use a random ID or implement a better ID generation strategy
+      id: Math.random(), 
       name,
       type,
       health,
       stats,
-      canEvolve: true, // Assuming new Pokémon can evolve, adjust as needed
+      canEvolve: true, 
     };
     onAddPokemon(newPokemon);
-    onClose(); // Close the modal after adding
+    onClose(); 
   };
 
   return (

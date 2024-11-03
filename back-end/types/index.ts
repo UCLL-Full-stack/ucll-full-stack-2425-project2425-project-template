@@ -1,6 +1,5 @@
 type Role = 'admin' | 'trainer' | 'nurse';
 
-// types/index.ts
 type PokemonInput = {
   id?: number;
   name: string;

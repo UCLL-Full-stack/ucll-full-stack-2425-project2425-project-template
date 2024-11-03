@@ -1,4 +1,4 @@
-// components/trainers/TrainerOverviewTable.tsx
+
 import React from 'react';
 import { Trainer } from '@types';
 

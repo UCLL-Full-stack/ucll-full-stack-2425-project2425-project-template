@@ -1,7 +1,7 @@
-// components/pokemons/pokemonDetail.tsx
+
 import React from 'react';
 import { Pokemon } from '@types';
-import styles from '../../styles/pokemon.module.css'; // Import the styles
+import styles from '../../styles/pokemon.module.css'; 
 
 interface PokemonDetailsProps {
   pokemon: Pokemon;

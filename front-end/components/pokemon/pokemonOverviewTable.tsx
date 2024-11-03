@@ -1,4 +1,4 @@
-// components/pokemons/pokemonOverviewTable.tsx
+
 import React from 'react';
 import { Pokemon } from '@types';
 

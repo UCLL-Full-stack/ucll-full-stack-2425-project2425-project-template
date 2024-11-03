@@ -29,7 +29,6 @@ const Pokemons: React.FC = () => {
 
   const handleSelectTrainer = (trainer: Trainer) => {
     setSelectedTrainer(trainer);
-    setSelectedPokemon(null); // Clear selected Pokémon when a new trainer is selected
   };
 
   const handleSelectPokemon = (pokemon: Pokemon) => {
@@ -37,14 +36,25 @@ const Pokemons: React.FC = () => {
   };
 
   const handleAddPokemon = async (newPokemon: Pokemon) => {
-    try{
-      if (selectedTrainer!=null && selectedTrainer.id!=null) {
-        const updatedTrainer = await TrainerService.addPokemonToTrainerById(selectedTrainer.id,newPokemon);
+    try {
+      if (selectedTrainer != null && selectedTrainer.id != null) {
+        const updatedTrainer = await TrainerService.addPokemonToTrainerById(selectedTrainer.id, newPokemon);
+  
+        // Update the selected trainer with the new Pokemon list
         setSelectedTrainer(updatedTrainer);
-      }} catch (error) {
-        console.error(error)
+  
+        // Update the trainers list with the modified trainer
+        setTrainers(prevTrainers =>
+          prevTrainers.map(trainer =>
+            trainer.id === updatedTrainer.id ? updatedTrainer : trainer
+          )
+        );
       }
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   return (
     <>
