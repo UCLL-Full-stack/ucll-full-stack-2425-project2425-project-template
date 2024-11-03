@@ -1,3 +1,5 @@
+type TransactionType = 'expense' | 'income';
+
 type UserInput = {
     id?: number;
     nationalRegisterNumber: string;
@@ -53,6 +55,7 @@ type AuthenticationResponse = {
 };
 
 export {
+    TransactionType,
     UserInput,
     AccountInput,
     TransactionInput,

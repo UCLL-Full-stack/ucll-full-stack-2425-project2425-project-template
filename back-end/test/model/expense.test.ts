@@ -1,101 +1,92 @@
 import { set } from 'date-fns';
 import { Account } from '../../model/account';
-import { Transaction } from '../../model/transaction';
+import { User } from '../../model/user';
 import { Expense } from '../../model/expense';
+
+const user = new User({
+    nationalRegisterNumber: '01.01.01-001.01',
+    name: 'John Doe',
+    birthDate: new Date('1990-01-01T00:00:00.000Z'),
+    isAdministrator: true,
+    phoneNumber: '012345678',
+    email: 'john.doe@gmail.com',
+    password: 'Password1!',
+});
 
 test('given: valid values for expense, when: creating a expense, then: expense is created with those values', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings', users: [] });
+    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+    const destinationAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
-    //When
+    // When
     const expense = new Expense({
         amount: 100,
         currency: 'EUR',
-        type: 'expense',
         account,
-        destination: 'Groceries',
+        destination: destinationAccount.getAccountNumber(),
     });
 
-    //Then
+    // Then
     expect(expense.getAmount()).toEqual(100);
     expect(expense.getCurrency()).toEqual('EUR');
-    expect(expense.getType()).toEqual('expense');
+    expect(expense.getTransactionType()).toEqual('expense');
     expect(expense.getAccount()).toEqual(account);
-    expect(expense.getDestination()).toEqual('Groceries');
+    expect(expense.getDestination()).toEqual(destinationAccount.getAccountNumber());
 });
 
 test('given: zero amount for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings', users: [] });
+    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+    const destinationAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
-    //When
+    // When
     const createExpense = () => {
         new Expense({
             amount: 0,
             currency: 'EUR',
-            type: 'expense',
             account,
-            destination: 'Groceries',
+            destination: destinationAccount.getAccountNumber(),
         });
     };
 
-    //Then
+    // Then
     expect(createExpense).toThrow('Amount must be greater than 0.');
 });
 
 test('given: negative amount for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings', users: [] });
+    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+    const destinationAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
-    //When
+    // When
     const createExpense = () => {
         new Expense({
             amount: -1,
             currency: 'EUR',
-            type: 'expense',
             account,
-            destination: 'Groceries',
+            destination: destinationAccount.getAccountNumber(),
         });
     };
 
-    //Then
+    // Then
     expect(createExpense).toThrow('Amount must be greater than 0.');
 });
 
 test('given: invalid currency for expense, when: creating a expense, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: true, type: 'Savings', users: [] });
+    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+    const destinationAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
-    //When
+    // When
     const createExpense = () => {
         new Expense({
             amount: 100,
             currency: 'AUD',
-            type: 'expense',
             account,
-            destination: 'Groceries',
+            destination: destinationAccount.getAccountNumber(),
         });
     };
 
-    //Then
+    // Then
     expect(createExpense).toThrow('Currency must be either USD, EUR or GBP.');
-});
-
-test('given: invalid type for expense, when: creating a expense, then: an error is thrown', () => {
-    // Given
-    const account = new Account({ isShared: true, type: 'Savings', users: [] });
-
-    //When
-    const createExpense = () => {
-        new Expense({
-            amount: 100,
-            currency: 'EUR',
-            type: 'loan',
-            account,
-            destination: 'Groceries',
-        });
-    };
-
-    //Then
-    expect(createExpense).toThrow('Type must be either income or expense.');
 });

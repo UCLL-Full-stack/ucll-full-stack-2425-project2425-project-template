@@ -19,10 +19,7 @@ const Home: React.FC = () => {
 
         <div className={styles.description}>
           <p>
-            Courses lets you see as a lecturer all the courses you are teaching
-            and as a student all the courses you are enrolled in. <br />
-            You can also see when the courses are scheduled and the students
-            enrolled in each course.
+            This is a personal finance tracker app. You can use it to keep track of your expenses and income.
           </p>
         </div>
       </main>

@@ -1,6 +1,6 @@
 import { User } from './user';
-import { Budgetgoal } from './budgetgoal';
-import { Loan } from './loan';
+// import { Budgetgoal } from './budgetgoal';
+// import { Loan } from './loan';
 import { Transaction } from './transaction';
 
 export class Account {
@@ -15,7 +15,7 @@ export class Account {
     public transactions: Transaction[];
     public users: User[];
     // public loans: Loan[];
-    public budgetgoals: Budgetgoal[];
+    // public budgetgoals: Budgetgoal[];
 
     constructor(account: { id?: number; isShared: boolean; type: string; users: User[] }) {
         this.validate(account);
@@ -31,7 +31,7 @@ export class Account {
         this.transactions = [];
         this.users = account.users;
         // this.loans = [];
-        this.budgetgoals = [];
+        // this.budgetgoals = [];
     }
 
     getId(): number | undefined {
@@ -78,16 +78,27 @@ export class Account {
     //     return this.loans;
     // }
 
-    getBudgetgoals(): Budgetgoal[] {
-        return this.budgetgoals;
-    }
+    // getBudgetgoals(): Budgetgoal[] {
+    //     return this.budgetgoals;
+    // }
 
-    validate(account: { isShared: boolean; type: string; id?: number }) {
-        if (account.isShared === undefined) {
-            throw new Error('Is shared is required.');
+    validate(account: { isShared: boolean; type: string; users: User[]; id?: number }) {
+        const validTypes = ['transaction', 'savings', 'emergency fund'];
+
+        if (account.isShared && account.users.length < 2) {
+            throw new Error('Shared accounts must have at least two users.');
+        } else if (!account.isShared && account.users.length > 1) {
+            throw new Error('A personal account can only have one user.');
         }
-        if (!account.type) {
-            throw new Error('Type is required.');
+        if (!account.type?.trim()) {
+            throw new Error('Account type is required.');
+        } else if (!validTypes.includes(account.type.toLowerCase())) {
+            throw new Error(
+                `Invalid account type. Valid types are: ${validTypes.join(' account, ')} account.`
+            );
+        }
+        if (account.users.length === 0) {
+            throw new Error('An account must have at least one user.');
         }
     }
 
