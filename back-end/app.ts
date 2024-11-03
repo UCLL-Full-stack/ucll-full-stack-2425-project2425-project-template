@@ -32,7 +32,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/boards', boardRouter);
 app.use('/api/columns', columnRouter);
-app.use('api/guilds', guildRouter);
+app.use('/api/guilds', guildRouter);
 app.use('/api/tasks', taskRouter);
 
 app.get('/status', (req, res) => {

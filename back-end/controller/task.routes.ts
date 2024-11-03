@@ -4,10 +4,9 @@ import { validateTask } from '../util/validators';
 
 const taskRouter = Router();
 
-// Update a task by ID
 taskRouter.put('/:taskId', validateTask, (req, res) => {
     const { taskId } = req.params;
-    const updatedTask = req.body; // Expecting updated task details in request body
+    const updatedTask = req.body;
     try {
         taskService.updateTask(taskId, updatedTask);
         res.status(200).json({ message: 'Task updated successfully' });
@@ -20,12 +19,11 @@ taskRouter.put('/:taskId', validateTask, (req, res) => {
     }
 });
 
-// Delete a task by ID
 taskRouter.delete('/:taskId', (req, res) => {
     const { taskId } = req.params;
     try {
         taskService.deleteTask(taskId);
-        res.status(204).send(); // No content to send back
+        res.status(204).send();
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });

@@ -129,4 +129,15 @@ export class Board {
         this.permissions = permissions;
     }
 
+    public toJSON() {
+        return {
+            boardId: this.boardId,
+            boardName: this.boardName,
+            createdByUser: this.createdByUser.getUserId(),
+            guild: this.guild.getGuildId(),
+            columns: this.columns.map(column => column.toJSON()),
+            permissions: this.permissions
+        };
+    }
+
 }

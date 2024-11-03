@@ -51,9 +51,9 @@ boardRouter.post('/:boardId/columns',validateColumn, (req, res) => {
 
 boardRouter.post('/:boardId/permissions', validatePermissions, (req, res) => {
     const { boardId } = req.params;
-    const permissions = req.body; // Expecting permissions in request body
+    const permissions = req.body;
     try {
-        boardService.setPermissionsForBoard(boardId, permissions); // Implement this method in your service
+        boardService.setPermissionsForBoard(boardId, permissions);
         res.status(200).json({ message: 'Permissions set successfully' });
     } catch (error) {
         if (error instanceof Error) {
