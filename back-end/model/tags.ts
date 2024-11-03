@@ -32,14 +32,6 @@ export class Tag {
         this._description = description;
     }
 
-    getRecipes(): Recipe[] {
-        return this._recipes;
-    }
-
-    setRecipes(recipes: Recipe[]): void {
-        this._recipes = recipes;
-    }
-
 
     //I haven't included the Id because this will normally never match 
     //I also haven't included the recipes because if the have the same name and description the are still the same
