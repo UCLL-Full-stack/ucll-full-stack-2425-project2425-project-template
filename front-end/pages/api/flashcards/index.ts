@@ -44,7 +44,6 @@ const flashcards: Flashcard[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }
-  // Add more flashcards here
 ];
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
