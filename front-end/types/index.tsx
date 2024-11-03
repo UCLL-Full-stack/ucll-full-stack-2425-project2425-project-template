@@ -15,6 +15,14 @@ type PlaylistInput = {
     name: string;
     totalNumbers: number;
 }
+type Playlist = {
+    id?: number;
+    name: string;
+    totalNumbers: number;
+    songs: Song[]
+}
+
+
 
 type SongInput = {
     id?: number;
@@ -33,5 +41,6 @@ export type {
     UserInput,
     PlaylistInput,
     SongInput,
-    Song
+    Song,
+    Playlist
 }

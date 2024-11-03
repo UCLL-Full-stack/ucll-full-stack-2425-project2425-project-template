@@ -1,15 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Song } from "types";
+import playlistService from "@services/playlistService";
 
 type Props = {
-    songs: Array<Song>
-}
+    songs: Array<Song>;
+};
 
 const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
-    const [visibleCount, setVisibleCount] = useState(10); // State to track visible songs
+    const [visibleCount, setVisibleCount] = useState(10);
+    const [playlists, setPlaylists] = useState<Array<{ id: number; name: string }>>([]);
+    const [isPopupVisible, setPopupVisible] = useState<number | null>(null);
+    
+    useEffect(() => {
+        const fetchPlaylists = async () => {
+            const response = await playlistService.getAllPlaylists();
+            const playlistsData = await response.json();
+            setPlaylists(playlistsData);
+        };
+
+        fetchPlaylists();
+    }, []);
 
     const loadMoreSongs = () => {
-        setVisibleCount((prevCount: number) => prevCount + 10); // Increase the count by 10
+        setVisibleCount((prevCount: number) => prevCount + 10);
+    };
+
+    const handleAddSongToPlaylist = async (songId: number, playlistId: number) => {
+        await playlistService.addSongToPlaylist(songId, playlistId);
+        setPopupVisible(null); 
+        console.log(`Song ${songId} added to playlist ${playlistId}`);
+    };
+
+    const togglePopup = (index: number) => {
+        setPopupVisible(prevIndex => (prevIndex === index ? null : index));
     };
 
     return (
@@ -27,21 +50,36 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
                         </thead>
                         <tbody>
                             {songs.slice(0, visibleCount).map((song, index) => (
-                                <tr key={index} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                                <tr key={song.id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">img</td>
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">{song.title}</td>
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">{song.genre}</td>
                                     <td className="px-4 py-2 border-b border-gray-200 text-left">
-                                        <button>...</button>
+                                        <button onClick={() => togglePopup(index)} className="text-blue-600">...</button>
+                                        {isPopupVisible === index && (
+                                            <div className="absolute mt-2 w-48 bg-white shadow-md rounded-md border border-gray-200 z-10">
+                                                <ul>
+                                                    {playlists.map(playlist => (
+                                                        <li
+                                                            key={playlist.id}
+                                                            onClick={() => handleAddSongToPlaylist(song.id, playlist.id)}
+                                                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                        >
+                                                            {playlist.name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    {visibleCount < songs.length && ( // Show button only if there are more songs to show
+                    {visibleCount < songs.length && (
                         <div className="mt-4 text-center">
-                            <button 
-                                onClick={loadMoreSongs} 
+                            <button
+                                onClick={loadMoreSongs}
                                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
                             >
                                 View More

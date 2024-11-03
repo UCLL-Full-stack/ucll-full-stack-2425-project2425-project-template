@@ -55,9 +55,19 @@ const generateSongs = async () => {
         console.error('Error generating songs:', error);
     }
 };
+const getSongById = (id: number) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/songs/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+}
+
 
 const songService = {
     getAllSongs,
-    generateSongs
+    generateSongs,
+    getSongById
 }
 export default songService
