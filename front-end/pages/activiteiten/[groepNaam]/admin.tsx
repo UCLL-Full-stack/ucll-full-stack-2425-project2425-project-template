@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
 import { useRouter } from 'next/router';
+import header from '@/components/header';
+import Header from '@/components/header';
 
 const Activiteiten: React.FC = () => {
     const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>();
@@ -53,6 +55,7 @@ const Activiteiten: React.FC = () => {
             <Head>
                 <title>Activiteiten</title>
             </Head>
+            <Header />
             <main>
                 <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Activiteiten {groepNaam}</h1>
 
@@ -112,11 +115,13 @@ const Activiteiten: React.FC = () => {
                                 />
                             </label>
                             <div className="text-center">
-                                <button className="bg-green-900 text-white px-4 py-2 rounded shadow-md hover:bg-green-950 mr-2"
-                                        onClick={addActiviteit}>Toevoegen
+                                <button
+                                    className="bg-green-900 text-white px-4 py-2 rounded shadow-md hover:bg-green-950 mr-2"
+                                    onClick={addActiviteit}>Toevoegen
                                 </button>
-                                <button className="bg-amber-800 text-white px-4 py-2 rounded shadow-md hover:bg-amber-900"
-                                        onClick={() => setShowModal(false)}>Annuleren
+                                <button
+                                    className="bg-amber-800 text-white px-4 py-2 rounded shadow-md hover:bg-amber-900"
+                                    onClick={() => setShowModal(false)}>Annuleren
                                 </button>
                             </div>
                         </div>

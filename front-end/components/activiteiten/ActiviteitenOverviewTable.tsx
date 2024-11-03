@@ -15,7 +15,7 @@ const ActiviteitenOverviewTable: React.FC<Props> = ({ activiteiten }: Props) => 
                         <th scope="col" className="p-2 border-r border-amber-900">Naam</th>
                         <th scope="col" className="p-2 border-r border-amber-900">Beschrijving</th>
                         <th scope="col" className="p-2 border-r border-amber-900">Begindatum</th>
-                        <th scope="col" className="p-2">Einddatum</th>
+                        <th scope="col" className="p-2 border-r border-amber-900">Einddatum</th>
                     </tr>
                     </thead>
                     <tbody>

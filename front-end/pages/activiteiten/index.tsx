@@ -3,6 +3,7 @@ import ActiviteitenOverviewTable from '@/components/activiteiten/ActiviteitenOve
 import { useEffect, useState } from 'react';
 import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
+import Header from '@/components/header';
 
 const Activiteiten: React.FC = () => {
     const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>();
@@ -22,8 +23,9 @@ const Activiteiten: React.FC = () => {
             <Head>
                 <title>Activiteiten</title>
             </Head>
+            <Header />
             <main>
-                <h1 className="text-5xl font-extrabold text-center text-blue-700 mb-8">Alle Activiteiten</h1>
+                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Alle Activiteiten</h1>
                 <section>
                     {activiteiten && (
                         <ActiviteitenOverviewTable activiteiten={activiteiten} />

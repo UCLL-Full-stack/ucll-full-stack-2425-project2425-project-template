@@ -152,7 +152,7 @@ activiteitRouter.post("/:groepNaam", async (req: Request, res: Response, next: N
             einddatum: new Date(req.body.einddatum)
         });
         const result = await activiteitService.addActiviteit(activiteit, String(req.params.groepNaam));
-        res.status(201).json(result);
+        res.status(200).json(result);
     } catch (e) {
         next(e);
     }
