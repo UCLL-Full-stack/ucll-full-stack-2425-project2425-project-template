@@ -2,19 +2,19 @@
 
 export class Movie {
     private id?: number;
-    private name: string;
+    private name: String;
     private duration: Date;
     private playingdates: Date[];
-    private genre: string;
-    private summary: string;
+    private genre: String;
+    private summary: String;
 
     constructor(movie: {
         id?: number;
-        name: string;
+        name: String;
         duration: Date;
         playingdates: Date[];
-        genre: string;
-        summary: string;
+        genre: String;
+        summary: String;
     }) {
         this.id = movie.id;
         this.name = movie.name;
@@ -28,7 +28,7 @@ export class Movie {
         return this.id;
     }
 
-    getName(): string{
+    getName(): String{
         return this.name;
     }
 
@@ -40,12 +40,14 @@ export class Movie {
         return this.playingdates;
     }
 
-    getGenre(): string {
+    getGenre(): String {
         return this.genre;
     }
 
-    getSummary(): string {
+    getSummary(): String {
         return this.summary;
     }
+
+    
 
 }
