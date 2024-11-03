@@ -8,13 +8,13 @@ export class User {
     attendance? : number;
 
     constructor (user: {
-        id? : number,
+        userId? : number,
         username : string,
         password : string,
         role : Role,
         attendance? : number
     }) {
-        this.userId = user.id;
+        this.userId = user.userId;
         this.username = user.username;
         this.password = user.password;
         this.role = user.role;

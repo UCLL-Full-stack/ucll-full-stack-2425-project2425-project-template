@@ -9,13 +9,13 @@ export class Match {
     players? : Array<User>; // Unusable for now
 
     constructor (match: {
-        id? : number,
+        matchId? : number,
         date : Date,
         hall : string,
         square : number;
         players? : Array<User>; // Unusable for now
     }) {
-        this.matchId = match.id;
+        this.matchId = match.matchId;
         this.date = match.date;
         this.hall = match.hall;
         this.square = match.square;

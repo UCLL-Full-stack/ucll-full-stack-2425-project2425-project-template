@@ -10,14 +10,14 @@ export class Training {
     coach : User;
 
     constructor (training: {
-        id? : number,
+        trainingId? : number,
         date : Date,
         hall : string,
         square : number;
         players? : Array<User>; // Unusable for now
         coach : User;
     }) {
-        this.trainingId = training.id;
+        this.trainingId = training.trainingId;
         this.date = training.date;
         this.hall = training.hall;
         this.square = training.square;
