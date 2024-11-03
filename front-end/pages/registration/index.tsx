@@ -33,7 +33,7 @@ export default function Register() {
             const newUser = await response.json();
             // Handle successful registration, e.g., redirect or show a success message
             console.log('User registered successfully:', newUser);
-            setSuccessMessage('Login successful!');
+            setSuccessMessage('Registering successful!');
         } catch (error) {
             setErrorMessage((error as Error).message);
         }

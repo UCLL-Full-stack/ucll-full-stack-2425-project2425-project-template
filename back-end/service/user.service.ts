@@ -1,7 +1,6 @@
 // src/service/userService.ts
 import { User } from '../model/user';
 import userRepository from '../repository/user.db';
-import orderRepository from '../repository/order.db';
 import { Role } from '../types';
 import { Order } from '../model/order';
 import orderService from './order.service';
@@ -60,26 +59,12 @@ const createUser = async (userData: { firstName: string; lastName: string; email
             promotions: order.getPromotions()
         });
 
-        // Save the order using its getter methods if needed
-        orderRepository.saveOrder({
-            orderDate: order.getOrderDate(),
-            product: order.getProduct(),
-            price: order.getPrice(),
-            user: order.getUser(),
-            promotions: order.getPromotions()
-        });
-
         return newUser; // Return the newly created user
     } catch (error) {
-        // Handle known error types
         if ((error as Error).message.includes('already exists')) {
             throw new Error(`User creation failed: ${(error as Error).message}`);
-        } else if ((error as Error).message.includes('Validation error')) {
-            throw new Error(`User creation failed: ${(error as Error).message}`);
         }
-
-        // If it's an unexpected error, rethrow it
-        throw new Error(`An unexpected error occurred: ${(error as Error).message}`);
+        throw new Error(`Unexpected error occurred: ${(error as Error).message}`);
     }
 };
 

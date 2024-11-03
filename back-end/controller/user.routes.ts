@@ -159,7 +159,7 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
     } catch (error) {
         // Handle specific error types
         if ((error as Error).message.includes('already exists')) {
-            return res.status(409).json({ message: (error as Error).message }); // Conflict error for duplicate users
+            return res.status(409).json({ message: 'User already exists.' });// Conflict error for duplicate users
         } else if ((error as Error).message.includes('required')) {
             return res.status(400).json({ message: (error as Error).message }); // Bad request for validation issues
         } else if ((error as Error).message.includes('Validation error')) {
