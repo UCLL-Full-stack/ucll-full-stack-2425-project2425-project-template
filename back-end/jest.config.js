@@ -6,7 +6,6 @@ module.exports = {
   },
 };
 
-// jest.config.js
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -15,7 +14,6 @@ module.exports = {
   modulePathIgnorePatterns: ['<rootDir>/.vscode'],
 };
 
-// jest.config.js
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',

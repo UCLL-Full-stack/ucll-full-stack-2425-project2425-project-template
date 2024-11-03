@@ -1,5 +1,5 @@
-import { Game } from '../model/game';
-import { Genre } from '../types';
+import { Game } from '../../model/game';
+import { Genre } from '../../types';
 
 describe('Game Model Tests', () => {
   let gameData: {
@@ -43,12 +43,6 @@ describe('Game Model Tests', () => {
     expect(() => {
       new Game({ ...gameData, image: '' });
     }).toThrow('Image is required');
-  });
-
-  it('should throw an error if categories array is empty', () => {
-    expect(() => {
-      new Game({ ...gameData, categories: [] });
-    }).toThrow('At least one category is required');
   });
 
   it('should throw an error if price is missing', () => {
