@@ -7,12 +7,18 @@ export class Expense extends Transaction {
     constructor(expense: {
         amount: number;
         currency: string;
-        type: string;
         destination: string;
         account: Account;
         id?: number;
     }) {
-        super(expense);
+        super({
+            amount: expense.amount,
+            currency: expense.currency,
+            transactionType: 'expense',
+            account: expense.account,
+            id: expense.id,
+        });
+        this.validateExpense(expense);
         this.destination = expense.destination;
     }
 
@@ -20,7 +26,9 @@ export class Expense extends Transaction {
         return this.destination;
     }
 
-    // makeExpense(destination: string) {
-    //
-    // }
+    validateExpense(expense: { destination: string }) {
+        if (!expense.destination?.trim()) {
+            throw new Error('Destination is required');
+        }
+    }
 }

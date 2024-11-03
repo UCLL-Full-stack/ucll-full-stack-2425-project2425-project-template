@@ -7,12 +7,18 @@ export class Income extends Transaction {
     constructor(income: {
         amount: number;
         currency: string;
-        type: string;
         source: string;
         account: Account;
         id?: number;
     }) {
-        super(income);
+        super({
+            amount: income.amount,
+            currency: income.currency,
+            transactionType: 'income',
+            account: income.account,
+            id: income.id,
+        });
+        this.validateIncome(income);
         this.source = income.source;
     }
 
@@ -20,7 +26,9 @@ export class Income extends Transaction {
         return this.source;
     }
 
-    getIncome(source: string): Income {
-        return this;
+    validateIncome(income: { source: string }) {
+        if (!income.source?.trim()) {
+            throw new Error('source is required');
+        }
     }
 }
