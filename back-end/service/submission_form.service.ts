@@ -30,7 +30,12 @@ const createSubmissionForm = (submissionFormInput: any): SubmissionForm => {
     return newSubmissionForm;
 };
 
+const acceptSubmissionForm = (submissionFormId: number): SubmissionForm => {
+    // TODO
+}
+
 export default {
     getAllSubmissionForms,
     createSubmissionForm,
+    acceptSubmissionForm,
 };
