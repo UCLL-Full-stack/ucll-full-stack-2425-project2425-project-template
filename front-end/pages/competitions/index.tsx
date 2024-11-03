@@ -41,6 +41,7 @@ const Competitions: React.FC = () => {
                         <TeamOverviewTable competition={selectedCompetition} />
                     </section>
                 )}
+                <button onClick={() => setSelectedCompetition(null)}>Add competition</button>
             </main>
         </>
     );
