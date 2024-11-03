@@ -61,7 +61,7 @@ const guildRouter = Router();
 
 /**
  * @swagger
- * /guilds/{guildId}/permissions:
+ * /api/guilds/{guildId}/permissions:
  *   get:
  *     summary: Get permissions for a specific guild
  *     parameters:
@@ -103,7 +103,7 @@ guildRouter.get('/:guildId/permissions', (req, res) => {
 
 /**
  * @swagger
- * /guilds:
+ * /api/guilds:
  *   get:
  *     summary: Get all guilds
  *     responses:
