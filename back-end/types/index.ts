@@ -19,6 +19,7 @@ type CompetitionInput = {
     id?: number;
     name: string;
     matchesPlayed: number;
+    teams: TeamInput[];
 }
 
 type MatchInput = {
