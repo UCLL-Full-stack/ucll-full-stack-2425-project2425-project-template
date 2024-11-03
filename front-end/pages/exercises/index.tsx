@@ -39,7 +39,6 @@ const Exercises: React.FC = () => {
         throw new Error("Failed to add exercise to workout.");
       }
       toast.success("Exercise added successfully!");
-      router.push("/workouts");
     } catch (err) {
       console.error(err);
       toast.error("This exercise is already part of your workout");
