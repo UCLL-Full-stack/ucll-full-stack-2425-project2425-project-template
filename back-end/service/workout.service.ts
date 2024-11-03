@@ -44,7 +44,13 @@ const addExerciseToWorkout = (workoutId: number, exerciseId: number): Workout =>
         throw new Error(`Exercise with ID ${exerciseId} not found`);
     }
 
+    const isDuplicate = workout.exercises.some((existingExercise) => existingExercise.id === exerciseId);
+    if (isDuplicate) {
+        throw new Error(`Exercise with ID ${exerciseId} is already added to the workout`);
+    }
+
     workoutDb.addExerciseToWorkout(workoutId, exercise);
+
     return workout;
 };
 
