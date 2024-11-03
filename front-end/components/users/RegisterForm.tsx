@@ -1,5 +1,4 @@
 import { User } from "@/types";
-import { ChangeEvent, useState } from "react";
 
 type Props = {
     user: User;
@@ -9,7 +8,7 @@ type Props = {
 
 
 
-const LoginForm: React.FC<Props> = ({ user, handleSubmit, handleInputChange }: Props) => {
+const RegisterForm: React.FC<Props> = ({ user, handleSubmit, handleInputChange }: Props) => {
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -90,4 +89,4 @@ const LoginForm: React.FC<Props> = ({ user, handleSubmit, handleInputChange }: P
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

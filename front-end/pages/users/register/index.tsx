@@ -1,5 +1,5 @@
 import Header from "@/components/header";
-import LoginForm from "@/components/users/LoginForm";
+import RegisterForm from "@/components/users/RegisterForm";
 import UserService from "@/services/UserService";
 import { User } from "@/types";
 import Head from "next/head";
@@ -44,7 +44,7 @@ const RegisterUser: React.FC = () => {
                 <h1>Sign up</h1>
                 <section>
                     {user && (
-                        <LoginForm user={user} handleSubmit={handleSubmit} handleInputChange={handleInputChange}/>
+                        <RegisterForm user={user} handleSubmit={handleSubmit} handleInputChange={handleInputChange}/>
                     )}
                 </section>
             </main>
