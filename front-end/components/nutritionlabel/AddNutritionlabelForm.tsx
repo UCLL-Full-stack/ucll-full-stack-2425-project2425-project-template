@@ -66,6 +66,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                         type="number"
                         required
                         name="energy"
+                        min="0.01"
+                        step={1}
                         value={nutritionlabel.energy}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -81,6 +83,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                             type="number"
                             required
                             name="fat"
+                            min="0.01"
+                            step={1}
                             value={nutritionlabel.fat}
                             onChange={handleInputChange}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -98,6 +102,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                             type="number"
                             required
                             name="saturatedFats"
+                            min="0.01"
+                            step={1}
                             value={nutritionlabel.saturatedFats}
                             onChange={handleInputChange}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -117,6 +123,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                             type="number"
                             required
                             name="carbohydrates"
+                            min="0.01"
+                            step={1}
                             value={nutritionlabel.carbohydrates}
                             onChange={handleInputChange}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -130,6 +138,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                             type="number"
                             required
                             name="sugar"
+                            min="0.01"
+                            step={1}
                             value={nutritionlabel.sugar}
                             onChange={handleInputChange}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -145,6 +155,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                         type="number"
                         required
                         name="protein"
+                        min="0.01"
+                        step={1}
                         value={nutritionlabel.protein}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -159,6 +171,8 @@ const AddNutritionLabelForm: React.FC<Props> = ({ item }: Props) => {
                         type="number"
                         required
                         name="salts"
+                        min="0.01"
+                        step={1}
                         value={nutritionlabel.salts}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
