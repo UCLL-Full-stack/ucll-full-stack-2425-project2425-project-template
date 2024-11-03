@@ -31,7 +31,18 @@ const createUser = ({
         throw new Error('Username and hashedPassword are required.');
     }
 
-    const userProfile = profileId || firstName || lastName || bio ? new Profile({ id: profileId, email: email || "", firstName: firstName || "", lastName: lastName || "", bio: bio || "" }) : undefined;
+    if (userDb.getUserByUsername({username})) {
+        throw new Error(`User with username ${username} already exists.`);
+    }
+
+    const userProfile = profileId || firstName || lastName || bio ? new Profile({
+        id: profileId,
+        email: email || "",
+        firstName: firstName || "",
+        lastName: lastName || "",
+        bio: bio || ""
+    }) : undefined;
+
     const newUser = new User({
         id,
         username,

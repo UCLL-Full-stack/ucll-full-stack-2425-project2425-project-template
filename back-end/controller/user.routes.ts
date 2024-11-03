@@ -70,9 +70,14 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 });
 
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.body as UserInput;
-    const result = await userService.createUser(user);
-    res.status(200).json(result);
+    try {
+        const user = req.body as UserInput;
+        const result = await userService.createUser(user);
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+        next(err as Error);
+    }
 });
 
 

@@ -25,6 +25,14 @@ const getUserById = ({ id }: { id: number }): User | null => {
     return user; 
 }
 
+const getUserByUsername = ({ username }: { username: string }): User | null => {
+    const user = users.find((user) => user.getUsername() === username);
+    if (!user) {
+        return null;
+    }
+    return user; 
+}
+
 const createUser = (user: User): User => {
     users.push(user);
     return user;
@@ -33,5 +41,6 @@ const createUser = (user: User): User => {
 export default {
     getAllUsers,
     getUserById,
+    getUserByUsername,
     createUser,
 };
