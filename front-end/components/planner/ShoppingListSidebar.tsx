@@ -1,3 +1,9 @@
+/*
+ * NOT IMPLEMENTED, THE CODE HERE IS FOR REFERENCE
+ * This component displays a shopping list sidebar where users can view, add, edit, and remove ingredients
+ * Ingredients can be grouped by category or viewed all together in alphabetical order
+ */
+
 import {
   Select,
   SelectContent,
@@ -13,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AddIngredientDialog } from "./shopping-list-functionality/AddIngredientPopup";
 
-// This will come from the backend later
+// This comes from the backend
 type Ingredient = {
   id: string;
   name: string;
@@ -32,7 +38,7 @@ const ShoppingList = () => {
     null
   );
 
-  // Temporary mock data - this will come from the backend later
+  // Temporary mock data - this will come from the backend
   const mockIngredients: Ingredient[] = [
     {
       id: "1",

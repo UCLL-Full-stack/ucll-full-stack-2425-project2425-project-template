@@ -1,4 +1,6 @@
-import React from "react";
+/* CalendarHeader component with controls for navigating and interacting with the calendar.
+It includes buttons for changing the month, toggling select, and adding items to the shopping list. */
+
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import {
@@ -11,12 +13,12 @@ import {
 
 type Props = {
   currentDate: Date;
-  viewMode: "Month" | "Week";
+  viewMode: "Month" | "Week"; // not implemented yet
   selectionModeActive: boolean;
   selectedDatesCount: number;
   onChangeMonth: (value: number) => void;
   onToggleSelectionMode: () => void;
-  onChangeViewMode: (mode: "Month" | "Week") => void;
+  onChangeViewMode: (mode: "Month" | "Week") => void; // not implemented yet
   onDeleteMeals: () => void;
   onAddToShoppingList: () => void;
 };
@@ -34,7 +36,7 @@ const months = [
   "Oct",
   "Nov",
   "Dec",
-];
+]; // make type?
 
 const CalendarHeader: React.FC<Props> = ({
   currentDate,

@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react";
+/*
+ * Parent component of DailyMealsView and SingleMealCard.
+ * MealsDayPopup component displays a popup with a list of meals for a specific day.
+ * It fetches meal details based on the user ID and date, and provides actions for deleting meals.
+ */
+
+import { useState, useEffect } from "react";
 import PlannerService from "@/services/PlannerService";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import MealCard from "./MealCard";
+import DailyMealsView from "./DailyMealsView";
 import SingleMealView from "./SingleMealCard";
-import { MealDay } from "@/types/meal-planner";
+import { Recipe } from "@/types/recipes";
 
 type Props = {
   userId: number;
@@ -18,27 +24,23 @@ const categoryOrder: string[] = [
   "dinner",
   "snack",
   "other",
-];
+]; // temporary categories (the user will be able to make their own custom categories)
 
-const MealDayPopup: React.FC<Props> = ({ userId, date, onClose }) => {
-  const [meals, setMeals] = useState<MealDay[]>([]);
-  const [loading, setLoading] = useState(true);
+const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
+  const [meals, setMeals] = useState<Recipe[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        setLoading(true);
         const response = await PlannerService.fetchMealDetails(
           userId,
           date.toISOString().split("T")[0]
         );
         const meals = await response.json();
         setMeals(meals);
-      } catch (err) {
+      } catch (error) {
         setError("Error fetching meals");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -50,10 +52,10 @@ const MealDayPopup: React.FC<Props> = ({ userId, date, onClose }) => {
       await PlannerService.deleteMeal(
         userId,
         mealId,
-        date.toISOString().split("T")[0]
+        date.toISOString().split("T")[0] // to check if this is the best way
       );
-      setMeals(meals.filter((meal) => meal.id !== mealId.toString()));
-    } catch (err) {
+      setMeals(meals.filter((meal) => meal.id !== mealId));
+    } catch (error) {
       setError("Error deleting meal");
     }
   };
@@ -68,12 +70,10 @@ const MealDayPopup: React.FC<Props> = ({ userId, date, onClose }) => {
       );
       setMeals(
         meals.map((meal) =>
-          meal.id === mealId.toString()
-            ? { ...meal, isFavorite: !isFavorite }
-            : meal
+          meal.id === mealId ? { ...meal, isFavorite: !isFavorite } : meal
         )
       );
-    } catch (err) {
+    } catch (error) {
       setError("Error updating meal");
     }
   };
@@ -86,30 +86,31 @@ const MealDayPopup: React.FC<Props> = ({ userId, date, onClose }) => {
     return `${weekday}, ${day}/${month}/${year}`;
   };
 
-  if (loading) return <div className="text-center p-4">Loading...</div>;
-  if (error) return <div className="text-center p-4 text-red-500">{error}</div>;
+  if (error) {
+    return <div className="text-center p-4 text-red-500">{error}</div>;
+  }
 
+  // create new array ordered by categories
   const allMeals = categoryOrder
     .flatMap((category) => meals.filter((meal) => meal.category === category))
-    .filter(Boolean);
+    .filter(Boolean); // filters out falsy values (null, undefined, false, 0, "")
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b p-6 flex items-center justify-between z-10">
+    <section className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <section className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <article className="sticky top-0 bg-white border-b p-6 flex items-center justify-between z-10">
           <h2 className="text-2xl font-semibold">
             Meals for {formatDate(date)}
           </h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-6 w-6" />
-            <span className="sr-only">Close</span>
           </Button>
-        </div>
+        </article>
 
-        <div className="p-6">
+        <section className="p-6">
           {allMeals.length === 0 ? (
             <p className="text-center text-gray-500 py-8">
-              No meals planned for this day
+              No meals planned for this day :(
             </p>
           ) : allMeals.length === 1 ? (
             <SingleMealView
@@ -124,8 +125,8 @@ const MealDayPopup: React.FC<Props> = ({ userId, date, onClose }) => {
                   <h3 className="text-lg font-semibold capitalize">
                     {meal.category}
                   </h3>
-                  <MealCard
-                    meal={meal}
+                  <DailyMealsView
+                    recipe={meal}
                     onToggleFavorite={handleToggleFavorite}
                     onDelete={handleDelete}
                   />
@@ -133,10 +134,10 @@ const MealDayPopup: React.FC<Props> = ({ userId, date, onClose }) => {
               ))}
             </div>
           )}
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </section>
   );
 };
 
-export default MealDayPopup;
+export default DailyMealsPopup;

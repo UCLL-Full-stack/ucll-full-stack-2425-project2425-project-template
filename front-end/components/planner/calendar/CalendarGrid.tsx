@@ -1,25 +1,33 @@
-import React, { useEffect, useState } from "react";
+/**
+ * CalendarGrid component displays a grid of days for the current month (or week --> to implement)
+ * It manages the state for the current date, view mode, selected dates, and other interactions.
+ */
+
+// QUESTION: Is this component correct? Or the fetch logic should go in the planner index.tsx page?
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import PlannerService from "@/services/PlannerService";
-import { MealDay } from "@/types/meal-planner";
 import CalendarHeader from "./CalendarHeader";
 import CalendarDay from "./CalendarDay";
-import MealDayPopup from "../calendar-functionality/MealsDayPopup";
+import DailyMealsPopup from "../calendar-functionality/DailyMealsPopup";
+import { Recipe } from "@/types/recipes";
 
-const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]; // make a type?
 
 const CalendarGrid: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<"Month" | "Week">("Month");
+  const [viewMode, setViewMode] = useState<"Month" | "Week">("Month"); // to implement
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectionModeActive, setSelectionModeActive] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-  const [showMealPopup, setShowMealPopup] = useState(false);
+  const [showRecipePopup, setShowRecipePopup] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [mealsByDate, setMealsByDate] = useState<Record<string, MealDay[]>>({});
+  const [recipeByDate, setRecipesByDate] = useState<Record<string, Recipe[]>>(
+    {}
+  );
 
   useEffect(() => {
-    const fetchMealsForMonth = async () => {
+    const fetchMonthRecipes = async () => {
       const startDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
@@ -31,24 +39,24 @@ const CalendarGrid: React.FC = () => {
         0
       );
 
-      for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-        const dateString = d.toISOString().split("T")[0];
+      for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
+        const dateString = i.toLocaleDateString("en-CA");
         try {
-          const response = await PlannerService.fetchMealDetails(1, dateString); // Assuming userId is 1
+          const response = await PlannerService.fetchMealDetails(1, dateString); // userId is 1 for testing -- temporary
           if (response.ok) {
-            const meals = await response.json();
-            if (meals.length > 0) {
-              setMealsByDate((prev) => ({ ...prev, [dateString]: meals }));
+            const recipes = await response.json();
+            if (recipes.length > 0) {
+              setRecipesByDate((prev) => ({ ...prev, [dateString]: recipes }));
             }
           }
         } catch (error) {
-          console.error("Error fetching meals for", dateString, error);
+          console.error("Error fetching recipes for", dateString, error);
         }
       }
     };
 
-    fetchMealsForMonth();
-  }, [currentDate]);
+    fetchMonthRecipes();
+  }, [currentDate]); // re-run whenever currentDate changes
 
   // calculate days that should be displayed in the calendar for 1 full grid
   const getDaysInGrid = (date: Date) => {
@@ -104,7 +112,7 @@ const CalendarGrid: React.FC = () => {
       });
     } else {
       setSelectedDate(newDate);
-      setShowMealPopup(true);
+      setShowRecipePopup(true);
     }
   };
 
@@ -119,11 +127,11 @@ const CalendarGrid: React.FC = () => {
     if (selectedDates.length === 0) {
       return;
     }
-    // Implement shopping list logic here
+    // to implement!
   };
 
   const handleDeleteMeals = () => {
-    // Implement delete meals logic here
+    // to implement!
   };
 
   return (
@@ -158,7 +166,7 @@ const CalendarGrid: React.FC = () => {
               )}
               isHovered={hoveredDate?.getTime() === date.getTime()}
               selectionModeActive={selectionModeActive}
-              meals={mealsByDate[date.toISOString().split("T")[0]] || []}
+              recipes={recipeByDate[date.toISOString().split("T")[0]] || []}
               onDateClick={handleDateClick}
               onCheckboxChange={(checked, date) => {
                 if (checked) {
@@ -175,11 +183,11 @@ const CalendarGrid: React.FC = () => {
           ))}
         </section>
       </CardContent>
-      {showMealPopup && selectedDate && (
-        <MealDayPopup
+      {showRecipePopup && selectedDate && (
+        <DailyMealsPopup
           userId={1}
           date={selectedDate}
-          onClose={() => setShowMealPopup(false)}
+          onClose={() => setShowRecipePopup(false)}
         />
       )}
     </Card>

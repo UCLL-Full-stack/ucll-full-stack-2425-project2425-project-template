@@ -1,3 +1,8 @@
+/*
+ * STILL TO ADD MORE OPTIONS FOR EDITING!! --> Probably will change as I want the users to be able to edit on the recipe page instead of through a dialog
+ * This component provides a dialog for editing a recipe. Users can modify the recipe details and save the changes
+ */
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,14 +15,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { MealDay } from "@/types/meal-planner";
+import { Recipe } from "@/types/recipes";
 
-interface RecipeEditDialogProps {
-  recipe: MealDay;
-  onSave: (editedRecipe: MealDay) => void;
-}
+type Props = {
+  recipe: Recipe;
+  onSave: (editedRecipe: Recipe) => void;
+};
 
-export function RecipeEditDialog({ recipe, onSave }: RecipeEditDialogProps) {
+const RecipeEditDialog: React.FC<Props> = ({ recipe, onSave }) => {
   const [editedRecipe, setEditedRecipe] = useState(recipe);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -87,4 +92,6 @@ export function RecipeEditDialog({ recipe, onSave }: RecipeEditDialogProps) {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default RecipeEditDialog;

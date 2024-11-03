@@ -1,4 +1,9 @@
-import * as React from "react";
+/*
+ * STILL TO IMPLEMENT FUNCTIONALITY --> Future user story, but the form can be opened
+ * AddIngredientPopup is a component that provides a popup form for adding a new ingredient.
+ * It includes fields for selecting the ingredient's name, category, quantity, unit, and store.
+ */
+
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +15,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Ingredient, IngredientCategory } from "@/types/meal-planner";
+import { Ingredient, IngredientCategory } from "@/types/recipes";
+import { useEffect, useRef, useState } from "react";
 
 const units = [
   "g",
@@ -22,9 +28,9 @@ const units = [
   "tbsp",
   "can",
   "package",
-] as const;
+] as const; // make type?
 
-const mockStores = ["Albert Heijn", "Colruyt", "Carrefour", "Aldi", "Lidl"];
+const mockStores = ["Albert Heijn", "Colruyt", "Carrefour", "Aldi", "Lidl"]; // users will be able to add their own stores
 
 const defaultIngredient: Ingredient = {
   name: "",
@@ -34,12 +40,11 @@ const defaultIngredient: Ingredient = {
 };
 
 export function AddIngredientDialog() {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [ingredient, setIngredient] =
-    React.useState<Ingredient>(defaultIngredient);
-  const overlayRef = React.useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [ingredient, setIngredient] = useState<Ingredient>(defaultIngredient);
+  const overlayRef = useRef<HTMLDivElement>(null); // this will change
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
     };
@@ -57,11 +62,14 @@ export function AddIngredientDialog() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     console.log("Adding ingredient:", ingredient);
+
     setIngredient(defaultIngredient);
     setIsOpen(false);
   };
 
+  // -- I will change the way this is handled --
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === overlayRef.current) {
       setIsOpen(false);
@@ -128,8 +136,11 @@ export function AddIngredientDialog() {
                       </SelectTrigger>
                       <SelectContent>
                         {Object.values(IngredientCategory).map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
+                          <SelectItem
+                            key={category as string}
+                            value={category as string}
+                          >
+                            {category as string}
                           </SelectItem>
                         ))}
                       </SelectContent>

@@ -1,3 +1,8 @@
+/*
+ * STILL TO IMPLEMENT FUNCTIONALITIES, but the right clicks work.
+ * RightClickMenu component is a context menu
+ */
+
 import { Plus, Trash, Copy, ClipboardPaste, Heart } from "lucide-react";
 import {
   ContextMenu,
@@ -6,7 +11,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-interface RightClickMenuProps {
+type Props = {
   children: React.ReactNode;
   onAddNewMeal?: () => void;
   onAddExistingMeal?: () => void;
@@ -14,9 +19,9 @@ interface RightClickMenuProps {
   onDeleteMeal?: () => void;
   onCopyMeal?: () => void;
   onPasteMeal?: () => void;
-}
+};
 
-export default function RightClickMenu({
+const RightClickMenu: React.FC<Props> = ({
   children,
   onAddNewMeal,
   onAddExistingMeal,
@@ -24,7 +29,7 @@ export default function RightClickMenu({
   onDeleteMeal,
   onCopyMeal,
   onPasteMeal,
-}: RightClickMenuProps) {
+}) => {
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
@@ -55,4 +60,6 @@ export default function RightClickMenu({
       </ContextMenuContent>
     </ContextMenu>
   );
-}
+};
+
+export default RightClickMenu;

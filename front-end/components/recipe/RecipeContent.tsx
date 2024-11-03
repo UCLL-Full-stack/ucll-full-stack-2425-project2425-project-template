@@ -1,31 +1,33 @@
+/*
+ * This component displays the content of a recipe, including the title, cooking time, category, and image
+ */
+
 import Image from "next/image";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { Recipe } from "@/types/recipes";
 import { Card } from "@/components/ui/card";
 
-interface RecipeContentProps {
+type Props = {
   recipe: Recipe;
-}
+};
 
-export default function RecipeContent({ recipe }: RecipeContentProps) {
+const RecipeContent: React.FC<Props> = ({ recipe }) => {
   return (
     <article className="max-w-3xl mx-auto">
-      {/* Recipe Header */}
       <header className="mb-8 text-center">
         <h1 className="text-4xl font-bold mb-4">{recipe.title}</h1>
-        <div className="flex items-center justify-center gap-6 text-gray-600">
-          <div className="flex items-center gap-2">
+        <section className="flex items-center justify-center gap-6 text-gray-600">
+          <article className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
             <span>{recipe.cookingTime} minutes</span>
-          </div>
+          </article>
           <div className="capitalize">{recipe.category}</div>
-        </div>
+        </section>
       </header>
 
-      {/* Recipe Image */}
       {recipe.imageUrl && (
-        <div className="mb-12">
-          <div className="aspect-[16/9] relative rounded-xl overflow-hidden">
+        <section className="mb-12">
+          <article className="aspect-[16/9] relative rounded-xl overflow-hidden">
             <Image
               src={recipe.imageUrl}
               alt={recipe.title}
@@ -33,17 +35,14 @@ export default function RecipeContent({ recipe }: RecipeContentProps) {
               objectFit="cover"
               priority
             />
-          </div>
-        </div>
+          </article>
+        </section>
       )}
 
-      {/* Recipe Details */}
-      <div className="space-y-10">
-        {/* Ingredients & Instructions Container */}
+      <section className="space-y-10">
         <Card className="p-8">
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Ingredients */}
-            <section>
+          <section className="grid md:grid-cols-2 gap-12">
+            <article>
               <h2 className="text-2xl font-semibold mb-6 text-primary">
                 Ingredients
               </h2>
@@ -67,9 +66,9 @@ export default function RecipeContent({ recipe }: RecipeContentProps) {
               ) : (
                 <p className="text-gray-500">No ingredients listed</p>
               )}
-            </section>
+            </article>
 
-            {/* Instructions */}
+            {/* Instructions are strings separated by comma --> temporarily */}
             <section>
               <h2 className="text-2xl font-semibold mb-6 text-primary">
                 Instructions
@@ -91,10 +90,9 @@ export default function RecipeContent({ recipe }: RecipeContentProps) {
                 <p className="text-gray-500">No instructions available</p>
               )}
             </section>
-          </div>
+          </section>
         </Card>
 
-        {/* Notes */}
         {recipe.notes && (
           <Card className="p-8 bg-primary/5">
             <h2 className="text-2xl font-semibold mb-4 text-primary">Notes</h2>
@@ -102,9 +100,8 @@ export default function RecipeContent({ recipe }: RecipeContentProps) {
           </Card>
         )}
 
-        {/* Source Link */}
         {recipe.source && (
-          <div className="flex justify-end">
+          <article className="flex justify-end">
             <a
               href={recipe.source}
               target="_blank"
@@ -114,9 +111,11 @@ export default function RecipeContent({ recipe }: RecipeContentProps) {
               View Original Recipe
               <ArrowUpRight className="h-4 w-4" />
             </a>
-          </div>
+          </article>
         )}
-      </div>
+      </section>
     </article>
   );
-}
+};
+
+export default RecipeContent;

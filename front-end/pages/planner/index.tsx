@@ -1,3 +1,5 @@
+/* This is currently the homepage of the app, hence why the <Head /> and meta information */
+
 import CalendarGrid from "@/components/planner/calendar/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
 import ShoppingList from "@/components/planner/ShoppingListSidebar";
@@ -16,8 +18,8 @@ const MealPlanner: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {/* Main Content */}
       <main className="flex h-screen overflow-hidden">
-        {/* Main Content */}
         <section className="flex-1 overflow-auto">
           <section className="p-6">
             <Greeting />

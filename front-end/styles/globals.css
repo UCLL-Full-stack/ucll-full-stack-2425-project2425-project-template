@@ -1,3 +1,5 @@
+/* I started with this basic global.css, but it will be modified properly later on */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -1,7 +1,13 @@
+/*
+ - CalendarDay component represents a single day in a calendar view.
+ - It displays the date, handles selection and hover states, and shows a limited number of recipes (max 2 per day).
+ - It also calls the right-click menu for additional actions.
+ */
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { MealDay } from "@/types/meal-planner";
 import RightClickMenu from "../calendar-functionality/RightClickMenu";
+import { Recipe } from "@/types/recipes";
 
 type Props = {
   date: Date;
@@ -9,7 +15,7 @@ type Props = {
   isSelected: boolean;
   isHovered: boolean;
   selectionModeActive: boolean;
-  meals: MealDay[];
+  recipes: Recipe[];
   onDateClick: (date: Date) => void;
   onCheckboxChange: (checked: boolean, date: Date) => void;
   onMouseEnter: (date: Date) => void;
@@ -22,7 +28,7 @@ const CalendarDay: React.FC<Props> = ({
   isSelected,
   isHovered,
   selectionModeActive,
-  meals,
+  recipes,
   onDateClick,
   onCheckboxChange,
   onMouseEnter,
@@ -30,18 +36,20 @@ const CalendarDay: React.FC<Props> = ({
 }) => {
   const isToday = (date: Date) => {
     const today = new Date();
-    return date.toDateString() === today.toDateString();
+    return date.toDateString() === today.toDateString(); // to only compare year, month and day, and ignore the time parts (hours, minutes,...)
   };
 
   const isPastDate = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return date < today;
+    date.setHours(0, 0, 0, 0);
+    return date < today; // compares dates after setting both times to midnight
   };
 
-  const isOtherMonth = date.getMonth() !== currentMonth;
+  const isOtherMonth: Boolean = date.getMonth() !== currentMonth;
 
   return (
+    // Right click menu --> Still to implement as a separate component
     <RightClickMenu
       onAddNewMeal={() => console.log("Add New Meal", date)}
       onAddExistingMeal={() => console.log("Add Existing Meal", date)}
@@ -50,7 +58,7 @@ const CalendarDay: React.FC<Props> = ({
       onCopyMeal={() => console.log("Copy Meal", date)}
       onPasteMeal={() => console.log("Paste Meal", date)}
     >
-      <div
+      <section
         className={`border rounded-lg p-2 h-24 relative cursor-pointer transition-colors duration-200 ${
           isOtherMonth
             ? isPastDate(date)
@@ -60,13 +68,13 @@ const CalendarDay: React.FC<Props> = ({
             ? "bg-white text-gray-400"
             : "bg-white"
         } ${
-          isSelected ? "bg-blue-50 ring-1 ring-blue-200" : ""
+          isSelected ? "bg-blue-200 ring-1 ring-blue-300" : ""
         } hover:bg-blue-50`}
         onClick={() => onDateClick(date)}
         onMouseEnter={() => onMouseEnter(date)}
-        onMouseLeave={onMouseLeave}
+        onMouseLeave={() => onMouseLeave()}
       >
-        <div className="absolute top-1.5 left-2">
+        <section className="absolute top-1.5 left-2">
           <span
             className={`text-sm font-medium ${
               isToday(date)
@@ -76,21 +84,22 @@ const CalendarDay: React.FC<Props> = ({
           >
             {date.getDate()}
           </span>
-        </div>
+        </section>
 
         {(selectionModeActive || isHovered || isSelected) && (
           <Checkbox
             checked={isSelected}
-            onCheckedChange={(checked) => onCheckboxChange(!!checked, date)}
+            onCheckedChange={(checked) => onCheckboxChange(!!checked, date)} // !! ensures "checked" is a boolean
             onClick={(e) => e.stopPropagation()}
             className="absolute top-1.5 right-2"
           />
         )}
 
-        {meals.length > 0 && (
-          <div className="absolute top-8 left-0 right-0 px-2">
-            <div className="space-y-1">
-              {meals.slice(0, 2).map((meal, i) => (
+        {recipes.length > 0 && (
+          <section className="absolute top-8 left-0 right-0 px-2">
+            <article className="space-y-1">
+              {/* show a max of 2 recipe per day in calendar :) */}
+              {recipes.slice(0, 2).map((recipe, i) => (
                 <Badge
                   key={i}
                   variant="outline"
@@ -100,10 +109,10 @@ const CalendarDay: React.FC<Props> = ({
                       : "bg-blue-50 border-blue-100 text-blue-700"
                   }`}
                 >
-                  {meal.title}
+                  {recipe.title}
                 </Badge>
               ))}
-              {meals.length > 2 && (
+              {recipes.length > 2 && (
                 <Badge
                   variant="outline"
                   className={`w-full justify-start text-xs ${
@@ -112,13 +121,13 @@ const CalendarDay: React.FC<Props> = ({
                       : "bg-blue-50 border-blue-100 text-blue-700"
                   }`}
                 >
-                  +{meals.length - 2} more
+                  +{recipes.length - 2} more
                 </Badge>
               )}
-            </div>
-          </div>
+            </article>
+          </section>
         )}
-      </div>
+      </section>
     </RightClickMenu>
   );
 };
