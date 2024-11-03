@@ -1,3 +1,4 @@
+import { isAfter } from 'date-fns';
 import { Order } from './order'; // Assuming Order class is in the same directory
 
 export class Beurtenkaart {
@@ -80,6 +81,9 @@ export class Beurtenkaart {
         }
         if (!(beurtenkaart.endDate instanceof Date)) {
             throw new Error('EndDate must be a valid date');
+        }
+        if (beurtenkaart.endDate < beurtenkaart.startDate) {
+            throw new Error('EndDate cannot be before StartDate');
         }
         if (beurtenkaart.order.getOrderId() === undefined) {
             throw new Error('Order ID is required');
