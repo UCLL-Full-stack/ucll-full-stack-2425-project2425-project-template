@@ -5,6 +5,7 @@ import boardDb from '../repository/board.db';
 import columnDb from '../repository/column.db';
 import taskDb from '../repository/task.db';
 import { User } from '../model/user';
+import { validateColumn, validateTask } from '../util/validators';
 
 const getAllColumns = () => {
     return columnDb.getColumns();
@@ -44,6 +45,10 @@ const addTaskToColumn = (columnId: string, task: any) => {
     if (!column) {
         throw new Error('Column not found');
     }
+    const errors = validateTask(task);
+    if (errors.length > 0) {
+        throw new Error(errors.join(', '));
+    }
     const boardId = `board${columnId.split('-').slice(1).join('-')}`;
     const existingTasks = boardDb.getAllTasksForBoard(boardId);
     const taskNumber = existingTasks.length + 1;
@@ -61,6 +66,10 @@ const getTasksForColumn = (columnId: string) => {
 }
 
 const updateColumn = (columnId: string, column: any) => {
+    const errors = validateColumn(column);
+    if (errors.length > 0) {
+        throw new Error(errors.join(', '));
+    }
     const existingColumn = columnDb.getColumnById(columnId);
     if (!existingColumn) {
         throw new Error('Column not found');

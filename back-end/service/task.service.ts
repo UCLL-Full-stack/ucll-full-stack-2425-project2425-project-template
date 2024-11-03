@@ -3,6 +3,7 @@ import { Task } from '../model/task';
 import taskDb from '../repository/task.db';
 import userDb from '../repository/user.db';
 import columnDb from '../repository/column.db';
+import { validatePartialTask } from '../util/validators';
 
 const getAllTasks = () => {
     return taskDb.getTasks();
@@ -31,6 +32,10 @@ const deleteTask = (taskId: string) => {
 }
 
 const updateTask = (taskId: string, updatedData: any) => {
+    const errors = validatePartialTask(updatedData);
+    if (errors.length > 0) {
+        throw new Error(errors.join(', '));
+    }
     const task = taskDb.getTaskById(taskId);
     if (!task) {
         throw new Error('Task not found');

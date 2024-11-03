@@ -8,6 +8,7 @@ import columnDb from '../repository/column.db';
 import guildDb from '../repository/guild.db';
 import userDb from '../repository/user.db';
 import { PermissionEntry } from '../types';
+import { validateBoard, validateColumn, validatePermissions } from '../util/validators';
 
 const getAllBoards = (): Board[] => {
     return boardDb.getBoards();
@@ -18,6 +19,10 @@ const getBoard = (boardId: string): Board | null => {
 }
 
 const createBoard = (boardData: any): void => {
+    const errors = validateBoard(boardData);
+    if (errors.length > 0) {
+        throw new Error(errors.join(', '));
+    }
     const { boardName, createdByUser, guild, columns, permissions } = boardData;
     let user: User | null;
     if (typeof createdByUser === 'string') {
@@ -60,7 +65,6 @@ const createBoard = (boardData: any): void => {
     if (permissions && permissions.length > 0) {
         boardPermissions = permissions;
     } else {
-        // Default to server settings
         boardPermissions = guildData!.getSettings();
     }
 
@@ -74,6 +78,10 @@ const deleteBoard = (boardId: string): void => {
 }
 
 const addColumnToBoard = (boardId: string, columnData: any): void => {
+    const errors = validateColumn(columnData);
+    if (errors.length > 0) {
+        throw new Error(errors.join(', '));
+    }
     const { columnName } = columnData;
     const columnId = `column${boardDb.getColumnsByBoardId(boardId).length + 1}-${boardId.slice(5)}`;
     columnDb.addColumn({ columnId, columnName, tasks: [] as Task[] });
@@ -89,12 +97,16 @@ const getColumnsForBoard = (boardId: string): Column[] => {
     return boardDb.getColumnsByBoardId(boardId);
 }
 
-const setPermissionsForBoard = (boardId: string, permissions: PermissionEntry[]) => {
-    const board = boardDb.getBoardById(boardId); // Fetch board by ID
+const setPermissionsForBoard = (boardId: string, permissions: any) => {
+    const errors = validatePermissions(permissions);
+    if (errors.length > 0) {
+        throw new Error(errors.join(', '));
+    }
+    const board = boardDb.getBoardById(boardId);
     if (!board) {
         throw new Error('Board not found');
     }
-    board.setPermissions(permissions); // Assuming this method sets permissions
+    board.setPermissions(permissions);
 }
 
 

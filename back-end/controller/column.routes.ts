@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import columnService from '../service/column.service';
-import { validateColumn, validateTask } from '../util/validators';
 
 const columnRouter = Router();
 
-columnRouter.put('/:columnId', validateColumn, (req, res) => {
+columnRouter.put('/:columnId', (req, res) => {
     const { columnId } = req.params;
     const updatedColumn = req.body; 
     try {
@@ -33,7 +32,7 @@ columnRouter.delete('/:columnId', (req, res) => {
     }
 });
 
-columnRouter.post('/:columnId/tasks', validateTask, (req, res) => {
+columnRouter.post('/:columnId/tasks', (req, res) => {
     const { columnId } = req.params;
     const task = req.body; 
     try {

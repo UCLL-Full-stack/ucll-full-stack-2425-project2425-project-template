@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import taskService from '../service/task.service';
-import { validatePartialTask } from '../util/validators';
 
 const taskRouter = Router();
 
-taskRouter.put('/:taskId', validatePartialTask, (req, res) => {
+taskRouter.put('/:taskId', (req, res) => {
     const { taskId } = req.params;
     const updatedTask = req.body;
     try {

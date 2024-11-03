@@ -126,7 +126,11 @@ export class Board {
     }
 
     public setPermissions(permissions: PermissionEntry[]): void {
-        this.permissions = permissions;
+        if(Array.isArray(permissions)) {
+            this.permissions = permissions;
+        } else {
+            this.permissions = [permissions];
+        }
     }
 
     public toJSON() {

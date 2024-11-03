@@ -5,8 +5,8 @@ import guildDb from '../repository/guild.db';
 import roleDb from '../repository/role.db';
 import taskDb from '../repository/task.db';
 
-export const validateBoard = (req: Request, res: Response, next: NextFunction) => {
-    const { boardName, createdByUser, guild, columns, permissions } = req.body;
+export const validateBoard = (boardData: any): string[] => {
+    const { boardName, createdByUser, guild, columns, permissions } = boardData;
     const errors: string[] = [];
     if (!boardName || typeof boardName !== 'string' || boardName.length < 3 || boardName.length > 50) {
         errors.push('Invalid board name. It must be a string between 3 and 50 characters.');
@@ -61,105 +61,87 @@ export const validateBoard = (req: Request, res: Response, next: NextFunction) =
             }
         }
     }
-    if (errors.length) {
-        return res.status(400).json({ errors });
-    }
-    next();
+    return errors;
 };
 
-export const validateColumn = (req: Request, res: Response, next: NextFunction) => {
-    const { columnName, tasks } = req.body;
+export const validateColumn = (columnData: any): string[] => {
+    const { columnName, tasks } = columnData;
+    const errors: string[] = [];
     if (!columnName && (!tasks || !Array.isArray(tasks))) {
-        return res.status(400).json({ error: 'Column must have either a columnName or tasks.' });
+        errors.push('Column must have either a columnName or tasks.');
     }
     if (columnName && typeof columnName !== 'string') {
-        return res.status(400).json({ error: 'Invalid column name. It must be a string.' });
+        errors.push('Invalid column name. It must be a string.');
     }
     if (tasks) {
         for (const task of tasks) {
             const taskId = typeof task === 'string' ? task : task.taskId;
             const taskExists = taskDb.getTaskById(taskId);
             if (!taskExists) {
-                return res.status(400).json({ error: `Task with ID ${taskId} does not exist.` });
+                errors.push(`Task with ID ${taskId} does not exist.`);
             }        
         }
     }
-    next();
+    return errors;
 };
 
-export const validateTask = (req: Request, res: Response, next: NextFunction) => {
-    const { title, description, dueDate, assignees } = req.body;
+export const validateTask = (taskData: any): string[] => {
+    const { title, description, dueDate, assignees } = taskData;
+    const errors: string[] = [];
     if (!title || typeof title !== 'string' || title.length === 0) {
-        return res.status(400).json({ error: 'Task title is required and must be a string.' });
+        errors.push('Task title is required and must be a string.');
     }
     if (!description || typeof description !== 'string') {
-        return res.status(400).json({ error: 'Task description is required and must be a string.' });
+        errors.push('Task description is required and must be a string.');
     }
     if (dueDate) {
         const checkDueDate = new Date(dueDate);
         if (isNaN(checkDueDate.getTime())) {
-            return res.status(400).json({ error: 'Task due date must be a valid date string.' });
+            errors.push('Task due date must be a valid date string.');
         }
     }
-    if(assignees){
-        if (!Array.isArray(assignees)) {
-            return res.status(400).json({ error: 'Assignees must be an array.' });
-        }
-        for (const assignee of assignees){
-            if (!assignee || typeof assignee !== 'object') {
-                return res.status(400).json({ error: 'Assignee must be an object.' });
-            }
-            if (!assignee.userId || typeof assignee.userId !== 'string') {
-                return res.status(400).json({ error: 'Assignee must have a userId.' });
-            }
-            const userExists = userDb.getUserById(assignee.userId);
-            if (!userExists) {
-                return res.status(400).json({ error: 'Assignee does not exist.' });
-            }
-        }
-    }
-    next();
+    return errors;
 };
 
-export const validatePartialTask = (req: Request, res: Response, next: NextFunction) => {
-    const { title, description, dueDate, assignees } = req.body;
+export const validatePartialTask = (taskData: any): string[] => {
+    const { title, description, dueDate, assignees } = taskData;
+    const errors: string[] = [];
     if (title && typeof title !== 'string') {
-        return res.status(400).json({ error: 'Task title must be a string.' });
+        errors.push('Task title must be a string.');
     }
 
     if (description && typeof description !== 'string') {
-        return res.status(400).json({ error: 'Task description must be a string.' });
+        errors.push('Task description must be a string.');
     }
 
     if (dueDate) {
         const checkDueDate = new Date(dueDate);
         if (isNaN(checkDueDate.getTime())) {
-            return res.status(400).json({ error: 'Task due date must be a valid date string.' });
+            errors.push('Task due date must be a valid date string.');
         }
     }
 
     if (assignees) {
         if (!Array.isArray(assignees)) {
-            return res.status(400).json({ error: 'Assignees must be an array.' });
+            errors.push('Assignees must be an array.');
         }
         for (const assignee of assignees) {
             if (typeof assignee === 'string') {
                 const userExists = userDb.getUserById(assignee);
                 if (!userExists) {
-                    return res.status(400).json({ error: `Assignee with userId ${assignee} does not exist.` });
+                    errors.push(`Assignee with userId ${assignee} does not exist.`);
                 }
             } else if (typeof assignee === 'object' && assignee.userId) {
                 const userExists = userDb.getUserById(assignee.userId);
                 if (!userExists) {
-                    return res.status(400).json({ error: `Assignee with userId ${assignee.userId} does not exist.` });
+                    errors.push(`Assignee with userId ${assignee.userId} does not exist.`);
                 }
             } else {
-                return res.status(400).json({ error: 'Assignee must be a userId string or an object with a userId property.' });
+                errors.push('Assignee must be a userId string or an object with a userId property.');
             }
         }
     }
-
-    next();
+    return errors;
 }
 
 export const validateGuild = (req: Request, res: Response, next: NextFunction) => {
@@ -264,23 +246,24 @@ const validatePermissionEntry = (permission: PermissionEntry) => {
 };
 
 
-export const validatePermissions = (req: Request, res: Response, next: NextFunction) => {
-    const permissions = req.body;
+export const validatePermissions = (permissionsData: any): string[] => {
+    const permissions = permissionsData;
+    const errors: string[] = [];
     if (!permissions) {
-        return res.status(400).json({ error: 'Invalid permissions. Request body must not be null.' });
+        errors.push('Invalid permissions. Request body must not be null.');
     }
     if (Array.isArray(permissions)) {
         for (const permission of permissions) {
             if (!validatePermissionEntry(permission)) {
-                return res.status(400).json({ error: 'Invalid permission entry.' });
+                errors.push(`Invalid permission entry: ${permission}.`);
             }
         }
     } else {
         if (!validatePermissionEntry(permissions)) {
-            return res.status(400).json({ error: 'Invalid permission entry.' });
+            errors.push('Invalid permission entry.');
         }
     }
-    next();
+    return errors;
 };
 
 const validateMembers = ( members: Member[] ) => {

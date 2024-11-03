@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import boardService from '../service/board.service';
-import { validateBoard, validateColumn, validatePermissions } from '../util/validators';
 
 const boardRouter = Router();
 
-boardRouter.post('/',validateBoard, (req, res) => {
+boardRouter.post('/', (req, res) => {
     const board = req.body;
     try {
         boardService.createBoard(board);
@@ -34,7 +33,7 @@ boardRouter.get('/:boardId', (req, res) => {
     }
 });
 
-boardRouter.post('/:boardId/columns',validateColumn, (req, res) => {
+boardRouter.post('/:boardId/columns', (req, res) => {
     const { boardId } = req.params;
     const column = req.body;
     try {
@@ -49,7 +48,7 @@ boardRouter.post('/:boardId/columns',validateColumn, (req, res) => {
     }
 });
 
-boardRouter.post('/:boardId/permissions', validatePermissions, (req, res) => {
+boardRouter.post('/:boardId/permissions', (req, res) => {
     const { boardId } = req.params;
     const permissions = req.body;
     try {
