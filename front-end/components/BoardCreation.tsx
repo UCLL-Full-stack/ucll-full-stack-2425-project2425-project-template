@@ -1,15 +1,47 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/board.module.css';
-import { KanbanPermission, DiscordPermission, ValidationErrors, Board, Column } from '../types/index';
+import { KanbanPermission, DiscordPermission, ValidationErrors, Board } from '../types';
 
 interface ApiResponse {
   success: boolean;
   message?: string;
   error?: string;
-  data?: any;
+  errors?: string[];
+  data?: Board;
 }
+
+interface BoardCreateData {
+  boardId?: string;
+  boardName: string;
+  description?: string;
+  createdByUser: {
+    userId: string;
+    username: string;
+    userTag: string;
+  };
+  guild: {
+    guildId: string;
+    guildName: string;
+  };
+  columns: {
+    columnName: string;
+    tasks: never[];
+  }[];
+  permissions?: {
+    identifier: DiscordPermission;
+    kanbanPermission: KanbanPermission[];
+  }[];
+}
+
+const DEFAULT_COLUMNS = [
+  { columnName: 'To Do', tasks: [] },
+  { columnName: 'In Progress', tasks: [] },
+  { columnName: 'Done', tasks: [] }
+];
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const BoardCreation = () => {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -26,44 +58,95 @@ const BoardCreation = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [successMessage, setSuccessMessage] = useState<string>('');
 
-  // Validation functions
+  // Fetch existing boards on component mount
+  useEffect(() => {
+    const fetchBoards = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/boards/guild/guild1`, {
+          credentials: 'include'
+        });
+        const data = await response.json();
+        if (response.ok && Array.isArray(data)) {
+          setBoards(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch boards:', error);
+      }
+    };
+
+    fetchBoards();
+  }, []);
+
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
       case 'boardName':
         if (!value.trim()) return 'Board Name is required';
         if (value.length < 3) return 'Board Name must be at least 3 characters long';
         if (value.length > 50) return 'Board Name must be less than 50 characters';
+        if (!/^[a-zA-Z0-9\s-_]+$/.test(value)) {
+          return 'Board name can only contain letters, numbers, spaces, hyphens, and underscores';
+        }
+        break;
+      case 'description':
+        if (value && value.length > 500) return 'Description must be less than 500 characters';
         break;
     }
   };
 
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
+    
     const boardNameError = validateField('boardName', formState.boardName);
     if (boardNameError) newErrors.boardName = boardNameError;
+    
+    const descriptionError = validateField('description', formState.description);
+    if (descriptionError) newErrors.description = descriptionError;
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // API functions
-  const createBoard = async (boardData: Partial<Board>): Promise<ApiResponse> => {
+  const createBoard = async (boardData: BoardCreateData): Promise<ApiResponse> => {
     try {
-      const response = await fetch('http://localhost:8080/api/boards', {
+      console.log('Sending board data:', boardData);
+      const response = await fetch(`${API_URL}/api/boards`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(boardData),
       });
 
       const data = await response.json();
+      console.log('Received response:', data);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create board');
+        switch (response.status) {
+          case 400:
+            return { 
+              success: false, 
+              errors: Array.isArray(data.errors) ? data.errors : [data.error],
+              error: 'Validation failed' 
+            };
+          case 401:
+            return { 
+              success: false, 
+              error: 'Unauthorized. Please check your permissions.' 
+            };
+          case 403:
+            return { 
+              success: false, 
+              error: 'You do not have permission to create boards.' 
+            };
+          default:
+            throw new Error(data.message || 'Failed to create board');
+        }
       }
 
       return { success: true, data };
     } catch (error) {
+      console.error('Board creation error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'An unexpected error occurred'
@@ -80,12 +163,13 @@ const BoardCreation = () => {
       touched: { ...prev.touched, [name]: true }
     }));
 
-    // Clear error when user starts typing
-    if (errors[name as keyof ValidationErrors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error,
+      general: undefined
+    }));
 
-    // Clear success message if any
     if (successMessage) {
       setSuccessMessage('');
     }
@@ -97,33 +181,25 @@ const BoardCreation = () => {
     setErrors({});
     setSuccessMessage('');
 
-    // Validate form
     if (!validateForm()) {
       setIsLoading(false);
       return;
     }
 
     try {
-      // Prepare board data
-      const boardData: Partial<Board> = {
-        boardName: formState.boardName,
-        description: formState.description,
+      const boardData: BoardCreateData = {
+        boardName: formState.boardName.trim(),
+        description: formState.description.trim() || undefined,
         createdByUser: {
-          userId: 'user1', // This would come from auth context
+          userId: 'user1',
           username: 'Test User',
           userTag: 'test#1234'
         },
         guild: {
-          guildId: 'guild1', // This would come from props/context
+          guildId: 'guild1',
           guildName: 'Test Guild'
         },
-        columns: [
-          {
-            columnId: `col-${Date.now()}`,
-            columnName: 'To Do',
-            tasks: []
-          }
-        ],
+        columns: DEFAULT_COLUMNS,
         permissions: [
           {
             identifier: DiscordPermission.ADMINISTRATOR,
@@ -132,17 +208,19 @@ const BoardCreation = () => {
         ]
       };
 
-      // Call API
       const result = await createBoard(boardData);
 
       if (result.success && result.data) {
-        // Update boards list
-        setBoards(prev => [...prev, result.data]);
-        
-        // Show success message
+        // Ensure the board has the required properties before adding to state
+        const newBoard: Board = {
+          ...result.data,
+          columns: result.data.columns || [],
+          permissions: result.data.permissions || []
+        };
+
+        setBoards(prev => [...prev, newBoard]);
         setSuccessMessage('Board created successfully!');
         
-        // Reset form
         setFormState({
           boardName: '',
           description: '',
@@ -152,15 +230,29 @@ const BoardCreation = () => {
           }
         });
         
-        // Close modal after delay
         setTimeout(() => {
           setIsCreating(false);
           setSuccessMessage('');
         }, 1500);
       } else {
-        throw new Error(result.error || 'Failed to create board');
+        if (result.errors) {
+          const formErrors: ValidationErrors = {};
+          result.errors.forEach(error => {
+            if (error.toLowerCase().includes('board name')) {
+              formErrors.boardName = error;
+            } else {
+              formErrors.general = error;
+            }
+          });
+          setErrors(formErrors);
+        } else {
+          setErrors({
+            general: result.error || 'Failed to create board'
+          });
+        }
       }
     } catch (error) {
+      console.error('Submit error:', error);
       setErrors({
         general: error instanceof Error ? error.message : 'Failed to create board'
       });
@@ -171,14 +263,12 @@ const BoardCreation = () => {
 
   return (
     <div className={styles.container}>
-      {/* Success Message Toast */}
       {successMessage && (
         <div className={styles.successToast} onClick={() => setSuccessMessage('')}>
           {successMessage}
         </div>
       )}
 
-      {/* Header */}
       <div className={styles.header}>
         <h1 className={styles.title}>Kanban Boards</h1>
         <button
@@ -190,13 +280,12 @@ const BoardCreation = () => {
         </button>
       </div>
 
-      {/* Boards List */}
       <div className={styles.boardsList}>
-        {boards.map((board) => (
-          <div key={board.boardId} className={styles.boardCard}>
+        {Array.isArray(boards) && boards.map((board) => board && (
+          <div key={board.boardId || Math.random()} className={styles.boardCard}>
             <h3 className={styles.boardTitle}>{board.boardName}</h3>
             <p className={styles.boardInfo}>
-              {board.columns.length} {board.columns.length === 1 ? 'column' : 'columns'}
+              {board.columns?.length || 0} {(board.columns?.length || 0) === 1 ? 'column' : 'columns'}
             </p>
             {board.description && (
               <p className={styles.boardDescription}>{board.description}</p>
@@ -205,7 +294,6 @@ const BoardCreation = () => {
         ))}
       </div>
 
-      {/* Create Board Modal */}
       {isCreating && (
         <div className={styles.modal} onClick={() => !isLoading && setIsCreating(false)}>
           <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
@@ -249,6 +337,9 @@ const BoardCreation = () => {
                   disabled={isLoading}
                   rows={3}
                 />
+                {errors.description && formState.touched.description && (
+                  <div className={styles.fieldError}>{errors.description}</div>
+                )}
               </div>
 
               <div className={styles.buttonGroup}>

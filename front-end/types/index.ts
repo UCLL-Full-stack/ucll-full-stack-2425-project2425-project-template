@@ -1,5 +1,3 @@
-// front-end/types/index.ts
-
 export enum DiscordPermission {
     VIEW_CHANNELS = "View Channels",
     MANAGE_CHANNELS = "Manage Channels",
