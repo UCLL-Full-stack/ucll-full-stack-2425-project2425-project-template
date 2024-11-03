@@ -9,6 +9,17 @@ const getAllCars = async () => {
       }
     });
 };
+
+const getCarById = async (id: string) => {
+  return await fetch(process.env.NEXT_PUBLIC_API_URL + '/cars/' + id, 
+    {
+      method: "GET",
+       headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+}
+
 const addCar = async (carData: Car) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cars`, {
     method: "POST",
@@ -20,6 +31,7 @@ const addCar = async (carData: Car) => {
   const newCar = await response.json();
   return newCar;
 };
+
 const deleteCar = async (carId: number) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cars/${carId}`, {
     method: "DELETE",
@@ -31,6 +43,7 @@ const deleteCar = async (carId: number) => {
 
 const carService = {
   getAllCars,
+  getCarById,
   addCar,
   deleteCar,
 }
