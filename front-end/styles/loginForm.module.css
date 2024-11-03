@@ -1,0 +1,51 @@
+.container {
+    max-width: 25rem;
+    margin: auto;
+    margin-top: 10vh;
+    padding: 1.25rem;
+    border: 0.05rem solid #ccc;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    text-align: center;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.label {
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    padding: 0.5rem;
+    border: 0.05rem solid #ccc;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.button {
+    padding: 0.5rem;
+    background-color: #4EB157;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: lightgreen;
+}
+
+.registerLink {
+    text-align: center;
+    margin-top: 1rem;
+}
