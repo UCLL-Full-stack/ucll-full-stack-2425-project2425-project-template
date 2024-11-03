@@ -1,18 +1,19 @@
-import { IngredientCategory } from "./meal-planner";
-
-export type Ingredient = {
-  id: number;
+type Ingredient = {
+  id?: number;
   name: string;
   category: IngredientCategory;
+  quantity: number;
+  unit: string;
+  store?: string;
 };
 
-export type RecipeIngredient = {
+type RecipeIngredient = {
   ingredient: Ingredient;
   unit: string;
   quantity: number;
 };
 
-export type Recipe = {
+type Recipe = {
   id: number;
   title: string;
   instructions: string;
@@ -30,3 +31,17 @@ export type Recipe = {
 };
 
 type RecipeCategory = "breakfast" | "lunch" | "dinner" | "snack" | "other";
+
+enum IngredientCategory {
+  Produce = "Produce",
+  MeatAndFish = "Meat & Fish",
+  DairyAndEggs = "Dairy & Eggs",
+  Pantry = "Pantry",
+  Snacks = "Snacks",
+  Beverages = "Beverages",
+  Frozen = "Frozen",
+  Other = "Other",
+}
+
+export type { Ingredient, RecipeIngredient, Recipe };
+export { IngredientCategory };

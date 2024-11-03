@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 export default function RecipePage() {
   const router = useRouter();
   const { id } = router.query;
+
   const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,21 +19,18 @@ export default function RecipePage() {
         const recipeId = parseInt(id, 10);
         if (isNaN(recipeId)) {
           setError("Invalid recipe ID");
-          setLoading(false);
           return;
         }
         try {
           const data = await RecipeService.fetchRecipeById(recipeId);
           setRecipe(data);
-        } catch (err) {
-          console.error("Error in fetchRecipe:", err);
+        } catch (error) {
+          console.error("Error in fetchRecipe:", error);
           setError(
             `Failed to load recipe details: ${
-              err instanceof Error ? err.message : String(err)
+              error instanceof Error ? error.message : String(error)
             }`
           );
-        } finally {
-          setLoading(false);
         }
       }
     };
@@ -47,27 +44,21 @@ export default function RecipePage() {
     router.back();
   };
 
+  // TO IMPLEMENT
   const handleToggleFavorite = () => {
-    // Implement toggle favorite logic here
     console.log("Toggle favorite");
   };
 
+  // TO IMPLEMENT
   const handleEdit = () => {
-    // Implement edit logic here
     console.log("Edit recipe");
   };
 
+  // TO IMPLEMENT
   const handleDelete = () => {
-    // Implement delete logic here
     console.log("Delete recipe");
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
   if (error)
     return (
       <div className="flex flex-col justify-center items-center h-screen">
@@ -84,7 +75,7 @@ export default function RecipePage() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <section className="min-h-screen bg-gray-50">
       <RecipeHeader
         isFavorite={recipe.isFavorite}
         onBack={handleBack}
@@ -95,6 +86,6 @@ export default function RecipePage() {
       <main className="container mx-auto px-4 py-8">
         <RecipeContent recipe={recipe} />
       </main>
-    </div>
+    </section>
   );
 }

@@ -9,19 +9,10 @@ const fetchRecipeById = async (recipeId: number) => {
       },
     });
 
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`Error response body: ${errorBody}`);
-      throw new Error(
-        `HTTP error! status: ${response.status}, body: ${errorBody}`
-      );
-    }
-
     const data = await response.json();
     return data;
   } catch (error) {
     console.error("Error fetching recipe:", error);
-    throw error;
   }
 };
 
