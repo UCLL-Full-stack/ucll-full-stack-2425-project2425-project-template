@@ -79,7 +79,7 @@ cocktailRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
  *                 example: 3
  *               imageUrl:
  *                 type: string
- *                 example: "placeholder.png"
+ *                 example: "/placeholder.png"
  *     responses:
  *       201:
  *         description: The cocktail has been added.

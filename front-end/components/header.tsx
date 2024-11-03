@@ -27,7 +27,7 @@ const Header: React.FC = () => {
       <img
         src={banners[currentBannerIndex]}
         alt="Sip Happens Online"
-        style={{ maxWidth: '1000px', height: '140px', cursor: 'pointer' }}
+        style={{ width: '1000px', height: '140px', cursor: 'pointer' }}
         onClick={handleBannerClick}
       />
       
@@ -40,12 +40,12 @@ const Header: React.FC = () => {
         </Link>
         <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
-            Home2
+            Add Cocktail
           </button>
         </Link>
         <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
-            Home3
+            Search
           </button>
         </Link>
       </nav>

@@ -140,12 +140,21 @@ const cocktailIngredientsList = [
 
 ];
 
+// unused, genuinely don't see a purpose to this function
+const getRelationById = ({ id }: { id: number }): CocktailIngredient | null => {
+    return cocktailIngredientsList.find((cocktailIngredient) => cocktailIngredient.id === id) || null;
+};
+
+const getAllRelations = (): CocktailIngredient[] => cocktailIngredientsList;
+
 export const getIngredientsByCocktailId = (cocktailId: number): CocktailIngredient[] => {
     return cocktailIngredientsList.filter(item => item.cocktailId === cocktailId);
 };
 
+export const getCocktailsByIngredientId = (ingredientId: number): CocktailIngredient[] => {
+    return cocktailIngredientsList.filter(item => item.ingredientId === ingredientId);
+};
 
 
 
-
-export default {getIngredientsByCocktailId};
+export default {getIngredientsByCocktailId, getCocktailsByIngredientId, getRelationById, getAllRelations};
