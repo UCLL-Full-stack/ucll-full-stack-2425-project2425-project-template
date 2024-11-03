@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
+import styles from '../styles/board.module.css';
 
 const BoardCreation = () => {
   const [isCreating, setIsCreating] = useState(false);
@@ -10,65 +13,67 @@ const BoardCreation = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission
+    console.log(formData);
     setIsCreating(false);
   };
 
   return (
-    <div className="p-8">
-      {/* Header with Title and New Board button */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-serif">Kanban Boards</h1>
+    <div className={styles.container}>
+      {/* Header */}
+      <div className={styles.header}>
+        <h1 className={styles.title}>Kanban Boards</h1>
         <button
           onClick={() => setIsCreating(true)}
-          className="bg-[#1867E3] text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
+          className={styles.button}
         >
-          <span className="mr-1 text-lg">+</span> New Board
+          + New Board
         </button>
       </div>
 
       {/* Modal */}
       {isCreating && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg w-[500px] p-6">
-            <h2 className="text-xl font-serif mb-6">Create New Board</h2>
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2 className={styles.title}>Create New Board</h2>
             
             <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label className="block mb-2">
-                  Board Name <span className="text-red-500">*</span>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>
+                  Board Name <span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.boardName}
                   onChange={(e) => setFormData({ ...formData, boardName: e.target.value })}
+                  className={styles.input}
                   placeholder="Enter board name"
-                  className="w-full px-3 py-2 border rounded"
                   required
                 />
               </div>
 
-              <div className="mb-6">
-                <label className="block mb-2">Description (Optional)</label>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>
+                  Description (Optional)
+                </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className={styles.textarea}
                   placeholder="Enter board description"
-                  className="w-full px-3 py-2 border rounded"
-                  rows={4}
                 />
               </div>
 
-              <div className="flex justify-end space-x-4">
+              <div className={styles.buttonGroup}>
                 <button
                   type="button"
                   onClick={() => setIsCreating(false)}
-                  className="text-gray-600 hover:text-gray-800"
+                  className={styles.cancelButton}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-[#1867E3] text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                  className={styles.createButton}
                 >
                   Create Board
                 </button>

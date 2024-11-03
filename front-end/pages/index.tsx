@@ -3,9 +3,9 @@ import BoardCreation from '../components/BoardCreation';
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <BoardCreation serverId="test-server-id" />
-    </div>
+    <main style={{minHeight: '100vh'}}>
+      <BoardCreation />
+    </main>
   );
 };
 

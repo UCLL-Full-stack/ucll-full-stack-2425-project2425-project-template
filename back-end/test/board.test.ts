@@ -17,7 +17,7 @@ describe('Board Entity', () => {
         mockColumns = [new Column('col1', 'Todo', [])];
         mockPermissions = [{
             identifier: 'user1',
-            kanbanPermission: KanbanPermission.ADMINISTRATOR
+            kanbanPermission: [KanbanPermission.ADMINISTRATOR]
         }];
     });
 
@@ -92,35 +92,3 @@ describe('Board Entity', () => {
         expect(board.getColumns().length).toBe(1);
     });
 });
-
-
-// import request from 'supertest';
-// import app from '../../back-end/app';
-
-// describe('Board Creation API', () => {
-//     test('should create board with valid data', async () => {
-//         const response = await request(app)
-//             .post('/api/boards')
-//             .send({
-//                 boardName: 'Test Board',
-//                 guildId: 'guild1',
-//                 userId: 'user1'
-//             });
-
-//         expect(response.status).toBe(201);
-//         expect(response.body).toHaveProperty('board');
-//         expect(response.body.board.name).toBe('Test Board');
-//     });
-
-//     test('should reject invalid board creation request', async () => {
-//         const response = await request(app)
-//             .post('/api/boards')
-//             .send({
-//                 boardName: '',  // Invalid empty name
-//                 guildId: 'guild1',
-//                 userId: 'user1'
-//             });
-
-//         expect(response.status).toBe(400);
-//         expect(response.body).toHaveProperty('error');  });
-// });
