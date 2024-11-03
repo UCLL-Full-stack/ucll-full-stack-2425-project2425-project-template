@@ -24,7 +24,14 @@ const createOrder = async (orderData: {
     });
 };
 
+
+//Method to get all orders
+const getAllOrders = (): Order[] => {
+    return orderRepository.getAllOrders();
+};
+
 export default {
+    getAllOrders,
     createOrder,
     // other order-related methods...
 };
