@@ -6,7 +6,7 @@ export class Training {
     date : Date;
     hall : string;
     square : number;
-    players? : Array<Players>; // Unusable for now
+    players? : Array<User>; // Unusable for now
     coach : User;
 
     constructor (training: {
@@ -14,14 +14,14 @@ export class Training {
         date : Date,
         hall : string,
         square : number;
-        players? : Array<Players>; // Unusable for now
+        players? : Array<User>; // Unusable for now
         coach : User;
     }) {
         this.trainingId = training.id;
         this.date = training.date;
         this.hall = training.hall;
         this.square = training.square;
-        this.players = training.players || new Array<Players>(); // Unusable for now
+        this.players = training.players || new Array<User>(); // Unusable for now
         this.coach = training.coach;
     }
 }
