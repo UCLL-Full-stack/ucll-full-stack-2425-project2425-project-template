@@ -32,6 +32,12 @@ const ProductsOverview = () => {
     router.push(`/products/${productId}`); 
   };
 
+  const calculateAverageScore = (reviews: { score: number }[]) => {
+    if (reviews.length === 0) return 0;
+    const totalScore = reviews.reduce((sum, review) => sum + review.score, 0);
+    return totalScore / reviews.length;
+  };
+
   return (
     <>
       <Head>
@@ -53,26 +59,28 @@ const ProductsOverview = () => {
           <p>Loading products...</p>
         ) : (
           <div className="d-grid gap-4" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="card"
-                style={{ width: "100%", cursor: "pointer" }}
-                onClick={() => product.id !== undefined && handleCardClick(product.id)} 
-              > 
-              {/* // ask question in class not sure how to do this???? */}
-                <img src={image} className="card-img-top" alt={product.name} />
-                <div className="card-body">
-                  <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text">€{product.price.toFixed(2)}</p>
-                  <div className="d-flex align-items-center gap-1">
-                    {[...Array(product.reviews.length)].map((_, i) => (
-                      <FontAwesomeIcon key={i} icon={solidStar} />
-                    ))}
+            {products.map((product) => {
+              const averageScore = calculateAverageScore(product.reviews);
+              return (
+                <div
+                  key={product.id}
+                  className="card"
+                  style={{ width: "100%", cursor: "pointer" }}
+                  onClick={() => product.id !== undefined && handleCardClick(product.id)} 
+                > 
+                  <img src={image} className="card-img-top" alt={product.name} />
+                  <div className="card-body">
+                    <h5 className="card-title">{product.name}</h5>
+                    <p className="card-text">€{product.price.toFixed(2)}</p>
+                    <div className="d-flex align-items-center gap-1">
+                      {[...Array(Math.round(averageScore))].map((_, i) => (
+                        <FontAwesomeIcon key={i} icon={solidStar} />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </main>
