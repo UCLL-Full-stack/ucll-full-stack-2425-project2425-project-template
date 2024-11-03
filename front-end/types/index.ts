@@ -1,31 +1,39 @@
+export type RecipeIngredient = {
+    recipeingredientId?: number;
+    recipeId: number;
+    ingredientId: number;
+    unit: string;
+    quantity: number;
+};
+
 export type Recipe = {
-    recipeId?: number;
+    id?: number;
+    ingredients: RecipeIngredient[];
     user: User;
     title: string;
     description: string;
     instructions: string;
-    nutritionFacts: string;
-    cookingTips: string;
-    extraNotes: string;
-    createdAt: Date;
-    updatedAt: Date;
-    tags: Tag[];
+    nutritionFacts: string,
+    cookingTips: string,
+    extraNotes: string,
+    createdAt: Date,
+    updatedAt: Date,
+    tags: Tag[]
 }
 
-type Role = 'admin' | 'user' | 'guest';
-
-export type Tag = {
-    tagId?: number;
-    name: string;
-    description: string;
-    recipes: Recipe[];
-}
+export type Role = 'admin' | 'user' | 'guest';
 
 export type User = {
+    username: string;
     firstName: string;
     lastName: string;
     email: string;
-    username: string;
     password: string;
     role: Role;
+}
+
+export type Tag = {
+    tagId?: number
+    name: string
+    description: string
 }

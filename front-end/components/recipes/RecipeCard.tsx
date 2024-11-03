@@ -5,6 +5,7 @@ import Tag from "@components/recipes/tag";
 
 type Props = {
     recipe: {
+        id: number,
         title: string;
         tags: Array<{ tagId: number; name: string }>;
     };
@@ -22,7 +23,7 @@ const RecipeCard: React.FC<Props> = ({recipe}: Props) => {
         setShowAllTags((prev) => !prev);
     };
 
-    const onClickRecipeDetails = () => {
+    const onClickRecipeDetails = ( id: number) => {
 
     }
 
@@ -53,7 +54,8 @@ const RecipeCard: React.FC<Props> = ({recipe}: Props) => {
                 </div>
                 {/*Recipe details button*/}
                 <button
-                onClick={() => onClikRecipeDetails(recipe.id)}
+                    onClick={() => onClickRecipeDetails(recipe.id)}
+                    className="bg-green-500 text-white px-3 py-1 rounded-full shadow"
                 >
                     View Recipe Details
                 </button>
