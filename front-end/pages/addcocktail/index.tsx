@@ -15,10 +15,18 @@ const Home: React.FC = () => {
       <main>
         <Header></Header>
 
-        <CocktailForm onSubmit={function (cocktail: { id: number; name: string; description: string; strongness: number; imageUrl: string; }): void {
-                  CocktailService.addCocktail(cocktail)
-                  window.location.href = '/';
-              } }></CocktailForm>
+        <CocktailForm
+        onSubmit={async function (cocktail: { name: string; description: string; strongness: number; imageUrl: string; }) {
+            try {
+            await CocktailService.addCocktail(cocktail);
+
+            window.location.href = '/';
+            
+            } catch (error) {
+            console.error("Failed to create cocktail:", error);
+            }
+        }}
+        ></CocktailForm>
       </main>
     </>
   );
