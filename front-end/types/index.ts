@@ -9,3 +9,9 @@ export type Course = {
   requiredPassedCourses: Course[];
 };
 
+export type CourseShort = {
+  id: number;
+  name: string;
+  phase: number;
+  credits: number;
+};
