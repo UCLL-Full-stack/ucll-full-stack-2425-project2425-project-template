@@ -76,6 +76,12 @@ const removeWorkout = (workoutId: number): Workout => {
 };
 
 const createWorkout = ({ workout_id, user_id, name, description }: WorkoutInput): Workout => {
+    const existingWorkout = workoutDb.getWorkoutById(workout_id);
+    
+    if (existingWorkout) {
+        throw new Error(`Workout with ID ${workout_id} already exists`);
+    }
+    
     const workout = new Workout({ workout_id, user_id, name, description, exercises: [] });
     return workoutDb.createWorkout(workout);
 };

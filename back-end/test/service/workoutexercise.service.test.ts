@@ -113,3 +113,48 @@ test(`given: valid workout ID; when: fetching workout exercises by workout ID; t
     expect(result).toEqual(workoutExercises);
     expect(workoutexerciseDb.getWorkoutExercisesByWorkoutId).toHaveBeenCalledWith(id);
 });
+
+test(`given: invalid workout exercise input; when: creating a workout exercise; then: an error is thrown`, () => {
+    //given
+    const workoutExerciseInput = workoutExercises[0];
+    workoutexerciseDb.getWorkoutExerciseById = mockWorkoutExerciseDbGetWorkoutExerciseById.mockReturnValue(workoutExerciseInput);
+
+    //when
+    const createWorkoutExercise = () => workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
+
+    //then
+    expect(createWorkoutExercise).toThrow(`Workout exercise with ID ${workoutExerciseInput.workout_exercise_id} already exists`);
+    expect(workoutexerciseDb.getWorkoutExerciseById).toHaveBeenCalledWith(workoutExerciseInput.workout_exercise_id); 
+});
+
+test(`given: invalid workout exercise input; when: creating a workout exercise; then: an error is thrown`, () => {
+    //given
+    const workoutExerciseInput = workoutExercises[0];
+    workoutexerciseDb.getWorkoutExerciseById = mockWorkoutExerciseDbGetWorkoutExerciseById.mockReturnValue(null);
+    workoutexerciseDb.getWorkoutExercisesByWorkoutId = MockWorkoutExerciseDbGetWorkoutExercisesByWorkoutId.mockReturnValue(workoutExercises);
+
+    //when
+    const createWorkoutExercise = () => workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
+
+    //then
+    expect(createWorkoutExercise).toThrow(`Workout exercise with workout ID ${workoutExerciseInput.workout_id} and exercise ID ${workoutExerciseInput.exercise_id} already exists`);
+    expect(workoutexerciseDb.getWorkoutExerciseById).toHaveBeenCalledWith(workoutExerciseInput.workout_exercise_id);
+    expect(workoutexerciseDb.getWorkoutExercisesByWorkoutId).toHaveBeenCalledWith(workoutExerciseInput.workout_id);
+});
+
+test(`given: valid workout exercise input; when: creating a workout exercise; then: the workout exercise is created`, () => {
+    //given
+    const workoutExerciseInput = workoutExercises[0];
+    workoutexerciseDb.getWorkoutExerciseById = mockWorkoutExerciseDbGetWorkoutExerciseById.mockReturnValue(null);
+    workoutexerciseDb.getWorkoutExercisesByWorkoutId = MockWorkoutExerciseDbGetWorkoutExercisesByWorkoutId.mockReturnValue([]);
+    workoutexerciseDb.createWorkoutExercise = mockWorkoutExerciseDbCreateWorkoutExercise.mockReturnValue(workoutExerciseInput);
+
+    //when
+    const result = workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
+
+    //then
+    expect(result).toEqual(workoutExerciseInput);
+    expect(workoutexerciseDb.getWorkoutExerciseById).toHaveBeenCalledWith(workoutExerciseInput.workout_exercise_id);
+    expect(workoutexerciseDb.getWorkoutExercisesByWorkoutId).toHaveBeenCalledWith(workoutExerciseInput.workout_id);
+    expect(workoutexerciseDb.createWorkoutExercise).toHaveBeenCalledWith(workoutExerciseInput);
+});

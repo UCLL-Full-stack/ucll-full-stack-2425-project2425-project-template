@@ -10,6 +10,7 @@ let mockWorkoutDbGetWorkoutByUserId: jest.Mock;
 let mockWorkoutDbAddExerciseToWorkout: jest.Mock;
 let mockWorkoutDbRemoveExerciseFromWorkout: jest.Mock;
 let mockWorkoutDbRemoveWorkout: jest.Mock;
+let mockWorkoutDbCreateWorkout: jest.Mock;
 
 const workouts: WorkoutInput[] = [
     {
@@ -68,6 +69,7 @@ beforeEach(() => {
     mockWorkoutDbAddExerciseToWorkout = jest.fn();
     mockWorkoutDbRemoveExerciseFromWorkout = jest.fn();
     mockWorkoutDbRemoveWorkout = jest.fn();
+    mockWorkoutDbCreateWorkout = jest.fn();
 });
 
 afterEach(() => {
@@ -267,4 +269,38 @@ test(`given: valid workout ID; when: removing a workout; then: the removed worko
     //then
     expect(result).toEqual(workouts[0]);
     expect(workoutDb.removeWorkout).toHaveBeenCalledWith(workoutId);
+});
+
+test(`given: invalid workout input; when: creating a workout; then: an error is thrown`, () => {
+    //given
+    const workoutInput = workouts[0];
+    workoutDb.getWorkoutById = mockWorkoutDbGetWorkoutById.mockReturnValue(workoutInput);
+
+    //when
+    const createWorkout = () => workoutService.createWorkout(workoutInput);
+
+    //then
+    expect(createWorkout).toThrow(`Workout with ID ${workoutInput.workout_id} already exists`);
+    expect(workoutDb.getWorkoutById).toHaveBeenCalledWith(workoutInput.workout_id);
+});
+
+test(`given: valid workout input; when: creating a workout; then: the created workout is returned`, () => {
+    //given
+    const workoutInput: WorkoutInput = {
+        workout_id: 3,
+        user_id: 1,
+        name: 'Workout 3',
+        description: 'Workout 3 description',
+        exercises: [],
+    };
+    workoutDb.getWorkoutById = mockWorkoutDbGetWorkoutById.mockReturnValue(null);
+    workoutDb.createWorkout = mockWorkoutDbCreateWorkout.mockReturnValue(workoutInput);
+
+    //when
+    const result = workoutService.createWorkout(workoutInput);
+
+    //then
+    expect(result).toEqual(workoutInput);
+    expect(workoutDb.createWorkout).toHaveBeenCalledWith(workoutInput);
+    expect(workoutDb.getWorkoutById).toHaveBeenCalledWith(workoutInput.workout_id);
 });
