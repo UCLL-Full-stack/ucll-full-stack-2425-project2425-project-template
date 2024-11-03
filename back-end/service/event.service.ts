@@ -40,8 +40,16 @@ const getEventById = (id: number): Event => {
 };
 
 const addParticipantToEvent = (email: string, eventId: number): void => {
-    const participant = participantService.getParticipantByEmail(email);
-    eventDb.addParticipantToEvent(participant, eventId);
+    try {
+        const participant = participantService.getParticipantByEmail(email);
+        eventDb.addParticipantToEvent(participant, eventId);
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error('An unknown error occurred');
+        }
+    }
 };
 
 export default { 

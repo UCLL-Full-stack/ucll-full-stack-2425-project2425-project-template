@@ -218,7 +218,6 @@ const getEventById = ({ id }: { id: number }): Event | null => {
     try {
         return events.find((event) => event.getId() === id) || null;
     } catch (error) {
-        console.error(error);
         throw new Error('Database error. See server log for the details.')
     }
 };
@@ -226,6 +225,11 @@ const getEventById = ({ id }: { id: number }): Event | null => {
 const addParticipantToEvent = (participant: Participant, eventId: number): void => {
     events.forEach(event => {
         if (event.getId() === eventId) {
+            event.getParticipants().forEach(p => {
+                if (p.getUser().getId() === participant.getUser().getId()) {
+                    throw new Error('Participant already exists in the event.');
+                }
+            });
             event.addParticipant(participant);
         };
     });

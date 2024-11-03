@@ -112,7 +112,11 @@ eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFun
     try {
         eventService.addParticipantToEvent(email, eventId);
     } catch (error) {
-        res.status(400).json({ status: 'error', message: 'Could not add participant to event.' });
+        if (error instanceof Error) {
+            res.status(400).json({ status: 'error', message: error.message });
+        } else {
+            res.status(400).json({ status: 'error', message: 'Unknown error' });
+        }
     }
 });
 
