@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import {recipeRouter} from "./controller/recipe.routes";
-import {userRouter} from "./controller/user.router";
+import {userRoutes} from "./controller/user.routes";
 
 const app = express();
 dotenv.config();
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/recipes', recipeRouter)
-app.use('/user', userRouter)
+app.use('/user', userRoutes)
 
 const swaggerOpts = {
     definition: {

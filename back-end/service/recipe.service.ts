@@ -1,9 +1,11 @@
 import recipeDb from "../repository/recipe.db"
-import recipeIngredientDb from "../repository/ingredient.db"
-import { Recipe } from "../model/recipe";
-import { RecipeInput} from "../types";
+import userService from "./user.service";
+import {Recipe} from "../model/recipe";
+import {RecipeInput} from "../types";
+import {Tag} from "../model/tags";
+import tagServerice from "./tag.serverice";
 
-const getAllRecipes = async (): Promise<Recipe[]> => {
+const getAllRecipes =  (): Recipe[] => {
     return recipeDb.getAllRecipes();
 }
 
@@ -12,49 +14,62 @@ const createRecipe = ({
                           ingredients: recipeIngredientInputs,
                           title,
                           description,
-                          instructions
-}: RecipeInput) => {
-    // Check if the user exists
-    if(!userInput.getUserId()){throw new Error(`User with id ${userInput.getUserId()} does not exit` )}
+                          instructions,
+                          nutritionFacts,
+                          cookingTips,
+                          extraNotes,
+                          createdAt,
+                          updatedAt,
+                          tags: tagInput
+}: RecipeInput): Recipe => {
+    if (!userInput.userId) throw new Error('User id is required')
 
-    // Validate each ingredient
-    recipeIngredientInputs.forEach((ingredientInput, index) => {
-        const ingredient = recipeIngredientDb.getRecipeIngredientById({ id: ingredientInput.recipeingredientId ?? -1 });
-
-        if (!ingredient) {
-            throw new Error(`RecipeIngredient at index ${index} with ID ${ingredientInput.recipeingredientId} not found`);
-        }
-    });
 
     //check if the other feels are filled in
-    if(!title || !description || !instructions){
+    if (!title || !description || !instructions) {
         throw new Error('We require all the feels to be filled in.')
     }
 
+    // Check if the user exists:
+    // the userService.getUserById should throw an error if the user does not exist
+    const user = userService.getUserById({userId: userInput.userId ?? -1})
+
+
+
+    let tags: Tag[] = [];
+    tagInput.forEach((tagInput) => {
+        const tag = tagServerice.getTagById({tagId: tagInput.tagId ?? -1})
+        if(tag){
+            tags.push(tag)
+        }
+    })
+
     //we will now check if we already have the same recipe saved
     const existingRecipe = recipeDb.getRecipeByTitle({title: title})
-
-    if(existingRecipe){throw new Error(`We already have a recipe by this tile: ${title}`)}
+    if (existingRecipe) {
+        throw new Error(`We already have a recipe by this tile: ${title}`)
+    }
 
     //we need to creat a new recipe to go true that validation logic
     let recipe;
     try {
         recipe = new Recipe({
-            user: userInput,
+            user,
             title,
             description,
             instructions,
-            nutritionFacts: "",
-            cookingTips: "",
-            extraNotes: "",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            tags: []})
-    }catch (error){
+            nutritionFacts,
+            cookingTips,
+            extraNotes,
+            createdAt,
+            updatedAt,
+            tags
+        })
+    } catch (error) {
         throw new Error(`you did not provide use with a valid Recipe error: ${error}`)
     }
 
     return recipeDb.createRecipe(recipe)
 }
 
-export default { createRecipe, getAllRecipes }
+export default {createRecipe, getAllRecipes}

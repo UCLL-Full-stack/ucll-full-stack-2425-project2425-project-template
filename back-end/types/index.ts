@@ -11,16 +11,22 @@ type RecipeIngredientInput = {
 type RecipeInput = {
     id?: number;
     ingredients: RecipeIngredientInput[];
-    user: User;
+    user: UserInput;
     title: string;
     description: string;
     instructions: string;
+    nutritionFacts: string,
+    cookingTips: string,
+    extraNotes: string,
+    createdAt: Date,
+    updatedAt: Date,
+    tags: TagInput[]
 }
 
 type Role = 'admin' | 'user' | 'guest';
 
 type UserInput = {
-    id?: number;
+    userId?: number;
     username: string;
     firstName: string;
     lastName: string;
@@ -29,5 +35,11 @@ type UserInput = {
     role: Role;
 }
 
+type TagInput = {
+    tagId?: number
+    name: string
+    description:string
+}
 
-export { RecipeIngredientInput, Role, RecipeInput, UserInput };
+
+export { RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };

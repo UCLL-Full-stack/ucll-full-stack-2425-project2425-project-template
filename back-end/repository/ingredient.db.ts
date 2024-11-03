@@ -7,6 +7,13 @@ const recipeIngredients: RecipeIngredient[] = [
     ingredientId: 1,
     unit: "grams",
     quantity: 250,
+    }),
+    new RecipeIngredient({
+        recipeingredientId: 2,
+        recipeId: 1,
+        ingredientId: 2,
+        unit: "grams",
+        quantity: 250,
     })
 ];
 const getRecipeIngredientById = ({ id }: { id: number }): RecipeIngredient | null => {

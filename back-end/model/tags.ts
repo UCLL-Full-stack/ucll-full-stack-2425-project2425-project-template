@@ -4,13 +4,11 @@ export class Tag {
     private _tagId?: number;
     private _name: string;
     private _description: string;
-    private _recipes: Recipe[];
 
-    constructor(tag: { tagId?: number, name: string, description: string, recipes: Recipe[] }) {
+    constructor(tag: { tagId?: number, name: string, description: string }) {
         this._tagId = tag.tagId;
         this._name = tag.name;
         this._description = tag.description;
-        this._recipes = tag.recipes
     }
 
     getTagId(): number | undefined {
