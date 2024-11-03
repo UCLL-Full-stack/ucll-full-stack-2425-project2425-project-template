@@ -47,7 +47,7 @@ describe('User Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });

@@ -46,7 +46,7 @@ describe('Schedule Class', () => {
             title: 'Pancakes',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 15,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -94,7 +94,7 @@ describe('Schedule Class', () => {
             title: 'Waffles',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 20,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
@@ -106,7 +106,9 @@ describe('Schedule Class', () => {
     test('should throw an error if adding a duplicate recipe', () => {
         expect(() => {
             schedule.addRecipe(recipe);
-        }).toThrow(`A recipe with the name "${recipe.getTitle()}" is already scheduled for this date`);
+        }).toThrow(
+            `A recipe with the name "${recipe.getTitle()}" is already scheduled for this date`
+        );
     });
 
     test('should remove a recipe from the schedule', () => {
@@ -122,11 +124,11 @@ describe('Schedule Class', () => {
             title: 'Waffles',
             instructions: 'Mix ingredients and cook.',
             cookingTime: 20,
-            category: 'Breakfast',
+            category: 'breakfast',
             ingredients: [recipeIngredient],
             user: user,
         });
-        
+
         expect(schedule.hasRecipe(newRecipe)).toBe(false);
     });
 });
