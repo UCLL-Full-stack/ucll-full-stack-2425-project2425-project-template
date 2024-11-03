@@ -2,12 +2,12 @@ import { Course } from "./course";
 import { Student } from "./student";
 
 export class ISP {
-    private readonly _id?: number;
-    private readonly _status: string;
-    private readonly _totalCredits: number;
-    private readonly _year: number;
-    private readonly _courses: Course[];
-    private readonly _student: Student;
+    public readonly id?: number;
+    public readonly status: string;
+    public readonly totalCredits: number;
+    public readonly year: number;
+    public readonly courses: Course[];
+    public readonly student: Student;
 
     constructor(isp: {
         id: number;
@@ -18,12 +18,12 @@ export class ISP {
         student: Student;
     }) {
         this.validate(isp);
-        this._id = isp.id;
-        this._status = isp.status;
-        this._totalCredits = isp.totalCredits;
-        this._year = isp.year;
-        this._courses = isp.courses ||[];
-        this._student = isp.student;
+        this.id = isp.id;
+        this.status = isp.status;
+        this.totalCredits = isp.totalCredits;
+        this.year = isp.year;
+        this.courses = isp.courses ||[];
+        this.student = isp.student;
     }
 
     validate(isp: { status: string; totalCredits: number; year: number; student: Student;}) {
@@ -44,33 +44,6 @@ export class ISP {
         }
     }
 
-    public get id(): number|undefined {
-        return this._id;
-    }
-
-    public get status(): string {
-        return this._status;
-    }
-
-
-    public get totalCredits(): number {
-        return this._totalCredits;
-    }
-
-
-    public get year(): number {
-        return this._year;
-    }
-
-
-    public get courses(): Course[] {
-        return this._courses;
-    }
-
-    public get student(): Student {
-        return this._student;
-    }
-
 
     public equals(isp: ISP): boolean {
         return (
@@ -78,8 +51,8 @@ export class ISP {
             this.status === isp.status &&
             this.totalCredits === isp.totalCredits &&
             this.year === isp.year &&
-            this._courses.length === isp._courses.length &&
-            this._courses.every((course, index) => course.equals(isp._courses[index]))
+            this.courses.length === isp.courses.length &&
+            this.courses.every((course, index) => course.equals(isp.courses[index]))
         );
     }
 }

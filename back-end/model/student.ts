@@ -2,9 +2,9 @@ import { Course } from "./course";
 import { User } from "./user";
 
 export class Student extends User {
-    private readonly _nationality: string;
-    private readonly _startYear: number;
-    private readonly _passedCourses: Course[];
+    public readonly nationality: string;
+    public readonly startYear: number;
+    public readonly passedCourses: Course[];
 
     constructor(student: { id: number; name: string; email: string; password: string; nationality: string; startYear: number; passedCourses: Course[] }) {
         super({
@@ -14,9 +14,9 @@ export class Student extends User {
             password: student.password,
         });
         this.validates(student);
-        this._nationality = student.nationality;
-        this._startYear = student.startYear;
-        this._passedCourses = student.passedCourses || [];
+        this.nationality = student.nationality;
+        this.startYear = student.startYear;
+        this.passedCourses = student.passedCourses || [];
     }
 
     validates(student: { nationality: string; startYear: number;}) {
@@ -31,21 +31,6 @@ export class Student extends User {
         }
     }
 
-    get nationality(): string {
-        return this._nationality;
-    }
-
-
-    get startYear(): number {
-        return this._startYear;
-    }
-
-
-    get passedCourses(): Course[] {
-        return this._passedCourses;
-    }
-
-
     equals(student: Student): boolean {
         return (
             this.id === student.id &&
@@ -53,7 +38,7 @@ export class Student extends User {
             this.email === student.email &&
             this.password === student.password &&
             this.nationality === student.nationality &&
-            this._passedCourses.every((passedCourse,index)=> passedCourse.equals(student._passedCourses[index]))
+            this.passedCourses.every((passedCourse,index)=> passedCourse.equals(student.passedCourses[index]))
         );
     }
 }

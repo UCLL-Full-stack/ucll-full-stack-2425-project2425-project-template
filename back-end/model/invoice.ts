@@ -1,11 +1,11 @@
 import { ISP } from "./isp";
 
 export class Invoice {
-    private readonly _id?: number;
-    private readonly _totalAmount: number;
-    private readonly _deadline: Date;
-    private readonly _paidAmount?: number;
-    private readonly _isp: ISP;
+    public readonly id?: number;
+    public readonly totalAmount: number;
+    public readonly deadline: Date;
+    public readonly paidAmount?: number;
+    public readonly isp: ISP;
 
     constructor(invoice: {
         id: number;
@@ -15,11 +15,11 @@ export class Invoice {
         isp: ISP;
     }) {
         this.validate(invoice);
-        this._id = invoice.id;
-        this._totalAmount = invoice.totalAmount;
-        this._deadline = invoice.deadline;
-        this._paidAmount = invoice.paidAmount||0;
-        this._isp = invoice.isp;
+        this.id = invoice.id;
+        this.totalAmount = invoice.totalAmount;
+        this.deadline = invoice.deadline;
+        this.paidAmount = invoice.paidAmount||0;
+        this.isp = invoice.isp;
     }
 
     validate(invoice: {totalAmount: number; deadline: Date; paidAmount?: number; isp: ISP;}) {
@@ -35,26 +35,6 @@ export class Invoice {
         if (!invoice.isp){
             throw new Error("ISP is required.")
         }
-    }
-
-    public get id(): number|undefined {
-        return this._id;
-    }
-
-    public get totalAmount(): number {
-        return this._totalAmount;
-    }
-
-    public get deadline(): Date {
-        return this._deadline;
-    }
-
-    public get paidAmount(): number | undefined {
-        return this._paidAmount;
-    }
-
-    public get isp(): ISP {
-        return this._isp;
     }
 
 
