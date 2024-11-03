@@ -42,5 +42,6 @@ export default
   getAllUsers,
   getUserById,
   createUser,
-  loginUser
+  loginUser,
+  getUserByName
  };
