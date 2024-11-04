@@ -56,6 +56,26 @@ const addItem = async (item: Item) => {
     }
 };
 
-const ItemsService = { getAllItems, getItemById, addItemToCart, addNutritionlabelToItem, addItem };
+const deleteItem = async (itemId: number) => {
+    try {
+        return fetch(process.env.NEXT_PUBLIC_API_URL + `/items/${itemId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const ItemsService = {
+    getAllItems,
+    getItemById,
+    addItemToCart,
+    addNutritionlabelToItem,
+    addItem,
+    deleteItem,
+};
 
 export default ItemsService;
