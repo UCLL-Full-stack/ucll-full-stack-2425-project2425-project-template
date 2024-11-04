@@ -11,7 +11,7 @@ const projects: Project[] = [
 let currentId = 6;
 
 const createProject = ({ name, users, tasks }: Project): Project => {
-    const project = new Project({ project_Id: currentId++, name, users: [], tasks: [] });
+    const project = new Project({ project_Id: currentId++, name, users: users || [], tasks: tasks || [] });
     projects.push(project);
     return project;
 
