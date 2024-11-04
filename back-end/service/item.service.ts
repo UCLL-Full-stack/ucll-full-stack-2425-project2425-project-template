@@ -47,9 +47,20 @@ const getItemById = (itemId: number): Item => {
     return item;
 };
 
+const deleteItemById = (itemId: number): string => {
+    const item = itemDb.getById(itemId);
+
+    if (!item) {
+        throw new Error(`Item with id ${itemId} not found`);
+    }
+
+    return itemDb.deleteItem(itemId);
+};
+
 export default {
     getAllItems,
     createItem,
     addNutritionLabelToItem,
     getItemById,
+    deleteItemById,
 };
