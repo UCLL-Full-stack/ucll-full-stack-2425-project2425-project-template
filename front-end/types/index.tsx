@@ -7,4 +7,5 @@ export type Vehicle = {
     fuel_type: string;
     transmission_type: string;
     vehicle_type: string;
+    body_type: string
 }

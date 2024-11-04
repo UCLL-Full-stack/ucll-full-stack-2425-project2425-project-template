@@ -18,7 +18,7 @@ const VehiclesOverviewCards: React.FC<Props> = ({ vehicles }: Props) => {
 
                     {/* Vehicle Details */}
                     <h2 className="text-lg font-semibold text-center">{vehicle.manufacturer} {vehicle.model_name}</h2>
-                    <p className="text-xl font-bold text-center mt-2">${vehicle.price}</p>
+                    <p className="text-xl font-bold text-center mt-2">€{vehicle.price}</p>
                     <div className="text-gray-500 mt-1 text-center">
                         <p>Year: {vehicle.year}</p>
                         <p>Fuel: {vehicle.fuel_type}</p>

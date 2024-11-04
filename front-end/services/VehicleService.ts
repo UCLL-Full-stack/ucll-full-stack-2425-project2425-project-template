@@ -17,9 +17,19 @@ const addVehicle = (vehicle: any)=>{
     })
 }
 
+const deleteVehicle = (vehicleId: number) => {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/vehicles/${vehicleId}`, {
+        method: 'DELETE', 
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+};
+
 const VehicleService = {
     getAllVehicles,
-    addVehicle
+    addVehicle,
+    deleteVehicle
 }
 
 export default VehicleService;
