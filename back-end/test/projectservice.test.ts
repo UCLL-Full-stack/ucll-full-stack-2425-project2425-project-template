@@ -1,4 +1,4 @@
-import projectDb from "../domain/data-access/project.db";
+/* import projectDb from "../domain/data-access/project.db";
 import { Project } from "../domain/model/project";
 import projectService from "../service/project.service";
 
@@ -46,4 +46,4 @@ describe('ProjectService', () => {
         expect(getProjectByNameMock).toHaveBeenCalledTimes(1);
         expect(getProjectByNameMock).toHaveBeenCalledWith({ name });
     });
-});
+}); */

@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import projectService from "../service/project.service"
 import { ProjectInput } from "../types/index"; 
 
-const projectRouter = express.Router();
+export const projectRouter = express.Router();
 
 /**
  * @swagger
@@ -56,3 +56,4 @@ projectRouter.post('/', async (req: Request, res: Response) => {
         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
     }
 });
+
