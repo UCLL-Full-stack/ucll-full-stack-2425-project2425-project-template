@@ -4,7 +4,7 @@ import vehicleDB from "../repository/vehicle.db";
 
 
 const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
-    if (!input.manufacturer || !input.model_name || !input.price ||
+    if (!input.manufacturer || !input.model_name || !input.price || !input.body_type ||
         !input.fuel_type || !input.transmission_type || !input.year ||
         !input.vehicle_type) {
         throw new Error("All vehicle properties must be defined");
@@ -17,15 +17,25 @@ const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
         fuel_type: input.fuel_type,
         transmission_type: input.transmission_type,
         year: input.year,
-        vehicle_type: input.vehicle_type
+        vehicle_type: input.vehicle_type,
+        body_type: input.body_type
     });
     return vehicleDB.createVehicle(vehicle);
 }
+
+
+const deleteVehicle = async (vehicleId: number): Promise<void> => {
+    const deleted = vehicleDB.deleteVehicleFromDatabase(vehicleId);
+    if (!deleted) {
+        throw new Error('Vehicle not found');
+    }
+};
 
 
 const getAllCars = async (): Promise<Vehicle[]> => vehicleDB.getAllCars();
 
 export default {
     getAllCars,
-    addVehicle
+    addVehicle,
+    deleteVehicle
 }

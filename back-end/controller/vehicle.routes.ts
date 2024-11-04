@@ -22,5 +22,17 @@ vehicleRouter.post('/', async (req: Request, res: Response) => {
     }
 })
 
+vehicleRouter.delete('/vehicles/:id', async (req, res) => {
+
+    const vehicleId = Number(req.params.id);
+
+    try {
+        await vehicleService.deleteVehicle(vehicleId);
+        res.status(200).json({ status: `Vehicle with ID ${vehicleId} was deleted.` });
+    } catch (error) {
+        res.status(400).json({ status: 'error' }); 
+    }
+});
+
 
 export default vehicleRouter;
