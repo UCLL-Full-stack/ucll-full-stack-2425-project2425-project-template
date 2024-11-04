@@ -114,6 +114,15 @@ export class Account {
     }
 
     addUser(user: User): void {
+        if (
+            this.users.find(
+                (user) => user.getNationalRegisterNumber() === user.getNationalRegisterNumber()
+            )
+        ) {
+            throw new Error(
+                `User with national register number ${user.getNationalRegisterNumber()} has already been added to this account.`
+            );
+        }
         this.users.push(user);
     }
 

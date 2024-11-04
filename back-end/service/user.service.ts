@@ -36,7 +36,7 @@ const getUserByEmailAndPassword = (email: string, password: string): User | unde
     if (!user) {
         throw new Error('Invalid email or password.');
     }
-    return userDb.getUserByEmailAndPassword(email, password);
+    return user;
 };
 
 const getUserByEmail = (email: string): User | undefined => {
@@ -44,7 +44,7 @@ const getUserByEmail = (email: string): User | undefined => {
     if (!user) {
         throw new Error(`User with email ${email} not found.`);
     }
-    return userDb.getUserByEmail(email);
+    return user;
 };
 
 const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User | undefined => {
@@ -52,7 +52,7 @@ const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User |
     if (!user) {
         throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
     }
-    return userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+    return user;
 };
 
 const addAccount = (nationalRegisterNumber: string, accountNumber: string): User => {

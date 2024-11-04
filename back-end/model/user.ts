@@ -83,7 +83,7 @@ export class User {
         if (!user.nationalRegisterNumber?.trim()) {
             throw new Error('National register number is required.');
         } else if (!this.validateNRN(user.nationalRegisterNumber)) {
-            throw new Error('Nationalregisternumber is not correct.');
+            throw new Error('National register number is not correct.');
         }
 
         // Validate name
@@ -92,9 +92,7 @@ export class User {
         }
 
         // Validate birth date
-        if (!user.birthDate) {
-            throw new Error('Birth date is required.');
-        } else if (user.birthDate > new Date()) {
+        if (user.birthDate > new Date()) {
             throw new Error('Birth date cannot be in the future.');
         }
 
@@ -147,6 +145,11 @@ export class User {
     }
 
     addAccount(account: Account): void {
+        if (this.accounts.find((acc) => acc.getAccountNumber() === account.getAccountNumber())) {
+            throw new Error(
+                `Account with account number ${account.getAccountNumber()} has already been added to this user.`
+            );
+        }
         this.accounts.push(account);
     }
 

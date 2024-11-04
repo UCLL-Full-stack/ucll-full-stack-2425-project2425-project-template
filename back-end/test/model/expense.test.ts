@@ -90,3 +90,21 @@ test('given: invalid currency for expense, when: creating a expense, then: an er
     // Then
     expect(createExpense).toThrow('Currency must be either USD, EUR or GBP.');
 });
+
+test('given: empty destination for expense, when: creating a expense, then: an error is thrown', () => {
+    // Given
+    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+
+    // When
+    const createExpense = () => {
+        new Expense({
+            amount: 100,
+            currency: 'EUR',
+            account,
+            destination: '',
+        });
+    };
+
+    // Then
+    expect(createExpense).toThrow('Destination is required');
+});
