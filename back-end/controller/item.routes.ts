@@ -336,4 +336,15 @@ itemRouter.post(
     }
 );
 
+itemRouter.delete('/:itemId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const itemId = parseInt(req.params.itemId);
+        const message = itemService.deleteItemById(itemId);
+
+        res.status(200).json({ message });
+    } catch (error) {
+        res.status(500).json({ message: (error as Error).message });
+    }
+});
+
 export { itemRouter };
