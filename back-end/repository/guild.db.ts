@@ -47,6 +47,7 @@ const guilds: Guild[] = [
             { identifier: DiscordPermission.MANAGE_MESSAGES, kanbanPermission: [KanbanPermission.CREATE_TASKS, KanbanPermission.EDIT_TASKS, KanbanPermission.DELETE_TASKS] },
             { identifier: "role1-2", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.CREATE_BOARD] },
             { identifier: "role2-2", kanbanPermission: [KanbanPermission.CREATE_COLUMNS, KanbanPermission.EDIT_COLUMNS] },
+            { identifier: "user2", kanbanPermission: [KanbanPermission.CREATE_BOARD] }
         ],
         [
             role1_2, role2_2
@@ -60,8 +61,8 @@ const guilds: Guild[] = [
             { identifier: DiscordPermission.VIEW_CHANNELS, kanbanPermission: [KanbanPermission.VIEW_BOARD] },
             { identifier: DiscordPermission.CREATE_INVITE, kanbanPermission: [KanbanPermission.ASSIGN_TASKS, KanbanPermission.MANAGE_TASK_ASSIGNEES] },
             { identifier: DiscordPermission.MUTE_MEMBERS, kanbanPermission: [KanbanPermission.VIEW_ACTIVITY_LOG, KanbanPermission.CREATE_COLUMNS] },
-            { identifier: "role3-1", kanbanPermission: [KanbanPermission.EDIT_COLUMNS, KanbanPermission.DELETE_COLUMNS] },
-            { identifier: "role3-2", kanbanPermission: [KanbanPermission.VIEW_BOARD] },
+            { identifier: "role1-3", kanbanPermission: [KanbanPermission.EDIT_COLUMNS, KanbanPermission.DELETE_COLUMNS] },
+            { identifier: "role2-3", kanbanPermission: [KanbanPermission.VIEW_BOARD, KanbanPermission.CREATE_BOARD] },
         ],
         [
             role1_3, role2_3
