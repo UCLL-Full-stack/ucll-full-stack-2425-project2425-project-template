@@ -3,8 +3,8 @@ import { Admin } from '../model/Admin';
 export const admins = [
     new Admin({
         id: 1,
-        username: 'John Doe',
-        password: 'Super Admin'
+        username: 'admin',
+        password: 'adminpassword'
     }),
 ];
 
@@ -12,4 +12,8 @@ const getAdminById = (id: number): Admin | undefined => {
     return admins.find(admin => admin.getId() === id);
 }
 
-export default { getAdminById }
+const getAdminByUsername = async (username: string): Promise<Admin | null> => {
+    return admins.find(admin => admin.getUsername() === username) || null;
+};
+
+export default { getAdminById, getAdminByUsername }

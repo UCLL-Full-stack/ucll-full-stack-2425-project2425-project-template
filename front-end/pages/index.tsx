@@ -1,14 +1,24 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Header from '@components/header';
 import styles from '@styles/home.module.css';
 
 const Home: React.FC = () => {
+  const [loggedInUser, setLoggedInUser] = useState<{ username: string; role: string } | null>(null);
+
+  useEffect(() => {
+    // Retrieve logged-in user's info
+    const userData = localStorage.getItem('loggedInUser');
+    if (userData) {
+      setLoggedInUser(JSON.parse(userData));
+    }
+  }, []);
+
   return (
     <>
       <Head>
-        <title>RaceForms</title>
-        <meta name="description" content="RaceForms.net" />
+        <title>Home</title>
       </Head>
       <Header />
       <main className={styles.main}>
@@ -20,7 +30,7 @@ const Home: React.FC = () => {
             width={50}
             height={50}
           />
-          <h1>Welcome to hell!</h1>
+          <h1>Welcome to the Home Page</h1>
         </span>
 
         <div className={styles.description}>
@@ -32,6 +42,13 @@ const Home: React.FC = () => {
             Laudantium, asperiores debitis.
           </p>
         </div>
+
+        {loggedInUser && (
+          <div className="alert alert-success">
+            Logged in as {loggedInUser.username} ({loggedInUser.role})
+          </div>
+        )}
+
       </main>
     </>
   );

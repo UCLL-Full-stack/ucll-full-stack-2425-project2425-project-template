@@ -7,14 +7,17 @@ import authService from '@services/authService';
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('user');
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await authService.login({ username, password });
+      const response = await authService.login({ username, password, role });
       if (response.ok) {
+        const userData = await response.json();
+        localStorage.setItem('loggedInUser', JSON.stringify({ username: userData.username, role: userData.role }));
         router.push('/');
       } else {
         const errorData = await response.json();
@@ -55,6 +58,19 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="role" className="form-label">Role</label>
+            <select
+              id="role"
+              className="form-select"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              required
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
           {error && <div className="alert alert-danger">{error}</div>}
           <button type="submit" className="btn btn-primary w-100">Login</button>

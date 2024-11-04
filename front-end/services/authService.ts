@@ -1,5 +1,6 @@
-const login = async (credentials: { username: string; password: string }): Promise<Response> => {
-  return fetch('/api/login', {
+const login = async (credentials: { username: string; password: string; role: string }): Promise<Response> => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  return fetch(apiUrl + '/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

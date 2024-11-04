@@ -2,14 +2,12 @@ import Head from 'next/head';
 import Header from '@components/header';
 import { useState, useEffect } from 'react';
 import submissionFormService from '@services/submission_formService';
-import raceService from '@services/RaceService';
+import raceService from '@services/raceService';
 import { Submission_form, Gebruiker, Race, Crash } from '@types';
 
 const SubmissionForms: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [raceOption, setRaceOption] = useState('existing');
   const [existingRaceId, setExistingRaceId] = useState('');
   const [races, setRaces] = useState<Race[]>([]);
@@ -22,6 +20,7 @@ const SubmissionForms: React.FC = () => {
   const [casualties, setCasualties] = useState('');
   const [deaths, setDeaths] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [submissionForms, setSubmissionForms] = useState<Submission_form[]>([]);
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const SubmissionForms: React.FC = () => {
 
     const fetchSubmissionForms = async () => {
       try {
-        const response = await submissionFormService.getAllSubmission_forms();
+        const response = await submissionFormService.getAllSubmissionForms();
         const submissionForms = await response.json();
         setSubmissionForms(submissionForms);
       } catch (error) {
@@ -52,7 +51,14 @@ const SubmissionForms: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const user: Gebruiker = { username, password };
+      // Retrieve the logged-in user's information from local storage
+      const userData = localStorage.getItem('loggedInUser');
+      if (!userData) {
+        setError('You must be logged in to submit a form.');
+        return;
+      }
+      const user: Gebruiker = JSON.parse(userData);
+
       let race: Race;
 
       if (raceOption === 'existing') {
@@ -76,7 +82,6 @@ const SubmissionForms: React.FC = () => {
         deaths: Number(deaths),
       };
 
-      // Initialize crashes array if it is undefined
       if (!race.crashes) {
         race.crashes = [];
       }
@@ -87,16 +92,20 @@ const SubmissionForms: React.FC = () => {
 
       const response = await submissionFormService.createSubmissionForm(submissionForm);
       if (response.ok) {
-        // Fetch the updated list of submission forms
-        const updatedResponse = await submissionFormService.getAllSubmission_forms();
+        
+        const updatedResponse = await submissionFormService.getAllSubmissionForms();
         const updatedSubmissionForms = await updatedResponse.json();
         setSubmissionForms(updatedSubmissionForms);
+        setSuccessMessage('Successfully submitted!');
+        setError('');
       } else {
         const errorData = await response.json();
         setError(errorData.message);
+        setSuccessMessage('');
       }
     } catch (error) {
       setError('An unexpected error occurred. Please try again.');
+      setSuccessMessage('');
     }
   };
 
@@ -107,7 +116,7 @@ const SubmissionForms: React.FC = () => {
       </Head>
       <Header />
       <main className="d-flex flex-column justify-content-center align-items-center">
-        <h1>Request to add a new crash to the database:</h1>
+        <h1>Request to Add A New Crash to the database</h1>
         <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '400px' }}>
           <div className="mb-3">
             <label htmlFor="title" className="form-label">Request title</label>
@@ -253,30 +262,8 @@ const SubmissionForms: React.FC = () => {
               required
             />
           </div>
-          <div className="mb-5"></div> {/* Add some space before the username and password fields */}
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">Your Username (kan later verkregen worden wanneer login werkt)</label>
-            <input
-              type="text"
-              id="username"
-              className="form-control"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Your Password (kan later verkregen worden wanneer login werkt)</label>
-            <input
-              type="password"
-              id="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
           {error && <div className="alert alert-danger">{error}</div>}
+          {successMessage && <div className="alert alert-success">{successMessage}</div>}
           <button type="submit" className="btn btn-primary w-100">Submit</button>
         </form>
         <h2 className="mt-5">All Submission Forms</h2>

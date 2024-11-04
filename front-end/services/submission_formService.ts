@@ -1,6 +1,6 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const getAllSubmission_forms = async () => {
+const getAllSubmissionForms = async () => {
     return fetch(apiUrl + "/submission_forms", {
       method: "GET",
       headers: {
@@ -20,7 +20,7 @@ const getAllSubmission_forms = async () => {
   };
   
   const submission_formService = {
-    getAllSubmission_forms,
+    getAllSubmissionForms,
     createSubmissionForm,
   };
 
