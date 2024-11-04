@@ -1,7 +1,7 @@
 import { set } from "date-fns";
 import { User } from "../domain/model/user";
 import { Task } from "../domain/model/task";
-import { Role } from "../types";
+import { Role, Roles } from "../types";
 
 const due_date = set(new Date(), { year: 2024, month: 10, date: 25 }); 
 
@@ -10,7 +10,7 @@ const user1 = new User({
     lastName: "Pieck", 
     email: "johan.pieck@example.com", 
     password: "securepassword", 
-    role: Role.Lecturer,
+    role: Roles.Lecturer,
     projects: [] 
 });
 
@@ -19,7 +19,7 @@ const user2 = new User({
     lastName: "Doe", 
     email: "john.doe@example.com",
     password: "passwordsecure",
-    role: Role.Admin,
+    role: Roles.Admin,
     projects: [] 
 });
 
@@ -28,7 +28,7 @@ const user3 = new User({
     lastName: "Smith", 
     email: "jane.smith@example.com",
     password: "anothersecurepassword",
-    role: Role.User,
+    role: Roles.User,
     projects: [] 
 });
 

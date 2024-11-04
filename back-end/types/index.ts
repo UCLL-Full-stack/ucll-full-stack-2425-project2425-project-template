@@ -4,6 +4,11 @@ import { User } from "../domain/model/user";
 
 export type Role = "admin" | "user" | "lecturer";
 
+export const Roles = {
+    Admin: "admin" as Role,
+    User: "user" as Role,
+    Lecturer: "lecturer" as Role
+};
 
 type UserInput = {
     user_Id?: number;
@@ -16,7 +21,7 @@ type UserInput = {
 };
 
 type ProjectInput = {
-    project_Id?: any;
+    project_Id?: number;
     name?: string;
     users?: User[];
     tasks?: Task[];

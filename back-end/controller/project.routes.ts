@@ -6,6 +6,30 @@ export const projectRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Project:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         # Add other properties here as per your requirements
+ *     ProjectInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         # Add other properties here as needed for creating a project
+ */
+
+/**
+ * @swagger
  * /projects:
  *   get:
  *     summary: Retrieve a list of projects
@@ -50,10 +74,11 @@ projectRouter.get('/', async (req: Request, res: Response) => {
 projectRouter.post('/', async (req: Request, res: Response) => {
     try {
         const project = <ProjectInput>req.body;
-        const result =  projectService.createProject(project);
+        const result = await projectService.createProject(project); // Ensure the function is awaited
         res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
     }
 });
 
+export default projectRouter;

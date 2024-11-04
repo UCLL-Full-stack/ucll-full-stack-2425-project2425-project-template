@@ -1,15 +1,17 @@
 import { Project } from "../model/project";
 
 const projects: Project[] = [
-    new Project({ name: "Project 1", users: [], tasks: [] }),
-    new Project({ name: "Project 2", users: [], tasks: [] }),
-    new Project({ name: "Project 3", users: [], tasks: [] }),
-    new Project({ name: "Project 4", users: [], tasks: [] }),
-    new Project({ name: "Project 5", users: [], tasks: [] }),
+    new Project({ project_Id: 1, name: "Project 1", users: [], tasks: [] }),
+    new Project({ project_Id: 2, name: "Project 2", users: [], tasks: [] }),
+    new Project({ project_Id: 3, name: "Project 3", users: [], tasks: [] }),
+    new Project({ project_Id: 4, name: "Project 4", users: [], tasks: [] }),
+    new Project({ project_Id: 5, name: "Project 5", users: [], tasks: [] }),
 ];
 
+let currentId = 6;
+
 const createProject = ({ name, users, tasks }: Project): Project => {
-    const project = new Project({  name, users: [], tasks: [] });
+    const project = new Project({ project_Id: currentId++, name, users: [], tasks: [] });
     projects.push(project);
     return project;
 

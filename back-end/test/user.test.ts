@@ -1,6 +1,6 @@
 import { User } from '../domain/model/user';
 import { Project } from '../domain/model/project';
-import { Role } from '../types';
+import { Role, Roles } from '../types';
 
 describe('User Model', () => {
     const validUser = {
@@ -9,7 +9,7 @@ describe('User Model', () => {
         lastName: 'Doe',
         email: 'john.doe@example.com',
         password: 'password123',
-        role: Role.Admin,
+        role: Roles.Admin,
         projects: [] as Project[]
     };
 

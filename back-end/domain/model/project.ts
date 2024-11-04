@@ -2,18 +2,20 @@ import { User } from "./user";
 import { Task } from "./task";
 
 export class Project {
-    project_Id: any;
+    project_Id: number | undefined;
     readonly name: string;
     readonly users: User[] = [];
     readonly tasks: Task[] = [];
 
     constructor(project: {
+        project_Id?: number;
         name: string;
         users: User[];
         tasks: Task[];
 
     }) {
         this.validate(project);
+        this.project_Id = project.project_Id;
         this.name = project.name;
         this.users = project.users || [];
         this.tasks = project.tasks || [];
@@ -21,16 +23,12 @@ export class Project {
 
     private validate(project: { name: string; users: User[]; tasks: Task[] }) {
         if (!project.name) {
-            throw new Error('Name is required');
+            throw new Error("Project name is required");
         }
-        /* if (!Array.isArray(project.users) || project.users.length === 0) {
-            throw new Error('At least one user is required');
-        }
-        if (!Array.isArray(project.tasks) || project.tasks.length === 0) {
-            throw new Error('At least one task is required');
-        } */
+        // if (!project.users || project.users.length === 0) {
+        //     throw new Error("At least one user is required");
+        // }
     }
-
 
     public getProjectId(): number | undefined {
         return this.project_Id;

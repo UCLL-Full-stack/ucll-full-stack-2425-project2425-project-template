@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import ProjectOverviewTable from "@/components/projects/ProjectOverviewTable";
 import TaskOverviewTable from "@/components/tasks/TaskOverviewTable";
-import Projectservice from "@/services/Projectservice";
+import Projectservice from "@/services/ProjectService";
 import Header from "@/components/header";
 
 const Projects: React.FC = () => {
