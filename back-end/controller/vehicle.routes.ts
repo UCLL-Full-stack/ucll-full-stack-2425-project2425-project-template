@@ -1,6 +1,7 @@
 import express,{ Request, Response, Router } from 'express';
 import vehicleService from "../service/vehicle.service";
 import { ca } from 'date-fns/locale';
+import { Vehicle } from '../domain/model/vehicle';
 
 const vehicleRouter = express.Router();
 
@@ -33,6 +34,17 @@ vehicleRouter.delete('/:id', async (req, res) => {
         res.status(400).json({ status: 'error' }); 
     }
 });
+
+vehicleRouter.put('/:id', async (req, res) => {
+    const vehicleId = Number(req.params.id);
+    const newVehicle = req.body
+    try {
+        await vehicleService.editVehicle(vehicleId, newVehicle);
+        res.status(200).json({ status: `Vehicle with ID ${vehicleId} was succesfully updated.`});
+    } catch (error) {
+        res.status(400).json({ status: 'error' }); 
+    }
+})
 
 
 export default vehicleRouter;

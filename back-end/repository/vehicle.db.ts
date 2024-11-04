@@ -26,8 +26,34 @@ const deleteVehicleFromDatabase = (vehicleId: number): boolean => {
     return false;
 };
 
+const updateVehicle = (vehicleId: number, newVehicleData: Vehicle): Vehicle => {
+    
+    const vehicleIndex = cars.findIndex(vehicle => vehicle.id === vehicleId);
+
+    if (vehicleIndex === -1) {
+        throw new Error("Vehicle not found");
+    }
+
+    const updatedVehicle = new Vehicle({
+        manufacturer: newVehicleData.manufacturer,
+        model_name: newVehicleData.model_name,
+        price: newVehicleData.price,
+        fuel_type: newVehicleData.fuel_type,
+        transmission_type: newVehicleData.transmission_type,
+        year: newVehicleData.year,
+        vehicle_type: newVehicleData.vehicle_type,
+        body_type: newVehicleData.body_type,
+        id: vehicleId 
+    });
+
+    cars[vehicleIndex] = updatedVehicle;
+
+    return updatedVehicle;
+};
+
+
 
 
 const getAllCars = (): Vehicle[] => cars;
 
-export default { getAllCars, createVehicle, deleteVehicleFromDatabase}
+export default { getAllCars, createVehicle, deleteVehicleFromDatabase, updateVehicle}
