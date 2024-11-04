@@ -10,6 +10,12 @@ const johnDoe = new User({
     phoneNumber: '+32 12 34 56 78',
     email: 'john.doe@example.com',
     password: 'P@ssw0rd!',
+    accounts: [
+        new Account({
+            isShared: false,
+            type: 'Savings',
+        }),
+    ],
 });
 
 const users: User[] = [johnDoe];
@@ -59,7 +65,6 @@ const getUserByEmail = (email: string): User | undefined => {
 };
 
 export default {
-    users,
     createUser,
     getUserByNationalRegisterNumber,
     getUserByEmailAndPassword,

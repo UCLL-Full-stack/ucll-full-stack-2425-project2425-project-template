@@ -1,6 +1,8 @@
 import userDb from '../repository/user.db';
 import { User } from '../model/user';
-import { UserInput } from '../types/index';
+import { AccountInput, UserInput } from '../types/index';
+import { Account } from '../model/account';
+import accountService from './account.service';
 
 const createUser = ({
     nationalRegisterNumber,
@@ -53,9 +55,24 @@ const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User |
     return userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
 };
 
+const addAccount = (nationalRegisterNumber: string, accountNumber: string): User => {
+    const user = getUserByNationalRegisterNumber(nationalRegisterNumber);
+    const account = accountService.getAccountByAccountNumber(accountNumber);
+    if (!user) {
+        throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
+    }
+    if (!account) {
+        throw new Error(`Account with account number ${accountNumber} not found.`);
+    }
+    user.addAccount(account);
+    account.addUser(user);
+    return user;
+};
+
 export default {
     createUser,
     getUserByEmailAndPassword,
     getUserByEmail,
     getUserByNationalRegisterNumber,
+    addAccount,
 };

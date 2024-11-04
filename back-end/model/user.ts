@@ -20,6 +20,7 @@ export class User {
         phoneNumber: string;
         email: string;
         password: string;
+        accounts?: Account[];
     }) {
         this.validate(user);
         this.id = user.id;
@@ -30,7 +31,7 @@ export class User {
         this.phoneNumber = user.phoneNumber;
         this.email = user.email;
         this.password = user.password;
-        this.accounts = [];
+        this.accounts = user.accounts || [];
     }
 
     getId(): number | undefined {
@@ -143,5 +144,22 @@ export class User {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         return emailPattern.test(email);
+    }
+
+    addAccount(account: Account): void {
+        this.accounts.push(account);
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            nationalRegisterNumber: this.nationalRegisterNumber,
+            name: this.name,
+            birthDate: this.birthDate,
+            isAdministrator: this.isAdministrator,
+            phoneNumber: this.phoneNumber,
+            email: this.email,
+            accounts: this.accounts.map((account) => account.toJSON()),
+        };
     }
 }

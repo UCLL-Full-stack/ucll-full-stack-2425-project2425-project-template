@@ -54,7 +54,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types/index';
+import { AccountInput, UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
@@ -170,5 +170,55 @@ userRouter.get('/:nationalRegisterNumber', (req: Request, res: Response, next: N
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /users/{nationalRegisterNumber}/accounts:
+ *   post:
+ *     summary: Add an account to a user
+ *     parameters:
+ *       - in: path
+ *         name: nationalRegisterNumber
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user's national register number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               accountNumber:
+ *                 type: string
+ *                 description: The account number to add
+ *     responses:
+ *       200:
+ *         description: The account was successfully added to the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: The account could not be added
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+userRouter.post(
+    '/:nationalRegisterNumber/accounts',
+    (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const nationalRegisterNumber = req.params.nationalRegisterNumber;
+            const accountNumber = <string>req.body.accountNumber;
+            const result = userService.addAccount(nationalRegisterNumber, accountNumber);
+            res.status(200).json(result.toJSON());
+        } catch (error: any) {
+            next(error);
+        }
+    }
+);
 
 export { userRouter };

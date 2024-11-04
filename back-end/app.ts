@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express, { Request, Response, NextFunction }  from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -15,7 +15,7 @@ app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.use('/users', userRouter);
-app.use('/users', accountRouter);
+app.use('/account', accountRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
@@ -38,7 +38,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     res.status(400).json({
         status: 'application error',
-        message: error.message
+        message: error.message,
     });
 });
 
