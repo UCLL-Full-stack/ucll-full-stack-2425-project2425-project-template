@@ -1,3 +1,5 @@
+import { Vehicle } from "@/types";
+
 const getAllVehicles = ()=>{
     return fetch(process.env.NEXT_PUBLIC_API_URL + '/vehicles',{
         method: 'GET',
@@ -26,10 +28,21 @@ const deleteVehicle = (vehicleId: number) => {
     });
 };
 
+const editVehicle = (vehicleId: number, input: Vehicle)=>{
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/vehicles',{
+        method: 'PUT',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(input)
+    })
+}
+
 const VehicleService = {
     getAllVehicles,
     addVehicle,
-    deleteVehicle
+    deleteVehicle,
+    editVehicle
 }
 
 export default VehicleService;
