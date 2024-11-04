@@ -49,7 +49,9 @@ const getUserByNationalRegisterNumber = async (
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch user by national register number");
+    throw new Error(
+      `Failed to fetch user by national register number ${userNationalRegisterNumber}`
+    );
   }
 
   const user = await response.json();

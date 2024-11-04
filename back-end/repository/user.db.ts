@@ -1,17 +1,18 @@
 import { get } from 'http';
 import { User } from '../model/user';
+import { Account } from '../model/account';
 
-const users: User[] = [
-    new User({
-        nationalRegisterNumber: '99.01.01-123.45', // Example valid NRN
-        name: 'John Doe',
-        birthDate: new Date('1990-01-01'),
-        isAdministrator: false,
-        phoneNumber: '+32 12 34 56 78',
-        email: 'john.doe@example.com',
-        password: 'P@ssw0rd!',
-    }),
-];
+const johnDoe = new User({
+    nationalRegisterNumber: '99.01.01-123.45', // Example valid NRN
+    name: 'John Doe',
+    birthDate: new Date('1990-01-01'),
+    isAdministrator: false,
+    phoneNumber: '+32 12 34 56 78',
+    email: 'john.doe@example.com',
+    password: 'P@ssw0rd!',
+});
+
+const users: User[] = [johnDoe];
 
 const getAllUsers = (): User[] => {
     return users;
@@ -58,6 +59,7 @@ const getUserByEmail = (email: string): User | undefined => {
 };
 
 export default {
+    users,
     createUser,
     getUserByNationalRegisterNumber,
     getUserByEmailAndPassword,
