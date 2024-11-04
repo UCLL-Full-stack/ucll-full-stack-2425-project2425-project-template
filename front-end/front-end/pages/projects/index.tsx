@@ -1,0 +1,51 @@
+import ProjectOverviewTable from "@/components/ProjectOverviewTable";
+import TaskOverviewTable from "@/components/TaskOverviewTable"; // Add this line
+import { Project } from "@/types";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import Projectservice from "@/services/Projectservice"; // Adjust the path as necessary
+
+const Projects: React.FC = () => {
+    const [projects, setProjects] = useState<Array<Project>>([]);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    
+    const getProjects = async () => {
+        try {
+            const response = await Projectservice.getAllProjects();
+            const projects = await response.json();
+            setProjects(projects);
+        } catch (error) {
+            console.error("Error fetching projects", error);
+        }
+    }
+
+    useEffect(() => {
+        getProjects();
+    }, []);
+
+    return (
+    <>
+    <Head>
+    <title>Projects</title>
+    </Head>
+    <main className="d-flex flex-column justify-content-center align-items-center">
+    <h1>Projects</h1>
+    <section>
+    <h2>Projects overview</h2>
+    {projects.length > 0 ? (
+        <ProjectOverviewTable projects={projects} selectProject={setSelectedProject}/> 
+    ) : (
+        <p>No projects...</p>
+    )}
+    {selectedProject && (
+        <>
+          <h2>tasks taught by {selectedProject.user.firstName}</h2>
+          <TaskOverviewTable project={selectedProject} />
+        </>
+    )}
+   </section>
+    </main>
+    </>
+    );
+   };
+   export default Projects;
