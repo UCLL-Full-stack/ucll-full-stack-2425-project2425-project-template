@@ -10,7 +10,7 @@ let mockItemDbGetById: jest.Mock;
 let mockNutritionlabelDbCreate: jest.Mock;
 let addNutritionlabelMock: jest.Mock;
 
-let mockItemDbDelete: jest.Mock;
+let mockItemDbDeleteItem: jest.Mock;
 
 beforeEach(() => {
     mockItemDbGetAllItems = jest.fn();
@@ -20,7 +20,7 @@ beforeEach(() => {
     mockNutritionlabelDbCreate = jest.fn();
     addNutritionlabelMock = jest.fn();
 
-    mockItemDbDelete = jest.fn();
+    mockItemDbDeleteItem = jest.fn();
 });
 
 test('given: a filled itemDb, when: getting all items from itemService, then: all items are returned', () => {
@@ -110,12 +110,14 @@ test('given a filled itemDb and an id of an item, when: deleting a item, then: t
 
     itemDb.getAll = mockItemDbGetAllItems.mockReturnValue([item]);
 
-    itemDb.delete = mockItemDbDelete.mockReturnValue('Item Deleted');
+    itemDb.deleteItem = mockItemDbDeleteItem.mockReturnValue('Item Deleted');
 
     // when deleting a item
-    itemService.deleteItem(item.id);
+    if (item.id !== undefined) {
+        itemService.deleteItemById(item.id);
+    }
 
     // then the item with that id is deleted
-    expect(mockItemDbDelete).toHaveBeenCalled();
-    expect(mockItemDbDelete).toHaveBeenCalledWith(item.id);
+    expect(mockItemDbDeleteItem).toHaveBeenCalled();
+    expect(mockItemDbDeleteItem).toHaveBeenCalledWith(item.id);
 });

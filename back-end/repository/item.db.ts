@@ -114,9 +114,28 @@ const addNutritionlabel = (item: Item, nutritionlabel: Nutritionlabel): Item => 
     }
 };
 
+const deleteItem = (id: number): string => {
+    try {
+        const item = items.find((item) => item.getId() === id);
+
+        if (!item) {
+            throw new Error(`Item with id ${id} not found`);
+        }
+
+        const index = items.indexOf(item);
+        items.splice(index, 1);
+
+        return `Item ${item.getName()} deleted`;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not delete item');
+    }
+};
+
 export default {
     getAll,
     create,
     getById,
     addNutritionlabel,
+    deleteItem,
 };
