@@ -22,7 +22,7 @@ vehicleRouter.post('/', async (req: Request, res: Response) => {
     }
 })
 
-vehicleRouter.delete('/vehicles/:id', async (req, res) => {
+vehicleRouter.delete('/:id', async (req, res) => {
 
     const vehicleId = Number(req.params.id);
 
