@@ -1,5 +1,6 @@
 import React from 'react';
 import { Project } from '@types';
+import { Task } from '@/types';
 
 type Props = {
   project: Project;
@@ -19,12 +20,12 @@ const TaskOverviewTable: React.FC<Props> = ({ project }) => {
             </tr>
           </thead>
           <tbody>
-            {project.tasks.map((task, index) => (
+            {project.tasks.map((task: Task, index: number) => (
               <tr key={index}>
-                <td>{task.name}</td>
-                <td>{task.description}</td>
-                <td>{task.dueDate}</td>
-                <td>{task.completed}</td>
+              <td>{task.name}</td>
+              <td>{task.description}</td>
+              <td>{task.dueDate}</td>
+              <td>{task.completed}</td>
               </tr>
             ))}
           </tbody>

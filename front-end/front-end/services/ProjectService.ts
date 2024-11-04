@@ -9,7 +9,7 @@ const getAllProjects = () => {
       });
     };
 const getProjectById = (projectId: string) => {
-  return fetch(`${apiUrl}/lecturers/${projectId}`, {
+  return fetch(`${apiUrl}/projects/${projectId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ const getProjectById = (projectId: string) => {
     })
 }
 const ProjectService = {
-    getAllProjects,
+  getAllProjects,
   getProjectById
 };
 
