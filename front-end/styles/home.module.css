@@ -23,22 +23,29 @@
 }
 
 .upcomingEventsMain {
-    height: 100vh;
+    /* height: 100vh; */
+    background-color: black;
+    border-top: 1px solid white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    padding-bottom: 5rem;
 }
 
 .upcomingEventsMain h1 {
     margin-top: 3rem;
     text-align: center;
+    color: white;
+    font-size: 2rem;
 }
 
 .myEvents h1 {
     margin-top: 3rem;
     text-align: center;
+    color: white;
 }
 
 .events {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     gap: 1.5rem;
     max-width: 80vw;
@@ -60,12 +67,13 @@
     /* height: min-content; */
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 .event:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
 }
 
 .event .overlay {
@@ -136,64 +144,117 @@
 };
 
 .participants {
-    margin-top: 4rem;
+    margin-top: 4rem !important;
 }
 
   .participantsTable {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
-  }
+}
   
-  .participantsTable th,
-  .participantsTable td {
+.participantsTable th,
+.participantsTable td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-  }
+}
   
-  .participantsTable th {
+.participantsTable th {
     background-color: #f2f2f2;
     font-weight: bold;
-  }
+}
   
-  .participantsTable tr:nth-child(even) {
+.participantsTable tr:nth-child(even) {
     background-color: #f9f9f9;
-  }
+}
   
-  .participantsTable tr:hover {
+.participantsTable tr:hover {
     background-color: #ddd;
-  }
-
-  .addParticipantForm {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
-.addParticipantForm label {
+.myEventsMain {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+    border-top: 1px solid white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.addParticipantForm {
+    margin-top: 2rem !important;
+}
+
+  .addParticipantForm,
+  .loginMyEvents {
+    margin-top: 10rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.loginMyEvents {
+    max-width: 50vw;
+}
+
+.addParticipantForm label,
+.loginMyEvents label {
     font-weight: bold;
 }
 
-.addParticipantForm input {
+.loginMyEvents label {
+    color: white;
+}
+
+.addParticipantForm input,
+.loginMyEvents input {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.addParticipantForm button {
+
+.addParticipantForm button,
+.loginMyEvents button {
     padding: 10px;
-    background-color: #0070f3;
+    background-color: black;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    transition: 0.3s ease;
 }
 
-.addParticipantForm button:hover {
+.addParticipantForm button:hover,
+.loginMyEvents button:hover {
     background-color: #005bb5;
 }
+
+.loginMyEvents button:hover {
+    scale: 1.05;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    color: black;
+}
+
+.myEventsLoginSignupButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.myEventsLoginSignupButtons button {
+    width: 100%;
+}
+
+/* .myEventsSignupButton {
+    background-color: white !important;
+    border: 1px solid #0070f3 !important;
+    color: #0070f3 !important; 
+} */
 
 .addParticipantButton {
     background-color: #007bff;

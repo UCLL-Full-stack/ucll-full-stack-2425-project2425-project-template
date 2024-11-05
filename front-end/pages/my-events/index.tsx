@@ -9,6 +9,7 @@ import styles from '@styles/home.module.css';
 const MyEvents: React.FC = () => {
     const [myEvents, setMyEvents] = useState<Array<Event>>();
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [showForm, setShowForm] = useState(true);
 
     // useEffect(() => {
@@ -38,18 +39,29 @@ const MyEvents: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
+            <main className={styles.myEventsMain}>
             {showForm && (
+
                 <form 
                     onSubmit={handleFormSubmit} 
-                    className={styles.loginToMyEvent}>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    <button type="submit">Submit</button>
+                    className={styles.loginMyEvents}>
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <div className={styles.myEventsLoginSignupButtons}>
+                        <button type="submit">Log in</button>
+                        <button type="button" className={styles.myEventsSignupButton}>Sign up</button>
+                    </div>
                 </form>
             )}
             { myEvents && (
@@ -60,6 +72,7 @@ const MyEvents: React.FC = () => {
                     </section>
                 ) : <p>No events</p>
             )}
+            </main>
         </>
     )
 };
