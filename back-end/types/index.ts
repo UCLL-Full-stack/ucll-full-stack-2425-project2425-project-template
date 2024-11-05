@@ -33,6 +33,7 @@ type TaskInput = {
     description?: string;
     due_date?: Date;
     users?: User[];
+    completed?: boolean;
 };
 
 export { UserInput, ProjectInput, TaskInput };

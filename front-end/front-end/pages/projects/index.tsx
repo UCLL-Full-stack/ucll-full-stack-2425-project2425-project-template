@@ -1,53 +1,50 @@
-import { Project } from "@/types";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import ProjectOverviewTable from "@/components/projects/ProjectOverviewTable";
-import TaskOverviewTable from "@/components/tasks/TaskOverviewTable";
-import Projectservice from "@/services/ProjectService";
-import Header from "@/components/header";
+import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import Header from '@/components/header';
+import ProjectService from '@/services/ProjectService';
+import ProjectOverviewTable from '@/components/projects/ProjectOverviewTable';
+import ProjectDetails from '@/components/projects/ProjectDetails';
+import { Project } from '@types';
 
-const Projects: React.FC = () => {
+const IndexPage: React.FC = () => {
     const [projects, setProjects] = useState<Array<Project>>([]);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-    
+
     const getProjects = async () => {
         try {
-            const response = await Projectservice.getAllProjects();
-            const projects = await response.json();
-            setProjects(projects);
+            const data = await ProjectService.fetchAndParseProjects();
+            setProjects(data);
         } catch (error) {
             console.error("Error fetching projects", error);
         }
-    }
+    };
 
     useEffect(() => {
         getProjects();
     }, []);
 
     return (
-    <>
-    <Head>
-    <title>Projects</title>
-    </Head>
-    <Header />
-    <main className="d-flex flex-column justify-content-center align-items-center">
-    <h1>Projects</h1>
-    <section>
-    <h2>Projects overview</h2>
-    {projects.length > 0 ? (
-        <ProjectOverviewTable projects={projects} selectProject={setSelectedProject}/> 
-    ) : (
-        <p>No projects...</p>
-    )}
-    {selectedProject && (
         <>
-          <h2>tasks of {selectedProject.name}</h2>
-          <TaskOverviewTable project={selectedProject} />
+            <Head>
+                <title>Projects</title>
+            </Head>
+            <Header />
+            <main className="d-flex flex-column justify-content-center align-items-center">
+                <h1>Projects</h1>
+                <section>
+                    <h2>Projects overview</h2>
+                    {projects.length > 0 ? (
+                        <ProjectOverviewTable projects={projects} selectProject={setSelectedProject} />
+                    ) : (
+                        <p>No projects...</p>
+                    )}
+                    {selectedProject && (
+                        <ProjectDetails project={selectedProject} />
+                    )}
+                </section>
+            </main>
         </>
-    )}
-   </section>
-    </main>
-    </>
     );
-   };
-   export default Projects;
+};
+
+export default IndexPage;

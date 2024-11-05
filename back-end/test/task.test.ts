@@ -33,7 +33,7 @@ const user3 = new User({
 });
 
 test("given: valid values for task, when: creating a task, then: task is created with those values", () => {
-    const task = new Task({task_Id: 1, name: "Task 1", description: "Task 1 description", due_date, users: [user1]});
+    const task = new Task({task_Id: 1, name: "Task 1", description: "Task 1 description", due_date, users: [user1], completed: false});
     expect(task.name).toBe("Task 1");
     expect(task.description).toBe("Task 1 description");
     expect(task.due_date).toBe(due_date);
@@ -41,14 +41,14 @@ test("given: valid values for task, when: creating a task, then: task is created
 });
 
 test("given: existing task, when: adding a new user, then: user is added to task", () => {
-    const task = new Task({task_Id: 1, name: "Task 1", description: "Task 1 description", due_date, users: [user1]});
+    const task = new Task({task_Id: 1, name: "Task 1", description: "Task 1 description", due_date, users: [user1], completed: false});
     task.addUserToTask(user2);
     expect(task.users).toContain(user1);
     expect(task.users).toContain(user2);
 });
 
 test("given: existing task, when: adding another new user, then: user is added to task", () => {
-    const task = new Task({task_Id: 1, name: "Task 1", description: "Task 1 description", due_date, users: [user1]});
+    const task = new Task({task_Id: 1, name: "Task 1", description: "Task 1 description", due_date, users: [user1], completed: false});
     task.addUserToTask(user3);
     expect(task.users).toContain(user1);
     expect(task.users).toContain(user3);

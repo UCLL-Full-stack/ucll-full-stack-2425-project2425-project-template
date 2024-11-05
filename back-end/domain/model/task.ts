@@ -5,6 +5,7 @@ export class Task {
     readonly name: string;
     readonly description: string;
     readonly due_date: Date;
+    readonly completed: boolean = false;
     readonly users: User[] = [];
 
     constructor(task: {
@@ -12,6 +13,7 @@ export class Task {
         name: string;
         description: string;
         due_date: Date;
+        completed: boolean;
         users: User[];
     }) {
         this.validate(task);
@@ -19,6 +21,7 @@ export class Task {
         this.name = task.name;
         this.description = task.description;
         this.due_date = task.due_date;
+        this.completed = task.completed;
         this.users = task.users;
 
     }
@@ -58,12 +61,17 @@ export class Task {
         return this.users;
     }
 
+    public getCompleted(): boolean {
+        return this.completed;
+    }
+
     equals(task: Task): boolean {
         return this.task_Id === task.getTaskId() &&
             this.name === task.getName() &&
             this.description === task.getDescription() &&
             this.due_date === task.getDueDate() &&
-            this.users === task.getUsers();
+            this.users === task.getUsers() &&
+            this.completed === task.getCompleted();
     }
     addUserToTask(user: User) {
         if (!this.users.includes(user))

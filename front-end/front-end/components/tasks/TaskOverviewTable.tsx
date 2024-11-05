@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Project } from '@types';
 import { Task } from '@/types';
 
@@ -24,8 +24,8 @@ const TaskOverviewTable: React.FC<Props> = ({ project }) => {
               <tr key={index}>
               <td>{task.name}</td>
               <td>{task.description}</td>
-              <td>{task.dueDate}</td>
-              <td>{task.completed}</td>
+              <td>{new Date(task.dueDate).toLocaleDateString()}</td>
+              <td>{task.completed ? 'yes' : 'No'}</td>
               </tr>
             ))}
           </tbody>

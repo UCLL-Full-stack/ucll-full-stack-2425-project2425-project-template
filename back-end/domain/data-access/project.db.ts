@@ -1,11 +1,22 @@
 import { Project } from "../model/project";
+import { Task } from "../model/task";
+import { User } from "../model/user";
+import taskDb from "./task.db";
+import userDb from "./user.db";
 
+// Import users from userDb
+const users: User[] = userDb.getAllUsers();
+
+// Import tasks from taskDb
+const tasks: Task[] = taskDb.getAllTasks();
+
+// Hardcoded projects with tasks
 const projects: Project[] = [
-    new Project({ project_Id: 1, name: "Project 1", users: [], tasks: [] }),
-    new Project({ project_Id: 2, name: "Project 2", users: [], tasks: [] }),
-    new Project({ project_Id: 3, name: "Project 3", users: [], tasks: [] }),
-    new Project({ project_Id: 4, name: "Project 4", users: [], tasks: [] }),
-    new Project({ project_Id: 5, name: "Project 5", users: [], tasks: [] }),
+    new Project({ project_Id: 1, name: "Project 1", users: [users[0]], tasks: [tasks[0]] }),
+    new Project({ project_Id: 2, name: "Project 2", users: [users[1]], tasks: [tasks[1]] }),
+    new Project({ project_Id: 3, name: "Project 3", users: [users[0], users[1]], tasks: [tasks[0], tasks[1]] }),
+    new Project({ project_Id: 4, name: "Project 4", users: [users[0]], tasks: [tasks[2]] }),
+    new Project({ project_Id: 5, name: "Project 5", users: [users[0]], tasks: [tasks[3], tasks[4]] }),
 ];
 
 let currentId = 6;
