@@ -22,10 +22,9 @@ export default function Home() {
 
         <div className={styles.description}>
           <p>
-            Courses lets you see as a lecturer all the courses you are teaching
-            and as a student all the courses you are enrolled in. <br />
-            You can also see when the courses are scheduled and the students
-            enrolled in each course.
+          This project aims to build a Project Management Tool that helps teams plan, execute, and
+          monitor their projects and tasks. The system will enable users to create and manage projects,
+          assign tasks and roles, form teams, and track progress in real time.
           </p>
         </div>
       </main>
