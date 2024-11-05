@@ -40,6 +40,7 @@ model Recipe {
   source       String?
   scheduleId   Int?
   schedule     Schedule?         @relation(fields: [scheduleId], references: [id])
+  scheduledDate DateTime?
 }
 
 model Ingredient {
@@ -64,7 +65,7 @@ model Schedule {
   id       Int      @id @default(autoincrement())
   userId   Int      @unique
   user     User     @relation(fields: [userId], references: [id])
-  date     DateTime
+  createdAt DateTime @default(now())
   recipes  Recipe[]
 }
 
