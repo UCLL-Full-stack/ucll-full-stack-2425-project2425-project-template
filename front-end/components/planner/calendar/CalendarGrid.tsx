@@ -148,6 +148,11 @@ const CalendarGrid: React.FC = () => {
     // to implement!
   };
 
+  const handleGoToToday = () => {
+    const today = new Date();
+    setCurrentDate(today);
+  };
+
   return (
     <Card>
       <CardContent className="p-6">
@@ -161,6 +166,7 @@ const CalendarGrid: React.FC = () => {
           onChangeViewMode={setViewMode}
           onDeleteMeals={handleDeleteMeals}
           onAddToShoppingList={handleAddToShoppingList}
+          onToday={handleGoToToday}
         />
 
         <section className="grid grid-cols-7 gap-2">

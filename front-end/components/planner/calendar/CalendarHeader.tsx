@@ -21,6 +21,7 @@ type Props = {
   onChangeViewMode: (mode: "Month" | "Week") => void; // not implemented yet
   onDeleteMeals: () => void;
   onAddToShoppingList: () => void;
+  onToday: () => void;
 };
 
 const months = [
@@ -48,18 +49,28 @@ const CalendarHeader: React.FC<Props> = ({
   onChangeViewMode,
   onDeleteMeals,
   onAddToShoppingList,
+  onToday,
 }) => {
   return (
     <section className="flex justify-between items-center mb-4">
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon" onClick={() => onChangeMonth(-1)}>
+        <Button variant="ghost" size="icon" onClick={() => onChangeMonth(-1)}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <p className="m-0 text-lg font-semibold">
           {months[currentDate.getMonth()]} {currentDate.getFullYear()}
         </p>
-        <Button variant="outline" size="icon" onClick={() => onChangeMonth(1)}>
+        <Button variant="ghost" size="icon" onClick={() => onChangeMonth(1)}>
           <ChevronRight className="h-4 w-4" />
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() => {
+            onToday();
+          }}
+        >
+          Today
         </Button>
       </div>
 
