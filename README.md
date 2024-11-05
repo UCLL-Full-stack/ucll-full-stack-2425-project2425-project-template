@@ -3,4 +3,14 @@
 
 YaDig is a social media application that allows users to connect through music taste
 
+#### to run add a .env file: 
+1. in the back-end directory:
+```
+APP_PORT=3030
+```
+2. in the front-end directory:
+```
+NEXT_PUBLIC_API_URL=http://localhost:3030
+```
+
 ### Adam Benkhazzi / Sadra Dezdar
