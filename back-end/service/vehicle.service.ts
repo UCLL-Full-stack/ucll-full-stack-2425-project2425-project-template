@@ -1,6 +1,7 @@
 import { Vehicle } from "../domain/model/vehicle";
 import { VehicleInput } from "../types";
 import vehicleDB from "../repository/vehicle.db";
+import { id } from "date-fns/locale";
 
 
 const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
@@ -45,7 +46,8 @@ const editVehicle = async (vehicleId: number, input: VehicleInput): Promise<Vehi
         transmission_type: input.transmission_type,
         year: input.year,
         vehicle_type: input.vehicle_type,
-        body_type: input.body_type
+        body_type: input.body_type,
+        id : vehicleId
     })
     return vehicleDB.updateVehicle(vehicleId, newVehicle)
 }

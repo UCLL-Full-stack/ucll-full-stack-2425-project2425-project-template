@@ -29,7 +29,7 @@ const deleteVehicle = (vehicleId: number) => {
 };
 
 const editVehicle = (vehicleId: number, input: Vehicle)=>{
-    return fetch(process.env.NEXT_PUBLIC_API_URL + '/vehicles',{
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/${vehicleId}`,{
         method: 'PUT',
         headers:{
             'Content-Type': 'application/json'

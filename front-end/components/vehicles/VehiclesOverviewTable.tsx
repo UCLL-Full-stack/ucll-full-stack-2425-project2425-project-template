@@ -70,6 +70,7 @@
 import { Vehicle } from "@/types";
 import { useState } from "react";
 import EditCarModal from "@/components/vehicles/editCarModal"; // Correct the import here
+import VehicleService from "@/services/VehicleService";
 
 type Props = {
     vehicles: Array<Vehicle>;
@@ -90,9 +91,23 @@ const VehiclesOverviewCards: React.FC<Props> = ({ vehicles }: Props) => {
     };
 
     const handleEditCar = async (updatedCar: Vehicle) => {
-        console.log("Edited car:", updatedCar);
-        handleCloseEditModal();
-        // Add logic here to update the car in your data source
+        // if (updatedCar.id === undefined) {
+        //     console.error("Cannot edit car: 'id' is undefined.");
+        //     return;
+        // }
+    
+        // try {
+        //     console.log("Editing car:", updatedCar);
+    
+        //     await VehicleService.editVehicle(updatedCar.id, updatedCar);
+    
+        //     console.log("Edited car successfully:", updatedCar);
+            
+        // } catch (error) {
+        //     console.error("Error updating car:", error);
+        // } finally {
+        //     handleCloseEditModal();
+        // }
     };
 
     return (

@@ -43,7 +43,7 @@ const updateVehicle = (vehicleId: number, newVehicleData: Vehicle): Vehicle => {
         year: newVehicleData.year,
         vehicle_type: newVehicleData.vehicle_type,
         body_type: newVehicleData.body_type,
-        id: vehicleId 
+        id: vehicleId
     });
 
     cars[vehicleIndex] = updatedVehicle;

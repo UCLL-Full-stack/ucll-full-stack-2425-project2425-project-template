@@ -40,7 +40,7 @@ vehicleRouter.put('/:id', async (req, res) => {
     const newVehicle = req.body
     try {
         await vehicleService.editVehicle(vehicleId, newVehicle);
-        res.status(200).json({ status: `Vehicle with ID ${vehicleId} was succesfully updated.`});
+        res.status(200).json(newVehicle);
     } catch (error) {
         res.status(400).json({ status: 'error' }); 
     }
