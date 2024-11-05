@@ -1,0 +1,71 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+model Project {
+  project_Id   Int      @id @default(autoincrement())  // Primary key
+  name         String   @unique                       // Project name
+  description  String?                                // Optional project description
+  start_date   DateTime?                              // Optional project start date
+  end_date     DateTime?                              // Optional project end date
+  tasks        Task[]                                 // One-to-many relationship with Task
+  users        User[] @relation("UserProjects")       // Many-to-many relationship with User through UserProject join table
+}
+
+model User {
+  user_Id      Int      @id @default(autoincrement())  // Primary key
+  firstName    String                                  // User's first name
+  lastName     String                                  // User's last name
+  email        String   @unique                        // User's email (unique)
+  password     String                                  // User's password
+  role         Role                                    // Enum representing user's role
+  projects     Project[] @relation("UserProjects")     // Many-to-many relationship with Project through UserProject join table
+  tasks        Task[]                                  // Many-to-many relationship with Task through UserTask join table
+
+  @@map("users") // Maps model name to 'users' table in the database
+}
+
+model Task {
+  task_Id      Int      @id @default(autoincrement())  // Primary key
+  name         String                                  // Task name
+  description  String                                  // Task description
+  due_date     DateTime                                // Task due date
+  completed    Boolean @default(false)                 // Task completion status
+  project      Project? @relation(fields: [projectId], references: [project_Id]) // Many-to-one relationship with Project
+  projectId    Int?                                    // Foreign key for Project
+  users        User[] @relation("UserTasks")           // Many-to-many relationship with User through UserTask join table
+
+  @@map("tasks") // Maps model name to 'tasks' table in the database
+}
+
+model UserProject {
+  user_Id    Int
+  project_Id Int
+  user       User    @relation(fields: [user_Id], references: [user_Id])
+  project    Project @relation(fields: [project_Id], references: [project_Id])
+
+  @@id([user_Id, project_Id]) // Composite primary key
+}
+
+model UserTask {
+  user_Id    Int
+  task_Id    Int
+  user       User  @relation(fields: [user_Id], references: [user_Id])
+  task       Task  @relation(fields: [task_Id], references: [task_Id])
+
+  @@id([user_Id, task_Id]) // Composite primary key
+}
+
+// Enum for User Roles
+enum Role {
+  ADMIN
+  USER
+  MANAGER
+}
