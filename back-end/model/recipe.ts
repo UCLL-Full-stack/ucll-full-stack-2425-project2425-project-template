@@ -18,6 +18,7 @@ export class Recipe {
     private notes?: string;
     private source?: string;
     private schedule?: Schedule;
+    private scheduledDate?: Date; // Add validations?
 
     constructor(recipe: {
         id?: number;
@@ -32,6 +33,7 @@ export class Recipe {
         notes?: string;
         source?: string;
         schedule?: Schedule;
+        scheduledDate?: Date;
     }) {
         this.validate(recipe);
         this.id = recipe.id;
@@ -46,6 +48,7 @@ export class Recipe {
         this.notes = recipe.notes;
         this.source = recipe.source;
         this.schedule = recipe.schedule;
+        this.scheduledDate = recipe.scheduledDate;
     }
 
     private validateId(id?: number): void {

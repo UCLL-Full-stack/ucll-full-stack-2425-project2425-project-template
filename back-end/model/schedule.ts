@@ -4,14 +4,14 @@ import { Recipe } from './recipe';
 export class Schedule {
     private id?: number;
     private user: User;
-    private date: Date;
+    private createdAt: Date;
     private recipes?: Recipe[];
 
     constructor(schedule: { id?: number; user: User; date: Date; recipes?: Recipe[] }) {
         this.validate(schedule);
         this.id = schedule.id;
         this.user = schedule.user;
-        this.date = schedule.date;
+        this.createdAt = schedule.date;
         this.recipes = schedule.recipes || [];
     }
 
@@ -43,7 +43,7 @@ export class Schedule {
     }
 
     getDate(): Date {
-        return this.date;
+        return this.createdAt;
     }
 
     getRecipes(): Recipe[] | undefined {
@@ -77,7 +77,7 @@ export class Schedule {
         return {
             id: this.id,
             user: this.user.getId(),
-            date: this.date,
+            createdAt: this.createdAt,
             recipes: this.recipes?.map((recipe) => recipe.toJSON()),
         };
     }
