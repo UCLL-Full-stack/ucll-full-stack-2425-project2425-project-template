@@ -13,6 +13,7 @@ const IndexPage: React.FC = () => {
     const getProjects = async () => {
         try {
             const data = await ProjectService.fetchAndParseProjects();
+            console.log('Fetched projects:', data);
             setProjects(data);
         } catch (error) {
             console.error("Error fetching projects", error);

@@ -20,14 +20,17 @@ const TaskOverviewTable: React.FC<Props> = ({ project }) => {
             </tr>
           </thead>
           <tbody>
-            {project.tasks.map((task: Task, index: number) => (
-              <tr key={index}>
-              <td>{task.name}</td>
-              <td>{task.description}</td>
-              <td>{new Date(task.dueDate).toLocaleDateString()}</td>
-              <td>{task.completed ? 'yes' : 'No'}</td>
-              </tr>
-            ))}
+            {project.tasks.map((task: Task, index: number) => {
+              const parsedDate = new Date(task.dueDate);
+              return (
+                <tr key={index}>
+                  <td>{task.name}</td>
+                  <td>{task.description}</td>
+                  <td>{parsedDate ? parsedDate.toLocaleDateString() : 'No due date'}</td>
+                  <td>{task.completed ? 'Yes' : 'No'}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}
