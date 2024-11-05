@@ -1,16 +1,30 @@
 import { User } from "./user";
+import { Event } from "./event";
 
 export class Participant {
     private id?: number;
     private user: User;
-
+    private events: Event[];
 
     constructor(participant: {
         id?: number,
-        user: User;
+        user: User,
+        events?: Event[];
     }) {
-        this.id = participant.id;
         this.user = participant.user;
+        if (participant.events){
+            this.events = participant.events;
+        } else {
+            this.events = [];
+        }
+    }
+
+    addEvent(event: Event) {
+        this.events.push(event);
+    }
+
+    getEvents(): Event[] {
+        return this.events;
     }
 
     getId(): number | undefined {

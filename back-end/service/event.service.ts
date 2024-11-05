@@ -52,9 +52,35 @@ const addParticipantToEvent = (email: string, eventId: number): void => {
     }
 };
 
+const getEventsByParticipantEmail = (email: string): Event[] => {
+    const tempEvents = [] as Event[];
+    try {
+        const participant = participantService.getParticipantByEmail(email);
+        if (!participant){
+            throw new Error("This participant is not found.");
+        }
+        
+        getAllEvents().forEach(e => {
+            e.getParticipants().forEach(p => {
+                if (p.getUser().getEmail() === email){
+                    tempEvents.push(e);
+                }
+            });
+        });
+    } catch (error){
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error('An unknown error occurred');
+        }
+    }
+    return tempEvents;
+}
+
 export default { 
     createEvent, 
     getAllEvents, 
     getEventById,
     addParticipantToEvent,
+    getEventsByParticipantEmail,
 };

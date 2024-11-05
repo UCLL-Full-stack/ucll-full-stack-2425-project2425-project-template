@@ -107,10 +107,6 @@ const participants_company_networking_night = [
         user: userCharlie,
     }),
     new Participant({
-        id: 6,
-        user: userDiana,
-    }),
-    new Participant({
         id: 7,
         user: userEve,
     }),

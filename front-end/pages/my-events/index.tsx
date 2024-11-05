@@ -1,7 +1,34 @@
+import EventOverview from "@components/events/EventOverview";
 import Header from "@components/header";
+import EventService from "@services/EventService";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import { EventInput } from "types";
+import styles from '@styles/home.module.css';
 
 const MyEvents: React.FC = () => {
+    const [myEvents, setMyEvents] = useState<Array<Event>>();
+    const [email, setEmail] = useState("");
+    const [showForm, setShowForm] = useState(true);
+
+    // useEffect(() => {
+    //     getEventsByParticipantEmail();
+    // }, [myEvents]);
+
+    const getEventsByParticipantEmail = async () => {
+        const events = await EventService.getEventsByParticipantEmail(email);
+        // const events = await response.json();
+
+        const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        setMyEvents(sortedEvents);
+    }
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setShowForm(false);
+        getEventsByParticipantEmail();
+    };
+
     return (
         <>
             <Head>
@@ -11,6 +38,23 @@ const MyEvents: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
+            {showForm && (
+                <form 
+                    onSubmit={handleFormSubmit} 
+                    className={styles.addParticipantForm}>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    <button type="submit">Submit</button>
+                </form>
+            )}
+            { myEvents && (
+                myEvents.length > 0 ? (<EventOverview events={myEvents} />) : <p>No events</p>
+            )}
         </>
     )
 };

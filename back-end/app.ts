@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { eventRouter } from './controller/event.routes';
+import { participantRouter } from './controller/participant.routes';
+
 
 const app = express();
 dotenv.config();
@@ -37,6 +39,7 @@ app.get('/status', (req: Request, res: Response) => {
 
 
 app.use('/events', eventRouter);
+app.use('/participants', participantRouter);
 
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

@@ -34,10 +34,27 @@ const addParticipantToEvent = async (email: string, eventId: string) => {
   return response.json();
 };
 
+const getEventsByParticipantEmail = async (email: string) => {
+  const response = await fetch(apiUrl + `/participants/${email}`, {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    }
+  });
+
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to retrieve events for this user.');
+  }
+
+  return response.json();
+};
+
 const EventService = {
   getAll,
   getEventById,
   addParticipantToEvent,
+  getEventsByParticipantEmail,
 }
 
 export default EventService;
