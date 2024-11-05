@@ -8,6 +8,7 @@ type EventInput = {
     location: string,
     category: string,
     backgroundImage?: string,
+    isTrending: boolean,
 };
 
 type UserInput = {

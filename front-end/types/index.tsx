@@ -7,6 +7,7 @@ export type EventInput = {
     category: string,
     backgroundImage?: string,
     participants: ParticipantInput[],
+    isTrending: boolean,
 };
 
 export type ParticipantInput = {

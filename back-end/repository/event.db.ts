@@ -122,6 +122,7 @@ const events = [
         category: 'Concert',
         backgroundImage: '/images/taylor-swift-concert.jpg',
         participants: participants_taylor_swift_concert,
+        isTrending: true,
     }),
     new Event({
         id: 2,
@@ -132,6 +133,7 @@ const events = [
         category: 'Birthday Celebration',
         backgroundImage: '/images/chris-birthday-party.jpg',
         participants: participants_chris_birthday_party,
+        isTrending: true,
     }),
     new Event({
         id: 3,
@@ -142,6 +144,7 @@ const events = [
         category: 'Culinary Festival',
         backgroundImage: '/images/food-festival.jpg',
         participants: [],
+        isTrending: false,
     }),
     new Event({
         id: 4,
@@ -152,6 +155,7 @@ const events = [
         category: 'Company Networking Exchange',
         backgroundImage: '/images/company-networking-night.jpg',
         participants: participants_company_networking_night,
+        isTrending: true,
     }),
     new Event({
         id: 5,
@@ -162,6 +166,7 @@ const events = [
         category: 'Art Exhibition',
         backgroundImage: '/images/art-exhibition.jpg',
         participants: [],
+        isTrending: false,
     }),
     new Event({
         id: 6,
@@ -172,6 +177,7 @@ const events = [
         category: 'Mindfulness',
         backgroundImage: '/images/yoga-workshop.jpg',
         participants: [],
+        isTrending: false,
     }),
     new Event({
         id: 7,
@@ -182,6 +188,7 @@ const events = [
         category: 'Entrepreneurship',
         backgroundImage: '/images/startup-pitch-competition.jpg',
         participants: [],
+        isTrending: false,
     }),
 
     new Event({
@@ -193,6 +200,7 @@ const events = [
         category: 'Tech Conference',
         backgroundImage: '/images/tech-conference.jpg',
         participants: [],
+        isTrending: true,
     }),
     new Event({
         id: 9,
@@ -203,6 +211,7 @@ const events = [
         category: 'Sommelier Events',
         backgroundImage: '/images/wine-tasting-evening.jpg',
         participants: [],
+        isTrending: false,
     }),
 ];
 

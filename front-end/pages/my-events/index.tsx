@@ -41,7 +41,7 @@ const MyEvents: React.FC = () => {
             {showForm && (
                 <form 
                     onSubmit={handleFormSubmit} 
-                    className={styles.addParticipantForm}>
+                    className={styles.loginToMyEvent}>
                         <label htmlFor="email">Email:</label>
                         <input
                             type="email"
@@ -53,7 +53,12 @@ const MyEvents: React.FC = () => {
                 </form>
             )}
             { myEvents && (
-                myEvents.length > 0 ? (<EventOverview events={myEvents} />) : <p>No events</p>
+                myEvents.length > 0 ? (
+                    <section className={styles.myEvents}>
+                        <h1>My events</h1>
+                        <EventOverview events={myEvents} />
+                    </section>
+                ) : <p>No events</p>
             )}
         </>
     )

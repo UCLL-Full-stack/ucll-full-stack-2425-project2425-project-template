@@ -9,6 +9,7 @@ export class Event {
     private category: string;
     private backgroundImage?: string;
     private participants: Participant[] = [];
+    private isTrending: boolean;
 
     constructor(event: {
         id?: number,
@@ -19,6 +20,7 @@ export class Event {
         category: string;
         backgroundImage?: string;
         participants?: Participant[];
+        isTrending: boolean;
     }) {
         // Validate the date
         if (isNaN(event.date.getTime())) {
@@ -48,6 +50,11 @@ export class Event {
         if (event.participants) {
             this.participants = event.participants;
         }
+        this.isTrending = event.isTrending;
+    }
+
+    getIsTrending(): boolean {
+        return this.isTrending;
     }
 
     addParticipant(participant: Participant): void {
