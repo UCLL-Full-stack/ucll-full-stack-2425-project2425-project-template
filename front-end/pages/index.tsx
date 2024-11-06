@@ -7,6 +7,9 @@ import { Guild, Board, User } from '@/types';
 import BoardService from '@/services/BoardService';
 import BoardCard from '@/components/BoardCard';
 import CreateBoardForm from '@/components/CreateBoardForm';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const Home: FC = () => {
   const [user, setUser] = useState<User>();
@@ -16,6 +19,13 @@ const Home: FC = () => {
   const [selectedGuildForBoardCreation, setSelectedGuildForBoardCreation] = useState<string | null>(null);
   const [boards, setBoards] = useState<Board[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+
+  const handleDiscordLogin = () => {
+    const redirectUri = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/discord`;
+    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify guilds`;
+  };
+
 
   const handleCreateClick = (guildId?: string) => {
     if(guildId) {
@@ -88,7 +98,7 @@ const Home: FC = () => {
               <meta name="description" content="A Kanban board application inspired by Discord." />
               <link rel="icon" href="/favicon.ico" />
           </Head>
-          <Header onCreateClick={handleCreateClick}></Header>
+          <Header onCreateClick={handleCreateClick} onLoginClick={handleDiscordLogin}></Header>
           <main className="flex-grow">
           <div className="p-4">
                 {loading ? (
