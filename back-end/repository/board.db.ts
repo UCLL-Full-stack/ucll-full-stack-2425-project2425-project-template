@@ -8,31 +8,31 @@ import { Task } from '../model/task';
 const columns: Column[] = columnDb.getColumns();
 
 const boards: Board[] = [
-    new Board(
-        "board1-1",
-        "Project 1",
-        userDb.getUserById("user1")!,
-        guildDb.getGuildById("guild1")!,
-        columns.filter(column => column.getColumnId().endsWith("1-1")),
-        guildDb.getGuildById("guild1")!.getSettings()
-    ),
-    new Board(
-        "board2-1",
-        "Project 2",
-        userDb.getUserById("user1")!,
-        guildDb.getGuildById("guild1")!,
-        columns.filter(column => column.getColumnId().endsWith("2-1")),
-        guildDb.getGuildById("guild1")!.getSettings()
-    ),
-    new Board(
-        "board1-2",
-        "Project 1",
-        userDb.getUserById("user2")!,
-        guildDb.getGuildById("guild2")!,
-        columns.filter(column => column.getColumnId().endsWith("1-2")),
-        guildDb.getGuildById("guild2")!.getSettings()
+    // new Board(
+    //     "board1-1",
+    //     "Project 1",
+    //     userDb.getUserById("user1")!,
+    //     guildDb.getGuildById("guild1")!,
+    //     columns.filter(column => column.getColumnId().endsWith("1-1")),
+    //     guildDb.getGuildById("guild1")!.getSettings()
+    // ),
+    // new Board(
+    //     "board2-1",
+    //     "Project 2",
+    //     userDb.getUserById("user1")!,
+    //     guildDb.getGuildById("guild1")!,
+    //     columns.filter(column => column.getColumnId().endsWith("2-1")),
+    //     guildDb.getGuildById("guild1")!.getSettings()
+    // ),
+    // new Board(
+    //     "board1-2",
+    //     "Project 1",
+    //     userDb.getUserById("user2")!,
+    //     guildDb.getGuildById("guild2")!,
+    //     columns.filter(column => column.getColumnId().endsWith("1-2")),
+    //     guildDb.getGuildById("guild2")!.getSettings()
 
-    ),
+    // ),
 ];
 
 const getBoards = (): Board[] => {

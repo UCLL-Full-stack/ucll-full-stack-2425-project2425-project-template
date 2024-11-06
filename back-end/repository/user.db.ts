@@ -4,12 +4,6 @@ import guildDb from "./guild.db";
 
 const users: User[] = [];
 
-const user1 = new User("user1", "Alice", "alice#1234", [guildDb.getGuildById("guild1")!, guildDb.getGuildById("guild2")!]);
-const user2 = new User("user2", "Bob", "bob#5678", [guildDb.getGuildById("guild2")!]);
-const user3 = new User("user3", "Charlie", "charlie#9012", [guildDb.getGuildById("guild1")!, guildDb.getGuildById("guild3")!]);
-
-users.push(user1, user2, user3);
-
 const addUser = (user: User): void => {
     if (getUserById(user.getUserId())) {
         throw new Error("User already exists");
@@ -28,16 +22,8 @@ const updateUser = (userId: string, updatedData: { username?: string; userTag?: 
     }
 
     if (updatedData.username) user.setUsername(updatedData.username);
-    if (updatedData.userTag) user.setUserTag(updatedData.userTag);
+    if (updatedData.userTag) user.setGlobalName(updatedData.userTag);
     if (updatedData.guilds) user.setGuilds(updatedData.guilds);
-};
-
-const removeUser = (userId: string): void => {
-    const userIndex = users.findIndex(user => user.getUserId() === userId);
-    if (userIndex === -1) {
-        throw new Error("User not found");
-    }
-    users.splice(userIndex, 1);
 };
 
 const getAllUsers = (): User[] => {
@@ -48,6 +34,5 @@ export default {
     addUser,
     getUserById,
     updateUser,
-    removeUser,
     getAllUsers,
 };

@@ -3,15 +3,15 @@ import { Task } from '../model/task';
 import taskDb from './task.db';
 
 const columns: Column[] = [
-    new Column("column1-1-1", "To Do", taskDb.getTasks().filter(task => task.getTaskId().endsWith("1-1-1"))),
-    new Column("column2-1-1", "In Progress", taskDb.getTasks().filter(task => task.getTaskId().endsWith("2-1-1"))),
-    new Column("column3-1-1", "Done", taskDb.getTasks().filter(task => task.getTaskId().endsWith("3-1-1"))),
-    new Column("column1-2-1", "To Do", taskDb.getTasks().filter(task => task.getTaskId().endsWith("1-2-1"))),
-    new Column("column2-2-1", "In Progress", taskDb.getTasks().filter(task => task.getTaskId().endsWith("2-2-1"))),
-    new Column("column3-2-1", "Done", taskDb.getTasks().filter(task => task.getTaskId().endsWith("3-2-1"))),
-    new Column("column1-1-2", "To Do", taskDb.getTasks().filter(task => task.getTaskId().endsWith("1-1-2"))),
-    new Column("column2-1-2", "In Progress", taskDb.getTasks().filter(task => task.getTaskId().endsWith("2-1-2"))),
-    new Column("column3-1-2", "Done", taskDb.getTasks().filter(task => task.getTaskId().endsWith("3-1-2"))),
+    // new Column("column1-1-1", "To Do", taskDb.getTasks().filter(task => task.getTaskId().endsWith("1-1-1"))),
+    // new Column("column2-1-1", "In Progress", taskDb.getTasks().filter(task => task.getTaskId().endsWith("2-1-1"))),
+    // new Column("column3-1-1", "Done", taskDb.getTasks().filter(task => task.getTaskId().endsWith("3-1-1"))),
+    // new Column("column1-2-1", "To Do", taskDb.getTasks().filter(task => task.getTaskId().endsWith("1-2-1"))),
+    // new Column("column2-2-1", "In Progress", taskDb.getTasks().filter(task => task.getTaskId().endsWith("2-2-1"))),
+    // new Column("column3-2-1", "Done", taskDb.getTasks().filter(task => task.getTaskId().endsWith("3-2-1"))),
+    // new Column("column1-1-2", "To Do", taskDb.getTasks().filter(task => task.getTaskId().endsWith("1-1-2"))),
+    // new Column("column2-1-2", "In Progress", taskDb.getTasks().filter(task => task.getTaskId().endsWith("2-1-2"))),
+    // new Column("column3-1-2", "Done", taskDb.getTasks().filter(task => task.getTaskId().endsWith("3-1-2"))),
 ];
 
 const getColumns = (): Column[] => {

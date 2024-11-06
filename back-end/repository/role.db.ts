@@ -2,12 +2,12 @@ import { Role } from "../model/role";
 import { DiscordPermission } from "../types";
 
 const roles: Role[] = [
-    new Role("role1-1", "Role 1-1", [DiscordPermission.ADMINISTRATOR]),
-    new Role("role2-1", "Role 2-1", [DiscordPermission.MANAGE_CHANNELS, DiscordPermission.BAN_MEMBERS]),
-    new Role("role1-2", "Role 1-2", [DiscordPermission.VIEW_CHANNELS]),
-    new Role("role2-2", "Role 2-2", [DiscordPermission.SEND_MESSAGES, DiscordPermission.ADD_REACTIONS]),
-    new Role("role1-3", "Role 1-3", [DiscordPermission.MANAGE_ROLES]),
-    new Role("role2-3", "Role 2-3", [DiscordPermission.KICK_MEMBERS, DiscordPermission.TIMEOUT_MEMBERS]),
+    // new Role("role1-1", "Role 1-1", [DiscordPermission.ADMINISTRATOR]),
+    // new Role("role2-1", "Role 2-1", [DiscordPermission.MANAGE_CHANNELS, DiscordPermission.BAN_MEMBERS]),
+    // new Role("role1-2", "Role 1-2", [DiscordPermission.VIEW_CHANNEL]),
+    // new Role("role2-2", "Role 2-2", [DiscordPermission.SEND_MESSAGES, DiscordPermission.ADD_REACTIONS]),
+    // new Role("role1-3", "Role 1-3", [DiscordPermission.MANAGE_ROLES]),
+    // new Role("role2-3", "Role 2-3", [DiscordPermission.KICK_MEMBERS, DiscordPermission.MODERATE_MEMBERS]),
 ];
 
 const getAllRoles = (): Role[] => {
