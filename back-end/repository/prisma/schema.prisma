@@ -1,73 +1,68 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("DATABASE_URL")
 }
 
-// schema.prisma
-
 model Project {
-  project_Id   Int      @id @default(autoincrement())  // Primary key
-  name         String   @unique                       // Project name
-  description  String?                                // Optional project description
-  start_date   DateTime?                              // Optional project start date
-  end_date     DateTime?                              // Optional project end date
-  tasks        Task[]                                 // One-to-many relationship with Task
-  users        User[] @relation("UserProjects")       // Many-to-many relationship with User through UserProject join table
+  projectId    Int           @id @default(autoincrement())  // Primary key
+  name         String        @unique                       // Project name
+  description  String?                                     // Optional project description
+  startDate    DateTime?                                   // Optional project start date
+  endDate      DateTime?                                   // Optional project end date
+  tasks        Task[]                                      // One-to-many relationship with Task
+  users        UserProject[]                               // Many-to-many relationship with User through UserProject
 
-  UserProject UserProject[]
+  @@map("projects")                                        // Maps to 'projects' table in the database
 }
 
 model User {
-  user_Id      Int      @id @default(autoincrement())  // Primary key
-  firstName    String                                  // User's first name
-  lastName     String                                  // User's last name
-  email        String   @unique                        // User's email (unique)
-  password     String                                  // User's password
-  role         Role                                    // Enum representing user's role
-  projects     Project[] @relation("UserProjects")     // Many-to-many relationship with Project through UserProject join table
-  tasks        Task[]                                  // Many-to-many relationship with Task through UserTask join table
+  userId       Int           @id @default(autoincrement())  // Primary key
+  firstName    String                                       // User's first name
+  lastName     String                                       // User's last name
+  email        String        @unique                        // User's email (unique)
+  password     String                                       // User's password
+  role         Role                                         // Enum representing user's role
+  projects     UserProject[]                                // Many-to-many relationship with Project through UserProject
+  tasks        UserTask[]                                   // Many-to-many relationship with Task through UserTask
 
-  @@map("users") // Maps model name to 'users' table in the database
-  Task Task[] @relation("UserTasks")
-  UserProject UserProject[]
-  UserTask UserTask[]
+  @@map("users")                                            // Maps to 'users' table in the database
 }
 
 model Task {
-  task_Id      Int      @id @default(autoincrement())  // Primary key
-  name         String                                  // Task name
-  description  String                                  // Task description
-  due_date     DateTime                                // Task due date
-  completed    Boolean @default(false)                 // Task completion status
-  project      Project? @relation(fields: [projectId], references: [project_Id]) // Many-to-one relationship with Project
-  projectId    Int?                                    // Foreign key for Project
-  users        User[] @relation("UserTasks")           // Many-to-many relationship with User through UserTask join table
+  taskId       Int           @id @default(autoincrement())  // Primary key
+  name         String                                       // Task name
+  description  String?                                      // Task description (optional)
+  dueDate      DateTime                                     // Task due date
+  completed    Boolean       @default(false)                // Task completion status
+  project      Project?      @relation(fields: [projectId], references: [projectId]) // Many-to-one relationship with Project
+  projectId    Int?                                         // Foreign key for Project
+  users        UserTask[]                                   // Many-to-many relationship with User through UserTask
 
-  @@map("tasks") // Maps model name to 'tasks' table in the database
-  User User[]
-  UserTask UserTask[]
+  @@map("tasks")                                            // Maps to 'tasks' table in the database
 }
 
 model UserProject {
-  user_Id    Int
-  project_Id Int
-  user       User    @relation(fields: [user_Id], references: [user_Id])
-  project    Project @relation(fields: [project_Id], references: [project_Id])
+  userId       Int
+  projectId    Int
+  user         User         @relation(fields: [userId], references: [userId])  // Relation to User
+  project      Project      @relation(fields: [projectId], references: [projectId]) // Relation to Project
 
-  @@id([user_Id, project_Id]) // Composite primary key
+  @@id([userId, projectId])                                 // Composite primary key
+  @@map("user_projects")                                    // Maps to 'user_projects' table in the database
 }
 
 model UserTask {
-  user_Id    Int
-  task_Id    Int
-  user       User  @relation(fields: [user_Id], references: [user_Id])
-  task       Task  @relation(fields: [task_Id], references: [task_Id])
+  userId       Int
+  taskId       Int
+  user         User         @relation(fields: [userId], references: [userId])  // Relation to User
+  task         Task         @relation(fields: [taskId], references: [taskId])  // Relation to Task
 
-  @@id([user_Id, task_Id]) // Composite primary key
+  @@id([userId, taskId])                                    // Composite primary key
+  @@map("user_tasks")                                       // Maps to 'user_tasks' table in the database
 }
 
 // Enum for User Roles
@@ -76,3 +71,29 @@ enum Role {
   USER
   MANAGER
 }
+
+
+//Key Changes and Explanations
+// Field Mapping with @@map:
+
+// In the User, Task, Project, UserProject, and UserTask models, I’ve added @@map annotations to explicitly map each model to its respective table name (e.g., users, tasks, projects). This step is optional but ensures Prisma’s mappings align with your intended table names.
+// Optional Fields (String? and Int?):
+
+// The description field in the Task model was made optional by adding a ? to match how optional fields are typically defined in Prisma.
+// projectId in Task is also defined as Int?, allowing Task records that might not belong to a project.
+// Enum Definition for Role:
+
+// The Role enum is correctly defined and used in the User model.
+// Removing Redundant Back-Relations:
+
+// The userProjects field in Project and userTasks in Task are unnecessary because UserProject and UserTask already define the relationships.
+// Composite Keys:
+
+// The @@id([userId, projectId]) and @@id([userId, taskId]) lines in the UserProject and UserTask models define composite primary keys, which Prisma requires to set up many-to-many join tables correctly.
+// Primary Keys and Defaults:
+
+// Primary keys like projectId, userId, and taskId are configured with @default(autoincrement()) to auto-generate unique values.
+// Potential Errors Addressed
+// Mapping Errors: Explicitly mapping model names to table names should prevent errors related to Prisma’s default naming conventions.
+// Optional Fields: Ensuring all optional fields have a ? should prevent errors around nullable fields.
+// Composite Keys: Setting @@id in join tables (like UserProject and UserTask) ensures that Prisma recognizes the composite key constraints.
