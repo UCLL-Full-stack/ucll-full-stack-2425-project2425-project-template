@@ -5,6 +5,7 @@ export class Task{
     private title: string;
     private description: string;
     private dueDate: Date;
+    private columnId: string;
     private assignees: User[];
 
     constructor(taskId: string, title: string, description: string, dueDate: Date, assignees: User[]){
@@ -13,6 +14,7 @@ export class Task{
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        this.columnId = "";
         this.assignees = assignees;
     }
 
@@ -30,6 +32,14 @@ export class Task{
 
     public setDueDate(dueDate: Date): void{
         this.dueDate = dueDate;
+    }
+
+    public setColumnId(status: string): void{
+        this.columnId = status;
+    }
+
+    public getColumnId(): string{
+        return this.columnId;
     }
 
     public setAssignees(assignees: User[]): void{

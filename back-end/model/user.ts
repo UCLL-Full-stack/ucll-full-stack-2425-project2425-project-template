@@ -3,14 +3,16 @@ import { Guild } from "./guild";
 export class User{
     private userId: string;
     private username: string;
-    private userTag: string;
+    private globalName: string;
+    private userAvatar: string;
     private guilds: Guild[];
 
-    constructor(userId: string, username: string, userTag: string, guilds: Guild[]){
-        this.validate(userId, username, userTag);
+    constructor(userId: string, username: string, globalName: string, userAvatar: string, guilds: Guild[]){
+        this.validate(userId, username, globalName);
         this.userId = userId;
         this.username = username;
-        this.userTag = userTag;
+        this.globalName = globalName;
+        this.userAvatar = userAvatar;
         this.guilds = guilds;
     }
 
@@ -22,8 +24,16 @@ export class User{
         this.username = username;
     }
 
-    public setUserTag(userTag: string): void{
-        this.userTag = userTag;
+    public setGlobalName(globalName: string): void{
+        this.globalName = globalName;
+    }
+
+    public setUserAvatar(userAvatar: string): void{
+        this.userAvatar = userAvatar;
+    }
+
+    public getUserAvatar(): string{
+        return this.userAvatar;
     }
 
     public setGuilds(guilds: Guild[]): void{
@@ -50,23 +60,23 @@ export class User{
         return this.username;
     }
 
-    public getUserTag(): string{
-        return this.userTag;
+    public getGlobalName(): string{
+        return this.globalName;
     }
 
     public getGuilds(): Guild[]{
         return this.guilds;
     }
 
-    public validate( userId: String, username: String, userTag: String): void{
+    public validate( userId: String, username: String, globalName: String): void{
         if(!userId){
             throw new Error("User ID is required");
         }
         if(!username){
             throw new Error("Username is required");
         }
-        if(!userTag){
-            throw new Error("User Tag is required");
+        if(!globalName){
+            throw new Error("Global Name is required");
         }
     }
 
@@ -74,7 +84,7 @@ export class User{
         return {
             userId: this.userId,
             username: this.username,
-            userTag: this.userTag,
+            globalName: this.globalName,
             guilds: this.guilds.map(guild => guild.toJSON())
         }
     }

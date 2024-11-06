@@ -3,11 +3,15 @@ import { Task } from "./task";
 export class Column{
     private columnId: string;
     private columnName: string;
+    private columnIndex: number;
+    private boardId: string;
     private tasks: Task[];
 
     constructor(columnId: string, columnName: string, tasks: Task[]){
         this.columnId = columnId;
         this.columnName = columnName;
+        this.columnIndex = 0;
+        this.boardId = "";
         this.tasks = tasks;
     }
 
@@ -21,6 +25,22 @@ export class Column{
 
     public setTasks(tasks: Task[]): void{
         this.tasks = tasks;
+    }
+
+    public setColumnIndex(columnIndex: number): void{
+        this.columnIndex = columnIndex;
+    }
+
+    public getColumnIndex(): number{
+        return this.columnIndex;
+    }
+
+    public setBoardId(boardId: string): void{
+        this.boardId = boardId;
+    }
+
+    public getBoardId(): string{
+        return this.boardId;
     }
 
     public addTask(task: Task): void{
