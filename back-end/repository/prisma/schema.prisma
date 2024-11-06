@@ -17,6 +17,8 @@ model Project {
   end_date     DateTime?                              // Optional project end date
   tasks        Task[]                                 // One-to-many relationship with Task
   users        User[] @relation("UserProjects")       // Many-to-many relationship with User through UserProject join table
+
+  UserProject UserProject[]
 }
 
 model User {
@@ -30,6 +32,9 @@ model User {
   tasks        Task[]                                  // Many-to-many relationship with Task through UserTask join table
 
   @@map("users") // Maps model name to 'users' table in the database
+  Task Task[] @relation("UserTasks")
+  UserProject UserProject[]
+  UserTask UserTask[]
 }
 
 model Task {
@@ -43,6 +48,8 @@ model Task {
   users        User[] @relation("UserTasks")           // Many-to-many relationship with User through UserTask join table
 
   @@map("tasks") // Maps model name to 'tasks' table in the database
+  User User[]
+  UserTask UserTask[]
 }
 
 model UserProject {
