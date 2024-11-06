@@ -1,29 +1,30 @@
-/**
- * @swagger
- *   components:
- *    schemas:
- *      SubmissionForm:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            title:
- *              type: string
- *              description: Submission form title.
- *            content:
- *              type: string
- *              description: Submission form content.
- *            user:
- *              $ref: '#/components/schemas/Gebruiker'
- *            race:
- *              $ref: '#/components/schemas/Race'
- */
 import express, { NextFunction, Request, Response } from 'express';
 import submissionFormService from '../service/submission_form.service';
 import { SubmissionFormInput } from '../types';
 
 const submissionFormRouter = express.Router();
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SubmissionForm:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         title:
+ *           type: string
+ *           description: Submission form title.
+ *         content:
+ *           type: string
+ *           description: Submission form content.
+ *         user:
+ *           $ref: '#/components/schemas/Gebruiker'
+ *         race:
+ *           $ref: '#/components/schemas/Race'
+ */
 
 /**
  * @swagger
@@ -92,43 +93,76 @@ submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFun
     }
 });
 
+
 /**
  * @swagger
- * /submission_forms/accept/{raceId}:
+ * /submission_forms/accept/{id}:
  *   post:
- *     summary: Accept a submission form by race ID
+ *     summary: Accept a submission form by ID
  *     tags: [Submission_form]
- *     description: Accept a submission form by providing the race ID.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               raceId:
- *                 type: number
- *                 format: int64
+ *     description: Accept a submission form by providing the submission form ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The submission form ID
  *     responses:
  *       200:
  *         description: Submission form accepted.
- *       400:
- *         description: Invalid input.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SubmissionForm'
+ *       404:
+ *         description: Submission form not found.
  *       500:
  *         description: Internal server error.
  */
-submissionFormRouter.post('/accept/:raceId', async (req: Request, res: Response, next: NextFunction) => {
+
+submissionFormRouter.post('/accept/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const raceId = parseInt(req.params.raceId);
-        submissionFormService.acceptSubmissionForm(raceId);
-        res.status(200).json({ message: 'Submission form accepted.' });
+        const submissionFormId = parseInt(req.params.id);
+        const acceptedSubmissionForm = submissionFormService.acceptSubmissionForm(submissionFormId);
+        res.status(200).json(acceptedSubmissionForm);
     } catch (error) {
         const err = error as Error;
-        if (err.message.includes('required')) {
-            res.status(404).json({ error: err.message });
-        } else {
-            next(err);
-        }
+        res.status(404).json({ error: err.message });
+    }
+});
+
+/**
+ * @swagger
+ * /submission_forms/{id}:
+ *   delete:
+ *     summary: Delete a submission form by ID
+ *     tags: [Submission_form]
+ *     description: Delete a submission form by providing the submission form ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The submission form ID
+ *     responses:
+ *       204:
+ *         description: Submission form deleted.
+ *       404:
+ *         description: Submission form not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
+submissionFormRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const submissionFormId = parseInt(req.params.id);
+        submissionFormService.deleteSubmissionForm(submissionFormId);
+        res.status(204).send();
+    } catch (error) {
+        const err = error as Error;
+        res.status(404).json({ error: err.message });
     }
 });
 

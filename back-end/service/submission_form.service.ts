@@ -1,7 +1,7 @@
 import submissionFormDb from '../repository/Submission_form.db';
 import { SubmissionForm } from '../model/Submission_form';
 import RaceService from './Race.service';
-import { RaceInput } from '../types';
+import { RaceInput, DriverInput, CrashInput, AdminInput } from '../types';
 
 const getAllSubmissionForms = (): SubmissionForm[] => {
     return submissionFormDb.getAllSubmission_forms();
@@ -33,12 +33,79 @@ const createSubmissionForm = (submissionFormInput: any): SubmissionForm => {
 };
 
 const acceptSubmissionForm = (submissionFormId: number): SubmissionForm => {
-    // todo
-    throw new Error('Not implemented');
-}
+    const submissionForm = submissionFormDb.getSubmission_formById(submissionFormId);
+    // console.log(submissionForm)
+    if (!submissionForm) {
+        throw new Error(`Submission form not found with ID ${submissionFormId}`);
+    }
+
+    const race = submissionForm.getRace();
+    const existingRace = RaceService.getRaceById(race.getId()!);
+
+    if (existingRace) {
+        const crash = submissionForm.getRace().getCrashes()![0];
+        existingRace.getCrashes()!.push(crash);
+    } else {
+        const drivers: DriverInput[] = race.getDrivers()?.map(driver => ({
+            name: driver.getName(),
+            team: driver.getTeam(),
+            description: driver.getDescription(),
+            age: driver.getAge(),
+            racecar: {
+                car_name: driver.getRacecar().getCarName(),
+                type: driver.getRacecar().getType(),
+                description: driver.getRacecar().getDescription(),
+                hp: driver.getRacecar().getHp(),
+            },
+            crash: {
+                type: driver.getCrash().getType(),
+                description: driver.getCrash().getDescription(),
+                casualties: driver.getCrash().getCasualties(),
+                deaths: driver.getCrash().getDeaths(),
+            },
+            id: driver.getId(),
+        })) || [];
+
+        const crashes: CrashInput[] = race.getCrashes()?.map(crash => ({
+            type: crash.getType(),
+            description: crash.getDescription(),
+            casualties: crash.getCasualties(),
+            deaths: crash.getDeaths(),
+            id: crash.getId(),
+        })) || [];
+
+        const admin: AdminInput = {
+            username: race.getAdmin()?.getUsername() || 'The admin is not known',
+            password: race.getAdmin()?.getPassword() || 'The admin is not known',
+            id: race.getAdmin()?.getId(),
+        };
+
+        const raceInput: RaceInput = {
+            name: race.getName(),
+            type: race.getType(),
+            description: race.getDescription(),
+            location: race.getLocation(),
+            drivers,
+            crashes,
+            admin,
+            id: race.getId(),
+        };
+
+        RaceService.createRace(raceInput);
+    }
+
+    submissionFormDb.deleteSubmission_form(submissionFormId);
+
+    return submissionForm;
+};
+
+const deleteSubmissionForm = (submissionFormId: number): void => {
+    submissionFormDb.deleteSubmission_form(submissionFormId);
+};
 
 export default {
     getAllSubmissionForms,
     createSubmissionForm,
     acceptSubmissionForm,
+    deleteSubmissionForm,
 };

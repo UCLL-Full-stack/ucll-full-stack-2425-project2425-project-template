@@ -33,38 +33,55 @@ const createRace = (raceInput: RaceInput): Race => {
     if (!raceInput.location) {
         throw new Error('Race location is required');
     }
-    if (!raceInput.admin.id) {
-        throw new Error('Admin ID is required');
-    }
 
     const drivers = raceInput.drivers.map((driverInput: DriverInput) => {
-        if (driverInput.id === undefined) {
-            throw new Error('Driver ID is required');
-        }
-        const driver = driverDb.getDriverById(driverInput.id);
-        if (!driver) {
-            throw new Error(`Driver not found with ID ${driverInput.id}`);
-        }
-        return driver;
+        const racecar = new Racecar({
+            id: driverInput.racecar.id,
+            car_name: driverInput.racecar.car_name,
+            type: driverInput.racecar.type,
+            description: driverInput.racecar.description,
+            hp: driverInput.racecar.hp,
+        });
+
+        const crash = new Crash({
+            id: driverInput.crash.id,
+            type: driverInput.crash.type,
+            description: driverInput.crash.description,
+            casualties: driverInput.crash.casualties,
+            deaths: driverInput.crash.deaths,
+        });
+
+        return new Driver({
+            id: driverInput.id,
+            name: driverInput.name,
+            team: driverInput.team,
+            description: driverInput.description,
+            age: driverInput.age,
+            racecar,
+            crash,
+        });
     });
 
     const crashes = raceInput.crashes.map((crashInput: CrashInput) => {
-        if (crashInput.id === undefined) {
-            throw new Error('Crash ID is required');
-        }
-        const crash = crashDb.getCrashById(crashInput.id);
-        if (!crash) {
-            throw new Error(`Crash not found with ID ${crashInput.id}`);
-        }
-        return crash;
+        return new Crash({
+            id: crashInput.id,
+            type: crashInput.type,
+            description: crashInput.description,
+            casualties: crashInput.casualties,
+            deaths: crashInput.deaths,
+        });
     });
 
-    const admin = adminDb.getAdminById(raceInput.admin.id);
-    if (!admin) {
-        throw new Error(`Admin not found with ID ${raceInput.admin.id}`);
+    let admin: Admin | undefined;
+    if (raceInput.admin && raceInput.admin.id !== undefined) {
+        admin = adminDb.getAdminById(raceInput.admin.id);
+        if (!admin) {
+            throw new Error(`Admin not found with ID ${raceInput.admin.id}`);
+        }
     }
 
     const newRace = new Race({
+        id: raceInput.id,
         name: raceInput.name,
         type: raceInput.type,
         description: raceInput.description,
@@ -182,8 +199,8 @@ const updateRace = (id: number, raceInput: RaceInput) => {
 }
 
 export default {
-    getAllRaces,
     getRaceById,
+    getAllRaces,
     createRace,
     getAllCrashes,
     createCrash,

@@ -49,7 +49,7 @@ export type RaceInput = {
     location: string;
     drivers: DriverInput[];
     crashes: CrashInput[];
-    admin: AdminInput;
+    admin?: AdminInput;
     id?: number;
 };
 
