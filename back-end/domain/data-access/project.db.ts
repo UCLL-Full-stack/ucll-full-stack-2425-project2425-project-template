@@ -3,36 +3,51 @@ import { Task } from "../model/task";
 import { User } from "../model/user";
 import taskDb from "./task.db";
 import userDb from "./user.db";
+import { PrismaClient } from '@prisma/client';
 
-// Import users from userDb
-const users: User[] = userDb.getAllUsers();
+const prisma = new PrismaClient();
 
-// Import tasks from taskDb
-const tasks: Task[] = taskDb.getAllTasks();
+const createProject = async ({ name, users, tasks }: { name: string, users: number[], tasks: number[] }) => {
+    const project = await prisma.project.create({
+        data: {
+            name,
+            users: {
+                connect: users.map(userId => ({
+                    id: userId // Assuming 'id' is the unique identifier for User
+                }))
+            },
+            tasks: {
+                connect: tasks.map(taskId => ({
+                    id: taskId // Assuming 'id' is the unique identifier for Task
+                }))
+            }
+        },
+        include: {
+            users: true,
+            tasks: true
+        }
+    });
 
-// Hardcoded projects with tasks
-const projects: Project[] = [
-    new Project({ project_Id: 1, name: "Project 1", users: [users[0]], tasks: [tasks[0]] }),
-    new Project({ project_Id: 2, name: "Project 2", users: [users[1]], tasks: [tasks[1]] }),
-    new Project({ project_Id: 3, name: "Project 3", users: [users[0], users[1]], tasks: [tasks[0], tasks[1]] }),
-    new Project({ project_Id: 4, name: "Project 4", users: [users[0]], tasks: [tasks[2]] }),
-    new Project({ project_Id: 5, name: "Project 5", users: [users[0]], tasks: [tasks[3], tasks[4]] }),
-];
-
-let currentId = 6;
-
-const createProject = ({ name, users, tasks }: Project): Project => {
-    const project = new Project({ project_Id: currentId++, name, users: users || [], tasks: tasks || [] });
-    projects.push(project);
     return project;
-
 };
 
-const getAllProjects = (): Project[] => projects;
+const getAllProjects = async () => {
+    return await prisma.project.findMany({
+        include: {
+            users: true,
+            tasks: true
+        }
+    });
+};
 
-const getProjectByName = ({ name }: { name: string }): Project | null => {
-    const project = projects.find(project => project.name === name);
-    return project || null;
+const getProjectByName = async (name: string) => {
+    return await prisma.project.findUnique({
+        where: { name },
+        include: {
+            users: true,
+            tasks: true
+        }
+    });
 };
 
 export default {
