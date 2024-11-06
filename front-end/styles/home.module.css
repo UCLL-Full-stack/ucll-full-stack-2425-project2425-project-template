@@ -5,6 +5,8 @@
     justify-content: center;
     padding: 6rem;
     min-height: 100vh;
+    border-top: 1px solid white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 
     background-image: url('/images/home-cover.jpg'); /* Path to the image */
     background-size: cover; /* Ensures the image covers the entire main area */
@@ -135,16 +137,22 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* align-content: center; */
     margin-top: 2rem;
-};
+    /* max-width: 30vw; */
+}
 
 .eventDetails {
     display: flex;
     flex-direction: column;
-};
+    border-top: 2px solid black;
+    padding-top: 2rem;
+}
 
 .participants {
-    margin-top: 4rem !important;
+    margin-top: 2rem;
+    border-top: 2px solid black;
+    padding-top: 2rem;
 }
 
   .participantsTable {
@@ -229,7 +237,7 @@
 
 .addParticipantForm button:hover,
 .loginMyEvents button:hover {
-    background-color: #005bb5;
+    scale: 1.05;
 }
 
 .loginMyEvents button:hover {
@@ -257,18 +265,18 @@
 } */
 
 .addParticipantButton {
-    background-color: #007bff;
+    padding: 10px;
+    background-color: black;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: 0.3s ease;
   }
   
   .addParticipantButton:hover {
-    background-color: #0056b3;
+    scale: 1.05;
   }
 
 .errorMessage {
