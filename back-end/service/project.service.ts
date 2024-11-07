@@ -1,5 +1,5 @@
-import projectDb from "../domain/data-access/project.db";
-import { Project } from "../domain/model/project";
+import projectDb from "../repository/project.db";
+import { Project } from "../model/project";
 import { ProjectInput } from "../types";
 
 let currentId = 1;

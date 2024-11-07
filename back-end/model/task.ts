@@ -41,6 +41,17 @@ export class Task {
         }
     }
 
+    static from(prismaTask: any): Task {
+        return new Task({
+            task_Id: prismaTask.task_Id,
+            name: prismaTask.name,
+            description: prismaTask.description,
+            due_date: prismaTask.due_date,
+            completed: prismaTask.completed,
+            users: prismaTask.users.map((user: any) => User.from(user))
+        });
+    }
+
     public getTaskId(): number | undefined {
         return this.task_Id;
     }

@@ -1,4 +1,4 @@
-import { Role } from '../../types';
+import { Role } from '../types';
 import { Project } from './project';
 
 export class User {
@@ -48,6 +48,18 @@ export class User {
         if (!Array.isArray(user.projects)) {
             throw new Error('Projects must be an array');
         }
+    }
+
+    static from(prismaUser: any): User {
+        return new User({
+            user_Id: prismaUser.user_Id,
+            firstName: prismaUser.firstName,
+            lastName: prismaUser.lastName,
+            email: prismaUser.email,
+            password: prismaUser.password,
+            role: prismaUser.role,
+            projects: prismaUser.projects.map((project: any) => Project.from(project))
+        });
     }
 
     public getId(): number | undefined {

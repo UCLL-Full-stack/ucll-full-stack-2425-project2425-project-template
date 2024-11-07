@@ -30,6 +30,15 @@ export class Project {
         // }
     }
 
+    static from(prismaProject: any): Project {
+        return new Project({
+            project_Id: prismaProject.project_Id,
+            name: prismaProject.name,
+            users: prismaProject.users.map((user: any) => User.from(user)),
+            tasks: prismaProject.tasks
+        });
+    }
+
     public getProjectId(): number | undefined {
         return this.project_Id;
     }
