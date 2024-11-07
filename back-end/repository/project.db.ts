@@ -1,8 +1,3 @@
-import { Project } from "../model/project";
-import { Task } from "../model/task";
-import { User } from "../model/user";
-import taskDb from "./task.db";
-import userDb from "./user.db";
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

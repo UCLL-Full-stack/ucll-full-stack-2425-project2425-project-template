@@ -1,5 +1,3 @@
-import { User } from "../model/user";
-
 let current_ID = 1;
 
 const users: User[] = [
