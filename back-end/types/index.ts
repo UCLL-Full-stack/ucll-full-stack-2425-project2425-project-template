@@ -2,16 +2,15 @@ import { Project } from "../model/project";
 import { Task } from "../model/task";
 import { User } from "../model/user";
 
-export type Role = "admin" | "user" | "lecturer";
+export type Role = "ADMIN" | "USER";
 
 export const Roles = {
-    Admin: "admin" as Role,
-    User: "user" as Role,
-    Lecturer: "lecturer" as Role
-};
+    Admin: "ADMIN",
+    User: "USER",
+} as const;
 
 type UserInput = {
-    user_Id?: number;
+    userId?: number;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -21,17 +20,17 @@ type UserInput = {
 };
 
 type ProjectInput = {
-    project_Id?: number;
+    projectId?: number;
     name?: string;
     users?: User[];
     tasks?: Task[];
 };
 
 type TaskInput = {
-    task_Id?: number;
+    taskId?: number;
     name?: string;
     description?: string;
-    due_date?: Date;
+    dueDate?: Date;
     users?: User[];
     completed?: boolean;
 };

@@ -1,39 +1,50 @@
 import { User } from "./user";
+import { Task as prismaTask } from '@prisma/client';
 
 export class Task {
-    task_Id: any;
+    readonly taskId: number;
     readonly name: string;
-    readonly description: string;
-    readonly due_date: Date;
-    readonly completed: boolean = false;
-    readonly users: User[] = [];
-
-    constructor(task: {
-        task_Id: any;
-        name: string;
-        description: string;
-        due_date: Date;
-        completed: boolean;
-        users: User[];
+    readonly description: string | null; // Allow description to be nullable
+    readonly dueDate: Date;
+    readonly completed: boolean;
+    readonly users: User[];
+  
+    constructor(task: { 
+      taskId: number, 
+      name: string, 
+      description: string | null, // description is now nullable
+      dueDate: Date, 
+      completed: boolean, 
+      users: User[] 
     }) {
-        this.validate(task);
-        this.task_Id = task.task_Id;
-        this.name = task.name;
-        this.description = task.description;
-        this.due_date = task.due_date;
-        this.completed = task.completed;
-        this.users = task.users;
-
+      this.validate(task);
+      this.taskId = task.taskId;
+      this.name = task.name;
+      this.description = task.description ?? null; // Default to null if no description
+      this.dueDate = task.dueDate;
+      this.completed = task.completed;
+      this.users = task.users;
+    }
+  
+    static from(task: prismaTask & { users: User[] }) {
+      return new Task({
+        taskId: task.taskId,
+        name: task.name,
+        description: task.description, // description can be null here
+        dueDate: task.dueDate,
+        completed: task.completed,
+        users: task.users.map(user => User.from(user)),
+      });
     }
 
-    private validate(task: { task_Id: any; name: string; description: string; due_date: Date; users: User[] }) {
+    private validate(task: { taskId: any; name: string; description: string | null; dueDate: Date; users: User[] }) {
         if (!task.name) {
             throw new Error('Name is required');
         }
         if (!task.description) {
             throw new Error('Description is required');
         }
-        if (!(task.due_date instanceof Date)) {
+        if (!(task.dueDate instanceof Date)) {
             throw new Error('Due date must be a valid date');
         }
         if (!Array.isArray(task.users) || task.users.length === 0) {
@@ -41,31 +52,16 @@ export class Task {
         }
     }
 
-    static from(prismaTask: any): Task {
-        return new Task({
-            task_Id: prismaTask.task_Id,
-            name: prismaTask.name,
-            description: prismaTask.description,
-            due_date: prismaTask.due_date,
-            completed: prismaTask.completed,
-            users: prismaTask.users.map((user: any) => User.from(user))
-        });
-    }
-
     public getTaskId(): number | undefined {
-        return this.task_Id;
+        return this.taskId;
     }
 
     public getName(): string {
         return this.name;
     }
 
-    public getDescription(): string {
-        return this.description;
-    }
-
     public getDueDate(): Date {
-        return this.due_date;
+        return this.dueDate;
     }
 
     public getUsers(): User[] {
@@ -77,10 +73,9 @@ export class Task {
     }
 
     equals(task: Task): boolean {
-        return this.task_Id === task.getTaskId() &&
+        return this.taskId === task.getTaskId() &&
             this.name === task.getName() &&
-            this.description === task.getDescription() &&
-            this.due_date === task.getDueDate() &&
+            this.dueDate === task.getDueDate() &&
             this.users === task.getUsers() &&
             this.completed === task.getCompleted();
     }

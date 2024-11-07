@@ -1,33 +1,78 @@
-import { Task } from "../model/task";
-import { User } from "../model/user";
-import userDb from "./user.db";
+import { Task } from '../model/task'; // Assuming Task class is in models folder
+import { User } from '../model/user'; // Assuming User class is in models folder
+import database from './database'; // Import the database connection
 
-const users: User[] = userDb.getAllUsers();
+export const createTask = async (
+  name: string, 
+  description: string | null, 
+  dueDate: Date, 
+  completed: boolean, 
+  users: User[]
+): Promise<Task> => {
 
-let current_ID = 1;
+  try {
+    const taskPrisma = await database.task.create({
+      data: {
+        name,
+        description,  // description can be null
+        dueDate: dueDate,
+        completed,
+        users: {
+          create: users.map(user => ({
+            user: {
+              connect: { userId: user.user_Id } // Assuming user object has userId field
+            }
+          }))
+        }
+      },
+      include: {
+        users: true // Include users in the returned task object
+      }
+    });
 
-const tasks: Task[] = [
-    new Task({ task_Id: current_ID++, name: "Task 1", description: "Description 1", due_date: new Date("2024-10-21T00:00:00Z"), users: [users[0]], completed: false }),
-    new Task({ task_Id: current_ID++, name: "Task 2", description: "Description 2", due_date: new Date("2024-11-20T00:00:00Z"), users: [users[1]], completed: false }),
-    new Task({ task_Id: current_ID++, name: "Task 3", description: "Description 3", due_date: new Date("2024-12-25T00:00:00Z"), users: [users[0]], completed: true }),
-    new Task({ task_Id: current_ID++, name: "Task 4", description: "Description 4", due_date: new Date("2024-09-28T00:00:00Z"), users: [users[1], users[0]], completed: true }),
-    new Task({ task_Id: current_ID++, name: "Task 5", description: "Description 5", due_date: new Date("2024-08-29T00:00:00Z"), users: [users[0]], completed: false }),
-]
-
-const createTask = ({ name, description, due_date, users }: Task): Task => {
-    const task = new Task({ task_Id: Date.now(), name, description, due_date, users: [], completed: false });
-    tasks.push(task);
-    return task;
+    // Transform the Prisma result into the Task domain model
+    return Task.from(taskPrisma); // Use Task.from() to map to domain model
+  } catch (error) {
+    console.error(error);
+    throw new Error('Database error. See server log for details.');
+  }
 };
 
-const getAllTasks = (): Task[] => tasks;
+export const getAllTasks = async (): Promise<Task[]> => {
+  try {
+    const tasksPrisma = await database.task.findMany({
+      include: {
+        users: true // Include associated users
+      }
+    });
 
-const getTaskById = (task_Id: number): Task | undefined => {
-    return tasks.find(task => task.task_Id === task_Id);
+    // Convert the Prisma result into Task domain models
+    return tasksPrisma.map(task => Task.from(task)); // Map Prisma result to Task model
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error retrieving tasks. See server log for details.');
+  }
+};
+
+export const getTaskById = async (taskId: number): Promise<Task | null> => {
+  try {
+    const taskPrisma = await database.task.findUnique({
+      where: { taskId },
+      include: {
+        users: true // Include associated users
+      }
+    });
+
+    // Convert to Task model if found, else return null
+    return taskPrisma ? Task.from(taskPrisma) : null; // Map Prisma result to Task model
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error retrieving task. See server log for details.');
+  }
 };
 
 export default {
-    createTask,
-    getAllTasks,
-    getTaskById
+  createTask,
+  getAllTasks,
+  getTaskById,
 };

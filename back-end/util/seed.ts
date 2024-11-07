@@ -1,34 +1,45 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { PrismaClient, Role } from '@prisma/client';
+import database from '../repository/database';
 
 async function main() {
-  // Seed roles if you’re using them as enums
-  const roles = ['ADMIN', 'USER', 'LECTURER'];
+
+  // Delete user-project relations first
+  await database.userProject.deleteMany();
+
+  // Delete user-task relations
+  await database.userTask.deleteMany();
+
+  // Now, delete the users
+  await database.user.deleteMany();
+
+  await database.project.deleteMany();
+
+  // Now, delete the users
+  await database.user.deleteMany();
 
   // Seed Users
-  const user1 = await prisma.user.create({
+  const user1 = await database.user.create({
     data: {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
-      password: 'password123', // Remember, you should hash passwords in a real app
-      role: 'ADMIN', // Must match the Role enum
+      password: 'password123', 
+      role: Role.ADMIN, 
     },
   });
 
-  const user2 = await prisma.user.create({
+  const user2 = await database.user.create({
     data: {
       firstName: 'Jane',
       lastName: 'Smith',
       email: 'jane.smith@example.com',
       password: 'password456',
-      role: 'USER',
+      role: Role.USER,
     },
   });
 
   // Seed Projects
-  const project1 = await prisma.project.create({
+  const project1 = await database.project.create({
     data: {
       name: 'Project Alpha',
       description: 'Initial project for testing.',
@@ -37,7 +48,7 @@ async function main() {
     },
   });
 
-  const project2 = await prisma.project.create({
+  const project2 = await database.project.create({
     data: {
       name: 'Project Beta',
       description: 'Second project for testing.',
@@ -47,7 +58,7 @@ async function main() {
   });
 
   // Seed Tasks
-  const task1 = await prisma.task.create({
+  const task1 = await database.task.create({
     data: {
       name: 'Task 1',
       description: 'Complete setup for Project Alpha',
@@ -57,7 +68,7 @@ async function main() {
     },
   });
 
-  const task2 = await prisma.task.create({
+  const task2 = await database.task.create({
     data: {
       name: 'Task 2',
       description: 'Initial draft for Project Beta',
@@ -68,14 +79,14 @@ async function main() {
   });
 
   // Seed User-Project Relations
-  await prisma.userProject.create({
+  await database.userProject.create({
     data: {
       userId: user1.userId,
       projectId: project1.projectId,
     },
   });
 
-  await prisma.userProject.create({
+  await database.userProject.create({
     data: {
       userId: user2.userId,
       projectId: project2.projectId,
@@ -83,14 +94,14 @@ async function main() {
   });
 
   // Seed User-Task Relations
-  await prisma.userTask.create({
+  await database.userTask.create({
     data: {
       userId: user1.userId,
       taskId: task1.taskId,
     },
   });
 
-  await prisma.userTask.create({
+  await database.userTask.create({
     data: {
       userId: user2.userId,
       taskId: task2.taskId,
@@ -107,5 +118,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await database.$disconnect();
   });

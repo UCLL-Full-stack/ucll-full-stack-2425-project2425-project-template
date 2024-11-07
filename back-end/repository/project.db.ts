@@ -1,49 +1,58 @@
-import { PrismaClient } from '@prisma/client';
+import database from './database';
 
-const prisma = new PrismaClient();
-
-const createProject = async ({ name, users, tasks }: { name: string, users: number[], tasks: number[] }) => {
-    const project = await prisma.project.create({
+async function createProject(name: string, description?: string, startDate?: Date, endDate?: Date) {
+    try {
+      const project = await database.project.create({
         data: {
-            name,
-            users: {
-                connect: users.map(userId => ({
-                    id: userId // Assuming 'id' is the unique identifier for User
-                }))
-            },
-            tasks: {
-                connect: tasks.map(taskId => ({
-                    id: taskId // Assuming 'id' is the unique identifier for Task
-                }))
-            }
+          name,
+          description,
+          startDate,
+          endDate,
         },
-        include: {
-            users: true,
-            tasks: true
-        }
-    });
-
-    return project;
+      });
+      return project;
+    } catch (error) {
+      console.error("Error creating project:", error);
+      throw error;
+    }
 };
 
 const getAllProjects = async () => {
-    return await prisma.project.findMany({
+    try {
+      return await database.project.findMany({
         include: {
-            users: true,
-            tasks: true
+          users: true,
+          tasks: true
         }
-    });
+      });
+    } catch (error) {
+      console.error("Error fetching all projects:", error);
+      throw new Error("Failed to fetch projects");
+    }
 };
+  
 
 const getProjectByName = async (name: string) => {
-    return await prisma.project.findUnique({
+    try {
+      const project = await database.project.findUnique({
         where: { name },
         include: {
-            users: true,
-            tasks: true
+          users: true,
+          tasks: true
         }
-    });
+      });
+
+      if (!project) {
+        throw new Error(`Project with name "${name}" not found`);
+      }
+
+      return project;
+    } catch (error) {
+      console.error(`Error fetching project by name "${name}":`, error);
+      throw new Error(`Failed to fetch project with name "${name}"`);
+    }
 };
+  
 
 export default {
     createProject,

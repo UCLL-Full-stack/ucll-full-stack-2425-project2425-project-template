@@ -1,26 +1,57 @@
-let current_ID = 1;
+import { Role } from "../types";
+import database from "./database";
 
-const users: User[] = [
-    new User({ user_Id: current_ID++, firstName: "John", lastName: "Doe", email: "john.doe@example.com", password: "password", role: "admin", projects: [] }),
-    new User({ user_Id: current_ID++, firstName: "Jane", lastName: "Doe", email: "jane.doe@example.com", password: "password", role: "lecturer", projects: [] }),
-    new User({ user_Id: current_ID++, firstName: "Alice", lastName: "Smith", email: "alice.smith@example.com", password: "password", role: "admin", projects: [] }),
-];
-
-const createUser = ({ firstName, lastName, email, password, role }: User): User => {
-    const user = new User({ user_Id: Date.now(), firstName, lastName, email, password, role, projects: [] });
-    users.push(user);
+const createUser = async ({ firstName, lastName, email, password, role }: { 
+    firstName: string; 
+    lastName: string; 
+    email: string; 
+    password: string; 
+    role: Role;
+}) => {
+    const user = await database.user.create({
+        data: {
+            firstName,
+            lastName,
+            email,
+            password,
+            role
+        }
+    });
     return user;
 };
 
-const getAllUsers = (): User[] => users;
-
-const getUserById = (user_Id: number): User | undefined => {
-    return users.find(user => user.user_Id === user_Id);
+const getAllUsers = async () => {
+    return await database.user.findMany({
+        include: {
+            projects: true,
+            tasks: true
+        }
+    });
 };
 
+const getUserById = async (userId: number) => {
+    return await database.user.findUnique({
+        where: { userId },
+        include: {
+            projects: true,
+            tasks: true
+        }
+    });
+};
+
+const getUserByEmail = async (email: string) => {
+    return await database.user.findUnique({
+        where: { email },
+        include: {
+            projects: true,
+            tasks: true
+        }
+    });
+};
 
 export default {
     createUser,
     getAllUsers,
-    getUserById
+    getUserById,
+    getUserByEmail
 };

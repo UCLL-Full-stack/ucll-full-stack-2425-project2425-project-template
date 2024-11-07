@@ -1,29 +1,47 @@
-import projectDb from "../repository/project.db";
+import projectDB from "../repository/project.db";
 import { Project } from "../model/project";
 import { ProjectInput } from "../types";
 
-let currentId = 1;
+const createProject = async ({ name, users = [], tasks = [] }: ProjectInput): Promise<Project> => {
+    if (!name) {
+        throw new Error("Project name is required");
+    }
 
-const createProject = async ({ name, users = [] }: ProjectInput): Promise<Project> => {
-    if (!name) throw new Error("Project name is required");
-    if (users.length === 0) throw new Error("At least one user is required");
+    // We need to handle optional params in createProject
+    const project = await projectDB.createProject(name, undefined, undefined, undefined);
 
-    const existingProject = await projectDb.getProjectByName({ name });
-    if (existingProject) throw new Error("Project with this name already exists");
+    if (!project) {
+        throw new Error("Project creation failed");
+    }
 
-    const project = new Project({
-        project_Id: currentId++,
-        name: name,
-        users: users,
-        tasks: []
-    });
-
-    return projectDb.createProject(project);
+    // Return a Project instance mapped from the returned data
+    return Project.from(project);
 };
 
-const getAllProjects = async (): Promise<Project[]> => projectDb.getAllProjects();
+const getAllProjects = async (): Promise<Project[]> => {
+    const projects = await projectDB.getAllProjects();
+
+    if (!projects || projects.length === 0) {
+        throw new Error("No projects found");
+    }
+
+    // Map the list of projects to instances of Project
+    return projects.map(Project.from);
+};
+
+const getProjectByName = async (name: string): Promise<Project> => {
+    const project = await projectDB.getProjectByName(name);
+
+    if (!project) {
+        throw new Error(`Project with name "${name}" doesn't exist`);
+    }
+
+    // Return a single Project instance mapped from the returned data
+    return Project.from(project);
+};
 
 export default {
     createProject,
     getAllProjects,
+    getProjectByName,
 };
