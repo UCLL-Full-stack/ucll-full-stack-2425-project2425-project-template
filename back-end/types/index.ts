@@ -29,7 +29,7 @@ type ProjectInput = {
 type TaskInput = {
     taskId?: number;
     name?: string;
-    description?: string;
+    description?: string | null;
     dueDate?: Date;
     users?: User[];
     completed?: boolean;

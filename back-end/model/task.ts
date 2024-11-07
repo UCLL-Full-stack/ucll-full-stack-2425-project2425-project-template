@@ -30,19 +30,22 @@ export class Task {
       return new Task({
         taskId: task.taskId,
         name: task.name,
-        description: task.description, // description can be null here
+        description: task.description ?? null, // description can be null here
         dueDate: task.dueDate,
         completed: task.completed,
         users: task.users.map(user => User.from(user)),
       });
     }
 
-    private validate(task: { taskId: any; name: string; description: string | null; dueDate: Date; users: User[] }) {
+    private validate(task: {
+        taskId: number;
+        name: string;
+        description: string | null;
+        dueDate: Date;
+        users: User[]
+    }) {
         if (!task.name) {
-            throw new Error('Name is required');
-        }
-        if (!task.description) {
-            throw new Error('Description is required');
+            throw new Error('Task name is required');
         }
         if (!(task.dueDate instanceof Date)) {
             throw new Error('Due date must be a valid date');
@@ -79,8 +82,10 @@ export class Task {
             this.users === task.getUsers() &&
             this.completed === task.getCompleted();
     }
+    
     addUserToTask(user: User) {
-        if (!this.users.includes(user))
+        if (!this.users.find(existingUser => existingUser.user_Id === user.user_Id)) {
             this.users.push(user);
+        }
     }
 }
