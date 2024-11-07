@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: rgb(0, 164, 0);
-    color: lightgoldenrodyellow;
+    color: white;
     padding-left: 10%;
     padding-right: 20%;
     padding-bottom: 1em;
@@ -27,7 +27,7 @@
 }
 
 .navbar-links a {
-    color: lightgoldenrodyellow;
+    color: white;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.5rem;

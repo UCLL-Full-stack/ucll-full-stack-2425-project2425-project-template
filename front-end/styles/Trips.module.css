@@ -1,5 +1,5 @@
 .trips-page {
-    background-color: lightgoldenrodyellow;
+    background-color: white;
     color: rgb(0, 164, 0);
     font-family: Arial, sans-serif;
     min-height: 100vh;
@@ -11,7 +11,7 @@
     margin: 2rem auto;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     padding: 2rem;
 }
 
@@ -25,26 +25,26 @@
 
 .table {
     width: 100%;
-    border-collapse: collapse; /* Important for alignment */
+    border-collapse: collapse;
 }
 
 .table th, .table td {
-    padding: 12px; /* Consistent padding */
-    text-align: left; /* Text alignment */
-    border: 1px solid #dddddd; /* Borders for visibility */
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #dddddd;
 }
 
 .table th {
-    background-color: lightgray; /* Optional: distinguish header */
-    width: 22.75%; /* This is fine to keep */
+    background-color: lightgray; 
+    width: 22.75%; 
 }
 
 .trip-table tr:nth-child(even) td {
-    background-color: #f2f2f2; /* Light gray for even rows */
+    background-color: #f2f2f2; 
 }
 
 .trip-table tr:hover td {
-    background-color: #e6ffe6; /* Highlight on hover */
+    background-color: #e6ffe6; 
 }
 
 
