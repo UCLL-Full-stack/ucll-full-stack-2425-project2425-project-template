@@ -15,4 +15,10 @@ export class Team {
         this.members = team.members || new Array<User>(); // Unusable for now
         this.coach = team.coach;
     }
+
+    getId() {
+        return this.teamId;
+    }
 }
+
+export default Team;

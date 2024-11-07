@@ -21,4 +21,10 @@ export class Match {
         this.square = match.square;
         this.players = match.players || new Array<User>(); // Unusable for now
     }
+
+    getId() {
+        return this.matchId;
+    }
 }
+
+export default Match;

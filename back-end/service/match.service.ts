@@ -1,7 +1,11 @@
-import { Match } from "../model/Match";
+import { Match } from "../model/match";
 import { MatchInput } from "../types";
+import MatchDB from "../repository/match.db";
 
-const createMatch = async ({
+
+
+
+const addMatch = async ({
     matchId,
     date,
     hall,
@@ -17,7 +21,7 @@ const createMatch = async ({
     })
     return match;
 }
+    
+const getAllMatches = (): Match[] => MatchDB.getAllMatches(); 
 
-export default {
-    createMatch,
-}
+export default { addMatch, getAllMatches } 

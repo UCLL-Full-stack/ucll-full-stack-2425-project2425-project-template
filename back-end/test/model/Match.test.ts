@@ -1,4 +1,4 @@
-import { User } from "../../model/User";
-import { Team } from "../../model/Team";
-import { Match } from "../../model/Match";
-import { Training } from "../../model/Training";
+import { User } from "../../model/user";
+import { Team } from "../../model/team";
+import { Match } from "../../model/match";
+import { Training } from "../../model/training";

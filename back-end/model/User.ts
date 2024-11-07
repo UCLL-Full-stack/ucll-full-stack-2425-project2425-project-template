@@ -21,3 +21,5 @@ export class User {
         this.attendance = user.attendance;
     }
 }
+
+export default User;

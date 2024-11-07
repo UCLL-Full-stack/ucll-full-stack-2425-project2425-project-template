@@ -24,4 +24,11 @@ export class Training {
         this.players = training.players || new Array<User>(); // Unusable for now
         this.coach = training.coach;
     }
+
+    getId() {
+        return this.trainingId;
+    }
 }
+
+export default Training;
+

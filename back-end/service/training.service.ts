@@ -1,7 +1,8 @@
-import { Training } from "../model/Training";
+import { Training } from "../model/training";
 import { TrainingInput } from "../types";
+import TrainingDB from "../repository/training.db";
 
-const createTraining = async ({
+const addTraining = async ({
     trainingId,
     date,
     hall,
@@ -20,6 +21,7 @@ const createTraining = async ({
     return training;
 }
 
-export default {
-    createTraining,
-}
+const getAllTrainings = (): Training[] => TrainingDB.getAllTrainings(); 
+
+
+export default { addTraining, getAllTrainings }

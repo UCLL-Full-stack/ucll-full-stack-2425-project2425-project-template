@@ -1,7 +1,7 @@
 import { User } from "../model/User";
 import { UserInput } from "../types";
 
-const createUser = async ({
+const addUser = async ({
     userId,
     username,
     password,
@@ -19,5 +19,5 @@ const createUser = async ({
 }
 
 export default {
-    createUser,
+    addUser,
 }
