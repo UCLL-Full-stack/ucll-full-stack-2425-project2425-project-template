@@ -27,6 +27,7 @@ model User {
     password    String
     age         Int
     participant Participant?
+    role        Role
 }
 
 model Participant {
@@ -34,4 +35,9 @@ model Participant {
     userId  Int     @unique
     user    User    @relation(fields: [userId], references: [id])
     events  Event[]
+}
+
+enum Role {
+    participant
+    organizer
 }
