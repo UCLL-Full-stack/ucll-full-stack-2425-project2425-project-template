@@ -7,152 +7,60 @@ generator client {
     provider = "prisma-client-js"
 }
 
-enum DiscordPermission {
-    ADD_REACTIONS
-    ADMINISTRATOR
-    ATTACH_FILES
-    BAN_MEMBERS
-    CHANGE_NICKNAME
-    CONNECT
-    CREATE_EVENTS
-    CREATE_EXPRESSIONS
-    CREATE_INSTANT_INVITE
-    CREATE_PRIVATE_THREADS
-    CREATE_PUBLIC_THREADS
-    DEAFEN_MEMBERS
-    EMBED_LINKS
-    KICK_MEMBERS
-    MANAGE_CHANNELS
-    MANAGE_EMOJIS_AND_STICKERS
-    MANAGE_EVENTS
-    MANAGE_GUILD
-    MANAGE_EXPRESSIONS
-    MANAGE_MESSAGES
-    MANAGE_NICKNAMES
-    MANAGE_ROLES
-    MANAGE_THREADS
-    MANAGE_WEBHOOKS
-    MENTION_EVERYONE
-    MODERATE_MEMBERS
-    MOVE_MEMBERS
-    MUTE_MEMBERS
-    PRIORITY_SPEAKER
-    READ_MESSAGE_HISTORY
-    REQUEST_TO_SPEAK
-    SEND_MESSAGES
-    SEND_MESSAGES_IN_THREADS
-    SEND_POLL
-    SEND_TEXT_TO_SPEECH_MESSAGES
-    SEND_VOICE_MESSAGES
-    SPEAK
-    STREAM
-    USE_APPLICATION_COMMANDS
-    USE_EMBEDDED_ACTIVITIES
-    USE_EXTERNAL_APPS
-    USE_EXTERNAL_EMOJIS
-    USE_EXTERNAL_SOUNDS
-    USE_EXTERNAL_STICKERS
-    USE_SOUNDBOARD
-    USE_VAD
-    VIEW_AUDIT_LOG
-    VIEW_CHANNEL
-    VIEW_GUILD_INSIGHTS
-    VIEW_CREATOR_MONETIZATION_ANALYTICS
-}
-
-enum KanbanPermission {
-    VIEW_BOARD
-    CREATE_BOARD
-    EDIT_BOARD
-    DELETE_BOARD
-    MANAGE_BOARD_PERMISSIONS
-    CREATE_COLUMNS
-    DELETE_COLUMNS
-    EDIT_COLUMNS
-    CREATE_TASKS
-    EDIT_TASKS
-    DELETE_TASKS
-    ASSIGN_TASKS
-    CHANGE_TASK_STATUS
-    MANAGE_TASK_ASSIGNEES
-    VIEW_ACTIVITY_LOG
-    ADMINISTRATOR
-}
-
 model User {
-    id         String  @id @default(uuid())
-    userId     String  @unique
+    userId     String  @id
     username   String
     globalName String
     userAvatar String
     guilds     Guild[] @relation("UserGuilds")
+    boards     Board[]
+    tasks      Task[]
 }
 
 model Guild {
-    id        String            @id @default(uuid())
-    guildId   String            @unique
+    guildId   String  @id
     guildName String
-    settings  PermissionEntry[]
+    settings  Json
     roles     Role[]
-    members   Member[]          @relation("GuildMembers")
-    User      User[]            @relation("UserGuilds")
-    Board     Board[]
+    members   Json
+    users     User[]  @relation("UserGuilds")
+    boards    Board[]
 }
 
 model Role {
-    id          String              @id @default(uuid())
-    roleId      String              @unique
+    roleId      String @id
     roleName    String
-    permissions DiscordPermission[]
-    guild       Guild?              @relation(fields: [guildId], references: [id])
-    guildId     String?
-}
-
-model Member {
-    id      String   @id @default(uuid())
-    userId  String
-    roleIds String[]
-    guild   Guild?   @relation("GuildMembers", fields: [guildId], references: [id])
-    guildId String?
+    permissions Json
+    guild       Guild  @relation(fields: [guildId], references: [guildId])
+    guildId     String
 }
 
 model Board {
-    id            String            @id @default(uuid())
-    boardId       String            @unique
-    boardName     String
-    createdByUser String
-    guild         Guild             @relation(fields: [guildId], references: [id])
-    guildId       String
-    columns       Column[]
-    permissions   PermissionEntry[]
+    boardId         String   @id @default(cuid())
+    boardName       String
+    createdByUser   User     @relation(fields: [createdByUserId], references: [userId])
+    createdByUserId String
+    guild           Guild    @relation(fields: [guildId], references: [guildId])
+    guildId         String
+    columns         Column[]
+    permissions     Json
 }
 
 model Column {
-    id         String  @id @default(uuid())
-    columnId   String  @unique
-    columnName String
-    tasks      Task[]
-    board      Board?  @relation(fields: [boardId], references: [id])
-    boardId    String?
+    columnId    String @id @default(cuid())
+    columnName  String
+    columnIndex Int
+    tasks       Task[]
+    board       Board  @relation(fields: [boardId], references: [boardId])
+    boardId     String
 }
 
 model Task {
-    id              String   @id @default(uuid())
-    taskId          String   @unique
-    taskName        String
-    taskDescription String
-    dueDate         DateTime
-    assignees       String[]
-    column          Column?  @relation(fields: [columnId], references: [id])
-    columnId        String?
-}
-
-model PermissionEntry {
-    id                String             @id @default(uuid())
-    identifier        String
-    kanbanPermissions KanbanPermission[]
-    Guild             Guild?             @relation(fields: [guildId], references: [id])
-    guildId           String?
-    Board             Board?             @relation(fields: [boardId], references: [id])
-    boardId           String?
+    taskId      String   @id @default(cuid())
+    title       String
+    description String
+    dueDate     DateTime
+    assignees   User[]
+    column      Column   @relation(fields: [columnId], references: [columnId])
+    columnId    String
 }
