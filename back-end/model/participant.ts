@@ -1,6 +1,12 @@
 import { User } from "./user";
 import { Event } from "./event";
 
+import {
+    Participant as ParticipantPrisma,
+    Event as EventPrisma,
+    User as UserPrisma,
+} from '@prisma/client';
+
 export class Participant {
     private id?: number;
     private user: User;
@@ -9,7 +15,8 @@ export class Participant {
     constructor(participant: {
         id?: number,
         user: User,
-        events?: Event[];
+        // events?: Event[];
+        events: Event[];
     }) {
         this.user = participant.user;
         if (participant.events){
@@ -39,5 +46,17 @@ export class Participant {
         return(
             this.user === participant.getUser()
         );
+    }
+
+    static from({
+        id,
+        user,
+        events,
+    }: ParticipantPrisma & {user: UserPrisma; events: EventPrisma[]}) {
+        return new Participant({
+            id,
+            user: User.from(user),
+            events: events.map((event) => Event.from(event)),
+        });
     }
 }

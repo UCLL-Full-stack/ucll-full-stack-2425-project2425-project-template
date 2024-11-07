@@ -1,5 +1,11 @@
 import { Participant } from "./participant";
 
+import {
+    Event as EventPrisma,
+    Participant as ParticipantPrisma,
+} from '@prisma/client';
+
+
 export class Event {
     private id?: number;
     private name: string;
@@ -107,4 +113,29 @@ export class Event {
             this.category === event.getCategory()
         );
     }
+
+    static from({
+        id,
+        name,
+        description,
+        date,
+        location,
+        category,
+        backgroundImage,
+        participants,
+        isTrending,
+    }: EventPrisma & { participant: ParticipantPrisma}) {
+        return new Event({
+            id,
+            name,
+            description,
+            date,
+            location,
+            category,
+            backgroundImage,
+            participants: participants.map((participant) => Participant.from(participant)),
+            isTrending
+        })
+    }
+
 }

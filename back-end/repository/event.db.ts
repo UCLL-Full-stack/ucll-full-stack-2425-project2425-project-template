@@ -1,9 +1,10 @@
 import { Event } from "../model/event";
 import { Participant } from "../model/participant";
 import { User } from "../model/user";
+import database from './database';
 
 //Create event:
-const createEvent = (event: Event): Event =>{
+const createEvent = (event: Event): Event => {
     events.push(event);
     return event;
 }
@@ -215,8 +216,17 @@ const events = [
     }),
 ];
 
-const getAllEvents = (): Event[] => {
-    return events;
+const getAllEvents = async (): Promise<Event[]> => {
+    try {
+        const eventsPrisma = await database.event.findMany({
+            include: { user: true, participant: true },
+        });
+        return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma))
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 }
 
 const getEventById = ({ id }: { id: number }): Event | null => {

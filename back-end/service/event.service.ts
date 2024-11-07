@@ -2,6 +2,8 @@ import { Event } from "../model/event";
 import eventDb from "../repository/event.db";
 import { EventInput } from "../types";
 import participantService from "./participant.service";
+
+
 //added 31/10
 const createEvent = (eventInput: EventInput): Event => {
     if (!eventInput.name) throw new Error('Event name is required');
@@ -26,9 +28,7 @@ const createEvent = (eventInput: EventInput): Event => {
 };
 
 //Function to get all the events
-const getAllEvents = (): Event[] => {
-    return eventDb.getAllEvents();
-};
+const getAllEvents = async (): Promise<Event[]> => eventDb.getAllEvents();
 
 //To get the events by their id:
 const getEventById = (id: number): Event => {
