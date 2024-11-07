@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Leiding {
+  id        Int      @id @default(autoincrement())
+  naam      String   
+  voornaam  String
+  email     String   @unique
+  telefoon  String
+  hoofdleiding Boolean
+  totem     String
+  groepId   Int      @unique
+  groep     Groep    @relation(fields: [groepId], references: [id])
+  nieuwsberichten Nieuwsbericht[]
+}
+
+model Groep {
+  id      Int      @id @default(autoincrement())
+  naam    String
+  beschrijving String
+  activiteiten Activiteit[]
+  leiding Leiding[]
+}
+
+model Activiteit {
+  id        Int      @id @default(autoincrement())
+  naam      String
+  beschrijving String
+  beginDatum DateTime
+  eindDatum  DateTime
+  groepen  Groep[]
+}
+
+model Nieuwsbericht {
+    id        Int      @id @default(autoincrement())
+    titel     String
+    inhoud    String
+    datum     DateTime
+    auteurId Int      @unique
+    auteur    Leiding  @relation(fields: [auteurId], references: [id])
+}
