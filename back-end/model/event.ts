@@ -14,7 +14,7 @@ export class Event {
     private location: string;
     private category: string;
     private backgroundImage?: string;
-    private participants: Participant[] = [];
+    private participants: Participant[];
     private isTrending: boolean;
 
     constructor(event: {
@@ -25,7 +25,7 @@ export class Event {
         location: string,
         category: string;
         backgroundImage?: string;
-        participants?: Participant[];
+        participants: Participant[];
         isTrending: boolean;
     }) {
         // Validate the date
@@ -53,9 +53,7 @@ export class Event {
         this.location = event.location;
         this.category = event.category;
         this.backgroundImage = event.backgroundImage;
-        if (event.participants) {
-            this.participants = event.participants;
-        }
+        this.participants = event.participants;
         this.isTrending = event.isTrending;
     }
 
