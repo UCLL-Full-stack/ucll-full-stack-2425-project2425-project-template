@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { Booking } from '../domain/model/booking';
+import { Booking } from '../model/booking';
 import bookingService from '../service/booking.service';
 
 const bookingRouter = express.Router();
