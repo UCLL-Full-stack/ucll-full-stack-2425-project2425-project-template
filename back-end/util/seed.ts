@@ -13,7 +13,7 @@ const main = async () => {
     const trip1 = await prisma.trip.create({
         data: {
             description: "Beach Getaway",
-            location: "Malibu, CA",
+            destination: "Malibu, CA",
             startDate: new Date("2024-07-01"),
             endDate: new Date("2024-07-10"),
             price: 499.99,
@@ -23,7 +23,7 @@ const main = async () => {
     const trip2 = await prisma.trip.create({
         data: {
             description: "Mountain Hiking",
-            location: "Banff, Canada",
+            destination: "Banff, Canada",
             startDate: new Date("2024-08-15"),
             endDate: new Date("2024-08-22"),
             price: 799.99,

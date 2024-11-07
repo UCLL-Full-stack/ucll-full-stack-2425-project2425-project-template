@@ -17,7 +17,6 @@ type TripInput = {
     price: number;
     description: string;
     images: string;
-    location: string;
 }
 
 type BookingInput = {

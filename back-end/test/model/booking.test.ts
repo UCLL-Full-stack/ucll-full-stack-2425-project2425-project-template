@@ -1,13 +1,13 @@
-import { Booking } from '../../domain/model/booking';
-import { Trip } from '../../domain/model/trip';
-import { Student } from '../../domain/model/student';
+import { Booking } from '../../model/booking';
+import { Trip } from '../../model/trip';
+import { Student } from '../../model/student';
 import { PaymentStatus } from '@prisma/client';
 
 const bookingDate = new Date();
 const trip = new Trip({
     id: 1,
     description: 'Beach Adventure',
-    location: 'Hawaii',
+    destination: 'Hawaii',
     startDate: new Date('2023-12-01'),
     endDate: new Date('2023-12-10'),
     price: 1200,

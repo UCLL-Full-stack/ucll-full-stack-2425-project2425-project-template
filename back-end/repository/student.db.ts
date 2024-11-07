@@ -1,4 +1,4 @@
-import database from "../../util/database";
+import database from "../util/database";
 import { Student } from "../model/student";
 import { Booking } from "../model/booking";
 

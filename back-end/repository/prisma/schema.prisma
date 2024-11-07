@@ -25,7 +25,7 @@ model Student {
 model Trip {
   id            Int           @id @default(autoincrement())
   description   String
-  location      String
+  destination   String
   startDate     DateTime
   endDate       DateTime
   price         Float

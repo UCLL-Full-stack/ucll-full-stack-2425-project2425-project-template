@@ -1,7 +1,7 @@
-import database from "../../util/database";
 import { Review } from "../model/review";
 import { Trip } from "../model/trip";
 import { Student } from "../model/student";
+import database from "../util/database";
 
 const getAllReviews = async (): Promise<Review[]> => {
     const reviewsPrisma = await database.review.findMany({

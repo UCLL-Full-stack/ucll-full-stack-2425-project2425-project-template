@@ -1,9 +1,9 @@
 import { PaymentStatus } from "@prisma/client";
-import bookingDb from "../domain/data-access/booking.db";
-import tripDb from "../domain/data-access/trip.db";
-import { Booking } from "../domain/model/booking";
+import bookingDb from "../repository/booking.db";
+import tripDb from "../repository/trip.db";
+import { Booking } from "../model/booking";
 import { BookingInput } from "../types";
-import { Student } from "../domain/model/student";
+import { Student } from "../model/student";
 
 const createBooking = async (input: BookingInput): Promise<Booking> => {
     const { bookingDate, tripId, studentIds, paymentStatus } = input;

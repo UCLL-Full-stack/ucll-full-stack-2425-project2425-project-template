@@ -6,7 +6,7 @@ import {
 export class Trip {
     private id?: number; 
     private description: string;
-    private location: string;
+    private destination: string;
     private startDate: Date;
     private endDate: Date;
     private price: number;
@@ -14,14 +14,14 @@ export class Trip {
     constructor(trip: { 
         id?: number; 
         description: string; 
-        location: string; 
+        destination: string;
         startDate: Date; 
         endDate: Date; 
         price: number; 
     }) {
         this.id = trip.id;
         this.description = trip.description;
-        this.location = trip.location;
+        this.destination = trip.destination;
         this.startDate = trip.startDate;
         this.endDate = trip.endDate;
         this.price = trip.price;
@@ -32,10 +32,10 @@ export class Trip {
             throw new Error('Description is required.');
         }
 
-        if (!this.location || this.location.trim().length === 0) {
-            throw new Error('Location is required.');
+        if (!this.destination || this.destination.trim().length === 0) {
+            throw new Error('Destination is required.');
         }
-
+        
         if (!this.startDate) {
             throw new Error('Start date is required.');
         }
@@ -52,7 +52,7 @@ export class Trip {
     static from({
         id,
         description,
-        location,
+        destination,
         startDate,
         endDate,
         price
@@ -60,7 +60,7 @@ export class Trip {
         return new Trip({
             id: id ? Number(id) : undefined,
             description,
-            location,
+            destination,
             startDate,
             endDate,
             price

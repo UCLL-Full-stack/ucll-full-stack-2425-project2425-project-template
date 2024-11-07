@@ -6,7 +6,7 @@
     "license": "ISC",
     "main": "app.ts",
     "prisma": {
-        "schema": "domain/data-access/prisma/schema.prisma"
+        "schema": "repository/prisma/schema.prisma"
     },
     "scripts": {
         "test": "jest",

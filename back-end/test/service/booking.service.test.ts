@@ -1,8 +1,8 @@
 import bookingService from '../../service/booking.service';
-import bookingDb from '../../domain/data-access/booking.db';
-import { Booking } from '../../domain/model/booking';
-import { Trip } from '../../domain/model/trip';
-import { Student } from '../../domain/model/student'; 
+import bookingDb from '../../repository/booking.db';
+import { Booking } from '../../model/booking';
+import { Trip } from '../../model/trip';
+import { Student } from '../../model/student'; 
 import { PaymentStatus } from '@prisma/client'; 
 
 let mockBookingDbGetAllBookings: jest.Mock;
@@ -28,14 +28,14 @@ test('should return all bookings', async () => {
             bookingDate: new Date(), 
             paymentStatus: 'Paid', 
             students: [], 
-            trip: new Trip({ id: 1, description: 'Trip to Paris', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 }) 
+            trip: new Trip({ id: 1, description: 'Trip to Paris', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 }) 
         }),
         new Booking({ 
             id: 2, 
             bookingDate: new Date(), 
             paymentStatus: 'Pending', 
             students: [],
-            trip: new Trip({ id: 2, description: 'Trip to London', location: 'UK', startDate: new Date(), endDate: new Date(), price: 200 }) 
+            trip: new Trip({ id: 2, description: 'Trip to London', destination: 'UK', startDate: new Date(), endDate: new Date(), price: 200 }) 
         }),
     ];
 
@@ -52,7 +52,7 @@ test('should return all bookings', async () => {
 test('should return a booking by ID', async () => {
     // Given
     const bookingId = 1;
-    const mockTrip = new Trip({ id: 1, description: 'Trip to Paris', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 });
+    const mockTrip = new Trip({ id: 1, description: 'Trip to Paris', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 });
     const mockBooking: Booking = new Booking({ 
         id: bookingId, 
         bookingDate: new Date(), 

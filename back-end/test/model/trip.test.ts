@@ -1,8 +1,8 @@
-import { Trip } from '../../domain/model/trip';
+import { Trip } from '../../model/trip';
 
 const validTripData = {
     description: 'Mountain Adventure',
-    location: 'Himalayas',
+    destination: 'Himalayas',
     startDate: new Date('2023-10-01'),
     endDate: new Date('2023-10-15'),
     price: 2500,
@@ -15,7 +15,7 @@ describe('Trip Model', () => {
 
         // Then
         expect(trip['description']).toEqual(validTripData.description);
-        expect(trip['location']).toEqual(validTripData.location);
+        expect(trip['destination']).toEqual(validTripData.destination);
         expect(trip['startDate']).toEqual(validTripData.startDate);
         expect(trip['endDate']).toEqual(validTripData.endDate);
         expect(trip['price']).toEqual(validTripData.price);
@@ -29,12 +29,12 @@ describe('Trip Model', () => {
         expect(() => trip.validate()).toThrow('Description is required.');
     });
 
-    test('given: missing location, when: trip is validated, then: an error is thrown', () => {
+    test('given: missing destination, when: trip is validated, then: an error is thrown', () => {
         // Given
-        const trip = new Trip({ ...validTripData, location: '' } as any);
+        const trip = new Trip({ ...validTripData, destination: '' } as any);
 
         // Then
-        expect(() => trip.validate()).toThrow('Location is required.');
+        expect(() => trip.validate()).toThrow('Destination is required.');
     });
 
     test('given: missing start date, when: trip is validated, then: an error is thrown', () => {

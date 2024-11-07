@@ -1,11 +1,11 @@
-import { Review } from '../../domain/model/review';
-import { Trip } from '../../domain/model/trip';
-import { Student } from '../../domain/model/student';
+import { Review } from '../../model/review';
+import { Trip } from '../../model/trip';
+import { Student } from '../../model/student';
 
 const trip = new Trip({
     id: 1,
     description: 'Mountain Hiking',
-    location: 'Alps',
+    destination: 'Alps',
     startDate: new Date('2023-06-01'),
     endDate: new Date('2023-06-10'),
     price: 800,

@@ -1,6 +1,6 @@
 import { PaymentStatus } from '@prisma/client';
-import database from '../../util/database';
 import { Booking } from '../model/booking';
+import database from '../util/database';
 
 const getAllBookings = async (): Promise<Booking[]> => {
     const bookingsPrisma = await database.booking.findMany({

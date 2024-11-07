@@ -1,8 +1,8 @@
 import reviewService from '../../service/review.service';
-import reviewDb from '../../domain/data-access/review.db';
-import { Review } from '../../domain/model/review';
-import { Trip } from '../../domain/model/trip';
-import { Student } from '../../domain/model/student';
+import reviewDb from '../../repository/review.db';
+import { Review } from '../../model/review';
+import { Trip } from '../../model/trip';
+import { Student } from '../../model/student';
 import { PaymentStatus } from '@prisma/client'; 
 
 let mockReviewDbGetAllReviews: jest.Mock;
@@ -27,14 +27,14 @@ test('should return all reviews', async () => {
             id: 1, 
             comment: 'Amazing trip!', 
             rating: 5, 
-            trip: new Trip({ id: 1, description: 'Trip to Paris', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 }), 
+            trip: new Trip({ id: 1, description: 'Trip to Paris', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 }), 
             student: new Student({ id: 1, username: 'student1', email: 'student1@example.com', password: 'pass', studentNumber: '123456' }) 
         }),
         new Review({ 
             id: 2, 
             comment: 'Not worth the price.', 
             rating: 2, 
-            trip: new Trip({ id: 2, description: 'Trip to London', location: 'UK', startDate: new Date(), endDate: new Date(), price: 200 }),
+            trip: new Trip({ id: 2, description: 'Trip to London', destination: 'UK', startDate: new Date(), endDate: new Date(), price: 200 }),
             student: new Student({ id: 2, username: 'student2', email: 'student2@example.com', password: 'pass', studentNumber: '654321' }) 
         }),
     ];
@@ -56,7 +56,7 @@ test('should return a review by ID', async () => {
         id: reviewId, 
         comment: 'Amazing trip!', 
         rating: 5, 
-        trip: new Trip({ id: 1, description: 'Trip to Paris', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 }), 
+        trip: new Trip({ id: 1, description: 'Trip to Paris', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 }), 
         student: new Student({ id: 1, username: 'student1', email: 'student1@example.com', password: 'pass', studentNumber: '123456' }) 
     });
 

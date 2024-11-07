@@ -1,4 +1,4 @@
-import database from '../../util/database';
+import database from '../util/database';
 import { Trip } from '../model/trip';
 
 const getAllTrips = async (): Promise<Trip[]> => {
@@ -29,13 +29,13 @@ const getTripById = async (tripId: number): Promise<Trip | null> => {
 
 const createTrip = async ({
     description,
-    location,
+    destination,
     startDate,
     endDate,
     price,
 }: {
     description: string;
-    location: string;
+    destination: string;
     startDate: Date;
     endDate: Date;
     price: number;
@@ -43,7 +43,7 @@ const createTrip = async ({
     try {
         const trip = new Trip({
             description,
-            location,
+            destination,
             startDate,
             endDate,
             price,
@@ -54,7 +54,7 @@ const createTrip = async ({
         const tripPrisma = await database.trip.create({
             data: {
                 description,
-                location,
+                destination,
                 startDate,
                 endDate,
                 price,

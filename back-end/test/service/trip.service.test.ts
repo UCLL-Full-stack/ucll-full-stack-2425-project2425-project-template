@@ -1,7 +1,7 @@
 // trip.service.test.ts
 import tripService from '../../service/trip.service';
-import tripDb from '../../domain/data-access/trip.db';
-import { Trip } from '../../domain/model/trip';
+import tripDb from '../../repository/trip.db';
+import { Trip } from '../../model/trip';
 
 let mockTripDbGetAllTrips: jest.Mock;
 let mockTripDbGetTripById: jest.Mock;
@@ -21,8 +21,8 @@ afterEach(() => {
 test('should return all trips', async () => {
     // Given
     const mockTrips: Trip[] = [
-        new Trip({ id: 1, description: 'Visit the Eiffel Tower', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 }),
-        new Trip({ id: 2, description: 'Explore the British Museum', location: 'UK', startDate: new Date(), endDate: new Date(), price: 150 }),
+        new Trip({ id: 1, description: 'Visit the Eiffel Tower', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 }),
+        new Trip({ id: 2, description: 'Explore the British Museum', destination: 'UK', startDate: new Date(), endDate: new Date(), price: 150 }),
     ];
 
     mockTripDbGetAllTrips.mockResolvedValue(mockTrips);
@@ -38,7 +38,7 @@ test('should return all trips', async () => {
 test('should return a trip by ID', async () => {
     // Given
     const tripId = 1;
-    const mockTrip: Trip = new Trip({ id: tripId, description: 'Visit the Eiffel Tower', location: 'France', startDate: new Date(), endDate: new Date(), price: 100 });
+    const mockTrip: Trip = new Trip({ id: tripId, description: 'Visit the Eiffel Tower', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 });
 
     mockTripDbGetTripById.mockResolvedValue(mockTrip);
 

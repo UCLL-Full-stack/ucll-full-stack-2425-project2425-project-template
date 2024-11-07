@@ -1,11 +1,11 @@
-import { Student } from '../../domain/model/student';
-import { Booking } from '../../domain/model/booking';
-import { Trip } from '../../domain/model/trip';
+import { Student } from '../../model/student';
+import { Booking } from '../../model/booking';
+import { Trip } from '../../model/trip';
 
 const trip = new Trip({
     id: 1,
     description: 'Beach Vacation',
-    location: 'Maldives',
+    destination: 'Maldives',
     startDate: new Date('2023-07-01'),
     endDate: new Date('2023-07-10'),
     price: 1200,

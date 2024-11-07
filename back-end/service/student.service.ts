@@ -1,5 +1,5 @@
-import studentDb from "../domain/data-access/student.db";
-import { Student } from "../domain/model/student";
+import studentDb from "../repository/student.db";
+import { Student } from "../model/student";
 import { StudentInput } from "../types";
 
 const createStudent = async (input: StudentInput): Promise<Student> => {

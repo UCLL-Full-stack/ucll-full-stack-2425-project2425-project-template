@@ -1,18 +1,18 @@
-import tripDb from "../domain/data-access/trip.db";
-import { Trip } from "../domain/model/trip";
+import tripDb from "../repository/trip.db";
+import { Trip } from "../model/trip";
 import { TripInput } from "../types";
 
 const createTrip = async (input: TripInput): Promise<Trip> => {
-    const { description, location, startDate, endDate, price, destination } = input;
+    const { description, startDate, endDate, price, destination } = input;
 
     if (!description || description.trim().length === 0) {
         throw new Error("Description is required.");
     }
 
-    if (!location || location.trim().length === 0) {
-        throw new Error("Location is required.");
-    }
 
+    if (!destination || destination.trim().length === 0) {
+        throw new Error("Destination is required.");
+    }
     if (!startDate) {
         throw new Error("Start date is required.");
     }
@@ -25,13 +25,13 @@ const createTrip = async (input: TripInput): Promise<Trip> => {
         throw new Error("Price must be a positive number.");
     }
 
-    const newTrip = new Trip({ description, location, startDate, endDate, price, });
+    const newTrip = new Trip({ description, destination, startDate, endDate, price, });
     newTrip.validate();
 
     try {
         return await tripDb.createTrip({
             description,
-            location,
+            destination,
             startDate,
             endDate,
             price,

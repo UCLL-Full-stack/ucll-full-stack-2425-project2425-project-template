@@ -1,7 +1,7 @@
-import reviewDb from "../domain/data-access/review.db";
-import tripDb from "../domain/data-access/trip.db";
-import studentDb from "../domain/data-access/student.db";
-import { Review } from "../domain/model/review";
+import reviewDb from "../repository/review.db";
+import tripDb from "../repository/trip.db";
+import studentDb from "../repository/student.db";
+import { Review } from "../model/review";
 import { ReviewInput } from "../types";
 
 const createReview = async (input: ReviewInput): Promise<Review> => {

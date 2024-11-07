@@ -1,6 +1,6 @@
 import studentService from '../../service/student.service';
-import studentDb from '../../domain/data-access/student.db';
-import { Student } from '../../domain/model/student';
+import studentDb from '../../repository/student.db';
+import { Student } from '../../model/student';
 
 let mockStudentDbCreateStudent: jest.Mock;
 let mockStudentDbGetStudentById: jest.Mock;
