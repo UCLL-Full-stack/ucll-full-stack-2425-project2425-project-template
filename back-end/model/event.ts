@@ -3,6 +3,7 @@ import { Participant } from "./participant";
 import {
     Event as EventPrisma,
     // Participant as ParticipantPrisma,
+    // User as UserPrisma,
 } from '@prisma/client';
 
 
@@ -131,8 +132,8 @@ export class Event {
             location,
             category,
             backgroundImage,
-            // participants: participants.map((participant) => Participant.from(participant)),
-            isTrending
+            // participants: participants.map((participant) => Participant.from(participant.id, participant.user)),
+            isTrending,
         })
     }
 

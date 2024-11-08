@@ -8,7 +8,7 @@ type EventInput = {
     location: string,
     category: string,
     backgroundImage?: string,
-    // participants: ParticipantInput[],
+    participants: ParticipantInput[],
     isTrending: boolean,
 };
 
@@ -32,6 +32,7 @@ type OrganizerInput = {
 type ParticipantInput = {
     id?: number,
     user: UserInput,
+    events: EventInput[],
 };
 
 type InviteInput = {
