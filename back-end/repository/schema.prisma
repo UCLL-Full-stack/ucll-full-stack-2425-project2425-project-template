@@ -19,13 +19,6 @@ model Event {
     isTrending  Boolean
 }
 
-model Participant {
-    id      Int     @id @default(autoincrement())
-    userId  Int     @unique
-    user    User    @relation(fields: [userId], references: [id])
-    events  Event[]
-}
-
 model User {
     id      Int         @id @default(autoincrement())
     username    String  @unique
@@ -33,11 +26,6 @@ model User {
     email       String  @unique
     password    String
     age         Int
-    role        Role
     participant Participant?
-}
-
-enum Role {
-    participant
-    organizer
+    role        Role
 }

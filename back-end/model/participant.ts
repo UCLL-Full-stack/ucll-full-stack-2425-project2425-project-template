@@ -15,15 +15,15 @@ export class Participant {
     constructor(participant: {
         id?: number,
         user: User,
-        // events?: Event[];
+        // // events?: Event[];
         events: Event[];
     }) {
         this.user = participant.user;
-        if (participant.events){
-            this.events = participant.events;
-        } else {
-            this.events = [];
-        }
+        // if (participant.events){
+        this.events = participant.events;
+        // } else {
+        //     this.events = [];
+        // }
     }
 
     addEvent(event: Event) {
@@ -52,7 +52,10 @@ export class Participant {
         id,
         user,
         events,
-    }: ParticipantPrisma & {user: UserPrisma; events: EventPrisma[]}) {
+    }: ParticipantPrisma & {
+        user: UserPrisma, 
+        events: EventPrisma[]
+    }) {
         return new Participant({
             id,
             user: User.from(user),

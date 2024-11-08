@@ -218,10 +218,8 @@ import database from './database';
 
 const getAllEvents = async (): Promise<Event[]> => {
     try {
-        const eventsPrisma = await database.event.findMany({
-            include: { user: true, participant: true },
-        });
-        return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma))
+        const eventsPrisma = await database.event.findMany();
+        return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma));
     }
     catch (error) {
         console.error(error);

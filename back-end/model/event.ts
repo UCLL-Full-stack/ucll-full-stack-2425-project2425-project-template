@@ -2,7 +2,7 @@ import { Participant } from "./participant";
 
 import {
     Event as EventPrisma,
-    Participant as ParticipantPrisma,
+    // Participant as ParticipantPrisma,
 } from '@prisma/client';
 
 
@@ -14,7 +14,7 @@ export class Event {
     private location: string;
     private category: string;
     private backgroundImage?: string;
-    private participants: Participant[];
+    // private participants: Participant[];
     private isTrending: boolean;
 
     constructor(event: {
@@ -25,7 +25,7 @@ export class Event {
         location: string,
         category: string;
         backgroundImage?: string;
-        participants: Participant[];
+        // participants: Participant[];
         isTrending: boolean;
     }) {
         // Validate the date
@@ -53,7 +53,7 @@ export class Event {
         this.location = event.location;
         this.category = event.category;
         this.backgroundImage = event.backgroundImage;
-        this.participants = event.participants;
+        // this.participants = event.participants;
         this.isTrending = event.isTrending;
     }
 
@@ -61,13 +61,13 @@ export class Event {
         return this.isTrending;
     }
 
-    addParticipant(participant: Participant): void {
-        this.participants.push(participant);
-    }
+    // addParticipant(participant: Participant): void {
+    //     this.participants.push(participant);
+    // }
 
-    getParticipants(): Participant[] {
-        return this.participants;
-    }
+    // getParticipants(): Participant[] {
+    //     return this.participants;
+    // }
 
     getId(): number | undefined {
         if (this.id === undefined) {
@@ -120,9 +120,9 @@ export class Event {
         location,
         category,
         backgroundImage,
-        participants,
+        // participants,
         isTrending,
-    }: EventPrisma & { participant: ParticipantPrisma}) {
+    }: EventPrisma) {
         return new Event({
             id,
             name,
@@ -131,7 +131,7 @@ export class Event {
             location,
             category,
             backgroundImage,
-            participants: participants.map((participant) => Participant.from(participant)),
+            // participants: participants.map((participant) => Participant.from(participant)),
             isTrending
         })
     }

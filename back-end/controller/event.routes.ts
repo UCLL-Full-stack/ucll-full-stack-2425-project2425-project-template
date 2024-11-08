@@ -59,7 +59,7 @@ const eventRouter = express.Router();
  */
 eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const events = eventService.getAllEvents();
+        const events = await eventService.getAllEvents();
         res.status(200).json(events);
     } catch (error) {
         res.status(400).json({ status: 'error' });
@@ -91,19 +91,19 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  *       400:
  *         description: Error occurred while fetching the event.
  */
-eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    const id = parseInt(req.params.id, 10);
+// eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+//     const id = parseInt(req.params.id, 10);
 
-    try {
-        const event = eventService.getEventById(id);
-        if (!event) {
-            return res.status(404).json({ message: `Event with id ${id} does not exist.` });
-        }
-        res.status(200).json(event);
-    } catch (error) {
-        res.status(400).json({ status: 'error', message: 'Could not fetch event.' });
-    }
-});
+//     try {
+//         const event = eventService.getEventById(id);
+//         if (!event) {
+//             return res.status(404).json({ message: `Event with id ${id} does not exist.` });
+//         }
+//         res.status(200).json(event);
+//     } catch (error) {
+//         res.status(400).json({ status: 'error', message: 'Could not fetch event.' });
+//     }
+// });
 
 /**
  * @swagger
@@ -130,19 +130,19 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
  *         description: Error adding participant.
  */
 
-eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
-    const eventId = parseInt(req.params.id, 10);
-    const email = req.params.email;
+// eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
+//     const eventId = parseInt(req.params.id, 10);
+//     const email = req.params.email;
 
-    try {
-        eventService.addParticipantToEvent(email, eventId);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ status: 'error', message: error.message });
-        } else {
-            res.status(400).json({ status: 'error', message: 'Unknown error' });
-        }
-    }
-});
+//     try {
+//         eventService.addParticipantToEvent(email, eventId);
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             res.status(400).json({ status: 'error', message: error.message });
+//         } else {
+//             res.status(400).json({ status: 'error', message: 'Unknown error' });
+//         }
+//     }
+// });
 
 export { eventRouter };
