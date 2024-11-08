@@ -7,7 +7,7 @@ import styles from '@styles/home.module.css';
 import { EventInput } from "types";
 
 const UpcomingEvents: React.FC = () => {    
-    const [events, setEvents] = useState<Array<Event>>();
+    const [otherEvents, setOtherEvents] = useState<Array<Event>>();
     const [trendingEvents, setTrendingEvents] = useState<Array<Event>>();
 
     useEffect(() => {
@@ -21,13 +21,11 @@ const UpcomingEvents: React.FC = () => {
         // Sort events by date
         const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-        const tempEvents = sortedEvents.filter((e: EventInput) => !e.isTrending);
+        const tempOtherEvents = sortedEvents.filter((e: EventInput) => !e.isTrending);
         const tempTrendingEvents = sortedEvents.filter((e: EventInput) => e.isTrending);
 
-        setEvents(tempEvents);
+        setOtherEvents(tempOtherEvents);
         setTrendingEvents(tempTrendingEvents);
-
-        setEvents(events);
     };
 
     return (
@@ -41,9 +39,9 @@ const UpcomingEvents: React.FC = () => {
             <Header />
             <main className={styles.upcomingEventsMain}>
                 <h1>Top Trending Events</h1>
-                {events && <EventOverview events={events} />}
-                <h1>Other events that you might like</h1>
                 {trendingEvents && <EventOverview events={trendingEvents} />}
+                <h1>Other events that you might like</h1>
+                {otherEvents && <EventOverview events={otherEvents} />}
             </main>
         </>
     );
