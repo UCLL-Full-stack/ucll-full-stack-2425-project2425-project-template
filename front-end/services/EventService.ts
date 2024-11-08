@@ -34,8 +34,8 @@ const addParticipantToEvent = async (email: string, eventId: string) => {
   return response.json();
 };
 
-const getEventsByParticipantEmail = async (email: string) => {
-  const response = await fetch(apiUrl + `/participants/${email}`, {
+const getEventsByUserEmail = async (email: string) => {
+  const response = await fetch(apiUrl + `/users/${email}`, {
     method: "GET",
     headers: {
         "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const EventService = {
   getAll,
   getEventById,
   addParticipantToEvent,
-  getEventsByParticipantEmail,
+  getEventsByUserEmail,
 }
 
 export default EventService;

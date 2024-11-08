@@ -13,11 +13,11 @@ const MyEvents: React.FC = () => {
     const [showForm, setShowForm] = useState(true);
 
     // useEffect(() => {
-    //     getEventsByParticipantEmail();
+    //     getEventsByUserEmail();
     // }, [myEvents]);
 
-    const getEventsByParticipantEmail = async () => {
-        const events = await EventService.getEventsByParticipantEmail(email);
+    const getEventsByUserEmail = async () => {
+        const events = await EventService.getEventsByUserEmail(email);
         // const events = await response.json();
 
         const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -27,7 +27,7 @@ const MyEvents: React.FC = () => {
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setShowForm(false);
-        getEventsByParticipantEmail();
+        getEventsByUserEmail();
     };
 
     return (

@@ -1,19 +1,4 @@
-export type EventInput = {
-    id?: number,
-    name: string,
-    description: string,
-    date: Date;
-    location: string,
-    category: string,
-    backgroundImage?: string,
-    participants: ParticipantInput[],
-    isTrending: boolean,
-};
-
-export type ParticipantInput = {
-    id?: number,
-    user: UserInput,
-};
+export type Role = 'PARTICIPANT' | 'ORGANIZER';
 
 export type UserInput = {
     id?: number,
@@ -25,4 +10,14 @@ export type UserInput = {
     role: Role,
 };
 
-export type Role = 'participant' | 'organizer';
+export type EventInput = {
+    id?: number,
+    name: string,
+    description: string,
+    date: Date;
+    location: string,
+    category: string,
+    backgroundImage?: string,
+    users: UserInput[],
+    isTrending: boolean,
+};

@@ -25,6 +25,7 @@ const RenderEventDetailsById: React.FC = () => {
         try {
             const response = await EventService.getEventById(eventId as string);
             const event = await response.json();
+
             setEvent(event);
         } catch (error) {
             console.error("Failed to fetch event:", error);
@@ -41,7 +42,6 @@ const RenderEventDetailsById: React.FC = () => {
             const eventRes = await response.json();
             setEvent(eventRes);
         } catch (error) {
-            console.log(1);
             if (error instanceof Error) {
                 setErrorMessage(error.message);
             } else {

@@ -18,16 +18,14 @@ const UpcomingEvents: React.FC = () => {
         const response = await EventService.getAll();
         const events = await response.json();
 
-        console.log(events);
-
         // Sort events by date
-        // const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-        // const tempEvents = sortedEvents.filter((e: EventInput) => !e.isTrending);
-        // const tempTrendingEvents = sortedEvents.filter((e: EventInput) => e.isTrending);
+        const tempEvents = sortedEvents.filter((e: EventInput) => !e.isTrending);
+        const tempTrendingEvents = sortedEvents.filter((e: EventInput) => e.isTrending);
 
-        // setEvents(tempEvents);
-        // setTrendingEvents(tempTrendingEvents);
+        setEvents(tempEvents);
+        setTrendingEvents(tempTrendingEvents);
 
         setEvents(events);
     };
