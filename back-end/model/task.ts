@@ -1,6 +1,6 @@
 import { Column } from "./column";
 import { User } from "./user";
-import { Task as TaskPrisma } from "@prisma/client";
+import { Task as TaskPrisma, Column as ColumnPrisma } from "@prisma/client";
 
 export class Task {
     private taskId: string;
@@ -8,19 +8,19 @@ export class Task {
     private description: string;
     private dueDate: Date;
     private assignees: User[] = [];
-    private column: Column;
+    private columnId: string;
   
-    constructor(taskId: string, title: string, description: string, dueDate: Date, column: Column) {
+    constructor(taskId: string, title: string, description: string, dueDate: Date, column: string) {
       this.taskId = taskId;
       this.title = title;
       this.description = description;
       this.dueDate = dueDate;
-      this.column = column;
+      this.columnId = column;
     }
 
-    static from({ taskId, title, description, dueDate, column, assignees }: TaskPrisma & { column: Column, assignees: User[] }): Task {
-        return new Task(taskId, title, description, dueDate, Column.from(column));
-      }
+    static from({ taskId, title, description, dueDate, columnId }: TaskPrisma): Task {
+        return new Task(taskId, title, description, dueDate, columnId);
+    }
   
     getTaskId(): string {
       return this.taskId;
@@ -58,12 +58,12 @@ export class Task {
       return this.assignees;
     }
   
-    setColumn(column: Column): void {
-      this.column = column;
+    setColumnId(columnId: string): void {
+      this.columnId = columnId;
     }
   
-    getColumn(): Column {
-      return this.column;
+    getColumnId(): string {
+      return this.columnId;
     }
   }
   

@@ -100,7 +100,7 @@ const Home: FC = () => {
           </Head>
           <Header onCreateClick={handleCreateClick} onLoginClick={handleDiscordLogin}></Header>
           <main className="flex-grow">
-          <div className="p-4">
+            <div className="p-4">
                 {loading ? (
                     <p>Loading guilds...</p>
                 ) : (
@@ -125,8 +125,7 @@ const Home: FC = () => {
                       </div>
                 </div>
             )}
-          </main>
-          <CreateBoardForm 
+            <CreateBoardForm 
                 isOpen={isFormOpen} 
                 onClose={handleFormClose} 
                 onSubmit={handleFormSubmit} 
@@ -134,6 +133,7 @@ const Home: FC = () => {
                 user={user!}
                 guilds={guilds}
             />
+          </main>
       </div>
   );
 };

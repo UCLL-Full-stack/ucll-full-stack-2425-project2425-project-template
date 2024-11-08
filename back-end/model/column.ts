@@ -1,23 +1,24 @@
+import { PermissionEntry } from "../types";
 import { Board } from "./board";
 import { Task } from "./task";
-import { Column as ColumnPrisma } from "@prisma/client";
+import { Column as ColumnPrisma, Board as BoardPrisma } from "@prisma/client";
 
 export class Column {
     private columnId: string;
     private columnName: string;
     private columnIndex: number;
     private tasks: Task[] = [];
-    private board: Board;
+    private boardId: string;
   
-    constructor(columnId: string, columnName: string, columnIndex: number, board: Board) {
+    constructor(columnId: string, columnName: string, columnIndex: number, board: string) {
       this.columnId = columnId;
       this.columnName = columnName;
       this.columnIndex = columnIndex;
-      this.board = board;
+      this.boardId = board;
     }
   
-    static from({ columnId, columnName, columnIndex, board }: ColumnPrisma & { board: Board }): Column {
-        return new Column(columnId, columnName, columnIndex, Board.from(board));
+    static from({ columnId, columnName, columnIndex, boardId }: ColumnPrisma): Column {
+        return new Column(columnId, columnName, columnIndex, boardId);
     }
 
     getColumnId(): string {
@@ -48,12 +49,12 @@ export class Column {
       return this.tasks;
     }
   
-    setBoard(board: Board): void {
-      this.board = board;
+    setBoardId(boardId: string): void {
+      this.boardId = boardId;
     }
   
-    getBoard(): Board {
-      return this.board;
+    getBoardId(): string {
+      return this.boardId;
     }
   }
   

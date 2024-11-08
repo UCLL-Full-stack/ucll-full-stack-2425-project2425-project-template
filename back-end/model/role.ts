@@ -1,22 +1,22 @@
-import { DiscordPermission } from "../types";
+import { DiscordPermission, Member, PermissionEntry } from "../types";
 import { Guild } from "./guild";
-import { Role as RolePrisma } from "@prisma/client";
+import { Role as RolePrisma, Guild as GuildPrisma } from "@prisma/client";
 
 export class Role {
     private roleId: string;
     private roleName: string;
     private permissions: DiscordPermission[];
-    private guild: Guild;
+    private guildId: string;
   
-    constructor(roleId: string, roleName: string, permissions: DiscordPermission[], guild: Guild) {
+    constructor(roleId: string, roleName: string, permissions: DiscordPermission[], guild: string) {
       this.roleId = roleId;
       this.roleName = roleName;
       this.permissions = permissions;
-      this.guild = guild;
+      this.guildId = guild;
     }
 
-    static from({ roleId, roleName, permissions, guild }: RolePrisma & { guild: Guild }): Role {
-        return new Role(roleId, roleName, permissions ? permissions as DiscordPermission[] : [], guild);
+    static from({ roleId, roleName, permissions, guildId }: RolePrisma): Role {
+        return new Role(roleId, roleName, permissions ? permissions as DiscordPermission[] : [], guildId);
     }
   
     getRoleId(): string {
@@ -39,12 +39,12 @@ export class Role {
       return this.permissions;
     }
   
-    setGuild(guild: Guild): void {
-      this.guild = guild;
+    setGuildId(guildId: string): void {
+      this.guildId = guildId;
     }
   
-    getGuild(): Guild {
-      return this.guild;
+    getGuildId(): string {
+      return this.guildId;
     }
   }
   

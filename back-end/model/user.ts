@@ -16,7 +16,7 @@ export class User {
     }
 
     static from({ userId, username, globalName, userAvatar }: UserPrisma): User {
-        return new User(userId, username, globalName, userAvatar);
+      return new User(userId, username, globalName, userAvatar);
     }
   
     getUserId(): string {
