@@ -87,7 +87,7 @@ export class User {
             email,
             password,
             age,
-            role,
+            role: role as Role,
         });
     }
 

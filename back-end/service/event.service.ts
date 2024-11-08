@@ -1,31 +1,6 @@
 import { Event } from "../model/event";
 import eventDb from "../repository/event.db";
-import { EventInput } from "../types";
-import participantService from "./participant.service";
-
-
-//added 31/10
-// const createEvent = (eventInput: EventInput): Event => {
-//     if (!eventInput.name) throw new Error('Event name is required');
-//     if (!eventInput.description) throw new Error('Event description is required');
-//     if (!eventInput.date) throw new Error('Event date is required');
-//     if (!eventInput.location) throw new Error('Event location is required');
-//     if (!eventInput.category) throw new Error('Event category is required');
-
-//     // Validate the date
-//     if (isNaN(eventInput.date.getTime())) {
-//         throw new Error('Invalid event date');
-//     }
-
-//     const existingEvent = eventDb.getAllEvents().find(event => event.getName() === eventInput.name && event.getDate().getTime() === eventInput.date.getTime());
-
-//     if (existingEvent) {
-//         throw new Error('The event already exists.');
-//     }
-
-//     const event = new Event(eventInput);
-//     return eventDb.createEvent(event);
-// };
+import userService from "./user.service";
 
 //Function to get all the events
 const getAllEvents = async (): Promise<Event[]> => {
@@ -33,56 +8,39 @@ const getAllEvents = async (): Promise<Event[]> => {
 };
 
 //To get the events by their id:
-// const getEventById = (id: number): Event => {
-//     const event = eventDb.getEventById({ id });
-//     if (!event){
-//         throw new Error(`Event with id ${id} does not exist.`)
-//     }
-//     return event;
-// };
+const getEventById = async (id: number): Promise<Event> => {
+    const event = await eventDb.getEventById(id);
+    if (!event) {
+        throw new Error('Event not found');
+    }
+    return event;
+};
 
-// const addParticipantToEvent = (email: string, eventId: number): void => {
-//     try {
-//         const participant = participantService.getParticipantByEmail(email);
-//         eventDb.addParticipantToEvent(participant, eventId);
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             throw new Error(error.message);
-//         } else {
-//             throw new Error('An unknown error occurred');
-//         }
-//     }
-// };
+const addParticipantToEvent = (email: string, eventId: number): void => {
+    try {
+        eventDb.addParticipantToEvent(email, eventId);
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error('An unknown error occurred');
+        }
+    }
+};
 
-// const getEventsByParticipantEmail = (email: string): Event[] => {
-//     const tempEvents = [] as Event[];
-//     try {
-//         const participant = participantService.getParticipantByEmail(email);
-//         if (!participant){
-//             throw new Error("This participant is not found.");
-//         }
-        
-//         getAllEvents().forEach(e => {
-//             e.getParticipants().forEach(p => {
-//                 if (p.getUser().getEmail() === email){
-//                     tempEvents.push(e);
-//                 }
-//             });
-//         });
-//     } catch (error){
-//         if (error instanceof Error) {
-//             throw new Error(error.message);
-//         } else {
-//             throw new Error('An unknown error occurred');
-//         }
-//     }
-//     return tempEvents;
-// }
+const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
+    try {
+        return eventDb.getEventsByUserEmail(email);
+    } catch(error){
+        throw new Error('An unknown error occurred');
+    }
+};
 
 export default { 
     // createEvent, 
     getAllEvents, 
-    // getEventById,
-    // addParticipantToEvent,
+    getEventById,
+    addParticipantToEvent,
     // getEventsByParticipantEmail,
+    getEventsByUserEmail
 };

@@ -1,124 +1,90 @@
 // Execute: npx ts-node util/seed.ts
 
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
-import { set } from 'date-fns';
 
 const prisma = new PrismaClient();
 
 
 const main = async () => {
     await prisma.event.deleteMany();
-    await prisma.participant.deleteMany();
     await prisma.user.deleteMany();
 
-    const participantJohn = await prisma.participant.create({
+    const john = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'john_doe',
-                    name: 'John Doe',
-                    email: 'john.doe@ucll.be',
-                    password: 'passwordJohn',
-                    age: 26,
-                    role: 'participant',
-                }
-            }
+            username: 'john_doe',
+            name: 'John Doe',
+            email: 'john.doe@ucll.be',
+            password: 'passwordJohn',
+            age: 26,
+            role: 'PARTICIPANT',
         }
     });
 
-    const participantJane = await prisma.participant.create({
+    const jane = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'jane_doe',
-                    name: 'Jane Doe',
-                    email: 'jane.doe@ucll.be',
-                    password: 'passwordJane',
-                    age: 30,
-                    role: 'participant',
-                }
-            }
+            username: 'jane_doe',
+            name: 'Jane Doe',
+            email: 'jane.doe@ucll.be',
+            password: 'passwordJane',
+            age: 30,
+            role: 'PARTICIPANT',
         }
     });
 
-    const participantAlice = await prisma.participant.create({
+    const alice = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'alice_smith',
-                    name: 'Alice Smith',
-                    email: 'alice.smith@ucll.be',
-                    password: 'passwordAlice',
-                    age: 24,
-                    role: 'participant',
-                }
-            }
+            username: 'alice_smith',
+            name: 'Alice Smith',
+            email: 'alice.smith@ucll.be',
+            password: 'passwordAlice',
+            age: 24,
+            role: 'PARTICIPANT',
         }
     });
-
-    const participantBob = await prisma.participant.create({
+    
+    const bob = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'bob_brown',
-                    name: 'Bob Brown',
-                    email: 'bob.brown@ucll.be',
-                    password: 'passwordBob',
-                    age: 29,
-                    role: 'participant',
-                }
-            }
+            username: 'bob_brown',
+            name: 'Bob Brown',
+            email: 'bob.brown@ucll.be',
+            password: 'passwordBob',
+            age: 29,
+            role: 'PARTICIPANT',
         }
     });
-
-    const participantCharlie = await prisma.participant.create({
+    
+    const charlie = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'charlie_miller',
-                    name: 'Charlie Miller',
-                    email: 'charlie.miller@ucll.be',
-                    password: 'passwordCharlie',
-                    age: 22,
-                    role: 'participant',
-                }
-            }
+            username: 'charlie_miller',
+            name: 'Charlie Miller',
+            email: 'charlie.miller@ucll.be',
+            password: 'passwordCharlie',
+            age: 22,
+            role: 'PARTICIPANT',
         }
     });
-
-    const participantDiana = await prisma.participant.create({
+    
+    const diana = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'diana_jones',
-                    name: 'Diana Jones',
-                    email: 'diana.jones@ucll.be',
-                    password: 'passwordDiana',
-                    age: 27,
-                    role: 'participant',
-                }
-            }
+            username: 'diana_jones',
+            name: 'Diana Jones',
+            email: 'diana.jones@ucll.be',
+            password: 'passwordDiana',
+            age: 27,
+            role: 'PARTICIPANT',
         }
     });
-
-    const participantEve = await prisma.participant.create({
+    
+    const eve = await prisma.user.create({
         data: {
-            user: {
-                create: {
-                    username: 'eve_white',
-                    name: 'Eve White',
-                    email: 'eve.white@ucll.be',
-                    password: 'passwordEve',
-                    age: 25,
-                    role: 'participant',
-                }
-            }
+            username: 'eve_white',
+            name: 'Eve White',
+            email: 'eve.white@ucll.be',
+            password: 'passwordEve',
+            age: 25,
+            role: 'PARTICIPANT',
         }
     });
-
-
-
 
     const taylorswiftconcert = await prisma.event.create({
         data: {
@@ -128,8 +94,8 @@ const main = async () => {
             location: 'Amsterdam',
             category: 'Concert',
             backgroundImage: '/images/taylor-swift-concert.jpg',
-            participants:{
-                connect: [{id: participantJohn.id}, {id: participantJane.id}]
+            users:{
+                connect: [{id: john.id}, {id: jane.id}]
             },
             isTrending: true,
         }
@@ -143,9 +109,9 @@ const main = async () => {
             location: 'Brussels',
             category: 'Birthday Celebration',
             backgroundImage: '/images/chris-birthday-party.jpg',
-            participants: {
+            users: {
                 connect: [
-                    { id: participantAlice.id }
+                    { id: alice.id }
                 ]
             },
             isTrending: true,
@@ -161,7 +127,7 @@ const main = async () => {
             location: 'Paris',
             category: 'Culinary Festival',
             backgroundImage: '/images/food-festival.jpg',
-            participants: {},
+            users: {},
             isTrending: false,
         }
     });
@@ -175,11 +141,11 @@ const main = async () => {
             location: 'Berlin',
             category: 'Company Networking Exchange',
             backgroundImage: '/images/company-networking-night.jpg',
-            participants: {
+            users: {
                 connect: [
-                    { id: participantBob.id },
-                    { id: participantCharlie.id },
-                    { id: participantEve.id }
+                    { id: bob.id },
+                    { id: charlie.id },
+                    { id: eve.id }
                 ]
             },
             isTrending: true,
@@ -195,7 +161,7 @@ const main = async () => {
             location: 'London',
             category: 'Art Exhibition',
             backgroundImage: '/images/art-exhibition.jpg',
-            participants: {},
+            users: {},
             isTrending: false,
         }
     });
@@ -208,7 +174,7 @@ const main = async () => {
             location: 'Barcelona',
             category: 'Mindfulness',
             backgroundImage: '/images/yoga-workshop.jpg',
-            participants: {},
+            users: {},
             isTrending: false,
         }
     });
@@ -222,7 +188,7 @@ const main = async () => {
             location: 'Dublin',
             category: 'Entrepreneurship',
             backgroundImage: '/images/startup-pitch-competition.jpg',
-            participants: {},
+            users: {},
             isTrending: false,
         }
     });
@@ -235,7 +201,7 @@ const main = async () => {
             location: 'Rome',
             category: 'Sommelier Events',
             backgroundImage: '/images/wine-tasting-evening.jpg',
-            participants: {},
+            users: {},
             isTrending: false,
         }
     });

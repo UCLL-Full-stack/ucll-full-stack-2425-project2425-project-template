@@ -5,7 +5,8 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { eventRouter } from './controller/event.routes';
-import { participantRouter } from './controller/participant.routes';
+// import { participantRouter } from './controller/participant.routes';
+import { userRouter } from './controller/user.routes';
 
 
 const app = express();
@@ -39,7 +40,7 @@ app.get('/status', (req: Request, res: Response) => {
 
 
 app.use('/events', eventRouter);
-app.use('/participants', participantRouter);
+app.use('/users', userRouter);
 
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

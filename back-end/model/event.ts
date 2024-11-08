@@ -1,10 +1,9 @@
-import { Participant } from "./participant";
-
 import {
     Event as EventPrisma,
-    // Participant as ParticipantPrisma,
-    // User as UserPrisma,
+    // user as userPrisma,
+    User as UserPrisma,
 } from '@prisma/client';
+import { User } from './user';
 
 
 export class Event {
@@ -15,7 +14,7 @@ export class Event {
     private location: string;
     private category: string;
     private backgroundImage?: string;
-    // private participants: Participant[];
+    private users: User[];
     private isTrending: boolean;
 
     constructor(event: {
@@ -26,7 +25,7 @@ export class Event {
         location: string,
         category: string;
         backgroundImage?: string;
-        // participants: Participant[];
+        users: User[];
         isTrending: boolean;
     }) {
         // Validate the date
@@ -54,7 +53,7 @@ export class Event {
         this.location = event.location;
         this.category = event.category;
         this.backgroundImage = event.backgroundImage;
-        // this.participants = event.participants;
+        this.users = event.users;
         this.isTrending = event.isTrending;
     }
 
@@ -62,13 +61,17 @@ export class Event {
         return this.isTrending;
     }
 
-    // addParticipant(participant: Participant): void {
-    //     this.participants.push(participant);
-    // }
+    setUsers(users: User[]): void {
+        this.users = users;
+    }
 
-    // getParticipants(): Participant[] {
-    //     return this.participants;
-    // }
+    addUser(user: User): void {
+        this.users.push(user);
+    }
+
+    getUsers(): User[] {
+        return this.users;
+    }
 
     getId(): number | undefined {
         if (this.id === undefined) {
@@ -101,8 +104,6 @@ export class Event {
         return this.backgroundImage;
     }
 
-
-
     equals(event: Event): boolean {
         return (
             this.name === event.getName() &&
@@ -121,9 +122,9 @@ export class Event {
         location,
         category,
         backgroundImage,
-        // participants,
+        users,
         isTrending,
-    }: EventPrisma) {
+    }: EventPrisma & { users: UserPrisma[] }) {
         return new Event({
             id,
             name,
@@ -132,7 +133,7 @@ export class Event {
             location,
             category,
             backgroundImage,
-            // participants: participants.map((participant) => Participant.from(participant.id, participant.user)),
+            users: users.map((user) => User.from(user)),
             isTrending,
         })
     }

@@ -1,17 +1,5 @@
 type Role = 'participant' | 'organizer';
 
-type EventInput = {
-    id?: number,
-    name: string,
-    description: string,
-    date: Date;
-    location: string,
-    category: string,
-    backgroundImage?: string,
-    participants: ParticipantInput[],
-    isTrending: boolean,
-};
-
 type UserInput = {
     id?: number,
     username: string,
@@ -22,18 +10,30 @@ type UserInput = {
     role: Role,
 };
 
-type OrganizerInput = {
+// type ParticipantInput = {
+//     id?: number,
+//     user: UserInput,
+//     events: EventInput[],
+// };
+
+type EventInput = {
     id?: number,
-    user: UserInput,
-    organizationName: string,
-    organizationPass: string,
+    name: string,
+    description: string,
+    date: Date;
+    location: string,
+    category: string,
+    backgroundImage?: string,
+    users: UserInput[],
+    isTrending: boolean,
 };
 
-type ParticipantInput = {
-    id?: number,
-    user: UserInput,
-    events: EventInput[],
-};
+// type OrganizerInput = {
+//     id?: number,
+//     user: UserInput,
+//     organizationName: string,
+//     organizationPass: string,
+// };
 
 type InviteInput = {
     id?: number,
@@ -51,8 +51,8 @@ export {
     Role,
     EventInput,
     UserInput,
-    OrganizerInput,
-    ParticipantInput,
+    // OrganizerInput,
+    // ParticipantInput,
     InviteInput,
     TicketInput,
 };
