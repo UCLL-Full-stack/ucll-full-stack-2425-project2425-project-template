@@ -135,8 +135,10 @@ eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFun
     const email = req.params.email;
 
     try {
-        await eventService.addParticipantToEvent(email, eventId);
+        const updatedEvent = await eventService.addParticipantToEvent(email, eventId);
+        res.status(200).json(updatedEvent);
     } catch (error) {
+        console.log(error);
         if (error instanceof Error) {
             res.status(400).json({ status: 'error', message: error.message });
         } else {

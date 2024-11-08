@@ -39,8 +39,8 @@ const RenderEventDetailsById: React.FC = () => {
             setShowForm(false);
             setShowAddButton(true);
             const response = await EventService.addParticipantToEvent(email, eventId as string);
-            const eventRes = await response.json();
-            setEvent(eventRes);
+            setEvent(response);
+            
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(error.message);

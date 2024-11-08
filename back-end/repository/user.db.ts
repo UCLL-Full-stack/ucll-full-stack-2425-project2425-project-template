@@ -1,17 +1,12 @@
 import { User } from "../model/user";
 import database from "./database";
 
-const getAllUsers = async () => {
-    try {
+const getAllUsers = async (): Promise<User[]> => {
         const usersPrisma = await database.user.findMany();
         return usersPrisma.map((userPrisma) => User.from(userPrisma));
-    } catch (error) {
-        throw new Error("Database error. See server log for details.");
-    }
 }
 
-const getUserById = async ({ id }: { id: number }) => {
-    try {
+const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
         const userPrisma = await database.user.findUnique({
             where: {
                 id: id,
@@ -19,13 +14,9 @@ const getUserById = async ({ id }: { id: number }) => {
         });
 
         return userPrisma ? User.from(userPrisma) : null;
-    } catch (error) {
-        throw new Error("Database error. See server log for details.");
-    }
 };
 
-const getUserByEmail = async (email: string) => {
-    try {
+const getUserByEmail = async (email: string): Promise<User | null> => {
         const userPrisma = await database.user.findFirst({
             where:
             {
@@ -34,9 +25,6 @@ const getUserByEmail = async (email: string) => {
         });
 
         return userPrisma ? User.from(userPrisma) : null;
-    } catch (error) {
-        throw new Error("Database error. See server log for details.");
-    }
 };
 
 export default {
