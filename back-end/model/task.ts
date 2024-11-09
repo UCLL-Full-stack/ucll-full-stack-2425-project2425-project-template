@@ -1,25 +1,26 @@
 import { Column } from "./column";
 import { User } from "./user";
-import { Task as TaskPrisma, Column as ColumnPrisma } from "@prisma/client";
+import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Task {
     private taskId: string;
     private title: string;
     private description: string;
     private dueDate: Date;
-    private assignees: User[] = [];
+    private assigneeIds: string[];
     private columnId: string;
   
-    constructor(taskId: string, title: string, description: string, dueDate: Date, column: string) {
-      this.taskId = taskId;
-      this.title = title;
-      this.description = description;
-      this.dueDate = dueDate;
-      this.columnId = column;
+    constructor(taskId: string, title: string, description: string, dueDate: Date, assigneeIds: string[], column: string) {
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.assigneeIds = assigneeIds;
+        this.columnId = column;
     }
 
-    static from({ taskId, title, description, dueDate, columnId }: TaskPrisma): Task {
-        return new Task(taskId, title, description, dueDate, columnId);
+    static from({ taskId, title, description, dueDate, assigneeIds, columnId }: TaskPrisma): Task {
+        return new Task(taskId, title, description, dueDate, assigneeIds, columnId);
     }
   
     getTaskId(): string {
@@ -50,12 +51,12 @@ export class Task {
       return this.dueDate;
     }
   
-    setAssignees(assignees: User[]): void {
-      this.assignees = assignees;
+    setAssigneeIds(assignees: string[]): void {
+      this.assigneeIds = assignees;
     }
   
-    getAssignees(): User[] {
-      return this.assignees;
+    getAssigneeIds(): string[] {
+      return this.assigneeIds;
     }
   
     setColumnId(columnId: string): void {

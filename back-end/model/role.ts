@@ -1,6 +1,6 @@
 import { DiscordPermission, Member, PermissionEntry } from "../types";
 import { Guild } from "./guild";
-import { Role as RolePrisma, Guild as GuildPrisma } from "@prisma/client";
+import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Role {
     private roleId: string;

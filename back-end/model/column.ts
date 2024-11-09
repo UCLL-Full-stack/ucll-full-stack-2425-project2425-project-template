@@ -1,24 +1,31 @@
 import { PermissionEntry } from "../types";
 import { Board } from "./board";
 import { Task } from "./task";
-import { Column as ColumnPrisma, Board as BoardPrisma } from "@prisma/client";
+import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Column {
     private columnId: string;
     private columnName: string;
     private columnIndex: number;
-    private tasks: Task[] = [];
+    private taskIds: string[];
     private boardId: string;
   
-    constructor(columnId: string, columnName: string, columnIndex: number, board: string) {
-      this.columnId = columnId;
-      this.columnName = columnName;
-      this.columnIndex = columnIndex;
-      this.boardId = board;
+    constructor(columnId: string, columnName: string, columnIndex: number, tasks: string[], board: string) {
+        this.columnId = columnId;
+        this.columnName = columnName;
+        this.columnIndex = columnIndex;
+        this.taskIds = tasks;
+        this.boardId = board;
     }
   
-    static from({ columnId, columnName, columnIndex, boardId }: ColumnPrisma): Column {
-        return new Column(columnId, columnName, columnIndex, boardId);
+    static from({ columnId, columnName, columnIndex, taskIds, boardId }: ColumnPrisma): Column {
+        return new Column(
+            columnId,
+            columnName,
+            columnIndex,
+            taskIds,
+            boardId
+        );
     }
 
     getColumnId(): string {
@@ -41,12 +48,12 @@ export class Column {
       return this.columnIndex;
     }
   
-    setTasks(tasks: Task[]): void {
-      this.tasks = tasks;
+    setTaskIds(tasks: string[]): void {
+      this.taskIds = tasks;
     }
   
-    getTasks(): Task[] {
-      return this.tasks;
+    getTaskIds(): string[] {
+      return this.taskIds;
     }
   
     setBoardId(boardId: string): void {

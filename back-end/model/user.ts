@@ -1,22 +1,24 @@
+import { Member, PermissionEntry } from "../types";
 import { Guild } from "./guild";
-import { User as UserPrisma } from "@prisma/client";
+import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
 
 export class User {
     private userId: string;
     private username: string;
     private globalName: string;
     private userAvatar: string;
-    private guilds: Guild[] = [];
+    private guildIds: string[];
   
-    constructor(userId: string, username: string, globalName: string, userAvatar: string) {
+    constructor(userId: string, username: string, globalName: string, userAvatar: string, guildIds: string[]) {
       this.userId = userId;
       this.username = username;
       this.globalName = globalName;
       this.userAvatar = userAvatar;
+      this.guildIds = guildIds;
     }
 
-    static from({ userId, username, globalName, userAvatar }: UserPrisma): User {
-      return new User(userId, username, globalName, userAvatar);
+    static from({ userId, username, globalName, userAvatar, guildIds }: UserPrisma): User {
+      return new User(userId, username, globalName, userAvatar, guildIds);
     }
   
     getUserId(): string {
@@ -47,12 +49,12 @@ export class User {
       return this.userAvatar;
     }
   
-    setGuilds(guilds: Guild[]): void {
-      this.guilds = guilds;
+    setGuildIds(guildIds: string[]): void {
+      this.guildIds = guildIds;
     }
   
-    getGuilds(): Guild[] {
-      return this.guilds;
+    getGuildIds(): string[] {
+      return this.guildIds;
     }
   }
   

@@ -1,25 +1,27 @@
 import { Member, PermissionEntry } from '../types';
 import { Board } from './board';
 import { Role } from './role';
-import { Guild as GuildPrisma } from '@prisma/client';
+import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Guild {
   private guildId: string;
   private guildName: string;
   private settings: PermissionEntry[];
-  private roles: Role[] = [];
+  private roleIds: string[];
   private members: Member[];
-  private boards: Board[] = [];
+  private boardIds: string[];
 
-  constructor(guildId: string, guildName: string, settings: PermissionEntry[], members: Member[]) {
+  constructor(guildId: string, guildName: string, settings: PermissionEntry[], roleIds: string[], members: Member[], boardIds: string[]) {
     this.guildId = guildId;
     this.guildName = guildName;
     this.settings = settings;
+    this.roleIds = roleIds;
     this.members = members;
+    this.boardIds = boardIds;
   }
 
-  static from({ guildId, guildName, settings, members }: GuildPrisma & { settings: PermissionEntry[], members: Member[] }): Guild {
-    return new Guild(guildId, guildName, settings, members);
+  static from({ guildId, guildName, settings, roleIds, members, boardIds }: GuildPrisma & { settings: PermissionEntry[], members: Member[] }): Guild {
+    return new Guild(guildId, guildName, settings, roleIds, members, boardIds);
   }
 
   getGuildId(): string {
@@ -42,12 +44,12 @@ export class Guild {
     return this.settings;
   }
 
-  setRoles(roles: Role[]): void {
-    this.roles = roles;
+  setRoleIds(roles: string[]): void {
+    this.roleIds = roles;
   }
 
-  getRoles(): Role[] {
-    return this.roles;
+  getRoleIds(): string[] {
+    return this.roleIds;
   }
 
   setMembers(members: Member[]): void {
@@ -58,11 +60,11 @@ export class Guild {
     return this.members;
   }
 
-  setBoards(boards: Board[]): void {
-    this.boards = boards;
+  setBoardIds(boards: string[]): void {
+    this.boardIds = boards;
   }
 
-  getBoards(): Board[] {
-    return this.boards;
+  getBoardIds(): string[] {
+    return this.boardIds;
   }
 }

@@ -8,23 +8,27 @@ generator client {
 }
 
 model User {
-    userId     String  @id
+    userId     String   @id
     username   String
     globalName String
     userAvatar String
-    guilds     Guild[] @relation("UserGuilds")
+    guilds     Guild[]  @relation("UserGuilds")
+    guildIds   String[]
     boards     Board[]
     tasks      Task[]
 }
 
 model Guild {
-    guildId   String  @id
+    guildId   String   @id
     guildName String
     settings  Json
     roles     Role[]
+    roleIds   String[]
     members   Json
-    users     User[]  @relation("UserGuilds")
+    users     User[]   @relation("UserGuilds")
+    userIds   String[]
     boards    Board[]
+    boardIds  String[]
 }
 
 model Role {
@@ -43,15 +47,17 @@ model Board {
     guild           Guild    @relation(fields: [guildId], references: [guildId])
     guildId         String
     columns         Column[]
+    columnIds       String[]
     permissions     Json
 }
 
 model Column {
-    columnId    String @id @default(cuid())
+    columnId    String   @id @default(cuid())
     columnName  String
     columnIndex Int
     tasks       Task[]
-    board       Board  @relation(fields: [boardId], references: [boardId])
+    taskIds     String[]
+    board       Board    @relation(fields: [boardId], references: [boardId])
     boardId     String
 }
 
@@ -61,6 +67,7 @@ model Task {
     description String
     dueDate     DateTime
     assignees   User[]
+    assigneeIds String[]
     column      Column   @relation(fields: [columnId], references: [columnId])
     columnId    String
 }

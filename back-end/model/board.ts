@@ -2,26 +2,34 @@ import { PermissionEntry } from '../types';
 import { Column } from './column';
 import { Guild } from './guild';
 import { User } from './user';
-import { Board as BoardPrisma, User as UserPrisma, Guild as GuildPrisma } from '@prisma/client';
+import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Board {
   private boardId: string;
   private boardName: string;
   private createdByUserId: string;
   private guildId: string;
-  private columns: Column[] = [];
+  private columnIds: string[];
   private permissions: PermissionEntry[];
 
-  constructor(boardId: string, boardName: string, createdByUserId: string, guildId: string, permissions: PermissionEntry[]) {
+  constructor(boardId: string, boardName: string, createdByUserId: string, columnIds: string[], guildId: string, permissions: PermissionEntry[]) {
     this.boardId = boardId;
     this.boardName = boardName;
     this.createdByUserId = createdByUserId;
+    this.columnIds = columnIds;
     this.guildId = guildId;
     this.permissions = permissions;
   }
 
-  static from({ boardId, boardName, createdByUserId, guildId, permissions }: BoardPrisma & { permissions: PermissionEntry[] }): Board {
-    return new Board(boardId, boardName, createdByUserId, guildId, permissions);
+  static from({ boardId, boardName, createdByUserId, columnIds, guildId, permissions }: BoardPrisma & { permissions: PermissionEntry[]}): Board {
+      return new Board(
+          boardId,
+          boardName,
+          createdByUserId,
+          columnIds,
+          guildId,
+          permissions
+      );
   }
 
   getBoardId(): string {
@@ -52,12 +60,12 @@ export class Board {
     return this.guildId;
   }
 
-  setColumns(columns: Column[]): void {
-    this.columns = columns;
+  setColumnIds(columnIds: string[]): void {
+    this.columnIds = columnIds;
   }
 
-  getColumns(): Column[] {
-    return this.columns;
+  getColumnIds(): string[] {
+    return this.columnIds;
   }
 
   setPermissions(permissions: PermissionEntry[]): void {
