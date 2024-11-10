@@ -50,10 +50,10 @@ async function getAllProjects() {
 }
 
 // Service function to retrieve a project by its name
-async function getProjectByName(name: string) {
+async function getProjectById(project_Id: number) {
   try {
     const project = await prisma.project.findUnique({
-      where: { name },
+      where: { projectId: project_Id },
       include: {
         users: true,
         tasks: true,
@@ -61,18 +61,18 @@ async function getProjectByName(name: string) {
     });
 
     if (!project) {
-      throw new Error(`Project with name "${name}" not found`);
+      throw new Error(`Project with name "${project_Id}" not found`);
     }
 
     return project;
   } catch (error) {
-    console.error(`Error fetching project by name "${name}":`, error);
-    throw new Error(`Failed to fetch project with name "${name}"`);
+    console.error(`Error fetching project by name "${project_Id}":`, error);
+    throw new Error(`Failed to fetch project with name "${project_Id}"`);
   }
 }
 
 export default {
   createProject,
   getAllProjects,
-  getProjectByName,
+  getProjectById,
 };

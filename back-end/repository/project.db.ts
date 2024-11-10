@@ -32,30 +32,31 @@ const getAllProjects = async () => {
 };
   
 
-const getProjectByName = async (name: string) => {
-    try {
+const getProjectById = async (project_Id: number) => {
+  try {
       const project = await database.project.findUnique({
-        where: { name },
-        include: {
-          users: true,
-          tasks: true
-        }
+          where: { projectId: project_Id },
+          include: {
+              users: true,
+              tasks: true
+          }
       });
 
       if (!project) {
-        throw new Error(`Project with name "${name}" not found`);
+          throw new Error(`Project with ID "${project_Id}" not found`);
       }
 
       return project;
-    } catch (error) {
-      console.error(`Error fetching project by name "${name}":`, error);
-      throw new Error(`Failed to fetch project with name "${name}"`);
-    }
+  } catch (error) {
+      console.error(`Error fetching project by ID "${project_Id}":`, error);
+      throw new Error(`Failed to fetch project with ID "${project_Id}"`);
+  }
 };
+
   
 
 export default {
     createProject,
     getAllProjects,
-    getProjectByName
+    getProjectById
 };
