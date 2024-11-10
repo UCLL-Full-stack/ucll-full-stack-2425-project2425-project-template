@@ -79,6 +79,43 @@ projectRouter.post('/', async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
     }
+
+    /**
+ * @swagger
+ * /projects/{id}:
+ *   get:
+ *     summary: Retrieve a project by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The project ID
+ *     responses:
+ *       200:
+ *         description: A single project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Project not found
+ */
+projectRouter.get('/:id', async (req: Request, res: Response) => {
+    const project_Id = parseInt(req.params.id);
+    if (isNaN(project_Id)) {
+      return res.status(400).json({ status: 'error', errorMessage: 'Invalid project ID' });
+    }
+  
+    try {
+      const project = await projectService.getProjectById(project_Id);
+      res.status(200).json(project);
+    } catch (error) {
+      res.status(404).json({ status: 'error', errorMessage: (error as Error).message });
+    }
+  });
+  
 });
 
 export default projectRouter;
