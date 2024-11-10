@@ -21,14 +21,15 @@ export class Board {
     this.permissions = permissions;
   }
 
-  static from({ boardId, boardName, createdByUserId, columnIds, guildId, permissions }: BoardPrisma & { permissions: PermissionEntry[]}): Board {
+  static from({ boardId, boardName, createdByUserId, columnIds, guildId, permissions }: BoardPrisma): Board {
+    const typedPermissions = permissions as unknown as PermissionEntry[];
       return new Board(
           boardId,
           boardName,
           createdByUserId,
           columnIds,
           guildId,
-          permissions
+          typedPermissions
       );
   }
 

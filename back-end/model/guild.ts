@@ -20,8 +20,10 @@ export class Guild {
     this.boardIds = boardIds;
   }
 
-  static from({ guildId, guildName, settings, roleIds, members, boardIds }: GuildPrisma & { settings: PermissionEntry[], members: Member[] }): Guild {
-    return new Guild(guildId, guildName, settings, roleIds, members, boardIds);
+  static from({ guildId, guildName, settings, roleIds, members, boardIds }: GuildPrisma): Guild {
+    const typedSettings = settings as unknown as PermissionEntry[];
+    const typedMembers = members as unknown as Member[];
+    return new Guild(guildId, guildName, typedSettings, roleIds, typedMembers, boardIds);
   }
 
   getGuildId(): string {

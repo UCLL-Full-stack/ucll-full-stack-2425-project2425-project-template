@@ -16,7 +16,7 @@ export class Role {
     }
 
     static from({ roleId, roleName, permissions, guildId }: RolePrisma): Role {
-        return new Role(roleId, roleName, permissions ? permissions as DiscordPermission[] : [], guildId);
+        return new Role(roleId, roleName, permissions as unknown as DiscordPermission[], guildId);
     }
   
     getRoleId(): string {
