@@ -39,9 +39,11 @@ const addUser = async (userData: {
     globalName: string;
     userAvatar: string;
     guildIds?: string[];
+    boardIds?: string[];
+    taskIds?: string[];
 }): Promise<User> => {
     try {
-        const { userId, username, globalName, userAvatar, guildIds = [] } = userData;
+        const { userId, username, globalName, userAvatar, guildIds = [], boardIds = [], taskIds = [] } = userData;
 
         const newUserPrisma = await database.user.create({
             data: {
@@ -49,8 +51,15 @@ const addUser = async (userData: {
                 username,
                 globalName,
                 userAvatar,
+                guildIds,
                 guilds: {
                     connect: guildIds.map(guildId => ({ guildId }))
+                },
+                boards: {
+                    connect: boardIds.map(boardId => ({ boardId }))
+                },
+                tasks: {
+                    connect: taskIds.map(taskId => ({ taskId }))
                 }
             },
             include: {
