@@ -2,16 +2,16 @@ import { Task } from '../model/task'; // Assuming Task class is in models folder
 import { User } from '../model/user'; // Assuming User class is in models folder
 import database from './database'; // Import the database connection
 
-export const createTask = async (
+async function createTask (
   name: string, 
   description: string | null, 
   dueDate: Date, 
   completed: boolean, 
   users: User[]
-): Promise<Task> => {
+) {
 
   try {
-    const taskPrisma = await database.task.create({
+    const task = await database.task.create({
       data: {
         name,
         description,  // description can be null
@@ -31,32 +31,31 @@ export const createTask = async (
     });
 
     // Transform the Prisma result into the Task domain model
-    return Task.from(taskPrisma); // Use Task.from() to map to domain model
+    return task; // Use Task.from() to map to domain model
   } catch (error) {
-    console.error(error);
-    throw new Error('Database error. See server log for details.');
+    console.error("Error creating task:", error);
+    throw error;
   }
 };
 
-export const getAllTasks = async (): Promise<Task[]> => {
+const getAllTasks = async () => {
   try {
-    const tasksPrisma = await database.task.findMany({
+    return await database.task.findMany({
       include: {
         users: true // Include associated users
       }
     });
 
     // Convert the Prisma result into Task domain models
-    return tasksPrisma.map(task => Task.from(task)); // Map Prisma result to Task model
   } catch (error) {
-    console.error(error);
-    throw new Error('Error retrieving tasks. See server log for details.');
+    console.error("Error fetching all projects:", error);
+    throw new Error("Failed to fetch projects");
   }
 };
 
 export const getTaskById = async (taskId: number): Promise<Task | null> => {
   try {
-    const taskPrisma = await database.task.findUnique({
+    const task = await database.task.findUnique({
       where: { taskId },
       include: {
         users: true // Include associated users
@@ -64,10 +63,10 @@ export const getTaskById = async (taskId: number): Promise<Task | null> => {
     });
 
     // Convert to Task model if found, else return null
-    return taskPrisma ? Task.from(taskPrisma) : null; // Map Prisma result to Task model
+    return task ? Task.from({ ...task, users: task.users.map(user => User.from(user)) }) : null; // Map Prisma result to Task model
   } catch (error) {
-    console.error(error);
-    throw new Error('Error retrieving task. See server log for details.');
+    console.error("Error retrieving task. See server log for details.", error);
+    throw error;
   }
 };
 

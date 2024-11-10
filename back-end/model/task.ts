@@ -26,14 +26,14 @@ export class Task {
       this.users = task.users;
     }
   
-    static from(task: prismaTask & { users: User[] }) {
+    static from(prismaTask: any): Task {
       return new Task({
-        taskId: task.taskId,
-        name: task.name,
-        description: task.description ?? null, // description can be null here
-        dueDate: task.dueDate,
-        completed: task.completed,
-        users: task.users.map(user => User.from(user)),
+        taskId: prismaTask.taskId,
+        name: prismaTask.name,
+        description: prismaTask.description ?? null, // description can be null here
+        dueDate: prismaTask.dueDate,
+        completed: prismaTask.completed,
+        users: prismaTask.users.map((user: any) => User.from(user)),
       });
     }
 
