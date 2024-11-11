@@ -4,9 +4,8 @@ import { User } from '../model/user';
 import { UserInput } from '../types';
 import { Chat } from '../model/chat';
 
-const getAllUsers = async () => {
-  return userDB.getAllUsers();
-}
+
+const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
 const getUserById = async ({id}: {id:number}) => {
   if (!id) {

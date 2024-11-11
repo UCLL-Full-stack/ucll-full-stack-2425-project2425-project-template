@@ -1,5 +1,6 @@
 import { Chat } from '../model/chat';
 import { users } from '../repository/user.db';
+import database from './database';
 
 const chats = [
     new Chat({
@@ -18,9 +19,14 @@ const chats = [
 users[0].addChat(chats[0]);
 users[1].addChat(chats[1]);
 
-
-const getAllChat = async (): Promise<Chat[]> => {
-    return chats;
+const getAllChats = async (): Promise<Chat[]> => {
+    try {
+        const chatPrisma = await database.chat.findMany();
+        return chatPrisma.map((chatPrisma) => Chat.from(chatPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
 const getChatByUserId = (userId: number): Chat[] => {
@@ -37,13 +43,12 @@ const getChatById = (id: number): Chat | null => {
 };
 const createChat = async (chat: Chat): Promise<Chat> => {
     try {
-            chats.push(chat);
-            return chat;
+        chats.push(chat);
+        return chat;
     } catch (error) {
-            console.error(error);
-            throw new Error('Database error. See server log for details.');
-        }
-    
-}
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-export default {getAllChat, getChatByUserId, getChatById, createChat};
+export default { getAllChats, getChatByUserId, getChatById, createChat };

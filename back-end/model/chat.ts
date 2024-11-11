@@ -1,4 +1,7 @@
 import { User } from "./user";
+import{
+    Chat as ChatPrisma,
+}from '@prisma/client';
 
 export class Chat {
     private id?: number;
@@ -18,6 +21,19 @@ export class Chat {
         this.message = chat.message;
         this.createdAt = chat.createdAt;
         this.userId = chat.userId;
+    }
+    static from({
+        id,
+        message,
+        createdAt,
+        userId,
+    }: ChatPrisma) {
+        return new Chat({
+            id,
+            message,
+            createdAt,
+            userId: userId ?? undefined,
+        });
     }
 
     public getId(): number | undefined {

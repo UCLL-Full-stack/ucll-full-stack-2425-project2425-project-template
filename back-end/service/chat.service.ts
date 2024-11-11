@@ -3,9 +3,8 @@ import chatDB from '../repository/chat.db';
 import userDb from '../repository/user.db';
 import { ChatInput } from '../types';
 
-const getAllChat = async () => {
-    return chatDB.getAllChat();
-};
+const getAllChat = async (): Promise<Chat[]> => chatDB.getAllChats();
+
 
 const getChatByUserId = ({ userId }: { userId: number }) => {
     return chatDB.getChatByUserId(userId);
