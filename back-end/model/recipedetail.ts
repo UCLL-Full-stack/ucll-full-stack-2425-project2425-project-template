@@ -1,21 +1,21 @@
 export class RecipeDetail {
-    private recipedetailid?: number;
-    private totallikes: number;
+    private recipeDetailId?: number;
+    private totalLikes: number;
     private difficulty: number;
-    private cookingtime: number;
+    private cookingTime: number;
 
-    constructor(recipedetail: { recipedetailid?: number, totallikes: number, difficulty: number, cookingtime: number }) {
-        this.recipedetailid = recipedetail.recipedetailid;
-        this.totallikes = recipedetail.totallikes;
-        this.difficulty = recipedetail.difficulty;
-        this.cookingtime = recipedetail.cookingtime;
+    constructor(recipeDetail: { recipeDetailId?: number, totalLikes: number, difficulty: number, cookingTime: number }) {
+        this.recipeDetailId = recipeDetail.recipeDetailId;
+        this.totalLikes = recipeDetail.totalLikes;
+        this.difficulty = recipeDetail.difficulty;
+        this.cookingTime = recipeDetail.cookingTime;
     }
 
     public addLike(): void {
-        this.totallikes += 1;
+        this.totalLikes += 1;
     }
 
-    public substractLike(): void {
-        this.totallikes -= 1;
+    public subtractLike(): void {
+        this.totalLikes -= 1;
     }
 }

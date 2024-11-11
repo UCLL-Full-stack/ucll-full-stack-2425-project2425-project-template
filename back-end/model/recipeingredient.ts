@@ -1,5 +1,5 @@
 export class RecipeIngredient {
-    private _recipeingredientId?: number;
+    private _recipeIngredientId?: number;
     private _recipeId: number;
     private _ingredientId: number;
     private _unit: string;
@@ -7,13 +7,13 @@ export class RecipeIngredient {
 
 
     constructor(recipeIngredient: {
-        recipeingredientId?: number;
+        recipeIngredientId?: number;
         recipeId: number;
         ingredientId: number;
         unit: string;
         quantity: number;
     }) {
-        this._recipeingredientId = recipeIngredient.recipeingredientId;
+        this._recipeIngredientId = recipeIngredient.recipeIngredientId;
         this._recipeId = recipeIngredient.recipeId;
         this._ingredientId = recipeIngredient.ingredientId;
         this._unit = recipeIngredient.unit;
@@ -21,7 +21,7 @@ export class RecipeIngredient {
     }
 
     getRecipeIngredientId(): number| undefined {
-        return this._recipeingredientId;
+        return this._recipeIngredientId;
     }
 
     getRecipeId(): number {
