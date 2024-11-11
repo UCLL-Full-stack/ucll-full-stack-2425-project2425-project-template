@@ -1,14 +1,14 @@
 import {RecipeIngredient} from "../../model/recipeingredient";
 
 const recipeingredientone = new RecipeIngredient({
-    recipeingredientId: 1,
+    recipeIngredientId: 1,
     recipeId: 1,
     ingredientId: 1,
     unit: "grams",
     quantity: 250,
 })
 const recipeingredienttwo = new RecipeIngredient({
-    recipeingredientId: 2,
+    recipeIngredientId: 2,
     recipeId: 1,
     ingredientId: 2,
     unit: "grams",
@@ -20,7 +20,7 @@ test('given: valid values for recipeingredient, when: recipeingredient is create
     //given
     //when
     const recipeingredientthree = new RecipeIngredient({
-        recipeingredientId: 3,
+        recipeIngredientId: 3,
         recipeId: 1,
         ingredientId: 3,
         unit: "millilitres",
