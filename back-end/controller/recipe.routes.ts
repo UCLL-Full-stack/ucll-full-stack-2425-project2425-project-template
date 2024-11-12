@@ -14,6 +14,33 @@ const recipeRouter = express.Router();
 
 /**
  * @swagger
+ * /recipes:
+ *   get:
+ *     summary: Retrieve a list of recipes
+ *     description: Retrieve a list of all recipes from the database.
+ *     responses:
+ *       200:
+ *         description: A list of recipes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ *       500:
+ *         description: Internal server error
+ */
+recipeRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const recipe = await recipeService.getAllRecipes();
+        res.status(200).json(recipe);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
  * /recipes/{recipeId}:
  *   get:
  *     summary: Get a recipe by ID
@@ -76,8 +103,14 @@ recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFun
 recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFunction) => {
     const { recipeId } = req.params;
     const recipeInputData = req.body;
+    const userId = 1; // TEMPORARY USER ID
+
     try {
-        const updatedRecipe = await recipeService.updateRecipe(parseInt(recipeId), recipeInputData);
+        const updatedRecipe = await recipeService.updateRecipe(
+            parseInt(recipeId),
+            recipeInputData,
+            userId
+        );
         res.status(200).json(updatedRecipe.toJSON());
     } catch (error) {
         next(error);
