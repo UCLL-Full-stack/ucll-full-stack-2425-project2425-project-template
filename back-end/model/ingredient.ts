@@ -14,18 +14,24 @@ export class Ingredient {
         ingredientId?: number,
         name: string,
         description: string,
-        caloriesPesUnit: number,
+        caloriesPerUnit: number,
         fatPerUnit: number,
         carbsPerUnit: number,
         proteinPerUnit:number
+        recipeIngredients?: RecipeIngredient[]
     }) {
         this.ingredientId= ingredient.ingredientId
         this.name = ingredient.name
         this.description = ingredient.description
-        this.caloriesPerUnit = ingredient.caloriesPesUnit
+        this.caloriesPerUnit = ingredient.caloriesPerUnit
         this.fatPerUnit = ingredient.fatPerUnit
         this.carbsPerUnit = ingredient.carbsPerUnit
         this.proteinPerUnit = ingredient.proteinPerUnit
+        this.recipeIngredients = ingredient.recipeIngredients
+    }
+
+    getIngredientId (): number | undefined {
+        return this.ingredientId
     }
 
     getName(): string {
