@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import authService from "@/services/authService";
 import { LoginData } from "@/types/auth";
 
@@ -7,6 +8,8 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const router = useRouter();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -44,7 +47,17 @@ const LoginForm = () => {
       const data: LoginData = { email, password };
       const response = await authService.login(data);
       console.log(response);
-      // 处理登录成功后的逻辑，例如保存 token，重定向等
+
+      // Save the username in session storage
+      sessionStorage.setItem("username", email);
+
+      // Display success message
+      setSuccessMessage("Login successful!");
+
+      // Redirect to home page after 2 seconds
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     } catch (error) {
       console.error(error);
       alert("Login failed. Please check your credentials and try again.");
@@ -77,6 +90,8 @@ const LoginForm = () => {
       >
         Login
       </button>
+
+      {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
     </form>
   );
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { RegisterData } from "@/types/auth";
 import authService from "@/services/authService";
 
@@ -13,6 +14,8 @@ const SignupForm = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [repeatPasswordError, setRepeatPasswordError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const router = useRouter();
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -80,7 +83,17 @@ const SignupForm = () => {
       const data: RegisterData = { firstName, lastName, email, password };
       const response = await authService.register(data);
       console.log(response);
-      // 处理注册成功后的逻辑，例如显示成功消息，重定向等
+
+      // Save the username in session storage
+      sessionStorage.setItem("username", email);
+
+      // Display success message
+      setSuccessMessage("Registration successful!");
+
+      // Redirect to login page after 2 seconds
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (error) {
       console.error(error);
       alert("Registration failed. Please try again.");
@@ -145,6 +158,8 @@ const SignupForm = () => {
       >
         Sign Up
       </button>
+
+      {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
     </form>
   );
 };
