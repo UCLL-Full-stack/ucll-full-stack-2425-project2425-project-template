@@ -23,7 +23,7 @@ model User {
   email     String    @unique
   password  String
   birthday  DateTime @default(now())
-  accountbirthday   DateTime @default(now())
+  accountBirthday   DateTime @default(now())
   Worlds    World[]
   Players   Player[]
 }

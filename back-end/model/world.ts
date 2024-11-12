@@ -1,6 +1,8 @@
 import { Floor, getRandomInt } from './floor';
 import { User } from './user';
-import { User as UserPrisma } from "@prisma/client"; 
+import { 
+    User as UserPrisma
+} from "@prisma/client"; 
 
 export class World {
     private id?: number;
