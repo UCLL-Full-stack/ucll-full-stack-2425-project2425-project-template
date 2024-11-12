@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use('/players', playerRouter);
+app.use('/world', worldRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

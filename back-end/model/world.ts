@@ -1,5 +1,6 @@
 import { Floor, getRandomInt } from './floor';
 import { User } from './user';
+import { User as UserPrisma } from "@prisma/client"; 
 
 export class World {
     private id?: number;
@@ -13,9 +14,6 @@ export class World {
         owner: User;
         floors: Floor[];
     }) {
-        if (world.floors.length === 0){
-            world.floors = generateFloors();
-        }
         this.validate(world);
 
         this.id = world.id;
@@ -57,15 +55,5 @@ export class World {
         if (!world.owner) {
             throw new Error('An owner is required.');
         }
-    }
-
-    generateFloors(): Floor[]{
-        let floors = new Array<Floor>();
-        const amount = getRandomInt(4, 20);
-        for (let i = 0; i < amount; i++){
-            floors[i] = new Floor({1, new Array<Array<Floor>>(),})
-        }
-
-        return floors;
     }
 }
