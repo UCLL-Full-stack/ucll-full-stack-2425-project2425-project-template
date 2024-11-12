@@ -22,7 +22,7 @@ const CalendarGrid: React.FC = () => {
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
   const [showRecipePopup, setShowRecipePopup] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [recipeByDate, setRecipesByDate] = useState<Record<string, Recipe[]>>(
+  const [recipesByDate, setRecipesByDate] = useState<Record<string, Recipe[]>>(
     {}
   );
 
@@ -49,6 +49,8 @@ const CalendarGrid: React.FC = () => {
         0
       );
 
+      const recipesByDateTemp: Record<string, Recipe[]> = {};
+
       for (
         let i = new Date(startDate);
         i <= endDate;
@@ -56,17 +58,16 @@ const CalendarGrid: React.FC = () => {
       ) {
         const dateString = formatDateUTC(i);
         try {
-          const response = await PlannerService.fetchMealDetails(1, dateString); // userId is 1 for testing -- temporary
-          if (response.ok) {
-            const recipes = await response.json();
-            if (recipes.length > 0) {
-              setRecipesByDate((prev) => ({ ...prev, [dateString]: recipes }));
-            }
+          const recipes = await PlannerService.fetchMealDetails(1, dateString); // userId is 1 for testing -- temporary
+          if (recipes.length > 0) {
+            recipesByDateTemp[dateString] = recipes;
           }
         } catch (error) {
           console.error("Error fetching recipes for", dateString, error);
         }
       }
+
+      setRecipesByDate(recipesByDateTemp);
     };
 
     fetchMonthRecipes();
@@ -102,7 +103,6 @@ const CalendarGrid: React.FC = () => {
       daysInGrid.push(day);
     }
 
-    // console.log(daysInGrid.map((day) => day.getDate()));
     return daysInGrid;
   };
 
@@ -186,7 +186,7 @@ const CalendarGrid: React.FC = () => {
               )}
               isHovered={hoveredDate?.getTime() === date.getTime()}
               selectionModeActive={selectionModeActive}
-              recipes={recipeByDate[formatDateUTC(date)] || []}
+              recipes={recipesByDate[formatDateUTC(date)] || []}
               onDateClick={handleDateClick}
               onCheckboxChange={(checked, date) => {
                 if (checked) {

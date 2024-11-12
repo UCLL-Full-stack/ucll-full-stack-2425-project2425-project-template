@@ -1,12 +1,19 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const fetchMealDetails = async (userId: number, date: string) => {
-  return fetch(`${apiUrl}/schedules/${userId}/${date}`, {
+  const response = await fetch(`${apiUrl}/schedules/${userId}/${date}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch meal details");
+  }
+
+  const data = await response.json();
+  return data;
 };
 
 const updateMealDate = async (

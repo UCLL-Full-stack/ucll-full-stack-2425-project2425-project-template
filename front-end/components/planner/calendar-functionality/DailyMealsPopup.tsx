@@ -43,11 +43,7 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
   const fetchMeals = useCallback(async () => {
     try {
       const dateString = formatDateUTC(date);
-      const response = await PlannerService.fetchMealDetails(
-        userId,
-        dateString
-      );
-      const meals = await response.json();
+      const meals = await PlannerService.fetchMealDetails(userId, dateString);
       setMeals(meals);
     } catch (error) {
       setError("Error fetching meals");
@@ -90,9 +86,15 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
     return <div className="text-center p-4 text-red-500">{error}</div>;
   }
 
+  const formatCategoryName = (category: string) => {
+    return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+  };
+
   // create new array ordered by categories
   const allMeals = categoryOrder
-    .flatMap((category) => meals.filter((meal) => meal.category === category))
+    .flatMap((category) =>
+      meals.filter((meal) => meal.category.toLowerCase() === category)
+    )
     .filter(Boolean); // filters out falsy values (null, undefined, false, 0, "")
 
   return (
@@ -123,7 +125,7 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
               {allMeals.map((meal) => (
                 <div key={meal.id} className="space-y-2">
                   <h3 className="text-lg font-semibold capitalize">
-                    {meal.category}
+                    {formatCategoryName(meal.category)}
                   </h3>
                   <DailyMealsView
                     recipe={meal}
