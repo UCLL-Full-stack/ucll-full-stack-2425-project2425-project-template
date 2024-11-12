@@ -1,5 +1,6 @@
 import { Tag } from './tags';
 import { User } from './user';
+import {RecipeIngredient} from "./recipeingredient";
 
 export class Recipe {
     private _recipeId?: number;
@@ -13,6 +14,7 @@ export class Recipe {
     private _createdAt: Date;
     private _updatedAt: Date;
     private _tags: Tag[];
+    private recipeIngredients: RecipeIngredient[];
 
     constructor(recipe: {
         recipeId?: number;
@@ -26,6 +28,7 @@ export class Recipe {
         createdAt: Date;
         updatedAt: Date;
         tags: Tag[];
+        recipeIngredients: RecipeIngredient[]
     }) {
         this.validate(recipe);
 
@@ -40,6 +43,7 @@ export class Recipe {
         this._createdAt = recipe.createdAt;
         this._updatedAt = recipe.updatedAt;
         this._tags = recipe.tags;
+        this.recipeIngredients = recipe.recipeIngredients
     }
 
     public getRecipeId(): number | undefined {
@@ -51,81 +55,35 @@ export class Recipe {
     public getUser(): User {
         return this._user;
     }
-
-    public setUser(user: User): void {
-        this._user = user;
-    }
-
     public getTitle(): string {
         return this._title;
     }
-
-    public setTitle(title: string): void {
-        this._title = title;
-    }
-
     public getDescription(): string {
         return this._description;
     }
-
-    public setDescription(description: string): void {
-        this._description = description;
-    }
-
     public getInstructions(): string {
         return this._instructions;
     }
-
-    public setInstructions(instructions: string): void {
-        this._instructions = instructions;
-    }
-
     public getNutritionFacts(): string {
         return this._nutritionFacts;
     }
-
-    public setNutritionFact(nutritionFacts: string): void {
-        this._nutritionFacts = nutritionFacts;
-    }
-
     public getCookingTips(): string {
         return this._cookingTips;
     }
-
-    public setCookingTips(cookingTips: string): void {
-        this._cookingTips = cookingTips;
-    }
-
     public getExtraNotes(): string {
         return this._extraNotes;
     }
-
-    public setExtraNotes(extraNotes: string): void {
-        this._extraNotes = extraNotes;
-    }
-
     public getCreationDate(): Date {
         return this._createdAt;
     }
-
-    public setCreationDate(): void {
-        this._createdAt = new Date();
-    }
-
     public getUpdateAt(): Date {
         return this._updatedAt;
     }
-
-    public setUpdatedAt(updatedAt: Date): void {
-        this._updatedAt = updatedAt;
-    }
-
     public getTags(): Tag[] {
         return this._tags;
     }
-
-    public setTags(tags: Tag[]): void {
-        this._tags = tags;
+    public getRecipeIngredients (): RecipeIngredient[] {
+        return this.recipeIngredients
     }
 
     private validate(recipe: {
