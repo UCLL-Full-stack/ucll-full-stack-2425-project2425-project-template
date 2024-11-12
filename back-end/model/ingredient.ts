@@ -18,7 +18,6 @@ export class Ingredient {
         fatPerUnit: number,
         carbsPerUnit: number,
         proteinPerUnit:number
-        recipeIngredients?: RecipeIngredient[]
     }) {
         this.ingredientId= ingredient.ingredientId
         this.name = ingredient.name
@@ -27,7 +26,6 @@ export class Ingredient {
         this.fatPerUnit = ingredient.fatPerUnit
         this.carbsPerUnit = ingredient.carbsPerUnit
         this.proteinPerUnit = ingredient.proteinPerUnit
-        this.recipeIngredients = ingredient.recipeIngredients
     }
 
     getName(): string {
