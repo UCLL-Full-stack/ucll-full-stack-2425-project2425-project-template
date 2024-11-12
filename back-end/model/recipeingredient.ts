@@ -1,9 +1,12 @@
+import {Ingredient} from "./ingredient";
+
 export class RecipeIngredient {
     private _recipeIngredientId?: number;
     private _recipeId: number;
     private _ingredientId: number;
     private _unit: string;
     private _quantity: number;
+    private ingredient: Ingredient;
 
 
     constructor(recipeIngredient: {
@@ -12,12 +15,14 @@ export class RecipeIngredient {
         ingredientId: number;
         unit: string;
         quantity: number;
+        ingredient: Ingredient
     }) {
         this._recipeIngredientId = recipeIngredient.recipeIngredientId;
         this._recipeId = recipeIngredient.recipeId;
         this._ingredientId = recipeIngredient.ingredientId;
         this._unit = recipeIngredient.unit;
         this._quantity = recipeIngredient.quantity;
+        this.ingredient = recipeIngredient.ingredient;
     }
 
     getRecipeIngredientId(): number| undefined {
@@ -38,6 +43,10 @@ export class RecipeIngredient {
 
     getQuantity(): number {
         return this._quantity;
+    }
+
+    getIngredient():Ingredient {
+        return this.ingredient;
     }
 
     /**
