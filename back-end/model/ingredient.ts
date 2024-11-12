@@ -1,3 +1,5 @@
+import {RecipeIngredient} from "./recipeingredient";
+
 export class Ingredient {
     private ingredientId?: number;
     private name: string;
@@ -6,6 +8,7 @@ export class Ingredient {
     private fatPerUnit: number
     private carbsPerUnit: number;
     private proteinPerUnit: number;
+    private recipeIngredients?: RecipeIngredient[];
 
     constructor(ingredient: {
         ingredientId?: number,
@@ -15,6 +18,7 @@ export class Ingredient {
         fatPerUnit: number,
         carbsPerUnit: number,
         proteinPerUnit:number
+        recipeIngredients?: RecipeIngredient[]
     }) {
         this.ingredientId= ingredient.ingredientId
         this.name = ingredient.name
@@ -23,6 +27,7 @@ export class Ingredient {
         this.fatPerUnit = ingredient.fatPerUnit
         this.carbsPerUnit = ingredient.carbsPerUnit
         this.proteinPerUnit = ingredient.proteinPerUnit
+        this.recipeIngredients = ingredient.recipeIngredients
     }
 
     getName(): string {
@@ -47,6 +52,10 @@ export class Ingredient {
 
     getProteinPerUnit(): number {
         return this.proteinPerUnit
+    }
+
+    getRecipeIngredients(): RecipeIngredient[] | undefined {
+        return this.recipeIngredients
     }
 
 
