@@ -1,26 +1,31 @@
 import { IngredientCategory } from '../types';
 import { RecipeIngredient } from './recipeIngredient';
+import {
+    Ingredient as IngredientPrisma,
+    IngredientCategory as CategoryPrisma,
+    // RecipeIngredient as RecipeIngredientPrisma,
+} from '@prisma/client';
 
 export class Ingredient {
     private id?: number;
     private name: string;
     private category: IngredientCategory;
     private store?: string;
-    private recipes?: RecipeIngredient[];
+    // private recipes?: RecipeIngredient[];
 
     constructor(ingredient: {
         id?: number;
         name: string;
         category: IngredientCategory;
         store?: string;
-        recipes?: RecipeIngredient[];
+        // recipes?: RecipeIngredient[];
     }) {
         this.validate(ingredient);
         this.id = ingredient.id;
         this.name = ingredient.name;
         this.category = ingredient.category;
         this.store = ingredient.store;
-        this.recipes = ingredient.recipes;
+        // this.recipes = ingredient.recipes;
     }
 
     validate(ingredient: {
@@ -28,7 +33,7 @@ export class Ingredient {
         name: string;
         category: IngredientCategory;
         store?: string;
-        recipes?: RecipeIngredient[];
+        // recipes?: RecipeIngredient[];
     }) {
         if (
             ingredient.id !== undefined &&
@@ -47,6 +52,24 @@ export class Ingredient {
         }
     }
 
+    static from({
+        id,
+        name,
+        category,
+        store,
+    }: // recipes,
+    IngredientPrisma & {
+        category: CategoryPrisma;
+    }): Ingredient {
+        return new Ingredient({
+            id,
+            name,
+            category: category as IngredientCategory,
+            store: store || undefined,
+            // recipes: recipes.map((recipe) => RecipeIngredient.from(recipe)),
+        });
+    }
+
     getId(): number | undefined {
         return this.id;
     }
@@ -63,13 +86,13 @@ export class Ingredient {
         return this.store;
     }
 
-    getRecipes(): RecipeIngredient[] | undefined {
-        return this.recipes;
-    }
+    // getRecipes(): RecipeIngredient[] | undefined {
+    //     return this.recipes;
+    // }
 
-    setRecipes(recipes: RecipeIngredient[]) {
-        this.recipes = recipes;
-    }
+    // setRecipes(recipes: RecipeIngredient[]) {
+    //     this.recipes = recipes;
+    // }
 
     equals(ingredient: Ingredient): boolean {
         return (

@@ -1,51 +1,49 @@
 import { Recipe } from './recipe';
 import { Ingredient } from './ingredient';
+import {
+    Recipe as RecipePrisma,
+    Ingredient as IngredientPrisma,
+    RecipeIngredient as RecipeIngredientPrisma,
+} from '@prisma/client';
 
 export class RecipeIngredient {
-    private recipe: Recipe;
-    private ingredient: Ingredient;
+    private recipeId: number;
+    private ingredientId: number;
     private unit: string;
     private quantity: number;
 
     constructor(recipeIngredient: {
-        recipe: Recipe;
-        ingredient: Ingredient;
+        recipeId: number;
+        ingredientId: number;
         unit: string;
         quantity: number;
     }) {
-        this.validate(recipeIngredient);
-        this.recipe = recipeIngredient.recipe;
-        this.ingredient = recipeIngredient.ingredient;
+        this.recipeId = recipeIngredient.recipeId;
+        this.ingredientId = recipeIngredient.ingredientId;
         this.unit = recipeIngredient.unit;
         this.quantity = recipeIngredient.quantity;
     }
 
-    validate(recipeIngredient: {
-        recipe: Recipe;
-        ingredient: Ingredient;
-        unit: string;
-        quantity: number;
-    }): void {
-        if (!recipeIngredient.recipe) {
-            throw new Error('Recipe is required');
-        }
-        if (!recipeIngredient.ingredient) {
-            throw new Error('Ingredient is required');
-        }
-        if (!recipeIngredient.unit || recipeIngredient.unit.trim().length === 0) {
-            throw new Error('Unit is required and cannot be empty');
-        }
-        if (recipeIngredient.quantity <= 0) {
-            throw new Error('Quantity must be greater than zero');
-        }
+    static from({
+        recipeId,
+        ingredientId,
+        unit,
+        quantity,
+    }: RecipeIngredientPrisma): RecipeIngredient {
+        return new RecipeIngredient({
+            recipeId,
+            ingredientId,
+            unit,
+            quantity,
+        });
     }
 
-    getRecipe(): Recipe {
-        return this.recipe;
+    getRecipeId(): number {
+        return this.recipeId;
     }
 
-    getIngredient(): Ingredient {
-        return this.ingredient;
+    getIngredientId(): number {
+        return this.ingredientId;
     }
 
     getUnit(): string {
@@ -56,13 +54,10 @@ export class RecipeIngredient {
         return this.quantity;
     }
 
-    setRecipe(recipe: Recipe) {
-        this.recipe = recipe;
-    }
-
     toJSON() {
         return {
-            ingredient: this.ingredient,
+            recipeId: this.recipeId,
+            ingredientId: this.ingredientId,
             unit: this.unit,
             quantity: this.quantity,
         };
@@ -70,8 +65,8 @@ export class RecipeIngredient {
 
     equals(recipeIngredient: RecipeIngredient): boolean {
         return (
-            this.recipe === recipeIngredient.getRecipe() &&
-            this.ingredient === recipeIngredient.getIngredient() &&
+            this.recipeId === recipeIngredient.getRecipeId() &&
+            this.ingredientId === recipeIngredient.getIngredientId() &&
             this.unit === recipeIngredient.getUnit() &&
             this.quantity === recipeIngredient.getQuantity()
         );

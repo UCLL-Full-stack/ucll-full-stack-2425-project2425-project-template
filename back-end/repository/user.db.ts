@@ -11,7 +11,7 @@ const users = [
             firstName: 'Anette',
             lastName: 'Hardy',
             email: 'annie@ucll.be',
-            user: undefined,
+            // user: undefined,
         }),
     }),
     new User({
@@ -23,7 +23,7 @@ const users = [
             firstName: 'Shulin',
             lastName: 'Xu',
             email: 'shulin@ucll.be',
-            user: undefined,
+            // user: undefined,
         }),
     }),
     new User({
@@ -35,15 +35,15 @@ const users = [
             firstName: 'Amelie',
             lastName: 'Lammens',
             email: 'amelie@ucll.be',
-            user: undefined,
+            // user: undefined,
         }),
     }),
 ];
 
 // Set user reference in profiles after user objects are created
-users.forEach((user) => {
-    user.getProfile().setUser(user);
-});
+// users.forEach((user) => {
+//     user.getProfile().setUser(user);
+// });
 
 const getAllUsers = (): User[] => users;
 

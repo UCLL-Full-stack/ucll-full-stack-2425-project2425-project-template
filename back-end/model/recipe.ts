@@ -1,9 +1,14 @@
-// We created validate methods to avoid code repetition
-
 import { RecipeCategory, RecipeUpdateInput } from '../types';
 import { RecipeIngredient } from './recipeIngredient';
-import { Schedule } from './schedule';
-import { User } from './user';
+// import { Schedule } from './schedule';
+// import { User } from './user';
+import {
+    Recipe as RecipePrisma,
+    RecipeCategory as CategoryPrisma,
+    RecipeIngredient as RecipeIngredientPrisma,
+    // Schedule as SchedulePrisma,
+    // User as UserPrisma,
+} from '@prisma/client';
 
 export class Recipe {
     private id?: number;
@@ -12,12 +17,12 @@ export class Recipe {
     private cookingTime: number;
     private category: RecipeCategory;
     private ingredients: RecipeIngredient[];
-    private user: User;
+    // private user: User;
     private imageUrl?: string;
     private isFavorite?: boolean;
     private notes?: string;
     private source?: string;
-    private schedule?: Schedule;
+    // private schedule?: Schedule;
     private scheduledDate?: Date; // Add validations?
 
     constructor(recipe: {
@@ -27,12 +32,12 @@ export class Recipe {
         cookingTime: number;
         category: RecipeCategory;
         ingredients: RecipeIngredient[];
-        user: User;
+        // user: User;
         imageUrl?: string;
         isFavorite?: boolean;
         notes?: string;
         source?: string;
-        schedule?: Schedule;
+        // schedule?: Schedule;
         scheduledDate?: Date;
     }) {
         this.validate(recipe);
@@ -42,13 +47,48 @@ export class Recipe {
         this.cookingTime = recipe.cookingTime;
         this.category = recipe.category;
         this.ingredients = recipe.ingredients;
-        this.user = recipe.user;
+        // this.user = recipe.user;
         this.imageUrl = recipe.imageUrl;
         this.isFavorite = recipe.isFavorite;
         this.notes = recipe.notes;
         this.source = recipe.source;
-        this.schedule = recipe.schedule;
+        // this.schedule = recipe.schedule;
         this.scheduledDate = recipe.scheduledDate;
+    }
+
+    static from({
+        id,
+        title,
+        instructions,
+        cookingTime,
+        category,
+        ingredients,
+        // user,
+        imageUrl,
+        isFavorite,
+        notes,
+        source,
+        // schedule,
+        scheduledDate,
+    }: RecipePrisma & {
+        ingredients: RecipeIngredientPrisma[];
+        category: CategoryPrisma;
+    }): Recipe {
+        return new Recipe({
+            id,
+            title,
+            instructions,
+            cookingTime,
+            category: category as RecipeCategory,
+            ingredients: ingredients.map((ingredient) => RecipeIngredient.from(ingredient)),
+            // user: User.from(user),
+            imageUrl: imageUrl || undefined,
+            isFavorite: isFavorite || undefined,
+            notes: notes || undefined,
+            source: source || undefined,
+            // schedule: schedule ? Schedule.from(schedule) : undefined,
+            scheduledDate: scheduledDate || undefined,
+        });
     }
 
     private validateId(id?: number): void {
@@ -84,11 +124,11 @@ export class Recipe {
         }
     }
 
-    private validateUser(user: User): void {
-        if (!user) {
-            throw new Error('User is required');
-        }
-    }
+    // private validateUser(user: User): void {
+    //     if (!user) {
+    //         throw new Error('User is required');
+    //     }
+    // }
 
     private validateIngredients(ingredients: RecipeIngredient[]): void {
         if (!ingredients || ingredients.length === 0) {
@@ -120,11 +160,11 @@ export class Recipe {
         }
     }
 
-    private validateSchedule(schedule?: Schedule): void {
-        if (schedule !== undefined && !(schedule instanceof Schedule)) {
-            throw new Error('Schedule must be an instance of Schedule');
-        }
-    }
+    // private validateSchedule(schedule?: Schedule): void {
+    //     if (schedule !== undefined && !(schedule instanceof Schedule)) {
+    //         throw new Error('Schedule must be an instance of Schedule');
+    //     }
+    // }
 
     validate(recipe: {
         id?: number;
@@ -133,25 +173,25 @@ export class Recipe {
         cookingTime: number;
         category: string;
         ingredients: RecipeIngredient[];
-        user: User;
+        // user: User;
         imageUrl?: string;
         isFavorite?: boolean;
         notes?: string;
         source?: string;
-        schedule?: Schedule;
+        // schedule?: Schedule;
     }): void {
         this.validateId(recipe.id);
         this.validateTitle(recipe.title);
         this.validateInstructions(recipe.instructions);
         this.validateCookingTime(recipe.cookingTime);
         this.validateCategory(recipe.category);
-        this.validateUser(recipe.user);
+        // this.validateUser(recipe.user);
         this.validateIngredients(recipe.ingredients);
         this.validateImageUrl(recipe.imageUrl);
         this.validateIsFavorite(recipe.isFavorite);
         this.validateNotes(recipe.notes);
         this.validateSource(recipe.source);
-        this.validateSchedule(recipe.schedule);
+        // this.validateSchedule(recipe.schedule);
     }
 
     getId(): number | undefined {
@@ -208,14 +248,14 @@ export class Recipe {
         this.ingredients = ingredients;
     }
 
-    getUser(): User {
-        return this.user;
-    }
+    // getUser(): User {
+    //     return this.user;
+    // }
 
-    setUser(user: User) {
-        this.validateUser(user);
-        this.user = user;
-    }
+    // setUser(user: User) {
+    //     this.validateUser(user);
+    //     this.user = user;
+    // }
 
     getImageUrl(): string | undefined {
         return this.imageUrl;
@@ -253,13 +293,21 @@ export class Recipe {
         this.source = source ? source.trim() : undefined;
     }
 
-    getSchedule(): Schedule | undefined {
-        return this.schedule;
+    // getSchedule(): Schedule | undefined {
+    //     return this.schedule;
+    // }
+
+    // setSchedule(schedule: Schedule) {
+    //     this.validateSchedule(schedule);
+    //     this.schedule = schedule;
+    // }
+
+    getScheduledDate(): Date | undefined {
+        return this.scheduledDate;
     }
 
-    setSchedule(schedule: Schedule) {
-        this.validateSchedule(schedule);
-        this.schedule = schedule;
+    setScheduledDate(scheduledDate?: Date | null) {
+        this.scheduledDate = scheduledDate ?? undefined;
     }
 
     // validate URLs
@@ -294,8 +342,8 @@ export class Recipe {
             const ingredients = updateInput.ingredients.map(
                 (ingredient) =>
                     new RecipeIngredient({
-                        recipe: this,
-                        ingredient: ingredient.ingredient,
+                        recipeId: this.id ?? 0,
+                        ingredientId: ingredient.ingredient.getId() ?? 0,
                         unit: ingredient.unit,
                         quantity: ingredient.quantity,
                     })
@@ -325,12 +373,12 @@ export class Recipe {
             cookingTime: this.cookingTime,
             category: this.category,
             ingredients: this.ingredients?.map((ingredient) => ingredient.toJSON()),
-            user: this.user.getId(),
+            // user: this.user.getId(),
             imageUrl: this.imageUrl,
             isFavorite: this.isFavorite,
             notes: this.notes,
             source: this.source,
-            schedule: this.schedule?.getId(),
+            // schedule: this.schedule?.getId(),
         };
     }
 

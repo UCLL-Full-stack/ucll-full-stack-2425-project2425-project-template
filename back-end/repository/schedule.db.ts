@@ -1,72 +1,107 @@
 import { Schedule } from '../model/schedule';
-import recipeDb from './recipe.db';
+import database from './database';
 
-// Mock User (user1 from recipes)
-const user1 = recipeDb.getAllRecipes()[0].getUser();
-
-// Mock Schedules
-const schedules: Schedule[] = [
-    new Schedule({
-        id: 1,
-        user: user1,
-        date: new Date('2024-11-03'),
-        recipes: [recipeDb.getRecipeById({ id: 2 })!],
-    }),
-    new Schedule({
-        id: 2,
-        user: user1,
-        date: new Date('2024-11-04'),
-        recipes: [recipeDb.getRecipeById({ id: 3 })!],
-    }),
-    new Schedule({
-        id: 3,
-        user: user1,
-        date: new Date('2024-11-06'),
-        recipes: [recipeDb.getRecipeById({ id: 2 })!, recipeDb.getRecipeById({ id: 3 })!],
-    }),
-    new Schedule({
-        id: 4,
-        user: user1,
-        date: new Date('2024-11-07'),
-        recipes: [
-            recipeDb.getRecipeById({ id: 1 })!,
-            recipeDb.getRecipeById({ id: 4 })!,
-            recipeDb.getRecipeById({ id: 5 })!,
-            recipeDb.getRecipeById({ id: 6 })!,
-        ],
-    }),
-];
-
-const getScheduleByUserIdAndDate = (userId: number, date: Date): Schedule | null => {
-    return (
-        schedules.find(
-            (schedule) =>
-                schedule.getUser().getId() === userId &&
-                schedule.getDate().toDateString() === date.toDateString()
-        ) || null
-    );
-};
-
-const createSchedule = (userId: number, date: Date): Schedule => {
-    const newId = Math.max(...schedules.map((s) => s.getId() || 0)) + 1;
-    const newSchedule = new Schedule({
-        id: newId,
-        user: user1, // TEMPORARILY --> should change to the actual user
-        date,
-        recipes: [],
-    });
-    schedules.push(newSchedule);
-    return newSchedule;
-};
-
-const saveSchedule = (schedule: Schedule): Schedule => {
-    const index = schedules.findIndex((s) => s.getId() === schedule.getId());
-    if (index !== -1) {
-        schedules[index] = schedule;
-    } else {
-        schedules.push(schedule);
+const getAllSchedules = async (): Promise<Schedule[]> => {
+    try {
+        const schedulesPrisma = await database.schedule.findMany({
+            include: {
+                recipes: {
+                    include: {
+                        ingredients: true,
+                    },
+                },
+            },
+        });
+        return schedulesPrisma.map((schedulePrisma) => Schedule.from(schedulePrisma));
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
     }
-    return schedule;
 };
 
-export default { getScheduleByUserIdAndDate, createSchedule, saveSchedule };
+const getScheduledRecipesByUserIdAndDate = async (
+    userId: number,
+    date: Date
+): Promise<Schedule | null> => {
+    try {
+        const schedulePrisma = await database.schedule.findFirst({
+            where: {
+                userId,
+            },
+            include: {
+                recipes: {
+                    where: {
+                        scheduledDate: date,
+                    },
+                    include: {
+                        ingredients: true,
+                    },
+                },
+            },
+        });
+        return schedulePrisma ? Schedule.from(schedulePrisma) : null;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+const createSchedule = async (userId: number, date: Date): Promise<Schedule> => {
+    try {
+        const newSchedulePrisma = await database.schedule.create({
+            data: {
+                userId,
+                createdAt: date,
+                recipes: {
+                    create: [],
+                },
+            },
+            include: {
+                recipes: {
+                    include: {
+                        ingredients: true,
+                    },
+                },
+            },
+        });
+        return Schedule.from(newSchedulePrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+const saveSchedule = async (schedule: Schedule): Promise<Schedule> => {
+    try {
+        const updatedSchedulePrisma = await database.schedule.update({
+            where: {
+                id: schedule.getId(),
+            },
+            data: {
+                recipes: {
+                    set: schedule.getRecipes()?.map((recipe) => ({
+                        id: recipe.getId(),
+                    })),
+                },
+            },
+            include: {
+                recipes: {
+                    include: {
+                        ingredients: true,
+                    },
+                },
+            },
+        });
+        return Schedule.from(updatedSchedulePrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+export default {
+    getAllSchedules,
+    getScheduledRecipesByUserIdAndDate,
+    createSchedule,
+    saveSchedule,
+};

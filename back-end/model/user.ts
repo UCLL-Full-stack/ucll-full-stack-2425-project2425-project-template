@@ -1,6 +1,13 @@
 import { Profile } from './profile';
 import { Recipe } from './recipe';
 import { Schedule } from './schedule';
+import {
+    User as UserPrisma,
+    Profile as ProfilePrisma,
+    Recipe as RecipePrisma,
+    Schedule as SchedulePrisma,
+    RecipeIngredient as RecipeIngredientPrisma,
+} from '@prisma/client';
 
 export class User {
     private id?: number;
@@ -27,6 +34,29 @@ export class User {
         this.schedule = user.schedule;
     }
 
+    static from({
+        id,
+        username,
+        password,
+        profile,
+        recipes,
+        schedule,
+    }: UserPrisma & {
+        profile: ProfilePrisma;
+        recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
+        schedule?: SchedulePrisma & {
+            recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
+        };
+    }): User {
+        return new User({
+            id,
+            username,
+            password,
+            profile: Profile.from(profile),
+            recipes: recipes.map((recipe) => Recipe.from(recipe)),
+            schedule: schedule ? Schedule.from(schedule) : undefined,
+        });
+    }
     validate(user: {
         id?: number;
         username: string;
@@ -54,7 +84,6 @@ export class User {
             throw new Error('Schedule must be an instance of Schedule');
         }
     }
-
 
     getId(): number | undefined {
         return this.id;

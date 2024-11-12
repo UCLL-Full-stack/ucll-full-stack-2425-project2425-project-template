@@ -1,8 +1,9 @@
 import { Recipe } from '../model/recipe';
+import recipeDb from '../repository/recipe.db';
 import scheduleDb from '../repository/schedule.db';
 
-const getScheduledRecipeDetails = (userId: number, date: Date): Recipe[] => {
-    const schedule = scheduleDb.getScheduleByUserIdAndDate(userId, date);
+const getScheduledRecipeDetails = async (userId: number, date: Date): Promise<Recipe[]> => {
+    const schedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date);
     if (!schedule) {
         return [];
     }
@@ -16,7 +17,7 @@ const updateRecipeDate = async (
     oldDate: Date,
     newDate: Date
 ): Promise<Recipe> => {
-    const oldSchedule = await scheduleDb.getScheduleByUserIdAndDate(userId, oldDate);
+    const oldSchedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, oldDate);
     if (!oldSchedule) throw new Error('Schedule not found');
 
     const recipe = oldSchedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
@@ -24,7 +25,7 @@ const updateRecipeDate = async (
 
     oldSchedule.removeRecipe(recipe);
     const newSchedule =
-        (await scheduleDb.getScheduleByUserIdAndDate(userId, newDate)) ||
+        (await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, newDate)) ||
         (await scheduleDb.createSchedule(userId, newDate));
     newSchedule.addRecipe(recipe);
 
@@ -39,7 +40,7 @@ const deleteScheduledRecipe = async (
     recipeId: number,
     date: Date
 ): Promise<void> => {
-    const schedule = await scheduleDb.getScheduleByUserIdAndDate(userId, date);
+    const schedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date);
     if (!schedule) throw new Error('Schedule not found');
 
     const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
@@ -47,6 +48,10 @@ const deleteScheduledRecipe = async (
 
     schedule.removeRecipe(recipe);
     await scheduleDb.saveSchedule(schedule);
+
+    // Update the recipe's scheduledDate to null
+    recipe.setScheduledDate(null);
+    await recipeDb.saveRecipe(recipe, userId);
 };
 
 export default {

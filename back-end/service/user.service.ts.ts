@@ -14,7 +14,7 @@ const getUserById = (id: number): User => {
 const createUser = ({ firstName, lastName, username, email, password }: UserSignupInput): User => {
     const profile = new Profile({ firstName, lastName, email });
     const user = new User({ username, password, profile });
-    profile.setUser(user);
+    // profile.setUser(user);
     return userDb.addUser(user);
 };
 

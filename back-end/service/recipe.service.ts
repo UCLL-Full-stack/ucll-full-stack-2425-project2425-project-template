@@ -2,16 +2,22 @@ import { Recipe } from '../model/recipe';
 import recipeDb from '../repository/recipe.db';
 import { RecipeUpdateInput } from '../types';
 
-const getAllRecipes = (): Recipe[] => recipeDb.getAllRecipes();
+const getAllRecipes = async (): Promise<Recipe[]> => {
+    return await recipeDb.getAllRecipes();
+};
 
-const getRecipeById = (id: number): Recipe => {
-    const recipe = recipeDb.getRecipeById({ id });
+const getRecipeById = async (id: number): Promise<Recipe> => {
+    const recipe = await recipeDb.getRecipeById({ id });
     if (!recipe) throw new Error(`Recipe with id ${id} does not exist.`);
     return recipe;
 };
 
-const updateRecipe = (id: number, recipeData: RecipeUpdateInput): Recipe => {
-    const recipe = recipeDb.getRecipeById({ id });
+const updateRecipe = async (
+    id: number,
+    recipeData: RecipeUpdateInput,
+    userId: number
+): Promise<Recipe> => {
+    const recipe = await recipeDb.getRecipeById({ id });
     if (!recipe) throw new Error(`Recipe with id ${id} does not exist.`);
 
     if (recipeData.title !== undefined && recipeData.title.trim() === '') {
@@ -19,16 +25,16 @@ const updateRecipe = (id: number, recipeData: RecipeUpdateInput): Recipe => {
     }
 
     recipe.updateRecipe(recipeData);
-    recipeDb.saveRecipe(recipe);
+    await recipeDb.saveRecipe(recipe, userId);
     return recipe;
 };
 
-const deleteRecipe = (id: number): void => {
+const deleteRecipe = async (id: number): Promise<void> => {
     if (id <= 0) throw new Error('Invalid recipe ID');
 
-    const recipe = recipeDb.getRecipeById({ id });
+    const recipe = await recipeDb.getRecipeById({ id });
     if (!recipe) throw new Error(`Recipe with id ${id} does not exist.`);
-    recipeDb.deleteRecipe({ id });
+    await recipeDb.deleteRecipe({ id });
 };
 
 export default { getAllRecipes, getRecipeById, updateRecipe, deleteRecipe };

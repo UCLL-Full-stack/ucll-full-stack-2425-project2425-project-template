@@ -1,34 +1,44 @@
 import { User } from './user';
+import { Profile as ProfilePrisma, User as UserPrisma } from '@prisma/client';
 
 export class Profile {
     private id?: number;
     private firstName: string;
     private lastName: string;
     private email: string;
-    private user?: User;
+    // private user?: User;
 
     constructor(profile: {
         id?: number;
         firstName: string;
         lastName: string;
         email: string;
-        user?: User;
+        // user?: User;
     }) {
         this.validate(profile);
         this.id = profile.id;
         this.firstName = profile.firstName;
         this.lastName = profile.lastName;
         this.email = profile.email;
-        this.user = profile.user;
+        // this.user = profile.user;
     }
 
-    validate(profile: {
-        id?: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        user?: User;
-    }): void {
+    static from({
+        id,
+        firstName,
+        lastName,
+        email,
+    }: // user,
+    ProfilePrisma): Profile {
+        return new Profile({
+            id,
+            firstName,
+            lastName,
+            email,
+        });
+    }
+
+    validate(profile: { id?: number; firstName: string; lastName: string; email: string }): void {
         if (profile.id !== undefined && (!Number.isInteger(profile.id) || profile.id <= 0)) {
             throw new Error('ID must be a positive integer');
         }
@@ -40,9 +50,6 @@ export class Profile {
         }
         if (!profile.email || profile.email.trim().length === 0) {
             throw new Error('Email is required and cannot be empty');
-        }
-        if (profile.user !== undefined && !(profile.user instanceof User)) {
-            throw new Error('User must be an instance of User');
         }
     }
 
@@ -74,13 +81,13 @@ export class Profile {
         this.email = email;
     }
 
-    getUser(): User | undefined {
-        return this.user;
-    }
+    // getUser(): User | undefined {
+    //     return this.user;
+    // }
 
-    setUser(user: User): void {
-        this.user = user;
-    }
+    // setUser(user: User): void {
+    //     this.user = user;
+    // }
 
     toJSON() {
         return {

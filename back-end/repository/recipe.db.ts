@@ -1,36 +1,136 @@
+import { RecipeCategory } from '@prisma/client';
 import { Recipe } from '../model/recipe';
-import { User } from '../model/user';
-import { RecipeIngredient } from '../model/recipeIngredient';
-import { Ingredient } from '../model/ingredient';
-import { Profile } from '../model/profile';
+import database from './database';
 
-export default {
-    getAllRecipes: (): Recipe[] => recipes,
-    getRecipeById: ({ id }: { id: number }): Recipe | null => {
-        return recipes.find((recipe) => recipe.getId() === id) || null;
-    },
-    addRecipe: (recipe: Recipe): Recipe => {
-        recipes.push(recipe);
-        return recipe;
-    },
-    saveRecipe: (recipe: Recipe): Recipe => {
-        const existingRecipeIndex = recipes.findIndex((r) => r.getId() === recipe.getId());
-        if (existingRecipeIndex >= 0) {
-            recipes[existingRecipeIndex] = recipe;
-        } else {
-            const newId =
-                recipes.length > 0 ? Math.max(...recipes.map((r) => r.getId() || 0)) + 1 : 1;
-            recipe.setId(newId);
-            recipes.push(recipe);
-        }
-        return recipe;
-    },
-    deleteRecipe: ({ id }: { id: number }): void => {
-        const recipeIndex = recipes.findIndex((recipe) => recipe.getId() === id);
-        if (recipeIndex >= 0) {
-            recipes.splice(recipeIndex, 1);
-        } else {
-            throw new Error(`Recipe with id ${id} does not exist.`);
-        }
-    },
+const getAllRecipes = async (): Promise<Recipe[]> => {
+    try {
+        const recipesPrisma = await database.recipe.findMany({
+            include: {
+                ingredients: true,
+            },
+        });
+        return recipesPrisma.map((recipePrisma) => Recipe.from(recipePrisma));
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
 };
+
+const getRecipeById = async ({ id }: { id: number }): Promise<Recipe | null> => {
+    try {
+        const recipePrisma = await database.recipe.findUnique({
+            where: { id },
+            include: {
+                ingredients: true,
+            },
+        });
+        if (!recipePrisma) return null;
+        return Recipe.from(recipePrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
+    try {
+        const newRecipePrisma = await database.recipe.create({
+            data: {
+                title: recipe.getTitle(),
+                instructions: recipe.getInstructions(),
+                cookingTime: recipe.getCookingTime(),
+                category: recipe.getCategory() as RecipeCategory,
+                imageUrl: recipe.getImageUrl(),
+                isFavorite: recipe.getIsFavorite(),
+                notes: recipe.getNotes(),
+                source: recipe.getSource(),
+                scheduledDate: recipe.getScheduledDate() ?? null,
+                ingredients: {
+                    create: recipe.getIngredients()?.map((ingredient) => ({
+                        ingredientId: ingredient.getIngredientId(),
+                        unit: ingredient.getUnit(),
+                        quantity: ingredient.getQuantity(),
+                    })),
+                },
+                userId: userId,
+            },
+            include: {
+                ingredients: true,
+            },
+        });
+        return Recipe.from(newRecipePrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+const saveRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
+    try {
+        const existingRecipePrisma = await database.recipe.upsert({
+            where: {
+                id: recipe.getId(),
+            },
+            update: {
+                title: recipe.getTitle(),
+                instructions: recipe.getInstructions(),
+                cookingTime: recipe.getCookingTime(),
+                category: recipe.getCategory() as RecipeCategory,
+                imageUrl: recipe.getImageUrl(),
+                isFavorite: recipe.getIsFavorite(),
+                notes: recipe.getNotes(),
+                source: recipe.getSource(),
+                scheduledDate: recipe.getScheduledDate() ?? null, // scheduledDate set to null if undefined
+                ingredients: {
+                    deleteMany: {},
+                    create: recipe.getIngredients()?.map((ingredient) => ({
+                        ingredientId: ingredient.getIngredientId(),
+                        unit: ingredient.getUnit(),
+                        quantity: ingredient.getQuantity(),
+                    })),
+                },
+            },
+            create: {
+                title: recipe.getTitle(),
+                instructions: recipe.getInstructions(),
+                cookingTime: recipe.getCookingTime(),
+                category: recipe.getCategory() as RecipeCategory,
+                userId: userId,
+                imageUrl: recipe.getImageUrl(),
+                isFavorite: recipe.getIsFavorite(),
+                notes: recipe.getNotes(),
+                source: recipe.getSource(),
+                scheduledDate: recipe.getScheduledDate() ?? null,
+                ingredients: {
+                    create: recipe.getIngredients()?.map((ingredient) => ({
+                        ingredientId: ingredient.getIngredientId(),
+                        unit: ingredient.getUnit(),
+                        quantity: ingredient.getQuantity(),
+                    })),
+                },
+            },
+            include: {
+                ingredients: true,
+            },
+        });
+        return Recipe.from(existingRecipePrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+const deleteRecipe = async ({ id }: { id: number }): Promise<void> => {
+    try {
+        await database.recipe.delete({
+            where: {
+                id,
+            },
+        });
+    } catch (error) {
+        console.log(error);
+        throw new Error(`Recipe with id ${id} does not exist.`);
+    }
+};
+
+export default { getAllRecipes, addRecipe, saveRecipe, deleteRecipe, getRecipeById };

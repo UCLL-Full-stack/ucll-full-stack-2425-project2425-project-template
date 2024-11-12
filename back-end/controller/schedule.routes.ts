@@ -147,13 +147,11 @@ scheduleRouter.put(
 scheduleRouter.delete(
     '/:userId/:recipeId/:date',
     async (req: Request, res: Response, next: NextFunction) => {
-        const { userId, recipeId, date } = req.params;
+        const { recipeId, date } = req.params;
+        const userId = 1; // TEMPORARY USER ID
+
         try {
-            await scheduleService.deleteScheduledRecipe(
-                parseInt(userId),
-                parseInt(recipeId),
-                new Date(date)
-            );
+            await scheduleService.deleteScheduledRecipe(userId, parseInt(recipeId), new Date(date));
             res.status(204).send(); // server processed the request but there's no response body
         } catch (error) {
             next(error);
