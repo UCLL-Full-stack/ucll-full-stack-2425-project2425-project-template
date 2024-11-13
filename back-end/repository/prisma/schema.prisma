@@ -1,0 +1,44 @@
+generator client {
+    provider    = "prisma-client-js"
+}
+
+datasource db {
+    provider    = "postgresql"
+    url         = env("DATABASE_URL")
+}
+
+model User {
+    id          Int     @id @default(autoincrement())
+    username    String  @unique
+    password    String
+}
+
+model Admin {
+    id          Int     @id @default(autoincrement())
+    username    String  @unique
+    password    String
+}
+
+model Crash {
+    id          Int     @id @default(autoincrement())
+    type        String
+}
+
+model Driver {
+    id          Int     @id @default(autoincrement())
+    name        String
+    team        String
+    descritpion String
+    age         Int
+    racecar     Racecar[]
+}
+
+model Racecar {
+    id          Int         @id @default(autoincrement())
+    car_name    String
+    type        String
+    description String
+    hp          Int
+
+    Driver Driver[]
+}
