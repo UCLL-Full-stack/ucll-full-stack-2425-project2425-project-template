@@ -24,7 +24,7 @@ export const users = [
 const getAllUsers = async (): Promise<User[]> => {
     try {
         const userPrisma = await database.user.findMany({
-            include: { chats: true },
+            include: { chats: true,groupchats: true },
         });
         return userPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
@@ -34,16 +34,52 @@ const getAllUsers = async (): Promise<User[]> => {
 };
 
 const getUserById = async (id: number): Promise<User | undefined> => {
-    return users.find((user) => user.getId() === id);
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: { id },
+            include: { chats: true , groupchats: true},
+        });
+        return userPrisma ? User.from(userPrisma) : undefined;
+        
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+        
+    }
 };
 
 const getUserByName = async (name: string): Promise<User | undefined> => {
-    return users.find((user) => user.getName() === name);
+    try{
+        const userPrisma = await database.user.findFirst({
+            where: { name },
+            include: { chats: true,groupchats: true },
+        });
+        return userPrisma ? User.from(userPrisma) : undefined;
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
 const createUser = async (user: User): Promise<User> => {
-    users.push(user);
-    return user;
+    try {
+        const userPrisma = await database.user.create({
+            data: {
+                name: user.getName(),
+                firstName: user.getFirstName(),
+                password: user.getPassword(),
+                role: user.getRole(),
+
+            },
+            include: { chats: true, groupchats: true },
+        });
+        return User.from(userPrisma);
+
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');  
+    }
 };
 
 export default { getAllUsers, getUserById, createUser, getUserByName };

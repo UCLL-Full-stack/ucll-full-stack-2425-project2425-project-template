@@ -20,6 +20,7 @@ const createUser = async (user: UserInput) => {
     password: user.password,
     firstName: user.firstname,
     name: user.name,
+    role: user.role,
   });
   return userDB.createUser(newUser);
 }
@@ -29,6 +30,7 @@ const getUserByName = async (name: string) => {
 
 const loginUser = async (user: UserInput) => {
   const searchUser = await userDB.getUserByName(user.name);
+  console.log(searchUser);
   if(searchUser === undefined || searchUser.getPassword() !== user.password) {
     throw new Error('Invalid credentials');
   }

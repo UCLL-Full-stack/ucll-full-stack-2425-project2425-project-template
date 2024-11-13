@@ -13,10 +13,17 @@ type ChatInput = {
   message: string;
   userId: number;
 }
+type GroupChatInput = {
+  createdAt: Date;
+  id?: number;
+  name: string;
+  description: string;
+}
 
 export {
   UserInput,
-  ChatInput
+  ChatInput,
+  GroupChatInput
 }
 
 

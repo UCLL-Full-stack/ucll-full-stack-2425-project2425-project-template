@@ -15,6 +15,7 @@ model User {
   firstName String  
   password  String  
   chats     Chat[]  @relation("UserChats")
+  groupchats GroupChat[] 
 }
 
 model Chat {
@@ -23,4 +24,14 @@ model Chat {
   createdAt DateTime @default(now())
   userId    Int?     
   user      User?    @relation("UserChats", fields: [userId], references: [id])
+  groupchats GroupChat[]
+}
+model GroupChat {
+  id        Int      @id @default(autoincrement())
+  name   String
+  description String   
+  createdAt DateTime @default(now())
+  users     User[]   
+  chats     Chat[]   
+
 }

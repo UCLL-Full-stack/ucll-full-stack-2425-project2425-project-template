@@ -29,13 +29,24 @@ const getAllChats = async (): Promise<Chat[]> => {
     }
 };
 
-const getChatByUserId = (userId: number): Chat[] => {
-    return chats.filter((chat) => chat.getUserId() === userId);
+const getChatByUserId = async (userId: number): Promise<Chat[]> => {
+    try {
+        const chatPrisma = await database.chat.findMany({
+            where: { userId: userId }
+        });
+        return chatPrisma.map((chatPrisma) => Chat.from(chatPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
-const getChatById = (id: number): Chat | null => {
+const getChatById = async (id: number): Promise<Chat | null> => {
     try {
-        return chats.find((chat) => chat.getId() === id) || null;
+        const chatPrisma = await database.chat.findUnique({
+            where: {id: id}
+        })  
+        return chatPrisma ? Chat.from(chatPrisma) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -43,8 +54,14 @@ const getChatById = (id: number): Chat | null => {
 };
 const createChat = async (chat: Chat): Promise<Chat> => {
     try {
-        chats.push(chat);
-        return chat;
+        const chatPrisma = await database.chat.create({
+            data: {
+                message: chat.getMessage(),
+                createdAt: chat.getCreatedAt(),
+                userId: chat.getUserId()
+            }
+        })
+        return Chat.from(chatPrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

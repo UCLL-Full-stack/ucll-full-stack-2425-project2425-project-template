@@ -1,5 +1,6 @@
 import { Chat } from './chat';
-import { Chat as ChatPrisma, User as UserPrisma } from '@prisma/client';
+import { Chat as ChatPrisma, User as UserPrisma, GroupChat as GroupChatPrisma } from '@prisma/client';
+import { GroupChat } from './groupchat';
 
 export class User {
     private id?: number;
@@ -7,7 +8,8 @@ export class User {
     private name: string;
     private firstName: string;
     private password: string;
-    private chats?: Chat[] = [];
+    private chats: Chat[] = [];
+    private groupchats: GroupChat[] = [];
 
     constructor(user: {
         id?: number;
@@ -16,6 +18,7 @@ export class User {
         firstName: string;
         password: string;
         chats?: Chat[];
+        groupchats?: GroupChat[];
     }) {
         this.validate(user);
         this.id = user.id;
@@ -24,7 +27,9 @@ export class User {
         this.firstName = user.firstName;
         this.password = user.password;
         this.chats = user.chats || [];
+        this.groupchats = user.groupchats || [];
     }
+
     static from({
         id,
         role,
@@ -32,13 +37,15 @@ export class User {
         firstName,
         password,
         chats,
-    }: UserPrisma & { chats: ChatPrisma[] }) {
+        groupchats
+    }: UserPrisma & { chats: ChatPrisma[], groupchats: GroupChatPrisma[] }) {
         return new User({
             id,
             role,
             name,
             firstName,
             password,
+            groupchats: groupchats.map((group: GroupChatPrisma) => GroupChat.from(group)),
             chats: chats.map((chat: ChatPrisma) => Chat.from(chat)),
         });
     }
@@ -60,15 +67,19 @@ export class User {
     }
 
     public getPassword(): string {
-        return this.password;
+        return this.password; // Consider removing or securing this method
     }
 
     public getChats(): Chat[] {
-        return this.chats || [];
+        return this.chats;
     }
 
     public addChat(chat: Chat): void {
-        this.chats?.push(chat);
+        this.chats.push(chat);
+    }
+
+    public getGroups(): GroupChat[] {
+        return this.groupchats;
     }
 
     equals(user: User): boolean {
@@ -76,7 +87,8 @@ export class User {
             this.id === user.getId() &&
             this.name === user.getName() &&
             this.firstName === user.getFirstName() &&
-            this.password === user.getPassword()
+            this.password === user.getPassword() &&
+            this.role === user.getRole()
         );
     }
 
@@ -87,13 +99,13 @@ export class User {
         firstName: string;
         password: string;
     }): void {
-        if (!user.name || user.name === '') {
+        if (!user.name || user.name.trim() === '') {
             throw new Error('User name is required');
         }
-        if (!user.firstName || user.firstName === '') {
+        if (!user.firstName || user.firstName.trim() === '') {
             throw new Error('User first name is required');
         }
-        if (!user.password || user.password === '') {
+        if (!user.password || user.password.trim() === '') {
             throw new Error('User password is required');
         }
     }

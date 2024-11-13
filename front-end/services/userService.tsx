@@ -13,8 +13,19 @@ const registerUser = (user: User) => {
   })
 }
 
+const loginUser = ({name, password}: {name: string, password: string}) => {
+  return fetch(`${URL}users/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({name, password}),
+  })
+}
+
 const userService = {
-  registerUser
+  registerUser,
+  loginUser,
 }
 
 export default userService;
