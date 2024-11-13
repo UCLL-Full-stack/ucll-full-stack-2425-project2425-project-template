@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Header from "@/components/header";
+import Footer from "@/components/footer";
 import UserService from "@/services/UserService";
 import { Authentication } from "@/types";
+import styles from '@/styles/Home.module.css';
+import LoginForm from "@/components/users/LoginForm";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<Authentication>({
@@ -38,30 +41,18 @@ const Login = () => {
     <>
       <Head>
         <title>Login</title>
+        <meta name="description" content="Personal Finance Tracker app" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon/favicon.ico" />
       </Head>
       <Header />
-      <main>
+      <main className={styles.main}>
         <h1>Login</h1>
         <section>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={credentials.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={credentials.password}
-              onChange={(e) => handleInputChange("password", e.target.value)}
-              required
-            />
-            <button type="submit">Login</button>
-          </form>
+        <LoginForm credentials={credentials} handleSubmit={handleSubmit} handleInputChange={handleInputChange} />
         </section>
       </main>
+      <Footer />
     </>
   );
 };

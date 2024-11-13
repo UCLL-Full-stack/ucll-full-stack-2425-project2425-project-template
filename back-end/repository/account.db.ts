@@ -1,11 +1,6 @@
 import { Account } from '../model/account';
 
-const accounts: Account[] = [
-    new Account({
-        isShared: false,
-        type: 'Savings',
-    }),
-];
+const accounts: Account[] = [];
 
 const createAccount = ({ isShared, type }: { isShared: boolean; type: string }): Account => {
     const account = new Account({ isShared, type });

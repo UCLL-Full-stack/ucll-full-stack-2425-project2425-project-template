@@ -1,6 +1,7 @@
 import Head from 'next/head';
-import styles from '@/styles/home.module.css';
+import styles from '@/styles/Home.module.css';
 import Header from '@/components/header';
+import Footer from '@/components/footer';
 
 const Home: React.FC = () => {
   return (
@@ -9,20 +10,34 @@ const Home: React.FC = () => {
         <title>Home</title>
         <meta name="description" content="Personal Finance Tracker app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" href="/favicon/favicon.ico" />
       </Head>
       <Header />
       <main className={styles.main}>
-        <span>
-          <h1>Welcome!</h1>
-        </span>
-
-        <div className={styles.description}>
+        <h1>Welcome to Personal Finance Tracker!</h1>
+        <div>
           <p>
-            This is a personal finance tracker app. You can use it to keep track of your expenses and income.
-          </p>
+            Easily manage your finances and reach your financial goals with the Personal Finance Tracker. Here’s what you can do: </p>
+            <ul>
+            <li><h2>Multiple Accounts</h2>
+            <p>Log in to create and manage multiple bank accounts. You can even share access with others, while retaining full control over your accounts.</p></li>
+
+            <li><h2>Seamless Transactions</h2>
+            <p>Send and receive money effortlessly between accounts.</p></li>
+
+            {/* <li><p>Set Budget Goals</p>
+            <p>Set up your budget goals, and the app will guide you on what’s left to save or what you can safely spend.</p></li> */}
+
+            <li><h2>Expense & Income Tracking</h2>
+            <p>Review all your expenses and income with detailed sorting options by date, amount, or category.</p></li>
+
+            <li><h2>Secure & Managed Environment</h2>
+            <p>With bank administrators on hand to monitor accounts and ensure security, your data is always safe.</p></li>
+            </ul>
+          <p>Get started today to take control of your finances!</p>
         </div>
       </main>
+      <Footer />
     </>
   );
 };

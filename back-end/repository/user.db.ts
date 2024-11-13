@@ -15,6 +15,10 @@ const johnDoe = new User({
             isShared: false,
             type: 'Savings',
         }),
+        new Account({
+            isShared: true,
+            type: 'Transaction',
+        }),
     ],
 });
 

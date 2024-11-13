@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import UserService from "@/services/UserService";
 import Head from "next/head";
 import Header from "@/components/header";
+import Footer from "@/components/footer";
 import { User } from "@/types";
 import UserDetails from "@/components/users/UserDetails";
 import AccountOverviewTable from "@/components/accounts/AccountDetails";
+import styles from '@/styles/Home.module.css';
 
 const ReadUserByNationalRegisterNumber = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -16,13 +18,13 @@ const ReadUserByNationalRegisterNumber = () => {
 
   useEffect(() => {
     if (userNationalRegisterNumber) {
-      console.log("Query Parameter:", userNationalRegisterNumber); // Log to verify parameter
+      console.log("Query Parameter:", userNationalRegisterNumber);
       const fetchUser = async () => {
         try {
           const userData = await UserService.getUserByNationalRegisterNumber(
             userNationalRegisterNumber as string
           );
-          console.log("Fetched User Data:", userData); // Log fetched data
+          console.log("Fetched User Data:", userData);
           setUser(userData);
         } catch (error) {
           console.error("Failed to fetch user:", error);
@@ -48,15 +50,18 @@ const ReadUserByNationalRegisterNumber = () => {
   return (
     <>
       <Head>
-        <title>User Info</title>
+        <title>Account Overview</title>
+        <meta name="description" content="Personal Finance Tracker app" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon/favicon.ico" />
       </Head>
       <Header />
-      <main>
-        <h1>User Details</h1>
+      <main className={styles.main}>
         <UserDetails user={user} />
         <h2>Account Overview</h2>
         <AccountOverviewTable user={user} />
       </main>
+      <Footer />
     </>
   );
 };
