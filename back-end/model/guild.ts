@@ -21,8 +21,8 @@ export class Guild {
   }
 
   static from({ guildId, guildName, settings, roleIds, members, boardIds }: GuildPrisma): Guild {
-    const typedSettings = settings as unknown as PermissionEntry[];
-    const typedMembers = members as unknown as Member[];
+    const typedSettings = JSON.parse(settings as unknown as string) as PermissionEntry[];
+    const typedMembers = JSON.parse(members as unknown as string) as Member[];
     return new Guild(guildId, guildName, typedSettings, roleIds, typedMembers, boardIds);
   }
 
