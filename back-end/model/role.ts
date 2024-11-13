@@ -16,7 +16,8 @@ export class Role {
     }
 
     static from({ roleId, roleName, permissions, guildId }: RolePrisma): Role {
-        return new Role(roleId, roleName, permissions as unknown as DiscordPermission[], guildId);
+        let permissionsArray = JSON.parse(permissions as string) as DiscordPermission[];
+        return new Role(roleId, roleName, permissionsArray, guildId);
     }
   
     getRoleId(): string {
