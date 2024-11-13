@@ -22,7 +22,7 @@ export class Board {
   }
 
   static from({ boardId, boardName, createdByUserId, columnIds, guildId, permissions }: BoardPrisma): Board {
-    const typedPermissions = permissions as unknown as PermissionEntry[];
+    const typedPermissions = JSON.parse(permissions as unknown as string) as PermissionEntry[];
       return new Board(
           boardId,
           boardName,
@@ -45,11 +45,11 @@ export class Board {
     return this.boardName;
   }
 
-  setCreatedByUser(user: string): void {
-    this.createdByUserId = user;
+  setCreatedByUserId(userId: string): void {
+    this.createdByUserId = userId;
   }
 
-  getCreatedByUser(): string {
+  getCreatedByUserId(): string {
     return this.createdByUserId;
   }
 
