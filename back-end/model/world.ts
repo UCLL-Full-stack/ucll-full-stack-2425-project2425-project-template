@@ -1,7 +1,10 @@
 import { Floor, getRandomInt } from './floor';
 import { User } from './user';
 import { 
-    User as UserPrisma
+    User as UserPrisma,
+    World as WorldPrisma,
+    Floor as FloorPrisma,
+    Line as LinePrisma,
 } from "@prisma/client"; 
 
 export class World {
@@ -57,5 +60,22 @@ export class World {
         if (!world.owner) {
             throw new Error('An owner is required.');
         }
+    }
+
+    static from({
+        id,
+        name,
+        owner,
+        floors,
+    }: WorldPrisma & {
+        owner: UserPrisma;
+        floors: (FloorPrisma & { tiles: LinePrisma[] })[];
+    }) {
+        return new World({
+            id,
+            name,
+            owner: User.from(owner),
+            floors: floors.map((floor) => Floor.from(floor)),
+        })
     }
 }

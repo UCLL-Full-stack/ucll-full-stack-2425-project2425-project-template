@@ -39,7 +39,15 @@ floors  Floor[]
 model Floor {
 id          Int     @id @default(autoincrement())
 floornumber Int
-end         DateTime
+tiles       Line[] 
 world       World   @relation(fields: [worldId], references: [id])
 worldId     Int
+}
+
+model Line {
+  id      Int       @id @default(autoincrement())
+  tiles   String[]
+  lineNum Int
+  floor   Floor     @relation(fields: [floorId], references: [id])
+  floorId Int
 }
