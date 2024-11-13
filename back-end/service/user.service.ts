@@ -1,7 +1,6 @@
 import userDb from '../repository/user.db';
 import { User } from '../model/user';
-import { AccountInput, UserInput } from '../types/index';
-import { Account } from '../model/account';
+import { UserInput } from '../types/index';
 import accountService from './account.service';
 
 const createUser = ({
@@ -69,10 +68,38 @@ const addAccount = (nationalRegisterNumber: string, accountNumber: string): User
     return user;
 };
 
+const updateUser = async (
+    nationalRegisterNumber: string,
+    userInput: Partial<UserInput>
+): Promise<User> => {
+    const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+    if (!user) {
+        throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
+    }
+    user.update(userInput);
+    await userDb.updateUser(user);
+    return user;
+};
+
+const deleteUser = async (nationalRegisterNumber: string): Promise<String> => {
+    const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+    if (!user) {
+        throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
+    } else if (user.getAccounts().length > 0) {
+        throw new Error(
+            `User with national register number ${nationalRegisterNumber} still has active bank accounts.` // need to change when account status is implemented
+        );
+    }
+    await userDb.deleteUser(nationalRegisterNumber);
+    return 'User deleted successfully.';
+};
+
 export default {
     createUser,
     getUserByEmailAndPassword,
     getUserByEmail,
     getUserByNationalRegisterNumber,
     addAccount,
+    updateUser,
+    deleteUser,
 };

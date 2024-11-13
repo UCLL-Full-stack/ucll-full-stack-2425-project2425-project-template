@@ -1,3 +1,4 @@
+import { UserInput } from '../types';
 import { Account } from './account';
 
 export class User {
@@ -164,5 +165,12 @@ export class User {
             email: this.email,
             accounts: this.accounts.map((account) => account.toJSON()),
         };
+    }
+
+    update(userInput: Partial<UserInput>) {
+        if (userInput.name) this.name = userInput.name;
+        if (userInput.phoneNumber) this.phoneNumber = userInput.phoneNumber;
+        if (userInput.email) this.email = userInput.email;
+        if (userInput.password) this.password = userInput.password;
     }
 }

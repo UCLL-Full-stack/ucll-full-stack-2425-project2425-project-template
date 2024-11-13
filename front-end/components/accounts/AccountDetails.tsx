@@ -2,11 +2,11 @@ import React from 'react';
 import { User } from '@/types';
 import styles from '@/styles/Home.module.css';
 
-type AccountOverviewTableProps = {
+type AccountDetailsProps = {
   user: User;
 };
 
-const AccountOverviewTable: React.FC<AccountOverviewTableProps> = ({ user }) => {
+const AccountDetails: React.FC<AccountDetailsProps> = ({ user }) => {
   return (
     <div className={styles.accountOverview}>
       <table>
@@ -43,4 +43,4 @@ const AccountOverviewTable: React.FC<AccountOverviewTableProps> = ({ user }) => 
   );
 };
 
-export default AccountOverviewTable;
+export default AccountDetails;

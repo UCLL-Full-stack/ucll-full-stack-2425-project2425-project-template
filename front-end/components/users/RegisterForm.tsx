@@ -8,6 +8,7 @@ type Props = {
 }
 
 const RegisterForm: React.FC<Props> = ({ user, handleSubmit, handleInputChange }: Props) => {
+    const birthDate = user.birthDate ? (user.birthDate instanceof Date ? user.birthDate : new Date(user.birthDate)) : new Date();
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
             <label htmlFor="nationalRegisterNumber">National Register Number <sup>*</sup></label>
@@ -37,7 +38,7 @@ const RegisterForm: React.FC<Props> = ({ user, handleSubmit, handleInputChange }
                 type="date"
                 id="birthDate"
                 name="birthDate"
-                value={user.birthDate ? user.birthDate.toISOString().split("T")[0] : ""} 
+                value={birthDate.toISOString().split("T")[0]} 
                 onChange={(e) => handleInputChange("birthDate", e.target.value)}
                 required
             />

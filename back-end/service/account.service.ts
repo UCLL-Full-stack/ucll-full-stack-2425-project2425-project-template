@@ -1,6 +1,6 @@
 import accountDb from '../repository/account.db';
 import { Account } from '../model/account';
-import { AccountInput, UserInput } from '../types/index';
+import { AccountInput } from '../types/index';
 
 const createAccount = (accountInput: AccountInput): Account => {
     const { isShared, type } = accountInput;

@@ -6,7 +6,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { User } from "@/types";
 import UserDetails from "@/components/users/UserDetails";
-import AccountOverviewTable from "@/components/accounts/AccountDetails";
+import AccountDetails from "@/components/accounts/AccountDetails";
 import styles from '@/styles/Home.module.css';
 
 const ReadUserByNationalRegisterNumber = () => {
@@ -59,7 +59,7 @@ const ReadUserByNationalRegisterNumber = () => {
       <main className={styles.main}>
         <UserDetails user={user} />
         <h2>Account Overview</h2>
-        <AccountOverviewTable user={user} />
+        <AccountDetails user={user} />
       </main>
       <Footer />
     </>
