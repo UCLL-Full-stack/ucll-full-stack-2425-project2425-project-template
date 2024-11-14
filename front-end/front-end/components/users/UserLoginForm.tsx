@@ -5,12 +5,15 @@ import { useState } from "react";
 
 const UserLoginForm: React.FC = () => {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState<string | null>(null);
-  const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [statusMessages, setStatusMessages] = useState<{ message: string; type: string }[]>([]);
 
   const clearErrors = () => {
-    setNameError(null);
+    setNameError('');
+    setPasswordError('');
     setStatusMessages([]);
   };
 
@@ -19,6 +22,11 @@ const UserLoginForm: React.FC = () => {
 
     if (!name && name.trim() === "") {
       setNameError("Name is required");
+      result = false;
+    }
+
+    if (!password || password.trim() === "") {
+      setPasswordError("Password is required");
       result = false;
     }
 
@@ -35,6 +43,7 @@ const UserLoginForm: React.FC = () => {
 
     setStatusMessages([{ message: 'Login successful. Redirecting to homepage...', type: 'success' }]);
     sessionStorage.setItem("loggedInUser", name);
+
 
     setTimeout(() => {
       router.push("/");
@@ -53,6 +62,7 @@ const UserLoginForm: React.FC = () => {
                 className={classNames({
                   "text-red-800": type === "error",
                   "text-green-800": type === "success",
+                  "text-base": true,
                 })}
               >
                 {message}
@@ -76,6 +86,22 @@ const UserLoginForm: React.FC = () => {
             className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue:500 block w-full p-2.5"
           />
           {nameError && <p className="text-red-800">{nameError}</p>}
+        </div>
+
+        <label htmlFor="passwordInput" className="block mb-2 text-sm font-medium">
+          Password:
+        </label>
+        <div className="block mb-2 text-sm font-medium">
+          <input
+            id="passwordInput"
+            type="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+            className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          {passwordError && <p className="text-red-800">{passwordError}</p>}
         </div>
 
         <button
