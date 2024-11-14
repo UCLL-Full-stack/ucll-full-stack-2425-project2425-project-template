@@ -12,17 +12,22 @@ model User {
     username    String  @unique
     password    String
     races       Race[]
+    submissions Submission_form[]
 }
 
 model Admin {
     id          Int     @id @default(autoincrement())
     username    String  @unique
     password    String
+    races       Race[]
+
 }
 
 model Crash {
     id          Int     @id @default(autoincrement())
     type        String
+
+    Driver Driver[] @relation(map: "Driver_crash_fkey")
 }
 
 model Driver {
@@ -34,7 +39,8 @@ model Driver {
     racecarId   Int
     crash       Crash @relation(fields: [crashId], references: [id], map: "Driver_crash_fkey")
     crashId     Int
-    crash       Crash
+    race        Race @relation(fields: [raceId], references: [id])
+    raceId      Int
 }
 
 model Racecar {
@@ -44,14 +50,12 @@ model Racecar {
 }
 
 model Submission_form {
-}
-
-model Submission_form {
     id          Int     @id @default(autoincrement())
     title       String
     content     String
-    user        User
-    race        Race
+    user        User @relation(fields: [UserId], references: [id], map: "User_fkey")
+    UserId      Int
+    races        Race[]
 }
 
 model Race {
@@ -61,5 +65,7 @@ model Race {
     description String
     location    String
     drivers      Driver[]
-    admin       Admin?
+    users        User[]
+    admin       Admin[]
+    submission_forms Submission_form[]
 }
