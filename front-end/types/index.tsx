@@ -1,5 +1,5 @@
 export type Vehicle = {
-    id?: number;
+    id: number;
     manufacturer: string;
     model_name: string;
     year: number;
@@ -8,4 +8,16 @@ export type Vehicle = {
     transmission_type: string;
     vehicle_type: string;
     body_type: string
+}
+
+export type UserLogIn = {
+    email: string;
+    password: string;
+}
+
+export type UserSignUp = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
 }

@@ -157,10 +157,11 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
             fuel_type: fuelType,
             transmission_type: transmissionType,
             vehicle_type: vehicleType,
-            body_type: bodyType
+            body_type: bodyType,
+            id: car.id
         };
 
-        await onAddCar(newCar);
+        const res = await onAddCar(newCar);
         onClose();
     };
 

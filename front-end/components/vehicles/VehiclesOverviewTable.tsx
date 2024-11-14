@@ -79,36 +79,25 @@ type Props = {
 const VehiclesOverviewCards: React.FC<Props> = ({ vehicles }: Props) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedCar, setSelectedCar] = useState<Vehicle | null>(null);
+    
 
     const handleEditCarClick = (vehicle: Vehicle) => {
-        setSelectedCar(vehicle);       // Set the car to be edited
-        setIsEditModalOpen(true);      // Open the modal
+        setSelectedCar(vehicle);       
+        setIsEditModalOpen(true);      
     };
 
     const handleCloseEditModal = () => {
-        setIsEditModalOpen(false);     // Close the modal
-        setSelectedCar(null);          // Clear the selected car
+        setIsEditModalOpen(false);     
+        setSelectedCar(null);          
     };
 
-    const handleEditCar = async (updatedCar: Vehicle) => {
-        // if (updatedCar.id === undefined) {
-        //     console.error("Cannot edit car: 'id' is undefined.");
-        //     return;
-        // }
+    const handleEditCar = async (newVehicle: Vehicle) => {
+        const oldVehicleId = newVehicle.id
+        const response = await VehicleService.editVehicle(oldVehicleId, newVehicle)
+                
+    }
+
     
-        // try {
-        //     console.log("Editing car:", updatedCar);
-    
-        //     await VehicleService.editVehicle(updatedCar.id, updatedCar);
-    
-        //     console.log("Edited car successfully:", updatedCar);
-            
-        // } catch (error) {
-        //     console.error("Error updating car:", error);
-        // } finally {
-        //     handleCloseEditModal();
-        // }
-    };
 
     return (
         <div className="flex flex-wrap gap-4">

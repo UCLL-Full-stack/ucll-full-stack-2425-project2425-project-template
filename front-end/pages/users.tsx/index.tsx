@@ -14,6 +14,7 @@ const Users: React.FC = () => {
     const [userVehicles, setUserVehicles] = useState<Array<Vehicle>>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, SetIsEditModalOpen] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
     // Fetch the user's vehicles
     const getUserVehicles = async () => { 
@@ -46,6 +47,14 @@ const Users: React.FC = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
+    const handleLogInClick = () => {
+        setIsLoginModalOpen(true)
+    }
+
+    const handleCloseLoginModal = () => {
+        setIsLoginModalOpen(false)
+    }
 
 
     return (
