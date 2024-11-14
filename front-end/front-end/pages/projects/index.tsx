@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from '@/components/header';
 import ProjectService from '@/services/ProjectService';
-import ProjectOverviewTable from '@/components/projects/ProjectOverviewTable';
+import ProjectOverviewTable from '../../components/projects/ProjectOverviewTable';
 import ProjectDetails from '@/components/projects/ProjectDetails';
 import { Project } from '@types';
 
