@@ -6,7 +6,7 @@ const userRouter = Router();
 userRouter.get("/:userId", (req, res) => {
     const { userId } = req.params;
     try {
-        const user = userService.getUser(userId);
+        const user = userService.getUserById(userId);
         res.status(200).json(user);
     } catch (error) {
         if (error instanceof Error) {

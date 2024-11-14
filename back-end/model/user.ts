@@ -10,6 +10,7 @@ export class User {
     private guildIds: string[];
   
     constructor(userId: string, username: string, globalName: string, userAvatar: string, guildIds: string[]) {
+      this.validate(userId, username, globalName);
       this.userId = userId;
       this.username = username;
       this.globalName = globalName;
@@ -19,6 +20,18 @@ export class User {
 
     static from({ userId, username, globalName, userAvatar, guildIds }: UserPrisma): User {
       return new User(userId, username, globalName, userAvatar, guildIds);
+    }
+
+    validate(userId: string, username: string, globalName: string): void {
+      if(userId === undefined || userId === "") {
+        throw new Error("User ID cannot be empty.");
+      }
+      if(username === undefined || username === "") {
+        throw new Error("Username cannot be empty.");
+      }
+      if(globalName === undefined || globalName === "") {
+        throw new Error("Global name cannot be empty.");
+      }
     }
   
     getUserId(): string {
