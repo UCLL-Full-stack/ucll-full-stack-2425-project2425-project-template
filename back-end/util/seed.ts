@@ -64,7 +64,7 @@ async function main() {
       description: 'Complete setup for Project Alpha',
       dueDate: new Date('2024-05-01'),
       completed: false,
-      project: { connect: { projectId: project1.projectId } }, // Links to Project Alpha
+      project: { connect: { project_Id: project1.project_Id } }, // Links to Project Alpha
     },
   });
 
@@ -74,7 +74,7 @@ async function main() {
       description: 'Initial draft for Project Beta',
       dueDate: new Date('2024-06-01'),
       completed: false,
-      project: { connect: { projectId: project2.projectId } }, // Links to Project Beta
+      project: { connect: { project_Id: project2.project_Id } }, // Links to Project Beta
     },
   });
 
@@ -82,14 +82,14 @@ async function main() {
   await database.userProject.create({
     data: {
       userId: user1.userId,
-      projectId: project1.projectId,
+      projectId: project1.project_Id,
     },
   });
 
   await database.userProject.create({
     data: {
       userId: user2.userId,
-      projectId: project2.projectId,
+      projectId: project2.project_Id,
     },
   });
 
