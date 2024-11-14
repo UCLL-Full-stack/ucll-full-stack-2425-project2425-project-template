@@ -43,7 +43,7 @@ const UserLoginForm: React.FC = () => {
 
   return (
     <>
-      <h3 className="px-0">Login</h3>
+      <h3 className="px-0 text-2xl">Login</h3>
       {statusMessages && (
         <div className="row">
           <ul className="list-none mb-3 mx-auto ">
