@@ -33,10 +33,11 @@ const ProjectPage: React.FC = () => {
     <>
       <Head>
         <title>Project Details</title>
+        <link rel="icon" href="/logo.ico" />
       </Head>
       <Header />
       <main className="d-flex flex-column justify-content-center align-items-center">
-        <h1>Project Details</h1>
+        <h1 className="text-2xl font-bold mb-8">Project Details</h1>
         <section>
           <ProjectOverviewTable projects={projects} selectProject={setSelectedProject} />
           {selectedProject ? (

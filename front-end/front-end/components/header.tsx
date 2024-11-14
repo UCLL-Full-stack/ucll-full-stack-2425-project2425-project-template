@@ -1,22 +1,27 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
-const Header: React.FC = () => {
+export default function Header() {
   return (
-    <header className="border-bottom bg-dark bg-gradient">
-      <a className="fs-2 d-flex justify-content-center mb-2 mb-lg-0 text-white-50 text-decoration-none">
-        {' '}
-        Courses App
-      </a>
-      <nav className="nav justify-content-center">
-        <Link href="/" className="nav-link px-4 fs-5 text-white">
-          Home
-        </Link>
-        <Link href="/projects" className="nav-link px-4 fs-5 text-white">
-          Projects
-        </Link>
-      </nav>
+    <header className="w-full bg-white shadow-md py-4">
+      <div className="container mx-auto flex items-center justify-between px-10">
+        <div className="flex items-center space-x-4">
+          <Image src="/PMT.png" alt="Project Management Tool Logo" width={50} height={50} unoptimized/>
+        </div>
+        <nav className=''>
+          <ul className="flex space-x-8 text-gray-700">
+          <li>
+              <Link href="/" className="hover:underline">Home</Link>
+            </li>
+            <li>
+              <Link href="/projects" className="hover:underline">Project Overview</Link>
+            </li>
+            <li>
+              <Link href="/contact" className="hover:underline">Test</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
-};
-
-export default Header;
+}
