@@ -10,16 +10,15 @@ const Vehicles: React.FC = () => {
 
     const [vehicles, setVehicles] = useState<Array<Vehicle>>([]);
 
-    const getVehicles = async() =>{ 
+    const refreshVehicles = async () => { 
         const response = await VehicleService.getAllVehicles();
-        const vehicle = await response.json();
-        setVehicles(vehicle);
-    }
+        const updatedVehicles = await response.json();
+        setVehicles(updatedVehicles);
+    };
 
-
-    useEffect(()=>{
-        getVehicles();
-    },[])
+    useEffect(() => {
+        refreshVehicles(); 
+    }, []);
 
     return (
         <>
@@ -33,7 +32,7 @@ const Vehicles: React.FC = () => {
                 <div>
                     <h2>Vehicles</h2>
                     <section>
-                        {vehicles && <VehiclesOverviewTable vehicles={vehicles} />}
+                        {vehicles && (<VehiclesOverviewTable vehicles={vehicles} onVehiclesChange={refreshVehicles}/>)}
 
                     </section>
                 </div>

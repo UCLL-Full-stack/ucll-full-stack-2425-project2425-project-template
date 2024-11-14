@@ -2,9 +2,7 @@
 
 import Header from "@/components/header";
 import AddCarModal from "@/components/vehicles/addCarModal";
-import editCarModal from "@/components/vehicles/editCarModal";
-import VehiclesOverviewTable from "@/components/vehicles/VehiclesOverviewTable"; // Or `VehiclesOverviewCards`, if you prefer the card view
-
+import VehiclesOverviewTable from "@/components/vehicles/VehiclesOverviewTable";
 import VehicleService from "@/services/VehicleService";
 import { Vehicle } from "@/types";
 import Head from "next/head";
@@ -13,31 +11,31 @@ import { useEffect, useState } from "react";
 const Users: React.FC = () => {
     const [userVehicles, setUserVehicles] = useState<Array<Vehicle>>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, SetIsEditModalOpen] = useState(false);
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  
+    
 
-    // Fetch the user's vehicles
     const getUserVehicles = async () => { 
-        const response = await VehicleService.getAllVehicles(); // Assuming a `getUserVehicles` method
+        const response = await VehicleService.getAllVehicles(); 
         const vehicles = await response.json();
         setUserVehicles(vehicles);
     };
 
-    // Function to handle adding a new car
     const handleAddCar = async (newCar: Vehicle) => {
         try {
             const response = await VehicleService.addVehicle(newCar);
             if (response.ok) {
                 const addedCar = await response.json();
-                setUserVehicles((prevVehicles) => [...prevVehicles, addedCar]); // Update state with new car
+                setUserVehicles((prevVehicles) => [...prevVehicles, addedCar]); 
             }
         } catch (error) {
             console.error("Failed to add car:", error);
         }
+
+
     };
 
     useEffect(() => {
-        getUserVehicles(); // Fetch vehicles when component mounts
+        getUserVehicles(); 
     }, []);
 
     const handleAddCarClick = () => {
@@ -47,14 +45,6 @@ const Users: React.FC = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-
-    const handleLogInClick = () => {
-        setIsLoginModalOpen(true)
-    }
-
-    const handleCloseLoginModal = () => {
-        setIsLoginModalOpen(false)
-    }
 
 
     return (
@@ -77,7 +67,7 @@ const Users: React.FC = () => {
                 </div>
 
                 <section>
-                    {userVehicles && <VehiclesOverviewTable vehicles={userVehicles} />}
+                    {userVehicles && (<VehiclesOverviewTable vehicles={userVehicles} onVehiclesChange={getUserVehicles} />)}
                 </section>
 
                 {/* Render the AddCarModal */}

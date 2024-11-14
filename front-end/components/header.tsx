@@ -2,21 +2,6 @@ import Link from "next/link";
 import { useState } from "react";
 
 
-const Users: React.FC = () => {
- 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
-
-  const handleLogInClick = () => {
-    setIsLoginModalOpen(true)
-  }
-  
-  const handleCloseLoginModal = () => {
-    setIsLoginModalOpen(false)
-  }
-
-  return void
-}
-
 const Header: React.FC = () => {
   return (
     <header className=" inset-0 flex flex-col items-center bg-white ml-10 mr-10">

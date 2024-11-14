@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Vehicle } from "@/types";
+import VehicleService from '@/services/VehicleService';
 
 type EditCarModalProps = {
     isOpen: boolean;
@@ -163,6 +164,7 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
 
         const res = await onAddCar(newCar);
         onClose();
+        // return VehicleService.getAllVehicles   
     };
 
     if (!isOpen) return null;
