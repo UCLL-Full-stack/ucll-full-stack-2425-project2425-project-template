@@ -28,11 +28,11 @@ const Vehicles: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <main>
-                <div>
-                    <h2>Vehicles</h2>
+            <main className="flex justify-center bg-white p-7 min-h-screen">
+            
+                <div className="items-center mb-6">
                     <section>
-                        {vehicles && (<VehiclesOverviewTable vehicles={vehicles} onVehiclesChange={refreshVehicles}/>)}
+                        {vehicles && (<VehiclesOverviewTable vehicles={vehicles} onVehiclesChange={() => refreshVehicles}/>)}
 
                     </section>
                 </div>

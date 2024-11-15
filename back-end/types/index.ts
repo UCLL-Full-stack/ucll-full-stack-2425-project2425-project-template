@@ -1,3 +1,4 @@
+import { id } from "date-fns/locale";
 
 type SellerInput = {
     id?: number;
@@ -17,6 +18,7 @@ type VehicleInput = {
     transmission_type?: string;
     vehicle_type?: string;
     body_type?:string;
+    mileage?:number;
 };
 
 

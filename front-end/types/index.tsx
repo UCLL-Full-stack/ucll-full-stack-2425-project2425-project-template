@@ -7,7 +7,8 @@ export type Vehicle = {
     fuel_type: string;
     transmission_type: string;
     vehicle_type: string;
-    body_type: string
+    body_type: string;
+    mileage: number
 }
 
 export type UserLogIn = {
@@ -19,5 +20,5 @@ export type UserSignUp = {
     name: string;
     email: string;
     password: string;
-confirmPassword: string;
+    confirmPassword: string;
 }

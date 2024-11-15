@@ -31,7 +31,7 @@ vehicleRouter.delete('/:id', async (req, res) => {
         await vehicleService.deleteVehicle(vehicleId);
         res.status(200).json({ status: `Vehicle with ID ${vehicleId} was deleted.` });
     } catch (error) {
-        res.status(400).json({ status: 'error' }); 
+        res.status(400).json({ status: 'error something wrong with delete method' }); 
     }
 });
 

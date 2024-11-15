@@ -2,7 +2,7 @@ import { Vehicle } from "@/types";
 import { useState } from "react";
 import EditCarModal from "@/components/vehicles/editCarModal";
 import VehicleService from "@/services/VehicleService";
-import Vehicles from "@/pages/vehicles.tsx";
+import Vehicles from "@/pages/vehicles";
 
 type Props = {
     vehicles: Array<Vehicle>;
@@ -57,10 +57,12 @@ const VehiclesOverviewTable: React.FC<Props> = ({ vehicles, onVehiclesChange }: 
                     <h2 className="text-lg font-semibold text-center">{vehicle.manufacturer} {vehicle.model_name}</h2>
                     <p className="text-xl font-bold text-center mt-2">€{vehicle.price}</p>
                     <div className="text-gray-500 mt-1 text-center">
+                        <p>Mileage: {vehicle.mileage} KM</p>
                         <p>Year: {vehicle.year}</p>
                         <p>Fuel: {vehicle.fuel_type}</p>
                         <p>Transmission: {vehicle.transmission_type}</p>
                         <p>Type: {vehicle.vehicle_type}</p>
+
                     </div>
 
                     <section className="grid grid-cols-2">

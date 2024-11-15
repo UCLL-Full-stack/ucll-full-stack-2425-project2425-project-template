@@ -6,7 +6,7 @@ import { id } from "date-fns/locale";
 
 const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
     if (!input.manufacturer || !input.model_name || !input.price || !input.body_type ||
-        !input.fuel_type || !input.transmission_type || !input.year ||
+        !input.fuel_type || !input.transmission_type || !input.year || !input.mileage || 
         !input.vehicle_type) {
         throw new Error("All vehicle properties must be defined");
     }
@@ -19,7 +19,8 @@ const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
         transmission_type: input.transmission_type,
         year: input.year,
         vehicle_type: input.vehicle_type,
-        body_type: input.body_type
+        body_type: input.body_type,
+        mileage: input.mileage
     });
     return vehicleDB.createVehicle(vehicle);
 }
@@ -34,7 +35,7 @@ const deleteVehicle = async (vehicleId: number): Promise<void> => {
 
 const editVehicle = async (vehicleId: number, input: VehicleInput): Promise<Vehicle> => {
     if (!input.manufacturer || !input.model_name || !input.price || !input.body_type ||
-        !input.fuel_type || !input.transmission_type || !input.year ||
+        !input.fuel_type || !input.transmission_type || !input.year || !input.mileage||
         !input.vehicle_type) {
         throw new Error("All vehicle properties must be defined");
     }
@@ -47,6 +48,7 @@ const editVehicle = async (vehicleId: number, input: VehicleInput): Promise<Vehi
         year: input.year,
         vehicle_type: input.vehicle_type,
         body_type: input.body_type,
+        mileage: input.mileage,
         id : vehicleId
     })
     return vehicleDB.updateVehicle(vehicleId, newVehicle)

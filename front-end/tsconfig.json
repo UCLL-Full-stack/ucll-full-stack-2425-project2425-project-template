@@ -28,7 +28,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "pages/vehicles", "pages/users"  ],
   "exclude": [
     "node_modules"
   ]

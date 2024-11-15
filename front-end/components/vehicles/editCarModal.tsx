@@ -17,6 +17,7 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
     const [price, setPrice] = useState(car.price);
     const [year, setYear] = useState(car.year);
     const [bodyType, setBodyType] = useState(car.body_type);
+    const [mileage, setMileage] = useState(car.mileage);
     const [fuelType, setFuelType] = useState(car.fuel_type);
     const [transmissionType, setTransmissionType] = useState(car.transmission_type);
     const [vehicleType, setVehicleType] = useState(car.vehicle_type);
@@ -159,6 +160,7 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
             transmission_type: transmissionType,
             vehicle_type: vehicleType,
             body_type: bodyType,
+            mileage: mileage,
             id: car.id
         };
 
@@ -228,6 +230,16 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
                             type="number"
                             value={year}
                             onChange={(e) => setYear(Number(e.target.value))}
+                            className="w-full px-4 py-2 border rounded-md"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium">Mileage</label>
+                        <input
+                            type="number"
+                            value={mileage}
+                            onChange={(e) => setMileage(Number(e.target.value))}
                             className="w-full px-4 py-2 border rounded-md"
                             required
                         />
