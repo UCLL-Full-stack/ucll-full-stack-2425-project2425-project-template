@@ -13,6 +13,7 @@ export class Board {
   private permissions: PermissionEntry[];
 
   constructor(boardId: string, boardName: string, createdByUserId: string, columnIds: string[], guildId: string, permissions: PermissionEntry[]) {
+    this.validate(boardName, createdByUserId, columnIds, guildId, permissions);
     this.boardId = boardId;
     this.boardName = boardName;
     this.createdByUserId = createdByUserId;
@@ -31,6 +32,24 @@ export class Board {
           guildId,
           typedPermissions
       );
+  }
+
+  validate(boardName: string, createdByUserId: string, columnIds: string[], guildId: string, permissions: PermissionEntry[]): void {
+    if(boardName === undefined || boardName === "") {
+      throw new Error("Board name cannot be empty.");
+    }
+    if(createdByUserId === undefined || createdByUserId === "") {
+      throw new Error("Created by user ID cannot be empty.");
+    }
+    if(columnIds === undefined || columnIds.length === 0) {
+      throw new Error("Column IDs cannot be empty.");
+    }
+    if(guildId === undefined || guildId === "") {
+      throw new Error("Guild ID cannot be empty.");
+    }
+    if(permissions === undefined || permissions.length === 0) {
+      throw new Error("Permissions cannot be empty.");
+    }
   }
 
   getBoardId(): string {

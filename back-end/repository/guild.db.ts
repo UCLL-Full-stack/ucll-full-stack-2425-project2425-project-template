@@ -58,7 +58,7 @@ const getGuildById = async (guildId: string): Promise<Guild> => {
 const addGuild = async (guildData: {
     guildId: string;
     guildName: string;
-    settings?: any;
+    settings?: PermissionEntry[];
     roleIds?: string[];
     members?: Member[];
     userIds?: string[];
@@ -123,7 +123,7 @@ const addGuild = async (guildData: {
   
 const updateGuild = async (guildId: string, updateData: {
     guildName?: string;
-    settings?: any;
+    settings?: PermissionEntry[];
     roleIds?: string[];
     members?: Member[];
     userIds?: string[];
@@ -181,7 +181,7 @@ const updateGuild = async (guildId: string, updateData: {
         throw new Error("Database error. See server log for details.");
     }
 };
-  
+
 
 export default {
     getAllGuilds,

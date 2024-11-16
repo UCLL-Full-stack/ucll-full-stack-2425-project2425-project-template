@@ -11,6 +11,7 @@ export class Task {
     private columnId: string;
   
     constructor(taskId: string, title: string, description: string, dueDate: Date, assigneeIds: string[], column: string) {
+        this.validate(title, column);
         this.taskId = taskId;
         this.title = title;
         this.description = description;
@@ -21,6 +22,15 @@ export class Task {
 
     static from({ taskId, title, description, dueDate, assigneeIds, columnId }: TaskPrisma): Task {
         return new Task(taskId, title, description, dueDate, assigneeIds, columnId);
+    }
+
+    validate(title: string, columnId: string): void {
+        if(title === undefined || title === "") {
+            throw new Error("Task title cannot be empty.");
+        }
+        if(columnId === undefined || columnId === "") {
+            throw new Error("Column ID cannot be empty.");
+        }
     }
   
     getTaskId(): string {

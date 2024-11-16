@@ -112,9 +112,24 @@ const updateColumn = async (columnId: string, columnData: {
     }
 }
 
+const deleteColumn = async (columnId: string): Promise<void> => {
+    const column = await database.column.findUnique({ where: { columnId }, include: { tasks: { select: { taskId: true } } } });
+    if (!column) {
+        throw new Error("Column not found");
+    }
+    const taskIds = column.tasks?.map(task => task.taskId) || [];
+    if(taskIds.length > 0) {
+        for(const taskId of taskIds) {
+            await taskDb.deleteTask(taskId);
+        }
+    }
+    await database.column.delete({ where: { columnId } });
+}
+
 export default {
     getAllColumns,
     getColumnById,
     addColumn,
     updateColumn,
+    deleteColumn,
 };

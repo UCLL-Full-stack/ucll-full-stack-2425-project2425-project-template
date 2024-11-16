@@ -108,9 +108,18 @@ const updateRole = async (
     }
 };
 
+const deleteRole = async (roleId: string): Promise<void> => {
+    const role = await database.role.findUnique({ where: { roleId } });
+    if (!role) {
+        throw new Error("Role not found");
+    }
+    await database.role.delete({ where: { roleId } });
+}
+
 export default {
     getAllRoles,
     getRoleById,
     addRole,
     updateRole,
+    deleteRole
 };

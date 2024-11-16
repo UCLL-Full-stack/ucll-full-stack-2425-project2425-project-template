@@ -12,6 +12,7 @@ export class Guild {
   private boardIds: string[];
 
   constructor(guildId: string, guildName: string, settings: PermissionEntry[], roleIds: string[], members: Member[], boardIds: string[]) {
+    this.validate(guildName, settings, roleIds, members);
     this.guildId = guildId;
     this.guildName = guildName;
     this.settings = settings;
@@ -24,6 +25,21 @@ export class Guild {
     const typedSettings = JSON.parse(settings as unknown as string) as PermissionEntry[];
     const typedMembers = JSON.parse(members as unknown as string) as Member[];
     return new Guild(guildId, guildName, typedSettings, roleIds, typedMembers, boardIds);
+  }
+
+  validate(guildName: string, settings: PermissionEntry[], roleIds: string[], members: Member[]): void {
+    if(guildName === undefined || guildName === "") {
+      throw new Error("Guild name cannot be empty.");
+    }
+    if(settings === undefined || settings.length === 0) {
+      throw new Error("Settings cannot be empty.");
+    }
+    if(roleIds === undefined || roleIds.length === 0) {
+      throw new Error("Role IDs cannot be empty.");
+    }
+    if(members === undefined || members.length === 0) {
+      throw new Error("Members cannot be empty.");
+    }
   }
 
   getGuildId(): string {

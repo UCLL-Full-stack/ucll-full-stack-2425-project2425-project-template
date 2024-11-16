@@ -11,6 +11,7 @@ export class Column {
     private boardId: string;
   
     constructor(columnId: string, columnName: string, columnIndex: number, tasks: string[], board: string) {
+        this.validate(columnName, columnIndex, board);
         this.columnId = columnId;
         this.columnName = columnName;
         this.columnIndex = columnIndex;
@@ -26,6 +27,18 @@ export class Column {
             taskIds,
             boardId
         );
+    }
+
+    validate(columnName: string, columnIndex: number, boardId: string): void {
+        if(columnName === undefined || columnName === "") {
+            throw new Error("Column name cannot be empty.");
+        }
+        if(columnIndex === undefined) {
+            throw new Error("Column index cannot be empty.");
+        }
+        if(boardId === undefined || boardId === "") {
+            throw new Error("Board ID cannot be empty.");
+        }
     }
 
     getColumnId(): string {

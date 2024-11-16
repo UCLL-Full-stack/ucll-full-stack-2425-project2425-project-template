@@ -1,3 +1,4 @@
+import { de } from 'date-fns/locale';
 import { Task } from '../model/task';
 import database from './database';
 import userDb from './user.db';
@@ -122,9 +123,18 @@ const updateTask = async (taskId: string, taskData: {
     }
 }
 
+const deleteTask = async (taskId: string): Promise<void> => {
+    const task = await database.task.findUnique({ where: { taskId } });
+    if (!task) {
+        throw new Error("Task not found");
+    }
+    await database.task.delete({ where: { taskId } });
+}
+
 export default {
     getAllTasks,
     getTaskById,
     addTask,
     updateTask,
+    deleteTask,
 };

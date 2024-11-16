@@ -131,9 +131,24 @@ const updateBoard = async (
     }
 };
 
+const deleteBoard = async (boardId: string): Promise<void> => {
+    const board = await database.board.findUnique({ where: { boardId }, include: { columns: { select: { columnId: true } } } });
+    if (!board) {
+        throw new Error("Board not found");
+    }
+    const columnIds = board.columns.map((column) => column.columnId);
+    if (columnIds.length > 0) {
+        for (const columnId of columnIds) {
+            await columnDb.deleteColumn(columnId);
+        }
+    }
+    await database.board.delete({ where: { boardId } });
+};
+
 export default {
     getAllBoards,
     getBoardById,
     addBoard,
     updateBoard,
+    deleteBoard
 };
