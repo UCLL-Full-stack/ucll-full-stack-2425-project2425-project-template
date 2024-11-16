@@ -1,35 +1,38 @@
-import { Role } from '../types';
 import { Project } from './project';
+import { Task } from './task';
+import { Role } from '../types';
 
 export class User {
-    readonly user_Id?: number;
+    readonly userId?: number;
     readonly firstName: string;
     readonly lastName: string;
     readonly email: string;
     readonly password: string;
     readonly role: Role;
     readonly projects: Project[] = [];
+    readonly tasks: Task[] = [];
 
     constructor(user: {
-        user_Id?: number;
+        userId?: number;
         firstName: string;
         lastName: string;
         email: string;
         password: string;
         role: Role;
-        projects: Project[];
+        projects?: Project[];
+        tasks?: Task[];
     }) {
-        this.validate(user);
-        this.user_Id = user.user_Id;
+        this.userId = user.userId;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.email = user.email;
         this.password = user.password;
         this.role = user.role;
-        this.projects = user.projects;
+        this.projects = user.projects || [];
+        this.tasks = user.tasks || [];
     }
 
-    private validate(user: { user_Id?: number; firstName: string; lastName: string; email: string; password: string; role: Role; projects: Project[] }) {
+    private validate(user: { userId?: number; firstName: string; lastName: string; email: string; password: string; role: Role; projects?: Project[]; tasks?: Task[] }) {
         if (!user.firstName) {
             throw new Error('First name is required');
         }
@@ -45,25 +48,29 @@ export class User {
         if (!user.role) {
             throw new Error('Role is required');
         }
-        if (!Array.isArray(user.projects)) {
+        if (user.projects && !Array.isArray(user.projects)) {
             throw new Error('Projects must be an array');
+        }
+        if (user.tasks && !Array.isArray(user.tasks)) {
+            throw new Error('Tasks must be an array');
         }
     }
 
-    static from(prismaUser: any): User {
+    static from(userPrisma: any): User {
         return new User({
-            user_Id: prismaUser.user_Id,
-            firstName: prismaUser.firstName,
-            lastName: prismaUser.lastName,
-            email: prismaUser.email,
-            password: prismaUser.password,
-            role: prismaUser.role,
-            projects: prismaUser.projects.map((project: any) => Project.from(project))
+            userId: userPrisma.userId,
+            firstName: userPrisma.firstName,
+            lastName: userPrisma.lastName,
+            email: userPrisma.email,
+            password: userPrisma.password,
+            role: userPrisma.role,
+            projects: userPrisma.projects?.map(Project.from) || [],
+            tasks: userPrisma.tasks?.map(Task.from) || [],
         });
     }
 
     public getId(): number | undefined {
-        return this.user_Id;
+        return this.userId;
     }
 
     public getFirstName(): string {
@@ -90,15 +97,18 @@ export class User {
         return this.projects;
     }
 
+    public getTasks(): Task[] {
+        return this.tasks;
+    }
+
     equals(user: User): boolean {
-        return this.user_Id === user.getId() &&
+        return this.userId === user.getId() &&
             this.firstName === user.getFirstName() &&
             this.lastName === user.getLastName() &&
             this.email === user.getEmail() &&
             this.password === user.getPassword() &&
             this.role === user.getRole() &&
-            this.projects === user.getProjects();
-
+            this.projects === user.getProjects() &&
+            this.tasks === user.getTasks();
     }
-
 }

@@ -2,12 +2,8 @@ import { Project } from "../model/project";
 import { Task } from "../model/task";
 import { User } from "../model/user";
 
-export type Role = "ADMIN" | "USER";
+type Role = "ADMIN" | "USER";
 
-export const Roles = {
-    Admin: "ADMIN",
-    User: "USER",
-} as const;
 
 type UserInput = {
     userId?: number;
@@ -35,4 +31,4 @@ type TaskInput = {
     completed?: boolean;
 };
 
-export { UserInput, ProjectInput, TaskInput };
+export { Role, UserInput, ProjectInput, TaskInput };

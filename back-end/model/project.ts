@@ -2,73 +2,74 @@ import { User } from "./user";
 import { Task } from "./task";
 
 export class Project {
-    project_Id: number | undefined;
-    readonly name: string;
-    readonly users: User[] = [];
-    readonly tasks: Task[] = [];
+  readonly projectId?: number;
+  readonly name: string;
+  readonly description?: string;
+  readonly startDate?: Date;
+  readonly endDate?: Date;
+  readonly tasks: Task[] = [];
+  readonly users: User[] = [];
 
-    constructor(project: {
-        project_Id?: number;
-        name: string;
-        users: User[];
-        tasks: Task[];
+  constructor(project: {
+    projectId?: number;
+    name: string;
+    description?: string;
+    startDate?: Date;
+    endDate?: Date;
+    tasks?: Task[];
+    users?: User[];
+  }) {
+    this.projectId = project.projectId;
+    this.name = project.name;
+    this.description = project.description;
+    this.startDate = project.startDate;
+    this.endDate = project.endDate;
+    this.tasks = project.tasks || [];
+    this.users = project.users || [];
+  }
 
-    }) {
-        this.validate(project);
-        this.project_Id = project.project_Id;
-        this.name = project.name;
-        this.users = project.users || [];
-        this.tasks = project.tasks || [];
-    }
+  static from(projectPrisma: any): Project {
+    return new Project({
+      projectId: projectPrisma.projectId,
+      name: projectPrisma.name,
+      description: projectPrisma.description,
+      startDate: projectPrisma.startDate,
+      endDate: projectPrisma.endDate,
+      tasks: projectPrisma.tasks?.map(Task.from) || [],
+      users: projectPrisma.users?.map(User.from) || [],
+    });
+  }
 
-    private validate(project: { name: string; users: User[]; tasks: Task[] }) {
-        if (!project.name) {
-            throw new Error("Project name is required");
-        }
-        // if (!project.users || project.users.length === 0) {
-        //     throw new Error("At least one user is required");
-        // }
-    }
+  public getProjectId(): number | undefined {
+    return this.projectId;
+  }
 
-    static from(prismaProject: any): Project {
-        return new Project({
-            project_Id: prismaProject.project_Id,
-            name: prismaProject.name,
-            users: prismaProject.users.map((user: any) => User.from(user)),
-            tasks: prismaProject.tasks
-        });
-    }
+  public getName(): string {
+    return this.name;
+  }
 
-    public getProjectId(): number | undefined {
-        return this.project_Id;
-    }
+  public getUsers(): User[] {
+    return this.users;
+  }
 
-    public getName(): string {
-        return this.name;
-    }
+  public getTasks(): Task[] {
+    return this.tasks;
+  }
 
-    public getUsers(): User[] {
-        return this.users;
-    }
+  equals(project: Project): boolean {
+    return this.projectId === project.getProjectId() &&
+      this.name === project.getName() &&
+      this.users === project.getUsers() &&
+      this.tasks === project.getTasks();
+  }
 
-    public getTasks(): Task[] {
-        return this.tasks;
-    }
+  addTaskToProject(task: Task) {
+    if (!this.tasks.includes(task))
+      this.tasks.push(task);
+  }
 
-    equals(project: Project): boolean {
-        return this.project_Id === project.getProjectId() &&
-            this.name === project.getName() &&
-            this.users === project.getUsers() &&
-            this.tasks === project.getTasks();
-    }
-
-    addTaskToProject(task: Task) {
-        if (!this.tasks.includes(task))
-            this.tasks.push(task);
-    }
-
-    addUserToProject(user: User) {
-        if (!this.users.includes(user))
-            this.users.push(user);
-    }
+  addUserToProject(user: User) {
+    if (!this.users.includes(user))
+      this.users.push(user);
+  }
 }

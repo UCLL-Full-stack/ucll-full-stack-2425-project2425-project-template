@@ -35,7 +35,7 @@ const getAllProjects = async () => {
 const getProjectById = async (project_Id: number) => {
   try {
       const project = await database.project.findUnique({
-          where: { projectId: project_Id },
+          where: { project_Id: project_Id },
           include: {
               users: true,
               tasks: true

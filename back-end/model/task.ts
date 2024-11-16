@@ -23,7 +23,7 @@ export class Task {
       this.description = task.description ?? null; // Default to null if no description
       this.dueDate = task.dueDate;
       this.completed = task.completed;
-      this.users = task.users;
+      this.users = task.users || [];
     }
   
     static from(prismaTask: any): Task {
@@ -33,7 +33,7 @@ export class Task {
         description: prismaTask.description ?? null, // description can be null here
         dueDate: prismaTask.dueDate,
         completed: prismaTask.completed,
-        users: prismaTask.users.map((user: any) => User.from(user)),
+        users: prismaTask.users?.map((user: any) => User.from(user)) || [],
       });
     }
 
@@ -84,7 +84,7 @@ export class Task {
     }
     
     addUserToTask(user: User) {
-        if (!this.users.find(existingUser => existingUser.user_Id === user.user_Id)) {
+        if (!this.users.find(existingUser => existingUser.userId === user.userId)) {
             this.users.push(user);
         }
     }
