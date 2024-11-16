@@ -40,38 +40,38 @@ const MyEvents: React.FC = () => {
             </Head>
             <Header />
             <main className={styles.myEventsMain}>
-            {showForm && (
+                {showForm && (
 
-                <form 
-                    onSubmit={handleFormSubmit} 
-                    className={styles.loginMyEvents}>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <div className={styles.myEventsLoginSignupButtons}>
-                        <button type="submit">Log in</button>
-                        <button type="button" className={styles.myEventsSignupButton}>Sign up</button>
-                    </div>
-                </form>
-            )}
-            { myEvents && (
-                myEvents.length > 0 ? (
-                    <section className={styles.myEvents}>
-                        <h1>My events</h1>
-                        <EventOverview events={myEvents} />
-                    </section>
-                ) : <p>No events</p>
-            )}
+                    <form
+                        onSubmit={handleFormSubmit}
+                        className={styles.loginMyEvents}>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <div className={styles.myEventsLoginSignupButtons}>
+                            <button type="submit">Log in</button>
+                            <button type="button" className={styles.myEventsSignupButton}>Sign up</button>
+                        </div>
+                    </form>
+                )}
+                {myEvents && (
+                    myEvents.length > 0 ? (
+                        <section className={styles.myEvents}>
+                            <h1>My events</h1>
+                             <EventOverview events={myEvents} /> {/* My-events page renders a component */}
+                        </section>
+                    ) : <p>No events</p>
+                )}
             </main>
         </>
     )
