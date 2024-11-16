@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import EventService from "@/services/EventService";
 import styles from "@/styles/eventForm.module.css";
 import { Event } from "@/types";
@@ -6,22 +6,33 @@ import { useRouter } from "next/router";
 
 const AddEventForm: React.FC = () => {
   const router = useRouter();
-  const [eventName, setEventName] = useState('');
-  const [date, setDate] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [date, setDate] = useState("");
   const [price, setPrice] = useState(0);
   const [minParticipants, setMinParticipants] = useState(1);
   const [maxParticipants, setMaxParticipants] = useState(1);
-  const [street, setStreet] = useState('');
+  const [street, setStreet] = useState("");
   const [number, setNumber] = useState(1);
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [categoryName, setCategoryName] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const selectedDate = new Date(date);
+    const currentDate = new Date();
+
+    if (selectedDate <= currentDate) {
+      setError("The event date must be in the future.");
+      return;
+    }
+
     const event: Event = {
       name: eventName,
-      date: new Date(date),
+      date: selectedDate,
       price,
       minParticipants,
       maxParticipants,
@@ -31,16 +42,19 @@ const AddEventForm: React.FC = () => {
         city,
         country,
       },
+      category: {
+        name: categoryName,
+        description,
+      },
     };
 
     try {
       await EventService.addEvent(event);
       setTimeout(() => {
-        router.push('/events');
-      }
-      , 1000);
+        router.push("/events");
+      }, 500);
     } catch (error) {
-      console.error('Error adding event:', error);
+      setError("Failed to create event. Please try again.");
     }
   };
 
@@ -63,6 +77,7 @@ const AddEventForm: React.FC = () => {
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
+        {error && <p className={"text-danger"}>{error}</p>}
         <label htmlFor="priceInput">Price</label>
         <input
           id="priceInput"
@@ -130,9 +145,29 @@ const AddEventForm: React.FC = () => {
             className={styles.input}
             value={country}
             onChange={(e) => setCountry(e.target.value)}
+          />{" "}
+        </div>
+        <p className="mt-2 mb-0">
+          <strong>Category</strong>
+        </p>
+        <div>
+          <label htmlFor="categoryName">Name</label>
+          <input
+            type="text"
+            id="categoryName"
+            className={styles.input}
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+          />
+          <label htmlFor="categoryDescription">Description</label>
+          <input
+            type="text"
+            id="categoryDescription"
+            className={styles.input}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-
         <button type="submit" className="btn btn-primary mt-3">
           Make event
         </button>

@@ -27,7 +27,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Events</title>
+        <title>Events - Eventer</title>
         <meta name="description" content="Eventer events page" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
