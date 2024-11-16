@@ -1,24 +1,8 @@
 import { User } from "../model/user";
 import userDb from "../repository/user.db";
+import { CreateUserInput, UpdateUserInput } from "../types";
 
-interface CreateUserInput {
-    userId: string;
-    username: string;
-    globalName: string;
-    userAvatar: string;
-    guildIds?: string[];
-    boardIds?: string[];
-    taskIds?: string[];
-}
-  
-interface UpdateUserInput {
-    username?: string;
-    globalName?: string;
-    userAvatar?: string;
-    guildIds?: string[];
-    boardIds?: string[];
-    taskIds?: string[];
-}
+
 
 const getAllUsers = async (): Promise<User[]> => {
     return await userDb.getAllUsers();

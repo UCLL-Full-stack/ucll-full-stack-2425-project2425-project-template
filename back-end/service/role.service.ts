@@ -1,19 +1,7 @@
 import { Role } from "../model/role";
 import roleDb from "../repository/role.db";
-import { DiscordPermission } from "../types";
+import { CreateRoleInput, DiscordPermission, UpdateRoleInput } from "../types";
 
-
-interface CreateRoleInput {
-    roleId: string;
-    roleName: string;
-    permissions: DiscordPermission[];
-    guildId: string;
-}
-
-interface UpdateRoleInput {
-    roleName?: string;
-    permissions?: DiscordPermission[];
-}
 
 const getAllRoles = async (): Promise<Role[]> => {
     return await roleDb.getAllRoles();

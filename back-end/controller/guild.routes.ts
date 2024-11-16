@@ -135,4 +135,33 @@ guildRouter.get('/', (req, res) => {
     }
 });
 
+guildRouter.post('/', (req, res) => {
+    const guild = req.body;
+    try {
+        guildService.addGuild(guild);
+        res.status(201).json({ message: 'Guild created successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+guildRouter.put('/:guildId', (req, res) => {
+    const { guildId } = req.params;
+    const guild = req.body;
+    try {
+        guildService.updateGuild(guildId, guild);
+        res.status(200).json({ message: 'Guild updated successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
 export default guildRouter;

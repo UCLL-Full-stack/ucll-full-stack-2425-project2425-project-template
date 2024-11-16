@@ -80,3 +80,54 @@ export interface Member {
     userId: string;
     roleIds: string[];
 }
+
+export interface CreateUserInput {
+    userId: string;
+    username: string;
+    globalName: string;
+    userAvatar: string;
+    guildIds?: string[];
+    boardIds?: string[];
+    taskIds?: string[];
+}
+  
+export interface UpdateUserInput {
+    username?: string;
+    globalName?: string;
+    userAvatar?: string;
+    guildIds?: string[];
+    boardIds?: string[];
+    taskIds?: string[];
+}
+
+export interface CreateGuildInput {
+    guildId: string;
+    guildName: string;
+    settings: PermissionEntry[];
+    roleIds?: string[];
+    userIds?: string[];
+    members?: Member[];
+    boardIds?: string[];
+}
+
+export interface UpdateGuildInput {
+    guildName?: string;
+    members?: Member[];
+    roleIds?: string[];
+    settings?: PermissionEntry[];
+    userIds?: string[];
+    boardIds?: string[];
+}
+
+
+export interface CreateRoleInput {
+    roleId: string;
+    roleName: string;
+    permissions: DiscordPermission[];
+    guildId: string;
+}
+
+export interface UpdateRoleInput {
+    roleName?: string;
+    permissions?: DiscordPermission[];
+}

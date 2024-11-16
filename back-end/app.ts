@@ -5,11 +5,12 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import boardRouter from './controller/board.routes';
-import columnRouter from './controller/column.routes';
+// import boardRouter from './controller/board.routes';
+// import columnRouter from './controller/column.routes';
 import guildRouter from './controller/guild.routes';
-import taskRouter from './controller/task.routes';
+// import taskRouter from './controller/task.routes';
 import userRouter from './controller/user.routes';
+import roleRouter from './controller/role.routes';
 
 const app = express();
 dotenv.config();
@@ -49,11 +50,12 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-app.use('/api/boards', boardRouter);
-app.use('/api/columns', columnRouter);
+// app.use('/api/boards', boardRouter);
+// app.use('/api/columns', columnRouter);
 app.use('/api/guilds', guildRouter);
-app.use('/api/tasks', taskRouter);
+// app.use('/api/tasks', taskRouter);
 app.use('/api/users', userRouter);
+app.use('/api/roles', roleRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

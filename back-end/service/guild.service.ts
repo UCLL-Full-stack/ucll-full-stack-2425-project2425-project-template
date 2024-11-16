@@ -1,26 +1,7 @@
 import { Guild } from "../model/guild";
 import guildDb from "../repository/guild.db";
-import { DiscordPermission, KanbanPermission, Member, PermissionEntry } from "../types";
+import { CreateGuildInput, DiscordPermission, KanbanPermission, Member, PermissionEntry, UpdateGuildInput } from "../types";
 
-
-interface CreateGuildInput {
-    guildId: string;
-    guildName: string;
-    settings: PermissionEntry[];
-    roleIds?: string[];
-    userIds?: string[];
-    members?: Member[];
-    boardIds?: string[];
-}
-
-interface UpdateGuildInput {
-    guildName?: string;
-    members?: Member[];
-    roleIds?: string[];
-    settings?: PermissionEntry[];
-    userIds?: string[];
-    boardIds?: string[];
-}
 
 const getAllGuilds = async (): Promise<Guild[]> => {
     return await guildDb.getAllGuilds();
@@ -55,9 +36,18 @@ const updateGuild = async (guildId: string, guildData: UpdateGuildInput): Promis
     return await guildDb.updateGuild(guildId, guildData);
 }
 
+const getGuildPermissions = async (guildId: string): Promise<PermissionEntry[]> => {
+    const guild = await guildDb.getGuildById(guildId);
+    if( !guild ) {
+        throw new Error("Guild not found");
+    }
+    return guild.getSettings();
+}
+
 export default {
     getAllGuilds,
     getGuildById,
     addGuild,
-    updateGuild
+    updateGuild,
+    getGuildPermissions
 }
