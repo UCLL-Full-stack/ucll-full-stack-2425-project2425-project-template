@@ -1,3 +1,11 @@
+import { Category } from './category';
+import { Location } from './location';
+import {
+    Profile as profilePrisma,
+    Location as locationPrisma,
+    Category as categoryPrisma,
+} from '@prisma/client';
+
 export class Profile {
     private id?: number;
     private firstName: string;
@@ -5,15 +13,18 @@ export class Profile {
     private email: string;
     private age: number;
     private administrator: boolean;
-    //location to be added
-    //category to be added
+    private location: Location;
+    private category: Category;
 
     constructor(profile: {
+        id?: number;
         firstName: string;
         lastName: string;
         email: string;
         age: number;
         administrator: boolean;
+        location: Location;
+        category: Category;
     }) {
         this.validate(profile);
         this.firstName = profile.firstName;
@@ -21,6 +32,8 @@ export class Profile {
         this.email = profile.email;
         this.age = profile.age;
         this.administrator = profile.administrator;
+        this.location = profile.location;
+        this.category = profile.category;
     }
 
     validate(profile: {
@@ -29,13 +42,15 @@ export class Profile {
         email: string;
         age: number;
         administrator: boolean;
+        location: Location;
+        category: Category;
     }) {
         if (!profile.firstName) throw new Error('First name is required.');
         if (!profile.lastName) throw new Error('Last name is required.');
         if (!profile.email) throw new Error('Email is required.');
         if (!profile.age) throw new Error('Age is required.');
-        //location to be added
-        //category to be added
+        if (!profile.location) throw new Error('Location is required.');
+        if (!profile.category) throw new Error('Category is required.');
     }
 
     isAdmin(): boolean {
@@ -53,4 +68,32 @@ export class Profile {
     getFirstName(): string {
         return this.firstName;
     }
+    getLocation(): Location {
+        return this.location;
+    }
+    getCategory(): Category {
+        return this.category;
+    }
+
+    static from = ({
+        id,
+        firstName,
+        lastName,
+        email,
+        age,
+        administrator,
+        location,
+        category,
+    }: profilePrisma & { location: locationPrisma; category: categoryPrisma }) => {
+        return new Profile({
+            id,
+            firstName,
+            lastName,
+            email,
+            age,
+            administrator,
+            location: Location.from(location),
+            category: Category.from(category),
+        });
+    };
 }

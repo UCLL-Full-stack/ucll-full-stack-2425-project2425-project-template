@@ -1,10 +1,12 @@
+import { Category as categoryPrisma } from '@prisma/client';
 export class Category {
     private id?: number;
     private name: string;
     private description: string;
 
-    constructor(category: { name: string; description: string }) {
+    constructor(category: { id?: number; name: string; description: string }) {
         this.validate(category);
+        this.id = category.id;
         this.name = category.name;
         this.description = category.description;
     }
@@ -14,11 +16,19 @@ export class Category {
         if (!category.description) throw new Error('Description is required.');
     }
 
+    getId(): number | undefined {
+        return this.id;
+    }
+
     getName(): string {
         return this.name;
     }
 
     getDescription(): string {
         return this.description;
+    }
+
+    static from({ id, name, description }: categoryPrisma) {
+        return new Category({ id, name, description });
     }
 }

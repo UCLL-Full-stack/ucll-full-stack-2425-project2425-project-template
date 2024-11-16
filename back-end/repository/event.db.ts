@@ -1,35 +1,63 @@
-import { add } from 'date-fns';
 import { Event } from '../model/event';
-import { Location } from '../model/location';
-import { Category } from '../model/category';
+import database from './database';
 
-const event1 = new Event({
-    name: 'Fred Again..',
-    date: add(new Date(), { days: 1 }),
-    price: 20,
-    minParticipants: 5,
-    maxParticipants: 10,
-    location: new Location({
-        street: 'ING Arena',
-        number: 1,
-        city: 'Brussels',
-        country: 'Belgium',
-    }),
-    category: new Category({ name: 'Concert', description: 'Concert of artist' }),
-});
-const events: Event[] = [event1];
-
-const addEvent = (event: Event) => {
-    events.push(event);
-    return event;
+const addEvent = async (event: Event): Promise<Event> => {
+    try {
+        const result = await database.event.create({
+            data: {
+                name: event.getName(),
+                date: event.getDate(),
+                price: event.getPrice(),
+                minParticipants: event.getMinParticipants(),
+                maxParticipants: event.getMinParticipants(),
+                location: {
+                    connect: {
+                        id: event.getLocation().getId(),
+                    },
+                },
+                category: {
+                    connect: {
+                        id: event.getCategory().getId(),
+                    },
+                },
+            },
+            include: {
+                location: true,
+                category: true,
+            },
+        });
+        return Event.from(result);
+    } catch (error) {
+        throw new Error(`Error:${error}`);
+    }
 };
 
-const getEventById = (id: number) => {
-    return events.find((event) => event.getId() === id);
+const getEventById = async (id: number): Promise<Event> => {
+    try {
+        const result = await database.event.findUnique({
+            where: { id: id },
+            include: { location: true, category: true },
+        });
+        if (!result) {
+            throw new Error(`No event with id ${id} found`);
+        }
+        return Event.from(result);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, see server logs for more detail');
+    }
 };
 
-const getEvents = () => {
-    return events;
+const getEvents = async (): Promise<Event[]> => {
+    try {
+        const eventPrisma = await database.event.findMany({
+            include: { location: true, category: true },
+        });
+        return eventPrisma.map((event) => Event.from(event));
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database Error, see server log for more detail');
+    }
 };
 
 export default {

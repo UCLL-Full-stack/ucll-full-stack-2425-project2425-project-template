@@ -1,6 +1,10 @@
-import e from 'express';
 import { Location } from './location';
 import { Category } from './category';
+import {
+    Event as eventPrisma,
+    Location as locationPrisma,
+    Category as categoryPrisma,
+} from '@prisma/client';
 
 export class Event {
     private id?: number;
@@ -15,6 +19,7 @@ export class Event {
     private dateCreated: Date;
 
     constructor(event: {
+        id?: number;
         name: string;
         date: Date;
         price: number;
@@ -24,6 +29,7 @@ export class Event {
         category: Category;
     }) {
         this.validate(event);
+        this.id = event.id;
         this.name = event.name;
         this.date = event.date;
         this.price = event.price;
@@ -44,9 +50,7 @@ export class Event {
         location: Location;
         category: Category;
     }) {
-        const currentDate = new Date();
         if (!event.name) throw new Error('Name is required.');
-        if (event.date < currentDate) throw new Error('Date cannot be in the past.');
         if (event.price < 0) throw new Error('Price must be positive.');
         if (event.minParticipants < 0) throw new Error('Minimum participants must be positive.');
         if (!event.maxParticipants) throw new Error('Maximum participants is required.');
@@ -126,6 +130,28 @@ export class Event {
     }
     setDateCreated(date: Date): void {
         this.dateCreated = date;
+    }
+
+    static from({
+        id,
+        name,
+        date,
+        price,
+        minParticipants,
+        maxParticipants,
+        location,
+        category,
+    }: eventPrisma & { location: locationPrisma; category: categoryPrisma }) {
+        return new Event({
+            id,
+            name,
+            date,
+            price,
+            minParticipants,
+            maxParticipants,
+            location: Location.from(location),
+            category: Category.from(category),
+        });
     }
 }
 

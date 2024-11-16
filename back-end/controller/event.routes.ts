@@ -41,8 +41,8 @@
  */
 
 import express, { NextFunction, Request, Response } from 'express';
-import { Event } from '../model/event';
 import eventService from '../service/event.service';
+import { EventInput } from '../types';
 
 const eventRouter = express.Router();
 
@@ -63,10 +63,10 @@ const eventRouter = express.Router();
  *
  */
 
-eventRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const events = eventService.getEvents();
-        res.json(events);
+        const events = await eventService.getEvents();
+        res.status(200).json(events);
     } catch (error) {
         next(error);
     }
@@ -92,11 +92,11 @@ eventRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *             $ref: '#/components/schemas/Event'
  */
 
-eventRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
-        const event = eventService.getEventById(id);
-        res.json(event);
+        const event = await eventService.getEventById(id);
+        res.status(200).json(event);
     } catch (error) {
         next(error);
     }
@@ -124,13 +124,11 @@ eventRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  *                          $ref: '#/components/schemas/Event'
  */
 
-eventRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log('Event router back end');
-        console.log(req.body);
-        const event = new Event(req.body);
-        const newEvent = eventService.addEvent(event);
-        res.json(newEvent);
+        const event = <EventInput>req.body;
+        const result = await eventService.addEvent(event);
+        res.json(result);
     } catch (error) {
         next(error);
     }
