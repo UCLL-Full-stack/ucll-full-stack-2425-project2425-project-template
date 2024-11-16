@@ -116,12 +116,14 @@ async function main() {
     data: {
       userId: user1.userId,
       projectId: project1.project_Id,
+      projectId: project1.project_Id,
     },
   });
 
   await database.userProject.create({
     data: {
       userId: user2.userId,
+      projectId: project2.project_Id,
       projectId: project2.project_Id,
     },
   });
