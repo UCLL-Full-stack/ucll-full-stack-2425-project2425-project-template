@@ -9,3 +9,12 @@ export type Vehicle = {
     vehicle_type: string;
     body_type: string
 }
+
+export type User = {
+    id?: number;
+    name?: string;
+    age?: number;
+    email?: string;
+    password?: string;
+  };
+  

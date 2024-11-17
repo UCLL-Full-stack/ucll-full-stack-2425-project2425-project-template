@@ -9,10 +9,11 @@ export class Motorcycle extends Vehicle{
         // this.validate(motorcycle);
 
         super({
-            id: motorcycle.id, manufacturer: motorcycle.manufacturer, model_name: motorcycle.model_name, 
-            price: motorcycle.price, fuel_type: motorcycle.fuel_type, 
-            transmission_type: motorcycle.transmission_type, 
-            year: motorcycle.year, vehicle_type: motorcycle.vehicle_type
+            id: motorcycle.id, manufacturer: motorcycle.manufacturer, model_name: motorcycle.model_name,
+            price: motorcycle.price, fuel_type: motorcycle.fuel_type,
+            transmission_type: motorcycle.transmission_type,
+            year: motorcycle.year, vehicle_type: motorcycle.vehicle_type,
+            body_type: ""
         });
 
     }

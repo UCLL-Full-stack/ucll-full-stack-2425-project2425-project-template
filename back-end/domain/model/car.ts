@@ -11,7 +11,8 @@ export class Car extends Vehicle {
 
         super({
             id: car.id, manufacturer: car.manufacturer, model_name: car.model_name, price: car.price,
-            fuel_type: car.fuel_type, transmission_type: car.transmission_type, year: car.year, vehicle_type: car.vehicle_type
+            fuel_type: car.fuel_type, transmission_type: car.transmission_type, year: car.year, vehicle_type: car.vehicle_type,
+            body_type: ""
         });
 
     }
