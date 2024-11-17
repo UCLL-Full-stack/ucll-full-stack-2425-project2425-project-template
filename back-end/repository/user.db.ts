@@ -1,7 +1,4 @@
 import { User } from '../model/user';
-import {
-    User as UserPrisma
-} from '@prisma/client'
 import database from './database';
 
 const everything = {
@@ -19,20 +16,7 @@ const everything = {
             }
         }
     }
-}
-
-const users = [
-    new User({
-        id: 1,
-        username: 'meesverbeeck',
-        hashedPassword: 't'
-    }),
-    new User({
-        id: 2,
-        username: 'larsfrancois',
-        hashedPassword: 't'
-    }),
-];
+};
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
@@ -43,7 +27,7 @@ const getAllUsers = async (): Promise<User[]> => {
     } catch (error) {
         console.log(error);
         throw new Error('Database error, see server log for details.');
-    }
+    };
 };
 
 const getUserById = async ({ id }: { id: number }): Promise<User> => {
@@ -61,8 +45,8 @@ const getUserById = async ({ id }: { id: number }): Promise<User> => {
     } catch (error) {
         console.log(error);
         throw new Error('Database error, see server log for details.');
-    }
-}
+    };
+};
 
 const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
     try {
@@ -79,8 +63,8 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     } catch (error) {
         console.log(error);
         throw new Error('Database error, see server log for details.');
-    }
-}
+    };
+};
 
 const createUser = async (user: User): Promise<User> => {
     try {
@@ -103,7 +87,7 @@ const createUser = async (user: User): Promise<User> => {
     } catch (error) {
         console.log(error);
         throw new Error('Database error, see server log for details.');
-    }
+    };
 };
 
 export default {

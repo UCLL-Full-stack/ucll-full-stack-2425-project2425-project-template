@@ -1,15 +1,12 @@
 import { Group } from '../model/group';
 import groupDb from '../repository/group.db';
 
-const getAllGroups = (): Group[] => {
-    return groupDb.getAllGroups();
+const getAllGroups = async (): Promise<Group[]> => {
+    return await groupDb.getAllGroups();
 };
 
-const getGroupById = (id: number): Group => {
-    const group = groupDb.getGroupById({id});
-    if (!group) {
-        throw new Error(`Group with id ${id} does not exist.`);
-    }
+const getGroupById = async (id: number): Promise<Group> => {
+    const group = await groupDb.getGroupById({id});
     return group;
 }
 

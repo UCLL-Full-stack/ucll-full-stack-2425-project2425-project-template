@@ -1,15 +1,12 @@
 import { Status } from '../model/status';
 import statusDb from '../repository/status.db';
 
-const getAllStatuses = (): Status[] => {
-    return statusDb.getAllStatuss();
+const getAllStatuses = async (): Promise<Status[]> => {
+    return await statusDb.getAllStatuses();
 };
 
-const getStatusById = (id: number): Status => {
-    const status = statusDb.getStatusById({id});
-    if (!status) {
-        throw new Error(`Status with id ${id} does not exist.`);
-    }
+const getStatusById = async (id: number): Promise<Status> => {
+    const status = await statusDb.getStatusById({id});
     return status;
 }
 

@@ -9,9 +9,6 @@ const getAllUsers = async (): Promise<User[]> => {
 
 const getUserById = async (id: number): Promise<User> => {
     const user = userDb.getUserById({id});
-    if (!user) {
-        throw new Error(`User with id ${id} does not exist.`);
-    }
     return user;
 }
 
