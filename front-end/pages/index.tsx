@@ -16,10 +16,12 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className="text-center md:mt-24 mx-auto md:w-3/5 lg:w-1/2">
+      <main className="bg-[url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bmw-m.com%2Fen%2Ffastlane%2Fbmw-individual.html&psig=AOvVaw1vkCW0PTP4e2HzOuVL2-k-&ust=1731792219598000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMiGvPWi34kDFQAAAAAdAAAAABAE')]">
         <span className="flex flex-row justify-center items-center">
-          kashvdfjasvdsajdhksd
+        <h1 className="text-2xl flex justify center mt-10">Welcome to our homepage</h1>
+        
         </span>
+        
       </main>
     </>
   )

@@ -13,6 +13,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
     const [year, setYear] = useState("");
     const [price, setPrice] = useState("");
     const [bodyType, setBodyType] = useState("");
+    const [mileage, setMileage] = useState("");
     const [fuelType, setFuelType] = useState("");
     const [transmissionType, setTransmissionType] = useState("");
     const [vehicleType, setVehicleType] = useState("");
@@ -152,7 +153,8 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
             fuel_type: fuelType,
             transmission_type: transmissionType,
             vehicle_type: vehicleType,
-            body_type: bodyType
+            body_type: bodyType,
+            mileage: parseInt(mileage)
         };
 
         await onAddCar(newCar);
@@ -219,6 +221,16 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                             type="number"
                             value={year}
                             onChange={(e) => setYear(e.target.value)}
+                            className="w-full px-4 py-2 border rounded-md"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium">Mileage</label>
+                        <input
+                            type="number"
+                            value={mileage}
+                            onChange={(e) => setMileage(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md"
                             required
                         />
