@@ -1,3 +1,5 @@
+import {Ticket as TicketPrisma} from "@prisma/client";
+
 
 export class Ticket {
     private id?: number;
@@ -40,4 +42,20 @@ export class Ticket {
         return this.chair;
     }
 
+
+    static from({
+        id,
+        price,
+        date,
+        time,
+        chair,
+    }: TicketPrisma) {
+        return new Ticket ({
+            id,
+            price,
+            date,
+            time,
+            chair,
+        })
+    }
 }

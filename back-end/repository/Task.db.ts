@@ -1,35 +1,53 @@
+import { PrismaClient } from '@prisma/client';
 import { Task } from '../model/Task';
 
-const tasks = [
-    new Task({
-        id: 1,
-        date: new Date('2024-11-01'), 
-        time: new Date('2024-11-01T09:00:00'), 
-        description: "Cleaning Room 1",
-        status: "pending",
-        comment: "Make sure the trashbins are empty"
-    }),
-    
-    new Task({
-        id: 2,
-        date: new Date('2024-11-02'),
-        time: new Date('2024-11-02T13:00:00'),
-        description: "Check on the projector room to make sure everything is still working",
-        status: "completed",
-        comment: "Do this extremely carefully"
-    }),
-];
+const database = new PrismaClient();
 
-const getAllTasks = (): Task[] => {
-    return tasks;
+
+const getAllTasks = async (): Promise<Task[]> => {
+    try {
+        const tasksPrisma = await database.task.findMany({});
+        return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
 };
 
-const getTaskById = (id: number): Task | null => {
-    const task = tasks.find((task) => task.getId() === id);
-    return task || null;
-}
+
+const getTaskById = async (id: number): Promise<Task | null> => {
+    try {
+        const taskPrisma = await database.task.findUnique({
+            where: { id },
+        });
+        return taskPrisma ? Task.from(taskPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
+
+const addTask = async (date: Date, time: Date, description: string, status: string, comment: string): Promise<Task> => {
+    try {
+        const taskPrisma = await database.task.create({
+            data: {
+                date,
+                time,
+                description,
+                status,
+                comment,
+            },
+        });
+        return Task.from(taskPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
 
 export default {
     getAllTasks,
-    getTaskById
+    getTaskById,
+    addTask,
 };

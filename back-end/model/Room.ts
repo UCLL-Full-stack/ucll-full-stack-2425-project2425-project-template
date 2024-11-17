@@ -1,3 +1,4 @@
+import {Room as RoomPrisma} from "@prisma/client"; 
 
 export class Room {
     private id?: number;
@@ -25,6 +26,18 @@ export class Room {
 
     getChairs(): number[] {
         return this.chairs;
+    }
+
+    static from({
+        id,
+        name,
+        chairs,
+    }: RoomPrisma) {
+        return new Room ({
+            id,
+            name,
+            chairs,
+        })
     }
 
 }

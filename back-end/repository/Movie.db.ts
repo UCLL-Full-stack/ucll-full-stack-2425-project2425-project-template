@@ -1,42 +1,53 @@
-
+import { PrismaClient } from '@prisma/client';
 import { Movie } from '../model/Movie';
 
-const movies = [
-    new Movie({
-        id: 1,
-        name: "Infinity War",
-        duration: new Date(0, 0, 0, 3, 0),
-        playingdates: [new Date('2024-04-27'), new Date('2024-05-01')], 
-        genre: "action",
-        summary: "Reality can be whatever I want"
-    }),
-    new Movie({
-        id: 2,
-        name: "EndGame",
-        duration: new Date(0, 0, 0, 3, 30),
-        playingdates: [new Date('2024-06-27'), new Date('2024-08-01')], 
-        genre: "action",
-        summary: "We are in the endgame now"
-    }),
-];
+const database = new PrismaClient();
 
-const getAllMovies = (): Movie[] => {
-    return movies;
+
+const getAllMovies = async (): Promise<Movie[]> => {
+    try {
+        const moviesPrisma = await database.movie.findMany({});
+        return moviesPrisma.map((moviePrisma) => Movie.from(moviePrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
 };
 
-const getMovieById = (id: number): Movie | null => {
-    const movie = movies.find((movie) => movie.getId() === id);
-    return movie || null;
-}
 
-const addMovie = (moviename: String,movieduration: Date, movieplayingdates: Date[], moviegenre: String, moviesummary: String): Movie => {
-    const movie = new Movie({name:moviename,duration:movieduration,playingdates:movieplayingdates, genre:moviegenre, summary:moviesummary})
-    movies.push(movie);
-    return movie;
-}
+const getMovieById = async (id: number): Promise<Movie | null> => {
+    try {
+        const moviePrisma = await database.movie.findUnique({
+            where: { id },
+        });
+        return moviePrisma ? Movie.from(moviePrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
+
+const addMovie = async (name: string, duration: Date, playingdates: Date[], genre: string, summary: string): Promise<Movie> => {
+    try {
+        const moviePrisma = await database.movie.create({
+            data: {
+                name,
+                duration,
+                playingdates,
+                genre,
+                summary,
+            },
+        });
+        return Movie.from(moviePrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
 
 export default {
     getAllMovies,
     getMovieById,
-    addMovie
+    addMovie,
 };

@@ -1,33 +1,51 @@
+import { PrismaClient } from '@prisma/client';
 import { User } from '../model/User';
 
-const users = [
-    new User({
-        id: 1,
-        username: "Alexander_Symons",
-        email: "Alexander@Symons.com",
-        password: "P@ssword", 
-        // role: Role.USER,
-    }),
-    
-    new User({
-        id: 2,
-        username: "Niel_Stroobants",
-        email: "Niel@Stroobants.com",
-        password: "P@ssword2",
-        // role: Role.ADMIN, 
-    }),
-];
+const database = new PrismaClient();
 
-const getAllUsers = (): User[] => {
-    return users;
+
+const getAllUsers = async (): Promise<User[]> => {
+    try {
+        const usersPrisma = await database.user.findMany({});
+        return usersPrisma.map((userPrisma) => User.from(userPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
 };
 
-const getUserById = (id: number): User | null => {
-    const user = users.find((user) => user.getId() === id);
-    return user || null;
-}
+
+const getUserById = async (id: number): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: { id },
+        });
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
+
+const addUser = async (username: string, email: string, password: string): Promise<User> => {
+    try {
+        const userPrisma = await database.user.create({
+            data: {
+                username,
+                email,
+                password,
+            },
+        });
+        return User.from(userPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
 
 export default {
     getAllUsers,
-    getUserById
+    getUserById,
+    addUser,
 };

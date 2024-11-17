@@ -1,4 +1,4 @@
-
+import {Movie as MoviePrisma} from "@prisma/client"; 
 
 export class Movie {
     private id?: number;
@@ -48,6 +48,22 @@ export class Movie {
         return this.summary;
     }
 
-    
+    static from({
+        id,
+        name,
+        duration,
+        playingdates,
+        genre,
+        summary,
+    }: MoviePrisma) {
+        return new Movie ({
+            id,
+            name,
+            duration,
+            playingdates,
+            genre,
+            summary,
+        })
+    }
 
 }

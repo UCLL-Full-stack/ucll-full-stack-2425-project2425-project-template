@@ -1,29 +1,50 @@
+import { PrismaClient } from '@prisma/client';
 import { Room } from '../model/Room';
 
-const rooms = [
-    new Room({
-        id: 1,
-        name: "Room 1",
-        chairs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
-    }),
+const database = new PrismaClient();
 
-    new Room({
-        id: 2,
-        name: "Room 2",
-        chairs: [1, 2, 3, 4, 5], 
-    }),
-];
 
-const getAllRooms = (): Room[] => {
-    return rooms;
+const getAllRooms = async (): Promise<Room[]> => {
+    try {
+        const roomsPrisma = await database.room.findMany({});
+        return roomsPrisma.map((roomPrisma) => Room.from(roomPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
 };
 
-const getRoomById = (id: number): Room | null => {
-    const room = rooms.find((room) => room.getId() === id);
-    return room || null;
-}
+
+const getRoomById = async (id: number): Promise<Room | null> => {
+    try {
+        const roomPrisma = await database.room.findUnique({
+            where: { id },
+        });
+        return roomPrisma ? Room.from(roomPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
+
+const addRoom = async (name: string, chairs: number[]): Promise<Room> => {
+    try {
+        const roomPrisma = await database.room.create({
+            data: {
+                name,
+                chairs,
+            },
+        });
+        return Room.from(roomPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
 
 export default {
     getAllRooms,
-    getRoomById
+    getRoomById,
+    addRoom,
 };

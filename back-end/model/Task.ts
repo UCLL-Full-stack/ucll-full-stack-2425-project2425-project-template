@@ -1,3 +1,4 @@
+import {Task as TaskPrisma} from "@prisma/client"; 
 
 export class Task {
     private id?: number;
@@ -45,6 +46,24 @@ export class Task {
 
     getComment(): string {
         return this.comment;
+    }
+
+    static from({
+        id,
+        date,
+        time,
+        description,
+        status,
+        comment,
+    }: TaskPrisma) {
+        return new Task ({
+            id,
+            date,
+            time,
+            description,
+            status,
+            comment,
+        })
     }
 
 }
