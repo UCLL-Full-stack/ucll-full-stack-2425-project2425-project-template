@@ -15,6 +15,10 @@
   list-style: none;
 }
 
+.nav .welcomeUser {
+  margin: auto;
+}
+
 .nav img {
   max-width: 6%;
 }
@@ -92,7 +96,7 @@ td, th {
   max-height: 10rem;
   justify-content: center;
   margin: auto;
-  padding: 15rem 0 0 0;
+  padding: 10rem 0 0 0;
   gap: 1rem;
 }
 
@@ -120,6 +124,18 @@ td, th {
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.login .no-account-message {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.login .no-account-message-button {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Family Page */

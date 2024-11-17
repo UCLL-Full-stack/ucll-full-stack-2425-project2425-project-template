@@ -1,6 +1,6 @@
 import { Role, User } from "@/types";
 
-const getAllUsers = async () => {
+const getAllUsers = async (): Promise<Array<User>> => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   try {
     const response = await fetch(apiUrl + '/users', {
@@ -19,7 +19,7 @@ const getAllUsers = async () => {
   }
 };
 
-const getUserByEmail = async (email: string) => {
+const getUserByEmail = async (email: string): Promise<User | undefined>=> {
   
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/users/${email}`, {
@@ -37,7 +37,7 @@ const getUserByEmail = async (email: string) => {
   }
 }
 
-const createUser = async (name: string, email: string, password: string, role: Role) => {
+const createUser = async (name: string, email: string, password: string, role: Role): Promise<User | undefined> => {
   const user: User = {name, email, password, role};
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/users`, {
