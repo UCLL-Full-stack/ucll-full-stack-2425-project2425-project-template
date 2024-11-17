@@ -4,6 +4,23 @@ import {
 } from '@prisma/client'
 import database from './database';
 
+const everything = {
+    profile: true,
+    groups: {
+        include: {
+            boards: {
+                include: {
+                    statuses: {
+                        include: {
+                            tasks: true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 const users = [
     new User({
         id: 1,
@@ -20,22 +37,7 @@ const users = [
 const getAllUsers = async (): Promise<User[]> => {
     try {
         const userPrisma = await database.user.findMany({
-            include: {
-                profile: true,
-                groups: {
-                    include: {
-                        boards: {
-                            include: {
-                                statuses: {
-                                    include: {
-                                        tasks: true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            include: everything
         });
         return userPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
@@ -44,25 +46,64 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-const getUserById = ({ id }: { id: number }): User | null => {
-    const user = users.find((user) => user.getId() === id);
-    if (!user) {
-        return null;
+const getUserById = async ({ id }: { id: number }): Promise<User> => {
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: {
+                id
+            },
+            include: everything
+        });
+        if (!userPrisma) {
+            throw new Error(`User with id ${id} does not exist.`);
+        }
+        return User.from(userPrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, see server log for details.');
     }
-    return user; 
 }
 
-const getUserByUsername = ({ username }: { username: string }): User | null => {
-    const user = users.find((user) => user.getUsername() === username);
-    if (!user) {
-        return null;
+const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: {
+                username
+            },
+            include: everything
+        });
+        if (!userPrisma) {
+            throw new Error(`User with id ${username} does not exist.`);
+        }
+        return User.from(userPrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, see server log for details.');
     }
-    return user; 
 }
 
-const createUser = (user: User): User => {
-    users.push(user);
-    return user;
+const createUser = async (user: User): Promise<User> => {
+    try {
+        const userPrisma = await database.user.create({
+            data: {
+                username: user.getUsername(),
+                hashedPassword: user.getHashedPassword(),
+                profile: user.getProfile() ? {
+                    create: {
+                        email: user.getProfile()?.getEmail() || '',
+                        firstName: user.getProfile()?.getFirstName() || '',
+                        lastName: user.getProfile()?.getLastName() || '',
+                        bio: user.getProfile()?.getBio() || ''
+                    }
+                } : undefined
+            },
+            include: everything
+        });
+        return User.from(userPrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, see server log for details.');
+    }
 };
 
 export default {

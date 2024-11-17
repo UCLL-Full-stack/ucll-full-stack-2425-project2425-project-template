@@ -7,7 +7,7 @@ const getAllUsers = async (): Promise<User[]> => {
     return await userDb.getAllUsers();
 };
 
-const getUserById = (id: number): User => {
+const getUserById = async (id: number): Promise<User> => {
     const user = userDb.getUserById({id});
     if (!user) {
         throw new Error(`User with id ${id} does not exist.`);
@@ -15,7 +15,7 @@ const getUserById = (id: number): User => {
     return user;
 }
 
-const createUser = ({
+const createUser = async ({
     id,
     username,
     hashedPassword,
@@ -26,12 +26,12 @@ const createUser = ({
         lastName,
         bio
     } = {}
-}: UserInput): User => {
+}: UserInput): Promise<User> => {
     if (!username || !hashedPassword) {
         throw new Error('Username and hashedPassword are required.');
     }
 
-    if (userDb.getUserByUsername({username})) {
+    if (await userDb.getUserByUsername({username})) {
         throw new Error(`User with username ${username} already exists.`);
     }
 
