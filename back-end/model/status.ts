@@ -1,4 +1,8 @@
 import { Task } from "./task";
+import {
+    Status as StatusPrisma,
+    Task as TaskPrisma
+} from '@prisma/client'
 
 export class Status {
     private id?: number;
@@ -50,5 +54,17 @@ export class Status {
                 return task.equals(otherStatus.getTasks()[index]);
             })
         );
+    }
+
+    static from({
+        id,
+        name,
+        tasks
+    }: StatusPrisma & { tasks: TaskPrisma[] }): Status {
+        return new Status({
+            id,
+            name,
+            tasks: tasks.map((task) => Task.from(task))
+        })
     }
 }

@@ -3,8 +3,8 @@ import { User } from '../model/user';
 import userDb from '../repository/user.db';
 import { UserInput } from '../types';
 
-const getAllUsers = (): User[] => {
-    return userDb.getAllUsers();
+const getAllUsers = async (): Promise<User[]> => {
+    return await userDb.getAllUsers();
 };
 
 const getUserById = (id: number): User => {
@@ -49,7 +49,6 @@ const createUser = ({
         hashedPassword,
         profile: userProfile,
         groups: [],
-        tasks: [],
     });
 
     userDb.createUser(newUser);

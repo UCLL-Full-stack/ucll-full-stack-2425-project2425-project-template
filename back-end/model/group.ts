@@ -1,5 +1,12 @@
 import { Board } from "./board";
 import { User } from "./user";
+import {
+    User as UserPrisma,
+    Group as GroupPrisma,
+    Board as BoardPrisma,
+    Status as StatusPrisma,
+    Task as TaskPrisma
+} from '@prisma/client'
 
 export class Group {
     private id?: number;
@@ -96,5 +103,23 @@ export class Group {
                 return board.equals(otherGroup.getBoards()[index]);
             })
         );
+    }
+
+    static from({
+        id,
+        name,
+        description,
+        createdAt,
+        // users,
+        boards
+    }: GroupPrisma & { boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]}): Group {
+        return new Group({
+            id,
+            name,
+            description,
+            createdAt,
+            // users: users ? users.map((user) => User.from(user)) : [],
+            boards: boards ? boards.map((board) => Board.from(board)) : []
+        })
     }
 }

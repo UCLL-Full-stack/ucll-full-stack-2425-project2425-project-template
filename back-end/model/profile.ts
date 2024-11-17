@@ -1,3 +1,7 @@
+import {
+    Profile as ProfilePrisma,
+} from '@prisma/client'
+
 export class Profile {
     private id?: number;
     private email: string;
@@ -65,5 +69,21 @@ export class Profile {
             this.firstName === otherProfile.getFirstName() &&
             this.lastName === otherProfile.getLastName()
         );
+    }
+
+    static from({
+        id,
+        email,
+        bio,
+        firstName,
+        lastName,
+    }: ProfilePrisma): Profile {
+        return new Profile({
+            id,
+            email,
+            bio,
+            firstName,
+            lastName,
+        });
     }
 }
