@@ -1,12 +1,26 @@
+import { User } from "@/types";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 
 const Header: React.FC = () => {
+  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoggedInUser(sessionStorage.getItem('loggedInUser'));
+  },[])
+
+  const handleLogOut = () => {
+    sessionStorage.removeItem('loggedInUser');
+    setLoggedInUser(null);
+  }
+
   return (
     
     <header>
       <div className="nav">
         <img src="/images/FamList Temp.png" alt="famlist logo" />
+        {loggedInUser && <p className="welcomeUser">Welcome {JSON.parse(loggedInUser).name}!</p>}
         <ul>
           <Link href="/">
             Home
@@ -20,9 +34,13 @@ const Header: React.FC = () => {
             Families
           </Link>
 
-          <Link href='/login'>
+          {!loggedInUser && <Link href='/login'>
             Sign in
-          </Link>
+          </Link>}
+          
+          {loggedInUser && <Link onClick={handleLogOut} href='/'>
+            Log out
+          </Link>}
           
         </ul>
       </div>
