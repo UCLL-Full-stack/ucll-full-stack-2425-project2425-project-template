@@ -60,7 +60,7 @@
  *              description: Username.
  */
 import express, { NextFunction, Request, Response } from 'express';
-import raceService from '../service/Race.service';
+import raceService from '../service/race.service';
 import { RaceInput } from '../types';
 
 const raceRouter = express.Router();

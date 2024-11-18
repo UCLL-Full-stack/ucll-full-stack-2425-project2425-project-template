@@ -1,4 +1,4 @@
-import { Racecar } from '../model/Racecar';
+import { Racecar } from '../model/racecar';
 
 const racecars = [
     new Racecar({

@@ -1,4 +1,4 @@
-import { Admin } from '../model/Admin';
+import { Admin } from '../model/admin';
 
 export const admins = [
     new Admin({
@@ -9,11 +9,11 @@ export const admins = [
 ];
 
 const getAdminById = (id: number): Admin | undefined => {
-    return admins.find(admin => admin.getId() === id);
+    return admins.find(admin => admin.id === id);
 }
 
 const getAdminByUsername = async (username: string): Promise<Admin | null> => {
-    return admins.find(admin => admin.getUsername() === username) || null;
+    return admins.find(admin => admin.username === username) || null;
 };
 
 export default { getAdminById, getAdminByUsername }

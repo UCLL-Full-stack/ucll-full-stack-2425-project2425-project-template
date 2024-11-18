@@ -1,7 +1,7 @@
-import { Admin } from './Admin';
-import { Gebruiker } from './Gebruiker';
-import { Crash } from './Crash';
-import { Driver } from './Driver';
+import { Admin } from './admin';
+import { Gebruiker } from './gebruiker';
+import { Crash } from './crash';
+import { Driver } from './driver';
 
 export class Race {
     private id?: number;

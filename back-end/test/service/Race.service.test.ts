@@ -1,14 +1,14 @@
-import { Race } from '../../model/Race';
-import { Driver } from '../../model/Driver';
-import { Racecar } from '../../model/Racecar';
-import { Crash } from '../../model/Crash';
-import { Admin } from '../../model/Admin';
-import raceDb from '../../repository/Race.db';
-import driverDb from '../../repository/Driver.db';
-import racecarDb from '../../repository/Racecar.db';
-import crashDb from '../../repository/Crash.db';
-import adminDb from '../../repository/Admin.db';
-import raceService from '../../service/Race.service';
+import { Race } from '../../model/race';
+import { Driver } from '../../model/driver';
+import { Racecar } from '../../model/racecar';
+import { Crash } from '../../model/crash';
+import { Admin } from '../../model/admin';
+import raceDb from '../../repository/race.db';
+import driverDb from '../../repository/driver.db';
+import racecarDb from '../../repository/racecar.db';
+import crashDb from '../../repository/crash.db';
+import adminDb from '../../repository/admin.db';
+import raceService from '../../service/race.service';
 import { RaceInput, DriverInput, CrashInput, AdminInput, RacecarInput } from '../../types';
 
 const racecarInput: RacecarInput = {
@@ -115,7 +115,7 @@ test('given a driver with no ID, when race is created, then an error is thrown',
     const invalidRaceInput = { ...raceInput, drivers: [invalidDriverInput] };
 
     // When / Then
-    expect(() => raceService.createRace(invalidRaceInput)).toThrowError('Driver ID is required');
+    expect(() => raceService.createRace(invalidRaceInput)).toThrow('Driver ID is required');
 });
 
 test('given a driver not found with ID, when race is created, then an error is thrown', () => {
@@ -123,6 +123,6 @@ test('given a driver not found with ID, when race is created, then an error is t
     mockDriverDbGetDriverById.mockReturnValue(null);
 
     // When / Then
-    expect(() => raceService.createRace(raceInput)).toThrowError(`Driver not found with ID ${driverInput.id}`);
+    expect(() => raceService.createRace(raceInput)).toThrow(`Driver not found with ID ${driverInput.id}`);
 });
 

@@ -1,10 +1,10 @@
-import { SubmissionForm } from '../../model/Submission_form';
-import { Gebruiker } from '../../model/Gebruiker';
-import { Race } from '../../model/Race';
-import { Admin } from '../../model/Admin';
-import { Driver } from '../../model/Driver';
-import { Racecar } from '../../model/Racecar';
-import { Crash } from '../../model/Crash';
+import { SubmissionForm } from '../../model/submission_form';
+import { Gebruiker } from '../../model/gebruiker';
+import { Race } from '../../model/race';
+import { Admin } from '../../model/admin';
+import { Driver } from '../../model/driver';
+import { Racecar } from '../../model/racecar';
+import { Crash } from '../../model/crash';
 
 test('given: valid values for SubmissionForm, when: SubmissionForm is created, then: SubmissionForm is created with those values', () => {
     // given

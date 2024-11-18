@@ -1,8 +1,8 @@
-import { Race } from '../../model/Race';
-import { Driver } from '../../model/Driver';
-import { Racecar } from '../../model/Racecar';
-import { Crash } from '../../model/Crash';
-import { Admin } from '../../model/Admin';
+import { Race } from '../../model/race';
+import { Driver } from '../../model/driver';
+import { Racecar } from '../../model/racecar';
+import { Crash } from '../../model/crash';
+import { Admin } from '../../model/admin';
 
 test('given: valid values for Race, when: Race is created, then: Race is created with those values', () => {
     // given

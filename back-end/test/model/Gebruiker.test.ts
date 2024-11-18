@@ -1,4 +1,4 @@
-import { Gebruiker } from '../../model/Gebruiker';
+import { Gebruiker } from '../../model/gebruiker';
 
 test('given: valid values for Gebruiker, when: Gebruiker is created, then: Gebruiker is created with those values', () => {
     // given

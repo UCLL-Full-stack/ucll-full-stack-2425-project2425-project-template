@@ -60,3 +60,8 @@ export type CrashInput = {
     deaths: number;
     id?: number;
 };
+
+export type AuthenticationResponse = {
+    token: string;
+    username: string;
+};

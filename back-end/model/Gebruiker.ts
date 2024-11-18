@@ -1,11 +1,12 @@
+import { User as GebruikerPrisma } from '@prisma/client';
+
 export class Gebruiker {
-    private id?: number;
-    private username: string;
-    private password: string;
+    readonly id?: number;
+    readonly username: string;
+    readonly password: string;
 
     constructor(gebruiker: { username: string, password: string, id?: number }) {
         this.validate(gebruiker);
-
         this.username = gebruiker.username;
         this.password = gebruiker.password;
         if (gebruiker.id) this.id = gebruiker.id;
@@ -20,23 +21,23 @@ export class Gebruiker {
         }
     }
 
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getUsername(): string {
-        return this.username;
-    }
-
-    getPassword(): string {
-        return this.password;
-    }
-
-    equals(other: Gebruiker): boolean {
+    equals({ id, username, password }: { id?: number, username: string, password: string }): boolean {
         return (
-            this.id === other.getId() &&
-            this.username === other.getUsername() &&
-            this.password === other.getPassword()
+            this.id === id &&
+            this.username === username &&
+            this.password === password
         );
+    }
+
+    static from({
+        id,
+        username,
+        password,
+    }: GebruikerPrisma) {
+        return new Gebruiker({
+            id,
+            username,
+            password,
+        });
     }
 }

@@ -1,15 +1,15 @@
-import { Race } from '../model/Race';
-import { Driver } from '../model/Driver';
-import { Racecar } from '../model/Racecar';
-import { Crash } from '../model/Crash';
-import { Admin } from '../model/Admin';
-import raceDb from '../repository/Race.db';
-import driverDb from '../repository/Driver.db';
-import racecarDb from '../repository/Racecar.db';
-import crashDb from '../repository/Crash.db';
-import adminDb from '../repository/Admin.db';
+import { Race } from '../model/race';
+import { Driver } from '../model/driver';
+import { Racecar } from '../model/racecar';
+import { Crash } from '../model/crash';
+import { Admin } from '../model/admin';
+import raceDb from '../repository/race.db';
+import driverDb from '../repository/driver.db';
+import racecarDb from '../repository/racecar.db';
+import crashDb from '../repository/crash.db';
+import adminDb from '../repository/admin.db';
 import { RaceInput, DriverInput, CrashInput } from '../types';
-import RaceDb from '../repository/Race.db';
+import RaceDb from '../repository/race.db';
 
 const getAllRaces = (): Race[] => {
     return raceDb.getAllRaces();

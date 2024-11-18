@@ -1,6 +1,6 @@
-import { Driver } from '../model/Driver';
-import { Racecar } from '../model/Racecar';
-import { Crash } from '../model/Crash';
+import { Driver } from '../model/driver';
+import { Racecar } from '../model/racecar';
+import { Crash } from '../model/crash';
 
 const drivers = [
     new Driver({

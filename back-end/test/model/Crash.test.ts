@@ -1,4 +1,4 @@
-import { Crash } from '../../model/Crash';
+import { Crash } from '../../model/crash';
 
 test('given: valid values for Crash, when: Crash is created, then: Crash is created with those values', () => {
     // given

@@ -1,6 +1,6 @@
-import { Gebruiker } from '../model/Gebruiker';
-import { users } from '../repository/User.db';
-import { admins } from '../repository/Admin.db';
+import { Gebruiker } from '../model/gebruiker';
+import { users } from './user.db';
+import { admins } from './admin.db';
 
 const gebruikers: Gebruiker[] = [...users, ...admins];
 

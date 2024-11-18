@@ -1,5 +1,5 @@
-import { Crash } from '../model/Crash';
-import { Racecar } from '../model/Racecar';
+import { Crash } from '../model/crash';
+import { Racecar } from '../model/racecar';
 
 const crashes = [
     new Crash({

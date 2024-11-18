@@ -1,5 +1,5 @@
-import { Gebruiker } from './Gebruiker';
-import { Race } from './Race';
+import { Gebruiker } from './gebruiker';
+import { Race } from './race';
 
 export class SubmissionForm {
     public id?: number;

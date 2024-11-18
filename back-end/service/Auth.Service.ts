@@ -1,10 +1,10 @@
-import { User } from '../model/User';
-import { Admin } from '../model/Admin';
-import userDb from '../repository/User.db';
-import adminDb from '../repository/Admin.db';
+import { User } from '../model/user';
+import { Admin } from '../model/admin';
+import userDb from '../repository/user.db';
+import adminDb from '../repository/admin.db';
 
 const getUserByUsername = async (username: string): Promise<User | null> => {
-  return userDb.getUserByUsername(username);
+  return userDb.getUserByUsername({ username });
 };
 
 const getAdminByUsername = async (username: string): Promise<Admin | null> => {

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import AuthService from '../service/Auth.Service';
+import AuthService from '../service/auth.service';
 
 const authRouter = express.Router();
 const secretKey = process.env.JWT_SECRET || 'your_secret_key';
@@ -78,15 +78,15 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     }
 
     // Check if the user exists and the password is correct
-    if (!user || user.getPassword() !== password) {
+    if (!user || user.password !== password) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ id: user.getId(), username: user.getUsername(), role }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, username: user.username, role }, secretKey, { expiresIn: '1h' });
 
     // Return the token and user info
-    return res.json({ token, username: user.getUsername(), role });
+    return res.json({ token, username: user.username, role });
   } catch (error) {
     console.error('Login error:', error);
     return res.status(500).json({ message: 'Internal server error' });

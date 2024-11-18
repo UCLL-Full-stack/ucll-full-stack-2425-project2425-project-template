@@ -1,4 +1,4 @@
-import { Gebruiker } from './Gebruiker';
+import { Gebruiker } from './gebruiker';
 
 export class Admin extends Gebruiker {
     constructor(admin: { username: string, password: string, id?: number }) {

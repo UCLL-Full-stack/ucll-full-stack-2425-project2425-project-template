@@ -1,5 +1,5 @@
-import { Racecar } from './Racecar';
-import { Crash } from './Crash';
+import { Racecar } from './racecar';
+import { Crash } from './crash';
 
 export class Driver {
     private id?: number;

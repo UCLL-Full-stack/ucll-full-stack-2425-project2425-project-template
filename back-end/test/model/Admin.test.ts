@@ -1,4 +1,4 @@
-import { Admin } from '../../model/Admin';
+import { Admin } from '../../model/admin';
 
 test('given: valid values for Admin, when: Admin is created, then: Admin is created with those values', () => {
     // given

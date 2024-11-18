@@ -1,6 +1,6 @@
-import submissionFormDb from '../repository/Submission_form.db';
-import { SubmissionForm } from '../model/Submission_form';
-import RaceService from './Race.service';
+import submissionFormDb from '../repository/submission_form.db';
+import { SubmissionForm } from '../model/submission_form';
+import RaceService from './race.service';
 import { RaceInput, DriverInput, CrashInput, AdminInput } from '../types';
 
 const getAllSubmissionForms = (): SubmissionForm[] => {
@@ -75,9 +75,9 @@ const acceptSubmissionForm = (submissionFormId: number): SubmissionForm => {
         })) || [];
 
         const admin: AdminInput = {
-            username: race.getAdmin()?.getUsername() || 'The admin is not known',
-            password: race.getAdmin()?.getPassword() || 'The admin is not known',
-            id: race.getAdmin()?.getId(),
+            username: race.getAdmin()?.password || 'The admin is not known',
+            password: race.getAdmin()?.password || 'The admin is not known',
+            id: race.getAdmin()?.id,
         };
 
         const raceInput: RaceInput = {

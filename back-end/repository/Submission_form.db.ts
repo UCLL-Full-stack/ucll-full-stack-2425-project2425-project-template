@@ -1,10 +1,10 @@
-import { SubmissionForm } from '../model/Submission_form';
-import { Gebruiker } from '../model/Gebruiker';
-import { Race } from '../model/Race';
-import { Driver } from '../model/Driver';
-import { Crash } from '../model/Crash';
-import { Admin } from '../model/Admin';
-import { Racecar } from '../model/Racecar'
+import { SubmissionForm } from '../model/submission_form';
+import { Gebruiker } from '../model/gebruiker';
+import { Race } from '../model/race';
+import { Driver } from '../model/driver';
+import { Crash } from '../model/crash';
+import { Admin } from '../model/admin';
+import { Racecar } from '../model/racecar'
 
 const submissionForms: SubmissionForm[] = [
     new SubmissionForm({
