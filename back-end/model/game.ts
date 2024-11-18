@@ -1,5 +1,8 @@
 import { Team } from './team';
-import { Team as TeamPrisma } from '@prisma/client';
+import { 
+    Team as TeamPrisma,
+    Game as GamePrisma
+ } from '@prisma/client';
 
 export class Game {
     private id?: number;
@@ -45,5 +48,14 @@ export class Game {
 
     setResult(result: string) {
         this.result = result;
+    }
+
+    static from({id, result, date}: GamePrisma & {teams: TeamPrisma[]}) {
+        return new Game({
+            id,
+            result,
+            date,
+            teams: []
+        });
     }
 }

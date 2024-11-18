@@ -1,3 +1,5 @@
+import { Player as PlayerPrisma } from '@prisma/client';
+
 export class Player {
     private id?: number;
     private firstName: string;
@@ -69,5 +71,15 @@ export class Player {
             this.email === player.getEmail() &&
             this.phoneNumber === player.getPhoneNumber()
         );
+    }
+
+    static from({id, firstName, lastName, email, phoneNumber, teamId}: PlayerPrisma) {
+        return new Player({
+            id,
+            firstName,
+            lastName,
+            email,
+            phoneNumber
+        });
     }
 }

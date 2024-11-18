@@ -1,5 +1,10 @@
 import { Coach } from './coach';
 import { Player } from './player';
+import {
+    Coach as CoachPrisma,
+    Player as PlayerPrisma,
+    Team as TeamPrisma,
+} from '@prisma/client';
 
 export class Team {
     private id?: number;
@@ -69,5 +74,14 @@ export class Team {
         if (this.getTeamName() != newTeamName) {
             this.teamName = newTeamName;
         }
+    }
+
+    static from({ id, teamName, players, coach }: TeamPrisma & { players: PlayerPrisma[]; coach: CoachPrisma }) {
+        return new Team({
+            id,
+            teamName,
+            players: players.map((player) => new Player(player)),
+            coach: new Coach(coach),
+        });
     }
 }

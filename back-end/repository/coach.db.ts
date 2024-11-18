@@ -4,7 +4,7 @@ import database from './database';
 const getAllCoaches = async (): Promise<Coach[]> => {
     try {
         const coachPrisma = await database.coach.findMany({
-            include: { teams: true }
+            include: { team: true }
         });
         return coachPrisma.map((coachPrisma) => Coach.from(coachPrisma));
     } catch (error) {
