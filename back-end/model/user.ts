@@ -18,7 +18,7 @@ export class User {
       this.guildIds = guildIds;
     }
 
-    static from({ userId, username, globalName, userAvatar, guilds }: UserPrisma & {guilds: GuildPrisma[]}): User {
+    static from({ userId, username, globalName, userAvatar, guilds }: UserPrisma & {guilds: {guildId: string}[]}): User {
       const guildIds = guilds.map(guild => guild.guildId);
       return new User(userId, username, globalName, userAvatar, guildIds);
     }

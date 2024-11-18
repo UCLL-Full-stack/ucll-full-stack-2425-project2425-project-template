@@ -135,6 +135,7 @@ const updateGuild = async (guildId: string, updateData: {
             data.roles = {
                 set: roleIds.map((roleId) => ({ roleId })),
             };
+            data.roleIds = roleIds;
         }
         if (members !== undefined) {
             data.members = JSON.stringify(members);
@@ -143,11 +144,13 @@ const updateGuild = async (guildId: string, updateData: {
             data.users = {
                 set: userIds.map((userId) => ({ userId })),
             };
+            data.userIds = userIds;
         }
         if (boardIds !== undefined) {
             data.boards = {
                 set: boardIds.map((boardId) => ({ boardId })),
             };
+            data.boardIds = boardIds;
         }
 
         const updatedGuildPrisma = await database.guild.update({
