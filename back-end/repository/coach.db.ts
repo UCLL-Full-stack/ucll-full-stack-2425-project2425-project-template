@@ -13,18 +13,37 @@ const getAllCoaches = async (): Promise<Coach[]> => {
     }
 };
 
-const getCoachById = (id: number): Coach | undefined => {
+const getCoachById = async (id: number): Promise<Coach> => {
     try {
-        return coaches.find((coach) => coach.getId() === id) || undefined;
+        const coachPrisma = await database.coach.findUnique({
+            where: { id },
+            include: { team: true }
+        });
+        if (!coachPrisma) {
+            throw new Error('Coach not found');
+        }
+        return Coach.from(coachPrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error, see server log for details.');
     }
 };
 
-const createCoach = (coach: Coach): Coach => {
-    coaches.push(coach);
-    return coach;
+const createCoach = async (coach: Coach): Promise<Coach> => {
+    try {
+        const coachPrisma = await database.coach.create({
+            data: {
+                firstName: coach.getFirstName(),
+                lastName: coach.getLastName(),
+                email: coach.getEmail(),
+                phoneNumber: coach.getPhoneNumber()
+            }
+        });
+        return Coach.from(coachPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
+    }
 };
 
 export default { getAllCoaches, getCoachById, createCoach };
