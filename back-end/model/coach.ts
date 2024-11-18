@@ -1,5 +1,3 @@
-import { Coach as CoachPrisma } from '@prisma/client';
-
 export class Coach {
     private id?: number;
     private firstName: string;
@@ -57,6 +55,14 @@ export class Coach {
 
     getLastName(): string {
         return this.lastName;
+    }
+
+    getEmail(): string {
+        return this.email;
+    }
+
+    getPhoneNumber(): string {
+        return this.phoneNumber;
     }
 
     static from({id, firstName, lastName, email, phoneNumber}: CoachPrisma): Coach {
