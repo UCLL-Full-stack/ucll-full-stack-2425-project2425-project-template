@@ -18,11 +18,11 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "THREADS_ENABLED",
-      "TEXT_IN_VOICE_ENABLED",
       "COMMUNITY",
-      "NEW_THREAD_PERMISSIONS",
+      "THREADS_ENABLED",
       "WELCOME_SCREEN_ENABLED",
+      "TEXT_IN_VOICE_ENABLED",
+      "NEW_THREAD_PERMISSIONS",
       "NEWS"
     ]
   },
@@ -70,9 +70,9 @@
     "owner": false,
     "permissions": "2249600789905143",
     "features": [
-      "SOUNDBOARD",
+      "RAPIDASH_TEST",
       "CHANNEL_ICON_EMOJIS_GENERATED",
-      "RAPIDASH_TEST"
+      "SOUNDBOARD"
     ]
   },
   {
@@ -94,8 +94,8 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "SOUNDBOARD",
-      "CHANNEL_ICON_EMOJIS_GENERATED"
+      "CHANNEL_ICON_EMOJIS_GENERATED",
+      "SOUNDBOARD"
     ]
   },
   {
@@ -117,13 +117,13 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "CHANNEL_ICON_EMOJIS_GENERATED",
-      "SOUNDBOARD",
       "COMMUNITY",
+      "GUILD_ONBOARDING_EVER_ENABLED",
       "GUILD_ONBOARDING",
+      "SOUNDBOARD",
       "GUILD_ONBOARDING_HAS_PROMPTS",
-      "NEWS",
-      "GUILD_ONBOARDING_EVER_ENABLED"
+      "CHANNEL_ICON_EMOJIS_GENERATED",
+      "NEWS"
     ]
   },
   {
@@ -134,22 +134,22 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "SOUNDBOARD",
-      "PREVIEW_ENABLED",
-      "AUTO_MODERATION",
-      "CREATOR_ACCEPTED_NEW_TERMS",
-      "GUILD_WEB_PAGE_VANITY_URL",
-      "DISCOVERABLE",
       "COMMUNITY",
+      "DISCOVERABLE",
+      "GUILD_ONBOARDING_EVER_ENABLED",
       "GUILD_ONBOARDING",
       "GUILD_SERVER_GUIDE",
-      "GUILD_ONBOARDING_HAS_PROMPTS",
       "THREE_DAY_THREAD_ARCHIVE",
-      "NEWS",
-      "ENABLED_DISCOVERABLE_BEFORE",
-      "INVITE_SPLASH",
+      "CREATOR_ACCEPTED_NEW_TERMS",
       "ANIMATED_ICON",
-      "GUILD_ONBOARDING_EVER_ENABLED"
+      "GUILD_WEB_PAGE_VANITY_URL",
+      "SOUNDBOARD",
+      "GUILD_ONBOARDING_HAS_PROMPTS",
+      "ENABLED_DISCOVERABLE_BEFORE",
+      "PREVIEW_ENABLED",
+      "AUTO_MODERATION",
+      "INVITE_SPLASH",
+      "NEWS"
     ]
   },
   {

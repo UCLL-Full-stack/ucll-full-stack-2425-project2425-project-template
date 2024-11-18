@@ -57,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 });
                 const userData = await userResponse.data;
                 const guildsData = await guildResponse.data;
-                // const user = await UserService.getUser(userData.id);
+                const user = await UserService.getUser(userData.id);
                 // const guildsInDb = await GuildService.getGuilds();
                 // const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
                 const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
