@@ -14,6 +14,7 @@ const EventOverview: React.FC<Props> = ({ events }: Props) => {
     router.push(`/upcoming-events/${eventId}`);
   };
 
+  const [showDeleteButton, setShowDeleteButton] =
 
   const [myEvents, setMyEvents] = useState(events)
 

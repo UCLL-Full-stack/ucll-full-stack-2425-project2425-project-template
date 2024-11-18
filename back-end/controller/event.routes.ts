@@ -147,4 +147,48 @@ eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFun
     }
 });
 
+/**
+ * @swagger
+ * /events/{id}/{email}
+ *  delete:
+ *    summary: Remove a participant from an event.
+ *    tags:
+ *      - Events
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        required: true
+ *         schema:
+ *           type: integer
+ *       - name: email
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Participant removed successfully.
+ *       400:
+ *         description: The participant could not be removed.
+ */
+
+eventRouter.delete('/:id/:email', async (req: Request, res:Response, next: NextFunction) => {
+    const eventId = parseInt(req.params.id, 10);
+    const email = req.params.email;
+
+    try {
+        // Remove the user from the event's participant list
+        await eventService.removeFromMyEvents(email, eventId);
+
+        res.status(200).json({ message: `Participant removed from event ${eventId}` });
+    } catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+            res.status(400).json({ status: 'error', message: error.message });
+        } else {
+            res.status(400).json({ status: 'error', message: 'Unknown error' });
+        }
+    }
+});
+
 export { eventRouter };

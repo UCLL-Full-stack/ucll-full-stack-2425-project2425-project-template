@@ -1,4 +1,5 @@
 import { Event } from "../model/event";
+import prisma from '../repository/database';
 import database from './database';
 
 const getAllEvents = async (): Promise<Event[]> => {
@@ -90,6 +91,35 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
     return events.map((event) => Event.from(event));
 };
 
+
+// remove events
+const removeFromMyEvents = async (email: string, eventId: number) => {
+    try {
+        // Find the user by email
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            throw new Error(`User with email ${email} not found.`);
+        }
+
+        // Update the Event's users relation to disconnect the user
+        await prisma.event.update({
+            where: { id: eventId },
+            data: {
+                users: {
+                    disconnect: { id: user.id }, // Disconnect the user from the event
+                },
+            },
+        });
+
+        return { message: `User with email ${email} removed from event ${eventId}` };
+    } catch (error) {
+        throw new Error("Failed to remove the participant from the event. Please try again later.");
+    }
+};
+
 export default {
     // createEvent,
     getAllEvents,
@@ -98,4 +128,5 @@ export default {
     addParticipantToEvent,
     getEventsByUserEmail,
     userExist,
+    removeFromMyEvents
 };
