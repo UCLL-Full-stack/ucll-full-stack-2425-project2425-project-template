@@ -1,4 +1,5 @@
 import { Team } from './team';
+import { Team as TeamPrisma } from '@prisma/client';
 
 export class Game {
     private id?: number;

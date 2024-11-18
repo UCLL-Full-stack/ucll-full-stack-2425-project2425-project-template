@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output = "../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -7,38 +8,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model player {
+model Player {
   id          Int    @id @default(autoincrement())
   firstName   String
   lastName    String
   email       String @unique
   phoneNumber String @unique
-  team        team?  @relation(fields: [teamId], references: [id])
+  team        Team?  @relation(fields: [teamId], references: [id])
   teamId      Int?
 }
 
-model coach {
+model Coach {
   id          Int    @id @default(autoincrement())
   firstName   String
   lastName    String
   email       String @unique
   phoneNumber String @unique
-  team        team[]
+  team        Team[]
 }
 
-model team {
+model Team {
   id       Int      @id @default(autoincrement())
   teamName String
-  players  player[]
-  coach    coach    @relation(fields: [coachId], references: [id])
+  players  Player[]
+  coach    Coach    @relation(fields: [coachId], references: [id])
   coachId  Int
-  game     game?    @relation(fields: [gameId], references: [id])
+  game     Game?    @relation(fields: [gameId], references: [id])
   gameId   Int?
 }
 
-model game {
+model Game {
   id     Int      @id @default(autoincrement())
   date   DateTime
   result String
-  teams  team[]
+  teams  Team[]
 }
