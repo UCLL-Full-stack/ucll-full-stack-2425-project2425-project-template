@@ -3,6 +3,7 @@ import { Client, GatewayIntentBits } from "discord.js";
 import axios from 'axios';
 import UserService from '@/services/UserService';
 import GuildService from '@/services/GuildService';
+import RoleService from '@/services/RoleService';
 import fs from 'fs'
 
 const client = new Client({
@@ -58,8 +59,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const userData = await userResponse.data;
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
-                const guildsInDb = await GuildService.getGuilds();
-                const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
                 const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
                     const permissions = BigInt(guild.permissions);
                     const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
@@ -71,7 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 fs.writeFileSync('discord/user.json', JSON.stringify(userData, null, 2))
 
                 const botGuildData = await Promise.all(
-                    adminOrManageServerGuilds.map(async (guild: {id: string, name: string}) => {
+                    guildsData.map(async (guild: {id: string, name: string}) => {
                         try {
                             const botGuild = client.guilds.cache.get(guild.id);
                             if (!botGuild) return null;
@@ -101,27 +100,68 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 );
                 const filteredBotGuildData = botGuildData.filter((guild) => guild !== null);
                 fs.writeFileSync("discord/bot_guild_data.json", JSON.stringify(filteredBotGuildData, null, 2));
+                filteredBotGuildData.forEach(async (guild: any) => {
+                    const exists = await GuildService.getGuild(guild.id);
+                    if(exists.error){
+                        if(exists.error === "Guild not found"){
+                            await GuildService.addGuild({
+                                guildId: guild.id,
+                                guildName: guild.name,
+                                members: guild.members.map((member: any) => {
+                                    return {
+                                        userId: member.userId,
+                                        roleIds: member.roles,
+                                    };
+                                }),
+                            });
+                            await Promise.all(guild.roles.map(async (role: any) => {
+                                await RoleService.addRole({
+                                    roleId: role.id,
+                                    roleName: role.name,
+                                    permissions: role.permissions,
+                                    guildId: guild.id,
+                                });
+                            }));
+                            await GuildService.updateGuild(guild.id, {
+                                roleIds: guild.roles.map((role: any) => role.id),
+                            });
+                        }                
+                    } else if(exists.guildId){
+                        await GuildService.updateGuild(guild.id, {
+                            members: guild.members.map((member: any) => {
+                                return {
+                                    userId: member.userId,
+                                    roleIds: member.roles,
+                                };
+                            }),
+                        });
+                        await Promise.all(guild.roles.map(async (role: any) => {
+                            await RoleService.addRole({
+                                roleId: role.id,
+                                roleName: role.name,
+                                permissions: role.permissions,
+                                guildId: guild.id,
+                            });
+                        }));
+                        await GuildService.updateGuild(guild.id, {
+                            roleIds: guild.roles.map((role: any) => role.id),
+                        });
+                    }
+                });
+                const guildsInDb = await GuildService.getGuilds();
+                const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
                 if(user.error){
                     if(user.error === "User not found"){
                         await UserService.addUser({
                             userId: userData.id,
                             username: userData.username,
-                            globalName: userData.username,
+                            globalName: userData.global_name,
                             userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
                             guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
                         });
+
                     }
                 }
-                // if (user === null) {
-                //     await UserService.addUser({
-                //         userId: userData.id,
-                //         username: userData.username,
-                //         globalName: userData.username,
-                //         userAvatar: userData.avatar,
-                //         guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
-                //     });
-                // }
-
 
                 res.writeHead(302, { Location: '/' });
                 res.status(400).json(tokenData);

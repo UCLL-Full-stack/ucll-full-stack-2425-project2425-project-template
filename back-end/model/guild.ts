@@ -21,9 +21,11 @@ export class Guild {
     this.boardIds = boardIds;
   }
 
-  static from({ guildId, guildName, settings, roleIds, members, boardIds }: GuildPrisma): Guild {
+  static from({ guildId, guildName, settings, roles, members, boards }: GuildPrisma & { roles: RolePrisma[], boards: BoardPrisma[]}): Guild {
     const typedSettings = JSON.parse(settings as unknown as string) as PermissionEntry[];
     const typedMembers = JSON.parse(members as unknown as string) as Member[];
+    const roleIds = roles.map(role => role.roleId);
+    const boardIds = boards.map(board => board.boardId);
     return new Guild(guildId, guildName, typedSettings, roleIds, typedMembers, boardIds);
   }
 
@@ -33,9 +35,6 @@ export class Guild {
     }
     if(settings === undefined || settings.length === 0) {
       throw new Error("Settings cannot be empty.");
-    }
-    if(roleIds === undefined || roleIds.length === 0) {
-      throw new Error("Role IDs cannot be empty.");
     }
     if(members === undefined || members.length === 0) {
       throw new Error("Members cannot be empty.");

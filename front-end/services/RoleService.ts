@@ -1,7 +1,7 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-const getUsers = async () => {
-    const response = await fetch(`${API_URL}/api/users`, {
+const getRoles = async () => {
+    const response = await fetch(`${API_URL}/api/roles`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -10,8 +10,8 @@ const getUsers = async () => {
     return await response.json();
 };
 
-const getUser = async (userId: string) => {
-    const response = await fetch(`${API_URL}/api/users/${userId}`, {
+const getRole = async (roleId: string) => {
+    const response = await fetch(`${API_URL}/api/roles/${roleId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -20,33 +20,33 @@ const getUser = async (userId: string) => {
     return await response.json();
 };
 
-const addUser = async (user: any) => {
-    const response = await fetch(`${API_URL}/api/users`, {
+const addRole = async (role: any) => {
+    const response = await fetch(`${API_URL}/api/roles`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(role),
     });
     return await response.json();
 };
 
-const updateUser = async (userId: string, user: any) => {
-    const response = await fetch(`${API_URL}/api/users/${userId}`, {
+const updateRole = async (roleId: string, role: any) => {
+    const response = await fetch(`${API_URL}/api/roles/${roleId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(role),
     });
     return await response.json();
 };
 
-const UserService = {
-    getUsers,
-    getUser,
-    addUser,
-    updateUser,
+const RoleService = {
+    getRoles,
+    getRole,
+    addRole,
+    updateRole,
 };
 
-export default UserService;
+export default RoleService;

@@ -51,7 +51,6 @@ const addUser = async (userData: {
                 username,
                 globalName,
                 userAvatar,
-                guildIds,
                 guilds: {
                     connect: guildIds.map(guildId => ({ guildId }))
                 },
@@ -92,7 +91,7 @@ const updateUser = async (userId: string, updateData: {
         if (userAvatar !== undefined) data.userAvatar = userAvatar;
         if (guildIds !== undefined) {
             data.guilds = {
-            set: guildIds.map((guildId) => ({ guildId })),
+                set: guildIds.map((guildId) => ({ guildId })),
             };
         }
     

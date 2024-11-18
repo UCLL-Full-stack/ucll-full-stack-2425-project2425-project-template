@@ -4,10 +4,10 @@ import { UpdateUserInput } from "../types";
 
 const userRouter = Router();
 
-userRouter.get("/:userId", (req, res) => {
+userRouter.get("/:userId", async (req, res) => {
     const { userId } = req.params;
     try {
-        const user = userService.getUserById(userId);
+        const user = await userService.getUserById(userId);
         res.status(200).json(user);
     } catch (error) {
         if (error instanceof Error) {
@@ -18,10 +18,10 @@ userRouter.get("/:userId", (req, res) => {
     }
 });
 
-userRouter.post("/", (req, res) => {
+userRouter.post("/", async (req, res) => {
     const { userId, username, globalName, userAvatar, guildIds = []} = req.body;
     try {
-        const user = userService.addUser({userId, username, globalName, userAvatar, guildIds});
+        const user = await userService.addUser({userId, username, globalName, userAvatar, guildIds});
         res.status(201).json(user);
     } catch (error) {
         if (error instanceof Error) {
@@ -32,7 +32,7 @@ userRouter.post("/", (req, res) => {
     }
 });
 
-userRouter.put("/:userId", (req, res) => {
+userRouter.put("/:userId", async (req, res) => {
     const { userId } = req.params;
     const { username, globalName, userAvatar, guildIds, boardIds, taskIds} = req.body;
     const updateInput: UpdateUserInput = {};
@@ -43,7 +43,7 @@ userRouter.put("/:userId", (req, res) => {
     if (boardIds !== undefined) updateInput.boardIds = boardIds;
     if (taskIds !== undefined) updateInput.taskIds = taskIds;
     try {
-        const user = userService.updateUser(userId, updateInput);
+        const user = await userService.updateUser(userId, updateInput);
         res.status(200).json(user);
     } catch (error) {
         if (error instanceof Error) {

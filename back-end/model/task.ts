@@ -20,7 +20,8 @@ export class Task {
         this.columnId = column;
     }
 
-    static from({ taskId, title, description, dueDate, assigneeIds, columnId }: TaskPrisma): Task {
+    static from({ taskId, title, description, dueDate, assignees, columnId }: TaskPrisma & {assignees: UserPrisma[]}): Task {
+        const assigneeIds = assignees.map(assignee => assignee.userId);
         return new Task(taskId, title, description, dueDate, assigneeIds, columnId);
     }
 

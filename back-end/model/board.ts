@@ -22,8 +22,9 @@ export class Board {
     this.permissions = permissions;
   }
 
-  static from({ boardId, boardName, createdByUserId, columnIds, guildId, permissions }: BoardPrisma): Board {
+  static from({ boardId, boardName, createdByUserId, columns, guildId, permissions }: BoardPrisma & {columns: ColumnPrisma[]}): Board {
     const typedPermissions = JSON.parse(permissions as unknown as string) as PermissionEntry[];
+    const columnIds = columns.map(column => column.columnId);
       return new Board(
           boardId,
           boardName,

@@ -87,10 +87,10 @@ const guildRouter = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-guildRouter.get('/:guildId/permissions', (req, res) => {
+guildRouter.get('/:guildId/permissions', async (req, res) => {
     const { guildId } = req.params;
     try {
-        const permissions = guildService.getGuildPermissions(guildId);
+        const permissions = await guildService.getGuildPermissions(guildId);
         res.status(200).json(permissions);
     } catch (error) {
         if (error instanceof Error) {
@@ -122,9 +122,9 @@ guildRouter.get('/:guildId/permissions', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-guildRouter.get('/', (req, res) => {
+guildRouter.get('/', async (req, res) => {
     try {
-        const guilds = guildService.getAllGuilds();
+        const guilds = await guildService.getAllGuilds();
         res.status(200).json(guilds);
     } catch (error) {
         if (error instanceof Error) {
@@ -135,10 +135,10 @@ guildRouter.get('/', (req, res) => {
     }
 });
 
-guildRouter.post('/', (req, res) => {
+guildRouter.post('/', async (req, res) => {
     const guild = req.body;
     try {
-        guildService.addGuild(guild);
+        await guildService.addGuild(guild);
         res.status(201).json({ message: 'Guild created successfully' });
     } catch (error) {
         if (error instanceof Error) {
@@ -149,12 +149,26 @@ guildRouter.post('/', (req, res) => {
     }
 });
 
-guildRouter.put('/:guildId', (req, res) => {
+guildRouter.put('/:guildId', async (req, res) => {
     const { guildId } = req.params;
     const guild = req.body;
     try {
-        guildService.updateGuild(guildId, guild);
+        await guildService.updateGuild(guildId, guild);
         res.status(200).json({ message: 'Guild updated successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+guildRouter.get('/:guildId', async (req, res) => {
+    const { guildId } = req.params;
+    try {
+        const guild = await guildService.getGuildById(guildId);
+        res.status(200).json(guild);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });

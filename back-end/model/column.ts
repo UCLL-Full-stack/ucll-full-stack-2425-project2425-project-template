@@ -19,7 +19,8 @@ export class Column {
         this.boardId = board;
     }
   
-    static from({ columnId, columnName, columnIndex, taskIds, boardId }: ColumnPrisma): Column {
+    static from({ columnId, columnName, columnIndex, tasks, boardId }: ColumnPrisma & {tasks: TaskPrisma[]}): Column {
+        const taskIds = tasks.map(task => task.taskId);
         return new Column(
             columnId,
             columnName,

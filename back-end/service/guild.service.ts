@@ -13,19 +13,26 @@ const getGuildById = async (guildId: string): Promise<Guild> => {
 
 const addGuild = async (guildData: CreateGuildInput): Promise<Guild> => {
     const { guildId, guildName, settings = [], roleIds = [], members = [], userIds = [], boardIds = [] } = guildData;
-    const guild = await guildDb.getGuildById(guildId);
-    if( guild ) {
-        throw new Error("Guild already exists");
-    }
-    if( settings.length === 0 ) {
-        settings.push({ identifier: DiscordPermission.ADMINISTRATOR, kanbanPermission: [KanbanPermission.ADMINISTRATOR]})
+    let updatedSettings = settings;
+
+    if (settings.length === 0) {
+        updatedSettings = [
+            { identifier: DiscordPermission.ADMINISTRATOR, kanbanPermission: [KanbanPermission.ADMINISTRATOR] },
+        ];
     } else {
         const adminPermission = settings.find(permission => permission.identifier === DiscordPermission.ADMINISTRATOR);
-        if( !adminPermission ) {
-            settings.push({ identifier: DiscordPermission.ADMINISTRATOR, kanbanPermission: [KanbanPermission.ADMINISTRATOR]});
+        if (!adminPermission) {
+            updatedSettings = [
+                ...settings,
+                { identifier: DiscordPermission.ADMINISTRATOR, kanbanPermission: [KanbanPermission.ADMINISTRATOR] },
+            ];
         }
     }
-    return await guildDb.addGuild(guildData);
+    const updatedGuildData = {
+        ...guildData,
+        settings: updatedSettings,
+    };
+    return await guildDb.addGuild(updatedGuildData);
 }
 
 const updateGuild = async (guildId: string, guildData: UpdateGuildInput): Promise<Guild> => {

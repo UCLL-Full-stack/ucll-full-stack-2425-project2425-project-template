@@ -83,16 +83,13 @@ const addGuild = async (guildData: {
             guildId,
             guildName,
             settings: settingsJson,
-            roleIds,
             roles: {
                 connect: roleIds.map((roleId) => ({ roleId })),
             },
             members: membersJson,
-            userIds,
             users: {
                 connect: userIds.map((userId) => ({ userId })),
             },
-            boardIds,
             boards: {
                 connect: boardIds.map((boardId) => ({ boardId })),
             },
@@ -138,7 +135,6 @@ const updateGuild = async (guildId: string, updateData: {
             data.roles = {
                 set: roleIds.map((roleId) => ({ roleId })),
             };
-            data.roleIds = roleIds;
         }
         if (members !== undefined) {
             data.members = JSON.stringify(members);
@@ -147,13 +143,11 @@ const updateGuild = async (guildId: string, updateData: {
             data.users = {
                 set: userIds.map((userId) => ({ userId })),
             };
-            data.userIds = userIds;
         }
         if (boardIds !== undefined) {
             data.boards = {
                 set: boardIds.map((boardId) => ({ boardId })),
             };
-            data.boardIds = boardIds;
         }
 
         const updatedGuildPrisma = await database.guild.update({
