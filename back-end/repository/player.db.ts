@@ -1,4 +1,5 @@
 import { Player } from '../model/player';
+import database from './database';
 
 const getAllPlayers = (): Player[] => {
     return players;

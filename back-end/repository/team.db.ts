@@ -1,4 +1,5 @@
 import { Team } from '../model/team';
+import database from './database';
 
 const getAllTeams = (): Team[] => {
     return teams;
