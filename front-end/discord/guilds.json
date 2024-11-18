@@ -19,11 +19,11 @@
     "permissions": "2251799813685247",
     "features": [
       "NEW_THREAD_PERMISSIONS",
-      "NEWS",
-      "WELCOME_SCREEN_ENABLED",
       "THREADS_ENABLED",
+      "NEWS",
       "TEXT_IN_VOICE_ENABLED",
-      "COMMUNITY"
+      "COMMUNITY",
+      "WELCOME_SCREEN_ENABLED"
     ]
   },
   {
@@ -34,8 +34,8 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "COMMUNITY",
-      "NEWS"
+      "NEWS",
+      "COMMUNITY"
     ]
   },
   {
@@ -57,8 +57,8 @@
     "owner": true,
     "permissions": "2251799813685247",
     "features": [
-      "COMMUNITY",
       "NEWS",
+      "COMMUNITY",
       "WELCOME_SCREEN_ENABLED"
     ]
   },
@@ -70,9 +70,9 @@
     "owner": false,
     "permissions": "2249600789905143",
     "features": [
-      "SOUNDBOARD",
       "CHANNEL_ICON_EMOJIS_GENERATED",
-      "RAPIDASH_TEST"
+      "RAPIDASH_TEST",
+      "SOUNDBOARD"
     ]
   },
   {
@@ -94,8 +94,8 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "SOUNDBOARD",
-      "CHANNEL_ICON_EMOJIS_GENERATED"
+      "CHANNEL_ICON_EMOJIS_GENERATED",
+      "SOUNDBOARD"
     ]
   },
   {
@@ -118,11 +118,11 @@
     "permissions": "2251799813685247",
     "features": [
       "SOUNDBOARD",
-      "NEWS",
       "GUILD_ONBOARDING_HAS_PROMPTS",
+      "GUILD_ONBOARDING",
+      "NEWS",
       "CHANNEL_ICON_EMOJIS_GENERATED",
       "GUILD_ONBOARDING_EVER_ENABLED",
-      "GUILD_ONBOARDING",
       "COMMUNITY"
     ]
   },
@@ -134,21 +134,21 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "SOUNDBOARD",
-      "THREE_DAY_THREAD_ARCHIVE",
       "CREATOR_ACCEPTED_NEW_TERMS",
-      "PREVIEW_ENABLED",
-      "ANIMATED_ICON",
-      "DISCOVERABLE",
-      "NEWS",
-      "GUILD_ONBOARDING_HAS_PROMPTS",
+      "SOUNDBOARD",
       "INVITE_SPLASH",
-      "GUILD_SERVER_GUIDE",
+      "ANIMATED_ICON",
+      "THREE_DAY_THREAD_ARCHIVE",
+      "AUTO_MODERATION",
+      "GUILD_ONBOARDING",
+      "PREVIEW_ENABLED",
+      "NEWS",
+      "DISCOVERABLE",
+      "GUILD_ONBOARDING_HAS_PROMPTS",
       "GUILD_ONBOARDING_EVER_ENABLED",
       "COMMUNITY",
-      "GUILD_ONBOARDING",
-      "AUTO_MODERATION",
       "ENABLED_DISCOVERABLE_BEFORE",
+      "GUILD_SERVER_GUIDE",
       "GUILD_WEB_PAGE_VANITY_URL"
     ]
   },

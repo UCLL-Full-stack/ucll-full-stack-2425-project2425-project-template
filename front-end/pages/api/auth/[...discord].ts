@@ -122,12 +122,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                                     guildId: guild.id,
                                 });
                             }));
-                            await GuildService.updateGuild(guild.id, {
-                                roleIds: guild.roles.map((role: any) => role.id),
-                            });
                         }                
                     } else if(exists.guildId){
                         await GuildService.updateGuild(guild.id, {
+                            guildName: guild.name,
                             members: guild.members.map((member: any) => {
                                 return {
                                     userId: member.userId,
@@ -136,16 +134,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             }),
                         });
                         await Promise.all(guild.roles.map(async (role: any) => {
-                            await RoleService.addRole({
-                                roleId: role.id,
-                                roleName: role.name,
-                                permissions: role.permissions,
-                                guildId: guild.id,
-                            });
+                            const exists = await RoleService.getRole(role.id);
+                            if(exists.error){
+                                if(exists.error === "Role not found"){
+                                    await RoleService.addRole({
+                                        roleId: role.id,
+                                        roleName: role.name,
+                                        permissions: role.permissions,
+                                        guildId: guild.id,
+                                    });
+                                }
+                            } else if(exists.roleId){
+                                await RoleService.updateRole(role.id, {
+                                    roleName: role.name,
+                                    permissions: role.permissions,
+                                    guildId: guild.id,
+                                });
+                            }
                         }));
-                        await GuildService.updateGuild(guild.id, {
-                            roleIds: guild.roles.map((role: any) => role.id),
-                        });
                     }
                 });
                 const guildsInDb = await GuildService.getGuilds();
@@ -159,10 +165,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
                             guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
                         });
-
                     }
+                }else if(user.userId){
+                    await UserService.updateUser(userData.id, {
+                        username: userData.username,
+                        globalName: userData.global_name,
+                        userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                        guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
+                    });
                 }
-
                 res.writeHead(302, { Location: '/' });
                 res.status(400).json(tokenData);
             }
