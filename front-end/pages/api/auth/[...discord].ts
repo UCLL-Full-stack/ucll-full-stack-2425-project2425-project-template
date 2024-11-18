@@ -1,4 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Client, GatewayIntentBits } from "discord.js";
+import axios from 'axios';
+import UserService from '@/services/UserService';
+import GuildService from '@/services/GuildService';
+import fs from 'fs'
+
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+    ],
+})
+
+client.once('ready', () => {
+    console.log('Discord client ready');
+});
+
+client.login(process.env.BOT_TOKEN);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
@@ -26,22 +44,75 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const accessToken = tokenData.access_token;
 
                 // Fetch user data
-                const userResponse = await fetch('https://discord.com/api/v10/users/@me', {
+                const userResponse = await axios.get('https://discord.com/api/v10/users/@me', {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
-
-                const userData = await userResponse.json();
-
                 // Fetch guild data
-                const guildResponse = await fetch('https://discord.com/api/v10/users/@me/guilds', {
+                const guildResponse = await axios.get('https://discord.com/api/v10/users/@me/guilds', {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
+                const userData = await userResponse.data;
+                const guildsData = await guildResponse.data;
+                // const user = await UserService.getUser(userData.id);
+                // const guildsInDb = await GuildService.getGuilds();
+                // const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
+                const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
+                    const permissions = BigInt(guild.permissions);
+                    const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
+                    const hasManageServer = (permissions & BigInt(0x00000020)) === BigInt(0x00000020);
+                    return hasAdmin || hasManageServer;
+                })
+                
+                fs.writeFileSync('discord/guilds.json', JSON.stringify(adminOrManageServerGuilds, null, 2))
+                fs.writeFileSync('discord/user.json', JSON.stringify(userData, null, 2))
 
-                const guildsData = await guildResponse.json();
+                const botGuildData = await Promise.all(
+                    adminOrManageServerGuilds.map(async (guild: {id: string, name: string}) => {
+                        try {
+                            const botGuild = client.guilds.cache.get(guild.id);
+                            if (!botGuild) return null;
+                            const roles = botGuild.roles.cache.map((role) => ({
+                                id: role.id,
+                                name: role.name,
+                                permissions: role.permissions.toArray(),
+                            }));
+                            const members = await botGuild.members.fetch();
+                            const memberData = members.map((member) => ({
+                                userId: member.user.id,
+                                username: member.user.username,
+                                avatar: member.user.displayAvatarURL(),
+                                roles: member.roles.cache.map((role) => role.id),
+                            }));
+                            return {
+                                id: guild.id,
+                                name: guild.name,
+                                roles,
+                                members: memberData,
+                            };
+                        } catch (error: any) {
+                            console.error(`Error fetching data for guild ${guild.id}:`, error.message);
+                            return null;
+                        }
+                    })
+                );
+                const filteredBotGuildData = botGuildData.filter((guild) => guild !== null);
+                fs.writeFileSync("discord/bot_guild_data.json", JSON.stringify(filteredBotGuildData, null, 2));
+                
+                // if (user === null) {
+                //     await UserService.addUser({
+                //         userId: userData.id,
+                //         username: userData.username,
+                //         globalName: userData.username,
+                //         userAvatar: userData.avatar,
+                //         guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
+                //     });
+                // }
+
+
                 res.writeHead(302, { Location: '/' });
                 res.status(400).json(tokenData);
             }

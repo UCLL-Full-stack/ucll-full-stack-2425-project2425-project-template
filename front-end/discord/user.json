@@ -1,0 +1,21 @@
+{
+  "id": "348902272534839296",
+  "username": "ryujily",
+  "avatar": "877af4d3bf2171dfabe68fe3c7233741",
+  "discriminator": "0",
+  "public_flags": 4194560,
+  "flags": 4194560,
+  "banner": "4d53869c3ce6f57fc7c82c01fff248f5",
+  "accent_color": 9516253,
+  "global_name": "Ryuji Ly",
+  "avatar_decoration_data": {
+    "asset": "a_e8c11f139e55dac538cdaafb3caa2317",
+    "sku_id": "1228251846032756796",
+    "expires_at": null
+  },
+  "banner_color": "#9134dd",
+  "clan": null,
+  "mfa_enabled": true,
+  "locale": "en-US",
+  "premium_type": 2
+}

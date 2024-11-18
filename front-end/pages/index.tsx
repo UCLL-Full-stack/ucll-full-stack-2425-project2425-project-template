@@ -22,7 +22,7 @@ const Home: FC = () => {
 
 
   const handleDiscordLogin = () => {
-    const redirectUri = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/discord`;
+    const redirectUri = `http://localhost:8080/api/auth/discord`;
     window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify guilds`;
   };
 
@@ -65,9 +65,9 @@ const Home: FC = () => {
   const fetchUserData = async () => {
     try {
       // default to logged in state to user1 for now
-      const userData = await UserService.getUser('user1');
-      setUser(userData);
-      setGuilds(userData.guilds);
+      // const userData = await UserService.getUser('user1');
+      // setUser(userData);
+      // setGuilds(userData.guilds);
     } catch (error) {
       console.error('Error fetching user data', error);
     } finally {
