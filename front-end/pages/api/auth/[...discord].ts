@@ -58,8 +58,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const userData = await userResponse.data;
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
-                // const guildsInDb = await GuildService.getGuilds();
-                // const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
+                const guildsInDb = await GuildService.getGuilds();
+                const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
                 const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
                     const permissions = BigInt(guild.permissions);
                     const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
@@ -101,7 +101,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 );
                 const filteredBotGuildData = botGuildData.filter((guild) => guild !== null);
                 fs.writeFileSync("discord/bot_guild_data.json", JSON.stringify(filteredBotGuildData, null, 2));
-                
+                if(user.error){
+                    if(user.error === "User not found"){
+                        await UserService.addUser({
+                            userId: userData.id,
+                            username: userData.username,
+                            globalName: userData.username,
+                            userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                            guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
+                        });
+                    }
+                }
                 // if (user === null) {
                 //     await UserService.addUser({
                 //         userId: userData.id,
