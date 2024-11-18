@@ -1,26 +1,52 @@
 import { Rol } from "../types";
 import { Bestelling } from "./bestelling";
+import { User as UserPrisma } from '@prisma/client';
+import { Bestelling as BestellingPrisma } from '@prisma/client';
+export class User {
 
-export class User{
+    static from({
+        id,
+        naam,
+        voornaam,
+        email,
+        wachtwoord,
+        adres,
+        gebruikersnaam,
+        rol
+    }: UserPrisma) {
+        return new User({
+            id,
+            naam,
+            voornaam,
+            email,
+            wachtwoord,
+            adres,
+            gebruikersnaam,
+            rol
+        });
+    }
+
+
     private id?: number;
-    private naam: String;
-    private voornaam: String;
-    private email: String;
-    private wachtwoord: String;
-    private adres: String;
-    private gebruikersnaam: String;
+    private naam: string;
+    private voornaam: string;
+    private email: string;
+    private wachtwoord: string;
+    private adres: string;
+    private gebruikersnaam: string;
     private rol: Rol;
     private bestellingen: Bestelling[] = [];
 
     constructor(user: {
         id?: number;
-        naam: String;
-        voornaam: String;
-        email: String;
-        wachtwoord: String;
-        adres: String;
-        gebruikersnaam: String;
+        naam: string;
+        voornaam: string;
+        email: string;
+        wachtwoord: string;
+        adres: string;
+        gebruikersnaam: string;
         rol: Rol;
+        //bestellingen: Array<Bestelling>;
     }) {
         this.id = user.id;
         this.naam = user.naam;
@@ -30,41 +56,42 @@ export class User{
         this.adres = user.adres;
         this.gebruikersnaam = user.gebruikersnaam;
         this.rol = user.rol;
+        //this.bestellingen = user.bestellingen;
     }
 
     getId(): number | undefined {
         return this.id;
     }
 
-    getNaam(): String{
+    getNaam(): string {
         return this.naam;
     }
 
-    getVoornaam(): String{
+    getVoornaam(): string {
         return this.voornaam;
     }
 
-    getEmail(): String{
+    getEmail(): string {
         return this.email;
     }
 
-    getWachtwoord(): String{
+    getWachtwoord(): string {
         return this.wachtwoord;
     }
 
-    getAdres(): String{
+    getAdres(): string {
         return this.adres;
     }
 
-    getGebruikersnaam(): String{
+    getGebruikersnaam(): string {
         return this.gebruikersnaam;
     }
 
-    getBestellingen(): Bestelling[]{
+    getBestellingen(): Bestelling[] {
         return this.bestellingen;
     }
 
-    getRol(): Rol{
+    getRol(): Rol {
         return this.rol;
     }
 
@@ -72,7 +99,7 @@ export class User{
         console.log("User registrated successfully")
     }
 
-    order(bestelling:Bestelling): void {
+    order(bestelling: Bestelling): void {
         this.bestellingen.push(bestelling);
     }
 
@@ -82,11 +109,11 @@ export class User{
         //ook dit moet wss nog aangepast worden
     }
 
-    deleteUser(user:User): void{
+    deleteUser(user: User): void {
         console.log("User deleted")
     }
 
-    updateUser(user:User){
+    updateUser(user: User) {
         Object.assign(this, user);
         console.log("User updated")
     }

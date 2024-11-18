@@ -9,4 +9,7 @@ const createUser = async (user: User): Promise<User> => {
 
 const getAllUsers = async (): Promise<User[]> => userDb.getAllUsers();
 
-export default { createUser, getAllUsers }
+export default {
+    createUser,
+    getAllUsers
+}

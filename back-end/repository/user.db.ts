@@ -1,54 +1,49 @@
+import { Rol } from "@prisma/client";
 import { User } from "../model/user";
+import database from "./database";
 
-const users: User[] = [
-    new User({
-        id: 1,
-        naam: "Timmermans",
-        voornaam: "Ashley",
-        email: "ashley.timmermans@email.com",
-        wachtwoord: "welkom123",
-        adres: "Leuvensestraat 10",
-        gebruikersnaam: "AshleyT",
-        rol: "klant"
-    }),
-    new User({
-        id: 2,
-        naam: "de Weerd",
-        voornaam: "Nina",
-        email: "nina.deweerd@email.com",
-        wachtwoord: "helloworld!",
-        adres: "Heverleesestraat 20",
-        gebruikersnaam: "NinadW",
-        rol: "klant"
-    }),
-    new User({
-        id: 3,
-        naam: "Doe",
-        voornaam: "John",
-        email: "john.doe@email.com",
-        wachtwoord: "password",
-        adres: "Teststraat 123",
-        gebruikersnaam: "JohnD",
-        rol: "admin"
-    }),
-    new User({
-        id: 4,
-        naam: "Toe",
-        voornaam: "Jane",
-        email: "jane.toe@email.com",
-        wachtwoord: "hihihi3",
-        adres: "Teststraat 321",
-        gebruikersnaam: "JaneT",
-        rol: "manager"
-    })
-];
+const getAllUsers = async (): Promise<User[]> => {
+    try {
+        const usersPrisma = await database.user.findMany({
+            include: {
+                bestellingen: true,
+            },
+        });
+        return usersPrisma.map((userPrisma) => User.from(userPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-const getAllUsers = (): User[] => users;
-
-const createUser = (user: User): User => {
-    users.push(user);
-    return user;
+const createUser = async (user: User) => {
+    try {
+        const usersPrisma = await database.user.create({
+            data: {
+                naam: user.getNaam(),
+                voornaam: user.getVoornaam(),
+                email: user.getEmail(),
+                wachtwoord: user.getWachtwoord(),
+                adres: user.getAdres(),
+                gebruikersnaam: user.getGebruikersnaam(),
+                rol: user.getRol() as Rol,
+                bestellingen: {
+                    connect: user.getBestellingen().map((bestelling) => ({
+                        id: bestelling.getId()
+                    }))
+                }
+            }
+        });
+        return usersPrisma;
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
 };
 
 
-export default { createUser, getAllUsers };
+
+export default {
+    createUser,
+    getAllUsers
+};

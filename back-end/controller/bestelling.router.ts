@@ -49,15 +49,15 @@ const orderRouter = express.Router();
  *                  schema:
  *                     $ref: '#/components/schemas/Bestelling'
  */
-orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const bestellingInput = req.body;
-        const newBestelling = await bestellingService.createBestelling(bestellingInput);
-        res.status(201).json(newBestelling);
-    } catch (error) {
-        next(error);
-    }
-});
+// orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const bestellingInput = req.body;
+//         const newBestelling = await bestellingService.createBestelling(bestellingInput);
+//         res.status(201).json(newBestelling);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 /**
  * @swagger

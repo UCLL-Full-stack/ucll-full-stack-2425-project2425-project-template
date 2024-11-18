@@ -1,5 +1,5 @@
 type Type = "Protein" | "Topping" | "Sauce"
-type Rol = "admin" | "klant" | "manager";
+type Rol = "Admin" | "Klant" | "Manager";
 
 type BestellingInput = {
     id?: number;
@@ -19,6 +19,7 @@ type UserInput = {
     adres: String;
     gebruikersnaam: String;
     rol: Rol;
+    bestellingen: BestellingInput[];
 }
 
 type IngredientInput = {
