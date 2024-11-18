@@ -6,6 +6,13 @@ const getAllIngredienten = async (): Promise<Ingredient[]> => ingredientDb.getAl
 
 const addIngredient = async ({ naam, type, aantal, prijs }: IngredientInput): Promise<Ingredient> => {
 
+    const newIngredient = await ingredientDb.getIngredientByNaam({ naam: naam });
+
+    if (newIngredient) {
+        throw new Error(`Ingredient ${naam} already exists.`);
+    }
+
+
     const ingredient = new Ingredient({
         naam: naam,
         type: type,
@@ -18,7 +25,7 @@ const addIngredient = async ({ naam, type, aantal, prijs }: IngredientInput): Pr
 };
 
 const getIngredientById = async (id: number): Promise<Ingredient | null> => {
-    const ingredient = ingredientDb.getIngredientById({ id: id });
+    const ingredient = await ingredientDb.getIngredientById({ id: id });
     if (!ingredient) {
         throw new Error(`Ingredient with id ${id} does not exist.`);
     } else {
@@ -26,4 +33,8 @@ const getIngredientById = async (id: number): Promise<Ingredient | null> => {
     }
 }
 
-export default { getAllIngredienten, addIngredient, getIngredientById }
+export default {
+    getAllIngredienten,
+    addIngredient,
+    getIngredientById
+}

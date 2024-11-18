@@ -53,7 +53,7 @@ const userRouter = express.Router();
  *                  schema:
  *                     $ref: '#/components/schemas/User'
  */
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>{
+userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = req.body;
         const newUser = await userService.createUser(user);
@@ -79,13 +79,13 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>{
  *                          $ref: '#/components/schemas/User'
  * 
  */
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction)=> {
-    try{
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
-    } catch (error){
+    } catch (error) {
         next(error);
     }
 });
 
-export {userRouter};
+export { userRouter };

@@ -1,65 +1,74 @@
+import { Type } from "@prisma/client";
 import { Ingredient } from "../model/ingredient";
+import database from "./database";
 
-const ingredienten = [
-    new Ingredient({
-        id: 1,
-        naam: 'Salmon',
-        type: 'Protein',
-        aantal: 50,
-        prijs: 3.61
-    }),
-    new Ingredient({
-        id: 2,
-        naam: 'Avocado',
-        type: 'Topping',
-        aantal: 30,
-        prijs: 2.78
-    }),
-    new Ingredient({
-        id: 3,
-        naam: 'Spicy mayo',
-        type: 'Sauce',
-        aantal: 200,
-        prijs: 1.32
-    }),
-    new Ingredient({
-        id: 4,
-        naam: 'Tuna',
-        type: 'Protein',
-        aantal: 50,
-        prijs: 3.61
-    }),
-    new Ingredient({
-        id: 5,
-        naam: 'Corn',
-        type: 'Topping',
-        aantal: 198,
-        prijs: 0.54
-    }),
-    new Ingredient({
-        id: 6,
-        naam: 'Seaweed',
-        type: 'Topping',
-        aantal: 228,
-        prijs: 1.09
-    }),
-    new Ingredient({
-        id: 7,
-        naam: 'Srirachia',
-        type: 'Sauce',
-        aantal: 450,
-        prijs: 1.14
-    })
-];
 
-const getAllIngredienten = (): Ingredient[] => ingredienten;
+const getAllIngredienten = async (): Promise<Ingredient[]> => {
+    try {
+        const ingredientenPrisma = await database.ingredient.findMany({
+        });
+        return ingredientenPrisma.map((ingredientPrisma) => Ingredient.from(ingredientPrisma));
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
 
-const addIngredient = (ingredient: Ingredient) => {
-    ingredienten.push(ingredient);
 };
 
-const getIngredientById = ({ id }: { id: number }): Ingredient | null => {
-    return ingredienten.find((ingredient) => ingredient.getId() === id) || null;
+const addIngredient = async (ingredient: Ingredient): Promise<Ingredient> => {
+    try {
+        const ingredientenPrisma = await database.ingredient.create({
+            data: {
+                naam: ingredient.getNaam(),
+                type: ingredient.getType() as Type,
+                aantal: ingredient.getAantal(),
+                prijs: ingredient.getPrijs()
+            }
+        });
+        return Ingredient.from(ingredientenPrisma);
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
+};
+
+const getIngredientById = async ({ id }: { id: number }): Promise<Ingredient | null> => {
+    try {
+        const ingredientenPrisma = await database.ingredient.findUnique({
+            where: {
+                id: id
+            }
+        });
+        if (ingredientenPrisma == null) {
+            return null;
+        }
+        return Ingredient.from(ingredientenPrisma);
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
+};
+
+const getIngredientByNaam = async ({ naam }: { naam: string }): Promise<Ingredient | null> => {
+    try {
+        const ingredientenPrisma = await database.ingredient.findUnique({
+            where: {
+                naam: naam
+            }
+        });
+        if (ingredientenPrisma == null) {
+            return null;
+        }
+        return Ingredient.from(ingredientenPrisma);
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
 }
 
-export default { getAllIngredienten, addIngredient, getIngredientById }
+export default {
+    getAllIngredienten,
+    addIngredient,
+    getIngredientById,
+    getIngredientByNaam
+}

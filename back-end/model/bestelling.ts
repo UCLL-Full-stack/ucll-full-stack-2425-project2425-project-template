@@ -1,7 +1,28 @@
 import { Pokebowl } from "./pokebowl";
 import { User } from "./user";
+import {
+    User as UserPrisma,
+    Pokebowl as PokebowlPrisma,
+    Bestelling as BestellingPrisma,
+} from '@prisma/client';
 
 export class Bestelling {
+
+    static from({
+        id,
+        user,
+        datum,
+        pokebowls
+    }: BestellingPrisma & { user: UserPrisma, pokebowls: PokebowlPrisma[] }) {
+        return new Bestelling({
+            id,
+            user: User.from(user),
+            datum,
+            pokebowls: pokebowls.map((pokebowl) => Pokebowl.from(pokebowl))
+        });
+    }
+
+
     private id?: number;
     private user: User;
     private datum: Date;

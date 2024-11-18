@@ -1,6 +1,29 @@
 import { Ingredient } from "./ingredient";
-
+import { Ingredient as IngredientPrisma } from '@prisma/client';
+import { Pokebowl as PokebowlPrisma } from '@prisma/client';
 export class Pokebowl {
+
+    static from({
+        id,
+        naam,
+        type,
+        beschrijving,
+        prijs,
+        maxAantalIngredienten,
+        ingredienten = []
+    }: PokebowlPrisma & { ingredienten?: IngredientPrisma[] }) {
+        return new Pokebowl({
+            id,
+            naam,
+            type,
+            prijs,
+            beschrijving,
+            maxAantalIngredienten,
+            ingredienten: ingredienten.map((ingredient) => Ingredient.from(ingredient))
+        });
+    }
+
+
     private id?: number;
     private naam: string;
     private type: string;
@@ -23,7 +46,7 @@ export class Pokebowl {
         this.id = pokebowl.id;
         this.naam = pokebowl.naam;
         this.type = pokebowl.type;
-        this.prijs = pokebowl.prijs;
+        this.prijs = pokebowl.prijs ?? 0;
         this.beschrijving = pokebowl.beschrijving;
         this.maxAantalIngredienten = pokebowl.maxAantalIngredienten;
         this.ingredienten = pokebowl.ingredienten;
@@ -77,7 +100,7 @@ export class Pokebowl {
     }
 
     getPrijs(): number | undefined {
-        return this.calculatePrice();
+        return this.prijs;
     }
 
     setPrijs(prijs: number) {

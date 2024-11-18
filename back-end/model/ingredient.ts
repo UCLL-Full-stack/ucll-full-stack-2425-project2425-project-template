@@ -1,7 +1,27 @@
+import { Type } from "../types";
+import { Ingredient as IngredientPrisma } from '@prisma/client';
 export class Ingredient {
+
+    static from({
+        id,
+        naam,
+        type,
+        aantal,
+        prijs
+    }: IngredientPrisma): Ingredient {
+        return new Ingredient({
+            id,
+            naam,
+            type,
+            aantal,
+            prijs
+        });
+    }
+
+
     private id?: number;
     private naam: string;
-    private type: string;
+    private type: Type;
     private aantal: number;
     private prijs: number;
     private ingredientLimit: number = 0;
@@ -9,7 +29,7 @@ export class Ingredient {
     constructor(ingredient: {
         id?: number;
         naam: string;
-        type: string;
+        type: Type;
         aantal: number;
         prijs: number;
     }) {
@@ -22,7 +42,7 @@ export class Ingredient {
         this.prijs = ingredient.prijs;
         this.basicIngredientLimit();
     }
-    validate(ingredient: { naam: string, type: string, aantal: number, prijs: number }) {
+    validate(ingredient: { naam: string, type: Type, aantal: number, prijs: number }) {
         if (!ingredient.naam) {
             throw new Error("Naam cannot be empty");
         }
