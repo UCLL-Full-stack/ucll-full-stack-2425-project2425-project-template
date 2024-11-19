@@ -149,13 +149,13 @@ eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFun
 
 
 
-eventRouter.delete('/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
+eventRouter.put('/remove/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
     const eventId = parseInt(req.params.id, 10);
     const email = req.params.email;
 
-
     try {
-        await eventService.removeEvent(email, eventId); //no const cause for now it doesn't return anything
+        await eventService.removeEvent(email, eventId);
+        res.status(200).json({ message: 'Event removed successfully.' });
     } catch (error){
         console.log(error);
     }

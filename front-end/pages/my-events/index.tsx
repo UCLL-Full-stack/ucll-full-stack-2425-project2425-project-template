@@ -22,7 +22,7 @@ const MyEvents: React.FC = () => {
 
     // useEffect(() => {
     //     getEventsByUserEmail();
-    // }, [myEvents]);
+    // }, []);
 
     const getEventsByUserEmail = async () => {
         const events = await EventService.getEventsByUserEmail(email);

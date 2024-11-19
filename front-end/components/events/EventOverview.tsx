@@ -17,11 +17,11 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
     router.push(`/upcoming-events/${eventId}`);
   };
 
-
   const [myEvents, setMyEvents] = useState(events)
 
-  const removeEvent = async (email: string, eventId: number) => {
+  const removeEvent = async (eventId: number) => {
     await EventService.removeFromMyEvents(email, eventId);
+    setMyEvents(myEvents.filter(event => event.id !== eventId));
   }
 
   return (
@@ -44,14 +44,19 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
                 <p className={styles.hiddenOb}>{event.location}</p>
                 <p className={styles.hiddenOb}>{event.category}</p>
 
-                {showDeleteButton === true &&
-                  <button
-                    className={styles.removeButton}
-                    onClick={() => removeEvent(event.id)}
-                  >
-                    Remove
-                  </button>
-                }
+                <div>
+                  {showDeleteButton === true &&
+                    <button
+                      className={styles.removeButton}
+                      onClick={(e) => {
+                        // Instead of triggering handleEventClick, it should trigger removeEvent
+                        e.stopPropagation();
+                        removeEvent(event.id);
+                      }}
+                    >Remove
+                    </button>
+                  }
+                </div>
               </div>
             ))}
           </div>
