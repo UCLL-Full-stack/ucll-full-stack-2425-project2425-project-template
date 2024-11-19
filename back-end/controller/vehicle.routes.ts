@@ -46,5 +46,15 @@ vehicleRouter.put('/:id', async (req, res) => {
     }
 })
 
+vehicleRouter.get('/',async( req: Request, res: Response) => {
+    try{
+        const filters = req.query;
+        const vehicles = await vehicleService.getFilteredVehicles(filters);
+        res.status(200).json(vehicles);
+    }catch(error){
+        res.status(400).json({ status: 'error' });
+    }
+})
+
 
 export default vehicleRouter;

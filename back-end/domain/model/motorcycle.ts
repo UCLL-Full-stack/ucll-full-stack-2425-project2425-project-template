@@ -4,7 +4,7 @@ export class Motorcycle extends Vehicle{
     constructor(motorcycle: {
         id?: number, manufacturer: string,
         model_name: string, price: number, fuel_type: string,
-        transmission_type: string, year: number, vehicle_type: string
+        transmission_type: string, year: number, vehicle_type: string, body_type: string, mileage: number
     }) {
         // this.validate(motorcycle);
 
@@ -13,7 +13,7 @@ export class Motorcycle extends Vehicle{
             price: motorcycle.price, fuel_type: motorcycle.fuel_type,
             transmission_type: motorcycle.transmission_type,
             year: motorcycle.year, vehicle_type: motorcycle.vehicle_type,
-            body_type: ""
+            body_type: motorcycle.body_type, mileage: motorcycle.mileage
         });
 
     }
