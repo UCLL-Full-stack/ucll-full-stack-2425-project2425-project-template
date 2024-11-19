@@ -35,14 +35,16 @@ const ProjectDetails: React.FC<Props> = ({ project }) => {
 
     return (
         <div>
-            <h3>Project Users</h3>
+            <h2>Selected project: {project.name}</h2>
             <UserOverviewTable project={project} />
 
             <ul>
                 {users.map((user) => (
-                    <li key={user.userId}>
-                        {user.firstName} {user.lastName} ({user.role})
-                        <button onClick={() => addUserToProject(user.userId)}>
+                    <li key={user.userId} className="flex items-center justify-between mb-2">
+                        <span>
+                            {user.firstName} {user.lastName} ({user.role})
+                        </span>
+                        <button className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-10 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' onClick={() => addUserToProject(user.userId)}>
                             Add to Project
                         </button>
                     </li>
