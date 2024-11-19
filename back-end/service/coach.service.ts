@@ -2,20 +2,20 @@ import { Coach } from '../model/coach';
 import coachDb from '../repository/coach.db';
 import { CoachInput } from '../types';
 
-const getAllCoaches = (): Coach[] => {
-    return coachDb.getAllCoaches();
+const getAllCoaches = async (): Promise<Coach[]> => {
+    return await coachDb.getAllCoaches();
 };
 
-const getCoachById = (id: number): Coach | undefined => {
-    const coach = coachDb.getCoachById(id);
+const getCoachById = async (id: number): Promise<Coach> => {
+    const coach = await coachDb.getCoachById(id);
     if (!coach) {
         throw new Error(`Coach with id ${id} does not exist.`);
     }
     return coach;
 };
 
-const createCoach = (coachInput: CoachInput): Coach => {
-    const existingCoaches = coachDb.getAllCoaches() || [];
+const createCoach = async (coachInput: CoachInput): Promise<Coach> => {
+    const existingCoaches = await coachDb.getAllCoaches();
 
     if (coachInput.id === undefined || coachInput.id < 0) {
         throw new Error('Invalid id.');
@@ -37,8 +37,7 @@ const createCoach = (coachInput: CoachInput): Coach => {
     }
 
     const newCoach = new Coach(coachInput);
-    coachDb.createCoach(newCoach);
-    return newCoach;
+    return await coachDb.createCoach(newCoach);
 };
 
 export default { getAllCoaches, getCoachById, createCoach };
