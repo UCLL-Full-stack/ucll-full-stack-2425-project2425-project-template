@@ -6,7 +6,7 @@ const getAllCoaches = async (): Promise<Coach[]> => {
         const coachPrisma = await database.coach.findMany({
             include: { team: true }
         });
-        return coachPrisma.map((coachPrisma) => Coach.from(coachPrisma));
+        return coachPrisma.map((coach) => Coach.from(coach));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

@@ -1,34 +1,84 @@
 import { Team } from '../model/team';
 import database from './database';
 
-const getAllTeams = (): Team[] => {
-    return teams;
-};
-
-const getTeamsByCoach = (coachId: number): Team[] => {
-    const teamsToReturn = [];
-
-    for (var team of teams) {
-        if (team.getCoach().getId() == coachId) {
-            teamsToReturn.push(team);
-        }
+const getAllTeams = async (): Promise<Team[]> => {
+    try {
+        const teamPrisma = await database.team.findMany({
+            include: { coach: true, players: true }
+        });
+        return teamPrisma.map((team) => Team.from(team));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
     }
-    return teamsToReturn;
 };
 
-const getTeamById = (id: number): Team | undefined => {
-    return teams.find((team) => team.getId() === id) || undefined;
+const getTeamsByCoach = async (coachId: number): Promise<Team[]> => {
+    try {
+        const teamsPrisma = await database.team.findMany({
+            where: { coachId },
+            include: { coach: true, players: true }
+        });
+        return teamsPrisma.map((team) => Team.from(team));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
+    }
 };
 
-const createTeam = (newTeam: Team): Team => {
-    teams.push(newTeam);
-    return newTeam;
+const getTeamById = async (id: number): Promise<Team> => {
+    try {
+        const teamPrisma = await database.team.findUnique({
+            where: { id },
+            include: { coach: true, players: true }
+        });
+        if (!teamPrisma) {
+            throw new Error('Team not found');
+        }
+        return Team.from(teamPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
+    }
 };
 
-const updateTeam = (updatedTeam: Team): Team => {
-    const oldTeamIndex = teams.findIndex((team) => team.getId() === updatedTeam.getId());
-    teams[oldTeamIndex] = updatedTeam;
-    return updatedTeam;
+const createTeam = async (newTeam: Team): Promise<Team> => {
+    try {
+        const teamPrisma = await database.team.create({
+            data: {
+                teamName: newTeam.getTeamName(),
+                coachId: newTeam.getCoach().getId()!,
+                players: {
+                    connect: newTeam.getPlayers().map(player => ({ id: player.getId() }))
+                }
+            },
+            include: { coach: true, players: true }
+        });
+        return Team.from(teamPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
+    }
+};
+
+const updateTeam = async (updatedTeam: Team): Promise<Team> => {
+    try {
+        const teamPrisma = await database.team.update({
+            where: { id: updatedTeam.getId()! },
+            data: {
+                teamName: updatedTeam.getTeamName(),
+                coachId: updatedTeam.getCoach().getId()!,
+                players: {
+                    set: updatedTeam.getPlayers().map(player => ({ id: player.getId() }))
+                }
+            },
+            include: { coach: true, players: true }
+        });
+        return Team.from(teamPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error, see server log for details.');
+    }
 };
 
 export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam, updateTeam };

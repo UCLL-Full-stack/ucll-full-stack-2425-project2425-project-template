@@ -4,16 +4,9 @@ import database from './database';
 const getAllGames = async (): Promise<Game[]> => {
     try {
         const gamePrisma = await database.game.findMany({
-            include: { teams: { include: { team: true } } }
+            include: { teams: true }
         });
-        return gamePrisma.map((gamePrisma) => Game.from({
-            ...gamePrisma,
-            teams: gamePrisma.teams.map(teamRelation => ({
-                id: teamRelation.team.id,
-                teamName: teamRelation.team.teamName,
-                coachId: teamRelation.team.coachId
-            }))
-        }));
+        return gamePrisma.map((game) => Game.from(game));
     } catch (error) {
         console.error(error);
         throw new Error('Database error, see server log for details.');
@@ -24,19 +17,12 @@ const getGameById = async (id: number): Promise<Game> => {
     try {
         const gamePrisma = await database.game.findUnique({
             where: { id },
-            include: { teams: { include: { team: true } } }
+            include: { teams: true }
         });
         if (!gamePrisma) {
             throw new Error('Game not found');
         }
-        return Game.from({ 
-            ...gamePrisma, 
-            teams: gamePrisma.teams.map(teamRelation => ({
-                id: teamRelation.team.id,
-                teamName: teamRelation.team.teamName,
-                coachId: teamRelation.team.coachId
-            }))
-        });
+        return Game.from(gamePrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error, see server log for details.');
