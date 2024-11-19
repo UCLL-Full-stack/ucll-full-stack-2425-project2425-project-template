@@ -1,20 +1,24 @@
 import { Album } from "./album";
+import { User } from "./user";
 
 export class List{
     private readonly id?: number;
     private readonly createdAt: number;
+    private readonly user?: User;
     private title: string;
     private description: string;
     private albums: Album[];
 
     constructor(list: {
         id?: number,
+        user?: User,
         title: string, 
         description: string,
         albums: Album[]
     }){
         this.validate(list);
         this.id = list.id;
+        this.user = list.user;
         this.title = list.title;
         this.description = list.description;
         this.albums = list.albums;
@@ -26,7 +30,6 @@ export class List{
         description: string,
         albums: Album[]
     }){
-
         if(!list.title || !list.description){
             throw new Error('title and description cannot be empty');
         }
@@ -38,6 +41,10 @@ export class List{
 
     getId(): number | undefined{
         return this.id;
+    }
+
+    getUser(): User | undefined{
+        return this.user;
     }
 
     getTitle(): string{

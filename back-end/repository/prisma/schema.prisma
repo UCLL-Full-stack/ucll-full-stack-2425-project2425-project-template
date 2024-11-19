@@ -4,5 +4,48 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    url      = enc("DATABASE_URL") 
+    url      = env("DATABASE_URL") 
+}
+
+model Album{
+    id Int @id @default(autoincrement())
+    title String @db.VarChar(255)
+    duration DateTime @db.Time
+    artists Artist[]
+    songs Song[]
+    releaseDate DateTime
+    lists List[]
+}
+
+model Song{
+    id Int @id @default(autoincrement())
+    title String @db.VarChar(255)
+    duration DateTime @db.Time
+    album Album @relation(fields: [albumId], references: [id])
+    albumId Int 
+    Artists Artist[]
+}
+
+model Artist{
+    id Int @id @default(autoincrement())
+    name String
+    bio String
+    albums Album[]
+    Songs Song[]
+}
+
+model User{
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    email String @unique
+    userName String @unique
+    password String
+}
+
+model List{
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    title String @db.VarChar(255)
+    description String
+    albums Album[]
 }
