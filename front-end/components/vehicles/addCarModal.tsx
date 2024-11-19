@@ -165,16 +165,16 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-screen max-w-md">
                 <h2 className="text-2xl font-bold mb-4">Add a New Car</h2>
                 <form onSubmit={handleSubmit}>
 
                 <div className="mb-4">
-                        <label className="block text-sm font-medium">Vehicle Type</label>
+                        <label className="flex text-sm font-medium">Vehicle Type</label>
                         <select
                             value={vehicleType}
                             onChange={(e) => setVehicleType(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
                             <option value="" disabled>Select a Vehicle Type</option>
@@ -183,11 +183,11 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                         </select>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Manufacturer</label>
+                        <label className="flex text-sm font-medium">Manufacturer</label>
                         <select
                             value={manufacturer}
                             onChange={handleManufacturerChange}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
                             <option value="" disabled>Select a manufacturer</option>
@@ -199,11 +199,11 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                         </select>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Model Name</label>
+                        <label className="flex text-sm font-medium">Model Name</label>
                         <select
                             value={modelName}
                             onChange={(e) => setModelName(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                             disabled={!selectedModels.length}
                         >
@@ -216,41 +216,41 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                         </select>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Year</label>
+                        <label className="flex text-sm font-medium">Year</label>
                         <input
                             type="number"
                             value={year}
                             onChange={(e) => setYear(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Mileage</label>
+                        <label className="flex text-sm font-medium">Mileage</label>
                         <input
                             type="number"
                             value={mileage}
                             onChange={(e) => setMileage(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Price</label>
+                        <label className="flex text-sm font-medium">Price</label>
                         <input
                             type="number"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Body Type</label>
+                        <label className="flex text-sm font-medium">Body Type</label>
                         <select
                             value={bodyType}
                             onChange={(e) => setBodyType(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
                             <option value=""disabled>Select a Body Type</option>
@@ -263,11 +263,11 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                         </select>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Fuel Type</label>
+                        <label className="flex text-sm font-medium">Fuel Type</label>
                         <select
                             value={fuelType}
                             onChange={(e) => setFuelType(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
                             <option value="" disabled>Select a Fuel Type</option>
@@ -279,11 +279,11 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                         </select>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium">Transmission Type</label>
+                        <label className="flex text-sm font-medium">Transmission Type</label>
                         <select
                             value={transmissionType}
                             onChange={(e) => setTransmissionType(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
                             <option value=""disabled>Select a Transmission Type</option>
@@ -296,13 +296,13 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                            className="flex items-center px-4 py-2 text-lg font-medium text-black drop-shadow-lg align-middle rounded-lg transition duration-500 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                            className="flex items-center px-4 py-2 text-lg font-normal text-black bg-[#FCBA04] hover:bg-[#FDCD49] drop-shadow-lg align-middle rounded-lg transition duration-500"
                         >
                             Add Vehicle
                         </button>
