@@ -5,16 +5,6 @@ export const users = [
   new User({ id: 2, username: 'user', password: 'userpassword' }),
 ];
 
-const getAllUsers = async (): Promise<User[]> => {
-  try {
-    const userPrisma = await database.user.findMany();
-    return userPrisma.map((userPrisma) => User.from(userPrisma));
-  } catch (error) {
-    console.error(error);
-    throw new Error('Database error. See server logs for details.');
-  }
-};
-
 const getUserByUsername = async ({ username }: { username: string}): Promise<User | null> => {
   try {
     const userPrisma = await database.user.findFirst({
@@ -46,7 +36,6 @@ const createUser = async ({
 }
 
 export default { 
-  getAllUsers, 
   getUserByUsername,
   createUser,
 }; 

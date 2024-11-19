@@ -7,7 +7,6 @@ import swaggerUi from 'swagger-ui-express';
 import { submissionFormRouter } from './controller/submission_form.routes';
 import { raceRouter } from './controller/race.routes';
 import { authRouter } from './controller/auth.routes';
-import { userRouter } from './controller/user.routes';
 
 
 const app = express();
@@ -24,7 +23,6 @@ app.get('/status', (req, res) => {
 app.use('/submission_forms', submissionFormRouter);
 app.use('/races', raceRouter);
 app.use('/auth', authRouter);
-app.use('/users', userRouter);
 
 const swaggerOpts = {
     definition: {
