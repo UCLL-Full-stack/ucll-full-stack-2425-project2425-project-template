@@ -53,7 +53,7 @@ export class Game {
     static from({id, result, date}: GamePrisma & {teams: TeamPrisma[]}) {
         return new Game({
             id,
-            result,
+            result: result ?? undefined,
             date,
             teams: []
         });

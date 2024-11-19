@@ -33,13 +33,12 @@ model Team {
   players  Player[]
   coach    Coach    @relation(fields: [coachId], references: [id])
   coachId  Int
-  game     Game?    @relation(fields: [gameId], references: [id])
-  gameId   Int?
+  games    Game[]
 }
 
 model Game {
   id     Int      @id @default(autoincrement())
   date   DateTime
-  result String
+  result String?
   teams  Team[]
 }

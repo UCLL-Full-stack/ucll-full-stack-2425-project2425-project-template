@@ -90,7 +90,7 @@ const main = async () => {
                     { id: player2.id },
                     { id: player3.id },
                 ]
-            }
+            },
         }
     });
 

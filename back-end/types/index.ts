@@ -24,7 +24,7 @@ type TeamInput = {
     id?: number;
     teamName: string;
     players: Player[];
-    coach: Coach;
+    coach: Coach;   
 };
 
 type GameInput = {
