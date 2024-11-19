@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-import { ProjectInput } from "../types"; // Assuming ProjectInput is defined correctly
+import { ProjectInput, UserInput } from "../types"; // Assuming ProjectInput is defined correctly
+import projectDb from '../repository/project.db';
+import userDb from '../repository/user.db';
+import { Project } from '../model/project';
 
 // Initialize PrismaClient
 const prisma = new PrismaClient();
@@ -49,7 +52,7 @@ async function getAllProjects() {
   }
 }
 
-// Service function to retrieve a project by its name
+// Service function to retrieve a project by its ID
 async function getProjectById(project_Id: number) {
   try {
     const project = await prisma.project.findUnique({
@@ -61,18 +64,50 @@ async function getProjectById(project_Id: number) {
     });
 
     if (!project) {
-      throw new Error(`Project with name "${project_Id}" not found`);
+      throw new Error(`Project with ID "${project_Id}" not found`);
     }
 
     return project;
   } catch (error) {
-    console.error(`Error fetching project by name "${project_Id}":`, error);
-    throw new Error(`Failed to fetch project with name "${project_Id}"`);
+    console.error(`Error fetching project by ID "${project_Id}":`, error);
+    throw new Error(`Failed to fetch project with ID "${project_Id}"`);
   }
 }
+
+// Service function to add a user to a project
+const addUserToProject = async ({
+  project: projectInput,
+  users: usersInput,
+}: {
+  project:ProjectInput;
+  users: UserInput[];
+}): Promise<Project | null> => {
+  if (!usersInput.length) throw new Error('At least one user is required');
+
+  if (projectInput.id === undefined) {
+    throw new Error('Project ID is required');
+  }
+  const project = await projectDb.getProjectById({ id: projectInput.id });
+  if (!project) throw new Error('Project not found');
+
+  const users = await Promise.all(
+      usersInput.map(async (userInput) => {
+          const student = await userDb.getUserById({ id: userInput.id });
+          if (!student) throw new Error(`Student with id ${userInput.id} not found`);
+          return student;
+      })
+  );
+
+  users.forEach((user) => {
+      project.addUserToProject(user);
+  });
+
+  return await projectDb.updateUsersOfProject({ project });
+};
 
 export default {
   createProject,
   getAllProjects,
   getProjectById,
+  addUserToProject,
 };

@@ -2,7 +2,7 @@ import { User } from "./user";
 import { Task } from "./task";
 
 export class Project {
-  readonly projectId?: number;
+  readonly id?: number;
   readonly name: string;
   readonly description?: string;
   readonly startDate?: Date;
@@ -11,7 +11,7 @@ export class Project {
   readonly users: User[] = [];
 
   constructor(project: {
-    projectId?: number;
+    id?: number;
     name: string;
     description?: string;
     startDate?: Date;
@@ -19,7 +19,7 @@ export class Project {
     tasks?: Task[];
     users?: User[];
   }) {
-    this.projectId = project.projectId;
+    this.id = project.id;
     this.name = project.name;
     this.description = project.description;
     this.startDate = project.startDate;
@@ -30,7 +30,7 @@ export class Project {
 
   static from(projectPrisma: any): Project {
     return new Project({
-      projectId: projectPrisma.projectId,
+      id: projectPrisma.projectId,
       name: projectPrisma.name,
       description: projectPrisma.description,
       startDate: projectPrisma.startDate,
@@ -41,7 +41,7 @@ export class Project {
   }
 
   public getProjectId(): number | undefined {
-    return this.projectId;
+    return this.id;
   }
 
   public getName(): string {
@@ -57,7 +57,7 @@ export class Project {
   }
 
   equals(project: Project): boolean {
-    return this.projectId === project.getProjectId() &&
+    return this.id === project.getProjectId() &&
       this.name === project.getName() &&
       this.users === project.getUsers() &&
       this.tasks === project.getTasks();
@@ -72,4 +72,9 @@ export class Project {
     if (!this.users.includes(user))
       this.users.push(user);
   }
+
+  addUsersToProject(user: User) {
+    if (!this.users.includes(user))
+      this.users.push(user);
+}
 }

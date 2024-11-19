@@ -4,4 +4,6 @@ import { UserInput } from "../types";
 
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
+
+
 export default { getAllUsers };

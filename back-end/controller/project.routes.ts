@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import projectService from "../service/project.service"
-import { ProjectInput } from "../types/index"; 
+import { ProjectInput, EnrollmentInput } from "../types/index"; 
 
 export const projectRouter = express.Router();
 
@@ -117,5 +117,59 @@ projectRouter.get('/:id', async (req: Request, res: Response) => {
   });
   
 });
+
+/**
+ * @swagger
+ * /users/{userId}/projects/{projectId}:
+ *   post:
+ *     summary: Add a user to a project
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The project ID
+ *     responses:
+ *       200:
+ *         description: User added to project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 errorMessage:
+ *                   type: string
+ */
+projectRouter.post('/add', async (req: Request, res: Response) => {
+  try {
+      const project = <EnrollmentInput>req.body;
+      const result = await projectService.addUserToProject(project);
+      res.status(200).json(result);
+  } catch (error) {
+      res.status(400).json({ status: 'error', errorMessage: error.message });
+  }
+});
+
 
 export default projectRouter;

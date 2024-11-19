@@ -3,7 +3,7 @@ import { Task } from './task';
 import { Role } from '../types';
 
 export class User {
-    readonly userId?: number;
+    readonly id?: number;
     readonly firstName: string;
     readonly lastName: string;
     readonly email: string;
@@ -13,7 +13,7 @@ export class User {
     readonly tasks: Task[] = [];
 
     constructor(user: {
-        userId?: number;
+        id?: number;
         firstName: string;
         lastName: string;
         email: string;
@@ -22,7 +22,7 @@ export class User {
         projects?: Project[];
         tasks?: Task[];
     }) {
-        this.userId = user.userId;
+        this.id = user.id;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.email = user.email;
@@ -32,7 +32,7 @@ export class User {
         this.tasks = user.tasks || [];
     }
 
-    private validate(user: { userId?: number; firstName: string; lastName: string; email: string; password: string; role: Role; projects?: Project[]; tasks?: Task[] }) {
+    private validate(user: { id?: number; firstName: string; lastName: string; email: string; password: string; role: Role; projects?: Project[]; tasks?: Task[] }) {
         if (!user.firstName) {
             throw new Error('First name is required');
         }
@@ -58,7 +58,7 @@ export class User {
 
     static from(userPrisma: any): User {
         return new User({
-            userId: userPrisma.userId,
+            id: userPrisma.id,
             firstName: userPrisma.firstName,
             lastName: userPrisma.lastName,
             email: userPrisma.email,
@@ -70,7 +70,7 @@ export class User {
     }
 
     public getId(): number | undefined {
-        return this.userId;
+        return this.id;
     }
 
     public getFirstName(): string {
@@ -102,7 +102,7 @@ export class User {
     }
 
     equals(user: User): boolean {
-        return this.userId === user.getId() &&
+        return this.id === user.getId() &&
             this.firstName === user.getFirstName() &&
             this.lastName === user.getLastName() &&
             this.email === user.getEmail() &&

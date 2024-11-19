@@ -24,7 +24,6 @@ const getAllUsers = async (): Promise<User[]> => {
         const usersPrisma = await database.user.findMany({
             include: {
                 projects: true,
-                tasks: true
             }
         });
         console.log("Fetched users from database:", usersPrisma);
@@ -43,7 +42,6 @@ const getUserById = async ({ id }: { id: number }) => {
             },
             include: {
                 projects: true,
-                tasks: true
             }
         });
         return User.from(userPrisma);
@@ -53,8 +51,24 @@ const getUserById = async ({ id }: { id: number }) => {
     }
 };
 
+const addUserToProject = async (userId: number, projectId: number) => {
+    try {
+        const userProject = await database.userProject.create({
+            data: {
+                userId,
+                projectId
+            }
+        });
+        return userProject;
+    } catch (error) {
+        console.error("Error adding user to project:", error);
+        throw new Error("error adding user to project");
+    }
+};
+
 export default {
     createUser,
     getAllUsers,
     getUserById,
+    addUserToProject
 };

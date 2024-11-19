@@ -6,7 +6,7 @@ type Role = "ADMIN" | "USER";
 
 
 type UserInput = {
-    userId?: number;
+    id: number;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -16,10 +16,15 @@ type UserInput = {
 };
 
 type ProjectInput = {
-    projectId?: number;
+    id?: number;
     name?: string;
     users?: User[];
     tasks?: Task[];
+};
+
+type EnrollmentInput = {
+    project: ProjectInput;
+    users: UserInput[];
 };
 
 type TaskInput = {
@@ -31,4 +36,4 @@ type TaskInput = {
     completed?: boolean;
 };
 
-export { Role, UserInput, ProjectInput, TaskInput };
+export { Role, UserInput, ProjectInput, TaskInput, EnrollmentInput };
