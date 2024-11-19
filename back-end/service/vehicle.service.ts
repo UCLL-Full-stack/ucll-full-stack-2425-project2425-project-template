@@ -55,11 +55,16 @@ const editVehicle = async (vehicleId: number, input: VehicleInput): Promise<Vehi
 }
 
 
+const getFilteredVehicles = async (filters: any) =>{
+    return await vehicleDB.filterCars(filters);
+}
+
 const getAllCars = async (): Promise<Vehicle[]> => vehicleDB.getAllCars();
 
 export default {
     getAllCars,
     addVehicle,
     deleteVehicle,
-    editVehicle
+    editVehicle,
+    getFilteredVehicles
 }
