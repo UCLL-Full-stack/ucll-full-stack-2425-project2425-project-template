@@ -64,10 +64,10 @@ const Home: FC = () => {
 
   const fetchUserData = async () => {
     try {
-      // default to logged in state to user1 for now
-      // const userData = await UserService.getUser('user1');
-      // setUser(userData);
-      // setGuilds(userData.guilds);
+      const userData = await UserService.getUser('348902272534839296');
+      setUser(userData);
+      const guildsData = await UserService.getGuilds('348902272534839296');
+      setGuilds(guildsData);
     } catch (error) {
       console.error('Error fetching user data', error);
     } finally {
@@ -96,7 +96,7 @@ const Home: FC = () => {
           <Head>
               <title>KanbanCord</title>
               <meta name="description" content="A Kanban board application inspired by Discord." />
-              <link rel="icon" href="/favicon.ico" />
+              <link rel="icon" href="/images/kanbancord.png" />
           </Head>
           <Header onCreateClick={handleCreateClick} onLoginClick={handleDiscordLogin}></Header>
           <main className="flex-grow">

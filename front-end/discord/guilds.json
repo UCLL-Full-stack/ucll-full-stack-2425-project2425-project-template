@@ -18,12 +18,12 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
+      "COMMUNITY",
+      "NEWS",
       "NEW_THREAD_PERMISSIONS",
       "THREADS_ENABLED",
-      "NEWS",
-      "TEXT_IN_VOICE_ENABLED",
-      "COMMUNITY",
-      "WELCOME_SCREEN_ENABLED"
+      "WELCOME_SCREEN_ENABLED",
+      "TEXT_IN_VOICE_ENABLED"
     ]
   },
   {
@@ -34,8 +34,8 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "NEWS",
-      "COMMUNITY"
+      "COMMUNITY",
+      "NEWS"
     ]
   },
   {
@@ -57,9 +57,9 @@
     "owner": true,
     "permissions": "2251799813685247",
     "features": [
-      "NEWS",
+      "WELCOME_SCREEN_ENABLED",
       "COMMUNITY",
-      "WELCOME_SCREEN_ENABLED"
+      "NEWS"
     ]
   },
   {
@@ -71,8 +71,8 @@
     "permissions": "2249600789905143",
     "features": [
       "CHANNEL_ICON_EMOJIS_GENERATED",
-      "RAPIDASH_TEST",
-      "SOUNDBOARD"
+      "SOUNDBOARD",
+      "RAPIDASH_TEST"
     ]
   },
   {
@@ -117,13 +117,13 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "SOUNDBOARD",
-      "GUILD_ONBOARDING_HAS_PROMPTS",
-      "GUILD_ONBOARDING",
+      "COMMUNITY",
       "NEWS",
-      "CHANNEL_ICON_EMOJIS_GENERATED",
       "GUILD_ONBOARDING_EVER_ENABLED",
-      "COMMUNITY"
+      "CHANNEL_ICON_EMOJIS_GENERATED",
+      "GUILD_ONBOARDING",
+      "SOUNDBOARD",
+      "GUILD_ONBOARDING_HAS_PROMPTS"
     ]
   },
   {
@@ -134,22 +134,22 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "CREATOR_ACCEPTED_NEW_TERMS",
-      "SOUNDBOARD",
-      "INVITE_SPLASH",
-      "ANIMATED_ICON",
-      "THREE_DAY_THREAD_ARCHIVE",
-      "AUTO_MODERATION",
-      "GUILD_ONBOARDING",
+      "COMMUNITY",
       "PREVIEW_ENABLED",
       "NEWS",
-      "DISCOVERABLE",
+      "AUTO_MODERATION",
       "GUILD_ONBOARDING_HAS_PROMPTS",
-      "GUILD_ONBOARDING_EVER_ENABLED",
-      "COMMUNITY",
-      "ENABLED_DISCOVERABLE_BEFORE",
+      "ANIMATED_ICON",
       "GUILD_SERVER_GUIDE",
-      "GUILD_WEB_PAGE_VANITY_URL"
+      "GUILD_ONBOARDING_EVER_ENABLED",
+      "THREE_DAY_THREAD_ARCHIVE",
+      "GUILD_ONBOARDING",
+      "INVITE_SPLASH",
+      "DISCOVERABLE",
+      "GUILD_WEB_PAGE_VANITY_URL",
+      "CREATOR_ACCEPTED_NEW_TERMS",
+      "SOUNDBOARD",
+      "ENABLED_DISCOVERABLE_BEFORE"
     ]
   },
   {

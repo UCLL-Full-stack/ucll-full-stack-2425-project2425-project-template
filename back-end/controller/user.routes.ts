@@ -54,5 +54,19 @@ userRouter.put("/:userId", async (req, res) => {
     }
 });
 
+userRouter.get("/:userId/guilds", async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const guilds = await userService.getUserGuilds(userId);
+        res.status(200).json(guilds);
+    } catch (error) {
+        if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+        } else {
+        res.status(404).json({ error: "An unknown error occurred" });
+        }
+    }
+});
+
 
 export default userRouter;

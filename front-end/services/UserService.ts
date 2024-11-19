@@ -42,11 +42,22 @@ const updateUser = async (userId: string, user: any) => {
     return await response.json();
 };
 
+const getGuilds = async (userId: string) => {
+    const response = await fetch(`${API_URL}/api/users/${userId}/guilds`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
 const UserService = {
     getUsers,
     getUser,
     addUser,
     updateUser,
+    getGuilds,
 };
 
 export default UserService;
