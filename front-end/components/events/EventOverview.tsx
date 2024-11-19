@@ -2,26 +2,26 @@ import { EventInput } from "@types";
 import styles from '@styles/home.module.css';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import EventService from "@services/EventService";
 
 type Props = {
-  events: EventInput[];
+  events: EventInput[],
+  showDeleteButton: boolean,
+  email: string,
 };
 
-const EventOverview: React.FC<Props> = ({ events }: Props) => {
+const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Props) => {
   const router = useRouter();
 
   const handleEventClick = (eventId: number) => {
     router.push(`/upcoming-events/${eventId}`);
   };
 
-  const [showDeleteButton, setShowDeleteButton] =
 
   const [myEvents, setMyEvents] = useState(events)
 
-  const removeEvent = (eventId: number) => {
-    const updatedEvents = myEvents.filter(event => event.id != eventId);
-    setMyEvents(updatedEvents);
-    //after this the event is removed from your list.
+  const removeEvent = async (email: string, eventId: number) => {
+    await EventService.removeFromMyEvents(email, eventId);
   }
 
   return (
@@ -44,13 +44,14 @@ const EventOverview: React.FC<Props> = ({ events }: Props) => {
                 <p className={styles.hiddenOb}>{event.location}</p>
                 <p className={styles.hiddenOb}>{event.category}</p>
 
-                <button
-                  className={styles.removeButton}
-                  onClick={() => removeEvent(event.id)}
-                >
-                  Remove
-                </button>
-
+                {showDeleteButton === true &&
+                  <button
+                    className={styles.removeButton}
+                    onClick={() => removeEvent(event.id)}
+                  >
+                    Remove
+                  </button>
+                }
               </div>
             ))}
           </div>

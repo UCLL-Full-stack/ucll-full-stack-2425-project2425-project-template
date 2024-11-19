@@ -5,12 +5,20 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { EventInput } from "types";
 import styles from '@styles/home.module.css';
+import { useRouter } from "next/router";
 
 const MyEvents: React.FC = () => {
+    const router = useRouter();
     const [myEvents, setMyEvents] = useState<Array<Event>>();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showForm, setShowForm] = useState(true);
+    // const [showDeleteButton, setShowDeleteButton] = useState(false);
+
+    //     //first one is value, other one is method to change value
+    //     if (router.pathname === '/my-events') {
+    //         setShowDeleteButton(true)
+    //     };
 
     // useEffect(() => {
     //     getEventsByUserEmail();
@@ -68,7 +76,7 @@ const MyEvents: React.FC = () => {
                     myEvents.length > 0 ? (
                         <section className={styles.myEvents}>
                             <h1>My events</h1>
-                             <EventOverview events={myEvents} /> {/* My-events page renders a component */}
+                            <EventOverview events={myEvents} showDeleteButton={true} email={email}/> {/* My-events page renders a component */}
                         </section>
                     ) : <p>No events</p>
                 )}

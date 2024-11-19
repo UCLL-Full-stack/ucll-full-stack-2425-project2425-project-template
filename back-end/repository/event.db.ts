@@ -94,31 +94,22 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
 
 // remove events
 const removeFromMyEvents = async (email: string, eventId: number) => {
-    try {
-        // Find the user by email
-        const user = await prisma.user.findUnique({
-            where: { email },
-        });
-
-        if (!user) {
-            throw new Error(`User with email ${email} not found.`);
-        }
-
-        // Update the Event's users relation to disconnect the user
-        await prisma.event.update({
-            where: { id: eventId },
-            data: {
-                users: {
-                    disconnect: { id: user.id }, // Disconnect the user from the event
+    await database.event.update({
+        where: {
+            id: eventId, //event op basis van id
+        },
+        data: {
+            users: {
+                disconnect: {
+                    email: email,
                 },
             },
-        });
+        },
+    });
 
-        return { message: `User with email ${email} removed from event ${eventId}` };
-    } catch (error) {
-        throw new Error("Failed to remove the participant from the event. Please try again later.");
-    }
+    // return { success: true, message: `Event ${eventId} successfully deleted ${email}.` };
 };
+
 
 export default {
     // createEvent,

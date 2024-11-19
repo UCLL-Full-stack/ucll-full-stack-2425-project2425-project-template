@@ -26,9 +26,9 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
 };
 
 
-const removeEvent = async (email: string, eventId: number): Promise<Event> => {
-    return await eventDb.removeFromMyEvents(email, eventId)
-}
+const removeEvent = async (email: string, eventId: number) => {
+    return await eventDb.removeFromMyEvents(email, eventId);
+};
 
 
 export default {
