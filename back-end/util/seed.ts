@@ -10,31 +10,24 @@ const main = async () => {
     await prisma.admin.deleteMany();
     await prisma.user.deleteMany();
 
-    const admin = await prisma.user.create({
-        data: {
-            username: 'admin1',
-            password: 'Password1'
-        },
-    });
-
-    const user = await prisma.user.create({
-        data: {
-            username: 'user',
-            password: 'password'
-        },
-    });
-
     await prisma.admin.create({
         data: {
             username: 'admin',
-            password: 'password'
+            password: 'Password1'
         },
     });
 
     await prisma.user.create({
         data: {
             username: 'user1',
-            password: 'Password1'
+            password: 'password'
+        },
+    });
+
+    await prisma.user.create({
+        data: {
+            username: 'user2',
+            password: 'PASSWORD'
         },
     });
 }
