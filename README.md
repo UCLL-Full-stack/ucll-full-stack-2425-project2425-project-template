@@ -1,7 +1,5 @@
-# Project template
+# Title: Management tool
+This project aims to build a Project Management Tool that helps teams plan, execute, and monitor their projects and tasks. The system will enable users to create and manage projects, assign tasks and roles, form teams, and track progress in real time.
 
-To get started, open the Readme.md files in the analysis, back-end and front-end folders.
 
-Change this readme file to describe your project, change the title and fill in your name below.
-
-### \<Student 1 name\> / \<Student 2 name\>
+### \<Elias Christmas\> / \<Nathan De Maegd\>

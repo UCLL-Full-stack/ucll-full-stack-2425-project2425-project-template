@@ -1,21 +1,45 @@
-import * as dotenv from 'dotenv';
-import express from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
-import * as bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import projectRouter from './controller/project.routes';
+import { userRouter } from './controller/user.routes';
+
+dotenv.config();
 
 const app = express();
-dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors());
+// Middleware
+app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
+// Routes
+app.use('/projects', projectRouter);
+app.use('/users', userRouter);
+
 app.get('/status', (req, res) => {
-    res.json({ message: 'Back-end is running...' });
+    res.json({ message: 'Project API is running...' });
 });
 
-app.listen(port || 3000, () => {
-    console.log(`Back-end is running on port ${port}.`);
+// Swagger setup
+const swaggerOpts = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Projects API',
+            version: '1.0.0',
+        },
+    },
+    apis: ['./controller/*.ts'], // Path to the API docs
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
