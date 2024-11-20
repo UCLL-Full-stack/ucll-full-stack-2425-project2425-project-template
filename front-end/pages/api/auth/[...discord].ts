@@ -67,9 +67,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     return hasAdmin || hasManageServer;
                 })
                 
-                fs.writeFileSync('discord/guilds.json', JSON.stringify(adminOrManageServerGuilds, null, 2))
-                fs.writeFileSync('discord/user.json', JSON.stringify(userData, null, 2))
-
                 const botGuildData = await Promise.all(
                     guildsData.map(async (guild: {id: string, name: string}) => {
                         try {
@@ -100,7 +97,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     })
                 );
                 const filteredBotGuildData = botGuildData.filter((guild) => guild !== null);
-                fs.writeFileSync("discord/bot_guild_data.json", JSON.stringify(filteredBotGuildData, null, 2));
                 filteredBotGuildData.forEach(async (guild: any) => {
                     const exists = await GuildService.getGuild(guild.id);
                     if(exists.error){

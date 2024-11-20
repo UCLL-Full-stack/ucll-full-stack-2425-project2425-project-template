@@ -62,20 +62,7 @@ const Home: FC = () => {
       
     }
     handleFormClose();
-  }
-
-  const fetchUserData = async () => {
-    try {
-      const userData = await UserService.getUser('348902272534839296');
-      setUser(userData);
-      const guildsData = await UserService.getGuilds('348902272534839296');
-      setGuilds(guildsData);
-    } catch (error) {
-      console.error('Error fetching user data', error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
