@@ -20,7 +20,7 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }) => {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Action</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
