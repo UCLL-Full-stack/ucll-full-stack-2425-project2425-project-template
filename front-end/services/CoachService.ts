@@ -1,7 +1,7 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const getAllCoaches = async () => {
-  return fetch(apiUrl + "/coaches", {
+  return await fetch(apiUrl + "/coaches", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

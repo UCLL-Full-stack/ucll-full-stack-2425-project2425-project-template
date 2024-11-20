@@ -1,8 +1,6 @@
 import coachService from '../../service/coach.service';
 import coachDb from '../../repository/coach.db';
 import { Coach } from '../../model/coach';
-import { fi } from 'date-fns/locale';
-import e from 'express';
 
 const validId = 1;
 const invalidId = -1;

@@ -3,7 +3,7 @@ import { Team } from "@/types";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const getAllTeams = async () => {
-  return fetch(apiUrl + "/teams", {
+  return await fetch(apiUrl + "/teams", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -12,7 +12,7 @@ const getAllTeams = async () => {
 };
 
 const getTeamById = async (id: number) => {
-  return fetch(apiUrl + `/teams/${id}`, {
+  return await fetch(apiUrl + `/teams/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

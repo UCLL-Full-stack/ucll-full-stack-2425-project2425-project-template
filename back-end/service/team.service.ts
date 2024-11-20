@@ -8,7 +8,7 @@ const getAllTeams = async (): Promise<Team[]> => {
 };
 
 const createTeam = async ({ teamName, players, coach }: TeamInput): Promise<Team> => {
-    const allTeams = await teamDb.getAllTeams() || [];
+    const allTeams = await teamDb.getAllTeams();
     for (var team of allTeams) {
         if (teamName == team.getTeamName()) {
             throw new Error('Team with that name already exists.');
