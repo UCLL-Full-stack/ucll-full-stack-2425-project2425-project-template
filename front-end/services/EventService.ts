@@ -50,11 +50,31 @@ const getEventsByUserEmail = async (email: string) => {
   return response.json();
 };
 
+const removeFromMyEvents = async(email: string, eventId: number) => {
+  // const response = await fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
+  
+    return fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+    }
+  });
+
+  // if (!response.ok) {
+  //     const errorData = await response.json();
+  //     throw new Error(errorData.message || 'Failed to remove the event from the user"s list.');
+  // }
+
+  // return response.json();
+};
+
+
 const EventService = {
   getAll,
   getEventById,
   addParticipantToEvent,
   getEventsByUserEmail,
+  removeFromMyEvents,
 }
 
 export default EventService;

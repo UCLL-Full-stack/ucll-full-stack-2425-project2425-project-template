@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import styles from '@styles/home.module.css';
 import { EventInput } from "types";
 
-const UpcomingEvents: React.FC = () => {    
+const UpcomingEvents: React.FC = () => {
     const [otherEvents, setOtherEvents] = useState<Array<Event>>();
     const [trendingEvents, setTrendingEvents] = useState<Array<Event>>();
 

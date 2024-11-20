@@ -1,4 +1,5 @@
 import { Event } from "../model/event";
+import prisma from '../repository/database';
 import database from './database';
 
 const getAllEvents = async (): Promise<Event[]> => {
@@ -90,6 +91,26 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
     return events.map((event) => Event.from(event));
 };
 
+
+// remove events
+const removeFromMyEvents = async (email: string, eventId: number) => {
+    await database.event.update({
+        where: {
+            id: eventId, //event op basis van id
+        },
+        data: {
+            users: {
+                disconnect: {
+                    email: email,
+                },
+            },
+        },
+    });
+
+    // return { success: true, message: `Event ${eventId} successfully deleted ${email}.` };
+};
+
+
 export default {
     // createEvent,
     getAllEvents,
@@ -98,4 +119,5 @@ export default {
     addParticipantToEvent,
     getEventsByUserEmail,
     userExist,
+    removeFromMyEvents
 };
