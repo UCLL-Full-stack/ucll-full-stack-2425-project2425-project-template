@@ -74,40 +74,8 @@ async function getProjectById(project_Id: number) {
   }
 }
 
-// Service function to add a user to a project
-const addUserToProject = async ({
-  project: projectInput,
-  users: usersInput,
-}: {
-  project:ProjectInput;
-  users: UserInput[];
-}): Promise<Project | null> => {
-  if (!usersInput.length) throw new Error('At least one user is required');
-
-  if (projectInput.id === undefined) {
-    throw new Error('Project ID is required');
-  }
-  const project = await projectDb.getProjectById({ id: projectInput.id });
-  if (!project) throw new Error('Project not found');
-
-  const users = await Promise.all(
-      usersInput.map(async (userInput) => {
-          const student = await userDb.getUserById({ id: userInput.id });
-          if (!student) throw new Error(`Student with id ${userInput.id} not found`);
-          return student;
-      })
-  );
-
-  users.forEach((user) => {
-      project.addUserToProject(user);
-  });
-
-  return await projectDb.updateUsersOfProject({ project });
-};
-
 export default {
   createProject,
   getAllProjects,
   getProjectById,
-  addUserToProject,
 };

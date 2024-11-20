@@ -40,9 +40,6 @@ const IndexPage: React.FC = () => {
                     ) : (
                         <p>No projects...</p>
                     )}
-                    {selectedProject && (
-                        <ProjectDetails project={selectedProject} />
-                    )}
                 </section>
             </main>
         </>

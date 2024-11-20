@@ -3,7 +3,7 @@ import { Project } from '@types';
 import { Task } from '@/types';
 
 type Props = {
-  project: Project;
+  project: Project & { tasks: Task[] };
 };
 
 const TaskOverviewTable: React.FC<Props> = ({ project }) => {

@@ -58,33 +58,48 @@ const getProjectById = async ({id}: {id: number}) => {
   }
 };
 
-const updateUsersOfProject = async ({
-  project,
-}: {
-  project: Project & { users: { id: number }[] };
-}): Promise<Project | null> => {
+const addUserToProject = async (projectId: number, userId: number) => {
   try {
-      const projectPrisma = await database.project.update({
-          where: { project_Id: project.getProjectId() },
+      // Fetch the project
+      const project = await database.project.findUnique({
+          where: { project_Id: projectId },
+          include: { users: true }
+      });
+
+      if (!project) {
+          throw new Error(`Project with ID ${projectId} not found`);
+      }
+
+      // Fetch the user
+      const user = await database.user.findUnique({
+          where: { userId: userId }
+      });
+
+      if (!user) {
+          throw new Error(`User with ID ${userId} not found`);
+      }
+
+        // Update the project with the new user
+        await database.project.update({
+          where: { project_Id: projectId },
           data: {
               users: {
-                  connect: project.users.map((user) => ({ id: user.id })),
-              },
-          },
-          include: {
-              users: true,
-          },
+                  create: {
+                      user: {
+                          connect: { userId: userId }
+                      }
+                  }
+              }
+          }
       });
-      return projectPrisma ? Project.from(projectPrisma) : null;
   } catch (error) {
-      console.error(error);
-      throw new Error('Database error. See server log for details.');
+      console.error(`Error adding user to project "${projectId}":`, error);
+      throw error;
   }
 };
-
 export default {
     createProject,
     getAllProjects,
     getProjectById,
-    updateUsersOfProject,
+    addUserToProject,
 };

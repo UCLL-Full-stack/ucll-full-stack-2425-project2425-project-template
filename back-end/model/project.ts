@@ -62,19 +62,4 @@ export class Project {
       this.users === project.getUsers() &&
       this.tasks === project.getTasks();
   }
-
-  addTaskToProject(task: Task) {
-    if (!this.tasks.includes(task))
-      this.tasks.push(task);
-  }
-
-  addUserToProject(user: User) {
-    if (!this.users.includes(user))
-      this.users.push(user);
-  }
-
-  addUsersToProject(user: User) {
-    if (!this.users.includes(user))
-      this.users.push(user);
-}
 }

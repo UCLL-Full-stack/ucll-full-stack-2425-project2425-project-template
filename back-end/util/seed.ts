@@ -4,16 +4,11 @@ import { Role } from '@prisma/client';
 const database = new PrismaClient();
 
 async function main() {
-  // Delete user-project relations first
+  // Delete existing data
   await database.userProject.deleteMany();
-
-  // Delete user-task relations
   await database.userTask.deleteMany();
-
-  // Now, delete the users
   await database.user.deleteMany();
-
-  // Delete projects
+  await database.task.deleteMany();
   await database.project.deleteMany();
 
   // Seed Users
@@ -36,38 +31,6 @@ async function main() {
       role: Role.USER,
     },
   });
-
-  const user3 = await database.user.create({
-    data: {
-      firstName: 'Alice',
-      lastName: 'Johnson',
-      email: 'alice.johnson@example.com',
-      password: 'password789',
-      role: Role.USER,
-    },
-  });
-
-  const user4 = await database.user.create({
-    data: {
-      firstName: 'Bob',
-      lastName: 'Brown',
-      email: 'bob.brown@example.com',
-      password: 'password101',
-      role: Role.USER,
-    },
-  });
-
-  const user5 = await database.user.create({
-    data: {
-      firstName: 'Charlie',
-      lastName: 'Davis',
-      email: 'charlie.davis@example.com',
-      password: 'password102',
-      role: Role.USER,
-    },
-  });
-
-  console.log('Seeded users:', { user1, user2, user3, user4, user5 });
 
   // Seed Projects
   const project1 = await database.project.create({
@@ -97,6 +60,7 @@ async function main() {
       description: 'Description for task 1',
       dueDate: new Date(),
       completed: false,
+      projectId: project1.project_Id, // Assign task to project1
     },
   });
 
@@ -106,6 +70,7 @@ async function main() {
       description: 'Description for task 2',
       dueDate: new Date(),
       completed: false,
+      projectId: project2.project_Id, // Assign task to project2
     },
   });
 
@@ -123,7 +88,8 @@ async function main() {
     data: {
       userId: user2.userId,
       projectId: project2.project_Id,
-  }});
+    },
+  });
 
   // Seed User-Task Relations
   await database.userTask.create({
@@ -139,8 +105,6 @@ async function main() {
       taskId: task2.taskId,
     },
   });
-
-  console.log('Seeded user-project and user-task relations');
 }
 
 main()

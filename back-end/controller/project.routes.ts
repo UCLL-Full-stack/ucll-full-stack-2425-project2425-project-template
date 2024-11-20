@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import projectService from "../service/project.service"
 import { ProjectInput, EnrollmentInput } from "../types/index"; 
+import prisma from '../repository/database';
 
 export const projectRouter = express.Router();
 
@@ -79,8 +80,8 @@ projectRouter.post('/', async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
     }
-
-    /**
+});
+/**
  * @swagger
  * /projects/{id}:
  *   get:
@@ -103,73 +104,102 @@ projectRouter.post('/', async (req: Request, res: Response) => {
  *         description: Project not found
  */
 projectRouter.get('/:id', async (req: Request, res: Response) => {
-    const project_Id = parseInt(req.params.id);
-    if (isNaN(project_Id)) {
-      return res.status(400).json({ status: 'error', errorMessage: 'Invalid project ID' });
+  const project_Id = parseInt(req.params.id);
+  if (isNaN(project_Id)) {
+    return res.status(400).json({ status: 'error', errorMessage: 'Invalid project ID' });
+  }
+    
+  try {
+    const project = await prisma.project.findUnique({
+      where: { project_Id },
+      include: {
+        tasks: true,
+        users: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+    
+    if (!project) {
+      return res.status(404).json({ status: 'error', errorMessage: 'Project not found' });
     }
-  
-    try {
-      const project = await projectService.getProjectById(project_Id);
-      res.status(200).json(project);
-    } catch (error) {
-      res.status(404).json({ status: 'error', errorMessage: (error as Error).message });
-    }
-  });
-  
-});
+    
+    res.status(200).json(project);
+  } catch (error) {
+    res.status(500).json({ status: 'error', errorMessage: (error as Error).message });
+  }
+});        
+
 
 /**
  * @swagger
- * /users/{userId}/projects/{projectId}:
+ * /projects/{id}/tasks:
  *   post:
- *     summary: Add a user to a project
- *     tags: [Users]
+ *     summary: Create a new task for a specific project
  *     parameters:
  *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: integer
- *         description: The user ID
- *       - in: path
- *         name: projectId
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
  *         description: The project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TaskInput'
  *     responses:
- *       200:
- *         description: User added to project
+ *       201:
+ *         description: The created task
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/Task'
  *       400:
- *         description: Bad request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 errorMessage:
- *                   type: string
+ *         description: Invalid input
+ *       404:
+ *         description: Project not found
+ *       500:
+ *         description: Internal server error
  */
-projectRouter.post('/add', async (req: Request, res: Response) => {
+projectRouter.post('/:id/tasks', async (req: Request, res: Response) => {
+  const projectId = parseInt(req.params.id);
+  if (isNaN(projectId)) {
+    return res.status(400).json({ status: 'error', errorMessage: 'Invalid project ID' });
+  }
+
+  const { name, description, dueDate, completed } = req.body;
+
+  if (!name || !dueDate) {
+    return res.status(400).json({ status: 'error', errorMessage: 'Name and due date are required' });
+  }
+
   try {
-      const project = <EnrollmentInput>req.body;
-      const result = await projectService.addUserToProject(project);
-      res.status(200).json(result);
+    const project = await prisma.project.findUnique({
+      where: { project_Id: projectId },
+    });
+
+    if (!project) {
+      return res.status(404).json({ status: 'error', errorMessage: 'Project not found' });
+    }
+
+    const task = await prisma.task.create({
+      data: {
+        name,
+        description,
+        dueDate: new Date(dueDate),
+        completed: completed !== undefined ? completed : false,
+        projectId: projectId,
+      },
+    });
+
+    res.status(201).json(task);
   } catch (error) {
-      res.status(400).json({ status: 'error', errorMessage: error.message });
+    console.error('Error creating task:', error);
+    res.status(500).json({ status: 'error', errorMessage: 'Internal server error' });
   }
 });
-
-
 export default projectRouter;

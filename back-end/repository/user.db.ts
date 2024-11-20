@@ -26,7 +26,6 @@ const getAllUsers = async (): Promise<User[]> => {
                 projects: true,
             }
         });
-        console.log("Fetched users from database:", usersPrisma);
         return usersPrisma.map(user => User.from(user));
     } catch (error) {
         console.error("Error fetching users:", error);

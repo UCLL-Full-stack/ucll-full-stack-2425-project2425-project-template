@@ -19,15 +19,13 @@ const UserOverviewTable: React.FC<Props> = ({ project }) => {
             </tr>
           </thead>
           <tbody>
-            {project.users.map((user: User, index: number) => {
-              return (
-                <tr key={index}>
-                  <td>{user.user_Id}</td>
-                  <td>{user.firstName + user.lastName}</td>
-                  <td>{user.role}</td>
-                </tr>
-              );
-            })}
+            {project.users.map(({ user }: { user: User }, index: number) => (
+              <tr key={index}>
+                <td>{user.userId}</td>
+                <td>{`${user.firstName} ${user.lastName}`}</td>
+                <td>{user.role}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

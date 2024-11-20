@@ -84,7 +84,7 @@ export class Task {
     }
     
     addUserToTask(user: User) {
-        if (!this.users.find(existingUser => existingUser.userId === user.userId)) {
+        if (!this.users.find(existingUser => existingUser.id === user.id)) {
             this.users.push(user);
         }
     }
