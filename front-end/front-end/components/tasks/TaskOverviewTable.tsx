@@ -5,12 +5,12 @@ import TaskService from '@/services/TaskService';
 type Props = {
   project: Project & { tasks: Task[] };
   onStatusChange: (taskId: number, newStatus: boolean) => void;
+  onTaskRemoved: (taskId: number) => void;
+  isEditing: boolean;
 };
 
-const TaskOverviewTable: React.FC<Props> = ({ project, onStatusChange }) => {
+const TaskOverviewTable: React.FC<Props> = ({ project, onStatusChange, onTaskRemoved, isEditing }) => {
   const handleStatusChange = async (taskId: number, currentStatus: boolean) => {
-    console.log('Task ID:', taskId, 'Current Status:', currentStatus);
-
     const newStatus = !currentStatus;
 
     try {
@@ -18,6 +18,15 @@ const TaskOverviewTable: React.FC<Props> = ({ project, onStatusChange }) => {
       onStatusChange(taskId, newStatus);
     } catch (error) {
       console.error('Error updating task status:', error);
+    }
+  };
+
+  const handleRemoveTask = async (taskId: number) => {
+    try {
+      await TaskService.deleteTask(taskId);
+      onTaskRemoved(taskId);
+    } catch (error) {
+      console.error('Error deleting task:', error);
     }
   };
 
@@ -29,7 +38,7 @@ const TaskOverviewTable: React.FC<Props> = ({ project, onStatusChange }) => {
           <th>Description</th>
           <th>Due Date</th>
           <th>Status</th>
-          <th></th>
+          {isEditing && <th></th>}
         </tr>
       </thead>
       <tbody>
@@ -49,6 +58,16 @@ const TaskOverviewTable: React.FC<Props> = ({ project, onStatusChange }) => {
                 {task.completed ? 'Mark as Incomplete' : 'Mark as Completed'}
               </button>
             </td>
+            {isEditing && (
+                <td>
+                  <button
+                    onClick={() => handleRemoveTask(task.taskId)}
+                    className="btn btn-danger text-white bg-red-500 px-2 py-2 rounded-md shadow hover:bg-red-600"
+                  >
+                    Remove Task
+                  </button>
+                </td>
+              )}
           </tr>
         ))}
       </tbody>

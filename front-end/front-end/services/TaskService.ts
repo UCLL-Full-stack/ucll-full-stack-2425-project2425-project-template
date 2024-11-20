@@ -37,9 +37,25 @@ const updateTaskStatus = async (taskId: number, completed: boolean) => {
   }
 };
 
+const deleteTask = async (taskId: number) => {
+  const response = await fetch(`${apiUrl}/projects/tasks/${taskId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error deleting task');
+  }
+
+  return response.json();
+};
+
 const TaskService = {
   createTask,
   updateTaskStatus,
+  deleteTask,
 };
 
 export default TaskService;

@@ -15,6 +15,7 @@ const ProjectPage = () => {
   const { projectId } = router.query;
   const [selectedProject, setSelectedProject] = useState<Project & { tasks: Task[] } | null>(null);
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (projectId) {
@@ -44,6 +45,13 @@ const ProjectPage = () => {
       const updatedTasks = selectedProject.tasks.map((task: { taskId: number; }) =>
         task.taskId === taskId ? { ...task, completed: newStatus } : task
       );
+      setSelectedProject({ ...selectedProject, tasks: updatedTasks });
+    }
+  };
+
+  const handleTaskRemoved = (taskId: number) => {
+    if (selectedProject) {
+      const updatedTasks = selectedProject.tasks.filter((task: { taskId: number; }) => task.taskId !== taskId);
       setSelectedProject({ ...selectedProject, tasks: updatedTasks });
     }
   };
@@ -82,9 +90,22 @@ const ProjectPage = () => {
                   + Create Task
                 </button>
               </div>
+              <div className="flex justify-between items-center mb-4">
+                <button
+                  className="text-white bg-blue-500 px-4 py-2 rounded-md shadow hover:bg-blue-600"
+                  onClick={() => setIsEditing(!isEditing)}
+                >
+                  {isEditing ? 'Stop Editing' : 'Edit tasks'}
+                </button>
+              </div>
               <div className="flex">
                 <div className="flex-1">
-                  <TaskOverviewTable project={selectedProject} onStatusChange={handleStatusChange}/>
+                  <TaskOverviewTable
+                    project={selectedProject}
+                    onStatusChange={handleStatusChange}
+                    onTaskRemoved={handleTaskRemoved}
+                    isEditing={isEditing}
+                  />
                 </div>
                 {showTaskForm && (
                   <div className="ml-4">

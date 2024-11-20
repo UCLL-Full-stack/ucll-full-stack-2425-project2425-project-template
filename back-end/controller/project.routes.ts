@@ -228,12 +228,23 @@ projectRouter.patch('/tasks/:taskId/status', async (req, res) => {
       return res.status(404).json({ status: 'error', errorMessage: 'Task not found' });
     }
 
-    console.log('Updated task:', task);
-
     res.status(200).json(task);
   } catch (error) {
     console.error('Error updating task status:', error);
     res.status(500).json({ status: 'error', errorMessage: 'Internal server error' });
+  }
+});
+
+projectRouter.delete('/tasks/:taskId', async (req, res) => {
+  const { taskId } = req.params;
+
+  try {
+    const deletedTask = await prisma.task.delete({
+      where: { taskId: parseInt(taskId) },
+    });
+    res.json(deletedTask);
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting task' });
   }
 });
 
