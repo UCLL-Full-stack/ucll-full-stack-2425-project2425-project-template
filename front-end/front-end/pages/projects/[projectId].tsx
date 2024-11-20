@@ -81,22 +81,22 @@ const ProjectPage = () => {
               <UserOverviewTable project={selectedProject} />
             </div>
             <div className="flex-1 mx-2.5 bg-white rounded-md p-4 shadow-md">
-              <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">Tasks</h2>
-                <button
-                  className="text-white bg-blue-500 px-4 py-2 rounded-md shadow hover:bg-blue-600"
-                  onClick={() => setShowTaskForm(!showTaskForm)}
-                >
-                  + Create Task
-                </button>
-              </div>
-              <div className="flex justify-between items-center mb-4">
-                <button
-                  className="text-white bg-blue-500 px-4 py-2 rounded-md shadow hover:bg-blue-600"
-                  onClick={() => setIsEditing(!isEditing)}
-                >
-                  {isEditing ? 'Stop Editing' : 'Edit tasks'}
-                </button>
+                <div className="flex space-x-2">
+                  <button
+                    className="text-white bg-blue-500 px-4 py-2 rounded-md shadow hover:bg-blue-600"
+                    onClick={() => setShowTaskForm(!showTaskForm)}
+                  >
+                    + Create Task
+                  </button>
+                  <button
+                    className="text-white bg-blue-500 px-4 py-2 rounded-md shadow hover:bg-blue-600"
+                    onClick={() => setIsEditing(!isEditing)}
+                  >
+                    {isEditing ? 'Stop Editing' : 'Edit tasks'}
+                  </button>
+                </div>
               </div>
               <div className="flex">
                 <div className="flex-1">
