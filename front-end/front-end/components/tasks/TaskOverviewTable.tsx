@@ -50,23 +50,25 @@ const TaskOverviewTable: React.FC<Props> = ({ project, onStatusChange, onTaskRem
             <td className={task.completed ? 'text-green-500' : 'text-red-500'}>
               {task.completed ? 'Completed' : 'Not Completed'}
             </td>
-            <td>
-              <button
-                onClick={() => handleStatusChange(task.taskId, task.completed)}
-                className="btn btn-primary text-white bg-blue-500 px-2 py-2 rounded-md shadow hover:bg-blue-600"
-              >
-                {task.completed ? 'Mark as Incomplete' : 'Mark as Completed'}
-              </button>
-            </td>
             {isEditing && (
-                <td>
-                  <button
-                    onClick={() => handleRemoveTask(task.taskId)}
-                    className="btn btn-danger text-white bg-red-500 px-2 py-2 rounded-md shadow hover:bg-red-600"
-                  >
-                    Remove Task
-                  </button>
-                </td>
+                <>
+                  <td>
+                    <button
+                      onClick={() => handleStatusChange(task.taskId, task.completed)}
+                      className="btn btn-primary text-white bg-blue-500 px-2 py-2 rounded-md shadow hover:bg-blue-600"
+                    >
+                      {task.completed ? 'Mark as Incomplete' : 'Mark as Completed'}
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleRemoveTask(task.taskId)}
+                      className="btn btn-danger text-white bg-red-500 px-2 py-2 rounded-md shadow hover:bg-red-600"
+                    >
+                      Remove Task
+                    </button>
+                  </td>
+                </>
               )}
           </tr>
         ))}
