@@ -17,10 +17,13 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
     router.push(`/upcoming-events/${eventId}`);
   };
 
-  const [myEvents, setMyEvents] = useState(events)
+  // Renew the events list when an event is removed
+  const [myEvents, setMyEvents] = useState(events);
 
   const removeEvent = async (eventId: number) => {
     await EventService.removeFromMyEvents(email, eventId);
+
+  // Renew the events list when an event is removed
     setMyEvents(myEvents.filter(event => event.id !== eventId));
   }
 
@@ -53,7 +56,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
                         e.stopPropagation();
                         removeEvent(event.id);
                       }}
-                    >Remove
+                    ><img src="/icons/close-white.png" alt="Close icon" width="40px" height="40px" />
                     </button>
                   }
                 </div>
@@ -61,7 +64,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
             ))}
           </div>
         ) : (
-          <p>There are no events yet.</p>
+            <p className="text-white">You don't have any upcoming events...</p>
         )}
       </section>
     </>
