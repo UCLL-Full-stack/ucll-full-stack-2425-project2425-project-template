@@ -5,6 +5,7 @@ import UserService from '@/services/UserService';
 import GuildService from '@/services/GuildService';
 import RoleService from '@/services/RoleService';
 import fs from 'fs'
+import * as cookie from 'cookie';
 
 const client = new Client({
     intents: [
@@ -174,6 +175,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                         guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
                     });
                 }
+                const serializedCookie = cookie.serialize('user', JSON.stringify(user), {
+                    httpOnly: false,
+                    secure: process.env.NODE_ENV === 'development',
+                    maxAge: 60 * 60 * 24 * 7,
+                    path: '/',
+                });
+                res.setHeader('Set-Cookie', serializedCookie);
                 res.writeHead(302, { Location: '/' });
                 res.status(400).json(tokenData);
             }

@@ -18,12 +18,12 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "COMMUNITY",
       "NEWS",
-      "NEW_THREAD_PERMISSIONS",
-      "THREADS_ENABLED",
       "WELCOME_SCREEN_ENABLED",
-      "TEXT_IN_VOICE_ENABLED"
+      "TEXT_IN_VOICE_ENABLED",
+      "THREADS_ENABLED",
+      "NEW_THREAD_PERMISSIONS",
+      "COMMUNITY"
     ]
   },
   {
@@ -34,8 +34,8 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "COMMUNITY",
-      "NEWS"
+      "NEWS",
+      "COMMUNITY"
     ]
   },
   {
@@ -57,9 +57,9 @@
     "owner": true,
     "permissions": "2251799813685247",
     "features": [
+      "NEWS",
       "WELCOME_SCREEN_ENABLED",
-      "COMMUNITY",
-      "NEWS"
+      "COMMUNITY"
     ]
   },
   {
@@ -70,9 +70,9 @@
     "owner": false,
     "permissions": "2249600789905143",
     "features": [
-      "CHANNEL_ICON_EMOJIS_GENERATED",
       "SOUNDBOARD",
-      "RAPIDASH_TEST"
+      "RAPIDASH_TEST",
+      "CHANNEL_ICON_EMOJIS_GENERATED"
     ]
   },
   {
@@ -94,13 +94,13 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "CHANNEL_ICON_EMOJIS_GENERATED",
-      "SOUNDBOARD"
+      "SOUNDBOARD",
+      "CHANNEL_ICON_EMOJIS_GENERATED"
     ]
   },
   {
     "id": "1190715475584368670",
-    "name": "Tutorial discord.js v14",
+    "name": "Bot testing 2.0",
     "icon": "472429aa1ef6ff2b0fdbafb7bd6fb705",
     "banner": null,
     "owner": true,
@@ -117,13 +117,13 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "COMMUNITY",
-      "NEWS",
+      "SOUNDBOARD",
       "GUILD_ONBOARDING_EVER_ENABLED",
+      "NEWS",
+      "GUILD_ONBOARDING_HAS_PROMPTS",
       "CHANNEL_ICON_EMOJIS_GENERATED",
       "GUILD_ONBOARDING",
-      "SOUNDBOARD",
-      "GUILD_ONBOARDING_HAS_PROMPTS"
+      "COMMUNITY"
     ]
   },
   {
@@ -134,22 +134,22 @@
     "owner": false,
     "permissions": "2251799813685247",
     "features": [
-      "COMMUNITY",
-      "PREVIEW_ENABLED",
-      "NEWS",
-      "AUTO_MODERATION",
-      "GUILD_ONBOARDING_HAS_PROMPTS",
-      "ANIMATED_ICON",
-      "GUILD_SERVER_GUIDE",
-      "GUILD_ONBOARDING_EVER_ENABLED",
-      "THREE_DAY_THREAD_ARCHIVE",
-      "GUILD_ONBOARDING",
-      "INVITE_SPLASH",
-      "DISCOVERABLE",
-      "GUILD_WEB_PAGE_VANITY_URL",
-      "CREATOR_ACCEPTED_NEW_TERMS",
       "SOUNDBOARD",
-      "ENABLED_DISCOVERABLE_BEFORE"
+      "PREVIEW_ENABLED",
+      "GUILD_ONBOARDING_EVER_ENABLED",
+      "DISCOVERABLE",
+      "GUILD_ONBOARDING_HAS_PROMPTS",
+      "NEWS",
+      "ENABLED_DISCOVERABLE_BEFORE",
+      "ANIMATED_ICON",
+      "THREE_DAY_THREAD_ARCHIVE",
+      "CREATOR_ACCEPTED_NEW_TERMS",
+      "GUILD_ONBOARDING",
+      "GUILD_SERVER_GUIDE",
+      "GUILD_WEB_PAGE_VANITY_URL",
+      "AUTO_MODERATION",
+      "COMMUNITY",
+      "INVITE_SPLASH"
     ]
   },
   {

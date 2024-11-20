@@ -8,11 +8,13 @@ import BoardService from '@/services/BoardService';
 import BoardCard from '@/components/BoardCard';
 import CreateBoardForm from '@/components/CreateBoardForm';
 import dotenv from 'dotenv';
+import { useUser } from '@/context/UserContext';
+import { parseCookies } from 'nookies';
 
 dotenv.config();
 
 const Home: FC = () => {
-  const [user, setUser] = useState<User>();
+  const { user, setUser} = useUser();
   const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGuildId, setSelectedGuildId] = useState<string | null>(null);
@@ -76,8 +78,29 @@ const Home: FC = () => {
   }
 
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const cookies = parseCookies();
+        if (cookies.user){
+          const userData = JSON.parse(cookies.user)
+          setUser({
+            userId: userData.userId,
+            username: userData.username,
+            globalName: userData.globalName,
+            userAvatar: userData.userAvatar,
+            guildIds: userData.guildIds
+          });
+          const guildsData = await UserService.getGuilds(userData.userId);
+          setGuilds(guildsData);
+        }
+      } catch (error) {
+        console.error('Error fetching user data', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [setUser]);
 
   const handleGuildClick = async (guildId: string) => {
     console.log(`Clicked on guild ${guildId}`);
@@ -101,7 +124,7 @@ const Home: FC = () => {
           <Header onCreateClick={handleCreateClick} onLoginClick={handleDiscordLogin}></Header>
           <main className="flex-grow">
             <div className="p-4">
-                {loading ? (
+                {loading && user ? (
                     <p>Loading guilds...</p>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

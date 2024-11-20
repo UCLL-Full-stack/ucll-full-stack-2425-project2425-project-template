@@ -95,8 +95,9 @@ export interface Member{
 export interface User{
     userId: string;
     username: string;
-    userTag: string;
-    guilds: Guild[];
+    globalName: string;
+    userAvatar: string;
+    guildIds?: string[];
 }
 
 export interface Column{

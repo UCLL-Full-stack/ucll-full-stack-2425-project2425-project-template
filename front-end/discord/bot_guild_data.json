@@ -1,7 +1,7 @@
 [
   {
     "id": "1190715475584368670",
-    "name": "Tutorial discord.js v14",
+    "name": "Bot testing 2.0",
     "roles": [
       {
         "id": "1190715475584368670",
@@ -119,8 +119,8 @@
       },
       {
         "userId": "1303467182344241283",
-        "username": "Test OAuth2",
-        "avatar": "https://cdn.discordapp.com/embed/avatars/1.png",
+        "username": "KanbanCord",
+        "avatar": "https://cdn.discordapp.com/avatars/1303467182344241283/5f66ec1d14d51ff8814756e3ce15a447.webp",
         "roles": [
           "1190715475584368670"
         ]
