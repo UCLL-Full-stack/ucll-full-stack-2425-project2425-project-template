@@ -88,4 +88,22 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.getUserById(parseInt(req.params.id));
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+userRouter.get('/:id/bestellingen', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const bestellingen = await userService.getUserBestellingen(parseInt(req.params.id));
+        res.status(200).json(bestellingen);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userRouter };

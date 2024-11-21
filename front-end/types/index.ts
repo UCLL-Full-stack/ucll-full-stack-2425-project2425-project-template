@@ -1,5 +1,5 @@
-type Type = "Protein" | "Topping" | "Sauce"
-type Rol = "admin" | "klant" | "manager";
+export type Type = "Protein" | "Topping" | "Sauce";
+export type Rol = "admin" | "klant" | "manager";
 
 export type Ingredient = {
     id?: number,
@@ -36,4 +36,10 @@ export type User = {
     adres: String;
     gebruikersnaam: String;
     rol: Rol;
+    bestellingen: Bestelling[];
 }
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};

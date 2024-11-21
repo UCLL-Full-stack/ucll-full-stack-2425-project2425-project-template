@@ -29,6 +29,11 @@ const Header: React.FC = () => {
                             Pokebowls
                         </Link>
                     </li>
+                    <li>
+                        <Link href="/login">
+                            Login
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </header>

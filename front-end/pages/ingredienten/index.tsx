@@ -3,6 +3,7 @@ import IngredientenOverzicht from "@/components/ingredienten/IngredientenOverzic
 import IngredientenService from "@/services/IngredientService";
 import { Ingredient } from "@/types";
 import Head from "next/head";
+import router from "next/router";
 import { useEffect, useState } from "react";
 
 const Ingredienten: React.FC = () => {
@@ -35,6 +36,7 @@ const Ingredienten: React.FC = () => {
                         <IngredientenOverzicht ingredienten={ingredienten} />
                     )}
                 </section>
+                <button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>
             </main>
         </>
     );

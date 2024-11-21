@@ -4,20 +4,33 @@ import PokebowlService from "@/services/PokebowlService";
 import { Pokebowl } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import useSWR, { mutate } from "swr";
+import useInterval from "use-interval";
 
 const Pokebowls: React.FC = () => {
-    const [pokebowls, setPokebowls] = useState<Array<Pokebowl>>();
     const [selectedPokebowl, setSelectedPokebowl] = useState<Pokebowl>();
 
     const getPokebowls = async () => {
-        const response = await PokebowlService.getAllPokebowls();
-        const pokebowls = await response.json();
-        setPokebowls(pokebowls);
-    }
+        const responses = await Promise.all([
+            PokebowlService.getAllPokebowls()
+        ]);
 
-    useEffect(() => {
-        getPokebowls();
-    }, []);
+        const [pokebowlResponse] = responses;
+
+        if (pokebowlResponse.ok) {
+            const pokebowls = await pokebowlResponse.json();
+            return { pokebowls }
+        }
+
+    }
+    const { data, isLoading, error } = useSWR(
+        "pokebowls",
+        getPokebowls
+    );
+
+    useInterval(() => {
+        mutate("pokebowls", getPokebowls());
+    }, 5000);
 
     return (
         <>
@@ -32,8 +45,10 @@ const Pokebowls: React.FC = () => {
                 <h1>Pokebowls</h1>
                 <p>Lijst van alle pokebowls</p>
                 <section>
-                    {pokebowls && (
-                        <PokebowlOverzicht pokebowls={pokebowls} selectPokebowl={setSelectedPokebowl} />
+                    {error && <div className="error-field">{error}</div>}
+                    {isLoading && <p className="text-green-800">Loading...</p>}
+                    {data && (
+                        <PokebowlOverzicht pokebowls={data.pokebowls} selectPokebowl={setSelectedPokebowl} />
                     )}
                 </section>
             </main>

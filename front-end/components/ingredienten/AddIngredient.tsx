@@ -1,23 +1,104 @@
-import { Ingredient } from "@/types";
+import IngredientenService from "@/services/IngredientService";
+import { StatusMessage, Type } from "@/types";
+import classNames from "classnames";
+import router from "next/router";
+import { FormEvent, useState } from "react";
 
-type Props = {
-    ingredient: Ingredient
-}
+const AddIngredient: React.FC = () => {
 
-const AddIngredient: React.FC<Props> = ({ ingredient }: Props) => {
+    const [naam, setNaam] = useState("");
+    const [type, setType] = useState<Type>();
+    const [aantal, setAantal] = useState("");
+    const [prijs, setPrijs] = useState("");
+
+    const [naamError, setNaamError] = useState<String | null>(null);
+    const [aantalError, setAantalError] = useState<String | null>(null);
+    const [prijsError, setPrijsError] = useState<String | null>(null);
+    const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+
+    const clearErrors = () => {
+        setNaamError(null);
+        setAantalError(null);
+        setPrijsError(null);
+        setStatusMessages([]);
+    };
+
+    const validate = (): boolean => {
+        let result = true;
+        clearErrors();
+
+        if (!naam && naam.trim() === "") {
+            setNaamError("Naam cannot be empty");
+            result = false;
+        }
+        if (!aantal || parseInt(aantal) < 0) {
+            setAantalError("Aantal cannot be empty or cannot be a negative number");
+            result = false;
+        }
+        if (!prijs || parseFloat(prijs) < 0) {
+            setPrijsError("Prijs cannot be empty or cannot be a negative number");
+        }
+
+        return result;
+    };
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        clearErrors();
+
+        if (!validate()) {
+            return;
+        }
+
+        const response = await IngredientenService.addIngredient({ naam: naam, type: type as Type, aantal: parseInt(aantal), prijs: parseFloat(prijs) });
+        const result = response.json();
+
+        if (response.status === 200) {
+            setStatusMessages([{ message: `Ingredient ${naam} is aangemaakt`, type: "success" }]);
+            setTimeout(() => {
+                router.push("/ingredienten");
+            }, 2000);
+        } else {
+            setStatusMessages([{ message: "Error", type: "error" }])
+        }
+
+
+    };
+
     return (
         <>
-            <form>
-                <label>Naam:</label>
-                <input type="text" name="name" value={ingredient.naam} />
-                <label>Naam:</label>
-                <input type="text" name="type" value={ingredient.type} />
-                <label>Naam:</label>
-                <input type="text" name="aantal" value={ingredient.aantal} />
-                <label>Naam:</label>
-                <input type="text" name="prijs" value={ingredient.prijs} />
-                <input type="submit" />
-            </form>
+            <div className="addForms">
+                {statusMessages && (
+                    <div className="status">
+                        {statusMessages.map(({ message, type }, index) => (
+                            <p key={index} className={classNames({
+                                "error-field": type === "error",
+                                "ok-field": type === "success",
+                            })}>
+                                {message}
+                            </p>
+                        ))}
+                    </div>
+                )}
+                <form onSubmit={handleSubmit}>
+                    <label>Naam:</label>
+                    {naamError && <p className="error-field">{naamError}</p>}
+                    <input type="text" name="name" value={naam} onChange={(event) => setNaam(event.target.value)} />
+                    <label>Type:</label>
+                    <select id="cars" name="cars" value={type} onChange={(event) => setType(event.target.value as Type)}>
+                        <option value="Protein">Protein</option>
+                        <option value="Topping">Topping</option>
+                        <option value="Sauce">Sauce</option>
+                    </select>
+                    <label>Aantal:</label>
+                    {aantalError && <p className="error-field">{aantalError}</p>}
+                    <input type="number" name="aantal" value={aantal} onChange={(event) => setAantal(event.target.value)} />
+                    <label>Prijs:</label>
+                    {prijsError && <p className="error-field">{prijsError}</p>}
+                    <input type="number" name="prijs" value={prijs} onChange={(event) => setPrijs(event.target.value)} />
+                    <input type="submit" value="Add Ingredient" />
+                </form>
+            </div>
         </>
     );
 }

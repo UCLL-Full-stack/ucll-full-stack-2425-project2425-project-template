@@ -11,6 +11,7 @@ const PokebowlOverzicht: React.FC<Props> = ({ pokebowls, selectPokebowl }: Props
     return (
         <>
             {pokebowls && (
+                console.log(pokebowls),
                 <table>
                     <tbody>
                         {pokebowls.map((pokebowl, index) => (

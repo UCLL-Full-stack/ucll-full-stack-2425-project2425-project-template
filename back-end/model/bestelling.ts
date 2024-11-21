@@ -45,6 +45,9 @@ export class Bestelling {
     getId(): number | undefined {
         return this.id;
     }
+    getUserId(): number | undefined {
+        return this.user.getId();
+    }
 
     getUser(): User {
         return this.user;

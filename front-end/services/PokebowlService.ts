@@ -5,6 +5,7 @@ const getAllPokebowls = async () => {
             "Content-Type": "application/json"
         }
     })
+
 };
 
 const getPokebowlById = async (id: string) => {

@@ -46,7 +46,7 @@ export class User {
         adres: string;
         gebruikersnaam: string;
         rol: Rol;
-        //bestellingen: Array<Bestelling>;
+        bestellingen?: Array<Bestelling>;
     }) {
         this.id = user.id;
         this.naam = user.naam;
@@ -56,7 +56,7 @@ export class User {
         this.adres = user.adres;
         this.gebruikersnaam = user.gebruikersnaam;
         this.rol = user.rol;
-        //this.bestellingen = user.bestellingen;
+        this.bestellingen = user.bestellingen ?? [];
     }
 
     getId(): number | undefined {
@@ -109,13 +109,13 @@ export class User {
         //ook dit moet wss nog aangepast worden
     }
 
-    deleteUser(user: User): void {
-        console.log("User deleted")
-    }
+    // deleteUser(user: User): void {
+    //     console.log("User deleted")
+    // }
 
-    updateUser(user: User) {
-        Object.assign(this, user);
-        console.log("User updated")
-    }
+    // updateUser(user: User) {
+    //     Object.assign(this, user);
+    //     console.log("User updated")
+    // }
 
 }

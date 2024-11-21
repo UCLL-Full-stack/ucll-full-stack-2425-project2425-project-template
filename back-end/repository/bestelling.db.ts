@@ -231,4 +231,21 @@ const getBestellingById = async ({ id }: { id: number }): Promise<Bestelling | n
     }
 }
 
-export default { getAllBestellingen, getBestellingById };
+const getBestellingenByUser = async ({ id }: { id: number }): Promise<Bestelling[]> => {
+    try {
+        const bestellingenPrisma = await database.bestelling.findMany({
+            where: {
+                user: { id: id }
+            }, include: {
+                user: true,
+                pokebowls: true
+            },
+        });
+        return bestellingenPrisma.map((bestellingPrisma) => Bestelling.from(bestellingPrisma));
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
+}
+
+export default { getAllBestellingen, getBestellingById, getBestellingenByUser };

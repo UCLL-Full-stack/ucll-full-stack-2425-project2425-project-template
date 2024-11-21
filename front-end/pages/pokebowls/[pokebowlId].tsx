@@ -23,10 +23,14 @@ const PokebowlId = () => {
         }
     }, [pokebowlId]);
 
+
     return (
         <>
             <Head>
-                <title>Pokebowl info </title>
+                <title>Pokebowl info</title>
+                <meta name="description" content="BowlBuddies Pokebowl Ingredienten" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="assets/logo.png" />
             </Head>
             <Header />
             <main>
