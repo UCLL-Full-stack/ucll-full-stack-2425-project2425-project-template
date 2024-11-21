@@ -48,6 +48,26 @@ const AddEventForm: React.FC = () => {
       },
     };
 
+    if (minParticipants > maxParticipants) {
+      setError("The minimum participants must be less than the maximum participants.");
+      return;
+    }
+
+    if (minParticipants < 1 || maxParticipants < 1) {
+      setError("The minimum and maximum participants must be at least 1.");
+      return;
+    }
+
+    if (price < 0) {
+      setError("The price must be at least 0.");
+      return;
+    }
+
+    if (eventName === "" || street === "" || city === "" || country === "" || categoryName === "" || description === "") {
+      setError("All fields are required.");
+      return;
+    }
+
     try {
       await EventService.addEvent(event);
       setTimeout(() => {
@@ -77,7 +97,6 @@ const AddEventForm: React.FC = () => {
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
-        {error && <p className={"text-danger"}>{error}</p>}
         <label htmlFor="priceInput">Price</label>
         <input
           id="priceInput"
@@ -171,6 +190,7 @@ const AddEventForm: React.FC = () => {
         <button type="submit" className="btn btn-primary mt-3">
           Make event
         </button>
+        {error && <p className={"text-danger"}>{error}</p>}
       </form>
     </>
   );
