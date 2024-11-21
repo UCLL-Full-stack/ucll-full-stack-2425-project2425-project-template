@@ -44,4 +44,5 @@ const createUser = async ({ username, email, password }: UserInput): Promise<Use
 export default {
     getAllUsers,
     getUserById,
+    createUser,
 };

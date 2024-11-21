@@ -9,13 +9,11 @@ type MovieInput = {
     summary: string;
 };
 
-
 type RoomInput = {
     id?: number;
     name: string;
     chairs: number[];
 };
-
 
 type TaskInput = {
     id?: number;
@@ -26,7 +24,6 @@ type TaskInput = {
     comment: string;
 };
 
-
 type TicketInput = {
     id?: number;
     price: number;
@@ -35,15 +32,13 @@ type TicketInput = {
     chair: number;
 };
 
-
 type UserInput = {
     id?: number;
     username: string;
     email: string;
     password: string;
-    role: Role;
+    role?: Role;
 };
-
 
 type AuthenticationResponse = {
     token: string;
@@ -51,12 +46,4 @@ type AuthenticationResponse = {
     role: string;
 };
 
-export {
-    Role,
-    MovieInput,
-    RoomInput,
-    TaskInput,
-    TicketInput,
-    UserInput,
-    AuthenticationResponse,
-};
+export { Role, MovieInput, RoomInput, TaskInput, TicketInput, UserInput, AuthenticationResponse };
