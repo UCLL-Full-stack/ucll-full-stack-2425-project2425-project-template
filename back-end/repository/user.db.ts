@@ -41,9 +41,30 @@ const createUser = async (user: User) => {
     }
 };
 
+const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: {
+                id: id
+            },
+            include: {
+                bestellingen: { include: { pokebowls: true } }
+            }
+        });
+        if (userPrisma == null) {
+            return null;
+        }
+        return User.from(userPrisma);
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
+};
+
 
 
 export default {
     createUser,
-    getAllUsers
+    getAllUsers,
+    getUserById
 };

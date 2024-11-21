@@ -16,6 +16,7 @@ const getBestellingentById = async (id: string) => {
     })
 }
 
+
 const BestellingService = {
     getAllBestellingen,
     getBestellingentById

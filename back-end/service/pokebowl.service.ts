@@ -1,4 +1,3 @@
-import { Ingredient } from "../model/ingredient";
 import { Pokebowl } from "../model/pokebowl";
 import ingredientDb from "../repository/ingredient.db";
 import pokebowlDb from "../repository/pokebowl.db";
