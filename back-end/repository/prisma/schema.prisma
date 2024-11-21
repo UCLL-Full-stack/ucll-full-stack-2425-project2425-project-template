@@ -26,6 +26,9 @@ model Admin {
 model Crash {
     id          Int     @id @default(autoincrement())
     type        String
+    description String
+    casualties  Int
+    deaths      Int
 
     Driver Driver[] @relation(map: "Driver_crash_fkey")
 }
@@ -46,6 +49,10 @@ model Driver {
 model Racecar {
     id          Int     @id @default(autoincrement())
     car_name    String
+    type        String
+    description String
+    hp          Int
+
     drivers     Driver[]
 }
 

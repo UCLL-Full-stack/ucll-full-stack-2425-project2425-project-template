@@ -19,7 +19,7 @@ const getRaceById = (id: number): Race | null => {
     return raceDb.getRaceById(id);
 };
 
-const createRace = (raceInput: RaceInput): Race => {
+const createRace = async (raceInput: RaceInput): Promise<Race> => {
     // error handling
     if (!raceInput.name) {
         throw new Error('Race name is required');
@@ -74,7 +74,7 @@ const createRace = (raceInput: RaceInput): Race => {
 
     let admin: Admin | undefined;
     if (raceInput.admin && raceInput.admin.id !== undefined) {
-        admin = adminDb.getAdminById(raceInput.admin.id);
+        admin = await adminDb.getAdminById({ id: raceInput.admin.id }) || undefined;
         if (!admin) {
             throw new Error(`Admin not found with ID ${raceInput.admin.id}`);
         }
@@ -95,8 +95,8 @@ const createRace = (raceInput: RaceInput): Race => {
     return newRace;
 };
 
-const getAllCrashes = (): Crash[] => {
-    return crashDb.getAllCrashes();
+const getAllCrashes = async (): Promise<Crash[] | null> => {
+    return await crashDb.getAllCrashes();
 }
 
 const createCrash = (crashInput: any): Crash => {
@@ -124,8 +124,8 @@ const createCrash = (crashInput: any): Crash => {
     return newCrash;
 };
 
-const getAllRacecars = (): Racecar[] => {
-    return racecarDb.getAllRacecars();
+const getAllRacecars = async (): Promise<Racecar[] | null> => {
+    return await racecarDb.getAllRacecars();
 }
 
 const createRacecar = (racecarInput: any): Racecar => {

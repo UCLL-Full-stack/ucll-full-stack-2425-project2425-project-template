@@ -1,13 +1,9 @@
 import { User } from '../model/user';
 import database from '../util/database';
 
-export const users = [
-  new User({ id: 2, username: 'user', password: 'userpassword' }),
-];
-
 const getUserByUsername = async ({ username }: { username: string}): Promise<User | null> => {
   try {
-    const userPrisma = await database.user.findFirst({
+      const userPrisma = await database.user.findFirst({
       where: { username },
     });
     return userPrisma ? User.from(userPrisma) : null;

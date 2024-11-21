@@ -52,26 +52,26 @@ const acceptSubmissionForm = (submissionFormId: number): SubmissionForm => {
             description: driver.getDescription(),
             age: driver.getAge(),
             racecar: {
-                car_name: driver.getRacecar().getCarName(),
-                type: driver.getRacecar().getType(),
-                description: driver.getRacecar().getDescription(),
-                hp: driver.getRacecar().getHp(),
+                car_name: driver.getRacecar().car_name,
+                type: driver.getRacecar().type,
+                description: driver.getRacecar().description,
+                hp: driver.getRacecar().hp,
             },
             crash: {
-                type: driver.getCrash().getType(),
-                description: driver.getCrash().getDescription(),
-                casualties: driver.getCrash().getCasualties(),
-                deaths: driver.getCrash().getDeaths(),
+                type: driver.getCrash().type,
+                description: driver.getCrash().description,
+                casualties: driver.getCrash().casualties,
+                deaths: driver.getCrash().deaths,
             },
             id: driver.getId(),
         })) || [];
 
         const crashes: CrashInput[] = race.getCrashes()?.map(crash => ({
-            type: crash.getType(),
-            description: crash.getDescription(),
-            casualties: crash.getCasualties(),
-            deaths: crash.getDeaths(),
-            id: crash.getId(),
+            type: crash.type,
+            description: crash.description,
+            casualties: crash.casualties,
+            deaths: crash.deaths,
+            id: crash.id,
         })) || [];
 
         const admin: AdminInput = {

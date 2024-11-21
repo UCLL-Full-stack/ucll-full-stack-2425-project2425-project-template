@@ -1,28 +1,30 @@
 import { Racecar } from '../model/racecar';
+import database from '../util/database';
 
-const racecars = [
-    new Racecar({
-        id: 1,
-        car_name: 'Mercedes W12',
-        type: 'Formula 1',
-        description: 'A fast racecar',
-        hp: 1000
-    }),
-    new Racecar({
-        id: 2,
-        car_name: 'Red Bull RB16B',
-        type: 'Formula 1',
-        description: 'A powerful racecar',
-        hp: 1050
-    }),
-];
-
-const getAllRacecars = (): Racecar[] => {
-    return racecars;
+const getAllRacecars = async (): Promise<Racecar[] | null> => {
+    try {
+        const racecarPrisma = await database.racecar.findMany();
+        return racecarPrisma ? racecarPrisma.map(racecar => Racecar.from(racecar)) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
 }
 
 const createRacecar = (racecar: Racecar): void => {
-    racecars.push(racecar);
+    try {
+        database.racecar.create({
+            data: {
+                car_name: racecar.car_name,
+                type: racecar.type,
+                description: racecar.description,
+                hp: racecar.hp,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
 };
 
 export default { getAllRacecars, createRacecar };

@@ -8,7 +8,7 @@ const getUserByUsername = async (username: string): Promise<User | null> => {
 };
 
 const getAdminByUsername = async (username: string): Promise<Admin | null> => {
-  return adminDb.getAdminByUsername(username);
+  return adminDb.getAdminByUsername({ username });
 };
 
 export default {

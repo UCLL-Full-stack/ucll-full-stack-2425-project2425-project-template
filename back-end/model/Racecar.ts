@@ -1,13 +1,14 @@
+import { Racecar as RacecarPrisma } from '@prisma/client';
+
 export class Racecar {
-    private id?: number;
-    private car_name: string;
-    private type: string;
-    private description: string;
-    private hp: number;
+    readonly id?: number;
+    readonly car_name: string;
+    readonly type: string;
+    readonly description: string;
+    readonly hp: number;
 
     constructor(racecar: { car_name: string, type: string, description: string, hp: number, id?: number }) {
         this.validate(racecar);
-
         this.car_name = racecar.car_name;
         this.type = racecar.type;
         this.description = racecar.description;
@@ -30,33 +31,29 @@ export class Racecar {
         }
     }
 
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getCarName(): string {
-        return this.car_name;
-    }
-
-    getType(): string {
-        return this.type;
-    }
-
-    getDescription(): string {
-        return this.description;
-    }
-
-    getHp(): number {
-        return this.hp;
-    }
-
     equals(other: Racecar): boolean {
         return (
-            this.id === other.getId() &&
-            this.car_name === other.getCarName() &&
-            this.type === other.getType() &&
-            this.description === other.getDescription() &&
-            this.hp === other.getHp()
+            this.id === other.id &&
+            this.car_name === other.car_name &&
+            this.type === other.type &&
+            this.description === other.description &&
+            this.hp === other.hp
         );
+    }
+
+    static from ({
+        id,
+        car_name,
+        type,
+        description,
+        hp,
+    }: RacecarPrisma) {
+        return new Racecar({
+            id,
+            car_name,
+            type,
+            description,
+            hp,
+        });
     }
 }

@@ -1,16 +1,14 @@
-import { Driver } from './driver';
-import { Race } from './race';
+import { Crash as CrashPrisma } from '@prisma/client';
 
 export class Crash {
-    private id?: number;
-    private type: string;
-    private description: string;
-    private casualties: number;
-    private deaths: number;
+    readonly id?: number;
+    readonly type: string;
+    readonly description: string;
+    readonly casualties: number;
+    readonly deaths: number;
 
     constructor(crash: { type: string, description: string, casualties: number, deaths: number, id?: number }) {
         this.validate(crash);
-
         this.type = crash.type;
         this.description = crash.description;
         this.casualties = crash.casualties;
@@ -33,33 +31,29 @@ export class Crash {
         }
     }
 
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getType(): string {
-        return this.type;
-    }
-
-    getDescription(): string {
-        return this.description;
-    }
-
-    getCasualties(): number {
-        return this.casualties;
-    }
-
-    getDeaths(): number {
-        return this.deaths;
-    }
-
     equals(other: Crash): boolean {
         return (
-            this.id === other.getId() &&
-            this.type === other.getType() &&
-            this.description === other.getDescription() &&
-            this.casualties === other.getCasualties() &&
-            this.deaths === other.getDeaths()
+            this.id === other.id &&
+            this.type === other.type &&
+            this.description === other.description &&
+            this.casualties === other.casualties &&
+            this.deaths === other.deaths
         );
+    }
+
+    static from ({
+        id,
+        type,
+        description,
+        casualties,
+        deaths,
+    }: CrashPrisma) {
+        return new Crash({
+            id,
+            type,
+            description,
+            casualties,
+            deaths,
+        });
     }
 }

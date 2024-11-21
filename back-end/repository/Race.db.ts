@@ -92,11 +92,11 @@ const getRaceById = (id: number): Race | null => {
 };
 
 const getAllRacesByTypeCrash = (crashType: string) => {
-    return races.filter(race => (race.getCrashes() ?? []).some(crash => crash.getType() === crashType));
+    return races.filter(race => (race.getCrashes() ?? []).some(crash => crash.type === crashType));
 }
 
 const getAllRacesByCar_nameRacecar = (racecarName: string) => {
-    return races.filter(race => (race.getDrivers() ?? []).some(driver => driver.getRacecar().getCarName() === racecarName));
+    return races.filter(race => (race.getDrivers() ?? []).some(driver => driver.getRacecar().car_name === racecarName));
 }
 
 const createRace = (race: Race): void => {

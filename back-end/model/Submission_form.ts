@@ -55,9 +55,9 @@ export class SubmissionForm {
 
     equals(other: SubmissionForm): boolean {
         return (
-            this.id === other.getId() &&
-            this.title === other.getTitle() &&
-            this.content === other.getContent() &&
+            this.id === other.id &&
+            this.title === other.title &&
+            this.content === other.content &&
             this.user.equals(other.getUser()) &&
             this.race === other.getRace()
         );

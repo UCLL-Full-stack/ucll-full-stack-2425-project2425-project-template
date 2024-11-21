@@ -30,6 +30,42 @@ const main = async () => {
             password: 'PASSWORD'
         },
     });
+
+    await prisma.crash.create({
+        data: {
+            type: "Collision",
+            description: 'Crash at turn 3',
+            casualties: 2,
+            deaths: 1,
+        },
+    });
+
+    await prisma.crash.create({
+        data: {
+            type: "Collision",
+            description: 'Crash at turn 5',
+            casualties: 3,
+            deaths: 0,
+        },
+    });
+
+    await prisma.racecar.create({
+        data: {
+            car_name: 'Mercedes W12',
+            type: 'Formula 1',
+            description: 'A fast racecar',
+            hp: 1000
+        },
+    });
+
+    await prisma.racecar.create({
+        data: {
+            car_name: 'Red Bull RB16B',
+            type: 'Formula 1',
+            description: 'A powerful racecar',
+            hp: 1050
+        },
+    });
 }
 
 (async () => {
