@@ -19,6 +19,8 @@ type VehicleInput = {
     vehicle_type?: string;
     body_type?:string;
     mileage?:number;
+    createdAt?:Date;
+    updatedAt?:Date
 };
 
 

@@ -2,18 +2,36 @@ import { Vehicle } from "./vehicle";
 
 export class Motorcycle extends Vehicle{
     constructor(motorcycle: {
-        id?: number, manufacturer: string,
-        model_name: string, price: number, fuel_type: string,
-        transmission_type: string, year: number, vehicle_type: string, body_type: string, mileage: number
+        id?: number, 
+        manufacturer: string,
+        model_name: string, 
+        price: number, 
+        fuel_type: string,
+        transmission_type: string, 
+        year: number, 
+        vehicle_type: string, 
+        body_type: string, 
+        mileage: number,
+        engineCapacity : number,
+        createdAt? : Date,
+        updatedAt? : Date
     }) {
         // this.validate(motorcycle);
 
         super({
-            id: motorcycle.id, manufacturer: motorcycle.manufacturer, model_name: motorcycle.model_name,
-            price: motorcycle.price, fuel_type: motorcycle.fuel_type,
+            id: motorcycle.id,
+            manufacturer: motorcycle.manufacturer, 
+            model_name: motorcycle.model_name,
+            price: motorcycle.price, 
+            fuel_type: motorcycle.fuel_type,
             transmission_type: motorcycle.transmission_type,
-            year: motorcycle.year, vehicle_type: motorcycle.vehicle_type,
-            body_type: motorcycle.body_type, mileage: motorcycle.mileage
+            year: motorcycle.year, 
+            vehicle_type: motorcycle.vehicle_type,
+            body_type: motorcycle.body_type, 
+            mileage: motorcycle.mileage,
+            engineCapacity: motorcycle.engineCapacity,
+            createdAt : motorcycle.createdAt,
+            updatedAt : motorcycle.updatedAt
         });
 
     }
