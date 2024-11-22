@@ -1,5 +1,3 @@
-import { Recipe } from './recipe';
-import { Ingredient } from './ingredient';
 import {
     Recipe as RecipePrisma,
     Ingredient as IngredientPrisma,

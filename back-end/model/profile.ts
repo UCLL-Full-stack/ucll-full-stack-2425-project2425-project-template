@@ -1,4 +1,3 @@
-import { User } from './user';
 import { Profile as ProfilePrisma, User as UserPrisma } from '@prisma/client';
 
 export class Profile {
@@ -6,30 +5,16 @@ export class Profile {
     private firstName: string;
     private lastName: string;
     private email: string;
-    // private user?: User;
 
-    constructor(profile: {
-        id?: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        // user?: User;
-    }) {
+    constructor(profile: { id?: number; firstName: string; lastName: string; email: string }) {
         this.validate(profile);
         this.id = profile.id;
         this.firstName = profile.firstName;
         this.lastName = profile.lastName;
         this.email = profile.email;
-        // this.user = profile.user;
     }
 
-    static from({
-        id,
-        firstName,
-        lastName,
-        email,
-    }: // user,
-    ProfilePrisma): Profile {
+    static from({ id, firstName, lastName, email }: ProfilePrisma): Profile {
         return new Profile({
             id,
             firstName,
@@ -80,14 +65,6 @@ export class Profile {
     setEmail(email: string): void {
         this.email = email;
     }
-
-    // getUser(): User | undefined {
-    //     return this.user;
-    // }
-
-    // setUser(user: User): void {
-    //     this.user = user;
-    // }
 
     toJSON() {
         return {
