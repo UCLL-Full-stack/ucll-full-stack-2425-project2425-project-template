@@ -1,7 +1,11 @@
 import { User } from './User';
 import { Recipe } from './Recipe';
-import { Review as ReviewPrisma } from '@prisma/client';
-
+import {
+    RecipeIngredient as RecipeIngredientPrisma,
+    Recipe as RecipePrisma,
+    Review as ReviewPrisma,
+    User as UserPrisma,
+} from '@prisma/client';
 export class Review {
     readonly id?: number;
     readonly writer: User;
@@ -42,13 +46,22 @@ export class Review {
         );
     }
 
-    static from({ id, writer, text, score, recipe }: ReviewPrisma): Review {
+    static from = ({
+        id,
+        text,
+        score,
+        writer,
+        recipe,
+    }: ReviewPrisma & {
+        writer: UserPrisma;
+        recipe?: RecipePrisma;
+    }): Review => {
         return new Review({
             id,
-            writer: User.from(writer),
             text,
             score,
-            recipe: recipe ? Recipe.from(recipe)
+            writer: User.from(writer),
+            recipe: recipe ? Recipe.from(recipe) : undefined,
         });
-    }
+    };
 }

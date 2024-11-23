@@ -65,7 +65,12 @@ export class User {
         email,
         firstName,
         lastName,
-    }: UserPrisma & { recipes?: Recipe[]; reviews?: Review[] }): User => {
+        recipes,
+        reviews,
+    }: UserPrisma & {
+        recipes?: RecipePrisma[];
+        reviews?: ReviewPrisma[];
+    }): User => {
         return new User({
             id,
             username,
