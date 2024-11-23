@@ -1,23 +1,24 @@
-import { RecipeIngredient } from '@prisma/client';
+import { RecipeIngredient as RecipeIngredientPrisma, Recipe as RecipePrisma, Review as ReviewPrisma, User as UserPrisma } from '@prisma/client';
 import { User } from './User';
 import { Review } from './Review';
 
 export class Recipe {
-    id?: number;
-    name: string;
-    description: string;
-    recipeIngredients: RecipeIngredient[];
-    creator?: User;
-    reviews?: Review[];
+    readonly id?: number;
+    readonly name: string;
+    readonly description: string;
+    readonly recipeIngredients: RecipeIngredientPrisma[];
+    readonly creator?: User;
+    readonly reviews?: Review[];
 
     constructor(data: {
         id?: number;
         name: string;
         description: string;
-        recipeIngredients: RecipeIngredient[];
+        recipeIngredients: RecipeIngredientPrisma[];
         creator?: User;
         reviews?: Review[];
     }) {
+        this.validate(data);
         this.id = data.id;
         this.name = data.name;
         this.description = data.description;
@@ -26,17 +27,21 @@ export class Recipe {
         this.reviews = data.reviews || [];
     }
 
-    validate() {
-        if (!this.name) {
+    private validate(data: {
+        name: string;
+        description: string;
+        recipeIngredients: RecipeIngredientPrisma[];
+    }) {
+        if (!data.name) {
             throw new Error('Recipe name is required');
         }
-        if (this.name.length < 3) {
-            throw new Error('Recipe name needs to be at least 3 characters long');
+        if (data.name.length < 3) {
+            throw new Error('Recipe name must be at least 3 characters long');
         }
-        if (!this.description) {
+        if (!data.description) {
             throw new Error('Description is required');
         }
-        this.recipeIngredients.forEach((ingredient) => {
+        data.recipeIngredients.forEach((ingredient) => {
             if (!ingredient.amount) {
                 throw new Error('Ingredient amount is required');
             }
@@ -50,15 +55,42 @@ export class Recipe {
         return this.name === recipe.name && this.description === recipe.description;
     }
 
-    static from = (recipePrisma: any): Recipe => {
-        // Temporarily set type to `any` for debugging
+    static from = ({
+        id,
+        name,
+        description,
+        recipeIngredients,
+        creator,
+        reviews,
+    }: RecipePrisma & {
+        recipeIngredients: RecipeIngredientPrisma[];
+        creator?: UserPrisma & {
+            recipes?: RecipePrisma[];
+            reviews?: ReviewPrisma[];
+        };
+        reviews?: ReviewPrisma & {
+            writer: UserPrisma;
+            recipe: RecipePrisma;
+        }
+    }): Recipe => {
         return new Recipe({
-            id: recipePrisma.id,
-            name: recipePrisma.name,
-            description: recipePrisma.description,
-            recipeIngredients: recipePrisma.ingredients, // Adjust to correct field
-            creator: recipePrisma.creator,
-            reviews: recipePrisma.reviews,
+            id,
+            name,
+            description,
+            recipeIngredients,
+            creator: creator ? User.from(creator),
+            reviews: reviews?.map((review) => Review.from(review)),
         });
     };
+    // } 
+    // Recipe => {
+    //     return new Recipe({
+    //         id: recipePrisma.id,
+    //         name: recipePrisma.name,
+    //         description: recipePrisma.description,
+    //         recipeIngredients: recipePrisma.ingredients, // Adjust to correct field
+    //         creator: recipePrisma.creator,
+    //         reviews: recipePrisma.reviews,
+    //     });
+    // };
 }

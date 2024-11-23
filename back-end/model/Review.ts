@@ -1,5 +1,6 @@
 import { User } from './User';
 import { Recipe } from './Recipe';
+import { Review as ReviewPrisma } from '@prisma/client';
 
 export class Review {
     readonly id?: number;

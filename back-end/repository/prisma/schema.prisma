@@ -12,8 +12,8 @@ model User {
     username  String    @unique
     password  String
     email     String    @unique
-    firstName String?
-    lastName  String?
+    firstName String
+    lastName  String
         // relationship fields
     recipes   Recipe[]  @relation("UserRecipes")
     reviews   Review[]  @relation("UserReviews")

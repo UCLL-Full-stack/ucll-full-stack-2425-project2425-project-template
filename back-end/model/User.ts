@@ -1,5 +1,6 @@
 import { Recipe } from './Recipe';
 import { Review } from './Review';
+import { User as UserPrisma, Recipe as RecipePrisma, Review as ReviewPrisma } from '@prisma/client';
 
 export class User {
     readonly id?: number;
@@ -57,15 +58,25 @@ export class User {
         return this.username === user.username && this.email === user.email;
     }
 
-    // static from(userPrisma: any): User {
-    //     return new User(
-    //         userPrisma.username,
-    //         userPrisma.password,
-    //         userPrisma.email,
-    //         userPrisma.firstName,
-    //         userPrisma.lastName,
-    //         userPrisma.recipes,
-    //         userPrisma.reviews
-    //     );
-    // }
+    static from = ({
+        id,
+        username,
+        password,
+        email,
+        firstName,
+        lastName,
+        recipes,
+        reviews,
+        }: UserPrisma & { recipes?: Recipe[]; reviews?: Review[] }): User => {
+            return new User({
+                id,
+                username,
+                password,
+                email,
+                firstName,
+                lastName,
+                recipes: recipes?.map((recipe) => Recipe.from(recipe)),
+                reviews: reviews?.map((review) => Review.from(review)),
+        });
+    }
 }
