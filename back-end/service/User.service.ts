@@ -1,32 +1,25 @@
 import UserDb from '../repository/User.db';
 import { User } from '../model/User';
 import bcrypt from 'bcrypt';
+import { UserInput } from '../types';
 
-const getAllUsers = (): User[] => {
+const getAllUsers = async (): Promise<User[]> => {
     return UserDb.getAllUsers();
 };
 
-const getUserById = (id: number): User => {
+const getUserById = async (id: number): Promise<User | null> => {
     return UserDb.getUserById(id);
 };
 
-const getUserByEmail = (email: string): User => {
-    const user = UserDb.getUserByEmail(email);
-    if (!user) {
-        throw new Error('User not found');
-    }
-    return user;
+const getUserByEmail = async (email: string): Promise<User | null> => {
+    return UserDb.getUserByEmail(email);
 };
 
-const getUserByUsername = (username: string): User => {
-    const user = UserDb.getUserByUsername(username);
-    if (!user) {
-        throw new Error('User not found');
-    }
-    return user;
+const getUserByUsername = async (username: string): Promise<User | null> => {
+    return UserDb.getUserByUsername(username);
 };
 
-const createUser = async (user: User): Promise<User> => {
+const createUser = async (user: UserInput): Promise<User> => {
     // Check if the email already exists
     const existingUserByEmail = await UserDb.getUserByEmail(user.email);
     if (existingUserByEmail) {
@@ -39,11 +32,6 @@ const createUser = async (user: User): Promise<User> => {
         throw new Error('Username already exists');
     }
 
-    // Ensure the password is provided
-    if (!user.password) {
-        throw new Error('Password is required');
-    }
-
     // Hash the password
     const hashedPassword = bcrypt.hashSync(user.password, 10);
 
@@ -54,8 +42,8 @@ const createUser = async (user: User): Promise<User> => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        recipes: user.recipes,
-        reviews: user.reviews
+        recipes: [],
+        reviews: [],
     });
 
     // Save the new user to the database

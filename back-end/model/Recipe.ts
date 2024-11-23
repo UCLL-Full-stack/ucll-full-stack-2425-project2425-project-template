@@ -1,4 +1,9 @@
-import { RecipeIngredient as RecipeIngredientPrisma, Recipe as RecipePrisma, Review as ReviewPrisma, User as UserPrisma } from '@prisma/client';
+import {
+    RecipeIngredient as RecipeIngredientPrisma,
+    Recipe as RecipePrisma,
+    Review as ReviewPrisma,
+    User as UserPrisma,
+} from '@prisma/client';
 import { User } from './User';
 import { Review } from './Review';
 
@@ -68,10 +73,9 @@ export class Recipe {
             recipes?: RecipePrisma[];
             reviews?: ReviewPrisma[];
         };
-        reviews?: ReviewPrisma & {
+        reviews?: (ReviewPrisma & {
             writer: UserPrisma;
-            recipe: RecipePrisma;
-        }
+        })[];
     }): Recipe => {
         return new Recipe({
             id,
@@ -82,15 +86,4 @@ export class Recipe {
             reviews: reviews?.map((review) => Review.from(review)),
         });
     };
-    // } 
-    // Recipe => {
-    //     return new Recipe({
-    //         id: recipePrisma.id,
-    //         name: recipePrisma.name,
-    //         description: recipePrisma.description,
-    //         recipeIngredients: recipePrisma.ingredients, // Adjust to correct field
-    //         creator: recipePrisma.creator,
-    //         reviews: recipePrisma.reviews,
-    //     });
-    // };
 }

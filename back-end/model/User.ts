@@ -65,18 +65,14 @@ export class User {
         email,
         firstName,
         lastName,
-        recipes,
-        reviews,
-        }: UserPrisma & { recipes?: Recipe[]; reviews?: Review[] }): User => {
-            return new User({
-                id,
-                username,
-                password,
-                email,
-                firstName,
-                lastName,
-                recipes: recipes?.map((recipe) => Recipe.from(recipe)),
-                reviews: reviews?.map((review) => Review.from(review)),
+    }: UserPrisma & { recipes?: Recipe[]; reviews?: Review[] }): User => {
+        return new User({
+            id,
+            username,
+            password,
+            email,
+            firstName,
+            lastName,
         });
-    }
+    };
 }

@@ -14,7 +14,6 @@ model User {
     email     String    @unique
     firstName String
     lastName  String
-        // relationship fields
     recipes   Recipe[]  @relation("UserRecipes")
     reviews   Review[]  @relation("UserReviews")
 }
@@ -23,7 +22,6 @@ model Recipe {
   id            Int                @id @default(autoincrement())
   name          String
   description   String
-       // relationship fields
   ingredients   RecipeIngredient[]
   creator       User               @relation("UserRecipes", fields: [creatorId], references: [id])
   creatorId     Int
@@ -53,7 +51,6 @@ model Review {
   id              Int       @id @default(autoincrement())
   text            String
   score           Int
-    // relationship fields
   writer          User      @relation("UserReviews", fields: [writerId], references: [id])
   writerId        Int
   recipe          Recipe    @relation(fields: [recipeId], references: [id])

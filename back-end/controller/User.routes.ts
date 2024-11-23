@@ -1,6 +1,7 @@
 import UserService from '../service/User.service';
 import { User } from '../model/User';
 import express, { NextFunction, Request, Response } from 'express';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -199,20 +200,8 @@ userRouter.get('/username/:username', async (req: Request, res: Response, next: 
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         console.log(req.body);
-        const userData = req.body as User;
-
-        console.log('First Name:', userData.firstName);
-        console.log('Last Name:', userData.lastName);
-
-        const newUser = new User({
-            username: userData.username,
-            password: userData.password,
-            email: userData.email,
-            firstName: userData.firstName,
-            lastName: userData.lastName
-        });
-
-        const createdUser = await UserService.createUser(newUser);
+        const userData = <UserInput>req.body;
+        const createdUser = await UserService.createUser(userData);
         res.status(201).json(createdUser);
     } catch (error) {
         next(error);

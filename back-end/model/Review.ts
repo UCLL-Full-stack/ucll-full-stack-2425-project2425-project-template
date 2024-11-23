@@ -9,7 +9,13 @@ export class Review {
     readonly score: number;
     readonly recipe?: Recipe;
 
-    constructor(review: { id?: number, writer: User, text: string, score: number, recipe?: Recipe }) {
+    constructor(review: {
+        id?: number;
+        writer: User;
+        text: string;
+        score: number;
+        recipe?: Recipe;
+    }) {
         this.validate(review);
         this.id = review.id;
         this.writer = review.writer;
@@ -18,29 +24,31 @@ export class Review {
         this.recipe = review.recipe;
     }
 
-    validate(review: { id?: number, writer: User, text: string, score: number, recipe?: Recipe }) {
+    validate(review: { id?: number; writer: User; text: string; score: number; recipe?: Recipe }) {
         if (!review.text) {
-            throw new Error("Review text is required");
+            throw new Error('Review text is required');
         }
 
         if (review.score < 1 || review.score > 5) {
-            throw new Error("Score must be between 1 and 5");
+            throw new Error('Score must be between 1 and 5');
         }
     }
 
     equals(review: Review): boolean {
-        return this.text === review.text && this.score === review.score && this.writer.equals(review.writer) ;
+        return (
+            this.text === review.text &&
+            this.score === review.score &&
+            this.writer.equals(review.writer)
+        );
     }
 
-    static from(reviewPrisma: any): Review {
+    static from({ id, writer, text, score, recipe }: ReviewPrisma): Review {
         return new Review({
-            id: reviewPrisma.id,
-            writer: reviewPrisma.writer,
-            text: reviewPrisma.text,
-            score: reviewPrisma.score,
-            recipe: reviewPrisma.recipe,
+            id,
+            writer: User.from(writer),
+            text,
+            score,
+            recipe: recipe ? Recipe.from(recipe)
         });
     }
 }
-
-export default { Review };
