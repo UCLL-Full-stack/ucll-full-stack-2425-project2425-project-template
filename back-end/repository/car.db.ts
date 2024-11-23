@@ -1,33 +1,51 @@
 import { Car } from "../model/Car";
+import database from "../util/database";
 
-let cars = [
-    new Car({
-        id: 1,
-        model: "Model S",
-        brand: "Tesla",
-        year: 2020,
-        licensePlate: "ABC123",
-        price: 80000,
-    }),
-]
-const getAllCars = (): Car[] => cars;
-const addCar = (carData: {
-    model: string;
-    brand: string;
-    year: number;
-    licensePlate: string;
-    price: number;
-}): Car => {
-    const newId = cars.length > 0 ? cars.length + 1 : 1;
-    const newCar = new Car({
-        id: newId,
-        ...carData,
-    });
-    cars.push(newCar);
-    return newCar;
+const addCar = async ({model, brand, year, licensePlate, price}:Car): Promise<Car> => {
+    try {
+        const carPrisma = await database.car.create({
+            data: {
+                model,
+                brand,
+                year,
+                licensePlate,
+                price
+            }
+        });
+        return Car.from(carPrisma);
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
-const deleteCarById = (id: number): Car[] => {
-    const newCars = cars.filter((car) => car.getId() !== id);
-    return cars = newCars
+
+const getAllCars = async (): Promise<Car[]> => {
+    try {
+        const carsPrisma = await database.car.findMany();
+        return carsPrisma.map((carPrisma) => Car.from(carPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
-export default {getAllCars, deleteCarById, addCar,};
+
+const deleteCarById = async (id: number): Promise<Car> => {
+    try {
+        const carPrisma = await database.car.delete({
+            where: {
+                id
+            }
+        });
+        return Car.from(carPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default {
+    getAllCars,
+    deleteCarById,
+    addCar,
+};

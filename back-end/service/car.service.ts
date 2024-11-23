@@ -1,16 +1,20 @@
 import carDb from "../repository/car.db";
 import { Car } from "../model/Car";
+import { CarInput } from "../types";
 
-const getAllCars = (): Car[] => carDb.getAllCars();
-const deleteCarById = (id: number): Car[] => carDb.deleteCarById(id);
-const addCar = (carData: {
-    model: string;
-    brand: string;
-    year: number;
-    licensePlate: string;
-    price: number;
-}): Car => {
-    return carDb.addCar(carData);
-};
+const getAllCars = async (): Promise<Car[]> => carDb.getAllCars();
 
-export default {getAllCars, deleteCarById, addCar,};
+const deleteCarById = async (id: number): Promise<Car> => carDb.deleteCarById(id);
+
+const addCar = async ({
+    model,
+    brand,
+    year,
+    licensePlate,
+    price,
+}: CarInput): Promise<Car> => {
+    const car = new Car({ model, brand, year, licensePlate, price });
+    return carDb.addCar(car);
+}
+
+export default {getAllCars, deleteCarById, addCar};

@@ -1,10 +1,11 @@
+import { Car as CarPrisma } from '@prisma/client';
 export class Car {
-    private id?: number;
-    private model: string;
-    private brand: string;
-    private year: number;
-    private licensePlate: string;
-    private price: number;
+    readonly id?: number;
+    readonly model: string;
+    readonly brand: string;
+    readonly year: number;
+    readonly licensePlate: string;
+    readonly price: number;
 
     constructor(car: {
         id?: number;
@@ -20,6 +21,17 @@ export class Car {
         this.year = car.year;
         this.licensePlate = car.licensePlate;
         this.price = car.price;
+    }
+
+    equals({ id, model, brand, year, licensePlate, price }: Car): boolean {
+        return(
+            this.id === id && 
+            this.model === model && 
+            this.brand === brand && 
+            this.year === year && 
+            this.licensePlate === licensePlate && 
+            this.price === price
+        );
     }
 
     getId(): number | undefined {
@@ -44,5 +56,15 @@ export class Car {
 
     getPrice(): number {
         return this.price;
+    }
+
+    static from({ id, model, brand, year, licensePlate, price }: CarPrisma) {
+        return new Car({ 
+            id, 
+            model, 
+            brand, 
+            year, 
+            licensePlate, 
+            price });
     }
 }
