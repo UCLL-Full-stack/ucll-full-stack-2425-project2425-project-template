@@ -1,31 +1,27 @@
-import { Shoppingcart } from "../model/shoppingcart";
-import productService from "../service/product.service";
-import productDb from "./product.db";
+import { PrismaClient } from '@prisma/client';
+import { Shoppingcart } from "../model/shoppingcart";  // Optional if you're using Prisma models directly
 
+const prisma = new PrismaClient();
 
-const shoppingCarts = [
-new Shoppingcart({
-    id: 1,
-    products: [],
-    totalPrice: 0
-})]
-
-const product1 = productDb.getProductById({id: 1});
-const product2 = productDb.getProductById({id: 2});
-
-if(product1){
-    shoppingCarts[0].addProductToShoppingCart(product1);    
-};
-if(product2){
-    shoppingCarts[0].addProductToShoppingCart(product2);
-}
-
-const getShoppingCartById = async ({ id }: { id: number }): Promise<Shoppingcart | undefined> => {
+const getShoppingCartById = async ({ id }: { id: number }): Promise<Shoppingcart | null> => {
     try {
-        return shoppingCarts.find(shoppingCart => shoppingCart.getId() === id) || undefined;
-    }catch(error){
+        const shoppingCart = await prisma.shoppingCart.findUnique({
+            where: {
+                id: id,  
+            },
+            include: {
+                products: true,  
+            },
+        });
+
+        if (!shoppingCart) {
+            return null;  
+        }
+
+        return shoppingCart;  
+    } catch (error) {
         throw new Error('Shoppingcart not found');
     }
-}
+};
 
-export default { getShoppingCartById }
+export default { getShoppingCartById };
