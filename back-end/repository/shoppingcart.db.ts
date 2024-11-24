@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Shoppingcart } from "../model/shoppingcart";  // Optional if you're using Prisma models directly
+import { Shoppingcart } from "../model/shoppingcart"; 
 
 const prisma = new PrismaClient();
 
