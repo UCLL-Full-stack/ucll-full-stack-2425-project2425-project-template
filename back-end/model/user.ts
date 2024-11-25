@@ -1,3 +1,4 @@
+import { UserInput } from '../types';
 import { Account } from './account';
 
 export class User {
@@ -20,6 +21,7 @@ export class User {
         phoneNumber: string;
         email: string;
         password: string;
+        accounts?: Account[];
     }) {
         this.validate(user);
         this.id = user.id;
@@ -30,7 +32,7 @@ export class User {
         this.phoneNumber = user.phoneNumber;
         this.email = user.email;
         this.password = user.password;
-        this.accounts = [];
+        this.accounts = user.accounts || [];
     }
 
     getId(): number | undefined {
@@ -82,7 +84,7 @@ export class User {
         if (!user.nationalRegisterNumber?.trim()) {
             throw new Error('National register number is required.');
         } else if (!this.validateNRN(user.nationalRegisterNumber)) {
-            throw new Error('Nationalregisternumber is not correct.');
+            throw new Error('National register number is not correct.');
         }
 
         // Validate name
@@ -91,9 +93,7 @@ export class User {
         }
 
         // Validate birth date
-        if (!user.birthDate) {
-            throw new Error('Birth date is required.');
-        } else if (user.birthDate > new Date()) {
+        if (user.birthDate > new Date()) {
             throw new Error('Birth date cannot be in the future.');
         }
 
@@ -143,5 +143,34 @@ export class User {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         return emailPattern.test(email);
+    }
+
+    addAccount(account: Account): void {
+        if (this.accounts.find((acc) => acc.getAccountNumber() === account.getAccountNumber())) {
+            throw new Error(
+                `Account with account number ${account.getAccountNumber()} has already been added to this user.`
+            );
+        }
+        this.accounts.push(account);
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            nationalRegisterNumber: this.nationalRegisterNumber,
+            name: this.name,
+            birthDate: this.birthDate,
+            isAdministrator: this.isAdministrator,
+            phoneNumber: this.phoneNumber,
+            email: this.email,
+            accounts: this.accounts.map((account) => account.toJSON()),
+        };
+    }
+
+    update(userInput: Partial<UserInput>) {
+        if (userInput.name) this.name = userInput.name;
+        if (userInput.phoneNumber) this.phoneNumber = userInput.phoneNumber;
+        if (userInput.email) this.email = userInput.email;
+        if (userInput.password) this.password = userInput.password;
     }
 }

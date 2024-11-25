@@ -13,10 +13,11 @@ const user = new User({
     password: 'Password1!',
 });
 
+const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+const sourceAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
+
 test('given: valid values for income, when: creating a income, then: income is created with those values', () => {
     // Given
-    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
-    const sourceAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
     //When
     const income = new Income({
@@ -36,8 +37,6 @@ test('given: valid values for income, when: creating a income, then: income is c
 
 test('given: zero amount for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
-    const sourceAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
     //When
     const createIncome = () => {
@@ -55,8 +54,6 @@ test('given: zero amount for income, when: creating a income, then: an error is 
 
 test('given: negative amount for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
-    const sourceAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
     //When
     const createIncome = () => {
@@ -74,8 +71,6 @@ test('given: negative amount for income, when: creating a income, then: an error
 
 test('given: invalid currency for income, when: creating a income, then: an error is thrown', () => {
     // Given
-    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
-    const sourceAccount = new Account({ isShared: false, type: 'Transaction', users: [user] });
 
     //When
     const createIncome = () => {
@@ -89,4 +84,21 @@ test('given: invalid currency for income, when: creating a income, then: an erro
 
     //Then
     expect(createIncome).toThrow('Currency must be either USD, EUR or GBP.');
+});
+
+test('given: empty source for income, when: creating a income, then: an error is thrown', () => {
+    // Given
+
+    // When
+    const createIncome = () => {
+        new Income({
+            amount: 100,
+            currency: 'EUR',
+            account,
+            source: '',
+        });
+    };
+
+    // Then
+    expect(createIncome).toThrow('Source is required');
 });

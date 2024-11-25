@@ -1,9 +1,11 @@
 import Header from "@/components/header";
+import Footer from "@/components/footer";
 import RegisterForm from "@/components/users/RegisterForm";
 import UserService from "@/services/UserService";
 import { User } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import styles from '@/styles/Home.module.css';
 
 const RegisterUser: React.FC = () => {
     const [user, setUser] = useState<User>({
@@ -38,9 +40,12 @@ const RegisterUser: React.FC = () => {
         <>
             <Head>
                 <title>Register form</title>
+                <meta name="description" content="Personal Finance Tracker app" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon/favicon.ico" />
             </Head>
             <Header />
-            <main>
+            <main className={styles.main}>
                 <h1>Sign up</h1>
                 <section>
                     {user && (
@@ -48,6 +53,7 @@ const RegisterUser: React.FC = () => {
                     )}
                 </section>
             </main>
+            <Footer />
         </>
     );
 };

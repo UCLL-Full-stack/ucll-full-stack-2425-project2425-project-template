@@ -28,7 +28,7 @@ export class Income extends Transaction {
 
     validateIncome(income: { source: string }) {
         if (!income.source?.trim()) {
-            throw new Error('source is required');
+            throw new Error('Source is required');
         }
     }
 }

@@ -9,6 +9,7 @@ type UserInput = {
     phoneNumber: string;
     email: string;
     password: string;
+    accounts?: AccountInput[];
 };
 
 type AccountInput = {
@@ -21,8 +22,6 @@ type AccountInput = {
     status?: string;
     type: string;
     transactions?: TransactionInput[];
-    users: UserInput[];
-    budgetgoals?: BudgetgoalInput[];
 };
 
 type TransactionInput = {
@@ -32,15 +31,6 @@ type TransactionInput = {
     amount: number;
     currency: string;
     type: string;
-    account: AccountInput;
-};
-
-type BudgetgoalInput = {
-    id?: number;
-    name: string;
-    amount: number;
-    startDate: Date;
-    endDate: Date;
     account: AccountInput;
 };
 
@@ -59,7 +49,6 @@ export {
     UserInput,
     AccountInput,
     TransactionInput,
-    BudgetgoalInput,
     AuthenticationRequest,
     AuthenticationResponse,
 };

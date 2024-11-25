@@ -16,7 +16,9 @@ test('given: valid values for account, when: creating a account, then: account i
     // Given
 
     // When
-    const account = new Account({ isShared: false, type: 'Savings', users: [user] });
+    const account = new Account({ isShared: false, type: 'Savings' });
+    user.addAccount(account);
+    account.addUser(user);
 
     // Then
     expect(account.getIsShared()).toEqual(false);
@@ -27,6 +29,7 @@ test('given: valid values for account, when: creating a account, then: account i
     expect(account.getEndDate()).toEqual(null);
     expect(account.getStatus()).toEqual('Active');
     expect(account.getTransactions()).toEqual([]);
+    expect(user.getAccounts()).toEqual([account]);
 });
 
 test('given: true for isShared and one user, when: creating a account, then: error is thrown', () => {
