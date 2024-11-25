@@ -21,3 +21,8 @@ export type EventInput = {
     users: UserInput[],
     isTrending: boolean,
 };
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};
