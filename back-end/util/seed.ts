@@ -79,14 +79,14 @@ async function main() {
   // Seed User-Project Relations
   await database.userProject.create({
     data: {
-      userId: user1.userId,
+      userId: user1.id,
       projectId: project1.project_Id,
     },
   });
 
   await database.userProject.create({
     data: {
-      userId: user2.userId,
+      userId: user2.id,
       projectId: project2.project_Id,
     },
   });
@@ -94,14 +94,14 @@ async function main() {
   // Seed User-Task Relations
   await database.userTask.create({
     data: {
-      userId: user1.userId,
+      userId: user1.id,
       taskId: task1.taskId,
     },
   });
 
   await database.userTask.create({
     data: {
-      userId: user2.userId,
+      userId: user2.id,
       taskId: task2.taskId,
     },
   });

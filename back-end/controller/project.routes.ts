@@ -3,6 +3,12 @@ import projectService from "../service/project.service"
 import { ProjectInput, EnrollmentInput } from "../types/index"; 
 import prisma from '../repository/database';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Projects
+ *   description: Project management
+ */
 export const projectRouter = express.Router();
 
 /**
@@ -34,6 +40,7 @@ export const projectRouter = express.Router();
  * /projects:
  *   get:
  *     summary: Retrieve a list of projects
+ *     tags: [Projects]
  *     responses:
  *       200:
  *         description: A list of projects
@@ -43,6 +50,17 @@ export const projectRouter = express.Router();
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 errorMessage:
+ *                   type: string
  */
 projectRouter.get('/', async (req: Request, res: Response) => {
     try {
@@ -58,6 +76,7 @@ projectRouter.get('/', async (req: Request, res: Response) => {
  * /projects:
  *   post:
  *     summary: Create a new project
+ *     tags: [Projects]
  *     requestBody:
  *       required: true
  *       content:
@@ -71,6 +90,17 @@ projectRouter.get('/', async (req: Request, res: Response) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 errorMessage:
+ *                   type: string
  */
 projectRouter.post('/', async (req: Request, res: Response) => {
     try {

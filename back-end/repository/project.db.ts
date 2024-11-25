@@ -72,7 +72,7 @@ const addUserToProject = async (projectId: number, userId: number) => {
 
       // Fetch the user
       const user = await database.user.findUnique({
-          where: { userId: userId }
+          where: {id: userId }
       });
 
       if (!user) {
@@ -86,7 +86,7 @@ const addUserToProject = async (projectId: number, userId: number) => {
               users: {
                   create: {
                       user: {
-                          connect: { userId: userId }
+                          connect: { id: userId }
                       }
                   }
               }

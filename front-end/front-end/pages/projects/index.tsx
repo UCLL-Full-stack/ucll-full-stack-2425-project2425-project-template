@@ -5,10 +5,12 @@ import ProjectService from '@/services/ProjectService';
 import ProjectOverviewTable from '../../components/projects/ProjectOverviewTable';
 import ProjectDetails from '@/components/projects/ProjectDetails';
 import { Project } from '@types';
+import NewProjectForm from '@/components/projects/NewProjectForm';
 
 const IndexPage: React.FC = () => {
     const [projects, setProjects] = useState<Array<Project>>([]);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [showNewProjectForm, setShowNewProjectForm] = useState(false);
 
     const getProjects = async () => {
         try {
@@ -24,6 +26,15 @@ const IndexPage: React.FC = () => {
         getProjects();
     }, []);
 
+    const handleCreateProjectClick = () => {
+        setShowNewProjectForm(true);
+    };
+
+    const handleProjectCreated = (newProject: Project) => {
+        setProjects((prevProjects) => [...prevProjects, newProject]);
+        setShowNewProjectForm(false);
+    };
+
     return (
         <>
             <Head>
@@ -34,9 +45,20 @@ const IndexPage: React.FC = () => {
             <main className="d-flex flex-column justify-content-center align-items-center">
                 <h1 className="text-2xl font-bold mb-8">Projects</h1>
                 <section>
-                    <h2>Projects overview</h2>
+                    <div className="flex justify-center">
+                        <button
+                            className="text-white bg-blue-500 px-4 py-2 rounded-md shadow hover:bg-blue-600"
+                            onClick={handleCreateProjectClick}
+                        >
+                            + Create Project
+                        </button>
+                    </div>
+                    {showNewProjectForm && <NewProjectForm onProjectCreated={handleProjectCreated} />}
                     {projects.length > 0 ? (
-                        <ProjectOverviewTable projects={projects} selectProject={setSelectedProject} />
+                        <ProjectOverviewTable 
+                            projects={projects} 
+                            selectProject={setSelectedProject} 
+                        />
                     ) : (
                         <p>No projects...</p>
                     )}
