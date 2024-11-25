@@ -2,11 +2,11 @@ import React from 'react';
 import { User } from '@/types';
 import styles from '@/styles/Home.module.css';
 
-type AccountDetailsProps = {
+type AccountOverviewProps = {
   user: User;
 };
 
-const AccountDetails: React.FC<AccountDetailsProps> = ({ user }) => {
+const AccountOverview: React.FC<AccountOverviewProps> = ({ user }) => {
   return (
     <div className={styles.accountOverview}>
       <table>
@@ -34,7 +34,7 @@ const AccountDetails: React.FC<AccountDetailsProps> = ({ user }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={6}>No accounts available.</td>
+              <td colSpan={6}>You currently do not have any accounts.</td>
             </tr>
           )}
         </tbody>
@@ -43,4 +43,4 @@ const AccountDetails: React.FC<AccountDetailsProps> = ({ user }) => {
   );
 };
 
-export default AccountDetails;
+export default AccountOverview;
