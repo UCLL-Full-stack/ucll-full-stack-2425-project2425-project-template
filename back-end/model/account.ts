@@ -3,16 +3,16 @@ import { User } from './user';
 import { Transaction } from './transaction';
 
 export class Account {
-    public id?: number;
-    public accountNumber: string;
-    public balance: number;
-    public isShared: boolean;
-    public startDate: Date;
-    public endDate: Date | null;
-    public status: string;
-    public type: string;
-    public transactions: Transaction[];
-    public users: User[];
+    private id?: number;
+    private accountNumber: string;
+    private balance: number;
+    private isShared: boolean;
+    private startDate: Date;
+    private endDate: Date | null;
+    private status: string;
+    private type: string;
+    private transactions: Transaction[];
+    private users: User[];
 
     constructor(account: {
         id?: number;
@@ -126,6 +126,10 @@ export class Account {
         }
         this.users.push(user);
     }
+
+    // addTransaction(transaction: Transaction): void {
+        
+    // }
 
     toJSON() {
         return {

@@ -21,11 +21,11 @@ model User {
 
 model Account {
     id              Int             @id @default(autoincrement())
-    accountNumber   Int             @unique
+    accountNumber   String          @unique
     balance         Float
     isShared        Boolean
     startDate       DateTime    
-    endDate         DateTime
+    endDate         DateTime?
     status          String
     type            String
     transactions    Transaction[]

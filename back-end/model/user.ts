@@ -3,15 +3,15 @@ import { UserInput } from '../types';
 import { Account } from './account';
 
 export class User {
-    public id?: number;
-    public nationalRegisterNumber: string;
-    public name: string;
-    public birthDate: Date;
-    public isAdministrator: boolean;
-    public phoneNumber: string;
-    public email: string;
-    public password: string;
-    public accounts: Account[];
+    private id?: number;
+    private nationalRegisterNumber: string;
+    private name: string;
+    private birthDate: Date;
+    private isAdministrator: boolean;
+    private phoneNumber: string;
+    private email: string;
+    private password: string;
+    private accounts: Account[];
 
     constructor(user: {
         id?: number;

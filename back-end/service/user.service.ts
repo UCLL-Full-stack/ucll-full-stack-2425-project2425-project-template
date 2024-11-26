@@ -3,34 +3,32 @@ import { User } from '../model/user';
 import { UserInput } from '../types/index';
 import accountService from './account.service';
 
-const createUser = ({
-    nationalRegisterNumber,
-    name,
-    birthDate,
-    isAdministrator,
-    phoneNumber,
-    email,
-    password,
-}: UserInput): User => {
-    const existingUser = userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
-    if (existingUser) {
+const createUser = async (userInput: UserInput): Promise<User> => {
+    const existingUser = await userDb.getUserByNationalRegisterNumber(userInput.email);
+    
+    if (existingUser == null) {
         throw new Error(
-            `User with national register number ${nationalRegisterNumber} already exists.`
+            `User with national register number ${userInput.nationalRegisterNumber} already exists.`
         );
     }
-    const user = new User({
-        nationalRegisterNumber,
-        name,
-        birthDate,
-        isAdministrator,
-        phoneNumber,
-        email,
-        password,
+
+    // const hashedPasswd = await bcrypt.hash(userInput.password, 12);
+
+    const newUser = new User({
+        nationalRegisterNumber: userInput.nationalRegisterNumber,
+        name: userInput.name,
+        birthDate: userInput.birthDate,
+        isAdministrator: userInput.isAdministrator,
+        phoneNumber: userInput.phoneNumber,
+        email: userInput.email,
+        password: userInput.password,
     });
-    return userDb.createUser(user);
+
+    return await userDb.createUser(newUser);
 };
 
-const getUserByEmailAndPassword = (email: string, password: string): User | undefined => {
+// Dit word authenticate functie
+const getUserByEmailAndPassword = async (email: string, password: string): User | undefined => {
     const user = userDb.getUserByEmailAndPassword(email, password);
     if (!user) {
         throw new Error('Invalid email or password.');
@@ -38,60 +36,67 @@ const getUserByEmailAndPassword = (email: string, password: string): User | unde
     return user;
 };
 
-const getUserByEmail = (email: string): User | undefined => {
-    const user = userDb.getUserByEmail(email);
-    if (!user) {
+const getUserByEmail = async (email: string): Promise<User> => {
+    const user = await userDb.getUserByEmail(email);
+    
+    if (user == null) {
         throw new Error(`User with email ${email} not found.`);
     }
+
     return user;
 };
 
-const getUserByNationalRegisterNumber = (nationalRegisterNumber: string): User | undefined => {
-    const user = userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
-    if (!user) {
+const getUserByNationalRegisterNumber = async (nationalRegisterNumber: string): Promise<User> => {
+    const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+    
+    if (user == null) {
         throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
     }
+    
     return user;
 };
 
 const addAccount = (nationalRegisterNumber: string, accountNumber: string): User => {
     const user = getUserByNationalRegisterNumber(nationalRegisterNumber);
     const account = accountService.getAccountByAccountNumber(accountNumber);
+  
     if (!user) {
         throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
     }
     if (!account) {
         throw new Error(`Account with account number ${accountNumber} not found.`);
     }
+  
     user.addAccount(account);
     account.addUser(user);
+  
     return user;
 };
 
-const updateUser = async (
-    nationalRegisterNumber: string,
-    userInput: Partial<UserInput>
-): Promise<User> => {
-    const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
-    if (!user) {
-        throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
+const updateUser = async (updatedUser: UserInput): Promise<User> => {
+    const user = await userDb.getUserByEmail(updatedUser.email);
+    
+    if (user == null) {
+        throw new Error(`User with national register number ${updatedUser.nationalRegisterNumber} not found.`);
     }
-    user.update(userInput);
-    await userDb.updateUser(user);
-    return user;
+
+    return await userDb.updateUser(user);
 };
 
-const deleteUser = async (nationalRegisterNumber: string): Promise<String> => {
+const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
     const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
-    if (!user) {
+    
+    if (user == null) {
         throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
     } else if (user.getAccounts().length > 0) {
         throw new Error(
             `User with national register number ${nationalRegisterNumber} still has active bank accounts.` // need to change when account status is implemented
         );
     }
-    await userDb.deleteUser(nationalRegisterNumber);
-    return 'User deleted successfully.';
+
+    // await userDb.deleteUser(nationalRegisterNumber);
+    // return 'User deleted successfully.';
+    return await userDb.deleteUser(nationalRegisterNumber);
 };
 
 export default {
