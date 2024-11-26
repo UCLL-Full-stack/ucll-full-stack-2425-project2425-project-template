@@ -8,71 +8,75 @@ datasource db {
 }
 
 model User {
-    id          Int     @id @default(autoincrement())
-    username    String  @unique
+    id          Int         @id @default(autoincrement())
+    username    String      @unique
     password    String
-    races       Race[]
-    submissions Submission_form[]
-}
-
-model Admin {
-    id          Int     @id @default(autoincrement())
-    username    String  @unique
-    password    String
-    races       Race[]
-
-}
-
-model Crash {
-    id          Int     @id @default(autoincrement())
-    type        String
-    description String
-    casualties  Int
-    deaths      Int
-
-    Driver Driver[] @relation(map: "Driver_crash_fkey")
-}
-
-model Driver {
-    id          Int     @id @default(autoincrement())
     name        String
-    team        String
-    descritpion String
-    racecar     Racecar @relation(fields: [racecarId], references: [id], map: "Driver_racecar_fkey")
-    racecarId   Int
-    crash       Crash @relation(fields: [crashId], references: [id], map: "Driver_crash_fkey")
-    crashId     Int
-    race        Race @relation(fields: [raceId], references: [id])
-    raceId      Int
+    surname     String
+    email       String      @unique
+    permission  String      @default("GUEST")
+    createdAt   DateTime    @default(now())
+    submissions Submission[]
+}
+
+model Submission {
+    id          Int         @id @default(autoincrement())
+    title       String
+    content     String
+    type        String
+    isSolved    Boolean     @default(false)
+    createdAt   DateTime    @default(now())
+    solvedAt    DateTime?
+    user        User        @relation(fields: [userId], references: [id])
+    userId      Int
 }
 
 model Racecar {
-    id          Int     @id @default(autoincrement())
-    car_name    String
+    id          Int         @id @default(autoincrement())
+    name        String
     type        String
-    description String
+    brand       String
     hp          Int
-
-    drivers     Driver[]
+    participation Participant[]
 }
 
-model Submission_form {
-    id          Int     @id @default(autoincrement())
-    title       String
-    content     String
-    user        User @relation(fields: [UserId], references: [id], map: "User_fkey")
-    UserId      Int
-    races        Race[]
+model Driver {
+    id          Int         @id @default(autoincrement())
+    name        String
+    surname     String
+    birthdate   DateTime
+    team        String
+    country     String
+    description String
+    participation Participant[]
+}
+
+model Participant {
+    id          Int         @id @default(autoincrement())
+    racecar     Racecar     @relation(fields: [racecarId], references: [id])
+    racecarId   Int
+    driver      Driver      @relation(fields: [driverId], references: [id])
+    driverId    Int         
+    crashes     Crash[]
+}
+
+model Crash {
+    id              Int             @id @default(autoincrement())
+    type            String
+    description     String
+    casualties      Int
+    deaths          Int
+    participants    Participant[]
+    race            Race    @relation(fields: [raceId], references: [id])
+    raceId          Int
 }
 
 model Race {
-    id          Int     @id @default(autoincrement())
+    id          Int         @id @default(autoincrement())
     name        String
     type        String
     description String
     location    String
-    drivers      Driver[]
-    users        User[]
-    admin       Admin[]
-    submission_forms Submission_form[]
+    date        DateTime
+    crashes     Crash[]
 }

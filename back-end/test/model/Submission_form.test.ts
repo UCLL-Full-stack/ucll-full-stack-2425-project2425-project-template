@@ -1,5 +1,5 @@
 import { SubmissionForm } from '../../model/submission_form';
-import { Gebruiker } from '../../model/gebruiker';
+import { Gebruiker } from '../../model/user';
 import { Race } from '../../model/race';
 import { Admin } from '../../model/admin';
 import { Driver } from '../../model/driver';

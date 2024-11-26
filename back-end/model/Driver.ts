@@ -1,45 +1,44 @@
-import { Racecar } from './racecar';
-import { Crash } from './crash';
+import { Driver as DriverPrisma } from '@prisma/client';
 
 export class Driver {
     private id?: number;
     private name: string;
+    private surname: string;
+    private birthdate: Date;
     private team: string;
+    private country: string;
     private description: string;
-    private age: number;
-    private racecar: Racecar;
-    private crash: Crash;
 
-    constructor(driver: { name: string, team: string, description: string, age: number, racecar: Racecar, crash: Crash, id?: number }) {
+    constructor(driver: { name: string, surname: string, birthdate: Date, team: string, country: string, description: string, id?: number }) {
         this.validate(driver);
 
         this.name = driver.name;
+        this.surname = driver.surname;
+        this.birthdate = driver.birthdate;
         this.team = driver.team;
+        this.country = driver.country;
         this.description = driver.description;
-        this.age = driver.age;
-        this.racecar = driver.racecar;
-        this.crash = driver.crash;
         if (driver.id) this.id = driver.id;
     }
 
-    private validate(driver: { name: string, team: string, description: string, age: number, racecar: Racecar, crash: Crash, id?: number }): void {
+    private validate(driver: { name: string, surname: string, birthdate: Date, team: string, country: string, description: string, id?: number }): void {
         if (!driver.name) {
             throw new Error('Name is required');
+        }
+        if (!driver.surname) {
+            throw new Error('Surname is required');
+        }
+        if (!driver.birthdate) {
+            throw new Error('Birthdate is required');
         }
         if (!driver.team) {
             throw new Error('Team is required');
         }
+        if (!driver.country) {
+            throw new Error('Country is required');
+        }
         if (!driver.description) {
             throw new Error('Description is required');
-        }
-        if (driver.age === undefined) {
-            throw new Error('Age is required');
-        }
-        if (!driver.racecar) {
-            throw new Error('Racecar is required');
-        }
-        if (!driver.crash) {
-            throw new Error('Crash is required');
         }
     }
 
@@ -51,35 +50,55 @@ export class Driver {
         return this.name;
     }
 
+    getSurname(): string {
+        return this.surname;
+    }
+
+    getBirthdate(): Date {
+        return this.birthdate;
+    }
+
     getTeam(): string {
         return this.team;
+    }
+
+    getCountry(): string {
+        return this.country;
     }
 
     getDescription(): string {
         return this.description;
     }
 
-    getAge(): number {
-        return this.age;
-    }
-
-    getRacecar(): Racecar {
-        return this.racecar;
-    }
-
-    getCrash(): Crash {
-        return this.crash;
-    }
-
     equals(other: Driver): boolean {
         return (
-            this.id === other.getId() &&
-            this.name === other.getName() &&
-            this.team === other.getTeam() &&
-            this.description === other.getDescription() &&
-            this.age === other.getAge() &&
-            this.racecar === other.getRacecar() &&
-            this.crash === other.getCrash()
+            this.id === other.id &&
+            this.name === other.name &&
+            this.surname === other.surname &&
+            this.birthdate === other.birthdate &&
+            this.team === other.team &&
+            this.country === other.country &&
+            this.description === other.description
         );
+    }
+
+    static from({
+        id,
+        name,
+        surname,
+        birthdate,
+        team,
+        country,
+        description
+    }: DriverPrisma) {
+        return new Driver({
+            id,
+            name,
+            surname,
+            birthdate,
+            team,
+            country,
+            description
+        });
     }
 }

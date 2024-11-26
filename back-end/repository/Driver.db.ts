@@ -1,58 +1,49 @@
 import { Driver } from '../model/driver';
 import { Racecar } from '../model/racecar';
 import { Crash } from '../model/crash';
+import database from '../util/database';
+import { dir } from 'console';
 
-const drivers = [
-    new Driver({
-        id: 1,
-        name: 'Lewis Hamilton',
-        team: 'Mercedes',
-        description: 'A skilled driver',
-        age: 36,
-        racecar: new Racecar({
-            car_name: 'Mercedes W12',
-            type: 'Formula 1',
-            description: 'A fast racecar',
-            hp: 1000
-        }),
-        crash: new Crash({
-            type: 'Collision',
-            description: 'A severe crash',
-            casualties: 5,
-            deaths: 2
-        })
-    }),
-    new Driver({
-        id: 2,
-        name: 'Max Verstappen',
-        team: 'Red Bull',
-        description: 'A competitive driver',
-        age: 24,
-        racecar: new Racecar({
-            car_name: 'Red Bull RB16B',
-            type: 'Formula 1',
-            description: 'A powerful racecar',
-            hp: 1050
-        }),
-        crash: new Crash({
-            type: 'Collision',
-            description: 'A minor crash',
-            casualties: 0,
-            deaths: 0
-        })
-    }),
-];
-
-const getAllDrivers = (): Driver[] => {
-    return drivers;
+const getAllDrivers = async ():Promise<Driver[] | null> => {
+    try {
+        const driversPrisma = await database.driver.findMany();
+        return driversPrisma.map((driversPrisma) => Driver.from(driversPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
 }
 
-const getDriverById = (id: number): Driver | undefined | null => {
-    return drivers.find(driver => driver.getId() === id) || null;
+const getDriverById = async ({ driver_id }: { driver_id: number}): Promise<Driver | null> => {
+    try {
+        const driverPrisma = await database.driver.findFirst({
+        where: { id: driver_id },
+      });
+      return driverPrisma ? Driver.from(driverPrisma) : null;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Database error. See server logs for details.');
+    }
 }
 
-const createDriver = (driver: Driver): void => {
-    drivers.push(driver);
-};
+const createDriver = async ({ driver }: { driver: Driver }): Promise<Driver | null> => {
+    try {
+        const driverPrisma = await database.driver.create({
+            data: {
+                name: driver.getName(),
+                surname: driver.getSurname(),
+                birthdate: driver.getBirthdate(),
+                team: driver.getTeam(),
+                country: driver.getCountry(),
+                description: driver.getDescription(),
+            },
+        });
+
+        return Driver.from(driverPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
+}
 
 export default { getAllDrivers, createDriver, getDriverById };

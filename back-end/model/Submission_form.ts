@@ -1,4 +1,4 @@
-import { Gebruiker } from './gebruiker';
+import { Gebruiker } from './user';
 import { Race } from './race';
 
 export class SubmissionForm {
