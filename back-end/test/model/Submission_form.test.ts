@@ -1,4 +1,4 @@
-import { SubmissionForm } from '../../model/submission_form';
+import { SubmissionForm } from '../../model/submission';
 import { Gebruiker } from '../../model/user';
 import { Race } from '../../model/race';
 import { Admin } from '../../model/admin';

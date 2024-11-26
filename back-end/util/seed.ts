@@ -172,7 +172,6 @@ const main = async () => {
             title: 'Race Application 1',
             content: 'This is the first race application form.',
             type: 'Formula 1',
-            isSolved: false,
             createdAt: new Date(),
             user: {
                 connect: { id: 1 }
@@ -185,7 +184,6 @@ const main = async () => {
             title: 'Race Application 3',
             content: 'This is the third race application form.',
             type: 'Formula 1',
-            isSolved: false,
             createdAt: new Date(),
             user: {
                 connect: { id: 1 }
@@ -198,7 +196,6 @@ const main = async () => {
             title: 'Add max verstappen',
             content: 'he crashed at turn 3 on the 12th of may 2021. Some other info here',
             type: 'Crash',
-            isSolved: true,
             createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
             solvedAt: new Date(),
             user: {

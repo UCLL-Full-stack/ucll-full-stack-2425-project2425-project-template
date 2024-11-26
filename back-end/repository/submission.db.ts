@@ -1,4 +1,4 @@
-import { SubmissionForm } from '../model/submission_form';
+import { SubmissionForm } from '../model/submission';
 import { Race } from '../model/race';
 import { Driver } from '../model/driver';
 import { Crash } from '../model/crash';

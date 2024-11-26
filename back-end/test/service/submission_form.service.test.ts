@@ -1,6 +1,6 @@
 import submissionFormService from '../../service/submission_form.service';
 import submissionFormDb from '../../repository/submission.db';
-import { SubmissionForm } from '../../model/submission_form';
+import { SubmissionForm } from '../../model/submission';
 import { Gebruiker } from '../../model/user';
 import { Race } from '../../model/race';
 import { Driver } from '../../model/driver';

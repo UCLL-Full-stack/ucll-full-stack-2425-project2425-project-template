@@ -18,7 +18,6 @@ CREATE TABLE "Submission" (
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "isSolved" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "solvedAt" TIMESTAMP(3),
     "userId" INTEGER NOT NULL,

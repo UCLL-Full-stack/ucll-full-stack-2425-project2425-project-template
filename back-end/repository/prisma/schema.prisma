@@ -24,7 +24,6 @@ model Submission {
     title       String
     content     String
     type        String
-    isSolved    Boolean     @default(false)
     createdAt   DateTime    @default(now())
     solvedAt    DateTime?
     user        User        @relation(fields: [userId], references: [id])
