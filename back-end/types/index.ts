@@ -1,4 +1,4 @@
-type TransactionType = 'expense' | 'income';
+type TransactionType = 'Expense' | 'Income';
 
 type UserInput = {
     id?: number;

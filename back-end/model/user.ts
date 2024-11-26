@@ -1,3 +1,4 @@
+import { User as UserPrisma, Account as AccountPrisma } from '@prisma/client';
 import { UserInput } from '../types';
 import { Account } from './account';
 
@@ -172,5 +173,29 @@ export class User {
         if (userInput.phoneNumber) this.phoneNumber = userInput.phoneNumber;
         if (userInput.email) this.email = userInput.email;
         if (userInput.password) this.password = userInput.password;
+    }
+
+    static from ({
+        id,
+        nationalRegisterNumber,
+        name,
+        birthDate,
+        isAdministrator,
+        phoneNumber,
+        email,
+        password,
+        accounts,
+    }: UserPrisma & {accounts: AccountPrisma[]}) {
+        return new User({
+            id,
+            nationalRegisterNumber,
+            name,
+            birthDate,
+            isAdministrator,
+            phoneNumber,
+            email,
+            password,
+            accounts: accounts.map((account) => Account.from(account)),
+        });
     }
 }

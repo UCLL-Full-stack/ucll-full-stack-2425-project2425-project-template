@@ -1,3 +1,4 @@
+import { Account as AccountPrisma } from '@prisma/client';
 import { User } from './user';
 import { Transaction } from './transaction';
 
@@ -17,7 +18,7 @@ export class Account {
         id?: number;
         isShared: boolean;
         type: string;
-        users?: User[];
+        // users?: User[];
         balance?: number;
         startDate?: Date;
         endDate?: Date | null;
@@ -34,7 +35,7 @@ export class Account {
         this.endDate = account.endDate || null;
         this.status = account.status || 'Active';
         this.transactions = [];
-        this.users = account.users || [];
+        this.users = [];
     }
 
     getId(): number | undefined {
@@ -139,4 +140,26 @@ export class Account {
             transactions: this.transactions,
         };
     }
+
+    
+    static from({
+        id,
+        balance,
+        isShared,
+        startDate,
+        endDate,
+        status,
+        type,
+    }: AccountPrisma) {
+        return new Account({
+            id,
+            balance,
+            isShared,
+            startDate,
+            endDate,
+            status,
+            type
+        });
+    }
 }
+

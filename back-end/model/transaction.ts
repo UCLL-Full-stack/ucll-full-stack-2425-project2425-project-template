@@ -1,6 +1,6 @@
+import { Account as AccountPrisma, Transaction as TransactionPrisma }
 import { Account } from './account';
 import { TransactionType } from '../types';
-
 export abstract class Transaction {
     private id?: number;
     private referenceNumber: string;
@@ -71,7 +71,7 @@ export abstract class Transaction {
         ) {
             throw new Error('Currency must be either USD, EUR or GBP.');
         }
-        if (transaction.transactionType !== 'income' && transaction.transactionType !== 'expense') {
+        if (transaction.transactionType !== 'Income' && transaction.transactionType !== 'Expense') {
             throw new Error('Type must be either income or expense.');
         }
     }

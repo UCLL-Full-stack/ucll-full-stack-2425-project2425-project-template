@@ -1,5 +1,6 @@
 import { Transaction } from './transaction';
 import { Account } from './account';
+import { TransactionType } from '../types';
 
 export class Expense extends Transaction {
     private destination: string;
@@ -14,7 +15,7 @@ export class Expense extends Transaction {
         super({
             amount: expense.amount,
             currency: expense.currency,
-            transactionType: 'expense',
+            transactionType: 'Expense' as TransactionType,
             account: expense.account,
             id: expense.id,
         });
@@ -30,5 +31,27 @@ export class Expense extends Transaction {
         if (!expense.destination?.trim()) {
             throw new Error('Destination is required');
         }
+    }
+
+    static from({
+        id,
+        amount,
+        currency,
+        destination,
+        account,
+    }: {
+        id?: number;
+        amount: number;
+        currency: string;
+        destination: string;
+        account: Account;
+    }) {
+        return new Expense({
+            id,
+            amount,
+            currency,
+            destination,
+            account,
+        });
     }
 }
