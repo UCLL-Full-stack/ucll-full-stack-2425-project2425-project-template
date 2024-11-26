@@ -1,0 +1,16 @@
+.p {
+  text-align: center;
+}
+.button {
+  background: radial-gradient(
+    circle,
+    rgba(112, 225, 245, 1) 0%,
+    rgba(255, 209, 149, 1) 100%
+  );
+  color: rgb(255, 255, 255);
+  border: white;
+  border-radius: 5px;
+}
+.title {
+  text-align: center;
+}
