@@ -23,6 +23,7 @@ const getAllGuilds = async(): Promise<Guild[]> => {
             const guild = Guild.from(guildPrisma);
             guild.setRoleIds(roleIds);
             guild.setBoardIds(boardIds);
+            guild.setGuildOwnerId(guildPrisma.guildOwnerId);
             return guild;
         });
     } catch (error) {
@@ -52,12 +53,14 @@ const getGuildById = async (guildId: string): Promise<Guild> => {
     const guild = Guild.from(guildPrisma);
     guild.setRoleIds(roleIds);
     guild.setBoardIds(boardIds);
+    guild.setGuildOwnerId(guildPrisma.guildOwnerId);
     return guild;
 };
 
 const addGuild = async (guildData: {
     guildId: string;
     guildName: string;
+    guildOwnerId: string;
     settings?: PermissionEntry[];
     roleIds?: string[];
     members?: Member[];
@@ -68,6 +71,7 @@ const addGuild = async (guildData: {
         const {
             guildId,
             guildName,
+            guildOwnerId,
             settings = [],
             roleIds = [],
             members = [],
@@ -82,6 +86,7 @@ const addGuild = async (guildData: {
             data: {
             guildId,
             guildName,
+            guildOwnerId,
             settings: settingsJson,
             roles: {
                 connect: roleIds.map((roleId) => ({ roleId })),
@@ -120,6 +125,7 @@ const addGuild = async (guildData: {
   
 const updateGuild = async (guildId: string, updateData: {
     guildName?: string;
+    guildOwnerId?: string;
     settings?: PermissionEntry[];
     roleIds?: string[];
     members?: Member[];
@@ -127,9 +133,10 @@ const updateGuild = async (guildId: string, updateData: {
     boardIds?: string[];
 }): Promise<Guild> => {
     try {
-        const { guildName, settings, roleIds, members, userIds, boardIds } = updateData;
+        const { guildName, guildOwnerId, settings, roleIds, members, userIds, boardIds } = updateData;
         const data: any = {};
         if (guildName !== undefined) data.guildName = guildName;
+        if (guildOwnerId !== undefined) data.guildOwnerId = guildOwnerId;
         if (settings !== undefined) data.settings = JSON.stringify(settings);
         if (roleIds !== undefined) {
             data.roles = {
@@ -172,6 +179,7 @@ const updateGuild = async (guildId: string, updateData: {
         const updatedGuild = Guild.from(updatedGuildPrisma);
         updatedGuild.setRoleIds(roleIdsResult);
         updatedGuild.setBoardIds(boardIdsResult);
+        updatedGuild.setGuildOwnerId(updatedGuildPrisma.guildOwnerId);
         return updatedGuild;
     } catch (error) {
         console.error(error);

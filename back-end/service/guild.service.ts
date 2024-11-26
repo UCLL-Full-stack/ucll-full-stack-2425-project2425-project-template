@@ -12,7 +12,7 @@ const getGuildById = async (guildId: string): Promise<Guild> => {
 }
 
 const addGuild = async (guildData: CreateGuildInput): Promise<Guild> => {
-    const { guildId, guildName, settings = [], roleIds = [], members = [], userIds = [], boardIds = [] } = guildData;
+    const { guildId, guildName, guildOwnerId, settings = [], roleIds = [], members = [], userIds = [], boardIds = [] } = guildData;
     let updatedSettings = settings;
 
     if (settings.length === 0) {

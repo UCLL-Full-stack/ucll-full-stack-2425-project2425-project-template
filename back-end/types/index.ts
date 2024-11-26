@@ -103,6 +103,7 @@ export interface UpdateUserInput {
 export interface CreateGuildInput {
     guildId: string;
     guildName: string;
+    guildOwnerId: string;
     settings: PermissionEntry[];
     roleIds?: string[];
     userIds?: string[];

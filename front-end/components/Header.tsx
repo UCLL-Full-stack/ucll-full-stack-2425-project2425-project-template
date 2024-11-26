@@ -17,9 +17,13 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick }) => {
         window.location.reload();
     };
 
+    const handleRefresh = () => {
+        window.location.reload();
+    };
+
     return (
         <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
-            <div className='flex items-center'>
+            <div className='flex items-center' onClick={handleRefresh}>
                 <img src="/images/kanbancord.png" alt="KanbanCord" className="w-12 h-12 mr-2" />
                 <h1 className="text-2xl font-bold">KanbanCord</h1>
             </div>

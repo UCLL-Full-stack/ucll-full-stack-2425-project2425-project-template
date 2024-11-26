@@ -15,16 +15,19 @@ model User {
     guilds     Guild[] @relation("UserGuilds")
     boards     Board[]
     tasks      Task[]
+    guildOwner Guild[]
 }
 
 model Guild {
-    guildId   String  @id
-    guildName String
-    settings  Json
-    roles     Role[]
-    members   Json
-    users     User[]  @relation("UserGuilds")
-    boards    Board[]
+    guildId      String  @id
+    guildName    String
+    guildOwner   User    @relation(fields: [guildOwnerId], references: [userId])
+    guildOwnerId String
+    settings     Json
+    roles        Role[]
+    members      Json
+    users        User[]  @relation("UserGuilds")
+    boards       Board[]
 }
 
 model Role {
