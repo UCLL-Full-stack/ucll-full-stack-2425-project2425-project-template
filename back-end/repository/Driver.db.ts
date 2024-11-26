@@ -1,8 +1,5 @@
 import { Driver } from '../model/driver';
-import { Racecar } from '../model/racecar';
-import { Crash } from '../model/crash';
 import database from '../util/database';
-import { dir } from 'console';
 
 const getAllDrivers = async ():Promise<Driver[] | null> => {
     try {

@@ -1,5 +1,6 @@
-import { User as UserPrisma } from '@prisma/client';
+import { User as UserPrisma, Submission as SubmissionPrisma } from '@prisma/client';
 import { Permission } from '../types'
+import { Submission } from './submission';
 
 export class User {
     private _id?: number | undefined;
@@ -10,8 +11,9 @@ export class User {
     private email: string;
     private permission: Permission;
     private createdAt: Date;
+    private submissions?: Submission[];
 
-    constructor(user: { id?: number, username: string, name: string, surname: string, email: string, password: string, permission: Permission, createdAt: Date }) {
+    constructor(user: { id?: number, username: string, name: string, surname: string, email: string, password: string, permission: Permission, submissions?: Submission[], createdAt: Date }) {
         this.validate(user);
         
         this.id = user.id;
@@ -22,6 +24,8 @@ export class User {
         this.email = user.email;
         this.permission = user.permission;
         this.createdAt = user.createdAt
+        if (user.submissions) this.submissions = user.submissions;
+        else this.submissions = [];
     }
 
     public get id(): number | undefined {
@@ -63,6 +67,10 @@ export class User {
         return this.createdAt;
     }
 
+    getSubmissions(): Submission[] | undefined {
+        return this.submissions;
+    }
+
     validate(user: { 
         username: string, 
         password: string, 
@@ -92,7 +100,7 @@ export class User {
         }
     }
 
-    equals({ id, username, password, name, surname, email, permission, createdAt }: { id?: number, username: string, password: string, name: string, surname: string, email: string, permission: Permission, createdAt: Date }): boolean {
+    equals({ id, username, password, name, surname, email, permission, createdAt, submissions }: { id?: number, username: string, password: string, name: string, surname: string, email: string, permission: Permission, createdAt: Date, submissions?: Submission[] }): boolean {
         return (
             id === this.getId() &&
             username === this.getUsername() &&
@@ -101,11 +109,23 @@ export class User {
             surname === this.getSurname() &&
             email === this.getEmail() &&
             permission === this.getPermission() &&
-            createdAt === this.getCreatedAt()
+            createdAt === this.getCreatedAt() &&
+            submissions === this.getSubmissions()
         );
     }
 
-    static from({ id, username, password, name, surname, email, permission, createdAt }: UserPrisma) {
+    static from({ 
+        id, 
+        username, 
+        password, 
+        name, surname, 
+        email, 
+        permission, 
+        createdAt, 
+        submissions,
+    }: UserPrisma & {
+        submissions?: SubmissionPrisma[];
+    }) {
         return new User({
             id,
             username,
@@ -114,7 +134,8 @@ export class User {
             surname,
             email,
             permission: permission as Permission,
-            createdAt
+            createdAt,
+            submissions: submissions?.map(submission => Submission.from(submission))
         });
     }
 }

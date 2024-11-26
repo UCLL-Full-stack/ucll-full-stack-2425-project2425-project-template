@@ -9,7 +9,7 @@ export class Crash {
     private deaths: number;
     private participants: Participant[];
 
-    constructor(crash: { type: string, description: string, casualties: number, deaths: number, participants: Participant[], id?: number }) {
+    constructor(crash: { type: string, description: string, casualties: number, deaths: number, participants?: Participant[], id?: number }) {
         this.validate(crash);
         this.type = crash.type;
         this.description = crash.description;
@@ -40,11 +40,11 @@ export class Crash {
         return this.deaths;
     }
 
-    getParticipants(): Participant[] {
+    getParticipants(): Participant[] | undefined {
         return this.participants;
     }
 
-    private validate(crash: { type: string, description: string, casualties: number, deaths: number, participants: Participant[], id?: number }): void {
+    private validate(crash: { type: string, description: string, casualties: number, deaths: number, id?: number }): void {
         if (!crash.type) {
             throw new Error('Type is required');
         }
@@ -56,9 +56,6 @@ export class Crash {
         }
         if (crash.deaths === undefined) {
             throw new Error('Deaths are required');
-        }
-        if (!crash.participants) {
-            throw new Error('Participants are required');
         }
     }
 

@@ -1,34 +1,98 @@
-import { SubmissionForm } from '../model/submission';
-import { Race } from '../model/race';
-import { Driver } from '../model/driver';
-import { Crash } from '../model/crash';
-import { Racecar } from '../model/racecar'
+import { Submission } from '../model/submission';
+import database from '../util/database';
 
-const getAllSubmission_forms = (): SubmissionForm[] => {
-    return submissionForms;
+const createSubmission = async ({ submission }: { submission: Submission }): Promise<Submission> => {
+    try {
+        const submissionPrisma = await database.submission.create({
+            data: {
+                title: submission.getTitle(),
+                content: submission.getContent(),
+                type: submission.getType(),
+                createdAt: submission.getCreatedAt(),
+                user: {
+                    connect: {
+                        id: submission.getCreatedBy(),
+                    },
+                },
+            }
+        });
+
+        return Submission.from(submissionPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
 };
 
-const createSubmission_form = (submission_form: SubmissionForm): void => {
-    // Find the maximum existing ID and increment it by one
-    const maxId = submissionForms.reduce((max, form) => (form.id && form.id > max ? form.id : max), 0);
-    submission_form.id = maxId + 1;
-    submissionForms.push(submission_form);
+const getAllSubmissions = async ():Promise<Submission[] | null> => {
+    try {
+        const submissionPrisma = await database.submission.findMany({
+            include: {
+                user: true,
+            },
+        });
+        return submissionPrisma.map((submissionPrisma) => Submission.from(submissionPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
 };
 
-const getSubmission_formById = (id: number): SubmissionForm | undefined => {
-    return submissionForms.find(submission_form => submission_form.id === id);
+const getSubmissionById = async ({ id }: { id: number }): Promise<Submission | null> => {
+    try {
+        const submissionPrisma = await database.submission.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                user: true,
+            },
+        });
+
+        return submissionPrisma ? Submission.from(submissionPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
-const deleteSubmission_form = (id: number): void => {
-    const index = submissionForms.findIndex(submission_form => submission_form.id === id);
-    if (index !== -1) {
-        submissionForms.splice(index, 1);
+const deleteSubmissionById = async ({ submissionId }: { submissionId: number }): Promise<void> => {
+    try {
+        const submission = await database.submission.findUnique({
+            where: {
+                id: submissionId,
+            },
+        });
+
+        if (!submission) {
+            throw new Error('Submission not found');
+        }
+
+        const user = await database.user.update({
+            where: { id: submission.userId },
+            data: {
+                submissions: {
+                    disconnect: {
+                        id: submissionId,
+                    },
+                },
+            },
+        });
+
+        await database.submission.delete({
+            where: {
+                id: submissionId,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
     }
 };
 
 export default {
-    getAllSubmission_forms,
-    createSubmission_form,
-    getSubmission_formById,
-    deleteSubmission_form,
+    getAllSubmissions,
+    createSubmission,
+    getSubmissionById,
+    deleteSubmissionById
 };

@@ -24,8 +24,11 @@ const createUser = async ({ user }: { user: User }): Promise<User> => {
                 name: user.getName(),
                 surname: user.getSurname(),
                 email: user.getEmail(),
-                permission: user.getPermission()
-            }
+                permission: user.getPermission(),
+            },
+            include: {
+                submissions: true,
+            },
         });
 
         return User.from(userPrisma);
@@ -37,5 +40,5 @@ const createUser = async ({ user }: { user: User }): Promise<User> => {
 
 export default {
     getUserByUsername,
-    createUser
+    createUser,
 };

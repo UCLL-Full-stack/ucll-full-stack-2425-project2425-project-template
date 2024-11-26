@@ -11,20 +11,22 @@ const getAllRacecars = async (): Promise<Racecar[] | null> => {
     }
 }
 
-const createRacecar = (racecar: Racecar): void => {
+const createRacecar = async ({ racecar }: { racecar: Racecar }): Promise<Racecar | null> => {
     try {
-        database.racecar.create({
+        const racecarPrisma = await database.racecar.create({
             data: {
-                car_name: racecar.car_name,
-                type: racecar.type,
-                description: racecar.description,
-                hp: racecar.hp,
+                name: racecar.getName(),
+                type: racecar.getType(),
+                brand: racecar.getBrand(),
+                hp: racecar.getHp(),
             },
         });
+
+        return Racecar.from(racecarPrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server logs for details.');
     }
-};
+}
 
 export default { getAllRacecars, createRacecar };

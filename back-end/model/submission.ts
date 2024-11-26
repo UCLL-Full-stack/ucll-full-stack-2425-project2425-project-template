@@ -1,4 +1,4 @@
-import { Submission as SubmissionPrisma, User } from "@prisma/client";
+import { Submission as SubmissionPrisma } from "@prisma/client";
 
 export class Submission {
     public id?: number;
@@ -7,9 +7,9 @@ export class Submission {
     private type: string;
     private createdAt: Date;
     private solvedAt?: Date;
-    private createdBy: User;
+    private createdBy: number;
 
-    constructor(submission: { title: string, content: string, type: string, createdAt: Date, createdBy: User, solvedAt?: Date, id?: number }) {
+    constructor(submission: { title: string, content: string, type: string, createdAt: Date, solvedAt?: Date, createdBy: number, id?: number }) {
         this.validate(submission);
 
         this.title = submission.title;
@@ -21,7 +21,7 @@ export class Submission {
         if (submission.id) this.id = submission.id;
     }
 
-    private validate(submission: { title: string, content: string, type: string, createdAt: Date, createdBy: User, id?: number }): void {
+    private validate(submission: { title: string, content: string, type: string, createdAt: Date, createdBy: number, id?: number }): void {
         if (!submission.title) {
             throw new Error('Title is required');
         }
@@ -63,7 +63,7 @@ export class Submission {
         return this.solvedAt;
     }
 
-    getCreatedBy(): User {
+    getCreatedBy(): number {
         return this.createdBy;
     }
 
@@ -74,8 +74,7 @@ export class Submission {
             this.content === other.content &&
             this.type === other.type &&
             this.createdAt === other.createdAt &&
-            this.solvedAt === other.solvedAt &&
-            this.createdBy === other.createdBy
+            this.solvedAt === other.solvedAt
         );
     }
 
@@ -86,19 +85,16 @@ export class Submission {
         type,
         createdAt,
         solvedAt,
-        createdBy
-    }: SubmissionPrisma & {
-        createdBy: User
-        solvedAt?: Date
-    }) {
+        userId,
+    }: SubmissionPrisma) {
         return new Submission({
             id,
             title,
             content,
             type,
-            createdAt,
-            solvedAt,
-            createdBy
+            createdAt: createdAt as Date,
+            solvedAt: solvedAt as Date,
+            createdBy: userId,
         });
     }
 }

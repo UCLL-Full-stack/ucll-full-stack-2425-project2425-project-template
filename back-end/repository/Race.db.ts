@@ -2,9 +2,20 @@ import { Race } from '../model/race';
 import { Driver } from '../model/driver';
 import { Racecar } from '../model/racecar';
 import { Crash } from '../model/crash';
+import database from '../util/database';
 
-const getAllRaces = (): Race[] => {
-    return races;
+const getAllRaces = async (): Promise<Race[] | null> => {
+    try {
+        const racePrisma = await database.race.findMany({
+            include: {
+                crashes: { include: { participants: { include : { driver: true, racecar: true } } } },
+            },
+        });
+        return racePrisma.map((racePrisma) => Race.from(racePrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
 }
 
 const getAllRacesByNameDriver = (driverName: string) => {

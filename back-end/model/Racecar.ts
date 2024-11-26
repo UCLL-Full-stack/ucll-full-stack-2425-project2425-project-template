@@ -31,6 +31,26 @@ export class Racecar {
         }
     }
 
+    getId(): number | undefined {
+        return this.id;
+    }
+
+    getName(): string {
+        return this.name;
+    }
+
+    getType(): string {
+        return this.type;
+    }
+
+    getBrand(): string {
+        return this.brand;
+    }
+
+    getHp(): number {
+        return this.hp;
+    }
+
     equals(other: Racecar): boolean {
         return (
             this.id === other.id &&

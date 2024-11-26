@@ -2,14 +2,14 @@ import { Race } from '../model/race';
 import { Driver } from '../model/driver';
 import { Racecar } from '../model/racecar';
 import { Crash } from '../model/crash';
-import { Admin } from '../model/admin';
 import raceDb from '../repository/race.db';
 import driverDb from '../repository/driver.db';
 import racecarDb from '../repository/racecar.db';
 import crashDb from '../repository/crash.db';
-import adminDb from '../repository/admin.db';
-import { RaceInput, DriverInput, CrashInput } from '../types';
+import { RaceInput, CrashInput, ParticipantInput, DriverInput, RacecarInput } from '../types';
 import RaceDb from '../repository/race.db';
+import { User } from '@prisma/client';
+import { Participant } from '../model/participant';
 
 const getAllRaces = (): Race[] => {
     return raceDb.getAllRaces();
@@ -34,51 +34,40 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
         throw new Error('Race location is required');
     }
 
-    const drivers = raceInput.drivers.map((driverInput: DriverInput) => {
-        const racecar = new Racecar({
-            id: driverInput.racecar.id,
-            car_name: driverInput.racecar.car_name,
-            type: driverInput.racecar.type,
-            description: driverInput.racecar.description,
-            hp: driverInput.racecar.hp,
-        });
+    const crashes = (raceInput.crashes || []).map((crashInput: CrashInput) => {
 
-        const crash = new Crash({
-            id: driverInput.crash.id,
-            type: driverInput.crash.type,
-            description: driverInput.crash.description,
-            casualties: driverInput.crash.casualties,
-            deaths: driverInput.crash.deaths,
-        });
+        const participants = crashInput.participants.map((participantInput: ParticipantInput) => {
+            const driver =  new Driver({
+                name: participantInput.driver.name,
+                surname: participantInput.driver.surname,
+                birthdate: participantInput.driver.birthdate,
+                team: participantInput.driver.team,
+                country: participantInput.driver.country,
+                description: participantInput.driver.description,
+            });
 
-        return new Driver({
-            id: driverInput.id,
-            name: driverInput.name,
-            team: driverInput.team,
-            description: driverInput.description,
-            age: driverInput.age,
-            racecar,
-            crash,
-        });
-    });
+            const racecar = new Racecar({
+                name: participantInput.racecar.car_name,
+                type: participantInput.racecar.type,
+                brand: participantInput.racecar.brand,
+                hp: participantInput.racecar.hp,
+            });
 
-    const crashes = raceInput.crashes.map((crashInput: CrashInput) => {
+            return new Participant({
+                driver: driver,
+                racecar: racecar,
+            });
+        });
+        
         return new Crash({
             id: crashInput.id,
             type: crashInput.type,
             description: crashInput.description,
             casualties: crashInput.casualties,
             deaths: crashInput.deaths,
+            participants: participants,
         });
     });
-
-    let admin: Admin | undefined;
-    if (raceInput.admin && raceInput.admin.id !== undefined) {
-        admin = await adminDb.getAdminById({ id: raceInput.admin.id }) || undefined;
-        if (!admin) {
-            throw new Error(`Admin not found with ID ${raceInput.admin.id}`);
-        }
-    }
 
     const newRace = new Race({
         id: raceInput.id,
@@ -86,9 +75,8 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
         type: raceInput.type,
         description: raceInput.description,
         location: raceInput.location,
-        drivers,
+        date: raceInput.date,
         crashes,
-        admin,
     });
 
     raceDb.createRace(newRace);
@@ -99,7 +87,7 @@ const getAllCrashes = async (): Promise<Crash[] | null> => {
     return await crashDb.getAllCrashes();
 }
 
-const createCrash = (crashInput: any): Crash => {
+const createCrash = async (crashInput: CrashInput): Promise<Crash> => {
     if (!crashInput.type) {
         throw new Error('Crash type is required');
     }
@@ -113,11 +101,35 @@ const createCrash = (crashInput: any): Crash => {
         throw new Error('Deaths are required');
     }
 
+    const participants = crashInput.participants.map((participantInput: ParticipantInput) => {
+        const driver = new Driver({
+            name: participantInput.driver.name,
+            surname: participantInput.driver.surname,
+            birthdate: participantInput.driver.birthdate,
+            team: participantInput.driver.team,
+            country: participantInput.driver.country,
+            description: participantInput.driver.description,
+        });
+
+        const racecar = new Racecar({
+            name: participantInput.racecar.car_name,
+            type: participantInput.racecar.type,
+            brand: participantInput.racecar.brand,
+            hp: participantInput.racecar.hp,
+        });
+
+        return new Participant({
+            driver: driver,
+            racecar: racecar,
+        });
+    });
+
     const newCrash = new Crash({
         type: crashInput.type,
         description: crashInput.description,
         casualties: crashInput.casualties,
         deaths: crashInput.deaths,
+        participants: participants,
     });
 
     crashDb.createCrash(newCrash);
@@ -128,24 +140,24 @@ const getAllRacecars = async (): Promise<Racecar[] | null> => {
     return await racecarDb.getAllRacecars();
 }
 
-const createRacecar = (racecarInput: any): Racecar => {
+const createRacecar = async (racecarInput: RacecarInput): Promise<Racecar> => {
     if (!racecarInput.car_name) {
         throw new Error('Car name is required');
     }
     if (!racecarInput.type) {
         throw new Error('Type is required');
     }
-    if (!racecarInput.description) {
-        throw new Error('Description is required');
+    if (!racecarInput.brand) {
+        throw new Error('Brand is required');
     }
     if (racecarInput.hp === undefined) {
         throw new Error('Horsepower is required');
     }
 
     const newRacecar = new Racecar({
-        car_name: racecarInput.car_name,
+        name: racecarInput.car_name,
         type: racecarInput.type,
-        description: racecarInput.description,
+        brand: racecarInput.brand,
         hp: racecarInput.hp,
     });
 
@@ -153,40 +165,40 @@ const createRacecar = (racecarInput: any): Racecar => {
     return newRacecar;
 };
 
-const getAllDrivers = (): Driver[] => {
+const getAllDrivers = async (): Promise<Driver[] | null> => {
     return driverDb.getAllDrivers();
 }
 
-const createDriver = (driverInput: any): Driver => {
+const createDriver = async (driverInput: DriverInput): Promise<Driver> => {
     if (!driverInput.name) {
         throw new Error('Driver name is required');
     }
-    if (!driverInput.team) {
-        throw new Error('Team is required');
+    if (!driverInput.surname) {
+        throw new Error('Driver surname is required');
+    }
+    if (!driverInput.birthdate) {
+        throw new Error('Driver birthdate is required');
+    }
+    if (driverInput.team === undefined) {
+        throw new Error('Driver team is required');
+    }
+    if (!driverInput.country) {
+        throw new Error('Driver country is required');
     }
     if (!driverInput.description) {
-        throw new Error('Description is required');
-    }
-    if (driverInput.age === undefined) {
-        throw new Error('Age is required');
-    }
-    if (!driverInput.racecar) {
-        throw new Error('Racecar is required');
-    }
-    if (!driverInput.crash) {
-        throw new Error('Crash is required');
+        throw new Error('Driver description is required');
     }
 
     const newDriver = new Driver({
         name: driverInput.name,
+        surname: driverInput.surname,
+        birthdate: driverInput.birthdate,
         team: driverInput.team,
+        country: driverInput.country,
         description: driverInput.description,
-        age: driverInput.age,
-        racecar: driverInput.racecar,
-        crash: driverInput.crash,
     });
 
-    driverDb.createDriver(newDriver);
+    driverDb.createDriver({ driver: newDriver });
     return newDriver;
 };
 
