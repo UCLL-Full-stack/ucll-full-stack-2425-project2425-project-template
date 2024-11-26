@@ -1,15 +1,23 @@
 import { Event } from "@/types";
+import { useRouter } from "next/router";
 
 type Prop = {
   events: Array<Event>;
 };
 
 const EventOverview: React.FC<Prop> = ({ events }: Prop) => {
+  const router = useRouter();
   return (
     events && (
       <div className="d-flex flex-wrap">
         {events.map((event) => (
-          <div key={event.id} className="event-card p-3 m-2 border rounded">
+          <div
+            key={event.id}
+            className="event-card p-3 m-2 border rounded"
+            onClick={() => {
+              router.push(`/events/${event.id}`);
+            }}
+          >
             <h2>{event.name}</h2>
             <p>Date: {new Date(event.date).toLocaleDateString()}</p>
             <p>Price: {event.price}</p>

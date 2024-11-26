@@ -15,4 +15,11 @@ const addEvent = async (event: Event) => {
   });
 };
 
-export default { getAllEvents, addEvent };
+const getEventById = async (id: number) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export default { getAllEvents, addEvent, getEventById };
