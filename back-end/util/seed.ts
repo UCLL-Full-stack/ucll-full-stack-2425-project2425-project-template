@@ -39,6 +39,51 @@ const main = async () => {
             category: { connect: { id: concertCategory.id } },
         },
     });
+    const locationJefke = await prisma.location.create({
+        data: {
+            street: 'Kapucijnenvoer',
+            number: 5,
+            city: 'Leuven',
+            country: 'Belgium',
+        },
+    });
+
+    const jefke = await prisma.user.create({
+        data: {
+            userName: 'Jefke',
+            password: 'Hello',
+        },
+    });
+    const profileJefke = await prisma.profile.create({
+        data: {
+            firstName: 'Jefke',
+            lastName: 'Vermeulen',
+            email: 'JefkeVermeulen@gmail.com',
+            age: 45,
+            administrator: false,
+            location: { connect: { id: locationJefke.id } },
+            category: { connect: { id: concertCategory.id } },
+            user: { connect: { id: jefke.id } },
+        },
+    });
+    const admin = await prisma.user.create({
+        data: {
+            userName: 'admin',
+            password: 'admin',
+        },
+    });
+    const profileAdmin = await prisma.profile.create({
+        data: {
+            firstName: 'Gunther',
+            lastName: 'hackerman',
+            email: 'GuntherAdmin@gmail.com',
+            age: 99,
+            administrator: true,
+            location: { connect: { id: locationJefke.id } },
+            category: { connect: { id: concertCategory.id } },
+            user: { connect: { id: admin.id } },
+        },
+    });
 };
 (async () => {
     try {
