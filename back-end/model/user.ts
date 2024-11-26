@@ -23,13 +23,13 @@ export class User {
         userName: string;
         password: string;
         profile: Profile;
-        events: Event[];
+        events?: Event[];
     }) {
         this.validate(user);
         this.userName = user.userName;
         this.password = user.password;
         this.profile = user.profile;
-        this.events = user.events;
+        this.events = user.events || [];
     }
 
     validate(user: { userName: string; password: string; profile: Profile }) {
