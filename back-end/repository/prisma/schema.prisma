@@ -12,6 +12,7 @@ model User {
   userName String   @unique
   password String
   profile  Profile?
+  events   UserEvent[]
 }
 
 model Profile {
@@ -64,4 +65,14 @@ model Event {
 
   location        Location  @relation(fields: [locationId], references: [id])
   category        Category  @relation(fields: [categoryId], references: [id])
+  users           UserEvent[]
+}
+model UserEvent {
+  userId  Int
+  eventId Int
+
+  user    User   @relation(fields: [userId], references: [id])
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  @@id([userId, eventId])
 }
