@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import submissionFormService from '../service/submission_form.service';
-import { SubmissionFormInput } from '../types';
+import { SubmissionInput } from '../types';
 
 const submissionFormRouter = express.Router();
 
@@ -45,7 +45,7 @@ const submissionFormRouter = express.Router();
  */
 submissionFormRouter.get('/', (req, res) => {
     try {
-        const submissionForms = submissionFormService.getAllSubmissionForms();
+        const submissionForms = submissionFormService.getAllSubmissions();
         res.status(200).json(submissionForms);
     } catch (error) {
         const err = error as Error;
@@ -80,8 +80,8 @@ submissionFormRouter.get('/', (req, res) => {
  */
 submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const submissionFormInput: SubmissionFormInput = req.body;
-        const newSubmissionForm = submissionFormService.createSubmissionForm(submissionFormInput);
+        const submissionFormInput: SubmissionInput = req.body;
+        const newSubmissionForm = submissionFormService.createSubmission(submissionFormInput);
         res.status(201).json(newSubmissionForm);
     } catch (error) {
         const err = error as Error;
@@ -124,7 +124,7 @@ submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFun
 submissionFormRouter.post('/accept/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormId = parseInt(req.params.id);
-        const acceptedSubmissionForm = submissionFormService.acceptSubmissionForm(submissionFormId);
+        const acceptedSubmissionForm = submissionFormService.acceptSubmission(submissionFormId);
         res.status(200).json(acceptedSubmissionForm);
     } catch (error) {
         const err = error as Error;
@@ -158,7 +158,7 @@ submissionFormRouter.post('/accept/:id', async (req: Request, res: Response, nex
 submissionFormRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormId = parseInt(req.params.id);
-        submissionFormService.deleteSubmissionForm(submissionFormId);
+        submissionFormService.deleteSubmission(submissionFormId);
         res.status(204).send();
     } catch (error) {
         const err = error as Error;

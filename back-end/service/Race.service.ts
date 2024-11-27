@@ -11,11 +11,11 @@ import RaceDb from '../repository/race.db';
 import { User } from '@prisma/client';
 import { Participant } from '../model/participant';
 
-const getAllRaces = (): Race[] => {
+const getAllRaces = async (): Promise<Race[] | null> => {
     return raceDb.getAllRaces();
 }
 
-const getRaceById = (id: number): Race | null => {
+const getRaceById = async (id: number): Promise<Race | null> => {
     return raceDb.getRaceById(id);
 };
 
@@ -79,7 +79,7 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
         crashes,
     });
 
-    raceDb.createRace(newRace);
+    raceDb.createRace({ race: newRace });
     return newRace;
 };
 
@@ -132,7 +132,7 @@ const createCrash = async (crashInput: CrashInput): Promise<Crash> => {
         participants: participants,
     });
 
-    crashDb.createCrash(newCrash);
+    crashDb.createCrash({ crash: newCrash });
     return newCrash;
 };
 
@@ -161,7 +161,7 @@ const createRacecar = async (racecarInput: RacecarInput): Promise<Racecar> => {
         hp: racecarInput.hp,
     });
 
-    racecarDb.createRacecar(newRacecar);
+    racecarDb.createRacecar({ racecar: newRacecar });
     return newRacecar;
 };
 

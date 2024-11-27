@@ -1,14 +1,13 @@
-import submissionFormService from '../../service/submission_form.service';
-import submissionFormDb from '../../repository/submission.db';
-import { SubmissionForm } from '../../model/submission';
-import { Gebruiker } from '../../model/user';
+import submissionService from '../../service/submission.service';
+import submissionDb from '../../repository/submission.db';
+import { Submission } from '../../model/submission';
 import { Race } from '../../model/race';
 import { Driver } from '../../model/driver';
 import { Racecar } from '../../model/racecar';
 import { Crash } from '../../model/crash';
-import { Admin } from '../../model/admin';
+import { User } from '../../model/user';
 
-jest.mock('../../repository/Submission_form.db');
+jest.mock('../../repository/submission.db');
 
 const userInput = {
     username: 'user1',
@@ -53,7 +52,7 @@ const raceInput = {
 const submissionFormInput = {
     title: 'Race Application 1',
     content: 'This is the first race application form.',
-    user: new Gebruiker(userInput),
+    user: new User(userInput),
     race: new Race({
         ...raceInput,
         drivers: [new Driver({ ...driverInput, racecar: new Racecar(driverInput.racecar), crash: new Crash(driverInput.crash) })],
@@ -62,7 +61,7 @@ const submissionFormInput = {
     })
 };
 
-const user = new Gebruiker(userInput);
+const user = new User(userInput);
 const driver = new Driver({ ...driverInput, racecar: new Racecar(driverInput.racecar), crash: new Crash(driverInput.crash) });
 const race = new Race({ ...raceInput, drivers: [driver], crashes: [driver.getCrash()], admin: new Admin(raceInput.admin) });
 
@@ -73,8 +72,8 @@ beforeEach(() => {
     createSubmissionFormMock = jest.fn();
     mockSubmissionFormDbGetAllSubmissionForms = jest.fn();
 
-    submissionFormDb.createSubmission_form = createSubmissionFormMock;
-    submissionFormDb.getAllSubmission_forms = mockSubmissionFormDbGetAllSubmissionForms;
+    submissionDb.createSubmission = createSubmissionFormMock;
+    submissionDb.getAllSubmissions = mockSubmissionFormDbGetAllSubmissionForms;
 });
 
 afterEach(() => {
@@ -83,10 +82,10 @@ afterEach(() => {
 
 test('should create a submission form successfully', () => {
     // Given
-    createSubmissionFormMock.mockReturnValue(new SubmissionForm(submissionFormInput));
+    createSubmissionFormMock.mockReturnValue(new Submission(submissionInput));
 
     // When
-    const result = submissionFormService.createSubmissionForm(submissionFormInput);
+    const result = submissionService.createSubmission(submissionFormInput);
 
     // Then
     expect(createSubmissionFormMock).toHaveBeenCalledTimes(1);
@@ -109,5 +108,5 @@ test('should throw an error when title is missing', () => {
     const invalidSubmissionFormInput = { ...submissionFormInput, title: '' };
 
     // When / Then
-    expect(() => submissionFormService.createSubmissionForm(invalidSubmissionFormInput)).toThrowError('Title is required');
+    expect(() => submissionService.createSubmission(invalidSubmissionFormInput)).toThrowError('Title is required');
 });

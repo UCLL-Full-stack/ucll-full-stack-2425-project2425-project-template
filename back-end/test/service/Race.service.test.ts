@@ -1,15 +1,12 @@
-import { Race } from '../../model/race';
 import { Driver } from '../../model/driver';
 import { Racecar } from '../../model/racecar';
 import { Crash } from '../../model/crash';
-import { Admin } from '../../model/admin';
 import raceDb from '../../repository/race.db';
 import driverDb from '../../repository/driver.db';
 import racecarDb from '../../repository/racecar.db';
 import crashDb from '../../repository/crash.db';
-import adminDb from '../../repository/admin.db';
 import raceService from '../../service/race.service';
-import { RaceInput, DriverInput, CrashInput, AdminInput, RacecarInput } from '../../types';
+import { RaceInput, DriverInput, CrashInput, RacecarInput } from '../../types';
 
 const racecarInput: RacecarInput = {
     car_name: 'Mercedes',

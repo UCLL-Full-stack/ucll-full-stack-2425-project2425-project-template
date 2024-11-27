@@ -70,23 +70,18 @@ authRouter.post('/login', async (req: Request, res: Response) => {
   }
 
   try {
-    let user;
-    if (role === 'admin') {
-      user = await AuthService.getAdminByUsername(username);
-    } else {
-      user = await AuthService.getUserByUsername(username);
-    }
+    let user = await AuthService.getUserByUsername(username);
 
     // Check if the user exists and the password is correct
-    if (!user || user.password !== password) {
+    if (!user || user.getPassword() !== password) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ id: user.id, username: user.username, role }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, username: user.getUsername(), role }, secretKey, { expiresIn: '1h' });
 
     // Return the token and user info
-    return res.json({ token, username: user.username, role });
+    return res.json({ token, username: user.getUsername(), role });
   } catch (error) {
     console.error('Login error:', error);
     return res.status(500).json({ message: 'Internal server error' });

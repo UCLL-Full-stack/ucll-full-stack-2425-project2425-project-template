@@ -38,7 +38,7 @@ const getAllCrashes = async (): Promise<Crash[] | null> => {
 }
 
 
-const getCrashById =  async ({ id }: { id: number }): Promise<Crash | null> => {
+const getCrashById = async ({ id }: { id: number }): Promise<Crash | null> => {
     try {
         const crashPrisma = await database.crash.findFirst({
             where: { id },
