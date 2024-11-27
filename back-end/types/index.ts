@@ -1,3 +1,5 @@
+type Type = 'basic' | 'advanced' | 'max';
+
 type UserInput = {
   id?: number;
   password: string;
@@ -20,10 +22,19 @@ type GroupChatInput = {
   description: string;
 }
 
+type subscriptionInput = { 
+  id?: number;
+  type: Type;
+  startDate: Date;
+  endDate: Date;
+}
+
 export {
+  Type,
   UserInput,
   ChatInput,
-  GroupChatInput
+  GroupChatInput,
+  subscriptionInput
 }
 
 
