@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import Language from './Language';
 
 const Header: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -40,6 +41,7 @@ const Header: React.FC = () => {
                     </Link>
                 </>
                 }
+                <Language />
             </nav>
         </header>
     );
