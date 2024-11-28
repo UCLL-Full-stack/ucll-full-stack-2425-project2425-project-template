@@ -7,16 +7,16 @@ interface TeamOverviewTableProps {
 
 const TeamOverviewTable: React.FC<TeamOverviewTableProps> = ({ competition }) => {
     return (
-        <table>
+        <table className="min-w-full bg-white border border-gray-200">
             <thead>
-                <tr>
-                    <th>Team name</th>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th className="py-3 px-6 text-left">Team name</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="text-gray-600 text-sm font-light">
                 {competition.teams.map(team => (
-                    <tr key={team.id}>
-                        <td>{team.name}</td>
+                    <tr key={team.id} className="border-b border-gray-200 hover:bg-gray-100">
+                        <td className="py-3 px-6 text-left">{team.name}</td>
                     </tr>
                 ))}
             </tbody>

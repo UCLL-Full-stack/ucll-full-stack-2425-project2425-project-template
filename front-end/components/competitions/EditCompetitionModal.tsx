@@ -28,19 +28,32 @@ const EditCompetitionModal: React.FC<EditCompetitionModalProps> = ({ competition
     }
 
     return (
-        <div className="modal">
-            <div className="modal-content">
-                <h2>Edit Competition</h2>
-                <label>
-                    Name:
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                <h2 className="text-2xl font-bold mb-4">Edit Competition</h2>
+                <label className="block mb-4">
+                    <span className="text-gray-700">Name:</span>
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     />
                 </label>
-                <button onClick={handleSave}>Save</button>
-                <button onClick={onClose}>Cancel</button>
+                <div className="flex justify-end space-x-4">
+                    <button
+                        onClick={handleSave}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                        Save
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );
