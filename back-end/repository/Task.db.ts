@@ -37,6 +37,7 @@ const addTask = async (date: Date, time: Date, description: string, status: stri
                 description,
                 status,
                 comment,
+                room:{}
             },
         });
         return Task.from(taskPrisma);

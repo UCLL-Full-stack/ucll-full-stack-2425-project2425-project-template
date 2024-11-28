@@ -36,6 +36,9 @@ const addTicket = async (price: number, date: Date, time: Date, chair: number): 
                 date,
                 time,
                 chair,
+                movie: {
+                    
+                }
             },
         });
         return Ticket.from(ticketPrisma);
