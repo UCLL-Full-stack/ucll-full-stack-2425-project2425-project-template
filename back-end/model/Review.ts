@@ -8,27 +8,17 @@ import {
 } from '@prisma/client';
 export class Review {
     readonly id?: number;
-    readonly writer: User;
     readonly text: string;
     readonly score: number;
-    readonly recipe?: Recipe;
 
-    constructor(review: {
-        id?: number;
-        writer: User;
-        text: string;
-        score: number;
-        recipe?: Recipe;
-    }) {
+    constructor(review: { id?: number; text: string; score: number }) {
         this.validate(review);
         this.id = review.id;
-        this.writer = review.writer;
         this.text = review.text;
         this.score = review.score;
-        this.recipe = review.recipe;
     }
 
-    validate(review: { id?: number; writer: User; text: string; score: number; recipe?: Recipe }) {
+    validate(review: { id?: number; text: string; score: number }) {
         if (!review.text) {
             throw new Error('Review text is required');
         }
@@ -39,29 +29,14 @@ export class Review {
     }
 
     equals(review: Review): boolean {
-        return (
-            this.text === review.text &&
-            this.score === review.score &&
-            this.writer.equals(review.writer)
-        );
+        return this.text === review.text && this.score === review.score;
     }
 
-    static from = ({
-        id,
-        text,
-        score,
-        writer,
-        recipe,
-    }: ReviewPrisma & {
-        writer: UserPrisma;
-        recipe?: RecipePrisma;
-    }): Review => {
+    static from = ({ id, text, score }: ReviewPrisma): Review => {
         return new Review({
             id,
             text,
             score,
-            writer: User.from(writer),
-            recipe: recipe ? Recipe.from(recipe) : undefined,
         });
     };
 }
