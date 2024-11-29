@@ -131,10 +131,33 @@ const deleteTask = async (taskId: string): Promise<void> => {
     await database.task.delete({ where: { taskId } });
 }
 
+const getTasksOfColumn = async (columnId: string): Promise<Task[]> => {
+    try {
+        const tasksPrisma = await database.task.findMany({
+            where: { columnId },
+            include: {
+                assignees: { select: { userId: true } },
+                column: { select: { columnId: true } },
+            },
+        });
+        return tasksPrisma.map((taskPrisma) => {
+            const assigneeIds = taskPrisma.assignees?.map(assignee => assignee.userId) || [];
+            const task = Task.from(taskPrisma);
+            task.setAssigneeIds(assigneeIds);
+            task.setColumnId(taskPrisma.column.columnId);
+            return task;
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllTasks,
     getTaskById,
     addTask,
     updateTask,
     deleteTask,
+    getTasksOfColumn
 };

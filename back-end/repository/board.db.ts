@@ -145,10 +145,35 @@ const deleteBoard = async (boardId: string): Promise<void> => {
     await database.board.delete({ where: { boardId } });
 };
 
+const getBoardsOfGuild = async (guildId: string): Promise<Board[]> => {
+    try {
+        const boardPrisma = await database.board.findMany({
+            where: { guildId },
+            include:{
+                columns: {select: {columnId: true}},
+                createdByUser: {select: {userId: true}},
+                guild: {select: {guildId: true}},
+            }
+        });
+        return boardPrisma.map((boardPrisma) => {
+            const columnIds = boardPrisma.columns?.map(column => column.columnId) || [];
+            const board = Board.from(boardPrisma);
+            board.setColumnIds(columnIds);
+            board.setCreatedByUserId(boardPrisma.createdByUser.userId);
+            board.setGuildId(boardPrisma.guild.guildId);
+            return board;
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllBoards,
     getBoardById,
     addBoard,
     updateBoard,
-    deleteBoard
+    deleteBoard,
+    getBoardsOfGuild,
 };

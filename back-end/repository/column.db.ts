@@ -126,10 +126,33 @@ const deleteColumn = async (columnId: string): Promise<void> => {
     await database.column.delete({ where: { columnId } });
 }
 
+const getColumnsOfBoard = async (boardId: string): Promise<Column[]> => {
+    try {
+        const columnsPrisma = await database.column.findMany({
+            where: { boardId },
+            include: {
+                tasks: { select: { taskId: true } },
+                board: { select: { boardId: true } },
+            },
+        });
+        return columnsPrisma.map((columnPrisma) => {
+            const taskIds = columnPrisma.tasks?.map(task => task.taskId) || [];
+            const column = Column.from(columnPrisma);
+            column.setTaskIds(taskIds);
+            column.setBoardId(columnPrisma.board.boardId);
+            return column;
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllColumns,
     getColumnById,
     addColumn,
     updateColumn,
     deleteColumn,
+    getColumnsOfBoard
 };
