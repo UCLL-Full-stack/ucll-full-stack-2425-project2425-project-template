@@ -1,7 +1,6 @@
-import { SubmissionForm } from '../../model/submission';
-import { Gebruiker } from '../../model/user';
+import { Submission } from '../../model/submission';
+import { User } from '../../model/user';
 import { Race } from '../../model/race';
-import { Admin } from '../../model/admin';
 import { Driver } from '../../model/driver';
 import { Racecar } from '../../model/racecar';
 import { Crash } from '../../model/crash';
