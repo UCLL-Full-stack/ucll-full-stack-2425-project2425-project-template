@@ -42,9 +42,6 @@ export class Board {
     if(createdByUserId === undefined || createdByUserId === "") {
       throw new Error("Created by user ID cannot be empty.");
     }
-    if(columnIds === undefined || columnIds.length === 0) {
-      throw new Error("Column IDs cannot be empty.");
-    }
     if(guildId === undefined || guildId === "") {
       throw new Error("Guild ID cannot be empty.");
     }

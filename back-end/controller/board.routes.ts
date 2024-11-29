@@ -1,7 +1,7 @@
-// import { Router } from 'express';
-// import boardService from '../service/board.service';
+import { Router } from 'express';
+import boardService from '../service/board.service';
 
-// const boardRouter = Router();
+const boardRouter = Router();
 
 
 // /**
@@ -238,4 +238,75 @@
 //     }
 // });
 
-// export default boardRouter;
+boardRouter.get('/:guildId', async (req, res) => {
+    const { guildId } = req.params;
+    try {
+        const boards = boardService.getBoardsOfGuild(guildId)
+        res.status(200).json(boards);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+boardRouter.get('/:boardId', async (req, res) => {
+    const { boardId } = req.params;
+    try {
+        const board = boardService.getBoardById(boardId);
+        res.status(200).json(board);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+boardRouter.post('/', async (req, res) => {
+    const board = req.body;
+    try {
+        await boardService.addBoard(board);
+        res.status(201).json({ message: 'Board created successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+boardRouter.put('/:boardId', async (req, res) => {
+    const { boardId } = req.params;
+    const board = req.body;
+    try {
+        await boardService.updateBoard(boardId, board);
+        res.status(200).json({ message: 'Board updated successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+boardRouter.delete('/:boardId', async (req, res) => {
+    const { boardId } = req.params;
+    try {
+        await boardService.deleteBoard(boardId);
+        res.status(200).json({ message: 'Board deleted successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+export default boardRouter;

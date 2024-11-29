@@ -1,7 +1,7 @@
-// import { Router } from 'express';
-// import columnService from '../service/column.service';
+import { Router } from 'express';
+import columnService from '../service/column.service';
 
-// const columnRouter = Router();
+const columnRouter = Router();
 
 
 // /**
@@ -187,4 +187,61 @@
 //     }
 // });
 
-// export default columnRouter;
+columnRouter.post('/', (req, res) => {
+    const column = req.body;
+    try {
+        columnService.addColumn(column);
+        res.status(201).json({ message: 'Column created successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+columnRouter.get('/:columnId', (req, res) => {
+    const { columnId } = req.params;
+    try {
+        const column = columnService.getColumnById(columnId);
+        res.status(200).json(column);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+columnRouter.delete('/:columnId', (req, res) => {
+    const { columnId } = req.params;
+    try {
+        columnService.deleteColumn(columnId);
+        res.status(204).send();
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+columnRouter.put('/:columnId', (req, res) => {
+    const { columnId } = req.params;
+    const updatedColumn = req.body;
+    try {
+        columnService.updateColumn(columnId, updatedColumn);
+        res.status(200).json({ message: 'Column updated successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+export default columnRouter;

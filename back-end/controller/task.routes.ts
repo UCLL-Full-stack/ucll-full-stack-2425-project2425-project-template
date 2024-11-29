@@ -1,7 +1,7 @@
-// import { Router } from 'express';
-// import taskService from '../service/task.service';
+import { Router } from 'express';
+import taskService from '../service/task.service';
 
-// const taskRouter = Router();
+const taskRouter = Router();
 
 // /**
 //  * @swagger
@@ -125,4 +125,61 @@
 //     }
 // });
 
-// export default taskRouter;
+taskRouter.post('/', (req, res) => {
+    const task = req.body;
+    try {
+        taskService.addTask(task);
+        res.status(201).json({ message: 'Task created successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+taskRouter.get('/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    try {
+        const task = taskService.getTaskById(taskId);
+        res.status(200).json(task);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+taskRouter.put('/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    const updatedTask = req.body;
+    try {
+        taskService.updateTask(taskId, updatedTask);
+        res.status(200).json({ message: 'Task updated successfully' });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }    
+    }
+});
+
+taskRouter.delete('/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    try {
+        taskService.deleteTask(taskId);
+        res.status(204).send();
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }    
+    }
+});
+
+export default taskRouter;
