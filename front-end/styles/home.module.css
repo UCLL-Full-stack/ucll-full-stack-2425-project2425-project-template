@@ -224,28 +224,39 @@
 }
 
   .addParticipantForm,
-  .loginMyEvents {
+  .loginMyEvents,
+  .userSignupForm {
     margin-top: 10rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.loginMyEvents {
+.userSignupForm {
+    margin-top: 2rem !important;
+    margin-bottom: 5rem !important;
+}
+
+.loginMyEvents,
+.userSignupForm{
     max-width: 50vw;
 }
 
 .addParticipantForm label,
-.loginMyEvents label {
+.loginMyEvents label,
+.userSignupForm label {
     font-weight: bold;
 }
 
-.loginMyEvents label {
+.loginMyEvents label,
+.userSignupForm label {
     color: white;
 }
 
 .addParticipantForm input,
-.loginMyEvents input {
+.loginMyEvents input,
+.userSignupForm input,
+.userSignupForm select {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -253,7 +264,8 @@
 
 
 .addParticipantForm button,
-.loginMyEvents button {
+.loginMyEvents button,
+.userSignupForm button {
     padding: 10px;
     background-color: black;
     color: white;
@@ -265,11 +277,13 @@
 }
 
 .addParticipantForm button:hover,
-.loginMyEvents button:hover {
+.loginMyEvents button:hover,
+.userSignupForm button:hover {
     scale: 1.05;
 }
 
-.loginMyEvents button:hover {
+.loginMyEvents button:hover,
+.userSignupForm button:hover {
     scale: 1.05;
     background-color: white;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);

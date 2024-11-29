@@ -7,11 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-    PARTICIPANT
-    ORGANIZER
-}
-
 model User {
     id          Int     @id @default(autoincrement())
     username    String  @unique
@@ -19,7 +14,7 @@ model User {
     email       String  @unique
     password    String
     age         Int
-    role        Role
+    role        String
     events      Event[]
 }
 

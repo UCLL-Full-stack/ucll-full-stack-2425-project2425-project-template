@@ -35,20 +35,24 @@ const UserLoginForm: React.FC = () => {
         e.preventDefault();
 
         // Validation
-        if (!validation()){
+        if (!validation()) {
             return;
         }
 
         // Clear all errors
         clearErrors();
 
-        setStatusMessages([{message: "Login successful. Redirecting to homepage...", type: "success"}]);
+        setStatusMessages([{ message: "Login successful. Redirecting to homepage...", type: "success" }]);
         sessionStorage.setItem("loggedUserEmail", email);
         sessionStorage.setItem("loggedUserPassword", password);
 
         setTimeout(() => {
             router.push('/');
-          }, 2000);
+        }, 2000);
+    }
+
+    const handleShowSignupForm = () => {
+        router.push('/signup');
     }
 
     return (
@@ -89,7 +93,11 @@ const UserLoginForm: React.FC = () => {
                 />
                 <div className={styles.myEventsLoginSignupButtons}>
                     <button type="submit">Log in</button>
-                    <button type="button" className={styles.myEventsSignupButton}>Sign up</button>
+                    <button
+                        type="button"
+                        className={styles.myEventsSignupButton}
+                        onClick={handleShowSignupForm}
+                    >Sign up</button>
                 </div>
 
                 {errorMessage && (

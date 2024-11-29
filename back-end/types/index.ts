@@ -10,12 +10,6 @@ type UserInput = {
     role: Role,
 };
 
-// type ParticipantInput = {
-//     id?: number,
-//     user: UserInput,
-//     events: EventInput[],
-// };
-
 type EventInput = {
     id?: number,
     name: string,
@@ -27,13 +21,6 @@ type EventInput = {
     users: UserInput[],
     isTrending: boolean,
 };
-
-// type OrganizerInput = {
-//     id?: number,
-//     user: UserInput,
-//     organizationName: string,
-//     organizationPass: string,
-// };
 
 type InviteInput = {
     id?: number,
@@ -51,8 +38,6 @@ export {
     Role,
     EventInput,
     UserInput,
-    // OrganizerInput,
-    // ParticipantInput,
     InviteInput,
     TicketInput,
 };

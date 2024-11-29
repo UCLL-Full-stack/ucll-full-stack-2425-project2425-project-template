@@ -1,7 +1,7 @@
 import { Role } from "../types";
 
 import {
-    Role as RolePrisma,
+    // Role as RolePrisma,
     User as UserPrisma,
 } from '@prisma/client';
 
@@ -79,7 +79,7 @@ export class User {
         password,
         age,
         role,
-    }: UserPrisma & {role: RolePrisma}) {
+    }: UserPrisma) {
         return new User({
             id,
             username,

@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 import eventService from '../service/event.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -23,5 +24,14 @@ userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction
         res.status(400).json({ status: 'error' });
     }
 });
+
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const createdUser = await userService.createUser(req.body as UserInput);
+        res.status(201).json(createdUser);
+    } catch (error){
+        next(error);
+    }
+})
 
 export { userRouter };

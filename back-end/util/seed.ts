@@ -1,5 +1,5 @@
 // Execute: npx ts-node util/seed.ts
-
+import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -14,7 +14,7 @@ const main = async () => {
             username: 'john_doe',
             name: 'John Doe',
             email: 'john.doe@ucll.be',
-            password: 'passwordJohn',
+            password: await bcrypt.hash('passwordJohn',12),
             age: 26,
             role: 'PARTICIPANT',
         }
@@ -25,7 +25,7 @@ const main = async () => {
             username: 'jane_doe',
             name: 'Jane Doe',
             email: 'jane.doe@ucll.be',
-            password: 'passwordJane',
+            password: await bcrypt.hash('passwordJane',12),
             age: 30,
             role: 'PARTICIPANT',
         }
@@ -36,7 +36,7 @@ const main = async () => {
             username: 'alice_smith',
             name: 'Alice Smith',
             email: 'alice.smith@ucll.be',
-            password: 'passwordAlice',
+            password: await bcrypt.hash('passwordAlice',12),
             age: 24,
             role: 'PARTICIPANT',
         }
@@ -47,7 +47,7 @@ const main = async () => {
             username: 'bob_brown',
             name: 'Bob Brown',
             email: 'bob.brown@ucll.be',
-            password: 'passwordBob',
+            password: await bcrypt.hash('passwordBob',12),
             age: 29,
             role: 'PARTICIPANT',
         }
@@ -58,7 +58,7 @@ const main = async () => {
             username: 'charlie_miller',
             name: 'Charlie Miller',
             email: 'charlie.miller@ucll.be',
-            password: 'passwordCharlie',
+            password: await bcrypt.hash('passwordCharlie',12),
             age: 22,
             role: 'PARTICIPANT',
         }
@@ -69,7 +69,7 @@ const main = async () => {
             username: 'diana_jones',
             name: 'Diana Jones',
             email: 'diana.jones@ucll.be',
-            password: 'passwordDiana',
+            password: await bcrypt.hash('passwordDiana',12),
             age: 27,
             role: 'PARTICIPANT',
         }
@@ -80,7 +80,7 @@ const main = async () => {
             username: 'eve_white',
             name: 'Eve White',
             email: 'eve.white@ucll.be',
-            password: 'passwordEve',
+            password: await bcrypt.hash('passwordEve', 12),
             age: 25,
             role: 'PARTICIPANT',
         }
