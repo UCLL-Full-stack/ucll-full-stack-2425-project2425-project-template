@@ -12,8 +12,18 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const validateInput = () => {
+    if (!username || !password || !role) {
+      setError('All fields are required.');
+      return false;
+    }
+    return true;
+  };
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!validateInput()) return;
+
     try {
       const response = await authService.login({ username, password, role });
       if (response.ok) {
@@ -37,7 +47,16 @@ const Login: React.FC = () => {
       <Header />
       <main className="container">
         <h1 className="text-center my-4">Login</h1>
-        <UserLoginForm/>
+        <UserLoginForm
+          username={username}
+          password={password}
+          role={role}
+          error={error}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          setRole={setRole}
+          handleLogin={handleLogin}
+        />
       </main>
     </>
   );

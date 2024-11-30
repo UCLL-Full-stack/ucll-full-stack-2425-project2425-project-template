@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import AuthService from '../service/auth.service';
 
 const authRouter = express.Router();
@@ -64,7 +65,6 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
 authRouter.post('/login', async (req: Request, res: Response) => {
   const { username, password, role } = req.body;
 
-  // Validate the request
   if (!username || !password || !role) {
     return res.status(400).json({ message: 'Username, password, and role are required' });
   }
@@ -72,15 +72,12 @@ authRouter.post('/login', async (req: Request, res: Response) => {
   try {
     let user = await AuthService.getUserByUsername(username);
 
-    // Check if the user exists and the password is correct
-    if (!user || user.getPassword() !== password) {
+    if (!user || !(await bcrypt.compare(password, user.getPassword()))) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
-    // Generate a JWT token
     const token = jwt.sign({ id: user.id, username: user.getUsername(), role }, secretKey, { expiresIn: '1h' });
 
-    // Return the token and user info
     return res.json({ token, username: user.getUsername(), role });
   } catch (error) {
     console.error('Login error:', error);
@@ -88,4 +85,4 @@ authRouter.post('/login', async (req: Request, res: Response) => {
   }
 });
 
-export { authRouter } ;
+export { authRouter };

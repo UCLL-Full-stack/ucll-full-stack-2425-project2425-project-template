@@ -1,9 +1,9 @@
+import bcrypt from 'bcrypt';
 import { User } from '../model/user';
 import database from '../util/database';
 
 const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
     try {
-
         const userPrisma = await database.user.findUnique({
             where: { username }
         });
@@ -17,10 +17,11 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
 
 const createUser = async ({ user }: { user: User }): Promise<User> => {
     try {
+        const hashedPassword = await bcrypt.hash(user.getPassword(), 10);
         const userPrisma = await database.user.create({
             data: {
                 username: user.getUsername(),
-                password: user.getPassword(),
+                password: hashedPassword,
                 name: user.getName(),
                 surname: user.getSurname(),
                 email: user.getEmail(),

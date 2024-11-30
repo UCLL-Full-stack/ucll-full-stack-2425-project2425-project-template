@@ -3,7 +3,6 @@ import authService from '@services/authService';
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-
 const UserLoginForm: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState("");
@@ -20,8 +19,18 @@ const UserLoginForm: React.FC = () => {
     const validate = () => {
         let result = true;
 
-        if (!username && username.trim() === "") {
-            setError("Name is required");
+        if (!username || username.trim() === "") {
+            setError("Username is required");
+            result = false;
+        }
+
+        if (!password || password.trim() === "") {
+            setError("Password is required");
+            result = false;
+        }
+
+        if (!role || role.trim() === "") {
+            setError("Role is required");
             result = false;
         }
 
@@ -36,69 +45,65 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        event.preventDefault();
         try {
-        const response = await authService.login({ username, password, role });
-        if (response.ok) {
-            const userData = await response.json();
-
-            setStatusMessages([{ message: "Logging in...", type: "success" }]);
-            localStorage.setItem('loggedInUser', JSON.stringify({ username: userData.username, role: userData.role }));
-
-            router.push("/");
-        } else {
-            const errorData = await response.json();
-            setError(errorData.message);
-        }
+            const response = await authService.login({ username, password, role });
+            if (response.ok) {
+                const userData = await response.json();
+                setStatusMessages([{ message: "Logging in...", type: "success" }]);
+                localStorage.setItem('loggedInUser', JSON.stringify({ username: userData.username, role: userData.role }));
+                router.push("/");
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message);
+            }
         } catch (error) {
             setError('An unexpected error occurred. Please try again.');
         }
-
     };
 
     return (
         <>
             <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '400px' }}>
                 <div className="mb-3">
-                <label htmlFor="username" className="form-label">Username</label>
-                <input
-                type="text"
-                id="username"
-                className="form-control"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                />
+                    <label htmlFor="username" className="form-label">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        className="form-control"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <input
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
+                        type="password"
+                        id="password"
+                        className="form-control"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="role" className="form-label">Role</label>
                     <select
-                    id="role"
-                    className="form-select"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    required
+                        id="role"
+                        className="form-select"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        required
                     >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
                     </select>
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
                 <button type="submit" className="btn btn-primary w-100">Login</button>
             </form>
         </>
-    )
+    );
 };
 
 export default UserLoginForm;

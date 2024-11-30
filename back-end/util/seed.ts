@@ -1,6 +1,10 @@
 // Execute: npx ts-node util/seed.ts
 
 import { PrismaClient } from '@prisma/client';
+import * as dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+
+dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -16,7 +20,7 @@ const main = async () => {
     await prisma.user.create({
         data: {
             username: 'admin',
-            password: 'Password1',
+            password: await bcrypt.hash('Password1', 10),
             name: 'Ad',
             surname: 'Min',
             email: 'admin.company@mail.com',
@@ -28,7 +32,7 @@ const main = async () => {
     await prisma.user.create({
         data: {
             username: 'user1',
-            password: 'password',
+            password: await bcrypt.hash('password', 10),
             name: 'Jonathan',
             surname: 'Surname',
             email: 'jonathan.surname@ucll.be',
@@ -40,7 +44,7 @@ const main = async () => {
     await prisma.user.create({
         data: {
             username: 'user2',
-            password: 'password',
+            password: await bcrypt.hash('password', 10),
             name: 'Zbigniew',
             surname: 'Surname',
             email: 'zbigniew.szypkowski@ucll.be',
@@ -52,7 +56,7 @@ const main = async () => {
     await prisma.user.create({
         data: {
             username: 'SigmaMale',
-            password: 'SkibidiRizz2012',
+            password: await bcrypt.hash('SkibidiRizz2012', 10),
             name: 'Piotr',
             surname: 'Brzasczykiewiczkowski',
             email: 'piotr.brzaczykiewiczkowski@ucll.be',
