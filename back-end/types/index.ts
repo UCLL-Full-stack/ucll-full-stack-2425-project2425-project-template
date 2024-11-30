@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+
 type UserInput = {
   id?: number;
   password: string;
@@ -18,6 +20,7 @@ type GroupChatInput = {
   id?: number;
   name: string;
   description: string;
+  users: UserInput[];
 }
 
 export {

@@ -1,27 +1,21 @@
+import { ca } from 'date-fns/locale';
 import { Chat } from '../model/chat';
-import { users } from '../repository/user.db';
 import database from './database';
 
-const chats = [
-    new Chat({
-        id: 1,
-        message: 'lorem ipsum',
-        createdAt: new Date('2003-12-18'),
-        userId: users[0].getId(),
-    }),
-    new Chat({
-        id: 2,
-        message: 'lorem ipsum2',
-        createdAt: new Date('2005-12-18'),
-        userId: users[1].getId(),
-    }),
-];
-users[0].addChat(chats[0]);
-users[1].addChat(chats[1]);
+
 
 const getAllChats = async (): Promise<Chat[]> => {
     try {
-        const chatPrisma = await database.chat.findMany();
+        const chatPrisma = await database.chat.findMany({
+            include: {
+                user: {
+                    include: {
+                        chats: true,
+                        groupchats: true
+                    }
+                }
+            }
+        });
         return chatPrisma.map((chatPrisma) => Chat.from(chatPrisma));
     } catch (error) {
         console.error(error);
@@ -32,7 +26,15 @@ const getAllChats = async (): Promise<Chat[]> => {
 const getChatByUserId = async (userId: number): Promise<Chat[]> => {
     try {
         const chatPrisma = await database.chat.findMany({
-            where: { userId: userId }
+            where: { userId: userId },
+            include: {
+                user: {
+                    include: {
+                        chats: true,
+                        groupchats: true
+                    }
+                }
+            }
         });
         return chatPrisma.map((chatPrisma) => Chat.from(chatPrisma));
     } catch (error) {
@@ -44,7 +46,15 @@ const getChatByUserId = async (userId: number): Promise<Chat[]> => {
 const getChatById = async (id: number): Promise<Chat | null> => {
     try {
         const chatPrisma = await database.chat.findUnique({
-            where: {id: id}
+            where: {id: id},
+            include: {
+                user: {
+                    include: {
+                        chats: true,
+                        groupchats: true
+                    }
+                }
+            }
         })  
         return chatPrisma ? Chat.from(chatPrisma) : null;
     } catch (error) {
@@ -58,7 +68,16 @@ const createChat = async (chat: Chat): Promise<Chat> => {
             data: {
                 message: chat.getMessage(),
                 createdAt: chat.getCreatedAt(),
-                userId: chat.getUserId()
+                user: {connect: {id: chat.getUser().getId()}
+                }
+            },
+            include: {
+                user: {
+                    include: {
+                        chats: true,
+                        groupchats: true
+                    }
+                }
             }
         })
         return Chat.from(chatPrisma);

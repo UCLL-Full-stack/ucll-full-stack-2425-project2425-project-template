@@ -1,6 +1,7 @@
 import { tr } from "date-fns/locale"
 import database from "./database";
 import { GroupChat } from "../model/groupchat";
+import { User } from "../model/user";
 
 
 const getAllGroupChats = async () => {
@@ -29,13 +30,16 @@ const getGroupChatById = async (id: number) => {
     }
 }
 
-const createGroupChat = async (groupChat: GroupChat): Promise<GroupChat> => {
+const createGroupChat = async (groupChat: GroupChat,users: User[]): Promise<GroupChat> => {
     try {
         const groupChatPrisma = await database.groupChat.create({
             data: {
                 name: groupChat.getName(),
                 description: groupChat.getDescription(),
                 createdAt: groupChat.getCreatedAt(),
+                users: {
+                    connect: users.map((user) => ({ id: user.getId() })),
+                },
             },
             include: { users: true },
         });

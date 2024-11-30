@@ -8,8 +8,6 @@ export class User {
     private name: string;
     private firstName: string;
     private password: string;
-    private chats: Chat[] = [];
-    private groupchats: GroupChat[] = [];
 
     constructor(user: {
         id?: number;
@@ -17,8 +15,6 @@ export class User {
         name: string;
         firstName: string;
         password: string;
-        chats?: Chat[];
-        groupchats?: GroupChat[];
     }) {
         this.validate(user);
         this.id = user.id;
@@ -26,8 +22,6 @@ export class User {
         this.name = user.name;
         this.firstName = user.firstName;
         this.password = user.password;
-        this.chats = user.chats || [];
-        this.groupchats = user.groupchats || [];
     }
 
     static from({
@@ -36,17 +30,13 @@ export class User {
         name,
         firstName,
         password,
-        chats,
-        groupchats
-    }: UserPrisma & { chats: ChatPrisma[], groupchats: GroupChatPrisma[] }) {
+    }: UserPrisma ) {
         return new User({
             id,
             role,
             name,
             firstName,
             password,
-            groupchats: groupchats.map((group: GroupChatPrisma) => GroupChat.from(group)),
-            chats: chats.map((chat: ChatPrisma) => Chat.from(chat)),
         });
     }
 
@@ -70,17 +60,8 @@ export class User {
         return this.password; // Consider removing or securing this method
     }
 
-    public getChats(): Chat[] {
-        return this.chats;
-    }
 
-    public addChat(chat: Chat): void {
-        this.chats.push(chat);
-    }
 
-    public getGroups(): GroupChat[] {
-        return this.groupchats;
-    }
 
     equals(user: User): boolean {
         return (
@@ -89,6 +70,7 @@ export class User {
             this.firstName === user.getFirstName() &&
             this.password === user.getPassword() &&
             this.role === user.getRole()
+            
         );
     }
 

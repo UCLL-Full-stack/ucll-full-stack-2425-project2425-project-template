@@ -14,24 +14,22 @@ model User {
   name      String  
   firstName String  
   password  String  
-  chats     Chat[]  @relation("UserChats")
-  groupchats GroupChat[] 
+  chats      Chat[]      
+  groupchats GroupChat[]
 }
 
 model Chat {
   id        Int      @id @default(autoincrement())
   message   String   
   createdAt DateTime @default(now())
-  userId    Int?     
-  user      User?    @relation("UserChats", fields: [userId], references: [id])
-  groupchats GroupChat[]
+  userId      Int        // Foreign key for User
+  user        User      @relation(fields: [userId], references: [id])
+ 
 }
 model GroupChat {
   id        Int      @id @default(autoincrement())
   name   String
   description String   
   createdAt DateTime @default(now())
-  users     User[]   
-  chats     Chat[]   
-
+  users       User[]    
 }

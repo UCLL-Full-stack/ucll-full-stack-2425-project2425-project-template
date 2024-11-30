@@ -118,6 +118,7 @@ groupchatRouter.get('/:id', async (req: Request, res: Response, next: NextFuncti
 groupchatRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const groupChatInput: GroupChatInput = req.body;
+    console.log(req.body);
     const groupChat = await groupchatservice.createGroupChat(groupChatInput);
     res.json(groupChat);
   } catch (error) {

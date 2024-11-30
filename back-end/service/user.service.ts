@@ -16,7 +16,6 @@ const getUserById = async ({id}: {id:number}) => {
 const createUser = async (user: UserInput) => {
   console.log(user)
   const newUser = new User({
-    id: user.id,
     password: user.password,
     firstName: user.firstname,
     name: user.name,

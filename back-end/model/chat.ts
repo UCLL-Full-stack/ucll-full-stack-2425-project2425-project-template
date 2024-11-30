@@ -1,38 +1,40 @@
 import { User } from "./user";
 import{
     Chat as ChatPrisma,
+    User as UserPrisma,
+    GroupChat as GroupChatPrisma
 }from '@prisma/client';
 
 export class Chat {
     private id?: number;
     private message: string;
     private createdAt: Date;
-    private userId?: number;
+    private user: User;
     
 
     constructor(chat: {
         id?: number;
         message: string;
         createdAt: Date;
-        userId?: number;
+        user: User;
     }) {
         this.validate(chat);
         this.id = chat.id;
         this.message = chat.message;
         this.createdAt = chat.createdAt;
-        this.userId = chat.userId;
+        this.user = chat.user
     }
     static from({
         id,
         message,
         createdAt,
-        userId,
-    }: ChatPrisma) {
+        user
+    }: ChatPrisma & { user: UserPrisma & { chats: ChatPrisma[]} }){        
         return new Chat({
             id,
             message,
             createdAt,
-            userId: userId ?? undefined,
+            user: User.from(user)
         });
     }
 
@@ -48,11 +50,11 @@ export class Chat {
         return this.createdAt;
     }
 
-    public getUserId(): number|undefined {
-        return this.userId;
+    public getUser(): User{
+        return this.user;
     }
 
-    validate(chat: { id?: number; message: string; createdAt: Date;userId?: number }): void {
+    validate(chat: { id?: number; message: string; createdAt: Date;user?: User }): void {
 
         if (!chat.createdAt) {
             throw new Error('Chat creation date is required');
