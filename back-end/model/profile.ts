@@ -11,7 +11,6 @@ export class Profile {
     private id?: number;
     private firstName: string;
     private lastName: string;
-    private email: string;
     private age: number;
     private administrator: boolean;
     private location: Location;
@@ -22,7 +21,6 @@ export class Profile {
         id?: number;
         firstName: string;
         lastName: string;
-        email: string;
         age: number;
         administrator: boolean;
         location: Location;
@@ -33,7 +31,6 @@ export class Profile {
         this.id = profile.id;
         this.firstName = profile.firstName;
         this.lastName = profile.lastName;
-        this.email = profile.email;
         this.age = profile.age;
         this.administrator = profile.administrator;
         this.location = profile.location;
@@ -44,7 +41,6 @@ export class Profile {
     validate(profile: {
         firstName: string;
         lastName: string;
-        email: string;
         age: number;
         administrator: boolean;
         location: Location;
@@ -52,7 +48,6 @@ export class Profile {
     }) {
         if (!profile.firstName) throw new Error('First name is required.');
         if (!profile.lastName) throw new Error('Last name is required.');
-        if (!profile.email) throw new Error('Email is required.');
         if (!profile.age) throw new Error('Age is required.');
         if (!profile.location) throw new Error('Location is required.');
         if (!profile.category) throw new Error('Category is required.');
@@ -64,9 +59,7 @@ export class Profile {
     getAge(): number {
         return this.age;
     }
-    getEmail(): string {
-        return this.email;
-    }
+
     getLastName(): string {
         return this.lastName;
     }
@@ -82,7 +75,6 @@ export class Profile {
     getEvents(): Event[] {
         return this.events;
     }
-
     addEvent(event: Event) {
         this.events.push(event);
     }
@@ -91,7 +83,6 @@ export class Profile {
         id,
         firstName,
         lastName,
-        email,
         age,
         administrator,
         location,
@@ -104,7 +95,6 @@ export class Profile {
             id,
             firstName,
             lastName,
-            email,
             age,
             administrator,
             location: Location.from(location),

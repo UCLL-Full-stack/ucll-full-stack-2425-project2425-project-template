@@ -4,11 +4,11 @@ import { add } from 'date-fns';
 const prisma = new PrismaClient();
 
 const main = async () => {
+    await prisma.profile.deleteMany();
     await prisma.user.deleteMany();
-    await prisma.event.deleteMany();
     await prisma.location.deleteMany();
     await prisma.category.deleteMany();
-    await prisma.profile.deleteMany();
+    await prisma.event.deleteMany();
 
     const eventDate = add(new Date(), { days: 1 });
 
@@ -47,10 +47,10 @@ const main = async () => {
             country: 'Belgium',
         },
     });
-
     const jefke = await prisma.user.create({
         data: {
             userName: 'Jefke',
+            email: 'JefkeVermeulen@gmail.com',
             password: 'Hello',
         },
     });
@@ -58,7 +58,6 @@ const main = async () => {
         data: {
             firstName: 'Jefke',
             lastName: 'Vermeulen',
-            email: 'JefkeVermeulen@gmail.com',
             age: 45,
             administrator: false,
             location: { connect: { id: locationJefke.id } },
@@ -69,6 +68,7 @@ const main = async () => {
     const admin = await prisma.user.create({
         data: {
             userName: 'admin',
+            email: 'GuntherAdmin@gmail.com',
             password: 'admin',
         },
     });
@@ -76,7 +76,6 @@ const main = async () => {
         data: {
             firstName: 'Gunther',
             lastName: 'hackerman',
-            email: 'GuntherAdmin@gmail.com',
             age: 99,
             administrator: true,
             location: { connect: { id: locationJefke.id } },
