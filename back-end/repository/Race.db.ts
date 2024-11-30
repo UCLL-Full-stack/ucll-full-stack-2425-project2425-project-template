@@ -10,9 +10,12 @@ const createRace = async ({ race }: { race: Race }): Promise<Race> => {
                 description: race.getDescription(),
                 location: race.getLocation(),
                 date: race.getDate(),
+                crashes: {
+                    connect: race.getCrashes().map((crash) => ({ id: crash.getId()})),
+                },
             },
             include: {
-                crashes: { include: { participants: { include: { driver: true, racecar: true } } } },
+                crashes: { include: { participants: { include : { driver: true, racecar: true } } } },
             },
         });
 

@@ -1,3 +1,4 @@
+import { tr } from 'date-fns/locale';
 import { Crash } from '../model/crash';
 import database from '../util/database';
 
@@ -9,10 +10,9 @@ const createCrash = async ({ crash }: { crash: Crash }): Promise<Crash> => {
                 description: crash.getDescription(),
                 casualties: crash.getCasualties(),
                 deaths: crash.getDeaths(),
-                raceId: 1, // TODO: change this to a dynamic value
             },
             include: {
-                participants: { include: { driver: true, racecar: true } },
+                participants: { include: { driver: true, racecar: true }},
             },
         });
 
@@ -35,7 +35,7 @@ const getAllCrashes = async (): Promise<Crash[] | null> => {
         console.error(error);
         throw new Error('Database error. See server logs for details.');
     }
-}
+};
 
 
 const getCrashById = async ({ id }: { id: number }): Promise<Crash | null> => {
@@ -51,6 +51,6 @@ const getCrashById = async ({ id }: { id: number }): Promise<Crash | null> => {
         console.error(error);
         throw new Error('Database error. See server logs for details.');
     }
-}
+};
 
 export default { getAllCrashes, createCrash, getCrashById };

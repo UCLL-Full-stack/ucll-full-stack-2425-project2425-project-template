@@ -55,8 +55,9 @@ model Participant {
     racecar     Racecar     @relation(fields: [racecarId], references: [id])
     racecarId   Int
     driver      Driver      @relation(fields: [driverId], references: [id])
-    driverId    Int         
-    crashes     Crash[]
+    driverId    Int
+    Crash       Crash[]
+
 }
 
 model Crash {
@@ -65,9 +66,8 @@ model Crash {
     description     String
     casualties      Int
     deaths          Int
+    Races           Race[]
     participants    Participant[]
-    race            Race    @relation(fields: [raceId], references: [id])
-    raceId          Int
 }
 
 model Race {

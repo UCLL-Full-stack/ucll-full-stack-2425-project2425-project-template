@@ -65,7 +65,6 @@ CREATE TABLE "Crash" (
     "description" TEXT NOT NULL,
     "casualties" INTEGER NOT NULL,
     "deaths" INTEGER NOT NULL,
-    "raceId" INTEGER NOT NULL,
 
     CONSTRAINT "Crash_pkey" PRIMARY KEY ("id")
 );
@@ -78,6 +77,7 @@ CREATE TABLE "Race" (
     "description" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
+    "crashId" INTEGER NOT NULL,
 
     CONSTRAINT "Race_pkey" PRIMARY KEY ("id")
 );
@@ -110,7 +110,7 @@ ALTER TABLE "Participant" ADD CONSTRAINT "Participant_racecarId_fkey" FOREIGN KE
 ALTER TABLE "Participant" ADD CONSTRAINT "Participant_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Crash" ADD CONSTRAINT "Crash_raceId_fkey" FOREIGN KEY ("raceId") REFERENCES "Race"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Race" ADD CONSTRAINT "Race_crashId_fkey" FOREIGN KEY ("crashId") REFERENCES "Crash"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CrashToParticipant" ADD CONSTRAINT "_CrashToParticipant_A_fkey" FOREIGN KEY ("A") REFERENCES "Crash"("id") ON DELETE CASCADE ON UPDATE CASCADE;

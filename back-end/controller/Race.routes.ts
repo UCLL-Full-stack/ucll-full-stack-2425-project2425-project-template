@@ -69,56 +69,23 @@ const raceRouter = express.Router();
  * @swagger
  * /races:
  *   get:
- *     summary: Get all races
- *     tags: [Races]
+ *     summary: Retrieve a list of all races
  *     responses:
  *       200:
- *         description: List of races
+ *         description: A list of races.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Race'
- *             examples:
- *               example-1:
- *                 value:
- *                   - id: 1
- *                     name: "Grand Prix"
- *                     type: "Formula 1"
- *                     description: "A high-speed race"
- *                     location: "Monaco"
- *                     drivers:
- *                       - name: "Lewis Hamilton"
- *                         team: "Mercedes"
- *                         description: "A skilled driver"
- *                         age: 36
- *                         racecar:
- *                           car_name: "Mercedes W12"
- *                           type: "Formula 1"
- *                           description: "A fast racecar"
- *                           hp: 1000
- *                         crash:
- *                           type: "Collision"
- *                           description: "A severe crash"
- *                           casualties: 5
- *                           deaths: 2
- *                     crashes:
- *                       - type: "Collision"
- *                         description: "A severe crash"
- *                         casualties: 5
- *                         deaths: 2
- *                     admin:
- *                       username: "adminuser"
- *                       password: "adminpassword"
  */
-raceRouter.get('/', (req, res) => {
+raceRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const races = raceService.getAllRaces();
+        const races = await raceService.getAllRaces();
         res.status(200).json(races);
     } catch (error) {
-        const err = error as Error;
-        res.status(404).json({ error: err.message });
+        next(error);
     }
 });
 

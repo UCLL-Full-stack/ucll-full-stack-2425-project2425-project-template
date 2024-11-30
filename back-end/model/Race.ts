@@ -12,7 +12,7 @@ export class Race {
     private description: string;
     private location: string;
     private date: Date;
-    private crashes?: Crash[];
+    private crashes: Crash[];
 
     constructor(race: { name: string, type: string, description: string, location: string, date: Date, crashes: Crash[], id?: number }) {
         this.validate(race);
@@ -22,7 +22,7 @@ export class Race {
         this.description = race.description;
         this.location = race.location;
         this.date = race.date;
-        if (race.crashes) this.crashes = this.crashes;
+        if (race.crashes) this.crashes = race.crashes;
         else this.crashes = [];
         if (race.id) this.id = race.id;
     }
@@ -69,7 +69,7 @@ export class Race {
         return this.date;
     }
 
-    getCrashes(): Crash[] | undefined {
+    getCrashes(): Crash[] {
         return this.crashes;
     }
 

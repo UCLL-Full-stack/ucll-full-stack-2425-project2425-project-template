@@ -123,13 +123,34 @@ const main = async () => {
         },
     });
 
+    await prisma.crash.create({
+        data: {
+            type: "Collision",
+            description: 'Crash at turn 3',
+            casualties: 2,
+            deaths: 1
+        },
+    });
+
+    await prisma.crash.create({
+        data: {
+            type: "Collision",
+            description: 'Crash at turn 5',
+            casualties: 3,
+            deaths: 0
+        },
+    });
+
     await prisma.race.create({
         data: {
             name: 'Grand Prix Monaco',
             type: 'Formula 1',
             description: 'A high-speed race',
             location: 'Monaco',
-            date: new Date()
+            date: new Date(),
+            crashes: {
+                connect: { id: 1 }
+            },
         },
     });
 
@@ -139,31 +160,10 @@ const main = async () => {
             type: 'Formula 1',
             description: 'A historic race',
             location: 'Silverstone',
-            date: new Date()
-        },
-    });
-
-    await prisma.crash.create({
-        data: {
-            type: "Collision",
-            description: 'Crash at turn 3',
-            casualties: 2,
-            deaths: 1,
-            race: {
-                connect: { id: 1 }
-            }
-        },
-    });
-
-    await prisma.crash.create({
-        data: {
-            type: "Collision",
-            description: 'Crash at turn 5',
-            casualties: 3,
-            deaths: 0,
-            race: {
-                connect: { id: 1 }
-            }
+            date: new Date(),
+            crashes: {
+                connect: { id: 2 }
+            },
         },
     });
     

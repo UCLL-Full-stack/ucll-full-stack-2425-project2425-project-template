@@ -210,6 +210,11 @@ const updateRace = (id: number, raceInput: RaceInput) => {
     createRace(raceInput);
 }
 
+const getCrashByRaceId = async (id: number): Promise<Race | null> => {
+    const race = await getRaceById(id);
+    return race || null;
+}
+
 export default {
     getRaceById,
     getAllRaces,
@@ -221,4 +226,5 @@ export default {
     getAllDrivers,
     createDriver,
     updateRace,
+    getCrashByRaceId,
 };
