@@ -1,5 +1,6 @@
 import { Category } from './category';
 import { Location } from './location';
+import { Event } from './event';
 import {
     Profile as profilePrisma,
     Location as locationPrisma,
@@ -15,6 +16,7 @@ export class Profile {
     private administrator: boolean;
     private location: Location;
     private category: Category;
+    private events: Event[];
 
     constructor(profile: {
         id?: number;
@@ -25,8 +27,10 @@ export class Profile {
         administrator: boolean;
         location: Location;
         category: Category;
+        events?: Event[];
     }) {
         this.validate(profile);
+        this.id = profile.id;
         this.firstName = profile.firstName;
         this.lastName = profile.lastName;
         this.email = profile.email;
@@ -34,6 +38,7 @@ export class Profile {
         this.administrator = profile.administrator;
         this.location = profile.location;
         this.category = profile.category;
+        this.events = profile.events || [];
     }
 
     validate(profile: {
@@ -74,6 +79,13 @@ export class Profile {
     getCategory(): Category {
         return this.category;
     }
+    getEvents(): Event[] {
+        return this.events;
+    }
+
+    addEvent(event: Event) {
+        this.events.push(event);
+    }
 
     static from = ({
         id,
@@ -84,7 +96,10 @@ export class Profile {
         administrator,
         location,
         category,
-    }: profilePrisma & { location: locationPrisma; category: categoryPrisma }) => {
+    }: profilePrisma & {
+        location: locationPrisma;
+        category: categoryPrisma;
+    }) => {
         return new Profile({
             id,
             firstName,

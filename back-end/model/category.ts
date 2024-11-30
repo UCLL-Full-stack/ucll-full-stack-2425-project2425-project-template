@@ -12,8 +12,8 @@ export class Category {
     }
 
     validate(category: { name: string; description: string }) {
-        if (!category.name) throw new Error('Name is required.');
-        if (!category.description) throw new Error('Description is required.');
+        if (!category.name?.trim()) throw new Error('Name is required.');
+        if (!category.description?.trim()) throw new Error('Description is required.');
     }
 
     getId(): number | undefined {

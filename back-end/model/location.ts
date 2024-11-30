@@ -23,10 +23,10 @@ export class Location {
     }
 
     validate(location: { street: string; number: number; city: string; country: string }) {
-        if (!location.street) throw new Error('Street is required.');
+        if (!location.street?.trim()) throw new Error('Street is required.');
         if (!location.number) throw new Error('Number is required.');
-        if (!location.city) throw new Error('City is required.');
-        if (!location.country) throw new Error('Country is required.');
+        if (!location.city?.trim()) throw new Error('City is required.');
+        if (!location.country?.trim()) throw new Error('Country is required.');
     }
 
     getId(): number | undefined {
