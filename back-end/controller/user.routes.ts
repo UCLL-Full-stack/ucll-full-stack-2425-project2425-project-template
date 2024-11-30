@@ -10,21 +10,14 @@
  *      User:
  *          type: object
  *          properties:
- *            id:
- *              type: number
- *              format: int64
  *            name:
  *              type: string
- *              description: Course name.
  *            firstName:
  *              type: string
- *              description: Course name.
  *            password:
  *              type: string
- *              description: Course name.
  *            role:
  *              type: string
- *              description: Course name.
  * 
  */
 

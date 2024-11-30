@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+type Type = 'basic' | 'advanced' | 'max';
 
 type UserInput = {
   id?: number;
@@ -23,10 +23,19 @@ type GroupChatInput = {
   users: UserInput[];
 }
 
+type subscriptionInput = { 
+  id?: number;
+  type: Type;
+  startDate: Date;
+  endDate: Date;
+}
+
 export {
+  Type,
   UserInput,
   ChatInput,
-  GroupChatInput
+  GroupChatInput,
+  subscriptionInput
 }
 
 

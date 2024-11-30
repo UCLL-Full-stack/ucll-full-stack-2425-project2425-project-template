@@ -10,19 +10,13 @@
  *      Chat:
  *          type: object
  *          properties:
- *            id:
- *              type: number
- *              format: int64
  *            message:
  *              type: string
- *              description: chat message.
  *            createdAt:
  *              type: Date
- *              description: chat createdAt.
  *            userId:
  *              type: number
  *              format: int64
- *              description: user id.
  *        
  * 
  */
