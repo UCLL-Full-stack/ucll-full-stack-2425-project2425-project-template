@@ -81,6 +81,8 @@ export interface Guild{
     settings: PermissionEntry[];
     roles: Role[];
     members: Member[];
+    greyedOut?: boolean;
+    inviteLink?: string;
 }
 
 export interface Role{

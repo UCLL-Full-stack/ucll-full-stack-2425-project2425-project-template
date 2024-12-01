@@ -15,6 +15,7 @@ dotenv.config();
 const Home: FC = () => {
   const { user, setUser} = useUser();
   const [guilds, setGuilds] = useState<Guild[]>([]);
+  const [displayGuilds, setDisplayGuilds] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGuildId, setSelectedGuildId] = useState<string | null>(null);
   const [selectedGuildForBoardCreation, setSelectedGuildForBoardCreation] = useState<string | null>(null);
@@ -67,9 +68,21 @@ const Home: FC = () => {
     const fetchData = async () => {
       try {
         const storedUser = sessionStorage.getItem('user');
-        const storedGuilds = sessionStorage.getItem('guilds');
+        const sessionGuilds = JSON.parse(sessionStorage.getItem('guilds') || '[]');
         if(storedUser) {
-          setUser(JSON.parse(storedUser));
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          const dbGuilds = await UserService.getGuilds(parsedUser.userId);
+          const displayGuilds = sessionGuilds.map((guild: any)=> {
+            const inDb = dbGuilds.some((dbGuild: any)=> dbGuild.guildId === guild.id);
+            return {
+              ...guild,
+              greyedOut: !inDb && !guild.botInGuild,
+            };
+          })
+          setGuilds(dbGuilds);
+          displayGuilds.sort((a: any, b: any) => a.greyedOut - b.greyedOut);
+          setDisplayGuilds(displayGuilds);
         }
       } catch (error) {
         console.error('Error fetching user data', error);
@@ -80,14 +93,17 @@ const Home: FC = () => {
     fetchData();
   }, [setUser]);
 
-  const handleGuildClick = async (guildId: string) => {
-    console.log(`Clicked on guild ${guildId}`);
-    setSelectedGuildId(guildId);
-    try {
-      const fetchedBoards = await BoardService.getBoardsByGuild(guildId);
-      setBoards(fetchedBoards);
-    } catch (error) {
-      console.error('Error fetching boards', error);
+  const handleGuildClick = async (guild: any) => {
+    if (guild.greyedOut && guild.inviteLink) {
+      window.open(guild.inviteLink, '_blank');
+    } else if (!guild.greyedOut) {
+      setSelectedGuildId(guild.guildId || guild.id);
+      try {
+          const fetchedBoards = await BoardService.getBoardsByGuild(guild.guildId || guild.id);
+          setBoards(fetchedBoards);
+      } catch (error) {
+          console.error('Error fetching boards', error);
+      }
     }
   };
 
@@ -105,8 +121,8 @@ const Home: FC = () => {
                     <p>Loading guilds...</p>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {guilds.map(guild => (
-                            <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick} user={user!}/>
+                        {displayGuilds.map(guild => (
+                            <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick}/>
                         ))}
                     </div>
                 )}

@@ -59,12 +59,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const userData = await userResponse.data;
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
+                // const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
+                //     const permissions = BigInt(guild.permissions);
+                //     const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
+                //     const hasManageServer = (permissions & BigInt(0x00000020)) === BigInt(0x00000020);
+                //     return hasAdmin || hasManageServer;
+                // })
                 const ownerGuilds = guildsData.filter((guild: {owner: boolean}) => guild.owner === true);
                 const enhancedGuilds = ownerGuilds.map((guild: {id: string, name: string}) => {
                     const botInGuild = client.guilds.cache.has(guild.id);
                     return {
-                        id: guild.id,
-                        name: guild.name,
+                        guildId: guild.id,
+                        guildName: guild.name,
                         botInGuild,
                         inviteLink: botInGuild
                             ? null
@@ -189,7 +195,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 res.end(`
                     <script>
                         sessionStorage.setItem('user', '${JSON.stringify(data)}');
-                        sessionStorage.setItem('guilds', '${JSON.stringify(enhancedGuilds)}');
+                        sessionStorage.setItem('guilds', ${JSON.stringify(JSON.stringify(enhancedGuilds))});
                         window.location.href = '/';
                     </script>    
                 `);

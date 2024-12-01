@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick }) => {
                             />
                         </div>
                         {dropDownVisible && (
-                            <div className="absolute right-0 mt-2 bg-white text-black rounded shadow-lg py-2">
+                            <div className="absolute right-0 mt-2 bg-white text-black rounded shadow-lg py-2 z-20">
                                 <button
                                     onClick={handleLogout}
                                     className="block px-4 py-2 hover:bg-gray-200 w-full text-left"
