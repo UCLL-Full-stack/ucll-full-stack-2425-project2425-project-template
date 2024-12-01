@@ -58,7 +58,7 @@ const RecipeContent: React.FC<Props> = ({ recipe }) => {
                         <span className="font-medium">
                           {item.quantity} {item.unit}
                         </span>{" "}
-                        {item.ingredient.name}
+                        {item.ingredient?.name}
                       </div>
                     </li>
                   ))}
