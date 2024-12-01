@@ -9,7 +9,6 @@ import BoardCard from '@/components/BoardCard';
 import CreateBoardForm from '@/components/CreateBoardForm';
 import dotenv from 'dotenv';
 import { useUser } from '@/context/UserContext';
-import { parseCookies } from 'nookies';
 
 dotenv.config();
 
@@ -67,19 +66,10 @@ const Home: FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const cookies = parseCookies();
-        if (cookies.user){
-          const userData = JSON.parse(cookies.user)
-          setUser({
-            userId: userData.userId,
-            username: userData.username,
-            globalName: userData.globalName,
-            userAvatar: userData.userAvatar,
-            guildIds: userData.guildIds
-          });
-          const guildsData = await UserService.getGuilds(userData.userId);
-          console.log('Fetched guilds:', guildsData);
-          setGuilds(guildsData || []);
+        const storedUser = sessionStorage.getItem('user');
+        const storedGuilds = sessionStorage.getItem('guilds');
+        if(storedUser) {
+          setUser(JSON.parse(storedUser));
         }
       } catch (error) {
         console.error('Error fetching user data', error);

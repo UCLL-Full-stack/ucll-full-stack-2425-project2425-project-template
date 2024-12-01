@@ -5,7 +5,6 @@ import UserService from '@/services/UserService';
 import GuildService from '@/services/GuildService';
 import RoleService from '@/services/RoleService';
 import fs from 'fs'
-import * as cookie from 'cookie';
 
 const client = new Client({
     intents: [
@@ -61,6 +60,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
                 const ownerGuilds = guildsData.filter((guild: {owner: boolean}) => guild.owner === true);
+                const enhancedGuilds = ownerGuilds.map((guild: {id: string, name: string}) => {
+                    const botInGuild = client.guilds.cache.has(guild.id);
+                    return {
+                        id: guild.id,
+                        name: guild.name,
+                        botInGuild,
+                        inviteLink: botInGuild
+                            ? null
+                            : `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&guild_id=${guild.id}&permissions=8&scope=bot`,
+                        };
+                });
                 const botGuildData = await Promise.all(
                     guildsData.map(async (guild: {id: string, name: string, ownerId: string}) => {
                         try {
@@ -169,15 +179,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                         guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
                     });
                 }
-                const serializedCookie = cookie.serialize('user', JSON.stringify(user), {
-                    httpOnly: false,
-                    secure: process.env.NODE_ENV === 'development',
-                    maxAge: 60 * 60 * 24 * 7,
-                    path: '/',
-                });
-                res.setHeader('Set-Cookie', serializedCookie);
-                res.writeHead(302, { Location: '/' });
-                res.status(400).json(tokenData);
+                const data = {
+                    userId: userData.id,
+                    username: userData.username,
+                    globalName: userData.global_name,
+                    userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                }
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(`
+                    <script>
+                        sessionStorage.setItem('user', '${JSON.stringify(data)}');
+                        sessionStorage.setItem('guilds', '${JSON.stringify(enhancedGuilds)}');
+                        window.location.href = '/';
+                    </script>    
+                `);
             }
         } else {
             res.status(400).json({ error: 'Invalid code' });

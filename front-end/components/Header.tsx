@@ -1,5 +1,4 @@
 import { useUser } from '@/context/UserContext';
-import { destroyCookie } from 'nookies';
 import React from 'react';
 
 interface HeaderProps {
@@ -12,7 +11,8 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick }) => {
     const [dropDownVisible, setDropDownVisible] = React.useState(false);
 
     const handleLogout = () => {
-        destroyCookie(null, 'user', {path: '/'});
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('guilds');
         setUser(null);
         window.location.reload();
     };
