@@ -21,7 +21,11 @@ const getRecipeById = async ({ id }: { id: number }): Promise<Recipe | null> => 
         const recipePrisma = await database.recipe.findUnique({
             where: { id },
             include: {
-                ingredients: true,
+                ingredients: {
+                    include: {
+                        ingredient: true,
+                    },
+                },
             },
         });
         if (!recipePrisma) return null;

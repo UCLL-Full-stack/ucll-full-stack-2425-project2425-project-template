@@ -85,4 +85,13 @@ export class Ingredient {
             this.store === ingredient.getStore()
         );
     }
+
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            category: this.category,
+            store: this.store,
+        };
+    }
 }

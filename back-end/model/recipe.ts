@@ -5,6 +5,7 @@ import {
     Recipe as RecipePrisma,
     RecipeCategory as CategoryPrisma,
     RecipeIngredient as RecipeIngredientPrisma,
+    Ingredient as IngredientPrisma,
 } from '@prisma/client';
 
 export class Recipe {
@@ -47,6 +48,37 @@ export class Recipe {
         this.scheduledDate = recipe.scheduledDate;
     }
 
+    // static from({
+    //     id,
+    //     title,
+    //     instructions,
+    //     cookingTime,
+    //     category,
+    //     ingredients,
+    //     imageUrl,
+    //     isFavorite,
+    //     notes,
+    //     source,
+    //     scheduledDate,
+    // }: RecipePrisma & {
+    //     ingredients: RecipeIngredientPrisma[];
+    //     category: CategoryPrisma;
+    // }): Recipe {
+    //     return new Recipe({
+    //         id,
+    //         title,
+    //         instructions,
+    //         cookingTime,
+    //         category: category as RecipeCategory,
+    //         ingredients: ingredients.map((ingredient) => RecipeIngredient.from(ingredient)),
+    //         imageUrl: imageUrl || undefined,
+    //         isFavorite: isFavorite || undefined,
+    //         notes: notes || undefined,
+    //         source: source || undefined,
+    //         scheduledDate: scheduledDate || undefined,
+    //     });
+    // }
+
     static from({
         id,
         title,
@@ -60,8 +92,7 @@ export class Recipe {
         source,
         scheduledDate,
     }: RecipePrisma & {
-        ingredients: RecipeIngredientPrisma[];
-        category: CategoryPrisma;
+        ingredients: (RecipeIngredientPrisma & { ingredient?: IngredientPrisma })[];
     }): Recipe {
         return new Recipe({
             id,
@@ -325,11 +356,12 @@ export class Recipe {
             instructions: this.instructions,
             cookingTime: this.cookingTime,
             category: this.category,
-            ingredients: this.ingredients?.map((ingredient) => ingredient.toJSON()),
+            ingredients: this.ingredients.map((ingredient) => ingredient.toJSON()),
             imageUrl: this.imageUrl,
             isFavorite: this.isFavorite,
             notes: this.notes,
             source: this.source,
+            scheduledDate: this.scheduledDate,
         };
     }
 

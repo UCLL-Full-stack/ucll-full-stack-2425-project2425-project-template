@@ -3,9 +3,11 @@ import {
     Ingredient as IngredientPrisma,
     RecipeIngredient as RecipeIngredientPrisma,
 } from '@prisma/client';
+import { Ingredient } from './ingredient';
 
 export class RecipeIngredient {
     private recipeId: number;
+    private ingredient?: Ingredient;
     private ingredientId: number;
     private unit: string;
     private quantity: number;
@@ -15,11 +17,13 @@ export class RecipeIngredient {
         ingredientId: number;
         unit: string;
         quantity: number;
+        ingredient?: Ingredient;
     }) {
         this.recipeId = recipeIngredient.recipeId;
         this.ingredientId = recipeIngredient.ingredientId;
         this.unit = recipeIngredient.unit;
         this.quantity = recipeIngredient.quantity;
+        this.ingredient = recipeIngredient.ingredient;
     }
 
     static from({
@@ -27,13 +31,22 @@ export class RecipeIngredient {
         ingredientId,
         unit,
         quantity,
-    }: RecipeIngredientPrisma): RecipeIngredient {
-        return new RecipeIngredient({
+        ingredient,
+    }: RecipeIngredientPrisma & { ingredient?: IngredientPrisma }): RecipeIngredient {
+        const recipeIngredient = new RecipeIngredient({
             recipeId,
             ingredientId,
             unit,
             quantity,
         });
+        if (ingredient) {
+            recipeIngredient.ingredient = Ingredient.from(ingredient); // Assume an `Ingredient.from` method exists
+        }
+        return recipeIngredient;
+    }
+
+    getIngredient(): Ingredient | undefined {
+        return this.ingredient;
     }
 
     getRecipeId(): number {
@@ -58,6 +71,7 @@ export class RecipeIngredient {
             ingredientId: this.ingredientId,
             unit: this.unit,
             quantity: this.quantity,
+            ingredient: this.ingredient?.toJSON(),
         };
     }
 

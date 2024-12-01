@@ -100,7 +100,7 @@ const main = async () => {
             imageUrl:
                 'https://images.unsplash.com/photo-1622973536968-3ead9e780960?auto=format&fit=crop&w=1170&q=80',
             isFavorite: true,
-            scheduledDate: new Date('2024-11-03'),
+            scheduledDate: new Date('2024-12-03'),
         },
     });
 
@@ -116,7 +116,7 @@ const main = async () => {
             imageUrl:
                 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=687&q=80',
             isFavorite: false,
-            scheduledDate: new Date('2024-11-05'),
+            scheduledDate: new Date('2024-12-05'),
         },
     });
 
@@ -134,7 +134,7 @@ const main = async () => {
             isFavorite: false,
             notes: 'For extra flavor, try adding some herbs or spices to the butter before spreading.',
             source: 'https://www.simplyrecipes.com/recipes/grilled_cheese_sandwich/',
-            scheduledDate: new Date('2024-11-05'),
+            scheduledDate: new Date('2024-12-05'),
         },
     });
 
@@ -150,7 +150,7 @@ const main = async () => {
             imageUrl:
                 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
             isFavorite: false,
-            scheduledDate: new Date('2024-11-10'),
+            scheduledDate: new Date('2024-12-10'),
         },
     });
 
@@ -167,7 +167,7 @@ const main = async () => {
             imageUrl:
                 'https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80',
             isFavorite: false,
-            scheduledDate: new Date('2024-11-10'),
+            scheduledDate: new Date('2024-12-10'),
         },
     });
 
@@ -184,7 +184,7 @@ const main = async () => {
             imageUrl:
                 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
             isFavorite: false,
-            scheduledDate: new Date('2024-11-10'),
+            scheduledDate: new Date('2024-12-10'),
         },
     });
 
