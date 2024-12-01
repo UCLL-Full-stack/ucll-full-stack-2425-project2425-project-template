@@ -60,13 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const userData = await userResponse.data;
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
-                const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
-                    const permissions = BigInt(guild.permissions);
-                    const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
-                    const hasManageServer = (permissions & BigInt(0x00000020)) === BigInt(0x00000020);
-                    return hasAdmin || hasManageServer;
-                })
-                
+                const ownerGuilds = guildsData.filter((guild: {owner: boolean}) => guild.owner === true);
                 const botGuildData = await Promise.all(
                     guildsData.map(async (guild: {id: string, name: string, ownerId: string}) => {
                         try {
