@@ -1,11 +1,11 @@
 import { Driver } from '../../model/driver';
 import { Racecar } from '../../model/racecar';
 import { Crash } from '../../model/crash';
-import raceDb from '../../repository/race.db';
-import driverDb from '../../repository/driver.db';
-import racecarDb from '../../repository/racecar.db';
-import crashDb from '../../repository/crash.db';
-import raceService from '../../service/race.service';
+import raceDb from '../../repository/Race.db';
+import driverDb from '../../repository/Driver.db';
+import racecarDb from '../../repository/Racecar.db';
+import crashDb from '../../repository/Crash.db';
+import raceService from '../../service/Race.service';
 import { RaceInput, DriverInput, CrashInput, RacecarInput } from '../../types';
 
 const racecarInput: RacecarInput = {

@@ -1,6 +1,6 @@
 import SubmissionDb from '../repository/submission.db';
 import { Submission } from '../model/submission';
-import RaceService from './race.service';
+import RaceService from './Race.service';
 import { RaceInput, DriverInput, CrashInput } from '../types';
 
 const getAllSubmissions = async (): Promise<Submission[] | null> => {

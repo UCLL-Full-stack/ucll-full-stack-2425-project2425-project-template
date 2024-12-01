@@ -1,5 +1,5 @@
-import { User } from '../model/user';
-import userDb from '../repository/user.db';
+import { User } from '../model/User';
+import userDb from '../repository/User.db';
 
 const getUserByUsername = async (username: string): Promise<User | null> => {
   return userDb.getUserByUsername({ username });

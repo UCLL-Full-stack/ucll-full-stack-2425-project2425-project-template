@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User } from '../model/user';
+import { User } from '../model/User';
 import database from '../util/database';
 
 const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {

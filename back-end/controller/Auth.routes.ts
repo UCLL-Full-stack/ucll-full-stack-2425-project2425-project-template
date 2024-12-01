@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import AuthService from '../service/auth.service';
+import AuthService from '../service/Auth.Service';
 
 const authRouter = express.Router();
 const secretKey = process.env.JWT_SECRET || 'your_secret_key';

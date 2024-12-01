@@ -4,10 +4,11 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { submissionFormRouter } from './controller/submission_form.routes';
-import { raceRouter } from './controller/race.routes';
-import { authRouter } from './controller/auth.routes';
-import { crashRouter } from './controller/crash.routes';
+import { submissionFormRouter } from './controller/Submission_form.routes';
+import { raceRouter } from './controller/Race.routes';
+import { authRouter } from './controller/Auth.routes';
+import { crashRouter } from './controller/Crash.routes';
+import { userRouter } from './controller/user.routes';
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use('/submission_forms', submissionFormRouter);
 app.use('/races', raceRouter);
 app.use('/crashes', crashRouter);
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 const swaggerOpts = {
     definition: {

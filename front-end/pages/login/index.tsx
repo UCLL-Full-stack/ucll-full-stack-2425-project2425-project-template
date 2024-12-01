@@ -57,6 +57,11 @@ const Login: React.FC = () => {
           setRole={setRole}
           handleLogin={handleLogin}
         />
+        <div className="text-center mt-3">
+          <button className="btn btn-secondary" onClick={() => router.push('/register')}>
+            Register
+          </button>
+        </div>
       </main>
     </>
   );

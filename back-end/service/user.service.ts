@@ -1,6 +1,6 @@
-import bcypt from 'bcrypt';
-import userDB from '../repository/user.db';
-import { User } from '../model/user';
+import bcrypt from 'bcrypt';
+import userDB from '../repository/User.db';
+import { User } from '../model/User';
 import { AuthenticationResponse, UserInput } from '../types';
 
 const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
@@ -14,7 +14,7 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
 const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
     const user = await getUserByUsername({ username });
 
-    const isValidPassword = await bcypt.compare(password, user.getPassword());
+    const isValidPassword = await bcrypt.compare(password, user.getPassword());
 
     if (!isValidPassword) {
         throw new Error('Incorrect password');
@@ -25,4 +25,18 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
     };
 };
 
-export default { getUserByUsername, authenticate };
+const createUser = async (userInput: UserInput): Promise<User> => {
+    const hashedPassword = await bcrypt.hash(userInput.password, 10);
+    const newUser = new User({
+        username: userInput.username,
+        password: hashedPassword,
+        name: userInput.name,
+        surname: userInput.surname,
+        email: userInput.email,
+        permission: userInput.permission,
+        createdAt: new Date(),
+    });
+    return userDB.createUser({ user: newUser });
+};
+
+export default { getUserByUsername, authenticate, createUser };

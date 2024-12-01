@@ -1,4 +1,4 @@
-import { Race } from '../model/race';
+import { Race } from '../model/Race';
 import database from '../util/database';
 
 const createRace = async ({ race }: { race: Race }): Promise<Race> => {
