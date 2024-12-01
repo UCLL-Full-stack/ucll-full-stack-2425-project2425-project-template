@@ -1,22 +1,18 @@
-import { User } from './user';
 import { Recipe } from './recipe';
 import {
     Schedule as SchedulePrisma,
-    // User as UserPrisma,
     Recipe as RecipePrisma,
     RecipeIngredient as RecipeIngredientPrisma,
 } from '@prisma/client';
 
 export class Schedule {
     private id?: number;
-    // private user: User;
     private createdAt: Date;
     private recipes?: Recipe[];
 
     constructor(schedule: { id?: number; date: Date; recipes?: Recipe[] }) {
         this.validate(schedule);
         this.id = schedule.id;
-        // this.user = schedule.user;
         this.createdAt = schedule.date;
         this.recipes = schedule.recipes || [];
     }
@@ -41,9 +37,6 @@ export class Schedule {
         if (schedule.id !== undefined && (!Number.isInteger(schedule.id) || schedule.id <= 0)) {
             throw new Error('ID must be a positive integer');
         }
-        // if (!schedule.user) {
-        //     throw new Error('User is required');
-        // }
         if (!(schedule.date instanceof Date)) {
             throw new Error('Date must be a valid Date object');
         }
@@ -55,14 +48,6 @@ export class Schedule {
     getId(): number | undefined {
         return this.id;
     }
-
-    // getUser(): User {
-    //     return this.user;
-    // }
-
-    // setUser(user: User) {
-    //     this.user = user;
-    // }
 
     getDate(): Date {
         return this.createdAt;
@@ -103,7 +88,6 @@ export class Schedule {
     toJSON() {
         return {
             id: this.id,
-            // user: this.user.getId(),
             createdAt: this.createdAt,
             recipes: this.recipes?.map((recipe) => recipe.toJSON()),
         };

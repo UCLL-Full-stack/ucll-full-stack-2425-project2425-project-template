@@ -1,9 +1,7 @@
 import { IngredientCategory } from '../types';
-import { RecipeIngredient } from './recipeIngredient';
 import {
     Ingredient as IngredientPrisma,
     IngredientCategory as CategoryPrisma,
-    // RecipeIngredient as RecipeIngredientPrisma,
 } from '@prisma/client';
 
 export class Ingredient {
@@ -11,21 +9,18 @@ export class Ingredient {
     private name: string;
     private category: IngredientCategory;
     private store?: string;
-    // private recipes?: RecipeIngredient[];
 
     constructor(ingredient: {
         id?: number;
         name: string;
         category: IngredientCategory;
         store?: string;
-        // recipes?: RecipeIngredient[];
     }) {
         this.validate(ingredient);
         this.id = ingredient.id;
         this.name = ingredient.name;
         this.category = ingredient.category;
         this.store = ingredient.store;
-        // this.recipes = ingredient.recipes;
     }
 
     validate(ingredient: {
@@ -33,7 +28,6 @@ export class Ingredient {
         name: string;
         category: IngredientCategory;
         store?: string;
-        // recipes?: RecipeIngredient[];
     }) {
         if (
             ingredient.id !== undefined &&
@@ -57,8 +51,7 @@ export class Ingredient {
         name,
         category,
         store,
-    }: // recipes,
-    IngredientPrisma & {
+    }: IngredientPrisma & {
         category: CategoryPrisma;
     }): Ingredient {
         return new Ingredient({
@@ -66,7 +59,6 @@ export class Ingredient {
             name,
             category: category as IngredientCategory,
             store: store || undefined,
-            // recipes: recipes.map((recipe) => RecipeIngredient.from(recipe)),
         });
     }
 
@@ -86,19 +78,20 @@ export class Ingredient {
         return this.store;
     }
 
-    // getRecipes(): RecipeIngredient[] | undefined {
-    //     return this.recipes;
-    // }
-
-    // setRecipes(recipes: RecipeIngredient[]) {
-    //     this.recipes = recipes;
-    // }
-
     equals(ingredient: Ingredient): boolean {
         return (
             this.name === ingredient.getName() &&
             this.category === ingredient.getCategory() &&
             this.store === ingredient.getStore()
         );
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            category: this.category,
+            store: this.store,
+        };
     }
 }

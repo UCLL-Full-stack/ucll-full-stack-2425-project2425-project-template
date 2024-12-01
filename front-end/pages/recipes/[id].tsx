@@ -38,7 +38,10 @@ export default function RecipePage() {
     if (router.isReady) {
       fetchRecipe();
     }
-  }, [id, router.isReady]);
+  }, [id]);
+
+  console.log(recipe);
+  console.log(recipe?.ingredients[0]);
 
   const handleBack = () => {
     router.back();
