@@ -22,7 +22,7 @@ const PlaylistOverview: React.FC<Props> = ({ playlists }: Props) => {
                     key={index} 
                     className="bg-white shadow-md rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-200 ease-in-out"
                     onClick={() => {
-                        handlePlaylistClick(playlist.id)
+                        playlist.id !== undefined && handlePlaylistClick(playlist.id)
                     }}
                 >
                     <div className="text-center">
