@@ -72,10 +72,10 @@ const accountRouter = express.Router();
  *                 message:
  *                   type: string
  */
-accountRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+accountRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const account = <AccountInput>req.body;
-        const result = accountService.createAccount(account);
+        const result = await accountService.createAccount(account);
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -103,10 +103,10 @@ accountRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *                 $ref: '#/components/schemas/Account'
  */
-accountRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+accountRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = Number(req.params.id);
-        const account = accountService.getAccountById({ id });
+        const account = await accountService.getAccountById({ id });
         res.status(200).json(account);
     } catch (error: any) {
         next(error);

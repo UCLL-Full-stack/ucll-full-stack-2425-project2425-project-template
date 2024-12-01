@@ -2,6 +2,7 @@ import userDb from '../repository/user.db';
 import { User } from '../model/user';
 import { UserInput } from '../types/index';
 import accountService from './account.service';
+import accountDb from '../repository/account.db';
 
 const createUser = async (userInput: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByNationalRegisterNumber(userInput.email);
@@ -11,7 +12,6 @@ const createUser = async (userInput: UserInput): Promise<User> => {
             `User with national register number ${userInput.nationalRegisterNumber} already exists.`
         );
     }
-
     // const hashedPasswd = await bcrypt.hash(userInput.password, 12);
 
     const newUser = new User({
@@ -28,11 +28,25 @@ const createUser = async (userInput: UserInput): Promise<User> => {
 };
 
 // Dit word authenticate functie
-const getUserByEmailAndPassword = async (email: string, password: string): User | undefined => {
-    const user = userDb.getUserByEmailAndPassword(email, password);
-    if (!user) {
+const getUserByEmailAndPassword = async ({ email, password }: UserInput): Promise<User | null> => {
+    const user = userDb.getUserByEmail(email);
+    
+    if (user == null) {
         throw new Error('Invalid email or password.');
     }
+
+    // const isValidPassword = bcrypt.compare(password, existingUser.getPassword());
+   
+    // if (!isValidPassword) {
+    //     throw new Error('Incorrect password.');
+    // }
+    
+    // return {
+    //     token: generateSWTtoken({ email }), 
+    //     email: email,
+    //     name: `${user.getName()}}`,
+    // };
+
     return user;
 };
 
@@ -56,29 +70,36 @@ const getUserByNationalRegisterNumber = async (nationalRegisterNumber: string): 
     return user;
 };
 
-const addAccount = (nationalRegisterNumber: string, accountNumber: string): User => {
-    const user = getUserByNationalRegisterNumber(nationalRegisterNumber);
-    const account = accountService.getAccountByAccountNumber(accountNumber);
+const addAccount = async (nationalRegisterNumber: string, accountNumber: string): Promise<User> => {
+    const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
+    const account = await accountDb.getAccountByAccountNumber(accountNumber);
   
-    if (!user) {
+    if (user == null) {
         throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
     }
     if (!account) {
         throw new Error(`Account with account number ${accountNumber} not found.`);
     }
   
-    user.addAccount(account);
-    account.addUser(user);
+    // user.addAccount(account);
+    // account.addUser(user);
   
-    return user;
+    return await userDb.addAccount(nationalRegisterNumber, accountNumber);
 };
 
-const updateUser = async (updatedUser: UserInput): Promise<User> => {
-    const user = await userDb.getUserByEmail(updatedUser.email);
+const updateUser = async (nationalRegisterNumber: string, userInput: UserInput): Promise<User> => {
+    const user = await userDb.getUserByNationalRegisterNumber(nationalRegisterNumber);
     
     if (user == null) {
-        throw new Error(`User with national register number ${updatedUser.nationalRegisterNumber} not found.`);
+        throw new Error(`User with national register number ${nationalRegisterNumber} not found.`);
     }
+
+    user.update({
+        name: userInput.name,
+        phoneNumber: userInput.phoneNumber,
+        email: userInput.email,
+        password: userInput.password,
+    });
 
     return await userDb.updateUser(user);
 };

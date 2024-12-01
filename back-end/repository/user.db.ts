@@ -57,6 +57,7 @@ const getAllUsers = async (): Promise<User[]> => {
 // };
 
 const createUser = async (user: User): Promise<User> => {
+    // Dit gaat waarschijnlijk nog moeten worden aangepast => accounts => addAccounts
     const accounts = user.getAccounts();
     
     try {
@@ -118,9 +119,9 @@ const getUserByNationalRegisterNumber = async (nationalRegisterNumber: string): 
 };
 
 // DIT IS VOOR LOGIN => BCRYPT en JWT
-const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
-    return users.find((user) => user.getEmail() === email && user.getPassword() === password);
-};
+// const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
+//     return users.find((user) => user.getEmail() === email && user.getPassword() === password);
+// };
 
 const getUserByEmail = async (email: string): Promise<User | null> => {
     try {
@@ -144,7 +145,7 @@ const updateUser = async (updatedUser: User): Promise<User> => {
     try {
         const updatedPrisma = await database.user.update({
             where: {
-                email: updatedUser.getEmail(),
+                email: updatedUser.getNationalRegisterNumber(),
             },
             data: {
                 nationalRegisterNumber: updatedUser.getNationalRegisterNumber(),
@@ -199,12 +200,30 @@ const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
     // return 'User deleted successfully.';
 };
 
+const addAccount = async (nationalRegisterNumber: string, accountNumber: string): Promise<User> => {
+    try {
+        const updatedUser = await database.user.update({
+            where: { nationalRegisterNumber },
+            data: {
+                accounts: {
+                    connect: { accountNumber },
+                },
+            },
+            include: { accounts: { include: { transactions: true } } },
+        }); 
+        return User.from(updatedUser);
+    } catch (error: any) {
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
 export default {
     createUser,
     getUserByNationalRegisterNumber,
-    getUserByEmailAndPassword,
+    // getUserByEmailAndPassword,
     getUserByEmail,
     getAllUsers,
     updateUser,
     deleteUser,
+    addAccount,
 };
