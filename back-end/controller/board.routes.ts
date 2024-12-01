@@ -238,7 +238,7 @@ const boardRouter = Router();
 //     }
 // });
 
-boardRouter.get('/:guildId', async (req, res) => {
+boardRouter.get('/guild/:guildId', async (req, res) => {
     const { guildId } = req.params;
     try {
         const boards = boardService.getBoardsOfGuild(guildId)

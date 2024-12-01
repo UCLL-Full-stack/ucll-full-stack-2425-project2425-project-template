@@ -78,7 +78,8 @@ const Home: FC = () => {
             guildIds: userData.guildIds
           });
           const guildsData = await UserService.getGuilds(userData.userId);
-          setGuilds(guildsData);
+          console.log('Fetched guilds:', guildsData);
+          setGuilds(guildsData || []);
         }
       } catch (error) {
         console.error('Error fetching user data', error);
@@ -97,7 +98,6 @@ const Home: FC = () => {
       setBoards(fetchedBoards);
     } catch (error) {
       console.error('Error fetching boards', error);
-      
     }
   };
 

@@ -36,6 +36,9 @@ const canUserAccessGuild = async (userId: string, guildId: string): Promise<bool
 
 const getAllKanbanPermissionsForGuild = async (userId: string, guildId: string): Promise<KanbanPermission[]> => {
     const guild = await guildDb.getGuildById(guildId);
+    if(guild.getGuildOwnerId() === userId) {
+        return [KanbanPermission.ADMINISTRATOR];
+    }
     const permissions = guild.getSettings();
     const userRoles = guild.getMembers().find(member => member.userId === userId)?.roleIds || [];
     const roles = await Promise.all(userRoles.map(async (roleId) => await roleDb.getRoleById(roleId)));

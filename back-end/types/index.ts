@@ -51,7 +51,6 @@ export enum DiscordPermission {
     VIEW_CREATOR_MONETIZATION_ANALYTICS = "View Creator Monetization Analytics",
 }
 
-  
 export enum KanbanPermission {
     VIEW_BOARD = "View Board",
     CREATE_BOARD = "Create Board",

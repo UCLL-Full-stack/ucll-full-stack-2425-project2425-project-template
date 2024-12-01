@@ -8,6 +8,7 @@ const getAllGuilds = async(): Promise<Guild[]> => {
     try {
         const guildsPrisma = await database.guild.findMany({
             include: {
+                guildOwner: true,
                 roles: {
                     select: { roleId: true },
                 },
@@ -36,6 +37,7 @@ const getGuildById = async (guildId: string): Promise<Guild> => {
     const guildPrisma = await database.guild.findUnique({
       where: { guildId },
       include: {
+        guildOwner: true,
         roles: {
           select: { roleId: true },
         },
@@ -78,7 +80,7 @@ const addGuild = async (guildData: {
             userIds = [],
             boardIds = [],
         } = guildData;
-
+        // console.log('guildData:', guildData);
         const settingsJson = JSON.stringify(settings);
         const membersJson = JSON.stringify(members);
     
@@ -86,7 +88,9 @@ const addGuild = async (guildData: {
             data: {
             guildId,
             guildName,
-            guildOwnerId,
+            guildOwner: {
+                connect: { userId: guildOwnerId },
+            },
             settings: settingsJson,
             roles: {
                 connect: roleIds.map((roleId) => ({ roleId })),
@@ -100,6 +104,7 @@ const addGuild = async (guildData: {
             },
             },
             include: {
+                guildOwner: true,
                 roles: {
                     select: { roleId: true },
                 },
@@ -136,7 +141,7 @@ const updateGuild = async (guildId: string, updateData: {
         const { guildName, guildOwnerId, settings, roleIds, members, userIds, boardIds } = updateData;
         const data: any = {};
         if (guildName !== undefined) data.guildName = guildName;
-        if (guildOwnerId !== undefined) data.guildOwnerId = guildOwnerId;
+        if (guildOwnerId !== undefined) data.guildOwner = { connect: { userId: guildOwnerId } };
         if (settings !== undefined) data.settings = JSON.stringify(settings);
         if (roleIds !== undefined) {
             data.roles = {
@@ -164,6 +169,7 @@ const updateGuild = async (guildId: string, updateData: {
             where: { guildId },
             data,
             include: {
+                guildOwner: true,
                 roles: {
                     select: { roleId: true },
                 },

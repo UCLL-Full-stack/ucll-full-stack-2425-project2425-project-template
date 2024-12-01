@@ -4,6 +4,19 @@ import { UpdateUserInput } from "../types";
 
 const userRouter = Router();
 
+userRouter.get("/", async (req, res) => {
+    try {
+        const users = await userService.getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+        } else {
+        res.status(404).json({ error: "An unknown error occurred" });
+        }
+    }
+});
+
 userRouter.get("/:userId", async (req, res) => {
     const { userId } = req.params;
     try {
@@ -59,6 +72,20 @@ userRouter.get("/:userId/guilds", async (req, res) => {
     try {
         const guilds = await userService.getUserGuilds(userId);
         res.status(200).json(guilds);
+    } catch (error) {
+        if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+        } else {
+        res.status(404).json({ error: "An unknown error occurred" });
+        }
+    }
+});
+
+userRouter.get("/:userId/guilds/:guildId/kanban-permissions", async (req, res) => {
+    const { userId, guildId } = req.params;
+    try {
+        const kanbanPermissions = await userService.getAllKanbanPermissionsForGuild(userId, guildId);
+        res.status(200).json(kanbanPermissions);
     } catch (error) {
         if (error instanceof Error) {
         res.status(404).json({ error: error.message });

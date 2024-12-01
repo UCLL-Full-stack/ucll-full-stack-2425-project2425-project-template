@@ -68,7 +68,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 })
                 
                 const botGuildData = await Promise.all(
-                    guildsData.map(async (guild: {id: string, name: string}) => {
+                    guildsData.map(async (guild: {id: string, name: string, ownerId: string}) => {
                         try {
                             const botGuild = client.guilds.cache.get(guild.id);
                             if (!botGuild) return null;
@@ -87,6 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             return {
                                 id: guild.id,
                                 name: guild.name,
+                                ownerId: botGuild.ownerId,
                                 roles,
                                 members: memberData,
                             };
@@ -101,9 +102,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     const exists = await GuildService.getGuild(guild.id);
                     if(exists.error){
                         if(exists.error === "Guild not found"){
+                            // console.log(guild)
                             await GuildService.addGuild({
                                 guildId: guild.id,
                                 guildName: guild.name,
+                                guildOwnerId: guild.ownerId,
                                 members: guild.members.map((member: any) => {
                                     return {
                                         userId: member.userId,
@@ -123,6 +126,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     } else if(exists.guildId){
                         await GuildService.updateGuild(guild.id, {
                             guildName: guild.name,
+                            guildOwnerId: guild.ownerId,
                             members: guild.members.map((member: any) => {
                                 return {
                                     userId: member.userId,
