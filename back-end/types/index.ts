@@ -40,9 +40,12 @@ type AuthenticationRequest = {
 };
 
 type AuthenticationResponse = {
-    id: number;
+    token: string;
+    id?: number;
     email: string;
+    name: string;
 };
+
 
 export {
     TransactionType,

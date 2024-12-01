@@ -1,8 +1,13 @@
 import userDb from '../repository/user.db';
 import { User } from '../model/user';
-import { UserInput } from '../types/index';
+import { AuthenticationResponse, UserInput } from '../types/index';
 import accountService from './account.service';
 import accountDb from '../repository/account.db';
+import bcrypt from 'bcrypt';
+import { generateJwtToken } from '../util/jwt';
+
+const getAllUsers = async (): Promise<User[]> => userDb.getAllUsers();
+
 
 const createUser = async (userInput: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByNationalRegisterNumber(userInput.email);
@@ -12,7 +17,7 @@ const createUser = async (userInput: UserInput): Promise<User> => {
             `User with national register number ${userInput.nationalRegisterNumber} already exists.`
         );
     }
-    // const hashedPasswd = await bcrypt.hash(userInput.password, 12);
+    const hashedPasswd = await bcrypt.hash(userInput.password, 12);
 
     const newUser = new User({
         nationalRegisterNumber: userInput.nationalRegisterNumber,
@@ -21,33 +26,32 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         isAdministrator: userInput.isAdministrator,
         phoneNumber: userInput.phoneNumber,
         email: userInput.email,
-        password: userInput.password,
+        password: hashedPasswd,
     });
 
     return await userDb.createUser(newUser);
 };
 
 // Dit word authenticate functie
-const getUserByEmailAndPassword = async ({ email, password }: UserInput): Promise<User | null> => {
-    const user = userDb.getUserByEmail(email);
+const authenticate = async ({ email, password }: UserInput): Promise<AuthenticationResponse> => {
+    const existingUser = await userDb.getUserByEmail(email);
     
-    if (user == null) {
+    if (existingUser == null) {
         throw new Error('Invalid email or password.');
     }
 
-    // const isValidPassword = bcrypt.compare(password, existingUser.getPassword());
+    const isValidPassword = bcrypt.compare(password, existingUser.getPassword());
    
-    // if (!isValidPassword) {
-    //     throw new Error('Incorrect password.');
-    // }
+    if (!isValidPassword) {
+        throw new Error('Incorrect password.');
+    }
     
-    // return {
-    //     token: generateSWTtoken({ email }), 
-    //     email: email,
-    //     name: `${user.getName()}}`,
-    // };
-
-    return user;
+    return {
+        token: generateJwtToken({ email }),
+        id: existingUser.getId(),
+        email: email,
+        name: `${existingUser.getName()}}`,
+    };
 };
 
 const getUserByEmail = async (email: string): Promise<User> => {
@@ -121,8 +125,9 @@ const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
 };
 
 export default {
+    getAllUsers,
     createUser,
-    getUserByEmailAndPassword,
+    authenticate,
     getUserByEmail,
     getUserByNationalRegisterNumber,
     addAccount,
