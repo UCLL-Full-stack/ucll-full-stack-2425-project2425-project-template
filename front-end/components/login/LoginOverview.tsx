@@ -1,13 +1,31 @@
+import { getUser } from '@services/userService';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 const LoginOverview: React.FC = () => {
     const router = useRouter(); 
+    const [isAdmin, setIsAdmin] = useState(false);
+    const onLogin = async () => {
+        const id = (document.getElementById("userField") as HTMLInputElement).value;
+        const password = (document.getElementById("passField") as HTMLInputElement).value;
+        
+        const user = {id: id, password}
+        const response = await getUser(id);
+        if (response.status == 200) {
 
-    const onLogin = () => {
+            const user = await response.json();
+            sessionStorage.setItem(
+            'loggedInUser',
+            JSON.stringify({
+                token: user.token,
+                id: user.id,
+                email: user.email,
+                role: user.role
+            })
+        )
+        }
         router.push('/'); 
     };
-
     return (
         <div className="flex flex-col">
             <h2 className="text-2xl font-semibold text-center text-gray-700">Login</h2>

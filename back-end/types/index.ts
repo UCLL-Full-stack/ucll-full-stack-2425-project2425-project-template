@@ -7,24 +7,34 @@ type UserInput = {
     username: string;
     email: string;
     password: string;
-    playlists: PlaylistInput[]
+    playlists:PlaylistInput[];
+    role: Role;
 }
 
 type PlaylistInput = {
     id?: number;
-    name: string;
-    totalNumbers: number;
+    name?: string;
+    totalNumbers?: number;
 }
 
 type SongInput = {
     id?: number;
-    title: string;
-    genre: string;
+    title?: string;
+    genre?: string;
 }
+
+type AuthenticationResponse = {
+    token?: string;
+    username?: string;
+    email?: string;
+    role?: string;
+}
+
 
 export {
     Role,
     UserInput,
     PlaylistInput,
-    SongInput
+    SongInput,
+    AuthenticationResponse
 }

@@ -40,6 +40,8 @@ const songRouter = express.Router()
  * @swagger
  * /songs:
  *   get:
+ *     security:
+ *       - bearerAuth: []  
  *     summary: Get a list of all songs.
  *     responses:
  *       200:
@@ -51,7 +53,7 @@ const songRouter = express.Router()
  *               items:
  *                 $ref: '#/components/schemas/Song'
  */
-songRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+songRouter.get('/', async (req: Request , auth:any, res: Response, next: NextFunction) => {
     const songs = songService.getAllSongs();
     res.status(200).json(songs)
 })

@@ -36,11 +36,18 @@ type Song = {
     genre: string;
 }
 
+type AuthenticationResponse = {
+    token?: string;
+    rnummer?: string;
+    email?: string;
+}
+
 export type {
     Role,
     UserInput,
     PlaylistInput,
     SongInput,
     Song,
-    Playlist
+    Playlist,
+    AuthenticationResponse
 }

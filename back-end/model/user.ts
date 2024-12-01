@@ -1,13 +1,16 @@
+import { Role } from "../types";
 import { Playlist } from "./playlist";
-
+import { User as UserPrisma } from '@prisma/client'
+import {Playlist as PlaylistPrisma} from '@prisma/client'
 export class User {
-    private id?: number;
-    private firstName: string;
-    private lastName: string;
-    private username: string;
-    private email: string;
-    private password: string;
-    private playlists: Playlist[];
+    readonly id: number;
+    readonly firstName: string;
+    readonly lastName: string;
+    readonly username: string;
+    readonly email: string;
+    readonly password: string;
+    readonly playlists: Playlist[];
+    readonly role: Role;
 
     constructor(user: {
         id?: number;
@@ -16,20 +19,21 @@ export class User {
         username: string;
         email: string;
         password: string;
-        playlists: Playlist[]
+        playlists?: Playlist[];
+        role: Role;
     }) {
         this.validate(user);
-
-        this.id = user.id;
+        this.id = user.id ?? -1;  // Default to a placeholder value if id is undefined
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.username = user.username;
         this.email = user.email;
         this.password = user.password;
-        this.playlists = user.playlists;
+        this.playlists = user.playlists ?? [];
+        this.role = user.role;
     }
 
-    getId(): number | undefined {
+    getId(): number {
         return this.id;
     }
 
@@ -60,6 +64,10 @@ export class User {
     getPlaylists(): Playlist[] {
         return this.playlists
     }
+    getRole(): Role {
+        return this.role
+    }
+
 
 
     validate(user: {
@@ -68,7 +76,8 @@ export class User {
         username: string;
         email: string;
         password: string;
-        playlists: Playlist[]
+        playlists?: Playlist[];
+        role: Role;
     }) {
         if (!user.firstName?.trim()) {
             throw new Error('First name is required');
@@ -94,7 +103,31 @@ export class User {
             this.username === user.getUsername() &&
             this.email === user.getEmail() &&
             this.password === user.getPassword() &&
-            this.playlists.every((playlist, index) => playlist.equals(user.getPlaylists()[index]))
+            this.playlists.every((playlist, index) => playlist.equals(user.getPlaylists()[index])) &&
+            this.role === user.getRole()
         );
     }
+
+    static from({
+        id,
+        firstName,
+        lastName,
+        username,
+        password,
+        email,
+        playlists,
+        role,
+    }: UserPrisma & { playlists?: PlaylistPrisma[] }) {
+        return new User({
+            id,
+            firstName,
+            lastName,
+            username,
+            password,
+            email,
+            playlists: playlists ? playlists.map((playlist) => Playlist.from(playlist)) : [],
+            role: role as Role,
+        });
+    }
+    
 }

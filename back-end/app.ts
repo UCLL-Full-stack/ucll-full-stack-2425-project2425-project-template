@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { playlistRouter } from './controller/playlist.routes';
 import { songRouter } from './controller/song.routes';
+import { expressjwt } from 'express-jwt';
 
 
 const app = express();
@@ -19,6 +20,20 @@ app.use(bodyParser.json());
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
+
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+    throw new Error('JWT_SECRET environment variable is not defined');
+}
+
+app.use(
+    expressjwt({
+        secret: jwtSecret, 
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/api/users/login', '/api/users/signup', '/api/users', '/api/status', '/status'],
+    })
+);
 
 app.use('/users', userRouter)
 app.use('/playlists', playlistRouter)

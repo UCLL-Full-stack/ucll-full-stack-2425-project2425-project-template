@@ -1,3 +1,5 @@
+import { Song as SongPrisma } from '@prisma/client'
+
 export class Song {
     private id?: number;
     private title: string;
@@ -25,11 +27,11 @@ export class Song {
         return this.genre
     }
 
-    validate(song: {title: string; genre: string}) {
-        if(!song.title) {
+    validate(song: { title: string; genre: string }) {
+        if (!song.title) {
             throw new Error('Title is required')
         }
-        if(!song.genre) {
+        if (!song.genre) {
             throw new Error('Genre is required')
         }
     }
@@ -41,4 +43,17 @@ export class Song {
             this.genre === song.getGenre()
         )
     }
+
+    static from({
+        id,
+        title,
+        genre
+    }: SongPrisma) {
+    return new Song({
+        id,
+        title,
+        genre,
+       
+    })
+}
 }
