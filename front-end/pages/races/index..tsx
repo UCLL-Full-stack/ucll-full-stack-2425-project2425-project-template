@@ -2,18 +2,18 @@ import Head from 'next/head';
 import Header from '@components/header';
 import { useState, useEffect } from 'react';
 import raceService from '@services/RaceService';
-import { Race } from '@types';
+import { Race, Crash } from '@types';
 import RaceOverviewTable from '@components/races/RaceOverviewTable';
 import CrashOverviewTable from '@components/crashes/CrashOverviewTable';
 
 const Races: React.FC = () => {
-  
-  const [races, setRaces] = useState<Array<Race>>();
-  const [error, setError] = useState<string>();
+  const [races, setRaces] = useState<Array<Race>>([]);
+  const [error, setError] = useState<string>('');
   const [selectedRace, setSelectedRace] = useState<Race | null>(null);
+  const [selectedCrash, setSelectedCrash] = useState<Crash | null>(null);
 
   const getRaces = async () => {
-    setError("");
+    setError('');
     const response = await raceService.getAllRaces();
 
     if (!response.ok) {
@@ -22,11 +22,20 @@ const Races: React.FC = () => {
       const races = await response.json();
       setRaces(races);
     }
-  }
+  };
 
   useEffect(() => {
     getRaces();
   }, []);
+
+  const handleCrashClick = (crash: Crash) => {
+    setSelectedCrash(crash);
+  };
+
+  const handleRaceClick = (race: Race) => {
+    setSelectedRace(race);
+    setSelectedCrash(null); // Reset selected crash
+  };
 
   return (
     <>
@@ -38,21 +47,19 @@ const Races: React.FC = () => {
         <h1>Races</h1>
         <section>
           {error && <div className="text-red-800">{error}</div>}
-          {races && (
+          {races.length > 0 && (
             <RaceOverviewTable
               races={races}
-              selectRace={setSelectedRace}
-              />
+              selectRace={handleRaceClick}
+            />
           )}
         </section>
 
         {selectedRace && (
           <section>
-            <h2>
-              Crashes withing "{selectedRace.name}"
-            </h2>
+            <h2>Crashes within "{selectedRace.name}"</h2>
             {selectedRace.crashes && (
-              <CrashOverviewTable race={selectedRace} />
+              <CrashOverviewTable crashes={selectedRace.crashes} onCrashClick={handleCrashClick} selectedRace={selectedRace} />
             )}
           </section>
         )}

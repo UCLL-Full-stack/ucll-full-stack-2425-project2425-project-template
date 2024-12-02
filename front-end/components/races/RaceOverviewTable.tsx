@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Race } from '@types';
 
 interface Props {
@@ -10,6 +10,13 @@ const RaceOverviewTable: React.FC<Props> = ({
     races,
     selectRace,
 }: Props) => {
+    const [selectedRace, setSelectedRace] = useState<Race | null>(null);
+
+    const handleRaceClick = (race: Race) => {
+        setSelectedRace(race);
+        selectRace(race);
+    };
+
     return (
         <>
             {races && races.length > 0 ? (
@@ -18,7 +25,6 @@ const RaceOverviewTable: React.FC<Props> = ({
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Description</th>
                             <th scope="col">Location</th>
                         </tr>
                     </thead>
@@ -26,11 +32,10 @@ const RaceOverviewTable: React.FC<Props> = ({
                         {races.map((race, index) => (
                             <tr 
                                 key={index}
-                                onClick={() => selectRace(race)}
+                                onClick={() => handleRaceClick(race)}
                                 role="button">
                                 <td>{race.name}</td>
                                 <td>{race.type}</td>
-                                <td>{race.description}</td>
                                 <td>{race.location}</td>
                             </tr>
                         ))}

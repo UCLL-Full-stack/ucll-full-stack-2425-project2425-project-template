@@ -1,58 +1,76 @@
 export type Admin = {
-  name: string;
-  role: string;
+  id?: number;
+  username: string;
+  password: string;
 };
 
 export type Crash = {
+  id?: number;
   type: string;
   description: string;
   casualties: number;
   deaths: number;
-  id?: number;
+  participants?: Participant[];
 };
 
 export type Driver = {
-  name: string;
-  team: string;
-  description: string;
-  age: number;
-  racecar: Racecar;
-  crash: Crash;
   id?: number;
+  name: string;
+  surname: string;
+  birthdate: Date;
+  team: string;
+  country: string;
+  description: string;
 };
 
 export type Gebruiker = {
+  id?: number;
   username: string;
   password: string;
+  name: string;
+  surname: string;
+  email: string;
+  permission: Permission;
+  createdAt: Date;
+  submissions?: Submission_form[];
+};
+
+export type Participant = {
   id?: number;
+  driver: Driver;
+  racecar: Racecar;
 };
 
 export type Race = {
+  id?: number;
   name: string;
   type: string;
   description: string;
   location: string;
-  drivers?: Driver[];
+  date: Date;
   crashes?: Crash[];
-  admin?: Admin;
-  id?: number;
 };
 
 export type Racecar = {
-  car_name: string;
-  type: string;
-  description: string;
-  hp: number;
   id?: number;
+  name: string;
+  type: string;
+  brand: string;
+  hp: number;
 };
 
 export type Submission_form = {
+  id?: number;
   title: string;
   content: string;
+  type: string;
+  createdAt: Date;
+  solvedAt?: Date;
   user: Gebruiker;
   race: Race;
-  id?: number;
 };
+
+export type Permission = 'ADMIN' | 'USER' | 'GUEST';
 
 export type User = {
   firstName?: string;

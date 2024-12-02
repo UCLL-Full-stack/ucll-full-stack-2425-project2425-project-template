@@ -55,8 +55,8 @@ const main = async () => {
 
     await prisma.user.create({
         data: {
-            username: 'SigmaMale',
-            password: await bcrypt.hash('SkibidiRizz2012', 10),
+            username: 'guest123',
+            password: await bcrypt.hash('password123456', 10),
             name: 'Piotr',
             surname: 'Brzasczykiewiczkowski',
             email: 'piotr.brzaczykiewiczkowski@ucll.be',
@@ -65,7 +65,7 @@ const main = async () => {
         },
     });
 
-    await prisma.driver.create({
+    const driver1 = await prisma.driver.create({
         data: {
             name: 'Lewis',
             surname: 'Hamilton',
@@ -76,7 +76,7 @@ const main = async () => {
         },
     });
 
-    await prisma.driver.create({
+    const driver2 = await prisma.driver.create({
         data: {
             name: 'Max',
             surname: 'Verstappen',
@@ -87,61 +87,176 @@ const main = async () => {
         },
     });
 
-    await prisma.racecar.create({
+    const driver3 = await prisma.driver.create({
+        data: {
+            name: 'Sebastian',
+            surname: 'Vettel',
+            birthdate: new Date('1987-07-03'),
+            team: 'Aston Martin',
+            country: 'Germany',
+            description: 'A four-time world champion',
+        },
+    });
+
+    const driver4 = await prisma.driver.create({
+        data: {
+            name: 'Charles',
+            surname: 'Leclerc',
+            birthdate: new Date('1997-10-16'),
+            team: 'Ferrari',
+            country: 'Monaco',
+            description: 'A young and talented driver',
+        },
+    });
+
+    const driver5 = await prisma.driver.create({
+        data: {
+            name: 'Lando',
+            surname: 'Norris',
+            birthdate: new Date('1999-11-13'),
+            team: 'McLaren',
+            country: 'United Kingdom',
+            description: 'A promising young driver',
+        },
+    });
+
+    const racecar1 = await prisma.racecar.create({
         data: {
             name: 'Mercedes W12',
             type: 'Formula 1',
             brand: 'Mercedes',
-            hp: 1000
+            hp: 1000,
         },
     });
 
-    await prisma.racecar.create({
+    const racecar2 = await prisma.racecar.create({
         data: {
             name: 'Red Bull RB16B',
             type: 'Formula 1',
             brand: 'Red Bull',
-            hp: 1050
+            hp: 1050,
         },
     });
 
-    await prisma.participant.create({
+    const racecar3 = await prisma.racecar.create({
         data: {
-            driver: {
-                connect: { id: 1 }
-            },
-            racecar: {
-                connect: { id: 1 }
-            }
+            name: 'Aston Martin AMR21',
+            type: 'Formula 1',
+            brand: 'Aston Martin',
+            hp: 980,
         },
     });
 
-    await prisma.participant.create({
+    const racecar4 = await prisma.racecar.create({
         data: {
-            driver: {
-                connect: { id: 2 }
-            },
-            racecar: {
-                connect: { id: 2 }
-            }
+            name: 'Ferrari SF21',
+            type: 'Formula 1',
+            brand: 'Ferrari',
+            hp: 1020,
         },
     });
 
-    await prisma.crash.create({
+    const racecar5 = await prisma.racecar.create({
         data: {
-            type: "Collision",
+            name: 'McLaren MCL35M',
+            type: 'Formula 1',
+            brand: 'McLaren',
+            hp: 990,
+        },
+    });
+
+    const participant1 = await prisma.participant.create({
+        data: {
+            driverId: driver1.id,
+            racecarId: racecar1.id,
+        },
+    });
+
+    const participant2 = await prisma.participant.create({
+        data: {
+            driverId: driver2.id,
+            racecarId: racecar2.id,
+        },
+    });
+
+    const participant3 = await prisma.participant.create({
+        data: {
+            driverId: driver3.id,
+            racecarId: racecar3.id,
+        },
+    });
+
+    const participant4 = await prisma.participant.create({
+        data: {
+            driverId: driver4.id,
+            racecarId: racecar4.id,
+        },
+    });
+
+    const participant5 = await prisma.participant.create({
+        data: {
+            driverId: driver5.id,
+            racecarId: racecar5.id,
+        },
+    });
+
+    const crash1 = await prisma.crash.create({
+        data: {
+            type: 'Collision',
             description: 'Crash at turn 3',
             casualties: 2,
-            deaths: 1
+            deaths: 1,
+            participants: {
+                connect: [{ id: participant1.id }, { id: participant2.id }],
+            },
         },
     });
 
-    await prisma.crash.create({
+    const crash2 = await prisma.crash.create({
         data: {
-            type: "Collision",
+            type: 'Collision',
             description: 'Crash at turn 5',
             casualties: 3,
-            deaths: 0
+            deaths: 0,
+            participants: {
+                connect: [{ id: participant1.id }],
+            },
+        },
+    });
+
+    const crash3 = await prisma.crash.create({
+        data: {
+            type: 'Spin',
+            description: 'Spin at turn 7',
+            casualties: 0,
+            deaths: 0,
+            participants: {
+                connect: [{ id: participant3.id }],
+            },
+        },
+    });
+
+    const crash4 = await prisma.crash.create({
+        data: {
+            type: 'Collision',
+            description: 'Crash at turn 2',
+            casualties: 1,
+            deaths: 0,
+            participants: {
+                connect: [{ id: participant4.id }, { id: participant5.id }],
+            },
+        },
+    });
+
+    const crash5 = await prisma.crash.create({
+        data: {
+            type: 'Engine Failure',
+            description: 'Engine failure at turn 10',
+            casualties: 0,
+            deaths: 0,
+            participants: {
+                connect: [{ id: participant2.id }],
+            },
         },
     });
 
@@ -153,7 +268,7 @@ const main = async () => {
             location: 'Monaco',
             date: new Date(),
             crashes: {
-                connect: { id: 1 }
+                connect: [{ id: crash1.id }, { id: crash2.id }],
             },
         },
     });
@@ -166,56 +281,56 @@ const main = async () => {
             location: 'Silverstone',
             date: new Date(),
             crashes: {
-                connect: { id: 2 }
+                connect: [{ id: crash3.id }, { id: crash4.id }],
             },
         },
     });
-    
-    await prisma.submission.create({
+
+    await prisma.race.create({
         data: {
-            title: 'Race Application 1',
-            content: 'This is the first race application form.',
+            name: 'Grand Prix Spa',
             type: 'Formula 1',
-            createdAt: new Date(),
-            user: {
-                connect: { id: 1 }
-            }
-        },
-    });
-    
-    await prisma.submission.create({
-        data: {
-            title: 'Race Application 3',
-            content: 'This is the third race application form.',
-            type: 'Formula 1',
-            createdAt: new Date(),
-            user: {
-                connect: { id: 1 }
-            }
+            description: 'A challenging race',
+            location: 'Spa',
+            date: new Date(),
+            crashes: {
+                connect: [{ id: crash5.id }],
+            },
         },
     });
 
-    await prisma.submission.create({
+    await prisma.race.create({
         data: {
-            title: 'Add max verstappen',
-            content: 'he crashed at turn 3 on the 12th of may 2021. Some other info here',
-            type: 'Crash',
-            createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-            solvedAt: new Date(),
-            user: {
-                connect: { id: 2 }
-            }
+            name: 'Grand Prix Monza',
+            type: 'Formula 1',
+            description: 'A fast race',
+            location: 'Monza',
+            date: new Date(),
+            crashes: {
+                connect: [{ id: crash1.id }, { id: crash3.id }],
+            },
         },
     });
 
+    await prisma.race.create({
+        data: {
+            name: 'Grand Prix Suzuka',
+            type: 'Formula 1',
+            description: 'A technical race',
+            location: 'Suzuka',
+            date: new Date(),
+            crashes: {
+                connect: [{ id: crash2.id }, { id: crash4.id }],
+            },
+        },
+    });
 }
 
-(async () => {
-    try {
-        await main();
-        await prisma.$disconnect();
-    } catch (error) {
-        console.error(error);
+main()
+    .catch((e) => {
+        console.error(e);
         process.exit(1);
-    }
-})();
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });
