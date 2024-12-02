@@ -55,7 +55,7 @@ const Home: FC = () => {
       console.log('Created board with data:', boardPayload);
       if (selectedGuildId) {
         const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId);
-        setBoards(fetchedBoards);
+        setBoards(fetchedBoards || []);
     }
     } catch (error) {
       console.error('Error creating board', error);
@@ -99,8 +99,8 @@ const Home: FC = () => {
     } else if (!guild.greyedOut) {
       setSelectedGuildId(guild.guildId || guild.id);
       try {
-          const fetchedBoards = await BoardService.getBoardsByGuild(guild.guildId || guild.id);
-          setBoards(fetchedBoards);
+          const fetchedBoards = await BoardService.getBoardsByGuild(guild.guildId);
+          setBoards(fetchedBoards || []);
       } catch (error) {
           console.error('Error fetching boards', error);
       }
@@ -130,9 +130,9 @@ const Home: FC = () => {
             {selectedGuildId && (
                 <div className="mt-8 p-4 bg-gray-800 rounded-lg m-4">
                     <h2 className="text-white text-xl font-bold">Boards</h2>
-                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white">
                       {boards.length === 0 ? (
-                          <p>No boards available for this guild.</p>
+                          <p>No boards available for this server.</p>
                       ) : (
                           boards.map(board => (
                               <BoardCard key={board.boardId} board={board} />

@@ -12,10 +12,11 @@ interface GuildCardProps {
 const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick }) => {
     const { user } = useUser();
     const [canCreateBoard, setCanCreateBoard] = React.useState(false);
-    console.log('Guild:', guild);
+    // console.log('Guild:', guild);
     useEffect(() => {
         const checkPermissions = async () => {
             try {
+                if( guild.greyedOut) return;
                 const userGuildKanbanPermissions = await UserService.getUserGuildKanbanPermissions(user!.userId, guild.guildId);
                 // console.log('User guild kanban permissions:', userGuildKanbanPermissions);
                 const hasPermission = userGuildKanbanPermissions.includes(KanbanPermission.CREATE_BOARD) ||
