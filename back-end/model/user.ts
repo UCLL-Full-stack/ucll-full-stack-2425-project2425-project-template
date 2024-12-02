@@ -1,6 +1,14 @@
 import { Group } from "./group";
 import { Profile } from "./profile";
 import { Task } from "./task";
+import {
+    User as UserPrisma,
+    Profile as ProfilePrisma,
+    Group as GroupPrisma,
+    Board as BoardPrisma,
+    Status as StatusPrisma,
+    Task as TaskPrisma
+} from '@prisma/client'
 
 export class User {
     private id?: number;
@@ -8,7 +16,6 @@ export class User {
     private hashedPassword: string;
     private profile?: Profile;
     private groups: Group[];
-    private tasks: Task[];
 
     constructor(user: {
         id?: number;
@@ -16,14 +23,12 @@ export class User {
         hashedPassword: string;
         profile?: Profile;
         groups?: Group[];
-        tasks?: Task[];
     }) {
         this.id = user.id;
         this.username = user.username;
         this.hashedPassword = user.hashedPassword;
         this.profile = user.profile || undefined;
         this.groups = user.groups || [];
-        this.tasks = user.tasks || [];
     }
 
     // getters
@@ -47,10 +52,6 @@ export class User {
         return this.groups;
     }
 
-    getTasks(): Task[] {
-        return this.tasks;
-    }
-
     // setters
     setUsername(username: string): void {
         this.username = username;
@@ -68,10 +69,6 @@ export class User {
         this.groups = groups;
     }
 
-    setTasks(tasks: Task[]): void {
-        this.tasks = tasks;
-    }
-
     // methods
     equals(otherUser: User): boolean {
         let profilesAreEqual = true;
@@ -87,10 +84,23 @@ export class User {
             profilesAreEqual &&
             this.groups.every((group, index) => {
                 return group.equals(otherUser.getGroups()[index]);
-            }) &&
-            this.tasks.every((task, index) => {
-                return task.equals(otherUser.getTasks()[index]);
             })
         );
+    }
+
+    static from({
+        id,
+        username,
+        hashedPassword,
+        profile,
+        groups,
+    }: UserPrisma & { profile: ProfilePrisma | null, groups: (GroupPrisma & { boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]})[]}) {
+        return new User({
+            id,
+            username,
+            hashedPassword,
+            profile: profile ? Profile.from(profile) : undefined,
+            groups: groups.map((group) => Group.from(group)),
+        });
     }
 }

@@ -1,4 +1,9 @@
 import { Status } from "./status";
+import {
+    Board as BoardPrisma,
+    Status as StatusPrisma,
+    Task as TaskPrisma
+} from '@prisma/client'
 
 export class Board {
     private id?: number;
@@ -75,5 +80,21 @@ export class Board {
                 return status.equals(otherBoard.getStatuses()[index]);
             })
         );
+    }
+
+    static from({
+        id,
+        name,
+        description,
+        updatedAt,
+        statuses
+    }: BoardPrisma & { statuses: (StatusPrisma & { tasks: TaskPrisma[] })[] }): Board {
+        return new Board({
+            id,
+            name,
+            description,
+            updatedAt,
+            statuses: statuses.map((status) => Status.from(status))
+        });
     }
 }

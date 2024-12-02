@@ -1,15 +1,12 @@
 import { Board } from '../model/board';
 import boardDb from '../repository/board.db';
 
-const getAllBoards = (): Board[] => {
-    return boardDb.getAllBoards();
+const getAllBoards = async (): Promise<Board[]> => {
+    return await boardDb.getAllBoards();
 };
 
-const getBoardById = (id: number): Board => {
-    const board = boardDb.getBoardById({id});
-    if (!board) {
-        throw new Error(`Board with id ${id} does not exist.`);
-    }
+const getBoardById = async (id: number): Promise<Board> => {
+    const board = await boardDb.getBoardById({id});
     return board;
 }
 

@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    id          Int         @id @default(autoincrement())
+    username    String      @unique
+    hashedPassword  String
+    profile     Profile?
+    groups      Group[]
+}
+
+model Profile {
+    id          Int         @id @default(autoincrement())
+    email       String      @unique
+    bio         String
+    firstName   String
+    lastName    String
+    userId      Int         @unique
+    user        User        @relation(fields: [userId], references: [id])
+}
+
+model Group {
+    id          Int         @id @default(autoincrement())
+    name        String
+    description String
+    createdAt   DateTime    @default(now())
+    users       User[]
+    boards      Board[]
+}
+
+model Board {
+    id          Int         @id @default(autoincrement())
+    name        String
+    description String
+    updatedAt   DateTime    @default(now())
+    groupId     Int
+    group       Group       @relation(fields: [groupId], references: [id])
+    statuses    Status[]
+}
+
+model Status {
+    id          Int         @id @default(autoincrement())
+    name        String
+    boardId     Int
+    board       Board       @relation(fields: [boardId], references: [id])
+    tasks       Task[]
+}
+
+model Task {
+    id          Int         @id @default(autoincrement())
+    name        String
+    description String
+    priority    String
+    storyPoints Int
+    startDate   DateTime
+    endDate     DateTime
+    statusId    Int
+    status      Status      @relation(fields: [statusId], references: [id])
+}
+
