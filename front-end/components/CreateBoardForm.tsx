@@ -32,10 +32,16 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
             setSelectedGuild(selectedGuildId);
         }
         for (const guild of guilds) {
-            const guildPermissions = permissions.filter(
+            const guildPermissions = permissions.find(
                 (permission) => permission.guildId === guild.guildId
             );
-            const hasPermission = guildPermissions.includes(KanbanPermission.CREATE_BOARD || KanbanPermission.ADMINISTRATOR);
+            // console.log('Guild permissions:', guildPermissions);
+            const hasPermission = guildPermissions.permissions.some(
+                (permission: KanbanPermission) =>
+                    permission === KanbanPermission.CREATE_BOARD ||
+                    permission === KanbanPermission.ADMINISTRATOR
+            );
+            // console.log('Has permission:', hasPermission, 'for guild:', guild.guildName);
             if (!hasPermission) {
                 setFilteredGuilds((prevGuilds) => prevGuilds.filter((g) => g.guildId !== guild.guildId));
             } else {
@@ -43,6 +49,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                     setFilteredGuilds((prevGuilds) => [...prevGuilds, guild]);
                 }
             }
+            // console.log('Filtered guilds:', filteredGuilds);
         }
     }, [selectedGuildId]);
 
