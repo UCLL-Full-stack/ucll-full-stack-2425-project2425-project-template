@@ -187,10 +187,10 @@ const columnRouter = Router();
 //     }
 // });
 
-columnRouter.post('/', (req, res) => {
+columnRouter.post('/', async (req, res) => {
     const column = req.body;
     try {
-        columnService.addColumn(column);
+        await columnService.addColumn(column);
         res.status(201).json({ message: 'Column created successfully' });
     } catch (error) {
         if (error instanceof Error) {
@@ -201,10 +201,10 @@ columnRouter.post('/', (req, res) => {
     }
 });
 
-columnRouter.get('/:columnId', (req, res) => {
+columnRouter.get('/:columnId', async (req, res) => {
     const { columnId } = req.params;
     try {
-        const column = columnService.getColumnById(columnId);
+        const column = await columnService.getColumnById(columnId);
         res.status(200).json(column);
     } catch (error) {
         if (error instanceof Error) {
@@ -215,10 +215,10 @@ columnRouter.get('/:columnId', (req, res) => {
     }
 });
 
-columnRouter.delete('/:columnId', (req, res) => {
+columnRouter.delete('/:columnId', async (req, res) => {
     const { columnId } = req.params;
     try {
-        columnService.deleteColumn(columnId);
+        await columnService.deleteColumn(columnId);
         res.status(204).send();
     } catch (error) {
         if (error instanceof Error) {
@@ -229,11 +229,11 @@ columnRouter.delete('/:columnId', (req, res) => {
     }
 });
 
-columnRouter.put('/:columnId', (req, res) => {
+columnRouter.put('/:columnId', async (req, res) => {
     const { columnId } = req.params;
     const updatedColumn = req.body;
     try {
-        columnService.updateColumn(columnId, updatedColumn);
+        await columnService.updateColumn(columnId, updatedColumn);
         res.status(200).json({ message: 'Column updated successfully' });
     } catch (error) {
         if (error instanceof Error) {

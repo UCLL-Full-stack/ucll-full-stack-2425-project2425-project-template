@@ -255,7 +255,7 @@ boardRouter.get('/guild/:guildId', async (req, res) => {
 boardRouter.get('/:boardId', async (req, res) => {
     const { boardId } = req.params;
     try {
-        const board = boardService.getBoardById(boardId);
+        const board = await boardService.getBoardById(boardId);
         res.status(200).json(board);
     } catch (error) {
         if (error instanceof Error) {

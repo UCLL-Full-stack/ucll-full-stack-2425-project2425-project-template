@@ -125,10 +125,10 @@ const taskRouter = Router();
 //     }
 // });
 
-taskRouter.post('/', (req, res) => {
+taskRouter.post('/', async (req, res) => {
     const task = req.body;
     try {
-        taskService.addTask(task);
+        await taskService.addTask(task);
         res.status(201).json({ message: 'Task created successfully' });
     } catch (error) {
         if (error instanceof Error) {
@@ -139,10 +139,10 @@ taskRouter.post('/', (req, res) => {
     }
 });
 
-taskRouter.get('/:taskId', (req, res) => {
+taskRouter.get('/:taskId', async (req, res) => {
     const { taskId } = req.params;
     try {
-        const task = taskService.getTaskById(taskId);
+        const task = await taskService.getTaskById(taskId);
         res.status(200).json(task);
     } catch (error) {
         if (error instanceof Error) {
@@ -153,11 +153,11 @@ taskRouter.get('/:taskId', (req, res) => {
     }
 });
 
-taskRouter.put('/:taskId', (req, res) => {
+taskRouter.put('/:taskId', async (req, res) => {
     const { taskId } = req.params;
     const updatedTask = req.body;
     try {
-        taskService.updateTask(taskId, updatedTask);
+        await taskService.updateTask(taskId, updatedTask);
         res.status(200).json({ message: 'Task updated successfully' });
     } catch (error) {
         if (error instanceof Error) {
@@ -168,10 +168,10 @@ taskRouter.put('/:taskId', (req, res) => {
     }
 });
 
-taskRouter.delete('/:taskId', (req, res) => {
+taskRouter.delete('/:taskId', async (req, res) => {
     const { taskId } = req.params;
     try {
-        taskService.deleteTask(taskId);
+        await taskService.deleteTask(taskId);
         res.status(204).send();
     } catch (error) {
         if (error instanceof Error) {
