@@ -9,6 +9,7 @@ interface CreateBoardFormProps {
     selectedGuildId?: string | null;
     user: User;
     guilds: Guild[];
+    permissions: any[];
 }
 
 const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
@@ -18,15 +19,30 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     user,
     selectedGuildId,
     guilds,
+    permissions,
 }) => {
     const [boardName, setBoardName] = useState('');
     const [columns, setColumns] = useState('');
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [filteredGuilds, setFilteredGuilds] = useState<Guild[]>(guilds);
 
     useEffect(() => {
         if (typeof selectedGuildId === 'string') {
             setSelectedGuild(selectedGuildId);
+        }
+        for (const guild of guilds) {
+            const guildPermissions = permissions.filter(
+                (permission) => permission.guildId === guild.guildId
+            );
+            const hasPermission = guildPermissions.includes(KanbanPermission.CREATE_BOARD || KanbanPermission.ADMINISTRATOR);
+            if (!hasPermission) {
+                setFilteredGuilds((prevGuilds) => prevGuilds.filter((g) => g.guildId !== guild.guildId));
+            } else {
+                if (!filteredGuilds.includes(guild)) {
+                    setFilteredGuilds((prevGuilds) => [...prevGuilds, guild]);
+                }
+            }
         }
     }, [selectedGuildId]);
 
@@ -47,49 +63,6 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
         setColumns('');
         setSelectedGuild(null);
         onClose();
-    };
-
-    const canCreateBoardForGuild = (guild: Guild) => {
-        for (const permission of guild.settings) {
-            if (permission.identifier === user.userId) {
-                for (const kanbanPermission of permission.kanbanPermission) {
-                    if (
-                        kanbanPermission === KanbanPermission.CREATE_BOARD ||
-                        kanbanPermission === KanbanPermission.ADMINISTRATOR
-                    ) {
-                        return true;
-                    }
-                }
-            }
-
-            const member = guild.members.find((member) => member.userId === user.userId);
-            if (!member) continue;
-
-            let allDiscordPermissions: DiscordPermission[] = [];
-            for (const roleId of member.roleIds) {
-                const role = guild.roles.find((role) => role.roleId === roleId);
-                if (role) {
-                    allDiscordPermissions.push(...role.permissions);
-                }
-            }
-
-            for (const discordPermission of allDiscordPermissions) {
-                const permissionEntry = guild.settings.find(
-                    (permission) => permission.identifier === discordPermission
-                );
-                if (permissionEntry) {
-                    for (const kanbanPermission of permissionEntry.kanbanPermission) {
-                        if (
-                            kanbanPermission === KanbanPermission.CREATE_BOARD ||
-                            kanbanPermission === KanbanPermission.ADMINISTRATOR
-                        ) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
     };
 
     if (!isOpen) return null;
@@ -120,7 +93,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                             <option value="" disabled>
                                 Select a guild
                             </option>
-                            {guilds.filter(canCreateBoardForGuild).map((guild) => (
+                            {filteredGuilds.map((guild) => (
                                 <option key={guild.guildId} value={guild.guildId}>
                                     {guild.guildName}
                                 </option>

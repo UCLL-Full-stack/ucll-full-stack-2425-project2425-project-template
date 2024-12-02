@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import UserService from '@/services/UserService';
 import GuildCard from '@/components/GuildCard';
-import { Guild, Board, User } from '@/types';
+import { Guild, Board, User, KanbanPermission } from '@/types';
 import BoardService from '@/services/BoardService';
 import BoardCard from '@/components/BoardCard';
 import CreateBoardForm from '@/components/CreateBoardForm';
@@ -22,6 +22,7 @@ const Home: FC = () => {
   const [boards, setBoards] = useState<Board[]>([]);
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [permissions, setPermissions] = useState<any[]>([]);
 
 
   const handleDiscordLogin = () => {
@@ -84,6 +85,11 @@ const Home: FC = () => {
           setGuilds(dbGuilds);
           displayGuilds.sort((a: any, b: any) => a.greyedOut - b.greyedOut);
           setDisplayGuilds(displayGuilds);
+          const permissions = await Promise.all(dbGuilds.map(async (guild: { guildId: string; }) => {
+            const permission = await UserService.getUserGuildKanbanPermissions(parsedUser.userId, guild.guildId);
+            return {guildId: guild.guildId, permissions: permission };
+          }));
+          setPermissions(permissions);
         }
       } catch (error) {
         console.error('Error fetching user data', error);
@@ -155,6 +161,7 @@ const Home: FC = () => {
                     selectedGuildId={selectedGuildForBoardCreation}
                     user={user!}
                     guilds={guilds}
+                    permissions={permissions}
                 />
               </>
             )}
