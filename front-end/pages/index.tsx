@@ -20,6 +20,7 @@ const Home: FC = () => {
   const [selectedGuildId, setSelectedGuildId] = useState<string | null>(null);
   const [selectedGuildForBoardCreation, setSelectedGuildForBoardCreation] = useState<string | null>(null);
   const [boards, setBoards] = useState<Board[]>([]);
+  const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
 
@@ -116,39 +117,48 @@ const Home: FC = () => {
           </Head>
           <Header onCreateClick={handleCreateClick} onLoginClick={handleDiscordLogin}></Header>
           <main className="flex-grow">
-            <div className="p-4">
-                {loading && user ? (
-                    <p>Loading guilds...</p>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {displayGuilds.map(guild => (
-                            <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick}/>
-                        ))}
-                    </div>
-                )}
-            </div>
-            {selectedGuildId && (
+            {selectedBoard ? (
+                <div className="p-4">
+                    <h2 className="text-white text-xl font-bold">{selectedBoard.boardName}</h2>
+                </div>
+            ) : (
+              <>
+                <div className="p-4">
+                  {loading && user ? (
+                      <p>Loading guilds...</p>
+                  ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {displayGuilds.map(guild => (
+                              <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick}/>
+                          ))}
+                      </div>
+                  )}
+                </div>
+                {selectedGuildId && (
                 <div className="mt-8 p-4 bg-gray-800 rounded-lg m-4">
                     <h2 className="text-white text-xl font-bold">Boards</h2>
                       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white">
-                      {boards.length === 0 ? (
-                          <p>No boards available for this server.</p>
-                      ) : (
-                          boards.map(board => (
-                              <BoardCard key={board.boardId} board={board} />
-                          ))
-                      )}
+                        {boards.length === 0 ? (
+                            <p>No boards available for this server.</p>
+                        ) : (
+                            boards.map(board => (
+                                <BoardCard key={board.boardId} board={board} />
+                            ))
+                        )}
                       </div>
-                </div>
+                    </div>
+                  )}
+                <CreateBoardForm 
+                    isOpen={isFormOpen} 
+                    onClose={handleFormClose} 
+                    onSubmit={handleFormSubmit} 
+                    selectedGuildId={selectedGuildForBoardCreation}
+                    user={user!}
+                    guilds={guilds}
+                />
+              </>
             )}
-            <CreateBoardForm 
-                isOpen={isFormOpen} 
-                onClose={handleFormClose} 
-                onSubmit={handleFormSubmit} 
-                selectedGuildId={selectedGuildForBoardCreation}
-                user={user!}
-                guilds={guilds}
-            />
+
           </main>
       </div>
   );
