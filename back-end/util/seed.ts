@@ -266,7 +266,7 @@ const main = async () => {
             type: 'Formula 1',
             description: 'A high-speed race',
             location: 'Monaco',
-            date: new Date(),
+            date: new Date('2023-05-28T00:00:00Z'),
             crashes: {
                 connect: [{ id: crash1.id }, { id: crash2.id }],
             },
@@ -279,7 +279,7 @@ const main = async () => {
             type: 'Formula 1',
             description: 'A historic race',
             location: 'Silverstone',
-            date: new Date(),
+            date: new Date('2023-07-09T00:00:00Z'),
             crashes: {
                 connect: [{ id: crash3.id }, { id: crash4.id }],
             },
@@ -292,7 +292,7 @@ const main = async () => {
             type: 'Formula 1',
             description: 'A challenging race',
             location: 'Spa',
-            date: new Date(),
+            date: new Date('2023-08-27T00:00:00Z'),
             crashes: {
                 connect: [{ id: crash5.id }],
             },
@@ -305,7 +305,7 @@ const main = async () => {
             type: 'Formula 1',
             description: 'A fast race',
             location: 'Monza',
-            date: new Date(),
+            date: new Date('2023-04-27T00:00:00Z'),
             crashes: {
                 connect: [{ id: crash1.id }, { id: crash3.id }],
             },
@@ -318,7 +318,7 @@ const main = async () => {
             type: 'Formula 1',
             description: 'A technical race',
             location: 'Suzuka',
-            date: new Date(),
+            date: new Date('2023-01-05T00:00:00Z'),
             crashes: {
                 connect: [{ id: crash2.id }, { id: crash4.id }],
             },

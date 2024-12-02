@@ -37,6 +37,8 @@ const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRa
             <tr>
               <th scope="col">Type</th>
               <th scope="col">Description</th>
+              <th scope="col">Casualties</th>
+              <th scope="col">Deaths</th>
             </tr>
           </thead>
           <tbody>
@@ -44,6 +46,8 @@ const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRa
               <tr key={index} onClick={() => handleCrashClick(crash)} role="button">
                 <td>{crash.type}</td>
                 <td>{crash.description}</td>
+                <td>{crash.casualties}</td>
+                <td>{crash.deaths}</td>
               </tr>
             ))}
           </tbody>

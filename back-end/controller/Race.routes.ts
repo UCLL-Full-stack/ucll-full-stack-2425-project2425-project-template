@@ -60,7 +60,7 @@
  *              description: Username.
  */
 import express, { NextFunction, Request, Response } from 'express';
-import raceService from '../service/race.service';
+import raceService from '../service/Race.service';
 import { RaceInput } from '../types';
 
 const raceRouter = express.Router();
@@ -186,14 +186,18 @@ raceRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *         description: Race not found
  */
 
-raceRouter.get('/:id', (req: Request, res: Response) => {
+raceRouter.get('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id, 10);
-    const race = raceService.getRaceById(id);
-    if (race) {
-      res.json(race);
-    } else {
-      res.status(404).json({ message: 'Race not found' });
+    try {
+        const race = await raceService.getRaceById(id);
+        if (race) {
+            res.json(race);
+        } else {
+            res.status(404).json({ message: 'Race not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
     }
-  });
+});
 
 export { raceRouter };
