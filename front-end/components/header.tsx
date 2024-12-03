@@ -33,7 +33,7 @@ const Header: React.FC = () => {
           Home
         </Link>
         <Link href="/races" className="nav-link px-4 fs-5 text-white">
-          Races
+          Information Overview
         </Link>
         <Link href="/submission_form" className="nav-link px-4 fs-5 text-white">
           Submission Form

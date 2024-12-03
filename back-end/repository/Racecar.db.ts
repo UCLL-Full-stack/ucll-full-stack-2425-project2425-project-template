@@ -9,7 +9,19 @@ const getAllRacecars = async (): Promise<Racecar[] | null> => {
         console.error(error);
         throw new Error('Database error. See server logs for details.');
     }
-}
+};
+
+const getRacecarById = async (id: number): Promise<Racecar | null> => {
+    try {
+        const racecarPrisma = await database.racecar.findFirst({
+            where: { id },
+        });
+        return racecarPrisma ? Racecar.from(racecarPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
+};
 
 const createRacecar = async ({ racecar }: { racecar: Racecar }): Promise<Racecar | null> => {
     try {
@@ -27,6 +39,6 @@ const createRacecar = async ({ racecar }: { racecar: Racecar }): Promise<Racecar
         console.error(error);
         throw new Error('Database error. See server logs for details.');
     }
-}
+};
 
-export default { getAllRacecars, createRacecar };
+export default { getAllRacecars, getRacecarById, createRacecar };

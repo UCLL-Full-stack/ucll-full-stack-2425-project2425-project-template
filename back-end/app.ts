@@ -9,7 +9,8 @@ import { raceRouter } from './controller/Race.routes';
 import { authRouter } from './controller/Auth.routes';
 import { crashRouter } from './controller/crash.routes';
 import { userRouter } from './controller/User.routes';
-
+import { racecarRouter } from './controller/Racecar.routes';
+import { driverRouter } from './controller/Driver.routes';
 
 const app = express();
 dotenv.config();
@@ -27,6 +28,8 @@ app.use('/races', raceRouter);
 app.use('/crashes', crashRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/racecars', racecarRouter);
+app.use('/drivers', driverRouter);
 
 const swaggerOpts = {
     definition: {
