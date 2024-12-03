@@ -18,8 +18,8 @@ import { User } from "../domain/model/user";
 
 const users: User[] = [];
 
-const createSeller = ({ id, email, name, phone_number }: Seller): Seller => {
-    const newSeller = new Seller({ id, email, name, phone_number });
+const createSeller = ({ id, email, name, phoneNumber, password }: Seller): Seller => {
+    const newSeller = new Seller({ id, email, name, phoneNumber, password});
     users.push(newSeller);
     return newSeller;
 }

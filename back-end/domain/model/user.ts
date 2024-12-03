@@ -1,12 +1,28 @@
+import { Car } from "./car";
+
 export class User {
     readonly id?: number | undefined;
     readonly email: string;
     readonly name: string;
+    readonly password: string;
+    readonly phoneNumber: number;
+    // readonly listOfcars: Car[]
+    
 
-    constructor(user: { id?: number, email: string, name: string }) {
-        this.id == user.id;
+    constructor(user: { 
+        id?: number, 
+        email: string, 
+        name: string,
+        password: string,
+        phoneNumber: number
+    }) {
+
+        this.id = user.id;
         this.email = user.email;
         this.name = user.name;
+        this.password = user.password;
+        this.phoneNumber = user.phoneNumber;
+        // listOfCars: Car[];
     }
 
     getId(): number | undefined {

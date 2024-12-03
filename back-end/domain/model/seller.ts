@@ -2,24 +2,23 @@ import { Car } from "./car";
 import { User } from "./user";
 
 export class Seller extends User {
-    readonly phone_number: number;
-    list_of_cars: Car[];
+   
+    listOfCarsForSelling: Car[];
 
     constructor(seller: {
-        id?: number, name: string,
-        phone_number: number, email: string
+        id?: number,
+        name: string,
+        password: string,
+        phoneNumber: number, 
+        email: string
     }) {
-        super({ id: seller.id, email: seller.email, name: seller.name });
-        this.phone_number = seller.phone_number;
-        this.list_of_cars = [];
-    }
-
-    getPhoneNumber(): number {
-        return this.phone_number
+        super({ id: seller.id, email: seller.email, name: seller.name, password: seller.password, phoneNumber: seller.phoneNumber});
+        
+        this.listOfCarsForSelling = [];
     }
 
     getListOfCars(): Car[] {
-        return this.list_of_cars
+        return this.listOfCarsForSelling
     }
 
 }

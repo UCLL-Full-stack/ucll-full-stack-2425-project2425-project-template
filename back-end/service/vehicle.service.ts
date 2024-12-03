@@ -5,9 +5,9 @@ import { id } from "date-fns/locale";
 
 
 const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
-    if (!input.manufacturer || !input.model_name || !input.price || !input.body_type ||
-        !input.fuel_type || !input.transmission_type || !input.year || !input.mileage || 
-        !input.vehicle_type) {
+    if (!input.manufacturer || !input.model_name || !input.price || !input.bodyType ||
+        !input.fuelType || !input.transmissionType || !input.year || !input.mileage || 
+        !input.vehicleType || !input.engineCapacity || !input.engineCapacity) {
         throw new Error("All vehicle properties must be defined");
     }
 
@@ -15,12 +15,15 @@ const addVehicle = async (input: VehicleInput): Promise<Vehicle> => {
         manufacturer: input.manufacturer,
         model_name: input.model_name,
         price: input.price,
-        fuel_type: input.fuel_type,
-        transmission_type: input.transmission_type,
+        fuelType: input.fuelType,
+        transmissionType: input.transmissionType,
         year: input.year,
-        vehicle_type: input.vehicle_type,
-        body_type: input.body_type,
-        mileage: input.mileage
+        vehicleType: input.vehicleType,
+        bodyType: input.bodyType,
+        mileage: input.mileage,
+        engineCapacity: input.engineCapacity,
+        createdAt: new Date(),
+        updatedAt: new Date()
     });
     return vehicleDB.createVehicle(vehicle);
 }
@@ -33,23 +36,37 @@ const deleteVehicle = async (vehicleId: number): Promise<void> => {
     }
 };
 
+
+
 const editVehicle = async (vehicleId: number, input: VehicleInput): Promise<Vehicle> => {
-    if (!input.manufacturer || !input.model_name || !input.price || !input.body_type ||
-        !input.fuel_type || !input.transmission_type || !input.year || !input.mileage||
-        !input.vehicle_type) {
+    if (!input.manufacturer || !input.model_name || !input.price || !input.bodyType ||
+        !input.fuelType || !input.transmissionType || !input.year || !input.mileage||
+        !input.vehicleType || !input.engineCapacity) {
         throw new Error("All vehicle properties must be defined");
     }
+
+
+    const oldVehicle = vehicleDB.findVehicleById(vehicleId)
+
+    if (oldVehicle === undefined) {
+        throw new Error("This vehicle cannot be found")
+    }
+
     const newVehicle = new Vehicle({
         manufacturer: input.manufacturer,
         model_name: input.model_name,
         price: input.price,
-        fuel_type: input.fuel_type,
-        transmission_type: input.transmission_type,
+        fuelType: input.fuelType,
+        transmissionType: input.transmissionType,
         year: input.year,
-        vehicle_type: input.vehicle_type,
-        body_type: input.body_type,
+        vehicleType: input.vehicleType,
+        bodyType: input.bodyType,
         mileage: input.mileage,
-        id : vehicleId
+        engineCapacity: input.engineCapacity,
+        id : oldVehicle.id,
+        createdAt : oldVehicle.createdAt,
+        updatedAt : new Date()
+
     })
     return vehicleDB.updateVehicle(vehicleId, newVehicle)
 }

@@ -2,18 +2,36 @@ import { Vehicle } from "./vehicle";
 
 export class Motorcycle extends Vehicle{
     constructor(motorcycle: {
-        id?: number, manufacturer: string,
-        model_name: string, price: number, fuel_type: string,
-        transmission_type: string, year: number, vehicle_type: string, body_type: string, mileage: number
+        id?: number, 
+        manufacturer: string,
+        model_name: string, 
+        price: number, 
+        fuelType: string,
+        transmissionType: string, 
+        year: number, 
+        vehicleType: string, 
+        bodyType: string, 
+        mileage: number,
+        engineCapacity : number,
+        createdAt? : Date,
+        updatedAt? : Date
     }) {
         // this.validate(motorcycle);
 
         super({
-            id: motorcycle.id, manufacturer: motorcycle.manufacturer, model_name: motorcycle.model_name,
-            price: motorcycle.price, fuel_type: motorcycle.fuel_type,
-            transmission_type: motorcycle.transmission_type,
-            year: motorcycle.year, vehicle_type: motorcycle.vehicle_type,
-            body_type: motorcycle.body_type, mileage: motorcycle.mileage
+            id: motorcycle.id,
+            manufacturer: motorcycle.manufacturer, 
+            model_name: motorcycle.model_name,
+            price: motorcycle.price, 
+            fuelType: motorcycle.fuelType,
+            transmissionType: motorcycle.transmissionType,
+            year: motorcycle.year, 
+            vehicleType: motorcycle.vehicleType,
+            bodyType: motorcycle.bodyType, 
+            mileage: motorcycle.mileage,
+            engineCapacity: motorcycle.engineCapacity,
+            createdAt : motorcycle.createdAt,
+            updatedAt : motorcycle.updatedAt
         });
 
     }
@@ -35,11 +53,11 @@ export class Motorcycle extends Vehicle{
     }
 
     getFuelType(): string {
-        return this.fuel_type;
+        return this.fuelType;
     }
 
     getTransmissionType(): string {
-        return this.transmission_type;
+        return this.transmissionType;
     }
 
     getYear(): number {
@@ -47,6 +65,6 @@ export class Motorcycle extends Vehicle{
     }
 
     getVehicleType(): string {
-        return this.vehicle_type;
+        return this.vehicleType;
     }
 }
