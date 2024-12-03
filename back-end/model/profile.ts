@@ -12,7 +12,6 @@ export class Profile {
     private firstName: string;
     private lastName: string;
     private age: number;
-    private administrator: boolean;
     private location: Location;
     private category: Category;
     private events: Event[];
@@ -22,7 +21,6 @@ export class Profile {
         firstName: string;
         lastName: string;
         age: number;
-        administrator: boolean;
         location: Location;
         category: Category;
         events?: Event[];
@@ -32,7 +30,6 @@ export class Profile {
         this.firstName = profile.firstName;
         this.lastName = profile.lastName;
         this.age = profile.age;
-        this.administrator = profile.administrator;
         this.location = profile.location;
         this.category = profile.category;
         this.events = profile.events || [];
@@ -42,7 +39,6 @@ export class Profile {
         firstName: string;
         lastName: string;
         age: number;
-        administrator: boolean;
         location: Location;
         category: Category;
     }) {
@@ -53,9 +49,6 @@ export class Profile {
         if (!profile.category) throw new Error('Category is required.');
     }
 
-    isAdmin(): boolean {
-        return this.administrator;
-    }
     getAge(): number {
         return this.age;
     }
@@ -84,7 +77,6 @@ export class Profile {
         firstName,
         lastName,
         age,
-        administrator,
         location,
         category,
     }: profilePrisma & {
@@ -96,7 +88,6 @@ export class Profile {
             firstName,
             lastName,
             age,
-            administrator,
             location: Location.from(location),
             category: Category.from(category),
         });

@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { eventRouter } from './controller/event.routes';
+import { expressjwt } from 'express-jwt';
+import userRouter from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -14,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/events', eventRouter);
-
+app.use('/users', userRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
@@ -46,5 +48,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.listen(port, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
-
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', 'events', 'user/login', 'users/signup', 'status'],
+    })
+);
 export default app;

@@ -8,24 +8,23 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  userName String   @unique
+  id              Int      @id @default(autoincrement())
+  userName        String   @unique  
+  email           String    @unique  
+  role            String
   password String
   profile  Profile?
-  events   UserEvent[]
 }
 
 model Profile {
   id              Int       @id @default(autoincrement())
   firstName       String
   lastName        String
-  email           String    @unique
   age             Int
-  administrator   Boolean
   locationId      Int
   categoryId      Int
   userId          Int       @unique
-
+  events          ProfileEvent[]
   location        Location  @relation(fields: [locationId], references: [id])
   category        Category  @relation(fields: [categoryId], references: [id])
   user            User      @relation(fields: [userId], references: [id])
@@ -65,14 +64,15 @@ model Event {
 
   location        Location  @relation(fields: [locationId], references: [id])
   category        Category  @relation(fields: [categoryId], references: [id])
-  users           UserEvent[]
+  profile         ProfileEvent[]
 }
-model UserEvent {
-  userId  Int
+
+model ProfileEvent {
+  profileId  Int
   eventId Int
 
-  user    User   @relation(fields: [userId], references: [id])
-  event   Event  @relation(fields: [eventId], references: [id])
+  profile    Profile   @relation(fields: [profileId], references: [id])
+  event      Event  @relation(fields: [eventId], references: [id])
 
-  @@id([userId, eventId])
+  @@id([profileId, eventId])
 }

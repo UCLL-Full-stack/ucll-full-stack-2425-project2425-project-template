@@ -1,5 +1,5 @@
 import { Profile } from './profile';
-
+import { Role } from '../types/index';
 import {
     User as userPrisma,
     Profile as profilePrisma,
@@ -11,6 +11,7 @@ export class User {
     private id?: number;
     private userName: string;
     private email: string;
+    private role: Role;
     private password: string;
     private profile?: Profile;
 
@@ -18,6 +19,7 @@ export class User {
         id?: number;
         userName: string;
         email: string;
+        role: string;
         password: string;
         profile?: Profile;
     }) {
@@ -25,13 +27,22 @@ export class User {
         this.id = user.id;
         this.userName = user.userName;
         this.email = user.email;
+        this.role = user.role as Role;
         this.password = user.password;
         this.profile = user.profile;
     }
 
-    validate(user: { userName: string; email: string; password: string; profile?: Profile }) {
+    validate(user: {
+        userName: string;
+        email: string;
+        role: string;
+        password: string;
+        profile?: Profile;
+    }) {
         if (!user.userName?.trim()) throw new Error('Username is required.');
         if (!user.email?.trim()) throw new Error('Email is required.');
+        if (!user.role?.trim()) throw new Error('Role is required.');
+        if (!['User', 'Admin'].includes(user.role)) throw new Error('Role should be User or Admin');
         if (!user.password?.trim()) throw new Error('Password is required.');
         // Profile is validated with creation of profile
     }
@@ -48,6 +59,10 @@ export class User {
         return this.email;
     }
 
+    getRole(): Role {
+        return this.role;
+    }
+
     getProfile(): Profile | undefined {
         return this.profile;
     }
@@ -56,6 +71,7 @@ export class User {
         id,
         userName,
         email,
+        role,
         password,
         profile,
     }: userPrisma & {
@@ -70,6 +86,7 @@ export class User {
             id,
             userName,
             email,
+            role: role as Role,
             password,
             profile: profile ? Profile.from(profile) : undefined,
         });

@@ -20,6 +20,8 @@ const addEvent = async (event: Event): Promise<Event> => {
                         id: event.getCategory().getId(),
                     },
                 },
+                dateCreated: event.getDateCreated(),
+                lastEdit: event.getLastEdit(),
             },
             include: {
                 location: true,

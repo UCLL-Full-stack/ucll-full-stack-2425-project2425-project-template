@@ -1,14 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import { add } from 'date-fns';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 const main = async () => {
+    await prisma.profileEvent.deleteMany();
     await prisma.profile.deleteMany();
+    await prisma.event.deleteMany();
     await prisma.user.deleteMany();
     await prisma.location.deleteMany();
     await prisma.category.deleteMany();
-    await prisma.event.deleteMany();
 
     const eventDate = add(new Date(), { days: 1 });
 
@@ -51,7 +53,8 @@ const main = async () => {
         data: {
             userName: 'Jefke',
             email: 'JefkeVermeulen@gmail.com',
-            password: 'Hello',
+            role: 'User',
+            password: await bcrypt.hash('Test123', 12),
         },
     });
     const profileJefke = await prisma.profile.create({
@@ -59,7 +62,6 @@ const main = async () => {
             firstName: 'Jefke',
             lastName: 'Vermeulen',
             age: 45,
-            administrator: false,
             location: { connect: { id: locationJefke.id } },
             category: { connect: { id: concertCategory.id } },
             user: { connect: { id: jefke.id } },
@@ -69,7 +71,8 @@ const main = async () => {
         data: {
             userName: 'admin',
             email: 'GuntherAdmin@gmail.com',
-            password: 'admin',
+            role: 'Admin',
+            password: await bcrypt.hash('admin123', 12),
         },
     });
     const profileAdmin = await prisma.profile.create({
@@ -77,7 +80,6 @@ const main = async () => {
             firstName: 'Gunther',
             lastName: 'hackerman',
             age: 99,
-            administrator: true,
             location: { connect: { id: locationJefke.id } },
             category: { connect: { id: concertCategory.id } },
             user: { connect: { id: admin.id } },
