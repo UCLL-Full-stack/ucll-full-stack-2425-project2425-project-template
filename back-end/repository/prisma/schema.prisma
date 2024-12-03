@@ -12,12 +12,15 @@ model Vehicle {
   manufacturer      String
   model_name        String
   price             Float
-  fuel_type         String
-  transmission_type String
+  fuelType         String
+  transmissionType String
   year              Int
-  vehicle_type      String
-  body_type         String
+  vehicleType      String
+  bodyType         String
   mileage           Int
+  engineCapacity   Int
+  createdAt        DateTime
+  updatedAt        DateTime
 
 }
 
@@ -25,9 +28,7 @@ model User {
   id                Int     @id @default(autoincrement())
   email             String  @unique
   name              String
+  phoneNumber       Int
+  password          String
 }
 
-model Buyer {
-  favouriteCarList  String?
-  User              User    @relation(fields: [userId], references: [id])
-}

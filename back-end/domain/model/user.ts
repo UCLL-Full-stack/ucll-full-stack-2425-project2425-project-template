@@ -6,12 +6,11 @@ export class User {
     readonly name: string;
     readonly password: string;
     readonly phoneNumber: number;
-    // readonly listOfcars: Car[]
-    
 
-    constructor(user: { 
-        id?: number, 
-        email: string, 
+
+    constructor(user: {
+        id?: number,
+        email: string,
         name: string,
         password: string,
         phoneNumber: number
@@ -22,7 +21,8 @@ export class User {
         this.name = user.name;
         this.password = user.password;
         this.phoneNumber = user.phoneNumber;
-        // listOfCars: Car[];
+        listOfCarsForSelling: Car: [];
+        listOfFavoriteCars: Car: [];
     }
 
     getId(): number | undefined {
@@ -36,5 +36,6 @@ export class User {
     getName(): string {
         return this.name
     }
+
 }
 

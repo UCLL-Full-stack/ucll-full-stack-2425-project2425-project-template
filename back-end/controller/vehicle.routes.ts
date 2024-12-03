@@ -23,6 +23,16 @@ vehicleRouter.post('/', async (req: Request, res: Response) => {
     }
 })
 
+vehicleRouter.get('/:id', async (req, res) => {
+    const vehicleId = Number(req.params.id);
+    try{
+        const vehicle = await vehicleService.getVehicleById(vehicleId);
+        res.status(200).json(vehicle);
+    }catch(error){
+        res.status(400).json({ status: 'error' });
+    }
+})  
+
 vehicleRouter.delete('/:id', async (req, res) => {
 
     const vehicleId = Number(req.params.id);
