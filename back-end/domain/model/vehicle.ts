@@ -76,4 +76,15 @@ export class Vehicle{
         return this.bodyType
     }
 
+    getEngineCapacity(): number {
+        return this.engineCapacity
+    }
+
+    getCreatedAt(): Date | undefined {
+        return this.createdAt
+    }
+
+    getUpdatedAt(): Date | undefined {
+        return this.updatedAt
+    }
 }
