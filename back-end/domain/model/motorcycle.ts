@@ -6,11 +6,11 @@ export class Motorcycle extends Vehicle{
         manufacturer: string,
         model_name: string, 
         price: number, 
-        fuel_type: string,
-        transmission_type: string, 
+        fuelType: string,
+        transmissionType: string, 
         year: number, 
-        vehicle_type: string, 
-        body_type: string, 
+        vehicleType: string, 
+        bodyType: string, 
         mileage: number,
         engineCapacity : number,
         createdAt? : Date,
@@ -23,11 +23,11 @@ export class Motorcycle extends Vehicle{
             manufacturer: motorcycle.manufacturer, 
             model_name: motorcycle.model_name,
             price: motorcycle.price, 
-            fuel_type: motorcycle.fuel_type,
-            transmission_type: motorcycle.transmission_type,
+            fuelType: motorcycle.fuelType,
+            transmissionType: motorcycle.transmissionType,
             year: motorcycle.year, 
-            vehicle_type: motorcycle.vehicle_type,
-            body_type: motorcycle.body_type, 
+            vehicleType: motorcycle.vehicleType,
+            bodyType: motorcycle.bodyType, 
             mileage: motorcycle.mileage,
             engineCapacity: motorcycle.engineCapacity,
             createdAt : motorcycle.createdAt,
@@ -53,11 +53,11 @@ export class Motorcycle extends Vehicle{
     }
 
     getFuelType(): string {
-        return this.fuel_type;
+        return this.fuelType;
     }
 
     getTransmissionType(): string {
-        return this.transmission_type;
+        return this.transmissionType;
     }
 
     getYear(): number {
@@ -65,6 +65,6 @@ export class Motorcycle extends Vehicle{
     }
 
     getVehicleType(): string {
-        return this.vehicle_type;
+        return this.vehicleType;
     }
 }

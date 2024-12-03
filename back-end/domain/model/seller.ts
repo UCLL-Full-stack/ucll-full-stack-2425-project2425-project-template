@@ -3,7 +3,7 @@ import { User } from "./user";
 
 export class Seller extends User {
    
-    list_of_cars: Car[];
+    listOfCarsForSelling: Car[];
 
     constructor(seller: {
         id?: number,
@@ -14,11 +14,11 @@ export class Seller extends User {
     }) {
         super({ id: seller.id, email: seller.email, name: seller.name, password: seller.password, phoneNumber: seller.phoneNumber});
         
-        this.list_of_cars = [];
+        this.listOfCarsForSelling = [];
     }
 
     getListOfCars(): Car[] {
-        return this.list_of_cars
+        return this.listOfCarsForSelling
     }
 
 }

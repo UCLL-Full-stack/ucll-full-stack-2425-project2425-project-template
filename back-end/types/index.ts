@@ -14,12 +14,13 @@ type VehicleInput = {
     model_name?: string;
     year?: number;
     price?: number;
-    fuel_type?: string;
-    transmission_type?: string;
-    vehicle_type?: string;
-    body_type?:string;
+    fuelType?: string;
+    engineCapacity? : number;
+    transmissionType?: string;
+    vehicleType?: string;
+    bodyType?:string;
     mileage?:number;
-    createdAt?:Date;
+    createdAt?: Date;
     updatedAt?:Date
 };
 

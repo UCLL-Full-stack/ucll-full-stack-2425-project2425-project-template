@@ -4,11 +4,11 @@ export class Vehicle{
     readonly manufacturer: string;
     readonly model_name: string;
     readonly price: number;
-    readonly fuel_type: string;
-    readonly transmission_type: string;
+    readonly fuelType: string;
+    readonly transmissionType: string;
     readonly year: number;
-    readonly body_type: string;
-    readonly vehicle_type: string;
+    readonly bodyType: string;
+    readonly vehicleType: string;
     readonly mileage: number;
     readonly engineCapacity : number;
     readonly createdAt? : Date;
@@ -16,18 +16,19 @@ export class Vehicle{
 
     constructor(vehicle: {
         id?: number, manufacturer: string,
-        model_name: string, price: number, fuel_type: string, body_type: string,
-        transmission_type: string, year: number, vehicle_type: string, mileage: number, engineCapacity: number, createdAt? : Date, updatedAt?: Date
+        model_name: string, price: number, fuelType: string, bodyType: string,
+        transmissionType: string, year: number, vehicleType: string, mileage: number, engineCapacity: number, createdAt? : Date, updatedAt?: Date
     }) {
         this.id = vehicle.id;
         this.manufacturer = vehicle.manufacturer;
         this.model_name = vehicle.model_name;
         this.price = vehicle.price;
-        this.fuel_type = vehicle.fuel_type;
-        this.body_type = vehicle.body_type;
-        this.transmission_type = vehicle.transmission_type;
+        this.fuelType = vehicle.fuelType;
+        this.bodyType = vehicle.bodyType;
+        this.engineCapacity = vehicle.engineCapacity;
+        this.transmissionType = vehicle.transmissionType;
         this.year = vehicle.year;
-        this.vehicle_type = vehicle.vehicle_type;
+        this.vehicleType = vehicle.vehicleType;
         this.mileage = vehicle.mileage;
         this.engineCapacity = vehicle.engineCapacity;
         this.createdAt = vehicle.createdAt;
@@ -52,7 +53,7 @@ export class Vehicle{
     }
 
     getFuelType(): string{
-        return this.fuel_type
+        return this.fuelType
     }
 
     getMileage(): number{
@@ -60,7 +61,7 @@ export class Vehicle{
     }
 
     getTransmissionType(): string{
-        return this.transmission_type
+        return this.transmissionType
     }
 
     getYear(): number{
@@ -68,11 +69,11 @@ export class Vehicle{
     }
 
     getVehicleType(): string{
-        return this.vehicle_type
+        return this.vehicleType
     }
 
     getVehicleBodyType(): string {
-        return this.body_type
+        return this.bodyType
     }
 
 }
