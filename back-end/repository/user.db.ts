@@ -1,31 +1,31 @@
-import { Seller } from "../domain/model/seller";
-import { User } from "../domain/model/user";
 
-// const users: User[] = [
-//     new Seller({
-//         id: 1,
-//         name: 'seller1',
-//         email: 'seller1@gmail.com',
-//         phone_number: 123456789
-//     }),
+// import { User } from "../domain/model/user";
 
-//     new Buyer({
-//         id: 2,
-//         name: 'buyer1',
-//         email: 'buyer1@example.com'
-//     })
-// ]
+// // const users: User[] = [
+// //     new Seller({
+// //         id: 1,
+// //         name: 'seller1',
+// //         email: 'seller1@gmail.com',
+// //         phone_number: 123456789
+// //     }),
 
-const users: User[] = [];
+// //     new Buyer({
+// //         id: 2,
+// //         name: 'buyer1',
+// //         email: 'buyer1@example.com'
+// //     })
+// // ]
 
-const createSeller = ({ id, email, name, phoneNumber, password }: Seller): Seller => {
-    const newSeller = new Seller({ id, email, name, phoneNumber, password});
-    users.push(newSeller);
-    return newSeller;
-}
+// const users: User[] = [];
 
-
-const getAllUsers = (): User[] => users;
+// const createSeller = ({ id, email, name, phoneNumber, password }: Seller): Seller => {
+//     const newSeller = new Seller({ id, email, name, phoneNumber, password});
+//     users.push(newSeller);
+//     return newSeller;
+// }
 
 
-export default { getAllUsers }
+// const getAllUsers = (): User[] => users;
+
+
+// export default { getAllUsers, createSeller }
