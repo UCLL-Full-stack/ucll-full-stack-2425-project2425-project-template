@@ -1,23 +1,24 @@
+import { Account as AccountPrisma } from '@prisma/client';
 import { User } from './user';
 import { Transaction } from './transaction';
 
 export class Account {
-    public id?: number;
-    public accountNumber: string;
-    public balance: number;
-    public isShared: boolean;
-    public startDate: Date;
-    public endDate: Date | null;
-    public status: string;
-    public type: string;
-    public transactions: Transaction[];
-    public users: User[];
+    private id?: number;
+    private accountNumber: string;
+    private balance: number;
+    private isShared: boolean;
+    private startDate: Date;
+    private endDate: Date | null;
+    private status: string;
+    private type: string;
+    private transactions: Transaction[];
+    private users: User[];
 
     constructor(account: {
         id?: number;
         isShared: boolean;
         type: string;
-        users?: User[];
+        // users?: User[];
         balance?: number;
         startDate?: Date;
         endDate?: Date | null;
@@ -34,7 +35,7 @@ export class Account {
         this.endDate = account.endDate || null;
         this.status = account.status || 'Active';
         this.transactions = [];
-        this.users = account.users || [];
+        this.users = [];
     }
 
     getId(): number | undefined {
@@ -126,6 +127,10 @@ export class Account {
         this.users.push(user);
     }
 
+    // addTransaction(transaction: Transaction): void {
+        
+    // }
+
     toJSON() {
         return {
             id: this.id,
@@ -139,4 +144,26 @@ export class Account {
             transactions: this.transactions,
         };
     }
+
+    
+    static from({
+        id,
+        balance,
+        isShared,
+        startDate,
+        endDate,
+        status,
+        type,
+    }: AccountPrisma) {
+        return new Account({
+            id,
+            balance,
+            isShared,
+            startDate,
+            endDate,
+            status,
+            type
+        });
+    }
 }
+

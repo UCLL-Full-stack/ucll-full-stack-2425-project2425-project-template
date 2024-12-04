@@ -58,9 +58,37 @@ import { UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
+
 /**
  * @swagger
  * /users:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a list of all users
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.get('/', async (req: Request & { auth: UserInput }, res: Response, next: NextFunction) => {
+        try {
+            const users = await userService.getAllUsers();
+            res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * @swagger
+ * /users/signup:
  *   post:
  *     summary: Create a new user
  *     requestBody:
@@ -83,11 +111,11 @@ const userRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = <UserInput>req.body;
-        const result = userService.createUser(user);
-        res.status(200).json(result);
+        const userInput = <UserInput>req.body;
+        const user = await userService.createUser(userInput);
+        res.status(200).json(user);
     } catch (error: any) {
         next(error);
     }
@@ -125,10 +153,10 @@ userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.post('/login', (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, password } = req.body;
-        const result = userService.getUserByEmailAndPassword(email, password);
+        const userInput = <UserInput>req.body;
+        const result = await userService.authenticate(userInput);
         res.status(200).json(result);
     } catch (error: any) {
         next(error);
@@ -161,10 +189,10 @@ userRouter.post('/login', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.get('/:nationalRegisterNumber', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:nationalRegisterNumber', async (req: Request , res: Response, next: NextFunction) => {
     try {
         const nationalRegisterNumber = req.params.nationalRegisterNumber;
-        const result = userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
+        const result = await userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
         res.status(200).json(result);
     } catch (error: any) {
         next(error);
@@ -209,12 +237,12 @@ userRouter.get('/:nationalRegisterNumber', (req: Request, res: Response, next: N
  */
 userRouter.post(
     '/:nationalRegisterNumber/accounts',
-    (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         try {
             const nationalRegisterNumber = req.params.nationalRegisterNumber;
             const accountNumber = <string>req.body.accountNumber;
-            const result = userService.addAccount(nationalRegisterNumber, accountNumber);
-            res.status(200).json(result.toJSON());
+            const result = await userService.addAccount(nationalRegisterNumber, accountNumber);
+            res.status(200).json(result);
         } catch (error: any) {
             next(error);
         }
@@ -355,10 +383,10 @@ userRouter.put(
  */
 userRouter.delete(
     '/:nationalRegisterNumber/settings',
-    (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         try {
             const nationalRegisterNumber = req.params.nationalRegisterNumber;
-            const result = userService.deleteUser(nationalRegisterNumber);
+            const result = await userService.deleteUser(nationalRegisterNumber);
             res.status(200).json(result);
         } catch (error: any) {
             next(error);

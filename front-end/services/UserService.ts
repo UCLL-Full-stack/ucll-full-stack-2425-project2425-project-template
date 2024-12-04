@@ -1,7 +1,7 @@
 import { Authentication, User } from "@/types";
 
 const createUser = async (user: User): Promise<void> => {
-  await fetch(process.env.NEXT_PUBLIC_API_URL + "/users", {
+  await fetch(process.env.NEXT_PUBLIC_API_URL + "/users/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

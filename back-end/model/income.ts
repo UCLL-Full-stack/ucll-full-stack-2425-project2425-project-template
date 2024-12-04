@@ -1,5 +1,6 @@
 import { Transaction } from './transaction';
 import { Account } from './account';
+import { TransactionType } from '../types';
 
 export class Income extends Transaction {
     private source: string;
@@ -14,7 +15,7 @@ export class Income extends Transaction {
         super({
             amount: income.amount,
             currency: income.currency,
-            transactionType: 'income',
+            transactionType: 'Income' as TransactionType,
             account: income.account,
             id: income.id,
         });
@@ -30,5 +31,27 @@ export class Income extends Transaction {
         if (!income.source?.trim()) {
             throw new Error('Source is required');
         }
+    }
+
+    static from({
+        id,
+        amount,
+        currency,
+        source,
+        account,
+    }: {
+        id?: number;
+        amount: number;
+        currency: string;
+        source: string;
+        account: Account;
+    }) {
+        return new Income({
+            id,
+            amount,
+            currency,
+            source,
+            account,
+        });
     }
 }

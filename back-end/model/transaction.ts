@@ -1,6 +1,8 @@
+import { Account as AccountPrisma, Transaction as TransactionPrisma } from '@prisma/client';
 import { Account } from './account';
 import { TransactionType } from '../types';
-
+import { Income } from './income';
+import { Expense } from './expense';
 export abstract class Transaction {
     private id?: number;
     private referenceNumber: string;
@@ -31,7 +33,7 @@ export abstract class Transaction {
         return this.id;
     }
 
-    geReferenceNumber(): string {
+    getReferenceNumber(): string {
         return this.referenceNumber;
     }
 
@@ -71,7 +73,7 @@ export abstract class Transaction {
         ) {
             throw new Error('Currency must be either USD, EUR or GBP.');
         }
-        if (transaction.transactionType !== 'income' && transaction.transactionType !== 'expense') {
+        if (transaction.transactionType !== 'INCOME' && transaction.transactionType !== 'EXPENSE') {
             throw new Error('Type must be either income or expense.');
         }
     }
@@ -84,5 +86,33 @@ export abstract class Transaction {
             Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5);
         const referenceNumber = `${firstTwoLettType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
         return referenceNumber;
+    }
+
+    static from ({
+        id,
+        amount,
+        currency,
+        transactionType,
+        account,
+        source,
+        destination,
+    }: TransactionPrisma & { account: AccountPrisma }) {
+        if (transactionType as TransactionType == 'INCOME') {
+            return new Income({
+                id,
+                amount,
+                currency,
+                account: Account.from(account),
+                source: source || '',
+            });
+        } else {
+            return new Expense({
+                id,
+                amount,
+                currency,
+                account: Account.from(account),
+                destination: destination || '',
+            });
+        } 
     }
 }
