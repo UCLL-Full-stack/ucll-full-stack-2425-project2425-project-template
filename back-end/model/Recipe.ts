@@ -13,38 +13,38 @@ export class Recipe {
     readonly id?: number;
     readonly name: string;
     readonly description: string;
-    readonly reviews: Review[];
-    readonly recipeIngredients?: RecipeIngredient[];
+    readonly reviews?: Review[];
+    // readonly recipeIngredients?: RecipeIngredient[];
 
     constructor(data: {
         id?: number;
         name: string;
         description: string;
-        reviews: Review[];
-        recipeIngredients?: RecipeIngredient[];
+        reviews?: Review[];
+        // recipeIngredients?: RecipeIngredient[];
     }) {
         this.id = data.id;
         this.name = data.name;
         this.description = data.description;
         this.reviews = data.reviews;
-        this.recipeIngredients = data.recipeIngredients;
+        // this.recipeIngredients = data.recipeIngredients;
     }
 
     static from = ({
         id,
         name,
         description,
-        recipeIngredients,
+        // recipeIngredients,
         reviews,
     }: RecipePrisma & {
-        recipeIngredients: RecipeIngredientPrisma[];
+        // recipeIngredients: RecipeIngredientPrisma[];
         reviews: ReviewPrisma[];
     }): Recipe => {
         return new Recipe({
             id,
             name,
             description,
-            recipeIngredients: recipeIngredients.map((ri) => RecipeIngredient.from(ri)),
+            // recipeIngredients: recipeIngredients.map((ri) => RecipeIngredient.from(ri)),
             reviews: reviews.map((review) => Review.from(review)),
         });
     };

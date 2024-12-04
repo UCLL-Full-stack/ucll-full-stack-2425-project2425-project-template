@@ -68,8 +68,10 @@ export class User {
         recipes,
         reviews,
     }: UserPrisma & {
-        recipes?: RecipePrisma[];
-        reviews?: ReviewPrisma[];
+        recipes: RecipePrisma[] & {
+            reviews: ReviewPrisma[];
+        };
+        reviews: ReviewPrisma[];
     }): User => {
         return new User({
             id,
@@ -78,6 +80,8 @@ export class User {
             email,
             firstName,
             lastName,
+            recipes: recipes.map((recipe) => Recipe.from(recipe)),
+            reviews: reviews.map((review) => Review.from(review)),
         });
     };
 }

@@ -14,8 +14,8 @@ model User {
   email     String   @unique
   firstName String
   lastName  String
-  recipes   Recipe[] @relation("UserRecipes")
-  reviews   Review[] @relation("UserReviews")
+  reviews   Review[]
+  recipes   Recipe[]
 }
 
 model Recipe {
@@ -23,9 +23,9 @@ model Recipe {
   name        String
   description String
   ingredients RecipeIngredient[]
-  creator     User               @relation("UserRecipes", fields: [creatorId], references: [id])
-  creatorId   Int
   reviews     Review[]
+  user        User               @relation(fields: [userId], references: [id])
+  userId      Int
 }
 
 model Ingredient {
@@ -49,8 +49,8 @@ model Review {
   id       Int    @id @default(autoincrement())
   text     String
   score    Int
-  writer   User   @relation("UserReviews", fields: [writerId], references: [id])
-  writerId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  ecipe   Recipe @relation(fields: [recipeId], references: [id])
   recipeId Int
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
 }

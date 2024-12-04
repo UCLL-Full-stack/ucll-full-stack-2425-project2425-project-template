@@ -11,19 +11,19 @@ export class Ingredient {
     readonly id?: number;
     readonly name: string;
     readonly category: string;
-    readonly recipeIngredients: RecipeIngredient[];
+    // readonly recipeIngredients?: RecipeIngredient[];
 
     constructor(ingredient: {
         id?: number;
         name: string;
         category: string;
-        recipeIngredients: RecipeIngredient[];
+        // recipeIngredients?: RecipeIngredient[];
     }) {
         this.validate(ingredient);
         this.id = ingredient.id;
         this.name = ingredient.name;
         this.category = ingredient.category;
-        this.recipeIngredients = ingredient.recipeIngredients;
+        // this.recipeIngredients = ingredient.recipeIngredients;
     }
 
     validate(ingredient: { id?: number; name: string; category: string }) {
@@ -44,15 +44,15 @@ export class Ingredient {
         id,
         name,
         category,
-        recipeIngredients,
-    }: IngredientPrisma & {
-        recipeIngredients: RecipeIngredientPrisma[];
+    }: // recipeIngredients,
+    IngredientPrisma & {
+        // recipeIngredients?: RecipeIngredientPrisma[];
     }): Ingredient => {
         return new Ingredient({
             id,
             name,
             category,
-            recipeIngredients: recipeIngredients.map((ri) => RecipeIngredient.from(ri)),
+            // recipeIngredients: recipeIngredients.map((ri) => RecipeIngredient.from(ri)),
         });
     };
 }

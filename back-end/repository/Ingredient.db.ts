@@ -7,9 +7,7 @@ const getAllIngredients = async (): Promise<Ingredient[]> => {
     if (!ingredientPrisma || ingredientPrisma.length === 0) {
         return [];
     }
-
-    // here we use prisma because we are getting the data from the database and need to transform it into the layout of our model
-    return ingredientPrisma.map((ingredientPrisma) => Ingredient.from(ingredientPrisma));
+    return ingredientPrisma.map((ingredient) => Ingredient.from(ingredient));
 };
 
 const getIngredientById = async (id: number): Promise<Ingredient | null> => {
@@ -42,40 +40,3 @@ export default {
     getIngredientById,
     createIngredient,
 };
-
-// import { Ingredient } from '../model/Ingredient';
-
-// const ingredients = [
-//     new Ingredient({
-//         id: 1,
-//         name: 'Carrot',
-//         category: 'Yummy',
-//     }),
-// ];
-
-// const getAllIngredients = (): Ingredient[] => ingredients;
-
-// const getIngredientById = (id: number): Ingredient => {
-//     const ingredient = ingredients.find((ingredient) => ingredient.id === id);
-//     if (!ingredient) {
-//         throw new Error(`Ingredient with id ${id} not found`);
-//     }
-//     return ingredient;
-// };
-
-// const createIngredient = (ingredient: Ingredient): Ingredient => {
-//     const newId = ingredients.length > 0 ? (ingredients[ingredients.length - 1]?.id ?? 0) + 1 : 1;
-//     const newIngredient = new Ingredient({
-//         id: newId,
-//         name: ingredient.name,
-//         category: ingredient.category,
-//     });
-//     ingredients.push(newIngredient);
-//     return newIngredient;
-// };
-
-// export default {
-//     getAllIngredients,
-//     getIngredientById,
-//     createIngredient,
-// };
