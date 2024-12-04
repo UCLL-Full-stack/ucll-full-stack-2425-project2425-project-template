@@ -14,11 +14,14 @@ model User {
   password   String
   role       Role
   attendance Int?
+  teamId     Int?
+  team       Team?    @relation("TeamToMembers", fields: [teamId], references: [teamId])
   trainings  Training[] @relation("UserToTrainings")
-  teams      Team[]     @relation("UserToTeams")
   matches    Match[]    @relation("UserToMatches")
   coachedTrainings Training[] @relation("UserToCoachedTrainings")
   coachedTeams     Team[]     @relation("UserToCoachedTeams")
+
+  @@unique([userId, teamId])
 }
 
 model Training {
@@ -26,16 +29,16 @@ model Training {
   date       DateTime
   hall       String
   square     Int
-  players    User[]   @relation("UserToTrainings")
   coachId    Int
   coach      User     @relation("UserToCoachedTrainings", fields: [coachId], references: [userId])
+  players    User[]   @relation("UserToTrainings")
 }
 
 model Team {
   teamId  Int      @id @default(autoincrement())
-  members User[]   @relation("UserToTeams")
   coachId Int
   coach   User     @relation("UserToCoachedTeams", fields: [coachId], references: [userId])
+  members User[]   @relation("TeamToMembers")
 }
 
 model Match {
