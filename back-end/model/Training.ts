@@ -1,12 +1,7 @@
 import { Role } from "../types";
 import { User } from "./User";
 
-import {
-    Match as MatchPrisma,
-    Team as TeamPrisma,
-    Training as TrainingPrisma,
-    User as UserPrisma
-} from "@prisma/client"
+
 
 export class Training {
     private trainingId? : number;
@@ -31,25 +26,6 @@ export class Training {
         this.players = training.players || new Array<User>(); // Unusable for now
         this.coach = training.coach;
     }
-
-    static from ({
-        trainingId,
-        date,
-        hall,
-        square,
-        players,
-        coach,
-    }: TrainingPrisma & { user: UserPrisma; }) {
-        return new Training ({
-            trainingId,
-            date,
-            hall,
-            square,
-            players,
-            coach,
-        })
-    }
-
     getId() {
         return this.trainingId;
     }
