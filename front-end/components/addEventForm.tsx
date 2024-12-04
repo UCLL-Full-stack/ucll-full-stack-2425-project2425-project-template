@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EventService from "@/services/EventService";
-import styles from "@/styles/eventForm.module.css";
+import styles from "@/styles/Form.module.css";
 import { Event } from "@/types";
 import { useRouter } from "next/router";
 

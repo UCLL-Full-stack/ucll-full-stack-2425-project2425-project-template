@@ -10,20 +10,19 @@ import EventOverview from "@/components/EventOverview";
 const Home: React.FC = () => {
   const router = useRouter();
   const [events, setEvents] = useState<Array<Event>>([]);
-
-  const getEvents = async () => {
-    const response = await EventService.getAllEvents();
-    if (response.ok) {
-      const events = await response.json();
-      console.log(events);
-      setEvents(events);
-    }
-  };
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    getEvents();
+    fetchEvents();
   }, []);
-
+  const fetchEvents = async () => {
+    try {
+      const response = await EventService.getAllEvents();
+      setEvents(response);
+    } catch (error) {
+      setError(`Error: Failed to fetch events`);
+    }
+  };
   return (
     <>
       <Head>
@@ -33,6 +32,8 @@ const Home: React.FC = () => {
       </Head>
       <Header />
       <main className={styles.main}>
+        {error && <strong className={styles.error}>{error}</strong>}
+        <EventOverview events={events} />
         <button
           className="btn btn-primary"
           onClick={() => {
@@ -41,7 +42,6 @@ const Home: React.FC = () => {
         >
           Add event
         </button>
-        <EventOverview events={events} />
       </main>
     </>
   );

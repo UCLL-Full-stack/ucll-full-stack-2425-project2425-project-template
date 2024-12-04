@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Event } from "@/types";
 import styles from "@/styles/eventDetails.module.css";
+import Head from "next/head";
 
 const EventDetails: React.FC = () => {
   const router = useRouter();
@@ -22,11 +23,16 @@ const EventDetails: React.FC = () => {
   }, [router.query.id]);
 
   const handleOnClick = () => {
-    console.log("yep");
+    console.log("still need to handle the participate");
   };
   return (
     event && (
       <>
+        <Head>
+          <title>{event.name} - Eventer</title>
+          <meta name="description" content="Eventer home page" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
         <div className="d-flex flex-column ju">
           <h1 className={styles.title}>{event.name}</h1>
 

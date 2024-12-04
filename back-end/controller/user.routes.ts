@@ -16,10 +16,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
-        console.log(userInput);
-
-        const user = await userService.createUser(userInput);
-        res.status(200).json(user);
+        await userService.createUser(userInput);
+        const response = await userService.authenicate(userInput);
+        res.status(200).json({ message: 'Account made, login in', ...response });
     } catch (error) {
         next(error);
     }

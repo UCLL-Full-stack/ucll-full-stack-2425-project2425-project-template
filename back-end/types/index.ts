@@ -46,6 +46,7 @@ type AuthenticationResponse = {
     username: string;
     role: Role;
 };
+
 export {
     Role,
     UserInput,

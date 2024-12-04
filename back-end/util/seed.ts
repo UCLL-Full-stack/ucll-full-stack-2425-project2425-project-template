@@ -30,6 +30,33 @@ const main = async () => {
         },
     });
 
+    await prisma.category.create({
+        data: {
+            name: 'Festival',
+            description: 'Festival event',
+        },
+    });
+
+    await prisma.category.create({
+        data: {
+            name: 'Comedy show',
+            description: 'Comedy show of a comedian',
+        },
+    });
+
+    await prisma.category.create({
+        data: {
+            name: 'Cantus',
+            description: 'Drink alot of beer :)',
+        },
+    });
+
+    await prisma.category.create({
+        data: {
+            name: 'Techno',
+            description: 'A techno event, perfect for people that like techno',
+        },
+    });
     const event1 = await prisma.event.create({
         data: {
             name: 'Fred Again..',

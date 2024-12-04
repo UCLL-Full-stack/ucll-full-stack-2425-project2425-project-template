@@ -17,6 +17,10 @@ const createUser = async ({ userName, email, role, password }: UserInput): Promi
     if (existing) {
         throw new Error(`Error: User with username ${userName} already exists.`);
     }
+    const existingEmail = await userDb.getUserByEmail(email);
+    if (existingEmail) {
+        throw new Error(`Error: User with email ${email} already exists.`);
+    }
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({ userName, email, role, password: hashedPassword });
 
