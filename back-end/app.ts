@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { eventRouter } from './controller/event.routes';
 import { expressjwt } from 'express-jwt';
 import userRouter from './controller/user.routes';
+import { categoryRouter } from './controller/category.routes';
 
 const app = express();
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 
 app.use('/events', eventRouter);
 app.use('/users', userRouter);
+app.use('/categories', categoryRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
@@ -53,7 +55,7 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', 'events', 'user/login', 'users/signup', 'status'],
+        path: ['/api-docs', 'events', 'user/login', 'users/signup', 'status', 'categories'],
     })
 );
 export default app;

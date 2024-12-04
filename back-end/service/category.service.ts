@@ -19,6 +19,15 @@ const addCategory = async ({ name, description }: CategoryInput): Promise<Catego
     }
 };
 
+const getCategories = async (): Promise<Category[]> => {
+    try {
+        return await categoryDb.getCategories();
+    } catch (error) {
+        throw new Error(`Error:${error}`);
+    }
+};
+
 export default {
     addCategory,
+    getCategories,
 };
