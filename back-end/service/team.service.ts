@@ -19,8 +19,8 @@ const createTeam = async ({ teamName, players, coach }: TeamInput): Promise<Team
     }
 
     const createdTeam = new Team({ teamName, players, coach });
-    teamDb.createTeam(createdTeam);
-    return createdTeam;
+
+    return await teamDb.createTeam(createdTeam);
 };
 
 const getTeamById = async (id: number): Promise<Team> => {
@@ -40,19 +40,18 @@ const getTeamsByCoach = async (coachId: number): Promise<Team[]> => {
     return await teamDb.getTeamsByCoach(coachId);
 };
 
-const updateTeam = async ({id, teamName, coach, players}: TeamInput): Promise<Team> => {
-
+const updateTeam = async ({ id, teamName, coach, players }: TeamInput): Promise<Team> => {
     if (id == undefined) {
         throw new Error('An id is required.');
     }
-    
+
     const team = await teamDb.getTeamById(id);
 
     if (team == undefined) {
         throw new Error('No team with that id exists.');
     }
 
-    const updatedTeam = new Team({id, teamName, coach, players});
+    const updatedTeam = new Team({ id, teamName, coach, players });
 
     return await teamDb.updateTeam(updatedTeam);
 };

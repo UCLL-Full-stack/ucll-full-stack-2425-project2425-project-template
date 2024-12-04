@@ -31,7 +31,7 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('givenValidId_whenGettingCoachById_thenCoachIsReturned', () => {
+test('givenValidId_whenGettingCoachById_thenCoachIsReturned', async () => {
     // given
     const validCoach = new Coach({
         id: validId,
@@ -41,27 +41,27 @@ test('givenValidId_whenGettingCoachById_thenCoachIsReturned', () => {
         phoneNumber: validPhoneNumber,
     });
 
-    mockGetCoachById.mockReturnValue(validCoach);
+    mockGetCoachById.mockResolvedValue(validCoach);
 
     // when
-    const coach = coachService.getCoachById(validId);
+    const coach = await coachService.getCoachById(validId);
 
     // then
     expect(coach).toEqual(validCoach);
     expect(coach).not.toBeUndefined();
 });
 
-test('givenInvalidId_whenGettingCoachById_thenErrorIsThrown', () => {
+test('givenInvalidId_whenGettingCoachById_thenErrorIsThrown', async () => {
     // given
-    mockGetCoachById.mockReturnValue(undefined);
+    mockGetCoachById.mockResolvedValue(undefined);
 
     // when & then
-    expect(() => coachService.getCoachById(invalidId)).toThrow(
+    await expect(coachService.getCoachById(invalidId)).rejects.toThrow(
         `Coach with id ${invalidId} does not exist.`
     );
 });
 
-test('givenAllcoaches_whenGettingAllCoaches_thenAllCoachesAreReturnedSuccessfully', () => {
+test('givenAllCoaches_whenGettingAllCoaches_thenAllCoachesAreReturnedSuccessfully', async () => {
     // given
     const allCoaches = [
         new Coach({
@@ -73,14 +73,16 @@ test('givenAllcoaches_whenGettingAllCoaches_thenAllCoachesAreReturnedSuccessfull
         }),
     ];
 
+    mockGetAllCoaches.mockResolvedValue(allCoaches);
+
     // when
-    mockGetAllCoaches.mockReturnValue(allCoaches);
+    const coaches = await coachService.getAllCoaches();
 
     // then
-    expect(coachService.getAllCoaches()).toEqual(allCoaches);
+    expect(coaches).toEqual(allCoaches);
 });
 
-test('givenValidInput_whenCreatingCoach_thenCoachIsCreatedSuccessfully', () => {
+test('givenValidInput_whenCreatingCoach_thenCoachIsCreatedSuccessfully', async () => {
     // given
     const coachInput = {
         id: validId,
@@ -91,16 +93,16 @@ test('givenValidInput_whenCreatingCoach_thenCoachIsCreatedSuccessfully', () => {
     };
     const coach = new Coach(coachInput);
 
-    // when
-    mockCreateCoach.mockReturnValue(coach);
-    const createdCoach = coachService.createCoach(coachInput);
+    mockCreateCoach.mockResolvedValue(coach);
 
+    // when
+    const createdCoach = await coachService.createCoach(coachInput);
 
     // then
     expect(createdCoach).toEqual(coach);
 });
 
-test('givenInvalidId_whenCreatingCoach_thenErrorIsThrown', () => {
+test('givenInvalidId_whenCreatingCoach_thenErrorIsThrown', async () => {
     // given
     const coachInput = {
         id: invalidId,
@@ -111,10 +113,10 @@ test('givenInvalidId_whenCreatingCoach_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => coachService.createCoach(coachInput)).toThrow('Invalid id.');
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Invalid id.');
 });
 
-test('givenExistingCoachId_whenCreatingCoach_thenErrorIsThrown', () => {
+test('givenExistingCoachId_whenCreatingCoach_thenErrorIsThrown', async () => {
     // given
     const coachInput = {
         id: validId,
@@ -124,17 +126,16 @@ test('givenExistingCoachId_whenCreatingCoach_thenErrorIsThrown', () => {
         phoneNumber: validPhoneNumber,
     };
 
-    // when
     const existingCoach = new Coach(coachInput);
-    mockGetAllCoaches.mockReturnValue([existingCoach]);
+    mockGetAllCoaches.mockResolvedValue([existingCoach]);
 
-    // then
-    expect(() => coachService.createCoach(coachInput)).toThrow(
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow(
         `Coach with id ${validId} already exists.`
     );
 });
 
-test('givenInvalidFirstName_whenCreatingCoach_thenErrorIsThrown', () => {
+test('givenInvalidFirstName_whenCreatingCoach_thenErrorIsThrown', async () => {
     // given
     const coachInput = {
         id: validId,
@@ -145,10 +146,10 @@ test('givenInvalidFirstName_whenCreatingCoach_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => coachService.createCoach(coachInput)).toThrow('First name is required.');
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('First name is required.');
 });
 
-test('givenInvalidLastName_whenCreatingCoach_thenErrorIsThrown', () => {
+test('givenInvalidLastName_whenCreatingCoach_thenErrorIsThrown', async () => {
     // given
     const coachInput = {
         id: validId,
@@ -159,10 +160,10 @@ test('givenInvalidLastName_whenCreatingCoach_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => coachService.createCoach(coachInput)).toThrow('Last name is required.');
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Last name is required.');
 });
 
-test('givenInvalidEmail_whenCreatingCoach_thenErrorIsThrown', () => {
+test('givenInvalidEmail_whenCreatingCoach_thenErrorIsThrown', async () => {
     // given
     const coachInput = {
         id: validId,
@@ -173,10 +174,10 @@ test('givenInvalidEmail_whenCreatingCoach_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => coachService.createCoach(coachInput)).toThrow('Email is required.');
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Email is required.');
 });
 
-test('givenInvalidPhoneNumber_whenCreatingCoach_thenErrorIsThrown', () => {
+test('givenInvalidPhoneNumber_whenCreatingCoach_thenErrorIsThrown', async () => {
     // given
     const coachInput = {
         id: validId,
@@ -187,5 +188,165 @@ test('givenInvalidPhoneNumber_whenCreatingCoach_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => coachService.createCoach(coachInput)).toThrow('Phone number is required.');
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Phone number is required.');
+});
+
+test('givenValidId_whenGettingCoachById_thenCoachIsReturned', async () => {
+    // given
+    const validCoach = new Coach({
+        id: validId,
+        firstName: validFirstName,
+        lastName: validLastName,
+        email: validEmail,
+        phoneNumber: validPhoneNumber,
+    });
+
+    mockGetCoachById.mockResolvedValue(validCoach);
+
+    // when
+    const coach = await coachService.getCoachById(validId);
+
+    // then
+    expect(coach).toEqual(validCoach);
+    expect(coach).not.toBeUndefined();
+});
+
+test('givenInvalidId_whenGettingCoachById_thenErrorIsThrown', async () => {
+    // given
+    mockGetCoachById.mockResolvedValue(undefined);
+
+    // when & then
+    await expect(coachService.getCoachById(invalidId)).rejects.toThrow(
+        `Coach with id ${invalidId} does not exist.`
+    );
+});
+
+test('givenAllCoaches_whenGettingAllCoaches_thenAllCoachesAreReturnedSuccessfully', async () => {
+    // given
+    const allCoaches = [
+        new Coach({
+            id: validId,
+            firstName: validFirstName,
+            lastName: validLastName,
+            email: validEmail,
+            phoneNumber: validPhoneNumber,
+        }),
+    ];
+
+    mockGetAllCoaches.mockResolvedValue(allCoaches);
+
+    // when
+    const coaches = await coachService.getAllCoaches();
+
+    // then
+    expect(coaches).toEqual(allCoaches);
+});
+
+test('givenValidInput_whenCreatingCoach_thenCoachIsCreatedSuccessfully', async () => {
+    // given
+    const coachInput = {
+        id: validId,
+        firstName: validFirstName,
+        lastName: validLastName,
+        email: validEmail,
+        phoneNumber: validPhoneNumber,
+    };
+    const coach = new Coach(coachInput);
+
+    mockCreateCoach.mockResolvedValue(coach);
+
+    // when
+    const createdCoach = await coachService.createCoach(coachInput);
+
+    // then
+    expect(createdCoach).toEqual(coach);
+});
+
+test('givenInvalidId_whenCreatingCoach_thenErrorIsThrown', async () => {
+    // given
+    const coachInput = {
+        id: invalidId,
+        firstName: validFirstName,
+        lastName: validLastName,
+        email: validEmail,
+        phoneNumber: validPhoneNumber,
+    };
+
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Invalid id.');
+});
+
+test('givenExistingCoachId_whenCreatingCoach_thenErrorIsThrown', async () => {
+    // given
+    const coachInput = {
+        id: validId,
+        firstName: validFirstName,
+        lastName: validLastName,
+        email: validEmail,
+        phoneNumber: validPhoneNumber,
+    };
+
+    const existingCoach = new Coach(coachInput);
+    mockGetAllCoaches.mockResolvedValue([existingCoach]);
+
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow(
+        `Coach with id ${validId} already exists.`
+    );
+});
+
+test('givenInvalidFirstName_whenCreatingCoach_thenErrorIsThrown', async () => {
+    // given
+    const coachInput = {
+        id: validId,
+        firstName: invalidFirstName,
+        lastName: validLastName,
+        email: validEmail,
+        phoneNumber: validPhoneNumber,
+    };
+
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('First name is required.');
+});
+
+test('givenInvalidLastName_whenCreatingCoach_thenErrorIsThrown', async () => {
+    // given
+    const coachInput = {
+        id: validId,
+        firstName: validFirstName,
+        lastName: invalidLastName,
+        email: validEmail,
+        phoneNumber: validPhoneNumber,
+    };
+
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Last name is required.');
+});
+
+test('givenInvalidEmail_whenCreatingCoach_thenErrorIsThrown', async () => {
+    // given
+    const coachInput = {
+        id: validId,
+        firstName: validFirstName,
+        lastName: validLastName,
+        email: invalidEmail,
+        phoneNumber: validPhoneNumber,
+    };
+
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Email is required.');
+});
+
+test('givenInvalidPhoneNumber_whenCreatingCoach_thenErrorIsThrown', async () => {
+    // given
+    const coachInput = {
+        id: validId,
+        firstName: validFirstName,
+        lastName: validLastName,
+        email: validEmail,
+        phoneNumber: invalidPhoneNumber,
+    };
+
+    // when & then
+    await expect(coachService.createCoach(coachInput)).rejects.toThrow('Phone number is required.');
 });

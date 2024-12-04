@@ -80,7 +80,7 @@ export class Team {
         return new Team({
             id,
             teamName,
-            players: players.map((player) => new Player(player)),
+            players: players.map((player: any) => new Player(player)),
             coach: new Coach(coach),
         });
     }

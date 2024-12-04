@@ -6,7 +6,7 @@ const getAllTeams = async (): Promise<Team[]> => {
         const teamPrisma = await database.team.findMany({
             include: { coach: true, players: true }
         });
-        return teamPrisma.map((team) => Team.from(team));
+        return teamPrisma.map((team: any) => Team.from(team));
     } catch (error) {
         console.error(error);
         throw new Error('Database error, see server log for details.');
@@ -19,7 +19,7 @@ const getTeamsByCoach = async (coachId: number): Promise<Team[]> => {
             where: { coachId },
             include: { coach: true, players: true }
         });
-        return teamsPrisma.map((team) => Team.from(team));
+        return teamsPrisma.map((team: any) => Team.from(team));
     } catch (error) {
         console.error(error);
         throw new Error('Database error, see server log for details.');
