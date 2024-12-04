@@ -20,10 +20,9 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status']
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
     })
 );
-
 
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
@@ -70,8 +69,6 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     });
 });
 
-
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-

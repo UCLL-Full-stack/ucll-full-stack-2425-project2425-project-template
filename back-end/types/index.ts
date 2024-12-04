@@ -44,8 +44,8 @@ type AuthenticationResponse = {
     id?: number;
     email: string;
     name: string;
+    nationalRegisterNumber: string;
 };
-
 
 export {
     TransactionType,

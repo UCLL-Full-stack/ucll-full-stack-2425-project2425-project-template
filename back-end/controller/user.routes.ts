@@ -58,7 +58,6 @@ import { UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
-
 /**
  * @swagger
  * /users:
@@ -76,7 +75,9 @@ const userRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/User'
  */
-userRouter.get('/', async (req: Request & { auth: UserInput }, res: Response, next: NextFunction) => {
+userRouter.get(
+    '/',
+    async (req: Request & { auth: UserInput }, res: Response, next: NextFunction) => {
         try {
             const users = await userService.getAllUsers();
             res.status(200).json(users);
@@ -167,6 +168,8 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  * @swagger
  * /users/{nationalRegisterNumber}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a user by national register number
  *     parameters:
  *       - in: path
@@ -189,20 +192,27 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.get('/:nationalRegisterNumber', async (req: Request , res: Response, next: NextFunction) => {
-    try {
-        const nationalRegisterNumber = req.params.nationalRegisterNumber;
-        const result = await userService.getUserByNationalRegisterNumber(nationalRegisterNumber);
-        res.status(200).json(result);
-    } catch (error: any) {
-        next(error);
+userRouter.get(
+    '/:nationalRegisterNumber',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const nationalRegisterNumber = req.params.nationalRegisterNumber;
+            const result = await userService.getUserByNationalRegisterNumber(
+                nationalRegisterNumber
+            );
+            res.status(200).json(result);
+        } catch (error: any) {
+            next(error);
+        }
     }
-});
+);
 
 /**
  * @swagger
  * /users/{nationalRegisterNumber}/accounts:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Add an account to a user
  *     parameters:
  *       - in: path
@@ -253,6 +263,8 @@ userRouter.post(
  * @swagger
  * /users/{nationalRegisterNumber}/settings:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Update user credentials
  *     parameters:
  *       - in: path
@@ -309,6 +321,8 @@ userRouter.post(
  * @swagger
  * /users/{nationalRegisterNumber}/settings:
  *   put:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Update user credentials
  *     parameters:
  *       - in: path
@@ -355,6 +369,8 @@ userRouter.put(
  * @swagger
  * /users/{nationalRegisterNumber}/settings:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Delete a user
  *     parameters:
  *       - in: path
