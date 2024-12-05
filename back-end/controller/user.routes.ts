@@ -72,13 +72,24 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = req.body as UserInput;
-        const result = await userService.createUser(user);
-        res.status(200).json(result);
+        const JWT = await userService.registerUser(user);
+        res.status(200).json(JWT);
     } catch (err) {
         res.status(400).json({ message: (err as Error).message });
         next(err as Error);
     }
 });
+
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const input = <{username: string, password: string}>req.body
+            const JWT = await userService.authenticate(input);
+            res.status(200).json(JWT);
+        } catch (error) {
+            next(error);
+        }
+    }
+)
 
 
 export { userRouter };

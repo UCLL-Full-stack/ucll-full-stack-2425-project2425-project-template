@@ -46,14 +46,14 @@ const RegisterForm = () => {
         const response = await UserService.createUser(username, password, profile);
 
         if (response.status === 200) {
-            const user = await response.json();
+            const autheticationResponse = await response.json();
 
             sessionStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({
-                    id: user.id,
-                    username: user.username,
-                    profile: user.profile,
+                    token: autheticationResponse.token,
+                    username: autheticationResponse.username,
+                    profile: autheticationResponse.profile
                 })
             );
 

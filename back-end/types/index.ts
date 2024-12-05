@@ -43,4 +43,10 @@ type ProfileInput = {
     bio?: string;
 };
 
-export { UserInput, GroupInput, BoardInput, TaskInput, ProfileInput };
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+};
+
+export { UserInput, GroupInput, BoardInput, TaskInput, ProfileInput, AuthenticationResponse };

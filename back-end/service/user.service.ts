@@ -1,7 +1,10 @@
 import { Profile } from '../model/profile';
 import { User } from '../model/user';
 import userDb from '../repository/user.db';
-import { UserInput } from '../types';
+import { AuthenticationResponse, UserInput } from '../types';
+import { generateJWTtoken } from '../util/jwt';
+import bcrypt from 'bcrypt';
+
 
 const getAllUsers = async (): Promise<User[]> => {
     return await userDb.getAllUsers();
@@ -12,7 +15,7 @@ const getUserById = async (id: number): Promise<User> => {
     return user;
 }
 
-const createUser = async ({
+const registerUser = async ({
     id,
     username,
     hashedPassword,
@@ -23,7 +26,7 @@ const createUser = async ({
         lastName,
         bio
     } = {}
-}: UserInput): Promise<User> => {
+}: UserInput): Promise<AuthenticationResponse> => {
     if (!username || !hashedPassword) {
         throw new Error('Username and hashedPassword are required.');
     }
@@ -49,11 +52,36 @@ const createUser = async ({
     });
 
     userDb.createUser(newUser);
-    return newUser;
+
+    const JWT = generateJWTtoken(username);
+    const response = {
+        token: JWT,
+        username: username,
+        fullname: `${firstName} ${lastName}`
+    };
+    return response;
+};
+
+const authenticate = async ({ username, password}: { username: string, password: string }): Promise<AuthenticationResponse> => {
+    const user = await userDb.getUserByUsername({username});
+    const hashedPassword = user.getHashedPassword();
+    const passwordsMatch = await bcrypt.compare(password, hashedPassword);
+    if (passwordsMatch) {
+        const JWT = generateJWTtoken(username);
+        const response = {
+            token: JWT,
+            username: username,
+            fullname: `${user.getProfile()?.getFirstName()} ${user.getProfile()?.getLastName()}`
+        };
+        return response;
+    } else {
+        throw new Error(`Incorrect username or password`);
+    };
 };
 
 export default {
     getAllUsers,
     getUserById,
-    createUser,
+    registerUser,
+    authenticate,
 };
