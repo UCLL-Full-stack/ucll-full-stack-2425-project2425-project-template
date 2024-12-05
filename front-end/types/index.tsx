@@ -4,11 +4,12 @@ export type Vehicle = {
     model_name: string;
     year: number;
     price: number;
-    fuel_type: string;
-    transmission_type: string;
-    vehicle_type: string;
-    body_type: string;
-    mileage: number
+    fuelType: string;
+    engineCapacity : number;
+    transmissionType: string;
+    vehicleType: string;
+    bodyType:string;
+    mileage:number;
 }
 
 export type UserLogIn = {

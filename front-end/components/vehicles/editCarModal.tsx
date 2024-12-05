@@ -11,16 +11,17 @@ type EditCarModalProps = {
 
 
 const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, car }) => {
-    // State for each field, initialized with `car` prop values
+    
     const [manufacturer, setManufacturer] = useState(car.manufacturer);
     const [modelName, setModelName] = useState(car.model_name);
     const [price, setPrice] = useState(car.price);
     const [year, setYear] = useState(car.year);
-    const [bodyType, setBodyType] = useState(car.body_type);
+    const [bodyType, setBodyType] = useState(car.bodyType);
     const [mileage, setMileage] = useState(car.mileage);
-    const [fuelType, setFuelType] = useState(car.fuel_type);
-    const [transmissionType, setTransmissionType] = useState(car.transmission_type);
-    const [vehicleType, setVehicleType] = useState(car.vehicle_type);
+    const [fuelType, setFuelType] = useState(car.fuelType);
+    const [transmissionType, setTransmissionType] = useState(car.transmissionType);
+    const [vehicleType, setVehicleType] = useState(car.vehicleType);
+    const [engineCapacity, setEngineCapacity] = useState(car.engineCapacity);
     const [selectedModels, setSelectedModels] = useState<string[]>([]);
 
     type ManufacturersAndModels = {
@@ -152,45 +153,32 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
         e.preventDefault();
 
         const newCar: Vehicle = {
-            manufacturer,
+            manufacturer: manufacturer,
             model_name: modelName,
             year: year,
             price: price,
-            fuel_type: fuelType,
-            transmission_type: transmissionType,
-            vehicle_type: vehicleType,
-            body_type: bodyType,
+            fuelType: fuelType,
+            transmissionType: transmissionType,
+            vehicleType: vehicleType,
+            bodyType: bodyType,
             mileage: mileage,
+            engineCapacity: engineCapacity,
             id: car.id
         };
 
         const res = await onAddCar(newCar);
-        onClose();
-        // return VehicleService.getAllVehicles   
+        onClose(); 
     };
 
     if (!isOpen) return null;
 
     return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl"> {/* Increased width */}
+            <h2 className="text-2xl font-bold mb-6 text-center">Edit Car</h2>
+            <form onSubmit={handleSave}>
 
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-4">Edit Car</h2>
-                <form onSubmit={handleSave}>
-
-                <div className="mb-4">
-                        <label className="flex text-sm font-medium">Vehicle Type</label>
-                        <select
-                            value={vehicleType}
-                            onChange={(e) => setVehicleType(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        >
-                            <option value="" disabled>Select a Vehicle Type</option>
-                            <option value="Car">Car</option>
-                            <option value="Motorcycle">Motorcycle</option>
-                        </select>
-                    </div>
+                <div className="grid grid-cols-2 gap-6"> {/* Two-column layout */}
                     <div className="mb-4">
                         <label className="flex text-sm font-medium">Manufacturer</label>
                         <select
@@ -228,8 +216,18 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
                         <label className="flex text-sm font-medium">Year</label>
                         <input
                             type="number"
-                            value={year}
+                            value={year === 0 ? "" : year}
                             onChange={(e) => setYear(Number(e.target.value))}
+                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="flex text-sm font-medium">Engine Capacity</label>
+                        <input
+                            type="number"
+                            value={engineCapacity}
+                            onChange={(e) => setEngineCapacity(Number(e.target.value))}
                             className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         />
@@ -262,13 +260,12 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
                             className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
-                            <option value=""disabled>Select a Body Type</option>
+                            <option value="" disabled>Select a Body Type</option>
                             {bodyDictionary.map((body) => (
                                 <option key={body} value={body}>
                                     {body}
                                 </option>
                             ))}
-    
                         </select>
                     </div>
                     <div className="mb-4">
@@ -295,31 +292,34 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
                             className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
                             required
                         >
-                            <option value=""disabled>Select a Transmission Type</option>
+                            <option value="" disabled>Select a Transmission Type</option>
                             <option value="Automatic">Automatic</option>
                             <option value="Manual">Manual</option>
                             <option value="Semi-Automatic">Semi-Automatic</option>
                         </select>
                     </div>
-                    <div className="flex justify-end space-x-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex items-center px-4 py-2 text-lg font-medium text-black drop-shadow-lg align-middle rounded-lg transition duration-500 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 "
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="flex items-center px-4 py-2 text-lg font-normal text-black bg-[#FCBA04] hover:bg-[#FDCD49] drop-shadow-lg align-middle rounded-lg transition duration-500"
-                        >
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                
+                <div className="flex justify-end space-x-4 mt-6">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-4 py-2 text-lg font-medium bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 text-lg font-medium bg-[#FCBA04] text-black rounded-lg hover:bg-[#FDCD49]"
+                    >
+                        Save
+                    </button>
+                </div>
+            </form>
         </div>
-    );
+    </div>
+);
+
 };
 
 export default EditCarModal;

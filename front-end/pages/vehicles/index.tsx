@@ -32,8 +32,7 @@ const Vehicles: React.FC = () => {
             
                 <div className="items-center mb-6">
                     <section>
-                        {vehicles && (<VehiclesOverviewTable vehicles={vehicles} onVehiclesChange={() => refreshVehicles}/>)}
-
+                    <VehiclesOverviewTable vehicles={vehicles} onVehiclesChange={refreshVehicles} />
                     </section>
                 </div>
 

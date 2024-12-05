@@ -59,9 +59,9 @@ const VehiclesOverviewTable: React.FC<Props> = ({ vehicles, onVehiclesChange }: 
                     <div className="text-gray-500 mt-1 text-center">
                         <p>Mileage: {vehicle.mileage} KM</p>
                         <p>Year: {vehicle.year}</p>
-                        <p>Fuel: {vehicle.fuel_type}</p>
-                        <p>Transmission: {vehicle.transmission_type}</p>
-                        <p>Type: {vehicle.vehicle_type}</p>
+                        <p>Fuel: {vehicle.fuelType}</p>
+                        <p>Transmission: {vehicle.transmissionType}</p>
+                        <p>Type: {vehicle.vehicleType}</p>
 
                     </div>
 
