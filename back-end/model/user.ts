@@ -31,7 +31,10 @@ export class User {
         this.password = user.password;
         this.profile = user.profile;
     }
-
+    isValidEmail(email: string): boolean {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
     validate(user: {
         userName: string;
         email: string;
@@ -41,6 +44,7 @@ export class User {
     }) {
         if (!user.userName?.trim()) throw new Error('Username is required.');
         if (!user.email?.trim()) throw new Error('Email is required.');
+        if (!this.isValidEmail(user.email)) throw new Error('Email is not of right format.');
         if (!user.role?.trim()) throw new Error('Role is required.');
         if (!['User', 'Admin'].includes(user.role)) throw new Error('Role should be User or Admin');
         if (!user.password?.trim()) throw new Error('Password is required.');

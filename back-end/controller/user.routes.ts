@@ -33,4 +33,12 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+userRouter.post('/addCategory', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default userRouter;
