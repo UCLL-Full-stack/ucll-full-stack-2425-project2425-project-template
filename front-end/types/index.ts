@@ -22,7 +22,7 @@ export type Pokebowl = {
 export type Bestelling = {
     id?: number;
     user: User;
-    datum: Date;
+    datum?: Date;
     totaalPrijs?: number;
     pokebowls: Pokebowl[];
 }

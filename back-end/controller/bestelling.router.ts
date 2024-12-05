@@ -27,6 +27,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import bestellingService from '../service/bestelling.service';
+import { BestellingInput } from '../types';
 
 const orderRouter = express.Router();
 
@@ -79,6 +80,17 @@ orderRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     try {
         const bestellingen = await bestellingService.getAllBestellingen();
         res.status(200).json(bestellingen);
+    } catch (error) {
+        next(error);
+    }
+});
+
+orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const bestelling = <BestellingInput>req.body;
+        const result = await bestellingService.createBestelling(bestelling);
+        console.log(bestelling);
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }

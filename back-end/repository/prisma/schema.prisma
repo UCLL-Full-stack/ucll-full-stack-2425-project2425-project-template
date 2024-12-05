@@ -55,7 +55,7 @@ model Bestelling {
     id Int @id @default(autoincrement())
     userId Int
     user User @relation(fields: [userId], references: [id])
-    datum DateTime
+    datum DateTime @default(now())
     pokebowls Pokebowl[]
 }
 

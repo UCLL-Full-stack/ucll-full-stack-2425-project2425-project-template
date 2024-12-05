@@ -85,7 +85,7 @@ const AddIngredient: React.FC = () => {
                     {naamError && <p className="error-field">{naamError}</p>}
                     <input type="text" name="name" value={naam} onChange={(event) => setNaam(event.target.value)} />
                     <label>Type:</label>
-                    <select id="cars" name="cars" value={type} onChange={(event) => setType(event.target.value as Type)}>
+                    <select id="ingredient" name="ingredient" value={type} onChange={(event) => setType(event.target.value as Type)}>
                         <option value="Protein">Protein</option>
                         <option value="Topping">Topping</option>
                         <option value="Sauce">Sauce</option>

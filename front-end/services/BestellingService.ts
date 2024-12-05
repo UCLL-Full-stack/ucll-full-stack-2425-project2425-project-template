@@ -1,3 +1,5 @@
+import { Bestelling } from "@/types";
+
 const getAllBestellingen = async () => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/bestellingen", {
         method: "GET",
@@ -16,10 +18,21 @@ const getBestellingentById = async (id: string) => {
     })
 }
 
+const createBestelling = async (bestelling: Bestelling) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/bestellingen", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bestelling),
+    })
+}
+
 
 const BestellingService = {
     getAllBestellingen,
-    getBestellingentById
+    getBestellingentById,
+    createBestelling
 };
 
 export default BestellingService;

@@ -22,7 +22,7 @@ const UserInfo: React.FC<Props> = ({ user, bestellingen }: Props) => {
                     <ul>
                         {bestellingen && (
                             bestellingen.map((bestelling, key) => (
-                                <li key={key} onClick={() => { router.push(`/bestellingen/${bestelling.id}`) }} role='button'>{bestelling.datum.toString()}</li>
+                                <li key={key} onClick={() => { router.push(`/bestellingen/${bestelling.id}`) }} role='button'>{bestelling.datum ? bestelling.datum.toString() : null}</li>
                             )))
                         }
                     </ul>
