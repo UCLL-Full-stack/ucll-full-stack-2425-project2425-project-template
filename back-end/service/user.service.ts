@@ -18,7 +18,7 @@ const getUserById = async (id: number): Promise<User> => {
 const registerUser = async ({
     id,
     username,
-    hashedPassword,
+    password,
     profile: {
         id: profileId,
         email,
@@ -27,8 +27,8 @@ const registerUser = async ({
         bio
     } = {}
 }: UserInput): Promise<AuthenticationResponse> => {
-    if (!username || !hashedPassword) {
-        throw new Error('Username and hashedPassword are required.');
+    if (!username || !password) {
+        throw new Error('Username and password are required.');
     }
 
     try {
@@ -45,7 +45,7 @@ const registerUser = async ({
         const newUser = new User({
             id,
             username,
-            hashedPassword: await bcrypt.hash(hashedPassword, 10),
+            hashedPassword: await bcrypt.hash(password, 10),
             profile: userProfile,
             groups: [],
         });

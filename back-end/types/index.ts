@@ -2,6 +2,7 @@ type UserInput = {
     id?: number;
     username?: string;
     hashedPassword?: string;
+    password?: string;
     profile?: ProfileInput;
     groups?: GroupInput[];
     tasks?: TaskInput[];
