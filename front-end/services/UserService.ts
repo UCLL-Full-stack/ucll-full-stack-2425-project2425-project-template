@@ -1,5 +1,5 @@
 const login = async (username: string, password: string) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/login", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

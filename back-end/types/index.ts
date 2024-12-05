@@ -15,9 +15,9 @@ type UserInput = {
     naam: String;
     voornaam: String;
     email: String;
-    wachtwoord: String;
+    wachtwoord: string;
     adres: String;
-    gebruikersnaam: String;
+    gebruikersnaam: string;
     rol: Rol;
     bestellingen: BestellingInput[];
 }
@@ -40,11 +40,19 @@ type PokebowlInput = {
     ingredienten: IngredientInput[]
 }
 
+type AuthenticationResponse = {
+    token: string;
+    gebruikersnaam: string;
+    volledigenaam: string;
+    rol: string;
+};
+
 export {
     Type,
     IngredientInput,
     PokebowlInput,
     Rol,
     BestellingInput,
-    UserInput
+    UserInput,
+    AuthenticationResponse
 }

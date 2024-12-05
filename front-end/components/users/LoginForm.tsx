@@ -20,11 +20,11 @@ const LoginForm: React.FC = () => {
         let result = true;
         clearErrors();
 
-        if (!username && username.trim() === "") {
+        if (!username || username.trim() === "") {
             setLoginError("Username cannot be empty");
             result = false;
         }
-        if (!password && password.trim() === "") {
+        if (!password || password.trim() === "") {
             setLoginError("Password cannot be empty");
             result = false;
         }
@@ -41,12 +41,19 @@ const LoginForm: React.FC = () => {
         }
 
         const response = await UserService.login(username, password);
-        const result = response.json();
+        const user = await response.json();
 
         if (response.status === 200) {
-            sessionStorage.setItem("username", username);
+            //sessionStorage.setItem("username", username);
             //sessionStorage.setItem("rol", result);
             setStatusMessages([{ message: "Login succesfull", type: "success" }]);
+
+            sessionStorage.setItem("loggedInUser", JSON.stringify({
+                token : user.token,
+                username: user.username,
+                rol: user.role
+            }));
+
             setTimeout(() => {
                 router.push("/");
             }, 2000);
@@ -65,7 +72,7 @@ const LoginForm: React.FC = () => {
                     <label>Username:</label>
                     <input type="text" name="name" value={username} onChange={(event) => setUserName(event.target.value)} />
                     <label>Password:</label>
-                    <input type="password" name="prijs" value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <input type="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                     <input type="submit" value="Login" />
                 </form>
             </div>

@@ -61,10 +61,22 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
     }
 };
 
+const getUserByUsername = async ({ gebruikersnaam }: { gebruikersnaam: string }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { gebruikersnaam },
+        });
 
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default {
     createUser,
     getAllUsers,
-    getUserById
+    getUserById,
+    getUserByUsername,
 };
