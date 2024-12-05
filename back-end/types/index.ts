@@ -37,7 +37,7 @@ type UserInput = {
     username: string;
     email: string;
     password: string;
-    role?: Role;
+    role: Role;
 };
 
 type AuthenticationResponse = {

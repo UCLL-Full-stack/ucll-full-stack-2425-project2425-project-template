@@ -87,6 +87,35 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 
 /**
  * @swagger
+ * /users/login:
+ *   post:
+ *      summary: Login using username/password. Returns an object with JWT token and user name when succesful.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AuthenticationRequest'
+ *      responses:
+ *         200:
+ *            description: The created user object
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/AuthenticationResponse'
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const response = await userService.authenticate(userInput);
+        res.status(200).json({ message: 'Authentication succesful', ...response });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
  * /users/signup:
  *   post:
  *     summary: Register a new user
@@ -111,7 +140,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Valideer of de gegevens aanwezig zijn
-        const { username, password, email }: UserInput = req.body;
+        const { username, password, email, role }: UserInput = req.body;
 
         if (!username || !password || !email) {
             return res.status(400).json({ message: 'All fields are required.' });
@@ -121,6 +150,7 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
             username,
             password,
             email,
+            role,
         });
 
         res.status(200).json({
