@@ -1,23 +1,23 @@
 import Head from 'next/head';
 import Header from '@components/header';
-import RegisterForm from '@components/registerForm';
+import LoginForm from '@components/loginForm';
 import styles from '@styles/home.module.css';
 
 
-const Register: React.FC = () => {
+const Login: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Register</title>
+        <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
       <main className={styles.main}>
-          <h1>Register</h1>
-          <RegisterForm />
+          <h1>Login</h1>
+          <LoginForm />
       </main>
     </>
   );
 };
 
-export default Register;
+export default Login;

@@ -31,35 +31,36 @@ const registerUser = async ({
         throw new Error('Username and hashedPassword are required.');
     }
 
-    if (await userDb.getUserByUsername({username})) {
-        throw new Error(`User with username ${username} already exists.`);
-    }
-
-    const userProfile = profileId || firstName || lastName || bio ? new Profile({
-        id: profileId,
-        email: email || "",
-        firstName: firstName || "",
-        lastName: lastName || "",
-        bio: bio || ""
-    }) : undefined;
-
-    const newUser = new User({
-        id,
-        username,
-        hashedPassword,
-        profile: userProfile,
-        groups: [],
-    });
-
-    userDb.createUser(newUser);
-
-    const JWT = generateJWTtoken(username);
-    const response = {
-        token: JWT,
-        username: username,
-        fullname: `${firstName} ${lastName}`
+    try {
+        await userDb.getUserByUsername({username});
+    } catch (error) {
+        const userProfile = profileId || firstName || lastName || bio ? new Profile({
+            id: profileId,
+            email: email || "",
+            firstName: firstName || "",
+            lastName: lastName || "",
+            bio: bio || ""
+        }) : undefined;
+    
+        const newUser = new User({
+            id,
+            username,
+            hashedPassword: await bcrypt.hash(hashedPassword, 10),
+            profile: userProfile,
+            groups: [],
+        });
+    
+        userDb.createUser(newUser);
+    
+        const JWT = generateJWTtoken(username);
+        const response = {
+            token: JWT,
+            username: username,
+            fullname: `${firstName} ${lastName}`
+        };
+        return response;
     };
-    return response;
+    throw new Error(`User with username ${username} already exists.`);
 };
 
 const authenticate = async ({ username, password}: { username: string, password: string }): Promise<AuthenticationResponse> => {

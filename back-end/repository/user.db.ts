@@ -57,7 +57,7 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
             include: everything
         });
         if (!userPrisma) {
-            throw new Error(`User with id ${username} does not exist.`);
+            throw new Error(`User with username ${username} does not exist.`);
         }
         return User.from(userPrisma);
     } catch (error) {
