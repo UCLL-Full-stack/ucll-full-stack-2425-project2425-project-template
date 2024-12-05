@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import competitionRouter from './controller/competition.routes';
+import userRouter from './controller/user.routes';
+import { expressjwt } from 'express-jwt';
 
 
 const app = express();
@@ -30,10 +32,17 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use('/competitions', competitionRouter);
 
+app.use('/users', userRouter);
+
 app.get('/status', (req, res) => {
-    res.json({ message: 'Back-end is running...' });
+  res.json({ message: 'Back-end is running...' });
 });
 
 app.listen(port || 3000, () => {
-    console.log(`Back-end is running on port ${port}.`);
+  console.log(`Back-end is running on port ${port}.`);
 });
+
+
+app.use(
+  expressjwt({ secret: process.env.JWT_SECRET || 'default_secret', algorithms: ['HS256'] })
+)

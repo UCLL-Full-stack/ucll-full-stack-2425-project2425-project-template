@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { Role } from '../types';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
 if (!SECRET_KEY) {
@@ -18,6 +21,6 @@ interface TokenPayload {
 
 export const generateSWTtoken = (name: string, role: Role): string => {
     const payload: TokenPayload = { name, role };
-    const expiresIn = `${ EXPIRES }h`;
+    const expiresIn = `${EXPIRES}h`;
     return jwt.sign(payload, SECRET_KEY, { expiresIn });
 }

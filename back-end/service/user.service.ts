@@ -7,7 +7,7 @@ import { UserInput, AuthenticationResponse, Role } from '../types';
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
 const getUserByUsername = async ({ name }: { name: string }): Promise<User> => {
-    const user = await userDB.getUserByUsername({ name });
+    const user = await userDB.getUserByName({ name });
     if (!user) {
         throw new Error('User not found.');
     }
@@ -15,7 +15,7 @@ const getUserByUsername = async ({ name }: { name: string }): Promise<User> => {
 };
 
 const createUser = async (userInput: UserInput): Promise<User> => {
-    const existingUser = await userDB.getUserByUsername({ name: userInput.name });
+    const existingUser = await userDB.getUserByName({ name: userInput.name });
     if (existingUser) {
         throw new Error('User already exists.');
     }
@@ -30,8 +30,8 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     return await userDB.createUser(newUser);
 };
 
-const authenticate = async (username: string, password: string, role: Role): Promise<AuthenticationResponse> => {
-    const user = await userDB.getUserByUsername({ username });
+const authenticate = async (name: string, password: string, role: Role): Promise<AuthenticationResponse> => {
+    const user = await userDB.getUserByName({ name });
     if (!user) {
         throw new Error('Invalid username or password.');
     }
@@ -42,12 +42,11 @@ const authenticate = async (username: string, password: string, role: Role): Pro
     }
 
     const token = generateSWTtoken(user.getName(), role);
-    const name = user.getName();
+    const username = user.getName();
 
     return {
-        username: user.getUsername(),
+        name: username,
         token,
-        name,
         role,
     };
 };

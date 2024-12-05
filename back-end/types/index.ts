@@ -32,11 +32,25 @@ type UserInput = {
     role: Role;
 };
 
+type AuthenticationResponse = {
+    token: string;
+    name: string;
+    role: Role;
+};
+
+type AuthenticationRequest = {
+    name: string;
+    password: string;
+    role: Role;
+}
+
 export {
     CompetitionInput,
     TeamInput,
     PlayerInput,
     CoachInput,
     UserInput,
-    Role
+    Role,
+    AuthenticationResponse,
+    AuthenticationRequest
 };
