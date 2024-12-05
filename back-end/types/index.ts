@@ -17,6 +17,7 @@ export type SubmissionInput = {
     type: string;
     createdAt: Date;
     solvedAt?: Date;
+    createdBy: number;
     id?: number;
 };
 

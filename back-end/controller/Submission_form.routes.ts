@@ -20,10 +20,20 @@ const submissionFormRouter = express.Router();
  *         content:
  *           type: string
  *           description: Submission form content.
- *         user:
- *           $ref: '#/components/schemas/Gebruiker'
- *         race:
- *           $ref: '#/components/schemas/Race'
+ *         type:
+ *           type: string
+ *           description: Submission form type.
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Submission form creation date.
+ *         solvedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Submission form solved date.
+ *         createdBy:
+ *           type: number
+ *           description: ID of the user who created the submission form.
  */
 
 /**
@@ -65,7 +75,23 @@ submissionFormRouter.get('/', (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/SubmissionForm'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               createdAt:
+ *                 type: string
+ *                 format: date-time
+ *               solvedAt:
+ *                 type: string
+ *                 format: date-time
+ *               createdBy:
+ *                 type: number
+ *                 default: 1
  *     responses:
  *       201:
  *         description: The created submission form.
@@ -81,18 +107,21 @@ submissionFormRouter.get('/', (req, res) => {
 submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormInput: SubmissionInput = req.body;
-        const newSubmissionForm = submissionFormService.createSubmission(submissionFormInput);
+        submissionFormInput.createdAt = new Date(submissionFormInput.createdAt); // Convert to Date object
+        if (submissionFormInput.solvedAt) {
+            submissionFormInput.solvedAt = new Date(submissionFormInput.solvedAt); // Convert to Date object if present
+        }
+        const newSubmissionForm = await submissionFormService.createSubmission(submissionFormInput);
         res.status(201).json(newSubmissionForm);
     } catch (error) {
         const err = error as Error;
         if (err.message.includes('required')) {
-            res.status(404).json({ error: err.message });
+            res.status(400).json({ error: err.message });
         } else {
             next(err);
         }
     }
 });
-
 
 /**
  * @swagger
@@ -120,7 +149,6 @@ submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFun
  *       500:
  *         description: Internal server error.
  */
-
 submissionFormRouter.post('/accept/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormId = parseInt(req.params.id);

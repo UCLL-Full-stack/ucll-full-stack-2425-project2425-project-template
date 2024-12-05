@@ -14,20 +14,20 @@ const createSubmission = async (submissionInput: any): Promise<Submission> => {
     if (!submissionInput.content) {
         throw new Error('Content is required');
     }
-    if (!submissionInput.user) {
-        throw new Error('User is required');
+    if (!submissionInput.createdBy) {
+        throw new Error('ID of user is required');
     }
-    if (!submissionInput.race) {
-        throw new Error('Race is required');
+    if (!submissionInput.type) {
+        throw new Error('Type is required');
     }
 
     const newSubmission = new Submission({
         title: submissionInput.title,
         content: submissionInput.content,
         type: submissionInput.type,
-        createdAt: submissionInput,
-        solvedAt: submissionInput.solvedAt,
-        createdBy: submissionInput.user,
+        createdAt: new Date(submissionInput.createdAt),
+        solvedAt: submissionInput.solvedAt ? new Date(submissionInput.solvedAt) : undefined,
+        createdBy: submissionInput.createdBy,
     });
 
     SubmissionDb.createSubmission({ submission: newSubmission });

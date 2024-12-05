@@ -9,12 +9,13 @@ const createSubmission = async ({ submission }: { submission: Submission }): Pro
                 content: submission.getContent(),
                 type: submission.getType(),
                 createdAt: submission.getCreatedAt(),
+                solvedAt: submission.getSolvedAt(),
                 user: {
                     connect: {
                         id: submission.getCreatedBy(),
                     },
                 },
-            }
+            },
         });
 
         return Submission.from(submissionPrisma);

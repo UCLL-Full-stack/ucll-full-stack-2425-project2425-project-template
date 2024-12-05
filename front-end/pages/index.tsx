@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import Header from '@components/header';
 import styles from '@styles/home.module.css';
 
@@ -15,6 +14,11 @@ const Home: React.FC = () => {
     }
   }, []);
 
+  const users = [
+    { username: 'admin', password: 'Password1', role: 'ADMIN' },
+    { username: 'user1', password: 'password', role: 'USER' },
+  ];
+
   return (
     <>
       <Head>
@@ -23,13 +27,6 @@ const Home: React.FC = () => {
       <Header />
       <main className={styles.main}>
         <span>
-          <Image
-            src="/images/courses.png"
-            alt="Website Logo"
-            className={styles.vercelLogo}
-            width={50}
-            height={50}
-          />
           <h1>Welcome to the Home Page</h1>
         </span>
 
@@ -49,6 +46,25 @@ const Home: React.FC = () => {
           </div>
         )}
 
+        <h2>Users to login:</h2>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Username</th>
+              <th scope="col">Password</th>
+              <th scope="col">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={index}>
+                <td>{user.username}</td>
+                <td>{user.password}</td>
+                <td>{user.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </main>
     </>
   );
