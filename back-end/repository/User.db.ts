@@ -3,8 +3,13 @@ import { User } from '../model/User';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
-        const userPrisma = await database.user.findMany();
-        return userPrisma.map((userPrisma) => User.from(userPrisma));
+        const usersPrisma = await database.user.findMany({
+            include: {
+                recipes: true,
+                reviews: true,
+            },
+        });
+        return usersPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
         console.error(error);
         throw new Error('Error in database file at getAllUsers');
@@ -16,6 +21,10 @@ const getUserById = async (id: number): Promise<User | null> => {
         const userPrisma = await database.user.findUnique({
             where: {
                 id: id,
+            },
+            include: {
+                recipes: true,
+                reviews: true,
             },
         });
         if (!userPrisma) {
@@ -34,6 +43,10 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
             where: {
                 email: email,
             },
+            include: {
+                recipes: true,
+                reviews: true,
+            },
         });
         if (!userPrisma) {
             return null;
@@ -50,6 +63,10 @@ const getUserByUsername = async (username: string): Promise<User | null> => {
         const userPrisma = await database.user.findFirst({
             where: {
                 username: username,
+            },
+            include: {
+                recipes: true,
+                reviews: true,
             },
         });
         if (!userPrisma) {
@@ -85,6 +102,10 @@ const createUser = async ({
                 reviews: {
                     connect: reviews?.map((review) => ({ id: review.id })),
                 },
+            },
+            include: {
+                recipes: true,
+                reviews: true,
             },
         });
         return User.from(userPrisma);

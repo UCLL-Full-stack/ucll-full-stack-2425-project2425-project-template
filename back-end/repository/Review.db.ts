@@ -1,10 +1,10 @@
 import database from '../util/database';
 import { Review } from '../model/Review';
+import { connect } from 'http2';
 
 const getAllReviews = async (): Promise<Review[]> => {
     const reviewPrisma = await database.review.findMany({
         include: {
-            writer: true,
             recipe: true,
         },
     });
@@ -30,15 +30,17 @@ const getReviewById = async (id: number): Promise<Review | null> => {
     return Review.from(reviewPrisma);
 };
 
-const createReview = async (review: Review): Promise<Review> => {
+const createReview = async (review: Review, userId: number, recipeId: number): Promise<Review> => {
     const reviewPrisma = await database.review.create({
         data: {
             text: review.text,
             score: review.score,
+            user: { connect: { id: userId } },
+            recipe: { connect: { id: recipeId } },
         },
         include: {
-            writer: true,
             recipe: true,
+            user: true,
         },
     });
 

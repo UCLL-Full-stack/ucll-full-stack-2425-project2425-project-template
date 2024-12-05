@@ -54,34 +54,45 @@ export class User {
         if (!user.lastName) throw new Error('Last name is required');
     }
 
+    // static filterReviewsForRecipe(
+    //     recipe: RecipePrisma & { reviews: ReviewPrisma[] },
+    //     userId: number
+    // ): Review[] {
+    //     return recipe.reviews
+    //         .filter((review) => review.userId === userId)
+    //         .map((review) => new Review(review));
+    // }
+
     equals(user: User): boolean {
         return this.username === user.username && this.email === user.email;
     }
 
-    static from = ({
-        id,
-        username,
-        password,
-        email,
-        firstName,
-        lastName,
-        recipes,
-        reviews,
-    }: UserPrisma & {
-        recipes: RecipePrisma[] & {
+    static from = (
+        user: UserPrisma & {
+            recipes: (RecipePrisma & { reviews?: ReviewPrisma[] })[];
             reviews: ReviewPrisma[];
-        };
-        reviews: ReviewPrisma[];
-    }): User => {
+        }
+    ): User => {
         return new User({
-            id,
-            username,
-            password,
-            email,
-            firstName,
-            lastName,
-            recipes: recipes.map((recipe) => Recipe.from(recipe)),
-            reviews: reviews.map((review) => Review.from(review)),
+            id: user.id,
+            username: user.username,
+            password: user.password,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            recipes: user.recipes.map((recipe) =>
+                Recipe.from({
+                    ...recipe,
+                    reviews: (recipe.reviews ?? []).map((review) => ({
+                        id: review.id,
+                        text: review.text,
+                        score: review.score,
+                        recipeId: review.recipeId,
+                        userId: review.userId,
+                    })),
+                })
+            ),
+            reviews: user.reviews.map((review) => new Review(review)),
         });
     };
 }
