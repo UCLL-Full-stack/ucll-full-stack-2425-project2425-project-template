@@ -34,7 +34,6 @@ const players = [
         user: users[0],
     }),
     new Player({
-        id: 2,
         name: 'Cedinvu',
         statistics: 'hp: 20, power: veel',
         class: 'JAS 39 Gripen',
@@ -42,7 +41,6 @@ const players = [
         user: users[0],
     }),
     new Player({
-        id: 3,
         name: 'Cedinvu2',
         statistics: 'hp: 2000, power: -1',
         class: 'Impostor',
@@ -50,7 +48,6 @@ const players = [
         user: users[1],
     }),
     new Player({
-        id: 4,
         name: 'usersiscool',
         statistics: 'hp: 100, power: 100',
         class: 'Warrior',
@@ -58,7 +55,6 @@ const players = [
         user: users[0],
     }),
     new Player({
-        id: 5,
         name: 'MasterPieck',
         statistics: 'hp: 2000, power: 1500',
         class: 'Teacher',
@@ -87,6 +83,7 @@ const worlds = [
 //      'x': wall
 //      '@': player
 //      ' ': open space
+/*
 const tiles = [
     ['x', ' ', ' ', '', 'x'],
     ['x', 'x', ' ', '', 'x'],
@@ -117,13 +114,22 @@ const lines = [
         lineNum: 5,
     }),
 ];
-
+*/
 
 
 async function main() {
+
+    await prisma.line.deleteMany();
+    await prisma.floor.deleteMany();
+    await prisma.world.deleteMany();
+    await prisma.player.deleteMany();
+    await prisma.user.deleteMany();
+
     // Create Users
+    let createdUsers = [];
+
     for (const user of users) {
-        await prisma.user.create({
+        const createdUser = await prisma.user.create({
             data: {
                 name: user.getName(),
                 email: user.getEmail(),
@@ -132,53 +138,92 @@ async function main() {
                 accountBirthday: user.getAccountBirthday(),
             },
         });
+        createdUsers.push(createdUser);
     }
 
     // Create Players
+    const players = [
+        new Player({
+            name: 'Player1',
+            statistics: 'Stats1',
+            class: 'Warrior',
+            currency: 100,
+            user: users[0],
+        }),
+        new Player({
+            name: 'Cedinvu',
+            statistics: 'hp: 20, power: veel',
+            class: 'JAS 39 Gripen',
+            currency: 2389,
+            user: users[0],
+        }),
+        new Player({
+            name: 'Cedinvu2',
+            statistics: 'hp: 2000, power: -1',
+            class: 'Impostor',
+            currency: 100004,
+            user: users[1],
+        }),
+        new Player({
+            name: 'usersiscool',
+            statistics: 'hp: 100, power: 100',
+            class: 'Warrior',
+            currency: 1454,
+            user: users[0],
+        }),
+        new Player({
+            name: 'MasterPieck',
+            statistics: 'hp: 2000, power: 1500',
+            class: 'Teacher',
+            currency: 15474,
+            user: users[1],
+        }),
+    ];
+
     for (const player of players) {
-        if (player.getUser().getId() !== undefined) {
-            await prisma.player.create({
-                data: {
-                    name: 'Player2',
-                    statistics: 'Stats2',
-                    class: 'Mage',
-                    currency: 200,
-                    userId: player.getUser().getId()!,
-                },
-            });
-        }
+        await prisma.player.create({
+            data: {
+                name: player.getName(),
+                statistics: player.getStatistics(),
+                class: player.getClass(),
+                currency: player.getCurrency(),
+                userId: createdUsers[0].id,
+            },
+        });
     }
 
     // Create Worlds
     for (const world of worlds) {
-        await prisma.world.create({
+        const createdWorld = await prisma.world.create({
             data: {
                 name: world.getName(),
-                owner: { connect: { id: world.getOwner().getId() } },
+                owner: { connect: { id: world.getOwner().getId(), name: world.getOwner().getName(), email: world.getOwner().getEmail() } },
             },
         });
+        for (const floor of floors) {
+            const createdFloor = await prisma.floor.create({
+                data: {
+                    floornumber: floor.getFloornumber(),
+                    world: { connect: { id: createdWorld.id } },
+                },
+            });
+    
+            const tiles = floor.getTiles();
+            if (!tiles) break;
+            // Create lines
+            for (const line of tiles) {
+                await prisma.line.create({
+                    data: {
+                        tiles: line.getTiles(),
+                        lineNum: line.getLineNum(),
+                        floor: { connect: { id: createdFloor.id } },
+                    },
+                });
+            }
+        }
     }
 
     // Create Floors
-    for (const floor of floors) {
-        await prisma.floor.create({
-            data: {
-                floornumber: floor.getFloornumber(),
-                world: { connect: { id: floor.getWorldId() } },
-            },
-        });
-    }
-
-    // Create lines
-    for (const line of lines) {
-        await prisma.line.create({
-            data: {
-                tiles: line.getTiles(),
-                lineNum: line.getLineNum(),
-                floor: { connect: { id: line.getFloor() } },
-            },
-        });
-    }
 }
 
 main()
