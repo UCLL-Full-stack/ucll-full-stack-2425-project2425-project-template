@@ -1,0 +1,63 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Category {
+    fruits
+    vegetables
+    dairy
+}
+
+enum Role {
+    user
+    admin
+}
+
+model User {
+    id            Int            @id @default(autoincrement())
+    email         String         @unique
+    password      String
+    Role          Role
+    Shoppingcarts Shoppingcart[]
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+}
+
+model Shoppingcart {
+    id           Int      @id @default(autoincrement())
+    name         String
+    deliveryDate DateTime
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    User         User     @relation(fields: [userId], references: [id])
+    userId       Int
+    items        Item[]
+}
+
+model Item {
+    id             Int             @id @default(autoincrement())
+    name           String
+    price          Float
+    pathToImage    String
+    Category       Category
+    Shoppingcart   Shoppingcart[]
+    NutritionLabel NutritionLabel?
+}
+
+model NutritionLabel {
+    id            Int   @id @default(autoincrement())
+    energy        Float
+    fat           Float
+    saturatedFat  Float
+    carbohydrates Float
+    sugar         Float
+    protein       Float
+    salts         Float
+    item          Item? @relation(fields: [itemId], references: [id])
+    itemId        Int?  @unique
+}
