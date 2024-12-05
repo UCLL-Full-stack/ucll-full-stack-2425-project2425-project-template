@@ -1,10 +1,12 @@
 import { User } from "@/types";
+import { userInfo } from "os";
 
 const loginUser = async (user: User) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login", {
+  console.log("in frontend: " + user);
+  return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
+    body: JSON.stringify({ userName: user.userName, password: user.password }),
   });
 };
 

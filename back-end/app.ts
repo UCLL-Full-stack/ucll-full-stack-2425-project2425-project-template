@@ -16,6 +16,15 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', '/events', '/users/login', '/users/signup', '/status', '/categories'],
+    })
+);
+
 app.use('/events', eventRouter);
 app.use('/users', userRouter);
 app.use('/categories', categoryRouter);
@@ -50,12 +59,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.listen(port, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
-app.use(
-    expressjwt({
-        secret: process.env.JWT_SECRET || 'default_secret',
-        algorithms: ['HS256'],
-    }).unless({
-        path: ['/api-docs', 'events', 'user/login', 'users/signup', 'status', 'categories'],
-    })
-);
+
 export default app;

@@ -10,8 +10,9 @@ const LoginForm: React.FC = () => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
   const clearErrors = () => {
-    setName("");
+    setNameError("");
     setPasswordError("");
+    setStatusMessages([]);
   };
 
   const validate = (): boolean => {
@@ -35,8 +36,10 @@ const LoginForm: React.FC = () => {
     if (!validate()) {
       return;
     }
-    const user = { username: name, password };
+    const user = { userName: name, password };
     const response = await UserService.loginUser(user);
+
+    console.log("in log in form" + response);
 
     if (response.status === 200) {
       setStatusMessages([
@@ -55,7 +58,36 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  return <></>;
+  return <>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <div>{nameError}</div>
+      </div>
+      <div>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <div>{passwordError}</div>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    {statusMessages.map((message, index) => (
+      <div key={index} className={message.type}>
+        {message.message}
+      </div>
+    ))}
+  </>;
 };
 
 export default LoginForm;

@@ -6,10 +6,15 @@ import { generateJWTtoken } from '../util/jwt';
 
 const getAllUsers = (): Promise<User[]> => userDb.getAllUsers();
 
-const getUserByUserName = async ({ userName }: { userName: string }): Promise<User> => {
+const getUserByUserName = async ({ userName }: { userName: string }): Promise<UserInput> => {
     const user = await userDb.getUserByUsername(userName);
     if (!user) throw new Error(`No user with username: ${userName}`);
-    return user;
+    return {
+        userName: user.getUserName(),
+        email: user.getEmail(),
+        role: user.getRole(),
+        password: user.getPassword(),
+    };
 };
 
 const createUser = async ({ userName, email, role, password }: UserInput): Promise<User> => {
@@ -27,16 +32,16 @@ const createUser = async ({ userName, email, role, password }: UserInput): Promi
     return await userDb.createUser(user);
 };
 
-const authenicate = async ({ userName, password }: UserInput): Promise<AuthenticationResponse> => {
+const authenicate = async ({ userName, password, email, role }: UserInput): Promise<AuthenticationResponse> => {
     const user = await getUserByUserName({ userName });
-    const isValidPassword = await bcrypt.compare(password, user.getPassword());
+    const isValidPassword = await bcrypt.compare(password.trim(), user.password.trim());
 
     if (!isValidPassword) throw new Error('Incorrect password.');
 
     return {
-        token: generateJWTtoken({ username: userName, role: user.getRole() }),
+        token: generateJWTtoken({ username: userName, role: user.role }),
         username: userName,
-        role: user.getRole(),
+        role: user.role,
     };
 };
-export default { getAllUsers, createUser, authenicate };
+export default { getAllUsers, createUser, authenicate, getUserByUserName };

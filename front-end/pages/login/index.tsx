@@ -1,4 +1,5 @@
 import Header from "@/components/header";
+import LoginForm from "@/components/loginForm";
 import Head from "next/head";
 
 const LoginPage: React.FC = () => {
@@ -10,7 +11,10 @@ const LoginPage: React.FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Header></Header>
-      <p>hier moet nog alles komen</p>
+      <p>
+        Please Log in!
+      </p>
+      <LoginForm></LoginForm>
     </>
   );
 };
