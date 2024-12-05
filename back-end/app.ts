@@ -23,14 +23,14 @@ app.use('/training', trainingRouter);
 app.use('/match', matchRouter);
 
 app.get('/status', (req, res) => {
-    res.json({ message: 'Courses API is running...' });
+    res.json({ message: 'TeamTracker API is running...' });
 });
 
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Courses API',
+            title: 'TeamTracker API',
             version: '1.0.0',
         },
     },
@@ -50,5 +50,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port || 3000, () => {
-    console.log(`Courses API is running on port ${port}.`);
+    console.log(`TeamTracker API is running on port ${port}.`);
 });
