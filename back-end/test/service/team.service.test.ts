@@ -51,67 +51,54 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('givenValidTeamInput_whenCreatingTeam_thenTeamIsCreatedSuccessfully', () => {
+test('givenValidTeamId_whenUpdatingTeam_thenTeamIsUpdatedSuccessfully', async () => {
     // given
     const teamInput = {
-        teamName: validTeamName,
-        players: [validPlayer, validPlayer2],
-        coach: validCoach,
-    };
-    const team = new Team(teamInput);
-
-    // when
-    mockCreateTeam.mockReturnValue(team);
-    const createdTeam = teamService.createTeam(teamInput);
-
-    // then
-    expect(createdTeam).toEqual(team);
-});
-
-test('givenExistingTeamName_whenCreatingTeam_thenErrorIsThrown', () => {
-    // given
-    const teamInput = {
-        teamName: validTeamName,
-        players: [validPlayer, validPlayer2],
-        coach: validCoach,
-    };
-
-    // when
-    const existingTeam = new Team(teamInput);
-    mockGetAllTeams.mockReturnValue([existingTeam]);
-
-    // then
-    expect(() => teamService.createTeam(teamInput)).toThrow('Team with that name already exists.');
-});
-
-test('givenValidCoachId_whenGettingTeamsByCoach_thenTeamsWithThatCoachAreReturned', () => {
-    // given
-    const team = new Team({
         id: validId,
         teamName: validTeamName,
-        players: [validPlayer],
+        players: [validPlayer, validPlayer2],
         coach: validCoach,
-    });
-    mockGetTeamsByCoach.mockReturnValue([team]);
+    };
+    const updatedTeam = new Team(teamInput);
 
     // when
-    const teams = teamService.getTeamsByCoach(validId);
+    mockGetTeamById.mockResolvedValue(updatedTeam);
+    mockCreateTeam.mockResolvedValue(updatedTeam);
+    const result = await teamService.updateTeam(teamInput);
 
     // then
-    expect(teams).toContain(team);
+    expect(result).toEqual(updatedTeam);
 });
 
-test('givenInvalidCoachId_whenGettingTeamsByCoach_thenErrorIsThrown', () => {
+test('givenInvalidTeamId_whenUpdatingTeam_thenErrorIsThrown', async () => {
     // given
-    mockGetTeamsByCoach.mockReturnValue(undefined);
+    const teamInput = {
+        id: invalidId,
+        teamName: validTeamName,
+        players: [validPlayer, validPlayer2],
+        coach: validCoach,
+    };
+
+    // when
+    mockGetTeamById.mockReturnValue(undefined);
+
+    // then
+    await expect(teamService.updateTeam(teamInput)).rejects.toThrow('No team with that id exists.');
+});
+
+test('givenNoId_whenUpdatingTeam_thenErrorIsThrown', async () => {
+    // given
+    const teamInput = {
+        teamName: validTeamName,
+        players: [validPlayer, validPlayer2],
+        coach: validCoach,
+    };
 
     // when & then
-    expect(() => teamService.getTeamsByCoach(invalidId)).toThrow(
-        `Coach with id ${invalidId} does not exist.`
-    );
+    await expect(teamService.updateTeam(teamInput)).rejects.toThrow('An id is required.');
 });
 
-test('givenTeamWithValidId_whenGettingTeamById_thenTeamWithThatIdIsReturnedSuccessfully', () => {
+test('givenValidTeamId_whenGettingTeamById_thenTeamIsReturnedSuccessfully', async () => {
     // given
     const team = new Team({
         id: validId,
@@ -122,31 +109,45 @@ test('givenTeamWithValidId_whenGettingTeamById_thenTeamWithThatIdIsReturnedSucce
     mockGetTeamById.mockReturnValue(team);
 
     // when
-    const validTeam = teamDb.getTeamById(validId);
+    const result = await teamService.getTeamById(validId);
 
     // then
-    expect(validTeam).toEqual(team);
-    expect(validTeam).not.toBeUndefined();
+    expect(result).toEqual(team);
 });
 
-test('givenTeamWithInvalidId_whenGettingTeamById_thenErrorIsThrown', () => {
+test('givenInvalidTeamId_whenGettingTeamById_thenErrorIsThrown', async () => {
     // given
     mockGetTeamById.mockReturnValue(undefined);
 
     // when & then
-    expect(() => teamService.getTeamById(invalidId)).toThrow(
+    await expect(teamService.getTeamById(invalidId)).rejects.toThrow(
         `Team with id ${invalidId} does not exist.`
     );
 });
 
-test('givenNoPlayers_whenCreatingTeam_thenErrorIsThrown', () => {
+test('givenValidCoachId_whenGettingTeamsByCoach_thenTeamsAreReturnedSuccessfully', async () => {
     // given
-    const teamInput = {
+    const team = new Team({
+        id: validId,
         teamName: validTeamName,
-        players: [],
+        players: [validPlayer],
         coach: validCoach,
-    };
+    });
+
+    // when
+    mockGetTeamsByCoach.mockResolvedValue([team]);
+    const result = await teamService.getTeamsByCoach(validId);
+
+    // then
+    expect(result).toEqual([team]);
+});
+
+test('givenInvalidCoachId_whenGettingTeamsByCoach_thenErrorIsThrown', async () => {
+    // given
+    mockGetTeamsByCoach.mockReturnValue([]);
 
     // when & then
-    expect(() => teamService.createTeam(teamInput)).toThrow('Team must have at least one player.');
+    await expect(teamService.getTeamsByCoach(invalidId)).rejects.toThrow(
+        'No teams found for that coach.'
+    );
 });

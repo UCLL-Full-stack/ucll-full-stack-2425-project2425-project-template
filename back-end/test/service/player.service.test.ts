@@ -33,25 +33,18 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('givenAllPlayers_whenGettingAllPlayers_thenAllPlayersAreReturnedSuccessfully', () => {
+test('givenNoPlayers_whenGettingAllPlayers_thenEmptyArrayIsReturned', async () => {
     // given
-    const allPlayers = [
-        new Player({
-            firstName: validFirstName,
-            lastName: validLastName,
-            email: validEmail,
-            phoneNumber: validPhoneNumber,
-        }),
-    ];
+    mockGetAllPlayers.mockReturnValue([]);
 
     // when
-    mockGetAllPlayers.mockReturnValue(allPlayers);
+    const allPlayers = await playerService.getAllPlayers();
 
     // then
-    expect(playerService.getAllPlayers()).toEqual(allPlayers);
+    expect(allPlayers).toEqual([]);
 });
 
-test('givenValidPlayerId_whenGettingPlayerById_thenPlayerIsReturnedSuccessfully', () => {
+test('givenValidPlayerId_whenGettingPlayerById_thenPlayerIsReturnedSuccessfully', async () => {
     // given
     const player = new Player({
         id: validId,
@@ -61,27 +54,27 @@ test('givenValidPlayerId_whenGettingPlayerById_thenPlayerIsReturnedSuccessfully'
         phoneNumber: validPhoneNumber,
     });
 
-    mockGetPlayerById.mockReturnValue(player);
+    mockGetPlayerById.mockResolvedValue(player);
 
     // when
-    const validPlayer = playerService.getPlayerById(validId);
+    const validPlayer = await playerService.getPlayerById(validId);
 
     // then
     expect(validPlayer).toEqual(player);
     expect(validPlayer).not.toBeUndefined();
 });
 
-test('givenInvalidPlayerId_whenGettingPlayerById_thenErrorIsThrown', () => {
+test('givenInvalidPlayerId_whenGettingPlayerById_thenErrorIsThrown', async () => {
     // given
-    mockGetPlayerById.mockReturnValue(undefined);
+    mockGetPlayerById.mockResolvedValue(undefined);
 
     // when & then
-    expect(() => playerService.getPlayerById(invalidId)).toThrow(
+    await expect(playerService.getPlayerById(invalidId)).rejects.toThrow(
         `Player with id ${invalidId} does not exist.`
     );
 });
 
-test('givenValidPlayerInput_whenCreatingPlayer_thenPlayerIsCreatedSuccessfully', () => {
+test('givenValidPlayerInput_whenCreatingPlayer_thenPlayerIsCreatedSuccessfully', async () => {
     // given
     const playerInput = {
         id: validId,
@@ -99,14 +92,14 @@ test('givenValidPlayerInput_whenCreatingPlayer_thenPlayerIsCreatedSuccessfully',
     });
 
     // when
-    mockCreatePlayer.mockReturnValue(player);
-    const createdPlayer = playerService.createPlayer(playerInput);
+    mockCreatePlayer.mockResolvedValue(player);
+    const createdPlayer = await playerService.createPlayer(playerInput);
 
     // then
     expect(createdPlayer).toEqual(player);
 });
 
-test('givenInvalidId_whenCreatingPlayer_thenErrorIsThrown', () => {
+test('givenInvalidId_whenCreatingPlayer_thenErrorIsThrown', async () => {
     // given
     const playerInput = {
         id: invalidId,
@@ -117,10 +110,10 @@ test('givenInvalidId_whenCreatingPlayer_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => playerService.createPlayer(playerInput)).toThrow('Invalid id.');
+    await expect(playerService.createPlayer(playerInput)).rejects.toThrow('Invalid id.');
 });
 
-test('givenExistingPlayerId_whenCreatingPlayer_thenErrorIsThrown', () => {
+test('givenExistingPlayerId_whenCreatingPlayer_thenErrorIsThrown', async () => {
     // given
     const playerInput = {
         id: validId,
@@ -132,15 +125,15 @@ test('givenExistingPlayerId_whenCreatingPlayer_thenErrorIsThrown', () => {
 
     // when
     const existingPlayer = new Player(playerInput);
-    mockGetAllPlayers.mockReturnValue([existingPlayer]);
+    mockGetAllPlayers.mockResolvedValue([existingPlayer]);
 
     // then
-    expect(() => playerService.createPlayer(playerInput)).toThrow(
+    await expect(playerService.createPlayer(playerInput)).rejects.toThrow(
         `Player with id ${validId} already exists.`
     );
 });
 
-test('givenInvalidFirstName_whenCreatingPlayer_thenErrorIsThrown', () => {
+test('givenInvalidFirstName_whenCreatingPlayer_thenErrorIsThrown', async () => {
     // given
     const playerInput = {
         id: validId,
@@ -151,10 +144,12 @@ test('givenInvalidFirstName_whenCreatingPlayer_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => playerService.createPlayer(playerInput)).toThrow('First name is required.');
+    await expect(playerService.createPlayer(playerInput)).rejects.toThrow(
+        'First name is required.'
+    );
 });
 
-test('givenInvalidLastName_whenCreatingPlayer_thenErrorIsThrown', () => {
+test('givenInvalidLastName_whenCreatingPlayer_thenErrorIsThrown', async () => {
     // given
     const playerInput = {
         id: validId,
@@ -165,10 +160,10 @@ test('givenInvalidLastName_whenCreatingPlayer_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => playerService.createPlayer(playerInput)).toThrow('Last name is required.');
+    await expect(playerService.createPlayer(playerInput)).rejects.toThrow('Last name is required.');
 });
 
-test('givenInvalidEmail_whenCreatingPlayer_thenErrorIsThrown', () => {
+test('givenInvalidEmail_whenCreatingPlayer_thenErrorIsThrown', async () => {
     // given
     const playerInput = {
         id: validId,
@@ -179,10 +174,10 @@ test('givenInvalidEmail_whenCreatingPlayer_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => playerService.createPlayer(playerInput)).toThrow('Email is required.');
+    await expect(playerService.createPlayer(playerInput)).rejects.toThrow('Email is required.');
 });
 
-test('givenInvalidPhoneNumber_whenCreatingPlayer_thenErrorIsThrown', () => {
+test('givenInvalidPhoneNumber_whenCreatingPlayer_thenErrorIsThrown', async () => {
     // given
     const playerInput = {
         id: validId,
@@ -193,5 +188,7 @@ test('givenInvalidPhoneNumber_whenCreatingPlayer_thenErrorIsThrown', () => {
     };
 
     // when & then
-    expect(() => playerService.createPlayer(playerInput)).toThrow('Phone number is required.');
+    await expect(playerService.createPlayer(playerInput)).rejects.toThrow(
+        'Phone number is required.'
+    );
 });

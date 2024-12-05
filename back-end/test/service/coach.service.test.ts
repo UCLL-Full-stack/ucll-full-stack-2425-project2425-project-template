@@ -93,6 +93,7 @@ test('givenValidInput_whenCreatingCoach_thenCoachIsCreatedSuccessfully', async (
     };
     const coach = new Coach(coachInput);
 
+    mockGetAllCoaches.mockResolvedValue([]);
     mockCreateCoach.mockResolvedValue(coach);
 
     // when
@@ -100,6 +101,7 @@ test('givenValidInput_whenCreatingCoach_thenCoachIsCreatedSuccessfully', async (
 
     // then
     expect(createdCoach).toEqual(coach);
+    expect(createdCoach).not.toBeUndefined();
 });
 
 test('givenInvalidId_whenCreatingCoach_thenErrorIsThrown', async () => {

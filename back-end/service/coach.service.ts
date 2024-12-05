@@ -15,7 +15,7 @@ const getCoachById = async (id: number): Promise<Coach> => {
 };
 
 const createCoach = async (coachInput: CoachInput): Promise<Coach> => {
-    const existingCoaches = await coachDb.getAllCoaches();
+    const existingCoaches = (await coachDb.getAllCoaches()) || [];
 
     if (coachInput.id === undefined || coachInput.id < 0) {
         throw new Error('Invalid id.');

@@ -15,7 +15,7 @@ const getGameById = async (id: number): Promise<Game> => {
 };
 
 const createGame = async (gameInput: GameInput): Promise<Game> => {
-    const existingGames = await gameDb.getAllGames();
+    const existingGames = (await gameDb.getAllGames()) || [];
 
     if (!(gameInput.date instanceof Date) || isNaN(gameInput.date.getTime())) {
         throw new Error('Date is required.');

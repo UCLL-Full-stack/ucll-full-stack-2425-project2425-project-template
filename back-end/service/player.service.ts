@@ -3,11 +3,10 @@ import playerDb from '../repository/player.db';
 import { PlayerInput } from '../types';
 
 const getAllPlayers = async (): Promise<Player[]> => {
-    return await playerDb.getAllPlayers();
+    return (await playerDb.getAllPlayers()) || [];
 };
 
 const getPlayerById = async (id: number): Promise<Player> => {
-
     const player = await playerDb.getPlayerById(id);
 
     if (!player) {
@@ -17,7 +16,7 @@ const getPlayerById = async (id: number): Promise<Player> => {
 };
 
 const createPlayer = async (playerInput: PlayerInput): Promise<Player> => {
-    const existingPlayers = await playerDb.getAllPlayers();
+    const existingPlayers = (await playerDb.getAllPlayers()) || [];
 
     if (playerInput.id === undefined || playerInput.id < 0) {
         throw new Error('Invalid id.');

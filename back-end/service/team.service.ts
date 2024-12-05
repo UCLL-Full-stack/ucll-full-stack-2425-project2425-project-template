@@ -1,14 +1,15 @@
+import { te } from 'date-fns/locale';
 import { Team } from '../model/team';
 import coachDb from '../repository/coach.db';
 import teamDb from '../repository/team.db';
 import { TeamInput } from '../types/index';
 
 const getAllTeams = async (): Promise<Team[]> => {
-    return await teamDb.getAllTeams();
+    return (await teamDb.getAllTeams()) || [];
 };
 
 const createTeam = async ({ teamName, players, coach }: TeamInput): Promise<Team> => {
-    const allTeams = await teamDb.getAllTeams();
+    const allTeams = (await teamDb.getAllTeams()) || [];
     for (var team of allTeams) {
         if (teamName == team.getTeamName()) {
             throw new Error('Team with that name already exists.');
@@ -33,11 +34,17 @@ const getTeamById = async (id: number): Promise<Team> => {
 };
 
 const getTeamsByCoach = async (coachId: number): Promise<Team[]> => {
-    const coach = await coachDb.getCoachById(coachId);
-    if (!coach) {
-        throw new Error(`Coach with id ${coachId} does not exist.`);
+    const teams = (await teamDb.getTeamsByCoach(coachId)) || [];
+
+    if (teams.length === 0) {
+        throw new Error('No teams found for that coach.');
     }
-    return await teamDb.getTeamsByCoach(coachId);
+
+    if (coachId == undefined) {
+        throw new Error('An id is required.');
+    }
+
+    return teams;
 };
 
 const updateTeam = async ({ id, teamName, coach, players }: TeamInput): Promise<Team> => {
@@ -53,7 +60,7 @@ const updateTeam = async ({ id, teamName, coach, players }: TeamInput): Promise<
 
     const updatedTeam = new Team({ id, teamName, coach, players });
 
-    return await teamDb.updateTeam(updatedTeam);
+    return await teamDb.createTeam(updatedTeam);
 };
 
 export default { getAllTeams, getTeamsByCoach, getTeamById, createTeam, updateTeam };

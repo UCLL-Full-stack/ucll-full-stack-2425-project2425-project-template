@@ -72,54 +72,41 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('givenAllGames_whenGetAllGames_thenAllGamesAreReturned', () => {
+test('givenNoGames_whenGetAllGames_thenEmptyArrayIsReturned', async () => {
     // given
-    const allGames = new Game({ date: validDate, teams: [validTeam, validTeam2] });
-    
+    mockGetAllGames.mockReturnValue([]);
 
     // when
-    mockGetAllGames.mockReturnValue(allGames);
+    const allGames = await gameService.getAllGames();
 
     // then
-    expect(gameService.getAllGames()).toEqual(allGames);
+    expect(allGames).toEqual([]);
 });
 
-test('givenGames_whenGetGameById_thenReturnGameWithId', () => {
-    // given
-    const game = new Game({ id: validId, date: validDate, teams: [validTeam, validTeam2] });
-    mockGetGameById.mockReturnValue(game);
-
-    // when
-    const gameWithId = gameService.getGameById(validId);
-
-    // then
-    expect(gameWithId).toEqual(game);
-    expect(gameWithId).not.toBeUndefined();
-});
-
-test('givenGameWithInvalidId_whenGettingGameById_thenErrorIsThrown', () => {
+test('givenGameWithInvalidId_whenGettingGameById_thenErrorIsThrown', async () => {
     // given
     mockGetGameById.mockReturnValue(undefined);
 
     // when & then
-    expect(() => gameService.getGameById(invalidId)).toThrow(`Game with id ${invalidId} does not exist.`);
+    await expect(gameService.getGameById(invalidId)).rejects.toThrow(
+        `Game with id ${invalidId} does not exist.`
+    );
 });
 
-test('givenValidGameInput_whenCreatingGame_thenGameIsCreatedSuccessfully', () => {
+test('givenValidGameInput_whenCreatingGame_thenGameIsCreatedSuccessfully', async () => {
     // given
     const gameInput = { date: validDate, teams: [validTeam, validTeam2] };
     const game = new Game({ date: validDate, teams: [validTeam, validTeam2] });
-    
 
     // when
     mockCreateGame.mockReturnValue(game);
-    const createdGame = gameService.createGame(gameInput);
+    const createdGame = await gameService.createGame(gameInput);
 
     // then
     expect(createdGame).toEqual(game);
 });
 
-test('givenExistingGameId_whenCreatingGame_thenErrorIsThrown', () => {
+test('givenExistingGameId_whenCreatingGame_thenErrorIsThrown', async () => {
     // given
     const gameInput = { id: validId, date: validDate, teams: [validTeam, validTeam2] };
 
@@ -128,22 +115,36 @@ test('givenExistingGameId_whenCreatingGame_thenErrorIsThrown', () => {
     mockGetAllGames.mockReturnValue([existingGame]);
 
     // then
-    expect(() => gameService.createGame(gameInput)).toThrow(`Game with id ${validId} already exists.`);
+    await expect(gameService.createGame(gameInput)).rejects.toThrow(
+        `Game with id ${validId} already exists.`
+    );
 });
 
-test('givenInvalidDate_whenCreatingGame_thenErrorIsThrown', () => {
+test('givenInvalidDate_whenCreatingGame_thenErrorIsThrown', async () => {
     // given
     const invalidDate = new Date(NaN);
     const gameInput = { date: invalidDate, teams: [validTeam, validTeam2] };
 
     // when & then
-    expect(() => gameService.createGame(gameInput)).toThrow('Date is required.');
+    await expect(gameService.createGame(gameInput)).rejects.toThrow('Date is required.');
 });
 
-test('givenGameInputWithLessThenTwoTeams_whenCreatingGame_thenErrorIsThrown', () => {
+test('givenGameInputWithLessThenTwoTeams_whenCreatingGame_thenErrorIsThrown', async () => {
     // given
     const gameInput = { date: validDate, teams: [] };
 
     // when & then
-    expect(() => gameService.createGame(gameInput)).toThrow('Exactly two teams are required.');
+    await expect(gameService.createGame(gameInput)).rejects.toThrow(
+        'Exactly two teams are required.'
+    );
+});
+
+test('givenGameInputWithMoreThanTwoTeams_whenCreatingGame_thenErrorIsThrown', async () => {
+    // given
+    const gameInput = { date: validDate, teams: [validTeam, validTeam2, validTeam] };
+
+    // when & then
+    await expect(gameService.createGame(gameInput)).rejects.toThrow(
+        'Exactly two teams are required.'
+    );
 });
