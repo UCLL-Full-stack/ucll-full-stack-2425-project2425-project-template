@@ -15,9 +15,20 @@ export class Vehicle{
     readonly updatedAt? : Date
 
     constructor(vehicle: {
-        id?: number, manufacturer: string,
-        model_name: string, price: number, fuelType: string, bodyType: string,
-        transmissionType: string, year: number, vehicleType: string, mileage: number, engineCapacity: number, createdAt? : Date, updatedAt?: Date
+        id?: number, 
+        manufacturer: string,
+        model_name: string, 
+        price: number, 
+        fuelType: string, 
+        bodyType: string,
+        transmissionType: string, 
+        year: number, 
+        vehicleType: string, 
+        mileage: number, 
+        engineCapacity: number, 
+        createdAt? : Date, 
+        updatedAt?: Date
+
     }) {
         this.id = vehicle.id;
         this.manufacturer = vehicle.manufacturer;
