@@ -9,9 +9,11 @@ import { groupRouter } from './controller/group.routes';
 import { boardRouter } from './controller/board.routes';
 import { statusRouter } from './controller/status.routes';
 import { taskRouter } from './controller/task.routes';
+import helmet from 'helmet';
 
 const app = express();
 dotenv.config();
+app.use(helmet());
 const port = process.env.APP_PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:8080' }));

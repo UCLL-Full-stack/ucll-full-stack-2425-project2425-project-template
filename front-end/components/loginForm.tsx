@@ -3,13 +3,9 @@ import router from 'next/router';
 import React, { useState } from 'react';
 import { Profile } from '@/types';
 
-const RegisterForm = () => {
+const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [bio, setBio] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
 
     const [usernameError, setUsernameError] = useState<string | null>(null);
     const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -30,20 +26,9 @@ const RegisterForm = () => {
             return;
         };
 
-        console.log('Registering...');
+        console.log('Logging in...');
 
-        let profile: Profile | undefined = undefined;
-        if (email || bio || firstName || lastName) {
-            profile = {
-                email,
-                bio,
-                firstName,
-                lastName
-            };
-        };
-        console.log(profile);
-
-        const response = await UserService.createUser(username, password, profile);
+        const response = await UserService.login(username, password);
 
         if (response.status === 200) {
             const autheticationResponse = await response.json();
@@ -57,15 +42,14 @@ const RegisterForm = () => {
                 })
             );
 
-            setStatusMessage('Registration successful. Redirecting to home page...');
+            setStatusMessage('Login successful. Redirecting to home page...');
             setTimeout(() => {
                 router.push('/');
             }, 500);
         } else {
             const message = await response.json();
-            setStatusMessage(message.message || 'An error occurred');
-            console.error(message);
-        }
+            setStatusMessage('wrong username or password');
+        };
     };
 
     const validate = () => {
@@ -112,59 +96,12 @@ const RegisterForm = () => {
                 />
                 {passwordError && <div className="text-red-500 mt-1">{passwordError}</div>}
             </div>
-            <div className="mb-4">
-                <label htmlFor="firstNameInput" className="block text-gray-700 font-bold mb-2">
-                    First Name:
-                </label>
-                <input
-                    id="firstNameInput"
-                    type="text"
-                    value={firstName}
-                    onChange={(event) => setFirstName(event.target.value)}
-                    className="w-full px-3 py-2 border rounded"
-                />
-            </div>
-            <div className="mb-4">
-                <label htmlFor="lastNameInput" className="block text-gray-700 font-bold mb-2">
-                    Last Name:
-                </label>
-                <input
-                    id="lastNameInput"
-                    type="text"
-                    value={lastName}
-                    onChange={(event) => setLastName(event.target.value)}
-                    className="w-full px-3 py-2 border rounded"
-                />
-            </div>
-            <div className="mb-4">
-                <label htmlFor="emailInput" className="block text-gray-700 font-bold mb-2">
-                    Email:
-                </label>
-                <input
-                    id="emailInput"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    className="w-full px-3 py-2 border rounded"
-                />
-            </div>
-            <div className="mb-4">
-                <label htmlFor="bioInput" className="block text-gray-700 font-bold mb-2">
-                    Bio:
-                </label>
-                <textarea
-                    id="bioInput"
-                    value={bio}
-                    onChange={(event) => setBio(event.target.value)}
-                    className="w-full px-3 py-2 border rounded"
-                />
-            </div>
             <button type="submit">
-                Register
+                Login
             </button>
             {statusMessage && <div>{statusMessage}</div>}
         </form>
     );
 };
 
-export default RegisterForm;
+export default LoginForm;
