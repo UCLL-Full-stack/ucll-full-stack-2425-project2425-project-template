@@ -1,13 +1,14 @@
 import EventService from "@/services/EventService";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Event } from "@/types";
+import { Event, User } from "@/types";
 import styles from "@/styles/eventDetails.module.css";
 import Head from "next/head";
 
 const EventDetails: React.FC = () => {
   const router = useRouter();
   const [event, setEvent] = useState<Event | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   const fetchEvent = async () => {
     const { id } = router.query;
@@ -18,8 +19,16 @@ const EventDetails: React.FC = () => {
     }
   };
 
+  const fetchUser = async () => {
+    const result = sessionStorage.getItem("loggedInUser");
+    if (result) {
+      setLoggedInUser(JSON.parse(result));
+    }
+  };
+
   useEffect(() => {
     fetchEvent();
+    fetchUser();
   }, [router.query.id]);
 
   const handleOnClick = () => {
@@ -33,7 +42,7 @@ const EventDetails: React.FC = () => {
           <meta name="description" content="Eventer home page" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <div className="d-flex flex-column ju">
+        <div>
           <h1 className={styles.title}>{event.name}</h1>
 
           <div
@@ -43,6 +52,9 @@ const EventDetails: React.FC = () => {
               router.push(`/events/${event.id}`);
             }}
           >
+            {loggedInUser?.role === "Admin" && (
+              <button className={styles.editButton}>Edit event</button>
+            )}
             <p className={styles.p}>
               Date: {new Date(event.date).toLocaleDateString()}
             </p>
