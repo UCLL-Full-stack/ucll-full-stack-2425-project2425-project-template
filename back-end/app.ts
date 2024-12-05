@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { matchRouter } from './controller/match.routes';
 import { teamRouter } from './controller/team.routes';
 import { trainingRouter } from './controller/training.routes';
+import helmet from 'helmet';
 
 
 const app = express();
@@ -15,7 +16,7 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
-
+app.use(helmet());
 
 
 app.use('/team', teamRouter);
