@@ -67,9 +67,15 @@ const players = [
     }),
 ];
 
+const floors = [
+    new Floor({
+        floornumber: 1,
+    }),
+];
 
 const worlds = [
     new World({
+        id: 1,
         name: 'Eorzea',
         owner: users[0],
         floors: floors,
@@ -93,36 +99,26 @@ const lines = [
     new Line({
         tiles: tiles[0],
         lineNum: 1,
-        floorId: floors[0].getId()
     }),
     new Line({
         tiles: tiles[1],
         lineNum: 2,
-        floorId: 
     }),
     new Line({
         tiles: tiles[2],
         lineNum: 3,
-        floorId: 
     }),
     new Line({
         tiles: tiles[3],
-        lineNum: 4,
-        floorId: 
+        lineNum: 4, 
     }),
     new Line({
         tiles: tiles[4],
         lineNum: 5,
-        floorId: 
     }),
 ];
 
-const floors = [
-    new Floor({
-        floornumber: 1,
-        tiles: lines,
-    }),
-];
+
 
 async function main() {
     // Create Users
@@ -168,7 +164,7 @@ async function main() {
         await prisma.floor.create({
             data: {
                 floornumber: floor.getFloornumber(),
-                world: { connect: { id: floor.getWorld().getId() } },
+                world: { connect: { id: floor.getWorldId() } },
             },
         });
     }
@@ -179,7 +175,7 @@ async function main() {
             data: {
                 tiles: line.getTiles(),
                 lineNum: line.getLineNum(),
-                floor: { connect: { id: line.getFloor().getId() } },
+                floor: { connect: { id: line.getFloor() } },
             },
         });
     }
