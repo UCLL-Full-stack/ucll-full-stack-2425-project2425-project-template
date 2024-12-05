@@ -18,4 +18,33 @@ model Team {
     name          String
     competitionId Int
     competition   Competition @relation(fields: [competitionId], references: [id])
+    players       Player[]
+    coaches       Coach[]
+}
+
+model Player {
+    id     Int  @id @default(autoincrement())
+    number Int
+    userId Int  @unique
+    user   User @relation(fields: [userId], references: [id])
+    teamId Int
+    team   Team @relation(fields: [teamId], references: [id])
+}
+
+model Coach {
+    id     Int  @id @default(autoincrement())
+    userId Int  @unique
+    user   User @relation(fields: [userId], references: [id])
+    teamId Int
+    team   Team @relation(fields: [teamId], references: [id])
+}
+
+model User {
+    id       Int     @id @default(autoincrement())
+    name     String
+    email    String  @unique
+    password String
+    role     String
+    player   Player?
+    coach    Coach?
 }
