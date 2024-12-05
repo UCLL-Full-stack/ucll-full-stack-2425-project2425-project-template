@@ -38,4 +38,5 @@ export {
     PlayerInput,
     CoachInput,
     UserInput,
+    Role
 };
