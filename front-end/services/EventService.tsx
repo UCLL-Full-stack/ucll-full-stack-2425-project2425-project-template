@@ -1,10 +1,14 @@
 import { Event } from "@/types";
 
 const getAllEvents = async () => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
+  if (!response.ok) {
+    throw new Error("Failed to fetch events");
+  }
+  return response.json();
 };
 
 const addEvent = async (event: Event) => {
@@ -15,4 +19,11 @@ const addEvent = async (event: Event) => {
   });
 };
 
-export default { getAllEvents, addEvent };
+const getEventById = async (id: number) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export default { getAllEvents, addEvent, getEventById };

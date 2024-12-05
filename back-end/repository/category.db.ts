@@ -42,8 +42,19 @@ const getCategory = async (name: string, description: string): Promise<Category 
     return Category.from(result);
 };
 
+const getCategories = async (): Promise<Category[]> => {
+    try {
+        const categoriesPrisma = await database.category.findMany();
+        return categoriesPrisma.map((categoryPrisma) => Category.from(categoryPrisma));
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database Error, see server log for more detail');
+    }
+};
+
 export default {
     addCategory,
     getCategory,
     getCategoryById,
+    getCategories,
 };

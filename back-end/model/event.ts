@@ -50,7 +50,7 @@ export class Event {
         location: Location;
         category: Category;
     }) {
-        if (!event.name) throw new Error('Name is required.');
+        if (!event.name?.trim()) throw new Error('Name is required.');
         if (event.price < 0) throw new Error('Price must be positive.');
         if (event.minParticipants < 0) throw new Error('Minimum participants must be positive.');
         if (!event.maxParticipants) throw new Error('Maximum participants is required.');

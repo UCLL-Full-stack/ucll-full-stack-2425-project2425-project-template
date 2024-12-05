@@ -45,10 +45,7 @@ const getLocationByAddress = async (
             country: country,
         },
     });
-    if (!result) {
-        return null;
-    }
-    return Location.from(result);
+    return result ? Location.from(result) : null;
 };
 
 export default {

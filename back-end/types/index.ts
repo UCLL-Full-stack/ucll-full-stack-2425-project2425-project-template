@@ -1,6 +1,10 @@
+type Role = 'User' | 'Admin';
+
 type UserInput = {
     id?: string;
-    username: string;
+    userName: string;
+    email: string;
+    role: Role;
     password: string;
 };
 
@@ -37,5 +41,18 @@ type ProfileInput = {
     age: number;
     administrator: boolean;
 };
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    role: Role;
+};
 
-export { UserInput, CategoryInput, LocationInput, EventInput, ProfileInput };
+export {
+    Role,
+    UserInput,
+    CategoryInput,
+    LocationInput,
+    EventInput,
+    ProfileInput,
+    AuthenticationResponse,
+};

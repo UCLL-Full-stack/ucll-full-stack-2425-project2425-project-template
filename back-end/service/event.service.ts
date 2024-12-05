@@ -13,23 +13,33 @@ const addEvent = async ({
     location: LocationInput,
     category: CategoryInput,
 }: EventInput): Promise<Event> => {
-    const location = await locationService.addLocation(LocationInput);
-    const category = await categoryService.addCategory(CategoryInput);
+    try {
+        const location = await locationService.addLocation(LocationInput);
+        const category = await categoryService.addCategory(CategoryInput);
 
-    const event = new Event({
-        name,
-        date,
-        price,
-        minParticipants,
-        maxParticipants,
-        location,
-        category,
-    });
+        const event = new Event({
+            name,
+            date,
+            price,
+            minParticipants,
+            maxParticipants,
+            location,
+            category,
+        });
 
-    return await eventDb.addEvent(event);
+        return await eventDb.addEvent(event);
+    } catch (error) {
+        throw new Error(`Error: ${error}`);
+    }
 };
 
-const getEventById = (id: number): Promise<Event> => eventDb.getEventById(id);
+const getEventById = async (id: number): Promise<Event> => {
+    const result = await eventDb.getEventById(id);
+    if (!result) {
+        throw new Error(`Error: No event with id ${id} found.`);
+    }
+    return result;
+};
 
 const getEvents = (): Promise<Event[]> => eventDb.getEvents();
 
