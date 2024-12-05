@@ -46,6 +46,7 @@ const addTicket = async (
                 time,
                 chair,
                 movieId,
+
             },
         });
         return Ticket.from(ticketPrisma);

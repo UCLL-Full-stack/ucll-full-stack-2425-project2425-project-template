@@ -47,7 +47,8 @@ const addTask = async (
                 status,
                 comment,
                 roomId,
-            },
+            }
+
         });
         return Task.from(taskPrisma);
     } catch (error) {
