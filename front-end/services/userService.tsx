@@ -21,7 +21,7 @@ const createUser = (name: string, password: string, profile?: Profile) => {
 const login = (name: string, password: string) => {
     const data = {
         username: name,
-        hashedPassword: password,
+        password: password,
     };
 
     const jsonData = JSON.stringify(data);
