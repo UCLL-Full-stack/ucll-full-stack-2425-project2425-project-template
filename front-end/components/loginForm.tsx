@@ -39,12 +39,20 @@ const LoginForm: React.FC = () => {
     const user = { userName: name, password };
     const response = await UserService.loginUser(user);
 
-    console.log("in log in form" + response);
-
     if (response.status === 200) {
       setStatusMessages([
         { message: "Login succesful, redirecting...", type: "success" },
       ]);
+
+      const user = await response.json();
+      sessionStorage.setItem(
+        "LoggedInUser",
+        JSON.stringify({
+          token: user.token,
+          userName: user.userName,
+          role: user.role,
+        })
+      );
     } else if (response.status === 401) {
       const { errorMessage } = await response.json();
       setStatusMessages([{ message: errorMessage, type: "error" }]);
@@ -58,36 +66,38 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  return <>
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <div>{nameError}</div>
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <div>{passwordError}</div>
-      </div>
-      <button type="submit">Login</button>
-    </form>
-    {statusMessages.map((message, index) => (
-      <div key={index} className={message.type}>
-        {message.message}
-      </div>
-    ))}
-  </>;
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <div>{nameError}</div>
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div>{passwordError}</div>
+        </div>
+        <button type="submit">Login</button>
+      </form>
+      {statusMessages.map((message, index) => (
+        <div key={index} className={message.type}>
+          {message.message}
+        </div>
+      ))}
+    </>
+  );
 };
 
 export default LoginForm;

@@ -6,7 +6,11 @@ const loginUser = async (user: User) => {
   return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userName: user.userName, password: user.password }),
+    body: JSON.stringify({
+      userName: user.userName,
+      role: user.role,
+      password: user.password,
+    }),
   });
 };
 
