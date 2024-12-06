@@ -1,4 +1,4 @@
-import { Item } from './item';
+import { Nutritionlabel as NutritionlabelPrisma } from '@prisma/client';
 
 export class Nutritionlabel {
     private id?: number | undefined;
@@ -9,7 +9,7 @@ export class Nutritionlabel {
     private sugar: number;
     private protein: number;
     private salts: number;
-    private item!: Item;
+    private itemId: number | null;
 
     constructor(nutritionlabel: {
         id?: number;
@@ -20,6 +20,7 @@ export class Nutritionlabel {
         sugar: number;
         protein: number;
         salts: number;
+        itemId: number | null;
     }) {
         this.validate(nutritionlabel);
         this.id = nutritionlabel.id;
@@ -30,6 +31,7 @@ export class Nutritionlabel {
         this.sugar = nutritionlabel.sugar;
         this.protein = nutritionlabel.protein;
         this.salts = nutritionlabel.salts;
+        this.itemId = nutritionlabel.itemId;
     }
 
     setId(id: number) {
@@ -68,12 +70,8 @@ export class Nutritionlabel {
         return this.salts;
     }
 
-    getItem(): Item {
-        return this.item;
-    }
-
-    setItem(item: Item) {
-        this.item == item;
+    getItemId(): number | null {
+        return this.itemId;
     }
 
     validate(nutritionlabel: {
@@ -138,7 +136,31 @@ export class Nutritionlabel {
             this.sugar === nutritionlabel.getSugar() &&
             this.protein === nutritionlabel.getProtein() &&
             this.salts === nutritionlabel.getSalts() &&
-            this.item === nutritionlabel.getItem()
+            this.itemId === nutritionlabel.getItemId()
         );
+    }
+
+    static from({
+        id,
+        energy,
+        fat,
+        saturatedFats,
+        carbohydrates,
+        sugar,
+        protein,
+        salts,
+        itemId,
+    }: NutritionlabelPrisma) {
+        return new Nutritionlabel({
+            id,
+            energy,
+            fat,
+            saturatedFats,
+            carbohydrates,
+            sugar,
+            protein,
+            salts,
+            itemId,
+        });
     }
 }

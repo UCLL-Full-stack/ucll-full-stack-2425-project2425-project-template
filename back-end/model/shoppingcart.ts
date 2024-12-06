@@ -1,18 +1,25 @@
 import { Item } from './item';
 import { User } from './user';
 
+import {
+    User as UserPrisma,
+    Shoppingcart as ShoppingcartPrisma,
+    Item as ItemPrisma,
+} from '@prisma/client';
+
 export class Shoppingcart {
     private id?: number | undefined;
     private name: string;
     private deliveryDate: Date;
-    private user!: User;
+    private user?: User;
     private items: Item[] = [];
 
-    constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date }) {
+    constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date; items: Item[] }) {
         this.validate(shoppingcart);
         this.id = shoppingcart.id;
         this.name = shoppingcart.name;
         this.deliveryDate = shoppingcart.deliveryDate;
+        this.items = shoppingcart.items;
     }
 
     validate(shoppingcart: { name: string; deliveryDate: Date }) {
@@ -54,7 +61,7 @@ export class Shoppingcart {
         return this.deliveryDate;
     }
 
-    getUser(): User {
+    getUser(): User | undefined {
         return this.user;
     }
 
@@ -73,5 +80,19 @@ export class Shoppingcart {
             this.deliveryDate === shoppingcart.getDeliveryDate() &&
             this.user === shoppingcart.getUser()
         );
+    }
+
+    static from({
+        id,
+        name,
+        deliveryDate,
+        items,
+    }: ShoppingcartPrisma & { user: UserPrisma; items: ItemPrisma[] }) {
+        return new Shoppingcart({
+            id,
+            name,
+            deliveryDate,
+            items: items.map((item) => Item.from(item)),
+        });
     }
 }
