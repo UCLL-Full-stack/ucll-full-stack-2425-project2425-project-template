@@ -3,16 +3,23 @@ import styles from "@/styles/Header.module.css";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Language from "./Language";
+import { User } from "@/types";
 const Header: React.FC = () => {
   const { t } = useTranslation();
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   useEffect(() => {
-    setLoggedInUser(localStorage.getItem("loggedInUser"));
+    fetchUser();
   }, []);
 
+  const fetchUser = () => {
+    const user = sessionStorage.getItem("loggedInUser");
+    if (user) {
+      setLoggedInUser(JSON.parse(user));
+    }
+  };
   const handleLogout = () => {
-    localStorage.removeItem("loggedInUser");
+    sessionStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
   };
 
@@ -41,11 +48,15 @@ const Header: React.FC = () => {
           )}
           {loggedInUser && (
             <>
-              <Link href="/login" onClick={handleLogout}>
+              <Link
+                href="/login"
+                onClick={handleLogout}
+                className="nav-link px-4 fs-5 text-white"
+              >
                 {t("header.nav.logout")}
               </Link>
-              <p>
-                {t("header.welcome")} {loggedInUser}
+              <p className="text-white fs-5 px-4">
+                {t("header.welcome")} {loggedInUser.userName}
               </p>
             </>
           )}
