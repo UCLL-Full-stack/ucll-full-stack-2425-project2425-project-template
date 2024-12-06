@@ -18,12 +18,14 @@ type NutritionlabelInput = {
     sugar: number;
     protein: number;
     salts: number;
+    itemId: number | null;
 };
 
 type ShoppingcartInput = {
     id?: number;
     name: string;
     deliveryDate: Date;
+    items: [];
 };
 
 type UserInput = {
