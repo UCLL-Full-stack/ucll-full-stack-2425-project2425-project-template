@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import type { AppProps } from "next/app";
-
-export default function App({ Component, pageProps }: AppProps) {
+import { appWithTranslation } from "next-i18next";
+const App = ({ Component, pageProps }: AppProps) => {
   return <Component {...pageProps} />;
-}
+};
+export default appWithTranslation(App);

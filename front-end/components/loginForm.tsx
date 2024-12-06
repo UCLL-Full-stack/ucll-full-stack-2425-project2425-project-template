@@ -1,8 +1,10 @@
 import UserService from "@/services/UserService";
 import { useState } from "react";
 import { StatusMessage } from "@/types";
+import { useTranslation } from "next-i18next";
 
 const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState("");
@@ -19,11 +21,11 @@ const LoginForm: React.FC = () => {
     let result = true;
 
     if (name?.trim() === "") {
-      setNameError("Name is required.");
+      setNameError(t("login.validate.name"));
       result = false;
     }
     if (password?.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t("login.validate.password"));
     }
     return result;
   };
@@ -40,13 +42,11 @@ const LoginForm: React.FC = () => {
     const response = await UserService.loginUser(user);
 
     if (response.status === 200) {
-      setStatusMessages([
-        { message: "Login succesful, redirecting...", type: "success" },
-      ]);
+      setStatusMessages([{ message: t("login.success"), type: "success" }]);
 
       const user = await response.json();
       sessionStorage.setItem(
-        "LoggedInUser",
+        "loggedInUser",
         JSON.stringify({
           token: user.token,
           userName: user.userName,
@@ -59,7 +59,7 @@ const LoginForm: React.FC = () => {
     } else {
       setStatusMessages([
         {
-          message: "An error has occurred. Please try again later.",
+          message: t("general.error"),
           type: "error",
         },
       ]);
@@ -70,7 +70,7 @@ const LoginForm: React.FC = () => {
     <>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="name">{t("login.label.username")}</label>
           <input
             type="text"
             id="name"
@@ -80,7 +80,7 @@ const LoginForm: React.FC = () => {
           <div>{nameError}</div>
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">{t("login.label.password")}</label>
           <input
             type="password"
             id="password"
@@ -89,7 +89,7 @@ const LoginForm: React.FC = () => {
           />
           <div>{passwordError}</div>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">{t("login.button")}</button>
       </form>
       {statusMessages.map((message, index) => (
         <div key={index} className={message.type}>
