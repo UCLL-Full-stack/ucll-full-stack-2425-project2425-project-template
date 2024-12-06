@@ -2,8 +2,18 @@ import { Item } from '../model/item';
 import { Shoppingcart } from '../model/shoppingcart';
 
 const shoppingcarts = [
-    new Shoppingcart({ id: 0, name: 'Shoppingcart 1', deliveryDate: new Date('2026-12-24') }),
-    new Shoppingcart({ id: 1, name: 'Shoppingcart 2', deliveryDate: new Date('2026-9-16') }),
+    new Shoppingcart({
+        id: 0,
+        name: 'Shoppingcart 1',
+        deliveryDate: new Date('2026-12-24'),
+        items: [],
+    }),
+    new Shoppingcart({
+        id: 1,
+        name: 'Shoppingcart 2',
+        deliveryDate: new Date('2026-9-16'),
+        items: [],
+    }),
 ];
 
 const addItemToShoppingcart = ({
