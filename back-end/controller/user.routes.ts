@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import userService from '../service/user.service';
-import { UserInput } from '../types';
+import { AuthenticationInput, UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -27,9 +27,12 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
 
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { userName, password } = req.body;
-        const userInput: UserInput = await userService.getUserByUserName({ userName });
-        const authenicated = await userService.authenicate( { userName, password, email: userInput.email, role: userInput.role } );
+        const { userName, role, password } = <AuthenticationInput>req.body;
+        const authenicated = await userService.authenicate({
+            userName,
+            role,
+            password,
+        });
         res.status(200).json({ message: 'Login successful', ...authenicated });
     } catch (error) {
         next(error);

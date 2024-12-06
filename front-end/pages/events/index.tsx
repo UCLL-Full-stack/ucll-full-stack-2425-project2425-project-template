@@ -6,8 +6,12 @@ import EventService from "@/services/EventService";
 import { Event } from "@/types";
 import { useRouter } from "next/router";
 import EventOverview from "@/components/EventOverview";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const [events, setEvents] = useState<Array<Event>>([]);
   const [error, setError] = useState<string>("");
@@ -40,11 +44,20 @@ const Home: React.FC = () => {
             router.push("/add-event");
           }}
         >
-          Add event
+          {t("event.button")}
         </button>
       </main>
     </>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default Home;

@@ -1,6 +1,6 @@
 import { User } from '../model/user';
 import userDb from '../repository/user.db';
-import { AuthenticationResponse, UserInput } from '../types';
+import { AuthenticationInput, AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { generateJWTtoken } from '../util/jwt';
 
@@ -32,7 +32,11 @@ const createUser = async ({ userName, email, role, password }: UserInput): Promi
     return await userDb.createUser(user);
 };
 
-const authenicate = async ({ userName, password, email, role }: UserInput): Promise<AuthenticationResponse> => {
+const authenicate = async ({
+    userName,
+    role,
+    password,
+}: AuthenticationInput): Promise<AuthenticationResponse> => {
     const user = await getUserByUserName({ userName });
     const isValidPassword = await bcrypt.compare(password.trim(), user.password.trim());
 
@@ -40,7 +44,7 @@ const authenicate = async ({ userName, password, email, role }: UserInput): Prom
 
     return {
         token: generateJWTtoken({ username: userName, role: user.role }),
-        username: userName,
+        userName,
         role: user.role,
     };
 };

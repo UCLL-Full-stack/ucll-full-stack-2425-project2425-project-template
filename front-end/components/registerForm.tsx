@@ -3,8 +3,10 @@ import styles from "@/styles/Form.module.css";
 import UserService from "@/services/UserService";
 import { Role, StatusMessage } from "@/types/index";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 const RegisterForm: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,15 +20,15 @@ const RegisterForm: React.FC = () => {
   const validate = (): boolean => {
     let result = true;
     if (userName?.trim() === "") {
-      setUserNameError("Username is required.");
+      setUserNameError(t("register.username"));
       result = false;
     }
     if (email?.trim() === "") {
-      setEmailError("Email is required.");
+      setEmailError(t("register.email"));
       result = false;
     }
     if (password?.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t("register.password"));
       result = false;
     }
     return result;
@@ -41,9 +43,7 @@ const RegisterForm: React.FC = () => {
     const result = await UserService.registerUser(user);
 
     if (result.status === 200) {
-      setStatusMessages([
-        { message: "Account made, login in...", type: "success" },
-      ]);
+      setStatusMessages([{ message: t("register.success"), type: "success" }]);
       const user = await result.json();
       sessionStorage.setItem(
         "loggedInUser",
@@ -63,7 +63,7 @@ const RegisterForm: React.FC = () => {
     } else {
       setStatusMessages([
         {
-          message: "Error, please try again later",
+          message: t("general.error"),
           type: "error",
         },
       ]);
@@ -88,7 +88,7 @@ const RegisterForm: React.FC = () => {
               </div>
             )}
             <label htmlFor="username" className={styles.label}>
-              Username:
+              {t("register.label.username")}
             </label>
             <input
               className={styles.input}
@@ -103,7 +103,7 @@ const RegisterForm: React.FC = () => {
           </div>
           <div className={styles.div}>
             <label htmlFor="email" className={styles.label}>
-              Email:
+              {t("register.label.email")}
             </label>
             <input
               className={styles.input}
@@ -118,7 +118,7 @@ const RegisterForm: React.FC = () => {
           </div>
           <div className={styles.div}>
             <label htmlFor="password" className={styles.label}>
-              Password:
+              {t("register.label.password")}
             </label>
             <input
               className={styles.input}
@@ -133,7 +133,7 @@ const RegisterForm: React.FC = () => {
           </div>
           <div className={styles.div}>
             <label htmlFor="role" className={styles.label}>
-              Role:
+              {t("register.label.role")}
             </label>
             <select
               className={styles.input}
@@ -141,12 +141,12 @@ const RegisterForm: React.FC = () => {
               value={role}
               onChange={(e) => setRole(e.target.value as Role)}
             >
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
+              <option value="User">{t("register.role.user")}</option>
+              <option value="Admin">{t("register.role.admin")}</option>
             </select>
           </div>
           <button type="submit" className={styles.button}>
-            Register
+            {t("register.button")}
           </button>
         </form>
       </main>

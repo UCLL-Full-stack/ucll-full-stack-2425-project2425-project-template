@@ -1,0 +1,54 @@
+{
+  "app.title": "Eventer",
+  "home": {
+    "description": "In het huidige digitale tijdperk wordt het steeds belangrijker om mensen weer verbinding te laten maken in de echte wereld. Dit is wat eventer wil doen. Verbind allerlei verschillende soorten mensen via gemeenschappelijke passies, in het echte leven. Gebruikers krijgen evenementen aangeboden die zijn afgestemd op hun interesses en kunnen deze ervaren in een nieuwe sociale setting."
+  },
+  "general.error": "Er is een fout opgetreden, probeer later opnieuw.",
+  "login": {
+    "title": "Aanmelden - Eventer",
+    "button": "Meld aan",
+    "success": "Aanmelden succesvol, omleiden naar homepagina...",
+    "validate": {
+      "name": "Naam is vereist.",
+      "password": "Wachtwoord is vereist."
+    },
+    "label": { "name": "Naam:", "password": "Wachtwoord:" }
+  },
+  "register": {
+    "title": "Registreren - Eventer",
+    "button": "Registreer",
+    "username": "Gebruikersnaam is vereist.",
+    "email": "Email adres is vereist..",
+    "password": "Wachtwoord is vereist.",
+    "success": "Account gemaakt, aanmelden...",
+    "label": {
+      "username": "Gebruikersnaam:",
+      "email": "Email adres:",
+      "password": "Wachtwoord:",
+      "role": "Rol:"
+    },
+    "role": {
+      "user": "Gebruiker",
+      "admin": "Administrator"
+    }
+  },
+  "header": {
+    "name": "Eventer",
+    "welcome": "Welkom",
+    "language": "Taal:",
+    "nav": {
+      "events": "Evenementen",
+      "home": "Startpagina",
+      "register": "Registeren",
+      "login": "Aanmelden",
+      "logout": "Uitloggen"
+    },
+    "languageSelect": {
+      "en": "Engels",
+      "nl": "Nederlands"
+    }
+  },
+  "event": {
+    "button": "Maak event aan"
+  }
+}

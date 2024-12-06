@@ -43,8 +43,13 @@ type ProfileInput = {
 };
 type AuthenticationResponse = {
     token: string;
-    username: string;
+    userName: string;
     role: Role;
+};
+type AuthenticationInput = {
+    userName: string;
+    role: Role;
+    password: string;
 };
 
 export {
@@ -55,4 +60,5 @@ export {
     EventInput,
     ProfileInput,
     AuthenticationResponse,
+    AuthenticationInput,
 };
