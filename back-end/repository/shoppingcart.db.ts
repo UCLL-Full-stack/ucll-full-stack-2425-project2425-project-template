@@ -1,22 +1,74 @@
 import { Item } from '../model/item';
 import { Shoppingcart } from '../model/shoppingcart';
+import db from './db';
 
-const shoppingcarts = [
-    new Shoppingcart({
-        id: 0,
-        name: 'Shoppingcart 1',
-        deliveryDate: new Date('2026-12-24'),
-        items: [],
-    }),
-    new Shoppingcart({
-        id: 1,
-        name: 'Shoppingcart 2',
-        deliveryDate: new Date('2026-9-16'),
-        items: [],
-    }),
-];
+const getAll = async (): Promise<Shoppingcart[]> => {
+    try {
+        const shoppingcartPrisma = await db.shoppingcart.findMany({
+            include: {
+                items: true,
+                user: true,
+            },
+        });
 
-const addItemToShoppingcart = ({
+        return shoppingcartPrisma.map((shoppingcartPrisma) =>
+            Shoppingcart.from(shoppingcartPrisma)
+        );
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not get all shoppingcarts');
+    }
+};
+
+const getById = async (id: number): Promise<Shoppingcart | undefined> => {
+    try {
+        const shoppingcartPrisma = await db.shoppingcart.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                user: true,
+                items: true,
+            },
+        });
+
+        return shoppingcartPrisma ? Shoppingcart.from(shoppingcartPrisma) : undefined;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not get item by id');
+    }
+};
+
+const create = async (shoppingcart: Shoppingcart): Promise<Shoppingcart> => {
+    try {
+        const shoppingcartPrisma = await db.shoppingcart.create({
+            data: {
+                name: shoppingcart.getName(),
+                deliveryDate: shoppingcart.getDeliveryDate(),
+                items: {
+                    connect: shoppingcart.getItems().map((item) => ({ id: item.getId() })),
+                },
+                user: {
+                    connect: {
+                        id: shoppingcart.getUser()?.getId(),
+                    },
+                },
+            },
+
+            include: {
+                items: true,
+                user: true,
+            },
+        });
+
+        return Shoppingcart.from(shoppingcartPrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Could not create shoppingcart');
+    }
+};
+
+const addItemToShoppingcart = async ({
     item,
     shoppingcart,
 }: {
@@ -24,46 +76,29 @@ const addItemToShoppingcart = ({
     shoppingcart: Shoppingcart;
 }) => {
     try {
-        shoppingcart.addItem(item);
+        const shoppingcartPrisma = await db.shoppingcart.update({
+            where: {
+                id: shoppingcart.getId(),
+            },
+
+            data: {
+                items: {
+                    connect: {
+                        id: item.getId(),
+                    },
+                },
+            },
+
+            include: {
+                items: true,
+                user: true,
+            },
+        });
+
+        return shoppingcartPrisma ? Shoppingcart.from(shoppingcartPrisma) : undefined;
     } catch (error) {
         console.log(error);
         throw new Error('Could not add item to shoppingcart');
-    }
-};
-
-const getAll = (): Shoppingcart[] => {
-    try {
-        return shoppingcarts;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not get all shoppingcarts');
-    }
-};
-
-const getById = (id: number): Shoppingcart | undefined => {
-    try {
-        return shoppingcarts.find((shoppingcart) => shoppingcart.getId() === id);
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not get item by id');
-    }
-};
-
-const create = (shoppingcart: Shoppingcart): Shoppingcart => {
-    try {
-        const exists = shoppingcarts.some(
-            (existingShoppingcart) => existingShoppingcart.getId() === shoppingcart.getId()
-        );
-
-        if (exists) {
-            throw new Error('Shoppingcart already exists');
-        }
-
-        shoppingcarts.push(shoppingcart);
-        return shoppingcart;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not create shoppingcart');
     }
 };
 
