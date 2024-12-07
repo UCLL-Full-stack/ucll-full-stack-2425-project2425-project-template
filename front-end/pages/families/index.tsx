@@ -11,7 +11,7 @@ const Families: React.FC = () => {
     const [selectedFamily, setSelectedFamily] = useState<any | null>(null);
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [newFamilyName, setNewFamilyName] = useState("");
-    const [useremail, setUserEmail] = useState("");
+    const [userEmail, setUserEmail] = useState("");
 
     // Error states
     const [familyNameError, setFamilyNameError] = useState('');
@@ -41,7 +41,7 @@ const Families: React.FC = () => {
             setFamilyNameError('Family name is required.');
             result = false;
         }
-        if (useremail.trim() === '' || !emailRegex.test(useremail)) {
+        if (userEmail.trim() === '' || !emailRegex.test(userEmail)) {
             setUserEmailError('Email should be a valid email.');
             result = false;
         }
@@ -57,13 +57,13 @@ const Families: React.FC = () => {
             return;
         }
 
-        const user = await UserService.getUserByEmail(useremail);
-        if (!user || user.email !== useremail) {
+        const user = await UserService.getUserByEmail(userEmail);
+        if (!user || user.email !== userEmail) {
             setUserEmailError("No user with that email exists!");
             return;
         }
 
-        const newFamily = await FamilyService.createFamily(newFamilyName, user);
+        const newFamily = await FamilyService.createFamily(newFamilyName, userEmail);
         if (newFamily) {
             setFamilies([...families, newFamily]);
             setNewFamilyName("");
@@ -106,7 +106,7 @@ const Families: React.FC = () => {
                                     <label id="useremail">Please enter your user email.</label>
                                     <input
                                         type="text"
-                                        value={useremail}
+                                        value={userEmail}
                                         onChange={(event) => setUserEmail(event.target.value)}
                                         placeholder="Enter your user email"
                                     />

@@ -24,13 +24,13 @@ const getAllUsers = async(): Promise<User[]> => {
     }
 }
 
-const getUserByEmail = async(email:string): Promise<User | undefined> => {
+const getUserByEmail = async(email:string): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
             where: {email}
         });
         
-        return userPrisma ? User.from(userPrisma) : undefined;
+        return userPrisma ? User.from(userPrisma) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error: Could not fetch user with email, check server logs.')

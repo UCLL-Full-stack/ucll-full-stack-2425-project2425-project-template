@@ -49,7 +49,7 @@ export class User {
         return this.id;
     }
 
-    getName(): String {
+    getName(): string {
         return this.name;
     }
 
@@ -57,7 +57,7 @@ export class User {
         return this.email;
     }
 
-    getPassword(): String {
+    getPassword(): string {
         return this.password;
     }
 
