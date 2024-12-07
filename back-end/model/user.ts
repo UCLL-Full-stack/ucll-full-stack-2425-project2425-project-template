@@ -1,22 +1,25 @@
 import { Role } from "../types";
+import {User as UserPrisma} from '@prisma/client'
 
 export class User {
+    private id?: number;
     private name: string;
     private email: string;
     private password: string;
     private role: Role;
 
 
-    constructor(user: {name: string, email: string, password: string, role: Role}) {
+    constructor(user: {id?: number, name: string, email: string, password: string, role: Role}) {
         this.validate(user);
 
+        this.id = user.id;
         this.name = user.name;
         this.email = user.email;
         this.password = user.password;
         this.role = user.role;
     }
 
-    validate(user: {name: string, email: string, password: string, role: Role}) {
+    validate(user: {id?: number, name: string, email: string, password: string, role: Role}) {
        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
        
        if (!user.name || user.name.trim().length < 1) {
@@ -30,6 +33,20 @@ export class User {
        if (user.password.length < 8) {
         throw new Error("Password must be at least 8 characters long.")
        }
+    }
+
+    static from({id, name, email, password, role}: UserPrisma) {
+        return new User({
+            id,
+            name,
+            email,
+            password,
+            role: role as Role,
+        })
+    }
+
+    getId(): number | undefined {
+        return this.id;
     }
 
     getName(): String {
