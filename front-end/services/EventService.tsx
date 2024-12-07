@@ -20,10 +20,22 @@ const addEvent = async (event: Event) => {
 };
 
 const getEventById = async (id: number) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${id}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const user = sessionStorage.getItem("loggedInUser");
+  const token = user ? JSON.parse(user).token : null;
+  const result = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + `/events/${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!result.ok) {
+    throw new Error("Failed to fetch event");
+  }
+  return result.json();
 };
 
 export default { getAllEvents, addEvent, getEventById };

@@ -48,6 +48,19 @@ const getEventById = async (id: number): Promise<Event | null> => {
     }
 };
 
+const deleteEventById = async (id: number) => {
+    try {
+        await database.event.delete({
+            where: {
+                id: id,
+            },
+        });
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, see server logs for more detail');
+    }
+};
+
 const getEvents = async (): Promise<Event[]> => {
     try {
         const eventPrisma = await database.event.findMany({
@@ -63,5 +76,6 @@ const getEvents = async (): Promise<Event[]> => {
 export default {
     addEvent,
     getEventById,
+    deleteEventById,
     getEvents,
 };

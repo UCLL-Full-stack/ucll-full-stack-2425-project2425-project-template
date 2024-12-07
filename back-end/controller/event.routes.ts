@@ -88,7 +88,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import eventService from '../service/event.service';
-import { EventInput } from '../types';
+import { EventInput, Role } from '../types';
 
 const eventRouter = express.Router();
 
@@ -171,6 +171,17 @@ eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
         const event = <EventInput>req.body;
         const result = await eventService.addEvent(event);
         res.json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+eventRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { userName: string; role: string } };
+        const { role } = request.auth;
+        const id = Number(req.params.id);
+        eventService.deleteEvent(id, role as Role);
     } catch (error) {
         next(error);
     }

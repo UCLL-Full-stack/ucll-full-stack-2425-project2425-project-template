@@ -1,6 +1,6 @@
 import eventDb from '../repository/event.db';
 import { Event } from '../model/event';
-import { EventInput } from '../types';
+import { EventInput, Role } from '../types';
 import locationService from './location.service';
 import categoryService from './category.service';
 
@@ -33,6 +33,18 @@ const addEvent = async ({
     }
 };
 
+const deleteEvent = async (id: number, role: Role) => {
+    try {
+        if (role == 'Admin') {
+            await eventDb.deleteEventById(id);
+            return;
+        }
+        throw new Error(`Error: Only an administrator can delete events.`);
+    } catch (error) {
+        throw new Error(`Error: ${error}`);
+    }
+};
+
 const getEventById = async (id: number): Promise<Event> => {
     const result = await eventDb.getEventById(id);
     if (!result) {
@@ -45,6 +57,7 @@ const getEvents = (): Promise<Event[]> => eventDb.getEvents();
 
 export default {
     addEvent,
+    deleteEvent,
     getEventById,
     getEvents,
 };

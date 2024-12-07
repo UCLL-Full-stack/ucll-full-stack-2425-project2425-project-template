@@ -15,10 +15,7 @@ const EventDetails: React.FC = () => {
   const fetchEvent = async () => {
     const { id } = router.query;
     const response = await EventService.getEventById(Number(id));
-    if (response.ok) {
-      const event = await response.json();
-      setEvent(event);
-    }
+    setEvent(response);
   };
 
   const fetchUser = async () => {
@@ -35,6 +32,10 @@ const EventDetails: React.FC = () => {
 
   const handleOnClick = () => {
     console.log("still need to handle the participate");
+  };
+
+  const handleEdit = () => {
+    router.push(`edit/${router.query.id}`);
   };
   return (
     event && (
@@ -55,7 +56,9 @@ const EventDetails: React.FC = () => {
             }}
           >
             {loggedInUser?.role === "Admin" && (
-              <button className={styles.editButton}>Edit event</button>
+              <button className={styles.editButton} onClick={handleEdit}>
+                Edit event
+              </button>
             )}
             <p className={styles.p}>
               Date: {new Date(event.date).toLocaleDateString()}
