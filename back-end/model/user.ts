@@ -1,40 +1,41 @@
-import { Role } from "../types";
-import { Playlist } from "./playlist";
-import { User as UserPrisma } from '@prisma/client'
-import {Playlist as PlaylistPrisma} from '@prisma/client'
+import { User as UserPrisma } from '@prisma/client';
+import { Role } from '../types';
+
 export class User {
-    readonly id: number;
-    readonly firstName: string;
-    readonly lastName: string;
-    readonly username: string;
-    readonly email: string;
-    readonly password: string;
-    readonly playlists: Playlist[];
-    readonly role: Role;
+    private id?: number;
+    private username: string;
+    private firstName: string;
+    private lastName: string;
+    private email: string;
+    private role: Role;
+    private password: string;
 
     constructor(user: {
         id?: number;
+        username: string;
         firstName: string;
         lastName: string;
-        username: string;
         email: string;
-        password: string;
-        playlists?: Playlist[];
         role: Role;
+        password: string;
     }) {
         this.validate(user);
-        this.id = user.id ?? -1;  // Default to a placeholder value if id is undefined
+
+        this.id = user.id;
+        this.username = user.username;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
-        this.username = user.username;
         this.email = user.email;
-        this.password = user.password;
-        this.playlists = user.playlists ?? [];
         this.role = user.role;
+        this.password = user.password;
     }
 
-    getId(): number {
+    getId(): number | undefined {
         return this.id;
+    }
+
+    getUsername(): string {
+        return this.username;
     }
 
     getFirstName(): string {
@@ -45,89 +46,66 @@ export class User {
         return this.lastName;
     }
 
-    getUsername(): string {
-        return this.username;
-    }
-
     getEmail(): string {
         return this.email;
+    }
+
+    getRole(): Role {
+        return this.role;
     }
 
     getPassword(): string {
         return this.password;
     }
 
-    addPlaylist(playlist: Playlist): void {
-        this.playlists.push(playlist);
-    }
-
-    getPlaylists(): Playlist[] {
-        return this.playlists
-    }
-    getRole(): Role {
-        return this.role
-    }
-
-
-
     validate(user: {
+        username: string;
         firstName: string;
         lastName: string;
-        username: string;
         email: string;
-        password: string;
-        playlists?: Playlist[];
         role: Role;
+        password: string;
     }) {
+        if (!user.username?.trim()) {
+            throw new Error('Username is required');
+        }
         if (!user.firstName?.trim()) {
             throw new Error('First name is required');
         }
         if (!user.lastName?.trim()) {
             throw new Error('Last name is required');
         }
-        if (!user.username?.trim()) {
-            throw new Error('Username is required');
-        }
         if (!user.email?.trim()) {
             throw new Error('Email is required');
         }
-        if (!user.password?.trim()) {
+        if (!user.role) {
+            throw new Error('Role is required');
+        }
+        if (!user.password.trim()) {
             throw new Error('Password is required');
         }
     }
 
     equals(user: User): boolean {
         return (
+            this.username === user.getUsername() &&
             this.firstName === user.getFirstName() &&
             this.lastName === user.getLastName() &&
-            this.username === user.getUsername() &&
             this.email === user.getEmail() &&
-            this.password === user.getPassword() &&
-            this.playlists.every((playlist, index) => playlist.equals(user.getPlaylists()[index])) &&
-            this.role === user.getRole()
+            this.role === user.getRole() &&
+            this.password === user.getPassword()
         );
     }
 
-    static from({
-        id,
-        firstName,
-        lastName,
-        username,
-        password,
-        email,
-        playlists,
-        role,
-    }: UserPrisma & { playlists?: PlaylistPrisma[] }) {
+    static from({ id, username, firstName, lastName, email, role, password }: UserPrisma) {
         return new User({
             id,
+            username,
             firstName,
             lastName,
-            username,
-            password,
             email,
-            playlists: playlists ? playlists.map((playlist) => Playlist.from(playlist)) : [],
             role: role as Role,
+            password
         });
     }
-    
 }

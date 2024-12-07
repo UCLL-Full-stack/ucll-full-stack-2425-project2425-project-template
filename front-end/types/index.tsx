@@ -1,53 +1,44 @@
 type Role = 'admin' | 'user';
 
-type UserInput = {
+type User = {
     id?: number;
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    password: string;
-    playlists: PlaylistInput[]
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+    email?: string;
+    password?: string;
+    role?: string
+    fullname?: string;
 }
 
-type PlaylistInput = {
-    id?: number;
-    name: string;
-    totalNumbers: number;
-}
 type Playlist = {
     id?: number;
     name: string;
     totalNumbers: number;
+    user: User,
     songs: Song[]
 }
 
-
-
-type SongInput = {
-    id?: number;
-    title: string;
-    genre: string;
-}
-
 type Song = {
-    id?: number;
+    id: number;
     title: string;
     genre: string;
 }
 
-type AuthenticationResponse = {
-    token?: string;
-    rnummer?: string;
-    email?: string;
-}
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};
+
+// type AuthenticationResponse = {
+//     token?: string;
+//     rnummer?: string;
+//     email?: string;
+// }
 
 export type {
     Role,
-    UserInput,
-    PlaylistInput,
-    SongInput,
+    User,
     Song,
     Playlist,
-    AuthenticationResponse
 }

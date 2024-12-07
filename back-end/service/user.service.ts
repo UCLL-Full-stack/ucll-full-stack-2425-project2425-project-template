@@ -1,115 +1,82 @@
-import { User } from "../model/user"
-import playlistDb from "../repository/playlist.db"
-import userDb from "../repository/user.db"
-import { AuthenticationResponse, Role, UserInput } from "../types"
-import { generateJwtToken } from "../util/jwt"
-import bcrypt from 'bcrypt';
-import {User as UserPrisma} from "@prisma/client"
+import { User } from '../model/user';
+import userDB from '../repository/user.db';
+import { AuthenticationResponse, UserInput } from '../types';
+import bcrypt from 'bcrypt'
+import { generateJwtToken } from '../util/jwt';
 
-const getAllUsers = (): Promise<User[]> => {
-    return userDb.getAllUsers()
-}
+const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
-const createUser = async ({ id, firstName, lastName, username, email, password, role }: UserInput): Promise<User> => {
-    const existing_user = await getUserByUsername(username, true);
-
-    if (existing_user) {
-        throw new Error(`User with username ${username} already exists`);
-    }
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user_role: Role = role ? role : 'user';
-
-    const new_user = new User({
-        id,
-        firstName,
-        lastName,
-        username,
-        email,
-        password: hashedPassword,
-        role: user_role,
-        playlists: [],
-    });
-
-    return new_user;
-};
-
-
-const getUserById = ({ id }: { id: number}): Promise<User | null> => {
-    const user = userDb.getUserById({ id })
-
-    if (user === null) {
-        throw new Error(`User with id ${id} does not exist`)
-    }
-    return user;
-}
-
-const addPlaylistToUser = async ({
-    userId,
-    playlistId
-}: {
-    userId: number;
-    playlistId: number;
-}): Promise<User> => {
-
-    const user = await userDb.getUserById({ id: userId });
-
-    const playlist = await playlistDb.getPlaylistById({ id: playlistId });
+const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
+    const user = await userDB.getUserByUsername({ username });
     if (!user) {
-        throw new Error(`User with id ${userId} does not exist`);
-    }
-    if (!playlist) {
-        throw new Error(`Playlist with id ${playlistId} does not exist`);
-    }
-    const existingPlaylistIds = new Set(user.getPlaylists().map(pl => pl.getId()));
-    if (existingPlaylistIds.has(playlistId)) {
-        throw new Error(`User already has a playlist with id ${playlistId}`);
-    }
-    userDb.addPlaylistToUser(userId,playlistId);
-
-    return user; 
-};
-
-
-const getUserByUsername = async (username:string, accept_null:boolean=false): Promise<User | null> => {
-    // const regexRnummer = new RegExp('^r\\d{7}$');
-
-    // if (!regexRnummer.test(username)) {
-    //     throw new Error("Username hasn't the good format ")
-    // }
-
-    const user = await userDb.getUserByUsername(username)
-    if(!accept_null) {
-        if (user == null) {
-            throw new Error(`User with ${username} doesn't exist`)
-        }
+        throw new Error(`User with username: ${username} does not exist.`);
     }
     return user;
-}
+};
 
-
-const authenticate = async ({username, password}: UserInput): Promise<AuthenticationResponse> => {
-    const user = await getUserByUsername(username);
-    if (!user || !user.password) { 
-        throw new Error('User not found or password missing');
+const createUser = async ({username, firstName, lastName, email, role, password}: UserInput): Promise<User> => {
+    if (!username) {
+        throw new Error('Username is required');
     }
-    const isValid = bcrypt.compare(password, user.password);
+    const existingUser = await userDB.getUserByUsername({ username });
 
-    if(!isValid) { 
-        throw new Error('Incorrect password');
+    if (existingUser) {
+        throw new Error(`User with username: ${username} already exists`)
+    }
+
+    if (!username?.trim()) {
+        throw new Error('Username is required')
+    }
+
+    if (!firstName?.trim()) {
+        throw new Error('First name is required')
     }
     
-    return {
-        token: generateJwtToken({username, role: user?.role}),
-        username,
-        email: user?.email,
-        role: user?.role
+    if (!email?.trim()) {
+        throw new Error('Email is required')
     }
+
+    if (!lastName?.trim()) {
+        throw new Error('Last name is required')
+    }
+
+    if (!password?.trim()) {
+        throw new Error('Password is required')
+    }
+
+    if (!role?.trim()) {
+        throw new Error('Role is required')
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User({ username, password: hashedPassword, firstName, lastName, email, role })
+
+    return await userDB.createUser(user)
+}
+
+const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
+    if (!username) {
+        throw new Error('Username is required');
+    }
+
+    if (!password) {
+        throw new Error('Username is required');
+    }
+    
+    const user = await getUserByUsername({ username })
+
+    const isValidPassword = await bcrypt.compare(password, user.getPassword())
+
+    if (!isValidPassword) {
+        throw new Error('Incorrect password.')
+    }
+    return {
+        token: generateJwtToken({ username, role: user.getRole() }),
+        username: username,
+        fullname: `${user.getFirstName()} ${user.getLastName()}`,
+        role: user.getRole(),
+        id: user.getId()
+    };
 };
 
-export default {
-    getAllUsers,
-    getUserById,
-    addPlaylistToUser,
-    createUser,
-    authenticate
-}
+export default { getUserByUsername, getAllUsers, createUser, authenticate };

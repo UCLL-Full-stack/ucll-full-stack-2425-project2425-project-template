@@ -1,26 +1,39 @@
 import { Song } from "../model/song"
+import database from "../util/database"
 
-// dit moet nog aangepast worden, wnr we een echte autincrement id hebben in de db
-let songId = 1;
-
-const songs: Song[] = []
-
-const createSong = (songData: {title: string, genre: string}): Song => {
-    const song = new Song({
-        ...songData,
-        id: songId++
-    });
-    songs.push(song);
-    return song;
-}
-
-const getAllSongs = () => {
-    return songs
-}
-
-const getSongById = ({id}: { id: number}): Song | null => {
+const createSong = async (song: Song): Promise<Song> => {
     try {
-        return songs.find((song) => song.getId() === id) || null;
+        const songPrisma = await database.song.create ({
+        data : {
+            title: song.getTitle(),
+            genre: song.getGenre()
+        }
+    })
+        return Song.from(songPrisma)
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+const getAllSongs = async (): Promise<Song[]> => {
+    try {
+        const songPrimsa = await database.song.findMany()
+        return songPrimsa.map((songPrimsa) => Song.from(songPrimsa))
+    } catch(error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+const getSongById = async ({id}: { id: number}): Promise<Song | null> => {
+    try {
+        const songPrisma = await database.song.findUnique({
+            where: {
+                id: id
+            }
+        })
+        return songPrisma ? Song.from(songPrisma) : null
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

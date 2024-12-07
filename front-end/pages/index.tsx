@@ -1,4 +1,4 @@
-import Header from "@components/Header";
+import Header from "@components/header";
 import Head from "next/head";
 
 const Home: React.FC = () => {

@@ -4,40 +4,37 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { expressjwt } from 'express-jwt';
 import { userRouter } from './controller/user.routes';
+import helmet from 'helmet';
 import { playlistRouter } from './controller/playlist.routes';
 import { songRouter } from './controller/song.routes';
-import { expressjwt } from 'express-jwt';
-
 
 const app = express();
+app.use(helmet())
+
+app.use(express.json());
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
-app.get('/status', (req, res) => {
-    res.json({ message: 'Back-end is running...' });
-});
+app.use(expressjwt({
+    secret: process.env.JWT_SECRET || 'default_secret' ,
+    algorithms: ['HS256'],
+    }).unless({ path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'] })
 
-const jwtSecret = process.env.JWT_SECRET;
-if (!jwtSecret) {
-    throw new Error('JWT_SECRET environment variable is not defined');
-}
-
-app.use(
-    expressjwt({
-        secret: jwtSecret, 
-        algorithms: ['HS256'],
-    }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, '/api/users/login', '/api/users/signup', '/api/users', '/api/status', '/status'],
-    })
 );
 
-app.use('/users', userRouter)
-app.use('/playlists', playlistRouter)
-app.use('/songs', songRouter)
+app.use('/playlists', playlistRouter);
+app.use('/songs', songRouter);
+app.use('/users', userRouter);
+
+app.get('/status', (req, res) => {
+    res.json({ message: 'Courses API is running...' });
+});
 
 const swaggerOpts = {
     definition: {
@@ -52,10 +49,16 @@ const swaggerOpts = {
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.listen(port || 3000, () => {
-    console.log(`Courses API is running on port ${port}.`);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'CoursesError') {
+        res.status(400).json({ status: 'domain error', message: err.message });
+    } else {
+        res.status(400).json({ status: 'application error', message: err.message });
+    }
 });
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    return res.status(400).json({ status: 'application error', message: err.message });
+app.listen(port || 3000, () => {
+    console.log(`Courses API is running on port ${port}.`);
 });

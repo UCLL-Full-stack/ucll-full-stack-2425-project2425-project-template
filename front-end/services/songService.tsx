@@ -1,73 +1,58 @@
-const songs = [
-    { title: "Blinding Lights", genre: "Pop" },
-    { title: "Shape of You", genre: "Dance" },
-    { title: "Someone Like You", genre: "Soul" },
-    { title: "Rolling in the Deep", genre: "Pop" },
-    { title: "Hotel California", genre: "Rock" },
-    { title: "Lose Yourself", genre: "Hip Hop" },
-    { title: "Take On Me", genre: "Synth-pop" },
-    { title: "Stairway to Heaven", genre: "Rock" },
-    { title: "Uptown Funk", genre: "Funk" },
-    { title: "Billie Jean", genre: "Pop" },
-    { title: "Smells Like Teen Spirit", genre: "Grunge" },
-    { title: "Shallow", genre: "Pop" },
-    { title: "Wonderwall", genre: "Rock" }
-];
-
+import { Song } from "types"
 
 const getAllSongs = () => {
+
+    const loggedInUser = localStorage.getItem('loggedInUser')
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null
+
+
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/songs", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
         }
     })
 }
 
 
-
-const generateSongs = async () => {
-    try {
-        const requests = songs.map(song => {
-            return fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs/create`, {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    title: song.title,
-                    genre: song.genre,
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); 
-            });
-        });
-
-        await Promise.all(requests);
-        console.log('All songs generated successfully');
-        window.location.reload(); 
-    } catch (error) {
-        console.error('Error generating songs:', error);
-    }
-};
 const getSongById = (id: number) => {
+
+    const loggedInUser = localStorage.getItem('loggedInUser')
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null
+
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/songs/${id}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
 }
 
+const createSong = async (title: string, genre: string): Promise<Response> => {
 
-const songService = {
-    getAllSongs,
-    generateSongs,
-    getSongById
+    const loggedInUser = localStorage.getItem('loggedInUser')
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null
+
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/songs/create", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            title, genre
+        })
+    })
+
+    return response
 }
-export default songService
+
+
+const SongService = {
+    getAllSongs,
+    getSongById,
+    createSong
+}
+export default SongService

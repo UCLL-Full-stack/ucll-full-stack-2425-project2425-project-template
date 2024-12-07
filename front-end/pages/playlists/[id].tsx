@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Header from '../../components/Header'; 
-import playlistService from '../../services/playlistService'; 
+import Header from '../../components/header'; 
+import playlistService from '../../services/PlaylistService'; 
 import { Song } from 'types'; 
 import { useRouter } from 'next/router';
 

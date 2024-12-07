@@ -2,19 +2,19 @@ type Role = 'admin' | 'user';
 
 type UserInput = {
     id?: number;
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    password: string;
-    playlists:PlaylistInput[];
-    role: Role;
-}
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    role?: Role;
+    password?: string,
+};
 
 type PlaylistInput = {
     id?: number;
     name?: string;
     totalNumbers?: number;
+    user?: UserInput;
 }
 
 type SongInput = {
@@ -24,11 +24,17 @@ type SongInput = {
 }
 
 type AuthenticationResponse = {
-    token?: string;
-    username?: string;
-    email?: string;
-    role?: string;
-}
+    token: string;
+    username: string;
+    fullname: string;
+    role: string;
+    id?: number;
+};
+
+type AddSongInput = {
+    playlist: PlaylistInput;
+    songs: SongInput[];
+};
 
 
 export {
@@ -36,5 +42,6 @@ export {
     UserInput,
     PlaylistInput,
     SongInput,
-    AuthenticationResponse
+    AuthenticationResponse,
+    AddSongInput
 }

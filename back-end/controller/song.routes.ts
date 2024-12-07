@@ -32,7 +32,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import songService from '../service/song.service';
-import { SongInput } from '../types';
+import { Role, SongInput } from '../types';
 
 const songRouter = express.Router()
 
@@ -53,8 +53,10 @@ const songRouter = express.Router()
  *               items:
  *                 $ref: '#/components/schemas/Song'
  */
-songRouter.get('/', async (req: Request , auth:any, res: Response, next: NextFunction) => {
-    const songs = songService.getAllSongs();
+songRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    const request = req as Request & { auth: { role: Role } }
+    const { role } = request.auth
+    const songs = await songService.getAllSongs({role});
     res.status(200).json(songs)
 })
 
@@ -62,6 +64,8 @@ songRouter.get('/', async (req: Request , auth:any, res: Response, next: NextFun
  * @swagger
  * /songs/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []  
  *     summary: Get a song by ID.
  *     parameters:
  *       - in: path
@@ -81,7 +85,7 @@ songRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     const songId = parseInt(req.params.id);
 
     try {
-        const song = songService.getSongById({id: songId});
+        const song = await songService.getSongById({id: songId});
         res.status(200).json(song)
     } catch {
         res.status(404).json({message: `Song with id ${songId} does not exist`})
@@ -92,6 +96,8 @@ songRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  * @swagger
  * /songs/create:
  *   post:
+ *     security:
+ *       - bearerAuth: []  
  *     summary: create song
  *     requestBody:
  *       required: true
@@ -110,7 +116,7 @@ songRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 songRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const songInput = <SongInput>req.body;
-        const song = songService.createSong(songInput);
+        const song = await songService.createSong(songInput);
         res.status(200).json(song)
     } catch(error) {
         next(error)

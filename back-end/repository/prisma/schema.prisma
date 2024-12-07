@@ -11,15 +11,16 @@ model Playlist {
     id           Int       @id @default(autoincrement())
     name         String
     totalNumbers Int
-    songs        Song[]    @relation("PlaylistSongs") 
-    users        User[]    @relation("UserPlaylists") 
+    songs        Song[]
+    userId       Int
+    user         User      @relation(fields: [userId], references: [id])
 }
 
 model Song {
     id          Int       @id @default(autoincrement())
     title       String
     genre       String
-    playlists   Playlist[] @relation("PlaylistSongs")
+    playlists   Playlist[]
 }
 
 model User {
@@ -27,8 +28,8 @@ model User {
   username  String    @unique
   firstName String
   lastName  String
-  password  String
   email     String    @unique
   role      String
-  playlists Playlist[] @relation("UserPlaylists")
+  password  String
+  playlists Playlist[]
 }

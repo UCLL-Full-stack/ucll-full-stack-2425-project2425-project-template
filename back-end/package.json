@@ -12,7 +12,6 @@
         "test": "jest",
         "start": "nodemon -L app.ts --delay 3",
         "seed": "ts-node prisma/seed.ts"
-        
     },
     "nodemonConfig": {
         "ext": "ts",
@@ -23,7 +22,7 @@
     },
     "dependencies": {
         "@prisma/client": "^5.1.1",
-        "bcrypt": "^5.1.0",
+        "bcrypt": "^5.1.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.1",
         "cors": "^2.8.0",

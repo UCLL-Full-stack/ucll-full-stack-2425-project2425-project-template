@@ -1,24 +1,50 @@
 import { Playlist } from "../model/playlist";
 import playlistDb from "../repository/playlist.db";
 import songDb from "../repository/song.db";
-import { PlaylistInput } from '../types';
+import userDb from "../repository/user.db";
+import { PlaylistInput, Role, SongInput, UserInput } from '../types';
+import { UnauthorizedError } from 'express-jwt';
 
-const createPlaylist = ({
-    name
-}: PlaylistInput): Playlist => {
-    if (!name) {
-        throw new Error("Playlist name is required")
+
+const createPlaylist = async ({
+    name,
+    user: userInput
+}: PlaylistInput): Promise<Playlist> => {
+
+    if (!userInput || !userInput.id) {
+        throw new Error('User is required');
     }
-    const playlist = {name}
-    return playlistDb.createPlaylist(playlist)
+
+    const user = await userDb.getUserById({id: userInput.id})
+
+    if (!user) throw new Error('User not found');
+
+    if (!name?.trim()) {
+        throw new Error('name is required')
+    }
+
+    if (!user) {
+        throw new Error('user is required')
+    }
+
+    const playlist = new Playlist({ name, user, totalNumbers: 0, songs: []});
+    return await playlistDb.createPlaylist(playlist);
 }
 
-const getAllPlaylists = (): Playlist[] => {
-    return playlistDb.getAllPlaylists()
+const getAllPlaylists = async ({ username, role }: { username: string, role: Role }): Promise<Playlist[]> => {
+    if (role === 'admin') {
+        return await playlistDb.getAllPlaylists();
+    } 
+    else if (role === 'user') {
+        return await playlistDb.getPlaylistsFromUser({username})
+    }
+    else {
+        throw new UnauthorizedError('credentials_required' as any, { message: 'Unauthorized access' })
+    }
 }
 
-const getPlaylistById = ({ id }: { id: number}): Playlist | null => {
-    const playlist = playlistDb.getPlaylistById({ id })
+const getPlaylistById = async ({ id }: { id: number}): Promise<Playlist | null> => {
+    const playlist = await playlistDb.getPlaylistById({ id })
 
     if (playlist == null) {
         throw new Error(`Playlist with id ${id} does not exist`) 
@@ -26,31 +52,50 @@ const getPlaylistById = ({ id }: { id: number}): Playlist | null => {
     return playlist;
 }
 
-const addSongToPlaylist = ({
-    playlistId,
-    songId
+const addSongToPlaylist = async ({
+    playlist: playlistInput,
+    songs: songsInput
 }: {
-    playlistId: number;
-    songId: number;
-}): Playlist | undefined => {
-    const playlist = playlistDb.getPlaylistById({ id: playlistId })
+    playlist: PlaylistInput;
+    songs: SongInput[]
+}): Promise<Playlist | null> => {
 
-    const song = songDb.getSongById({ id: songId })
-
-    const existingSongsIds = new Set(playlist?.getSongs().map(song => song.getId()));
-
-    if (existingSongsIds.has(songId)) {
-        throw new Error(`Playlist already has a song with id ${songId}`);
+    if (!playlistInput.id) {
+        throw new Error('Playlist ID is required');
     }
 
-    if (playlist === null) {
-        throw new Error(`Playlist with id ${playlistId} does not exist`)
+    const playlist = await playlistDb.getPlaylistById({ id: playlistInput.id })
+
+    if (!playlist) {
+        throw new Error(`Playlist not found`)
     }
 
-    if (song === null) {
-        throw new Error(`Song with id ${songId} does not exist`)
-    }
-    return playlistDb.addSongToPlaylist({playlistId, songId})
+
+    const songs = await Promise.all(
+        songsInput.map(async( songInput ) => {
+
+            if (!songInput.id) {
+                throw new Error('Song ID is required');
+            }
+
+            const song = await songDb.getSongById({id: songInput.id})
+
+            if (song && playlist.getSongs().some(s => s.getId() === song.getId())) {
+                throw new Error(`This song is already added to the playlist`)
+            }
+
+            if (!song) {
+                throw new Error(`Song is not found`)
+            }
+            return song;
+        })
+    )
+
+    songs.forEach((song) => {
+        playlist.addSongtoPlaylist(song)
+    })
+
+    return await playlistDb.UpdateAndAddSongToPlaylist({ playlist })
 }
 
 export default {
