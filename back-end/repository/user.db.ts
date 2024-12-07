@@ -3,15 +3,15 @@ import { Role } from "../types"
 import database from "../util/database";
 
 
-// empty userlist
-const users: User[] = []
+// // empty userlist
+// const users: User[] = []
 
-// making new users to fill the list
-users.push(new User({name: "Jorrit", email: "jorrit@email.com", password: "UnhackableHackmaster123", role: 'admin'}));
-users.push(new User({name: "John", email: "john@email.com", password: "VerySecure123", role: 'parent'}));
-users.push(new User({name: "Johnjr", email: "johnjr@email.com", password: "VerySecure123", role: 'child'}));
+// // making new users to fill the list
+// users.push(new User({name: "Jorrit", email: "jorrit@email.com", password: "UnhackableHackmaster123", role: 'admin'}));
+// users.push(new User({name: "John", email: "john@email.com", password: "VerySecure123", role: 'parent'}));
+// users.push(new User({name: "Johnjr", email: "johnjr@email.com", password: "VerySecure123", role: 'child'}));
 
-//----functions----//
+// //----functions----//
 
 // GET
 const getAllUsers = async(): Promise<User[]> => {
