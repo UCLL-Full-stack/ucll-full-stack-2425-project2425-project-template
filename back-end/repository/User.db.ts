@@ -58,19 +58,17 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
     }
 };
 
-const getUserByUsername = async (username: string): Promise<User | null> => {
+const getUserByUsername = async (username: string): Promise<User> => {
     try {
         const userPrisma = await database.user.findFirst({
-            where: {
-                username: username,
-            },
+            where: { username },
             include: {
                 recipes: true,
                 reviews: true,
             },
         });
         if (!userPrisma) {
-            return null;
+            throw new Error(`User with username "${username}" not found`);
         }
         return User.from(userPrisma);
     } catch (error) {
@@ -87,6 +85,7 @@ const createUser = async ({
     lastName,
     recipes,
     reviews,
+    role,
 }: User): Promise<User> => {
     try {
         const userPrisma = await database.user.create({
@@ -96,6 +95,7 @@ const createUser = async ({
                 email,
                 firstName,
                 lastName,
+                role,
                 recipes: {
                     connect: recipes?.map((recipe) => ({ id: recipe.id })),
                 },

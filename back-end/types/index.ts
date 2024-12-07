@@ -1,5 +1,7 @@
 import { RecipeIngredient } from '@prisma/client';
 
+type Role = 'admin' | 'chef' | 'user';
+
 type IngredientInput = {
     id?: number;
     name: string;
@@ -30,9 +32,15 @@ type UserInput = {
     password: string;
     firstName: string;
     lastName: string;
+    role: Role;
     recipes?: RecipeInput[];
     reviews?: ReviewInput[];
 };
 
-// Exporting all types
-export { UserInput, RecipeInput, ReviewInput, IngredientInput };
+type AuthenticationRespone = {
+    token: string;
+    username: string;
+    fullname: string;
+};
+
+export { UserInput, RecipeInput, ReviewInput, IngredientInput, AuthenticationRespone, Role };

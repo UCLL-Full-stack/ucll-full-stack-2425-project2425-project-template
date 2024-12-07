@@ -1,5 +1,6 @@
 import { Recipe } from './Recipe';
 import { Review } from './Review';
+import { Role } from '../types';
 import { User as UserPrisma, Recipe as RecipePrisma, Review as ReviewPrisma } from '@prisma/client';
 
 export class User {
@@ -11,6 +12,7 @@ export class User {
     readonly lastName: string;
     readonly recipes?: Recipe[];
     readonly reviews?: Review[];
+    readonly role: Role;
 
     constructor(user: {
         id?: number;
@@ -21,6 +23,7 @@ export class User {
         lastName: string;
         recipes?: Recipe[];
         reviews?: Review[];
+        role: Role;
     }) {
         this.validate(user);
         this.id = user.id;
@@ -31,6 +34,7 @@ export class User {
         this.lastName = user.lastName;
         this.recipes = user.recipes;
         this.reviews = user.reviews;
+        this.role = user.role;
     }
 
     private validate(user: {
@@ -45,6 +49,10 @@ export class User {
             throw new Error('Username must be at least 3 characters long');
 
         if (!user.password) throw new Error('Password is required');
+
+        if (!user.password?.trim()) {
+            throw new Error('Password must be at least 3 characters long');
+        }
 
         const emailRegex = /\S+@\S+\.\S+/;
         if (!user.email) throw new Error('Email is required');
@@ -80,6 +88,7 @@ export class User {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            role: user.role as Role,
             recipes: user.recipes.map((recipe) =>
                 Recipe.from({
                     ...recipe,

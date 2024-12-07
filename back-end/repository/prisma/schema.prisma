@@ -14,6 +14,7 @@ model User {
   email     String   @unique
   firstName String
   lastName  String
+  role      String   @default("user")
   reviews   Review[]
   recipes   Recipe[]
 }

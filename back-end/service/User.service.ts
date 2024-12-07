@@ -1,7 +1,8 @@
 import UserDb from '../repository/User.db';
 import { User } from '../model/User';
 import bcrypt from 'bcrypt';
-import { UserInput } from '../types';
+import { AuthenticationRespone, UserInput } from '../types';
+import { generateJwtToken } from '../util/jwt';
 
 const getAllUsers = async (): Promise<User[]> => {
     return UserDb.getAllUsers();
@@ -15,25 +16,13 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
     return UserDb.getUserByEmail(email);
 };
 
-const getUserByUsername = async (username: string): Promise<User | null> => {
+const getUserByUsername = async (username: string): Promise<User> => {
     return UserDb.getUserByUsername(username);
 };
 
 const createUser = async (user: UserInput): Promise<User> => {
-    // Check if the email already exists
-    const existingUserByEmail = await UserDb.getUserByEmail(user.email);
-    if (existingUserByEmail) {
-        throw new Error('Email already exists');
-    }
-
-    // Check if the username already exists
-    const existingUserByUsername = await UserDb.getUserByUsername(user.username);
-    if (existingUserByUsername) {
-        throw new Error('Username already exists');
-    }
-
     // Hash the password
-    const hashedPassword = bcrypt.hashSync(user.password, 10);
+    const hashedPassword = await bcrypt.hash(user.password, 10);
 
     // Create the new user object with the hashed password
     const newUser = new User({
@@ -42,6 +31,7 @@ const createUser = async (user: UserInput): Promise<User> => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        role: user.role,
         recipes: [],
         reviews: [],
     });
@@ -50,10 +40,26 @@ const createUser = async (user: UserInput): Promise<User> => {
     return UserDb.createUser(newUser);
 };
 
+const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationRespone> => {
+    const user = await getUserByUsername(username);
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+        throw new Error('Incorrect password');
+    }
+
+    return {
+        token: generateJwtToken({ username, role: user.role }),
+        username,
+        fullname: `${user.firstName} ${user.lastName}`,
+    };
+};
+
 export default {
     getAllUsers,
     getUserById,
     getUserByEmail,
     getUserByUsername,
     createUser,
+    authenticate,
 };
