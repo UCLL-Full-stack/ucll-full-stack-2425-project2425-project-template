@@ -15,8 +15,6 @@ const createFamily = async (familyName: string, userEmail: string): Promise<Fami
     }
     const familyList: User[] = [user];
 
-    console.log(user)
-
     return familyDb.createFamily(familyName, familyList, user);
 }
 
