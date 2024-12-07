@@ -38,19 +38,24 @@ const deleteEvent = async (id: number, role: Role) => {
         if (role == 'Admin') {
             await eventDb.deleteEventById(id);
             return;
+        } else {
+            throw new Error(`Only an administrator can delete events.`);
         }
-        throw new Error(`Error: Only an administrator can delete events.`);
     } catch (error) {
         throw new Error(`Error: ${error}`);
     }
 };
 
 const getEventById = async (id: number): Promise<Event> => {
-    const result = await eventDb.getEventById(id);
-    if (!result) {
-        throw new Error(`Error: No event with id ${id} found.`);
+    try {
+        const result = await eventDb.getEventById(id);
+        if (!result) {
+            throw new Error(`No event with id ${id} found.`);
+        }
+        return result;
+    } catch (error) {
+        throw new Error(`Error: ${error}`);
     }
-    return result;
 };
 
 const getEvents = (): Promise<Event[]> => eventDb.getEvents();
