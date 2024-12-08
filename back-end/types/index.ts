@@ -1,7 +1,7 @@
 type Role = 'User' | 'Admin';
 
 type UserInput = {
-    id?: string;
+    id?: number;
     userName: string;
     email: string;
     role: Role;
@@ -9,13 +9,13 @@ type UserInput = {
 };
 
 type CategoryInput = {
-    id?: string;
+    id?: number;
     name: string;
     description: string;
 };
 
 type LocationInput = {
-    id?: string;
+    id?: number;
     street: string;
     number: number;
     city: string;
@@ -23,7 +23,7 @@ type LocationInput = {
 };
 
 type EventInput = {
-    id?: string;
+    id?: number;
     name: string;
     date: Date;
     price: number;
@@ -34,7 +34,7 @@ type EventInput = {
 };
 
 type ProfileInput = {
-    id?: string;
+    id?: number;
     firstName: string;
     lastName: string;
     email: string;
