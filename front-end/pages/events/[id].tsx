@@ -6,6 +6,7 @@ import styles from "@/styles/eventDetails.module.css";
 import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
+import Header from "@/components/header";
 
 const EventDetails: React.FC = () => {
   const router = useRouter();
@@ -26,7 +27,9 @@ const EventDetails: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchEvent();
+    if (loggedInUser) {
+      fetchEvent();
+    }
     fetchUser();
   }, [router.query.id]);
 
@@ -37,6 +40,15 @@ const EventDetails: React.FC = () => {
   const handleEdit = () => {
     router.push(`edit/${router.query.id}`);
   };
+
+  if (!loggedInUser) {
+    return (
+      <>
+        <Header></Header>
+        <p className={styles.error}>Please log in first</p>
+      </>
+    );
+  }
   return (
     event && (
       <>
