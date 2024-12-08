@@ -58,7 +58,7 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
     try {
         const user = req.body;
         const newUser = await userService.createUser(user);
-        res.status(201).json(newUser);
+        res.status(200).json(newUser);
     } catch (error) {
         next(error);
     }

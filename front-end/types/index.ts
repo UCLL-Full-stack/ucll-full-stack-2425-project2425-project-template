@@ -29,14 +29,14 @@ export type Bestelling = {
 
 export type User = {
     id?: number;
-    naam: String;
-    voornaam: String;
-    email: String;
+    naam?: String;
+    voornaam?: String;
+    email?: String;
     wachtwoord: String;
-    adres: String;
+    adres?: String;
     gebruikersnaam: String;
-    rol: Rol;
-    bestellingen: Bestelling[];
+    rol?: Rol;
+    bestellingen?: Bestelling[];
 }
 
 export type StatusMessage = {

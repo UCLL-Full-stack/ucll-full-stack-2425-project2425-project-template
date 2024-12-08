@@ -8,6 +8,7 @@ import { ingredientRouter } from './controller/ingredient.routes';
 import { pokebowlRouter } from './controller/pokebowl.routes';
 import { orderRouter } from './controller/bestelling.router';
 import { userRouter } from './controller/user.routes';
+import { expressjwt } from 'express-jwt';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,15 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status', '/pokebowls', '/users'],
+    })
+);
 
 app.use('/ingredienten', ingredientRouter);
 app.use('/pokebowls', pokebowlRouter);
