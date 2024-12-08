@@ -7,9 +7,16 @@ import bcrypt from 'bcrypt';
 import { generateJwtToken } from "../util/jwt";
 
 const createUser = async (user: User): Promise<User> => {
-    user.register();
-    userDb.createUser(user);
-    return user;
+    const getUsername = await userDb.getUserByUsername({ gebruikersnaam: user.getGebruikersnaam() });
+
+    if (getUsername != null) {
+        throw new Error("User already exist");
+    }
+
+    const bcryptPassword = await bcrypt.hash(user.getWachtwoord(), 12);
+    const newUser = new User({ naam: user.getNaam(), voornaam: user.getVoornaam(), email: user.getEmail(), wachtwoord: bcryptPassword, adres: user.getAdres(), gebruikersnaam: user.getGebruikersnaam(), rol: user.getRol() });
+    userDb.createUser(newUser);
+    return newUser;
 }
 
 const getAllUsers = async (): Promise<User[]> => userDb.getAllUsers();
@@ -40,13 +47,15 @@ const getUserByUsername = async ({ gebruikersnaam }: { gebruikersnaam: string })
     return user;
 };
 
-const authenticate = async ({ gebruikersnaam, wachtwoord }: { gebruikersnaam: string, wachtwoord: string }): Promise<AuthenticationResponse> => {
+const authenticate = async ({ gebruikersnaam, wachtwoord }: UserInput): Promise<AuthenticationResponse> => {
     const user = await getUserByUsername({ gebruikersnaam });
 
     const isValidPassword = await bcrypt.compare(wachtwoord, user.getWachtwoord());
+    console.log(user.getWachtwoord());
+    console.log(wachtwoord);
 
     if (!isValidPassword) {
-        throw new Error('Incorrect password.');
+        throw new Error('Incorrect credentials.');
     }
     return {
         token: generateJwtToken({ gebruikersnaam, rol: user.getRol() }),
