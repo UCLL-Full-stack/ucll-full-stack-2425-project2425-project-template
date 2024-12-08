@@ -31,6 +31,7 @@
  */
 import express, { Request, Response, NextFunction } from 'express';
 import userService from "../service/user.service";
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -57,7 +58,7 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
     try {
         const user = req.body;
         const newUser = await userService.createUser(user);
-        res.status(201).json(newUser);
+        res.status(200).json(newUser);
     } catch (error) {
         next(error);
     }
@@ -101,6 +102,35 @@ userRouter.get('/:id/bestellingen', async (req: Request, res: Response, next: Ne
     try {
         const bestellingen = await userService.getUserBestellingen(parseInt(req.params.id));
         res.status(200).json(bestellingen);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *      summary: Login using gebruikersnaam/wachtwoord. Returns an object with JWT token and gebruikersnaam when succesful.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AuthenticationRequest'
+ *      responses:
+ *         200:
+ *            description: The created user object
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/AuthenticationResponse'
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const response = await userService.authenticate(userInput);
+        res.status(200).json({ message: 'Authentication succesful', ...response });
     } catch (error) {
         next(error);
     }

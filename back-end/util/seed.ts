@@ -1,6 +1,7 @@
 // Execute: npx ts-node util/seed.ts
 
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ const main = async () => {
             naam: "Timmermans",
             voornaam: "Ashley",
             email: "ashley.timmermans@email.com",
-            wachtwoord: "welkom123",
+            wachtwoord: await bcrypt.hash("welkom123", 12),
             adres: "Leuvensestraat 10",
             gebruikersnaam: "AshleyT",
             rol: "Klant",
@@ -30,7 +31,7 @@ const main = async () => {
             naam: "de Weerd",
             voornaam: "Nina",
             email: "nina.deweerd@email.com",
-            wachtwoord: "helloworld!",
+            wachtwoord: await bcrypt.hash("helloworld!", 12),
             adres: "Heverleesestraat 20",
             gebruikersnaam: "NinadW",
             rol: "Klant",
@@ -45,7 +46,7 @@ const main = async () => {
             naam: "Doe",
             voornaam: "John",
             email: "john.doe@email.com",
-            wachtwoord: "password",
+            wachtwoord: await bcrypt.hash("password", 12),
             adres: "Teststraat 123",
             gebruikersnaam: "JohnD",
             rol: "Admin",
@@ -60,10 +61,25 @@ const main = async () => {
             naam: "Toe",
             voornaam: "Jane",
             email: "jane.toe@email.com",
-            wachtwoord: "hihihi3",
+            wachtwoord: await bcrypt.hash("hihihi3", 12),
             adres: "Teststraat 321",
             gebruikersnaam: "JaneT",
             rol: "Manager",
+            bestellingen: {
+                connect: []
+            }
+        }
+    });
+
+    const userAdmin2 = await prisma.user.create({
+        data: {
+            naam: "Admin",
+            voornaam: "Admin",
+            email: "admin.admin@email.com",
+            wachtwoord: await bcrypt.hash("admin", 12),
+            adres: "Teststraat 321",
+            gebruikersnaam: "admin",
+            rol: "Admin",
             bestellingen: {
                 connect: []
             }

@@ -1,10 +1,12 @@
-const login = async (username: string, password: string) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/login", {
+import { User } from "@/types";
+
+const login = async (user: User) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify(user)
     })
 };
 

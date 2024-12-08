@@ -37,6 +37,8 @@ const ingredientRouter = express.Router();
  * @swagger
  * /ingredienten:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all ingredienten.
  *     responses:
  *          200:
@@ -59,6 +61,8 @@ ingredientRouter.get('/', async (req: Request, res: Response, next: NextFunction
  * @swagger
  * /ingredienten:
  *  post:
+ *      security:
+ *       - bearerAuth: []
  *      summary: Create new Ingredient
  *      requestBody:
  *          required: true

@@ -40,11 +40,19 @@ type PokebowlInput = {
     ingredienten: IngredientInput[]
 }
 
+type AuthenticationResponse = {
+    token: string;
+    gebruikersnaam: string;
+    volledigenaam: string;
+    rol: string;
+};
+
 export {
     Type,
     IngredientInput,
     PokebowlInput,
     Rol,
     BestellingInput,
-    UserInput
+    UserInput,
+    AuthenticationResponse
 }

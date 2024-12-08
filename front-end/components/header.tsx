@@ -1,7 +1,23 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { User } from '@/types';
 
 const Header: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const getUser = sessionStorage.getItem("loggedInUser")
+        if (getUser) {
+            const parsedUser = JSON.parse(getUser);
+            setLoggedInUser(parsedUser as User);
+        }
+    }, []);
+
+    const handleClick = () => {
+        sessionStorage.removeItem("loggedInUser");
+        setLoggedInUser(null);
+    };
+
     return (
         <header className="headerNav">
             <nav>
@@ -29,10 +45,14 @@ const Header: React.FC = () => {
                             Pokebowls
                         </Link>
                     </li>
-                    <li>
+                    <li>{!loggedInUser && (
                         <Link href="/login">
                             Login
                         </Link>
+                    )}
+                        {loggedInUser && (
+                            <a href="/login" onClick={handleClick}>Logout</a>
+                        )}
                     </li>
                 </ul>
             </nav>

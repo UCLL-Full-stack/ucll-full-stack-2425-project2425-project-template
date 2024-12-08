@@ -1,12 +1,12 @@
 import UserService from "@/services/UserService";
 import { Rol, StatusMessage } from "@/types";
+import classNames from "classnames";
 import router from "next/router";
 import { FormEvent, useState } from "react";
 
 const LoginForm: React.FC = () => {
-    const [username, setUserName] = useState("");
+    const [gebruikersnaam, setGebruikersnaam] = useState("");
     const [password, setPassword] = useState("");
-    const [rol, setRol] = useState<Rol>();
 
     const [loginError, setLoginError] = useState<String | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
@@ -20,15 +20,14 @@ const LoginForm: React.FC = () => {
         let result = true;
         clearErrors();
 
-        if (!username && username.trim() === "") {
+        if (!gebruikersnaam || gebruikersnaam.trim() === "") {
             setLoginError("Username cannot be empty");
             result = false;
         }
-        if (!password && password.trim() === "") {
+        if (!password || password.trim() === "") {
             setLoginError("Password cannot be empty");
             result = false;
         }
-
         return result;
     };
 
@@ -40,13 +39,21 @@ const LoginForm: React.FC = () => {
             return;
         }
 
-        const response = await UserService.login(username, password);
-        const result = response.json();
+        const response = await UserService.login({ gebruikersnaam: gebruikersnaam, wachtwoord: password });
+        const result = await response.json();
+        console.log(result);
 
         if (response.status === 200) {
-            sessionStorage.setItem("username", username);
-            //sessionStorage.setItem("rol", result);
             setStatusMessages([{ message: "Login succesfull", type: "success" }]);
+
+            const user = {
+                token: result.token,
+                gebruikersnaam: result.gebruikersnaam,
+                rol: result.rol,
+            };
+
+            sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+
             setTimeout(() => {
                 router.push("/");
             }, 2000);
@@ -60,12 +67,24 @@ const LoginForm: React.FC = () => {
     return (
         <>
             <div className="addForms">
+                {statusMessages && (
+                    <div className="status">
+                        {statusMessages.map(({ message, type }, index) => (
+                            <p key={index} className={classNames({
+                                "error-field": type === "error",
+                                "ok-field": type === "success",
+                            })}>
+                                {message}
+                            </p>
+                        ))}
+                    </div>
+                )}
                 <form onSubmit={(event) => handleSubmit(event)}>
                     {loginError && <p className="error-field">{loginError}</p>}
                     <label>Username:</label>
-                    <input type="text" name="name" value={username} onChange={(event) => setUserName(event.target.value)} />
+                    <input type="text" name="name" value={gebruikersnaam} onChange={(event) => setGebruikersnaam(event.target.value)} />
                     <label>Password:</label>
-                    <input type="password" name="prijs" value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <input type="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                     <input type="submit" value="Login" />
                 </form>
             </div>

@@ -1,10 +1,19 @@
 import { Bestelling } from "@/types";
 
+const user = sessionStorage.getItem('loggedInUser');
+let token = null;
+
+if (user) {
+    token = JSON.parse(user).token;
+}
+
+
 const getAllBestellingen = async () => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/bestellingen", {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
 };
