@@ -12,11 +12,11 @@ type BestellingInput = {
 
 type UserInput = {
     id?: number;
-    naam: String;
-    voornaam: String;
-    email: String;
+    naam: string;
+    voornaam: string;
+    email: string;
     wachtwoord: string;
-    adres: String;
+    adres: string;
     gebruikersnaam: string;
     rol: Rol;
     bestellingen: BestellingInput[];

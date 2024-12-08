@@ -3,6 +3,7 @@ import PokebowlOverzicht from '@/components/pokebowls/PokebowlOverzicht';
 import PokebowlService from "@/services/PokebowlService";
 import { Pokebowl } from "@/types";
 import Head from "next/head";
+import router from "next/router";
 import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
@@ -51,6 +52,7 @@ const Pokebowls: React.FC = () => {
                         <PokebowlOverzicht pokebowls={data.pokebowls} selectPokebowl={setSelectedPokebowl} />
                     )}
                 </section>
+                <button onClick={() => { router.push(`/pokebowls/add-pokebowl`); }}>Create new pokebowl</button>
             </main>
         </>
     );

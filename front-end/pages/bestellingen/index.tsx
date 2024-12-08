@@ -3,6 +3,7 @@ import Header from "@/components/header";
 import BestellingService from "@/services/BestellingService";
 import { Bestelling } from "@/types";
 import Head from "next/head";
+import router from "next/router";
 import { useEffect, useState } from "react";
 
 const Bestellingen: React.FC = () => {
@@ -37,6 +38,7 @@ const Bestellingen: React.FC = () => {
                         <BestellingenOverzicht bestellingen={bestellingen} selectBestelling={setSelectedBestelling} />
                     )}
                 </section>
+                <button onClick={() => { router.push(`/bestellingen/create-bestelling`); }}>Create new bestelling</button>
             </main>
         </>
     );
