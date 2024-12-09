@@ -28,7 +28,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import ingredientService from '../service/ingredient.service';
-import { IngredientInput } from '../types';
+import { IngredientInput, Rol } from '../types';
 
 const ingredientRouter = express.Router();
 
@@ -50,7 +50,9 @@ const ingredientRouter = express.Router();
  */
 ingredientRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const ingredienten = await ingredientService.getAllIngredienten();
+        const request = req as Request & { auth: { rol: Rol } };
+        const { rol } = request.auth;
+        const ingredienten = await ingredientService.getAllIngredienten({ rol });
         res.status(200).json(ingredienten);
     } catch (error) {
         next(error);

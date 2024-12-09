@@ -10,20 +10,35 @@ const login = async (user: User) => {
     })
 };
 
+
 const getUserById = async (id: string) => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/" + id, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
 }
 
 const getUserBestellingen = async (id: string) => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/" + id + "/bestellingen", {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
 }

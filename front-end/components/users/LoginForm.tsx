@@ -48,7 +48,9 @@ const LoginForm: React.FC = () => {
 
             const user = {
                 token: result.token,
+                id: result.id,
                 gebruikersnaam: result.gebruikersnaam,
+                volledigenaam: result.volledigenaam,
                 rol: result.rol,
             };
 
