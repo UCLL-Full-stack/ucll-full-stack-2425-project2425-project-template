@@ -1,5 +1,5 @@
 export type Type = "Protein" | "Topping" | "Sauce";
-export type Rol = "admin" | "klant" | "manager";
+export type Rol = "Admin" | "Klant" | "Manager";
 
 export type Ingredient = {
     id?: number,

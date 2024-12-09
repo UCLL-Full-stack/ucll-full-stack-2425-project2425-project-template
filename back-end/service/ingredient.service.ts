@@ -1,8 +1,18 @@
+import { UnauthorizedError } from "express-jwt";
 import { Ingredient } from "../model/ingredient";
 import ingredientDb from "../repository/ingredient.db"
-import { IngredientInput } from "../types";
+import { IngredientInput, Rol } from "../types";
 
-const getAllIngredienten = async (): Promise<Ingredient[]> => ingredientDb.getAllIngredienten();
+const getAllIngredienten = async ({ rol }: { rol: Rol }): Promise<Ingredient[]> => {
+    if (rol === "Admin" || rol === "Manager") {
+        return ingredientDb.getAllIngredienten();
+    }
+    else {
+        throw new UnauthorizedError("credentials_required", {
+            message: "You aren't authorized to access this page."
+        });
+    }
+};
 
 const addIngredient = async ({ naam, type, aantal, prijs }: IngredientInput): Promise<Ingredient> => {
 

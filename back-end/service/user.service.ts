@@ -57,8 +57,15 @@ const authenticate = async ({ gebruikersnaam, wachtwoord }: UserInput): Promise<
     if (!isValidPassword) {
         throw new Error('Incorrect credentials.');
     }
+
+    const userId = user.getId();
+    if (!userId) {
+        throw new Error("ID is undefined");
+    }
+
     return {
-        token: generateJwtToken({ gebruikersnaam, rol: user.getRol() }),
+        token: generateJwtToken({ gebruikersnaam, rol: user.getRol(), id: userId }),
+        id: userId,
         gebruikersnaam: gebruikersnaam,
         volledigenaam: `${user.getVoornaam()} ${user.getNaam()}`,
         rol: user.getRol(),

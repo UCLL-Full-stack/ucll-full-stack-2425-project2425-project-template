@@ -42,6 +42,7 @@ type PokebowlInput = {
 
 type AuthenticationResponse = {
     token: string;
+    id: number;
     gebruikersnaam: string;
     volledigenaam: string;
     rol: string;

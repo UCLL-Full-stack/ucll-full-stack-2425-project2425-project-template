@@ -35,11 +35,14 @@ const Header: React.FC = () => {
                             Bestellingen
                         </Link>
                     </li>
-                    <li>
-                        <Link href="/ingredienten">
-                            Ingredienten
-                        </Link>
-                    </li>
+                    {loggedInUser && (
+                        (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
+                            <li>
+                                <Link href="/ingredienten">
+                                    Ingredienten
+                                </Link>
+                            </li>))
+                    }
                     <li>
                         <Link href="/pokebowls">
                             Pokebowls
@@ -54,6 +57,13 @@ const Header: React.FC = () => {
                             <a href="/login" onClick={handleClick}>Logout</a>
                         )}
                     </li>
+                    {
+                        loggedInUser && (
+                            <li>
+                                <Link href={`/users/${loggedInUser.id}`}>Profiel</Link>
+                            </li>
+                        )
+                    }
                 </ul>
             </nav>
         </header>

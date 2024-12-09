@@ -9,24 +9,27 @@ import { useEffect, useState } from "react";
 const Ingredienten: React.FC = () => {
     const [ingredienten, setIngredienten] = useState<Array<Ingredient>>();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const [error, setError] = useState<string>();
 
     const getIngredienten = async () => {
+        setError("");
         const response = await IngredientenService.getAllIngredienten();
-        const ingredienten = await response.json();
-        setIngredienten(ingredienten);
+        if (response.ok) {
+            const ingredienten = await response.json();
+            setIngredienten(ingredienten);
+        } else {
+            setError("Unauthorized Access");
+        }
+
     }
 
     useEffect(() => {
         const getUser = sessionStorage.getItem("loggedInUser")
         if (getUser) {
             const parsedUser = JSON.parse(getUser);
-            if (parsedUser) {
-                console.log(parsedUser);
-                setLoggedInUser(parsedUser as User);
-                getIngredienten();
-
-            }
+            setLoggedInUser(parsedUser as User);
         }
+        getIngredienten();
     }, []);
 
     return (
@@ -42,11 +45,12 @@ const Ingredienten: React.FC = () => {
                 <h1>Ingredienten</h1>
                 <p>Lijst van alle ingredienten</p>
                 <section>
-                    {loggedInUser && (ingredienten && (
+                    {error && <p className="error-field">{error}</p>}
+                    {ingredienten && (
                         <IngredientenOverzicht ingredienten={ingredienten} />
-                    ))}
+                    )}
+                    {!error && (<button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>)}
                 </section>
-                <button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>
             </main>
         </>
     );
