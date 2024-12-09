@@ -28,6 +28,10 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     const [filteredGuilds, setFilteredGuilds] = useState<Guild[]>(guilds);
 
     useEffect(() => {
+        setSelectedGuild(null);
+        setError(null);
+        setBoardName('');
+        setColumns('');
         if (typeof selectedGuildId === 'string') {
             setSelectedGuild(selectedGuildId);
         }
@@ -35,13 +39,11 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
             const guildPermissions = permissions.find(
                 (permission) => permission.guildId === guild.guildId
             );
-            // console.log('Guild permissions:', guildPermissions);
             const hasPermission = guildPermissions.permissions.some(
                 (permission: KanbanPermission) =>
                     permission === KanbanPermission.CREATE_BOARD ||
                     permission === KanbanPermission.ADMINISTRATOR
             );
-            // console.log('Has permission:', hasPermission, 'for guild:', guild.guildName);
             if (!hasPermission) {
                 setFilteredGuilds((prevGuilds) => prevGuilds.filter((g) => g.guildId !== guild.guildId));
             } else {
@@ -49,7 +51,6 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                     setFilteredGuilds((prevGuilds) => [...prevGuilds, guild]);
                 }
             }
-            // console.log('Filtered guilds:', filteredGuilds);
         }
     }, [selectedGuildId]);
 
@@ -63,7 +64,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
         const columnsArray = columns.split(',').map(column => column.trim()).filter(column => column !== '');
         onSubmit({
             boardName,
-            guild: selectedGuild || '',
+            guild: selectedGuild,
             columns: columnsArray
         });
         setBoardName('');

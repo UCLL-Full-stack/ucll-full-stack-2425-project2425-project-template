@@ -41,6 +41,7 @@ const Home: FC = () => {
 
   const handleFormClose = () => {
     setIsFormOpen(false);
+    setSelectedGuildForBoardCreation(null);
   }
 
   const handleFormSubmit = async (boardData: { boardName: string; columns: string[]; guild: string }) => {
