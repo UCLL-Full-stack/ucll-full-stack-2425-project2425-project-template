@@ -6,6 +6,14 @@ type CarInput = {
     licensePlate: string;
     price: number;
 };
+type CarPartInput = {
+    id?: number;
+    name: string;
+    price: number;
+    quantity: number;
+};
+
 export {
     CarInput,
+    CarPartInput,
 };

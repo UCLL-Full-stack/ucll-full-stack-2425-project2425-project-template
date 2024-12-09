@@ -6,3 +6,9 @@ export type Car = {
     licensePlate: string;
     price: number;
 };
+export type CarPart = {
+    id?: number;
+    name: string;
+    price: number;
+    quantity: number;
+};

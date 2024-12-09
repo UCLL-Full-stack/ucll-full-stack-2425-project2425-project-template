@@ -4,6 +4,7 @@ const prisma = new PrismaClient()
 
 const main = async () => {
     await prisma.car.deleteMany();
+    await prisma.carPart.deleteMany();
 
 
 const teslaModelS = await prisma.car.create({
@@ -33,6 +34,21 @@ const BMWX5 = await prisma.car.create({
         year: 2021,
         licensePlate: "GHI789",
         price: 120000,
+    },
+})
+
+const teslaModelSFrontBumper = await prisma.carPart.create({
+    data: {
+        name: "Front Bumper",
+        price: 1000,
+        quantity: 5,
+    },
+})
+const teslaModelSRearBumper = await prisma.carPart.create({
+    data: {
+        name: "Rear Bumper",
+        price: 500,
+        quantity: 3,
     },
 })
 };

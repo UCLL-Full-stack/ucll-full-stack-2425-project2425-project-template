@@ -1,8 +1,9 @@
+import { CarPart as CarPartPrisma } from '@prisma/client';  
 export class CarPart{
-    private id?: number;
-    private name: string;
-    private price: number;
-    private quantity: number;
+    readonly id?: number;
+    readonly name: string;
+    readonly price: number;
+    readonly quantity: number;
 
     constructor(carpart: {
         id? : number;
@@ -30,5 +31,14 @@ export class CarPart{
 
     getQuantity(): number {
         return this.quantity;
+    }
+
+    static from(carpart: CarPartPrisma): CarPart {
+        return new CarPart({
+            id: carpart.id,
+            name: carpart.name,
+            price: carpart.price,
+            quantity: carpart.quantity
+        });
     }
 }
