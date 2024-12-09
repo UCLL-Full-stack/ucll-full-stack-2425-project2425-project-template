@@ -66,17 +66,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 //     return hasAdmin || hasManageServer;
                 // })
                 const ownerGuilds = guildsData.filter((guild: {owner: boolean}) => guild.owner === true);
-                const enhancedGuilds = ownerGuilds.map((guild: {id: string, name: string}) => {
-                    const botInGuild = client.guilds.cache.has(guild.id);
-                    return {
-                        guildId: guild.id,
-                        guildName: guild.name,
-                        botInGuild,
-                        inviteLink: botInGuild
-                            ? null
-                            : `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&guild_id=${guild.id}&permissions=8&scope=bot`,
-                        };
-                });
                 const botGuildData = await Promise.all(
                     guildsData.map(async (guild: {id: string, name: string, ownerId: string}) => {
                         try {
@@ -191,6 +180,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     globalName: userData.global_name,
                     userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
                 }
+                const enhancedGuildsInDb = guildsInDbUserIsIn.map((guild: {guildId: string, guildName: string}) => {
+                    const botInGuild = client.guilds.cache.has(guild.guildId);
+                    return {
+                        guildId: guild.guildId,
+                        guildName: guild.guildName,
+                        botInGuild,
+                        inviteLink: botInGuild
+                            ? null
+                            : `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&guild_id=${guild.guildId}&permissions=8&scope=bot`,
+                        };
+                });
+                const enhancedOwner = ownerGuilds.map((guild: {id: string, name: string}) => {
+                    const botInGuild = client.guilds.cache.has(guild.id);
+                    return {
+                        guildId: guild.id,
+                        guildName: guild.name,
+                        botInGuild,
+                        inviteLink: botInGuild
+                            ? null
+                            : `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&guild_id=${guild.id}&permissions=8&scope=bot`,
+                        };
+                });
+                const enhancedGuilds = [
+                    ...enhancedGuildsInDb,
+                    ...enhancedOwner.filter((guild: {guildId: string}) => !enhancedGuildsInDb.some((guildInDb: {guildId: string}) => guildInDb.guildId === guild.guildId)),
+                ]
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(`
                     <script>

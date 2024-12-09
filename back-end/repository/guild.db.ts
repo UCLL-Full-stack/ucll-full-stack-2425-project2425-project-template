@@ -80,7 +80,14 @@ const addGuild = async (guildData: {
             userIds = [],
             boardIds = [],
         } = guildData;
-        // console.log('guildData:', guildData);
+        for( const userId of userIds){
+            const user = await database.user.findUnique({
+                where: {userId},
+            });
+            if(!user){
+                userIds.splice(userIds.indexOf(userId), 1);
+            }
+        }
         const settingsJson = JSON.stringify(settings);
         const membersJson = JSON.stringify(members);
     
