@@ -11,13 +11,14 @@ async function main() {
 
   // Add new users
   const Chris = await prisma.user.create({
-    data: {
-      firstName: 'Coach',
-      lastName: 'Chris',
-      password: 'coachpassword',
-      role: 'COACH',
+      data: {
+        firstName: 'Coach',
+        lastName: 'Chris',
+        password: 'coachpassword',
+        role: 'COACH',
+      },
     },
-  });
+  );
 
   const Admin = await prisma.user.create({
     data: {
@@ -58,14 +59,16 @@ async function main() {
   // Create a team with the coach and players
   const team = await prisma.team.create({
     data: {
-      coachId: Chris.userId,
-      members: {
-        connect: [
-          { userId: John.userId },
-          { userId: Jane.userId },
-          { userId: Alice.userId },
-        ],
-      },
+        players: {
+            connect: [
+                { userId: John.userId },
+                { userId: Jane.userId },
+                { userId: Alice.userId },
+            ],
+        },
+        coach: {
+            connect: { userId: Chris.userId },
+        },
     },
   });
 

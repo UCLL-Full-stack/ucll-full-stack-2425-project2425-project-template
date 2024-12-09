@@ -9,6 +9,7 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL,
     "attendance" INTEGER,
+    "teamId" INTEGER,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("userId")
 );
@@ -43,40 +44,34 @@ CREATE TABLE "Match" (
 );
 
 -- CreateTable
-CREATE TABLE "_TrainingPlayers" (
+CREATE TABLE "_UserToTrainings" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_TeamMembers" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_MatchPlayers" (
+CREATE TABLE "_UserToMatches" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_TrainingPlayers_AB_unique" ON "_TrainingPlayers"("A", "B");
+CREATE UNIQUE INDEX "User_userId_teamId_key" ON "User"("userId", "teamId");
 
 -- CreateIndex
-CREATE INDEX "_TrainingPlayers_B_index" ON "_TrainingPlayers"("B");
+CREATE UNIQUE INDEX "_UserToTrainings_AB_unique" ON "_UserToTrainings"("A", "B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_TeamMembers_AB_unique" ON "_TeamMembers"("A", "B");
+CREATE INDEX "_UserToTrainings_B_index" ON "_UserToTrainings"("B");
 
 -- CreateIndex
-CREATE INDEX "_TeamMembers_B_index" ON "_TeamMembers"("B");
+CREATE UNIQUE INDEX "_UserToMatches_AB_unique" ON "_UserToMatches"("A", "B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_MatchPlayers_AB_unique" ON "_MatchPlayers"("A", "B");
+CREATE INDEX "_UserToMatches_B_index" ON "_UserToMatches"("B");
 
--- CreateIndex
-CREATE INDEX "_MatchPlayers_B_index" ON "_MatchPlayers"("B");
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("teamId") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Training" ADD CONSTRAINT "Training_coachId_fkey" FOREIGN KEY ("coachId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -85,19 +80,13 @@ ALTER TABLE "Training" ADD CONSTRAINT "Training_coachId_fkey" FOREIGN KEY ("coac
 ALTER TABLE "Team" ADD CONSTRAINT "Team_coachId_fkey" FOREIGN KEY ("coachId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_TrainingPlayers" ADD CONSTRAINT "_TrainingPlayers_A_fkey" FOREIGN KEY ("A") REFERENCES "Training"("trainingId") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_UserToTrainings" ADD CONSTRAINT "_UserToTrainings_A_fkey" FOREIGN KEY ("A") REFERENCES "Training"("trainingId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_TrainingPlayers" ADD CONSTRAINT "_TrainingPlayers_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_UserToTrainings" ADD CONSTRAINT "_UserToTrainings_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_TeamMembers" ADD CONSTRAINT "_TeamMembers_A_fkey" FOREIGN KEY ("A") REFERENCES "Team"("teamId") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_UserToMatches" ADD CONSTRAINT "_UserToMatches_A_fkey" FOREIGN KEY ("A") REFERENCES "Match"("matchId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_TeamMembers" ADD CONSTRAINT "_TeamMembers_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_MatchPlayers" ADD CONSTRAINT "_MatchPlayers_A_fkey" FOREIGN KEY ("A") REFERENCES "Match"("matchId") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_MatchPlayers" ADD CONSTRAINT "_MatchPlayers_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_UserToMatches" ADD CONSTRAINT "_UserToMatches_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;

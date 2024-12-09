@@ -1,7 +1,7 @@
-type Role = "ADMIN" | "Coach" | "Player" | "Guest"
+type Role = "ADMIN" | "COACH" | "PLAYER" | "GUEST";
 
 type UserInput = {
-    userId?: number;
+    id?: number;
     username: string;
     password: string;
     role: Role;
@@ -29,6 +29,7 @@ type MatchInput = {
     hall: string;
     square: number;
     players?: UserInput[];
+    coach: UserInput;
 }
 
 export {

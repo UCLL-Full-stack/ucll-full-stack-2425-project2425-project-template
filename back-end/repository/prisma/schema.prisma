@@ -15,10 +15,11 @@ model User {
   role       Role
   attendance Int?
   teamId     Int?
-  team       Team?    @relation("TeamToMembers", fields: [teamId], references: [teamId])
+  team       Team?    @relation("TeamToPlayers", fields: [teamId], references: [teamId])
   trainings  Training[] @relation("UserToTrainings")
   matches    Match[]    @relation("UserToMatches")
   coachedTrainings Training[] @relation("UserToCoachedTrainings")
+  coachedMatches   Match[]    @relation("UserToCoachedMatches")
   coachedTeams     Team[]     @relation("UserToCoachedTeams")
 
   @@unique([userId, teamId])
@@ -38,7 +39,7 @@ model Team {
   teamId  Int      @id @default(autoincrement())
   coachId Int
   coach   User     @relation("UserToCoachedTeams", fields: [coachId], references: [userId])
-  members User[]   @relation("TeamToMembers")
+  players User[]   @relation("TeamToPlayers")
 }
 
 model Match {
@@ -47,6 +48,8 @@ model Match {
   hall    String
   square  Int
   players User[]   @relation("UserToMatches")
+  coachId Int
+  coach   User     @relation("UserToCoachedMatches", fields: [coachId], references: [userId])
 }
 
 enum Role {

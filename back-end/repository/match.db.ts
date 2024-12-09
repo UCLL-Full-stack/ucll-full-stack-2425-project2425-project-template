@@ -1,19 +1,19 @@
-import { Match } from "../model/match";
-import { MatchInput } from "../types";
+// import { Match } from "../model/match";
+// import { MatchInput } from "../types";
 
-const matches: Match[] = [];
+// const matches: Match[] = [];
 
 
-const getAllMatches = (): Match[] => { return matches; };
+// const getAllMatches = (): Match[] => { return matches; };
     
 
-const getMatchById = (matchId: number): Match | undefined => {
-    return matches.find(match => match.getId() === matchId);
-};
+// const getMatchById = (matchId: number): Match | undefined => {
+//     return matches.find(match => match.getId() === matchId);
+// };
 
-const addMatch = (match: Match): Match => {
-    matches.push(match);
-    return match;
-};
+// const addMatch = (match: Match): Match => {
+//     matches.push(match);
+//     return match;
+// };
 
-export default { getMatchById, addMatch, getAllMatches };
+// export default { getMatchById, addMatch, getAllMatches };
