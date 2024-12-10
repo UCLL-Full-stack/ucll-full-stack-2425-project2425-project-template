@@ -1,0 +1,43 @@
+{
+    "index": {
+        "welkom": "Welkom bij EuroStudent Travel",
+        "inleidendetekst": "Het EuroStudent Travel webplatform is speciaal ontworpen voor studenten die op zoek zijn naar betaalbare reizen door heel Europa. Het platform biedt een lijst van budgetvriendelijke reizen met essentiële details zoals bestemmingen, places 2B en prijzen op maat van studenten. Gebruikers kunnen de reizen verkennen, bekijken en gemakkelijk hun volgende avontuur boeken, waardoor reizen toegankelijker wordt voor jonge avonturiers!",
+        "plan": "Plan Je Avontuur",
+        "trips": "Ontdek Trips",
+        "bookings": "Mijn Boekingen"
+    },
+
+    "trips": {
+        "titel": "Trips",
+        "all": "Alle Trips",
+        "bestemming": "Bestemming",
+        "start": "Start Datum",
+        "eind": "Eind Datum",
+        "prijs": "Prijs",
+        "omschrijving": "Omschrijving"
+    },
+
+    "booking": {
+        "mijn": "Mijn Boekingen",
+        "booking": "Boeking",
+        "nummer": "Boeking Nummer",
+        "datum": "Boeking Datum",
+        "status": "Betaal Status"
+    },
+
+    "login": {
+        "titel": "Login",
+        "login": "Login",
+        "gebruikersnaam": "Gebruikersnaam",
+        "wachtwoord": "Wachtwoord"
+    },
+
+    "nav": {
+        "thuis": "Thuis",
+        "trips": "Trips",
+        "boekingen": "Boekingen",
+        "welkom": "Welkom, ",
+        "logout": "Logout",
+        "login": "Login"
+    }
+}

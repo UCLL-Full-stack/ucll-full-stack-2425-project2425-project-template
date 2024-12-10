@@ -1,12 +1,16 @@
 import { Trip } from '@/types';
 import React from 'react';
 import styles from '../styles/Trips.module.css';
+import { useTranslation } from 'next-i18next';
 
 type Props = {
     trips: Array<Trip>;
 };
 
 const TripOverviewTable: React.FC<Props> = ({ trips }) => {
+
+    const { t } = useTranslation("common");
+    
   if (!trips) {
     return <div className={styles['bookings-table-container']}>Loading...</div>;
   }
@@ -16,11 +20,11 @@ const TripOverviewTable: React.FC<Props> = ({ trips }) => {
                 <table className={`${styles.table} table-hover`}>
                     <thead>
                         <tr>
-                            <th scope="col">Destination</th>
-                            <th scope="col">Start Date</th>
-                            <th scope="col">End Date</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">{t("trips.bestemming")}</th>
+                            <th scope="col">{t("trips.start")}</th>
+                            <th scope="col">{t("trips.eind")}</th>
+                            <th scope="col">{t("trips.prijs")}</th>
+                            <th scope="col">{t("trips.omschrijving")}</th>
                         </tr>
                     </thead>
                     <tbody>

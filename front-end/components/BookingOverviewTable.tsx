@@ -1,12 +1,14 @@
 import { Booking } from '@/types';
 import React from 'react';
 import styles from '../styles/Bookings.module.css';
+import { useTranslation } from 'next-i18next';
 
 type Props = {
     bookings: Array<Booking>;
 };
 
 const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
+    const { t } = useTranslation("common");
     if (!bookings) {
         return <div className={styles['bookings-table-container']}>Loading...</div>;
     }
@@ -15,9 +17,9 @@ const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
             <table className={`${styles.table} table-hover`}>
                 <thead>
                     <tr>
-                        <th scope="col">bookingId</th>
-                        <th scope="col">booking date</th>
-                        <th scope="col">Payment status</th>
+                        <th scope="col">{t("booking.nummer")}</th>
+                        <th scope="col">{t("booking.datum")}</th>
+                        <th scope="col">{t("booking.status")}</th>
                     </tr>
                 </thead>
                 <tbody>

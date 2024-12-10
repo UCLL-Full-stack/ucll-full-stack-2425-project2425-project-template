@@ -2,8 +2,10 @@ import { StatusMessage } from "../types";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from '../styles/UserLoginForm.module.css';
+import { useTranslation } from "next-i18next";
 
 const UserLoginForm: React.FC = () => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -73,10 +75,10 @@ const UserLoginForm: React.FC = () => {
   return (
     <div className={styles.userLoginPage}>
       <form onSubmit={handleSubmit} className={styles.userLoginForm}>
-        <h3 className={styles.titleForm}>Login</h3>
+        <h3 className={styles.titleForm}>{t("login.login")}</h3>
         
         {/* Username Field */}
-        <label className={styles.formLabels} htmlFor="nameInput">Username:</label>
+        <label className={styles.formLabels} htmlFor="nameInput">{t("login.gebruikersnaam")}</label>
         <input className={styles.inputField}
           id="nameInput"
           type="text"
@@ -86,7 +88,7 @@ const UserLoginForm: React.FC = () => {
         {nameError && <p className={styles.errorMessage}>{nameError}</p>}
 
         {/* Password Field */}
-        <label className={styles.formLabels} htmlFor="passwordInput">Password:</label>
+        <label className={styles.formLabels} htmlFor="passwordInput">{t("login.wachtwoord")}</label>
         <input className={styles.inputField}
           id="passwordInput"
           type="password"
@@ -106,12 +108,10 @@ const UserLoginForm: React.FC = () => {
           </ul>
         )}
 
-        {/* Submit Button */}
-        <button className={styles.loginButton} type="submit">Login</button>
+        <button className={styles.loginButton} type="submit">{t("login.login")}</button>
       </form>
     </div>
   );
 };
 
 export default UserLoginForm;
-
