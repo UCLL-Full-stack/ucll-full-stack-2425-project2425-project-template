@@ -1,19 +1,31 @@
 import { User } from '@types';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import useInterval from 'use-interval';
 
 const Header: React.FC = () => {
+    const router = useRouter();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-    const logout = () => {
+    const logOut = () => {
         sessionStorage.removeItem('loggedInUser');
         setLoggedInUser(null);
+        router.push('/login');
+    };
+
+    const getLoggedInUser = () => {
+        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') as string);
+        loggedInUser && setLoggedInUser(loggedInUser);
     };
 
     useEffect(() => {
-        const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
-        setLoggedInUser(token);
+        getLoggedInUser();
     }, []);
+
+    useInterval(() => {
+        getLoggedInUser();
+    }, 1000);
 
     return (
         <header className="bg-primary text-white flex justify-between uppercase py-6">
@@ -40,7 +52,7 @@ const Header: React.FC = () => {
 
                         {loggedInUser ? (
                             <li>
-                                <Link onClick={logout} href={'/login'}>
+                                <Link onClick={logOut} href={'/login'}>
                                     Logout
                                 </Link>
                             </li>
