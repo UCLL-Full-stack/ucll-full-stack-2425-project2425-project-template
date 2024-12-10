@@ -23,21 +23,6 @@ const createCrash = async ({ crash }: { crash: Crash }): Promise<Crash> => {
     }
 };
 
-const getAllCrashes = async (): Promise<Crash[] | null> => {
-    try {
-        const crashPrisma = await database.crash.findMany({
-            include: {
-                participants: { include: { driver: true, racecar: true } },
-            }
-        });
-        return crashPrisma.map((crashPrisma) => Crash.from(crashPrisma));
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server logs for details.');
-    }
-};
-
-
 const getCrashById = async ({ id }: { id: number }): Promise<Crash | null> => {
     try {
         const crashPrisma = await database.crash.findFirst({
@@ -53,4 +38,18 @@ const getCrashById = async ({ id }: { id: number }): Promise<Crash | null> => {
     }
 };
 
-export default { getAllCrashes, createCrash, getCrashById };
+const getAllCrashes = async (): Promise<Crash[]> => {
+    try {
+        const crashesPrisma = await database.crash.findMany({
+            include: {
+                participants: { include: { driver: true, racecar: true } },
+            },
+        });
+        return crashesPrisma.map(crashPrisma => Crash.from(crashPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
+};
+
+export default { createCrash, getCrashById, getAllCrashes };

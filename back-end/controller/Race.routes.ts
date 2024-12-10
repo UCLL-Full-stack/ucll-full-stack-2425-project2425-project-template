@@ -22,7 +22,7 @@
  *              description: Driver age.
  *            racecar:
  *              $ref: '#/components/schemas/Racecar'
- *      Crash:
+ *      CrashDetails:
  *          type: object
  *          properties:
  *            id:
@@ -141,25 +141,60 @@
  *     Crash:
  *       type: object
  *       properties:
- *         id:
- *           type: number
- *           format: int64
  *         type:
  *           type: string
- *           description: Crash type.
+ *           example: "Collision"
  *         description:
  *           type: string
- *           description: Crash description.
+ *           example: "A severe crash"
  *         casualties:
- *           type: number
- *           description: Number of casualties.
+ *           type: integer
+ *           example: 5
  *         deaths:
- *           type: number
- *           description: Number of deaths.
+ *           type: integer
+ *           example: 2
  *         participants:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/Participant'
+ *             type: object
+ *             properties:
+ *               driver:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     example: "Lewis"
+ *                   surname:
+ *                     type: string
+ *                     example: "Hamilton"
+ *                   birthdate:
+ *                     type: string
+ *                     format: date
+ *                     example: "1985-01-07"
+ *                   team:
+ *                     type: string
+ *                     example: "Mercedes"
+ *                   country:
+ *                     type: string
+ *                     example: "UK"
+ *                   description:
+ *                     type: string
+ *                     example: "A skilled driver"
+ *               racecar:
+ *                 type: object
+ *                 properties:
+ *                   car_name:
+ *                     type: string
+ *                     example: "W12"
+ *                   type:
+ *                     type: string
+ *                     example: "Formula 1"
+ *                   brand:
+ *                     type: string
+ *                     example: "Mercedes"
+ *                   hp:
+ *                     type: integer
+ *                     example: 1000
  */
 
 import express, { Request, Response, NextFunction } from 'express';
@@ -409,10 +444,10 @@ raceRouter.delete('/:raceId/crashes/:crashId', async (req: Request, res: Respons
 
 /**
  * @swagger
- * /crashes/{crashId}:
+ * /races/crashes/{crashId}:
  *   put:
  *     summary: Edit a crash
- *     tags: [Crashes]
+ *     tags: [Races]
  *     parameters:
  *       - in: path
  *         name: crashId
@@ -428,15 +463,15 @@ raceRouter.delete('/:raceId/crashes/:crashId', async (req: Request, res: Respons
  *             $ref: '#/components/schemas/Crash'
  *     responses:
  *       200:
- *         description: The updated crash.
+ *         description: Crash updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Crash'
+ *       400:
+ *         description: Invalid input
  *       404:
- *         description: Crash not found.
- *       500:
- *         description: Internal server error.
+ *         description: Crash not found
  */
 raceRouter.put('/crashes/:crashId', async (req: Request, res: Response, next: NextFunction) => {
     try {

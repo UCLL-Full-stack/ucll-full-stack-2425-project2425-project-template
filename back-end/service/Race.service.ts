@@ -49,7 +49,7 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
             });
 
             const racecar = new Racecar({
-                name: participantInput.racecar.car_name,
+                name: participantInput.racecar.name,
                 type: participantInput.racecar.type,
                 brand: participantInput.racecar.brand,
                 hp: participantInput.racecar.hp,
@@ -111,7 +111,7 @@ const createCrash = async (crashInput: CrashInput): Promise<Crash> => {
         });
 
         const racecar = new Racecar({
-            name: participantInput.racecar.car_name,
+            name: participantInput.racecar.name,
             type: participantInput.racecar.type,
             brand: participantInput.racecar.brand,
             hp: participantInput.racecar.hp,
@@ -140,7 +140,7 @@ const getAllRacecars = async (): Promise<Racecar[] | null> => {
 }
 
 const createRacecar = async (racecarInput: RacecarInput): Promise<Racecar> => {
-    if (!racecarInput.car_name) {
+    if (!racecarInput.name) {
         throw new Error('Car name is required');
     }
     if (!racecarInput.type) {
@@ -154,7 +154,7 @@ const createRacecar = async (racecarInput: RacecarInput): Promise<Racecar> => {
     }
 
     const newRacecar = new Racecar({
-        name: racecarInput.car_name,
+        name: racecarInput.name,
         type: racecarInput.type,
         brand: racecarInput.brand,
         hp: racecarInput.hp,
@@ -223,7 +223,7 @@ const addCrashToRace = async (raceId: number, crashData: CrashInput): Promise<Ra
         participants: crashData.participants.map(participantInput => new Participant({
             driver: new Driver(participantInput.driver),
             racecar: new Racecar({
-                name: participantInput.racecar.car_name,
+                name: participantInput.racecar.name,
                 type: participantInput.racecar.type,
                 brand: participantInput.racecar.brand,
                 hp: participantInput.racecar.hp,
@@ -248,7 +248,7 @@ const editCrash = async (crashId: number, crashData: Partial<CrashInput>): Promi
         participants: crashData.participants?.map(participantInput => new Participant({
             driver: new Driver(participantInput.driver),
             racecar: new Racecar({
-                name: participantInput.racecar.car_name,
+                name: participantInput.racecar.name,
                 type: participantInput.racecar.type,
                 brand: participantInput.racecar.brand,
                 hp: participantInput.racecar.hp,

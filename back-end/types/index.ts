@@ -55,7 +55,7 @@ export type DriverInput = {
 };
 
 export type RacecarInput = {
-    car_name: string;
+    name: string;
     type: string;
     brand: string;
     hp: number;

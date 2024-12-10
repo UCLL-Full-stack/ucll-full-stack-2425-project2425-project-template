@@ -31,7 +31,8 @@
  *             $ref: '#/components/schemas/Participant'
  */
 import express, { NextFunction, Response, Request } from 'express';
-import raceService from '../service/race.service';
+import raceService from '../service/Race.service';
+import crashService from '../service/Crash.service';
 
 const crashRouter = express.Router();
 
@@ -39,7 +40,7 @@ const crashRouter = express.Router();
  * @swagger
  * /crashes/{id}:
  *   get:
- *     summary: Get a crash by RaceID
+ *     summary: Get a crash by id
  *     parameters:
  *       - in: path
  *         name: id
@@ -57,8 +58,12 @@ const crashRouter = express.Router();
  */
 crashRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const crash = await raceService.getCrashByRaceId(Number(req.params.id));
-        res.status(200).json(crash);
+        const crash = await crashService.getCrashById(Number(req.params.id));
+        if (crash) {
+            res.status(200).json(crash);
+        } else {
+            res.status(404).json({ message: 'Crash not found' });
+        }
     } catch (error) {
         next(error);
     }

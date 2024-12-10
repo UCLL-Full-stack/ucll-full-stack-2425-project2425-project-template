@@ -6,9 +6,11 @@ interface Props {
   crashes: Crash[];
   onCrashClick: (crash: Crash) => void;
   selectedRace: Race | null;
+  handleEditCrash: (crashId: number) => void;
+  handleDeleteCrash: (crashId: number) => void;
 }
 
-const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRace }: Props) => {
+const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRace, handleEditCrash, handleDeleteCrash }: Props) => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [selectedCrash, setSelectedCrash] = useState<Crash | null>(null);
 
@@ -17,8 +19,7 @@ const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRa
     if (userData) {
       setLoggedInUser(JSON.parse(userData));
     }
-    console.log(loggedInUser);
-  }, [loggedInUser]);
+  }, []);
 
   useEffect(() => {
     setSelectedCrash(null); // Reset selected crash when the race changes
@@ -39,6 +40,7 @@ const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRa
               <th scope="col">Description</th>
               <th scope="col">Casualties</th>
               <th scope="col">Deaths</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -48,6 +50,10 @@ const CrashOverviewTable: React.FC<Props> = ({ crashes, onCrashClick, selectedRa
                 <td>{crash.description}</td>
                 <td>{crash.casualties}</td>
                 <td>{crash.deaths}</td>
+                <td>
+                  <button onClick={() => handleEditCrash(crash.id!)} className="btn btn-secondary me-2">Edit</button>
+                  <button onClick={() => handleDeleteCrash(crash.id!)} className="btn btn-danger">Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>
