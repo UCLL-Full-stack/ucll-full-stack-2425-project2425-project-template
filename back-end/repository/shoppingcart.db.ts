@@ -10,10 +10,28 @@ const getAll = async (): Promise<Shoppingcart[]> => {
                 user: true,
             },
         });
-
-        return shoppingcartPrisma.map((shoppingcartPrisma) =>
-            Shoppingcart.from(shoppingcartPrisma)
+        const shoppingcartsWithItems = await Promise.all(
+            shoppingcartPrisma.map(async (cart) => {
+                const withItems = await db.shoppingcart.findUnique({
+                    where: {
+                        id: cart.id,
+                    },
+                    include: {
+                        items: {
+                            include: {
+                                item: true,
+                            },
+                        },
+                        user: true,
+                    },
+                });
+                return withItems;
+            })
         );
+
+        return shoppingcartsWithItems
+            .map((cart) => (cart ? Shoppingcart.from(cart) : null))
+            .filter((cart): cart is Shoppingcart => cart !== null);
     } catch (error) {
         console.log(error);
         throw new Error('Could not get all shoppingcarts');
@@ -32,10 +50,24 @@ const getById = async (id: number): Promise<Shoppingcart | undefined> => {
             },
         });
 
-        return shoppingcartPrisma ? Shoppingcart.from(shoppingcartPrisma) : undefined;
+        const shoppingcartWithItems = await db.shoppingcart.findUnique({
+            where: {
+                id: shoppingcartPrisma?.id,
+            },
+            include: {
+                items: {
+                    include: {
+                        item: true,
+                    },
+                },
+                user: true,
+            },
+        });
+
+        return shoppingcartWithItems ? Shoppingcart.from(shoppingcartWithItems) : undefined;
     } catch (error) {
         console.log(error);
-        throw new Error('Could not get item by id');
+        throw new Error('Could not get shoppingcart by id');
     }
 };
 
@@ -58,7 +90,25 @@ const create = async (shoppingcart: Shoppingcart): Promise<Shoppingcart> => {
             },
         });
 
-        return Shoppingcart.from(shoppingcartPrisma);
+        const shoppingcartWithItems = await db.shoppingcart.findUnique({
+            where: {
+                id: shoppingcartPrisma.id,
+            },
+            include: {
+                items: {
+                    include: {
+                        item: true,
+                    },
+                },
+                user: true,
+            },
+        });
+
+        if (!shoppingcartWithItems) {
+            throw new Error('Could not fetch created shopping cart');
+        }
+
+        return Shoppingcart.from(shoppingcartWithItems);
     } catch (error) {
         console.log(error);
         throw new Error('Could not create shoppingcart');
@@ -73,28 +123,74 @@ const addItemToShoppingcart = async ({
     shoppingcart: Shoppingcart;
 }) => {
     try {
-        const existingitems = shoppingcart.getItems();
-        const shoppingcartPrisma = await db.shoppingcart.update({
+        // Check if the item already exists in the cart
+        const existingItem = await db.shoppingcartItems.findUnique({
             where: {
-                id: shoppingcart.getId(),
-            },
-
-            data: {
-                items: {
-                    connect: [
-                        ...existingitems.map((existingItem) => ({ id: existingItem.getId() })),
-                        { id: item.getId() },
-                    ],
+                shoppingcartId_itemId: {
+                    shoppingcartId: shoppingcart.getId()!,
+                    itemId: item.getId()!,
                 },
-            },
-
-            include: {
-                items: true,
-                user: true,
             },
         });
 
-        return shoppingcartPrisma ? Shoppingcart.from(shoppingcartPrisma) : undefined;
+        if (existingItem) {
+            // If item exists, increment its quantity
+            const shoppingcartPrisma = await db.shoppingcart.update({
+                where: {
+                    id: shoppingcart.getId(),
+                },
+                data: {
+                    items: {
+                        update: {
+                            where: {
+                                shoppingcartId_itemId: {
+                                    shoppingcartId: shoppingcart.getId()!,
+                                    itemId: item.getId()!,
+                                },
+                            },
+                            data: {
+                                quantity: existingItem.quantity + 1,
+                            },
+                        },
+                    },
+                },
+                include: {
+                    items: {
+                        include: {
+                            item: true,
+                        },
+                    },
+                    user: true,
+                },
+            });
+
+            return shoppingcartPrisma ? Shoppingcart.from(shoppingcartPrisma) : undefined;
+        } else {
+            // If item doesn't exist, create new relationship with quantity 1
+            const shoppingcartPrisma = await db.shoppingcart.update({
+                where: {
+                    id: shoppingcart.getId(),
+                },
+                data: {
+                    items: {
+                        create: {
+                            itemId: item.getId()!,
+                            quantity: 1,
+                        },
+                    },
+                },
+                include: {
+                    items: {
+                        include: {
+                            item: true,
+                        },
+                    },
+                    user: true,
+                },
+            });
+
+            return shoppingcartPrisma ? Shoppingcart.from(shoppingcartPrisma) : undefined;
+        }
     } catch (error) {
         console.log(error);
         throw new Error('Could not add item to shoppingcart');
