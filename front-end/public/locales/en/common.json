@@ -29,7 +29,8 @@
         "titel": "Login",
         "login": "Login",
         "gebruikersnaam": "Username:",
-        "wachtwoord": "Password:"
+        "wachtwoord": "Password:",
+        "success": "Login successful. Redirecting to homepage..."
     },
 
     "nav": {

@@ -61,7 +61,8 @@ const UserLoginForm: React.FC = () => {
     }
   
     setStatusMessages([
-      { message: "Login successful. Redirecting to homepage...", type: "success" },
+      // { message: "Login successful. Redirecting to homepage...", type: "success" },
+      { message: t("login.success"), type: "success"}
     ]);
   
     sessionStorage.setItem("loggedInUser", name);
