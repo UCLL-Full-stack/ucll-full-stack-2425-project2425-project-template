@@ -79,24 +79,44 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /users/signup:
  *   post:
- *     summary: post a new user
+ *     summary: Create a new user
+ *     tags:
+ *       - users
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/UserInput'
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *               - role
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email address
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *                 format: password
+ *               role:
+ *                 $ref: '#/components/schemas/Role'
  *     responses:
  *       200:
- *         description: Create a new user
+ *         description: User successfully created
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                  $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request - Invalid user data
+ *       409:
+ *         description: Conflict - User already exists
+ *       500:
+ *         description: Internal server error
  */
-
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const newUser = req.body as UserInput;
@@ -111,24 +131,45 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
  * @swagger
  * /users/login:
  *   post:
- *     summary: login a user
+ *     summary: Authenticate a user
+ *     tags:
+ *       - users
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/AuthenticationRequest'
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email address
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *                 format: password
  *     responses:
  *       200:
- *         description: Login a user
+ *         description: Successfully authenticated
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                  $ref: '#/components/schemas/AuthenticationResponse'
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT authentication token
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized - Invalid credentials
+ *       500:
+ *         description: Internal server error
  */
-
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
