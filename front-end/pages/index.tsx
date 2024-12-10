@@ -2,8 +2,12 @@ import React from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import styles from '../styles/Index.module.css';
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from 'next';
 
 const OverviewPage: React.FC = () => {
+  const { t } = useTranslation("common");
   return (
     <div className={styles['overview-page']}>
       <Navbar />
@@ -54,5 +58,14 @@ const OverviewPage: React.FC = () => {
     </div>
   );
 };
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const  { locale} = context;
+//   return {
+//       props: {
+//           ...(await serverSideTranslations(locale ?? "en", ["common"]))
+//       },
+//   };
+// };
 
 export default OverviewPage;
