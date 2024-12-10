@@ -1,3 +1,8 @@
+import { 
+    User as UserPrisma,
+} from "@prisma/client"; 
+import { fromUnixTime } from "date-fns";
+
 export class User {
     private id?: number;
     private name: string;
@@ -6,13 +11,15 @@ export class User {
     private birthday: Date;
     private accountBirthday?: Date; // will be added by the database (dunno if possible)
 
-    constructor(user: { name: string; email: string; password: string; birthday: Date }) {
+    constructor(user: { id?: number ;name: string; email: string; password: string; birthday: Date; accountBirthday?: Date}) {
         this.validate(user);
 
+        this.id = user.id;
         this.name = user.name;
         this.email = user.email;
         this.password = user.password;
         this.birthday = user.birthday;
+        this.accountBirthday = user.accountBirthday;
     }
 
     getId(): number | undefined {
@@ -62,5 +69,23 @@ export class User {
     emailRegex(email: string) {
         const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         return expression.test(email);
+    }
+
+    static from({
+        id,
+        name,
+        email,
+        password,
+        birthday,
+        accountBirthday,
+    }: UserPrisma) {
+        return new User({
+            id,
+            name,
+            email,
+            password,
+            birthday,
+            accountBirthday,
+        })
     }
 }

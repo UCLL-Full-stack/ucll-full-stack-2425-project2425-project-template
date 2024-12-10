@@ -1,4 +1,8 @@
 import { User } from './user';
+import { 
+    User as UserPrisma,
+    Player as PlayerPrisma,
+} from "@prisma/client"; 
 
 export class Player {
     private id?: number;
@@ -72,5 +76,25 @@ export class Player {
         if (!player.user) {
             throw new Error('A correct user is required.');
         }
+    }
+
+    static from({
+        id,
+        name,
+        statistics,
+        class: String,
+        currency,
+        user,
+    }: PlayerPrisma & {
+        user: UserPrisma;
+    }) {
+        return new Player({
+            id,
+            name,
+            statistics,
+            class: String,
+            currency,
+            user: User.from(user),
+        })
     }
 }

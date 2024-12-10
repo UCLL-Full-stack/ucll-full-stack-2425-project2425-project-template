@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id        Int        @id @default(autoincrement())
+  name      String
+  statistics    String
+  class     String
+  currency  Int
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  email     String    @unique
+  password  String
+  birthday  DateTime @default(now())
+  accountBirthday   DateTime @default(now())
+  Worlds    World[]
+  Players   Player[]
+}
+
+model World {
+id      Int     @id @default(autoincrement())
+name    String
+owner   User    @relation(fields: [userId], references: [id])
+userId  Int   
+floors  Floor[]
+}
+
+model Floor {
+id          Int     @id @default(autoincrement())
+floornumber Int
+tiles       Line[] 
+world       World   @relation(fields: [worldId], references: [id])
+worldId     Int
+}
+
+model Line {
+  id      Int       @id @default(autoincrement())
+  tiles   String[]
+  lineNum Int
+  floor   Floor     @relation(fields: [floorId], references: [id])
+  floorId Int
+}

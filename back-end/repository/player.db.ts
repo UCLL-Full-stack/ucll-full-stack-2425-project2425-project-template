@@ -1,10 +1,16 @@
 import { Player } from '../model/player';
 import { User } from '../model/user';
+import database from './database';
+
 /* 
 
 SETUP
 
 */
+
+// niet meer nodig door prisma, moet nog overgezet naar seed
+
+/*
 const xander = new User({
     name: 'Xander',
     email: 'xander.dhondt@student.ucll.be',
@@ -126,24 +132,41 @@ const players = [
         user: dean,
     }),
 ];
-
+*/
 /* 
 
 FUNCTIONALITY
 
 */
 
-const getAllPlayers = (): Player[] => {
-    return players;
-};
-
-const getPlayerById = (id: number): Player => {
-    const player = players.find((player) => player.getId() === id);
-    if (!player) {
-        throw new Error(`player with id ${id} does not exist.`);
+const getAllPlayers = async (): Promise<Player[]> => {
+    try {
+        const result = await database.player.findMany({
+            include: {user: true},
+        });
+        return result.map((playerprisma) => Player.from(playerprisma));
+    } catch(error){
+        console.error(error);
+        throw new Error("oops");
     }
-    return player;
-};
+}
+
+const getPlayerById = async (id: number): Promise<Player> => {
+    try {
+        const result = await database.player.findUniqueOrThrow(
+            {
+                where: {
+                    id: id
+                },
+                include: {user: true},
+            }
+        )
+        return Player.from(result);
+    } catch(error){
+        console.error(error);
+        throw new Error("Player not found");
+    }
+}
 
 export default {
     getAllPlayers,
