@@ -1,5 +1,5 @@
 type Role = 'user' | 'admin';
-type Category = 'fruits' | 'vegetables' | 'dairy';
+type Category = 'fruits' | 'vegetables' | 'dairy' | 'meat' | 'fish';
 
 type ItemInput = {
     id?: number;
@@ -7,6 +7,7 @@ type ItemInput = {
     price: number;
     pathToImage: string;
     category: Category;
+    quantity: number;
 };
 
 type NutritionlabelInput = {

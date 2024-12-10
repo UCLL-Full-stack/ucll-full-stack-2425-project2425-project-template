@@ -11,6 +11,8 @@ enum Category {
     fruits
     vegetables
     dairy
+    meat
+    fish
 }
 
 enum Role {

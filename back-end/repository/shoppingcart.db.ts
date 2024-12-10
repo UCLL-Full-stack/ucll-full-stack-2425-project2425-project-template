@@ -73,6 +73,7 @@ const addItemToShoppingcart = async ({
     shoppingcart: Shoppingcart;
 }) => {
     try {
+        const existingitems = shoppingcart.getItems();
         const shoppingcartPrisma = await db.shoppingcart.update({
             where: {
                 id: shoppingcart.getId(),
@@ -80,9 +81,10 @@ const addItemToShoppingcart = async ({
 
             data: {
                 items: {
-                    connect: {
-                        id: item.getId(),
-                    },
+                    connect: [
+                        ...existingitems.map((existingItem) => ({ id: existingItem.getId() })),
+                        { id: item.getId() },
+                    ],
                 },
             },
 
