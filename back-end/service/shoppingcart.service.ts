@@ -1,11 +1,11 @@
 import shoppingcartDb from '../repository/shoppingcart.db';
 import { Shoppingcart } from '../model/shoppingcart';
-import itemService from './item.service';
 import itemDb from '../repository/item.db';
 import { ShoppingcartInput } from '../types';
+import { User } from '../model/user';
 
-const getAllShoppingcarts = (): Shoppingcart[] => {
-    const shoppingcarts = shoppingcartDb.getAll();
+const getAllShoppingcarts = async (): Promise<Shoppingcart[]> => {
+    const shoppingcarts = await shoppingcartDb.getAll();
     if (!shoppingcarts) {
         throw new Error('No shoppingcarts found');
     }
@@ -13,29 +13,39 @@ const getAllShoppingcarts = (): Shoppingcart[] => {
     return shoppingcarts;
 };
 
-const addItemToShoppingcart = ({
+const addItemToShoppingcart = async ({
     itemId,
     shoppingcartId,
 }: {
     itemId: number;
     shoppingcartId: number;
-}): Shoppingcart => {
-    const item = itemDb.getById(itemId);
-    const shoppingcart = shoppingcartDb.getById(shoppingcartId);
+}): Promise<Shoppingcart> => {
+    const item = await itemDb.getById(itemId);
+    const shoppingcart = await shoppingcartDb.getById(shoppingcartId);
 
     if (!item || item === undefined || !shoppingcart || shoppingcart === undefined) {
         throw new Error('Item or shoppingcart not found');
     }
 
-    shoppingcartDb.addItemToShoppingcart({ item, shoppingcart });
+    await shoppingcartDb.addItemToShoppingcart({ item, shoppingcart });
 
     return shoppingcart;
 };
 
-const createShoppingcart = (shoppingcart: ShoppingcartInput): Shoppingcart => {
+const createShoppingcart = async (shoppingcart: ShoppingcartInput): Promise<Shoppingcart> => {
     const newShoppingcart = new Shoppingcart(shoppingcart);
 
-    const createdShoppingcart = shoppingcartDb.create(newShoppingcart);
+    // temp user
+    const tempUser = new User({
+        id: 0,
+        email: 'john@mail.com',
+        password: 'john123!',
+        role: 'admin',
+    });
+
+    newShoppingcart.setUser(tempUser);
+
+    const createdShoppingcart = await shoppingcartDb.create(newShoppingcart);
 
     if (!createdShoppingcart) {
         throw new Error('Could not create shoppingcart');

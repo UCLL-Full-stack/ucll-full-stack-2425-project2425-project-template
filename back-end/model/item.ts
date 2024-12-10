@@ -1,4 +1,6 @@
 import { Category } from '../types';
+
+import { Item as ItemPrisma, Nutritionlabel as NutritionlabelPrisma } from '@prisma/client';
 import { Nutritionlabel } from './nutritionlabel';
 
 export class Item {
@@ -7,7 +9,7 @@ export class Item {
     private price: number;
     private pathToImage: string;
     private category: Category;
-    private nutritionlabel!: Nutritionlabel;
+    private nutritionlabel?: Nutritionlabel | null;
 
     constructor(item: {
         id?: number;
@@ -15,6 +17,7 @@ export class Item {
         price: number;
         pathToImage: string;
         category: Category;
+        nutritionlabel?: Nutritionlabel | null;
     }) {
         this.validate(item);
         this.id = item.id;
@@ -22,6 +25,7 @@ export class Item {
         this.price = item.price;
         this.pathToImage = item.pathToImage;
         this.category = item.category;
+        this.nutritionlabel = item.nutritionlabel || null;
     }
 
     validate(item: { name: string; price: number; pathToImage: string; category: Category }) {
@@ -70,13 +74,8 @@ export class Item {
         return this.category;
     }
 
-    getNutritionLabel(): Nutritionlabel {
+    getNutritionlabel(): Nutritionlabel | undefined | null {
         return this.nutritionlabel;
-    }
-
-    setNutritionLabel(nutritionlabel: Nutritionlabel) {
-        this.nutritionlabel = nutritionlabel;
-        nutritionlabel.setItem(this);
     }
 
     equals(item: Item): boolean {
@@ -84,8 +83,25 @@ export class Item {
             this.id === item.getId() &&
             this.name === item.getName() &&
             this.pathToImage === item.getPathToImage() &&
-            this.category === item.getCategory() &&
-            this.nutritionlabel == item.getNutritionLabel()
+            this.category === item.getCategory()
         );
+    }
+
+    static from({
+        id,
+        name,
+        price,
+        pathToImage,
+        category,
+        nutritionlabel,
+    }: ItemPrisma & { nutritionlabel?: NutritionlabelPrisma }): Item {
+        return new Item({
+            id,
+            name,
+            price,
+            pathToImage,
+            category,
+            nutritionlabel: nutritionlabel ? Nutritionlabel.from(nutritionlabel) : undefined,
+        });
     }
 }
