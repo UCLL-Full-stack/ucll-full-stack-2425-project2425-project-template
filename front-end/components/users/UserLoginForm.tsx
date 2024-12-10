@@ -88,6 +88,7 @@ const UserLoginForm: React.FC = () => {
                         type="text"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
+                        placeholder="Enter your email..."
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                     {nameError && <span className="text-red-700 font-bold">{nameError}</span>}
@@ -100,6 +101,7 @@ const UserLoginForm: React.FC = () => {
                         type="text"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
+                        placeholder="Enter your password..."
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                     {passwordError && (
