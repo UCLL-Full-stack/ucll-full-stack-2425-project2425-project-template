@@ -8,24 +8,30 @@ type Props = {
 const TeamPlayers: React.FC<Props> = ({ players }: Props) => {
     return (
         <>
-            {players && (
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Firstname</th>
-                            <th scope="col">Lastname</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {players.map((player, index) => (
-                            <tr key={index} role="button">
-                                <td>{player.firstName}</td>
-                                <td>{player.lastName}</td>
+            <div className="shadow-lg rounded w-full mx-auto pt-4">
+                {players && (
+                    <table className="table table-hover w-full rounded-lg text-center mx-auto">
+                        <thead className="bg-accent rounded">
+                            <tr className="text-lg text-white font-bold rounded">
+                                <th scope="col" className="px-8 py-4 text-center">
+                                    Firstname
+                                </th>
+                                <th scope="col" className="px-8 py-4 text-center">
+                                    Lastname
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+                        </thead>
+                        <tbody className="bg-background rounded">
+                            {players.map((player, index) => (
+                                <tr className="bg-background border-b border-primary rounded">
+                                    <td className="px-8 py-6 rounded">{player.firstName}</td>
+                                    <td className="px-8 py-6 rounded">{player.lastName}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
         </>
     );
 };

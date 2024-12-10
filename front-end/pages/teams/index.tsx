@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { Router, useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '@components/layout/Layout';
+import Link from 'next/link';
 
 const Teams: React.FC = () => {
     const [teams, setTeams] = useState<Array<Team>>();
@@ -27,22 +28,34 @@ const Teams: React.FC = () => {
         router.push('/teams/create');
     };
 
+    const handleClick = () => {
+        router.reload();
+    };
+
     return (
         <Layout>
             <Head>
                 <title>Teams - TeamTrack</title>
             </Head>
-            <div className="flex flex-col items-center justify-center space-y-8">
-                <h1 className="max-w-4xl mx-auto px-10 text-6xl font-bold text-center mt-3 border-b border-primary">
-                    Teams
-                </h1>
-                <section className='flex justify-between space-y-8'>
-                    <h2>Team overview</h2>
+            <div className="flex flex-col items-center justify-center space-y-12">
+                <Link href="/teams" passHref>
+                    <div
+                        className="flex items-center hover:shadow-lg duration-200 cursor-pointer"
+                        onClick={handleClick}
+                    >
+                        <h1 className="max-w-4xl mx-auto px-10 text-6xl font-bold text-center mt-3 border-b border-primary">
+                            Team Overview
+                        </h1>
+                    </div>
+                </Link>
+                <section className="flex justify-center space-y-8 w-full">
                     {teams && <TeamOverviewTable teams={teams} selectTeam={setSelectedTeam} />}
                 </section>
                 {selectedTeam && (
                     <section>
-                        <h2>Players in {selectedTeam.teamName}:</h2>
+                        <h2 className="max-w-4xl mx-auto px-10 text-4xl font-bold text-center mt-3 pb-2 border-b border-primary">
+                            Players in {selectedTeam.teamName}:
+                        </h2>
                         {selectedTeam.players && <TeamPlayers players={selectedTeam.players} />}
                     </section>
                 )}
