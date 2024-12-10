@@ -1,7 +1,7 @@
-// src/types/auth.ts
 export type RegisterData = {
   firstName: string;
   lastName: string;
+  username: string;
   email: string;
   password: string;
 };

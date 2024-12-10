@@ -1,4 +1,4 @@
-import AuthToggle from "../components/auth/AuthToggle";
+import AuthToggle from "../../components/auth/AuthToggle";
 
 const AuthPage = () => {
   return (

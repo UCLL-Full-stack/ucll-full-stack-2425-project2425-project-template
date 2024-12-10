@@ -1,34 +1,74 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/router";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Button } from "../ui/button";
 
 const AuthToggle = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isPending, startTransition] = useTransition();
+
+  const router = useRouter();
+
+  const handleSuccess = () => {
+    router.push("/"); // redirects to homepage after successful login/signup
+  };
+
+  const handleTabChange = (value: string) => {
+    startTransition(() => {
+      setIsLogin(value === "login");
+    });
+  };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
-      {/* 灰色背景框 */}
-      <div className="flex bg-gray-200 p-1 rounded-full w-full mb-6">
-        <button
-          className={`flex-1 py-2 font-semibold rounded-full transition-colors ${
-            isLogin ? "bg-white text-gray-800" : "bg-transparent text-gray-500"
-          }`}
-          onClick={() => setIsLogin(true)}
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Plateful</CardTitle>
+        <CardDescription>
+          {isLogin ? "Welcome back!" : "Create a new account"}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs
+          defaultValue="login"
+          className="w-full"
+          onValueChange={handleTabChange}
         >
-          Login
-        </button>
-        <button
-          className={`flex-1 py-2 font-semibold rounded-full transition-colors ${
-            !isLogin ? "bg-white text-gray-800" : "bg-transparent text-gray-500"
-          }`}
-          onClick={() => setIsLogin(false)}
-        >
-          Sign Up
-        </button>
-      </div>
-      {/* 条件渲染表单 */}
-      {isLogin ? <LoginForm /> : <SignupForm />}
-    </div>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="register">Register</TabsTrigger>
+          </TabsList>
+          <div
+            className={`mt-4 transition-opacity duration-300 ${
+              isPending ? "opacity-50" : "opacity-100"
+            }`}
+          >
+            <TabsContent value="login">
+              <LoginForm onSuccess={handleSuccess} />
+            </TabsContent>
+            <TabsContent value="register">
+              <SignupForm onSuccess={handleSuccess} />
+            </TabsContent>
+          </div>
+        </Tabs>
+      </CardContent>
+      <CardFooter className="flex justify-center">
+        {isLogin && (
+          <Button variant="link" className="p-0">
+            Forgot password?
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
   );
 };
 
