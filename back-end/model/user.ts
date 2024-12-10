@@ -1,10 +1,11 @@
+import { User as UserPrisma } from '@prisma/client';
 export class User {
     private id?: number;
     private username: string;
     private email: string;
     private password: string;
 
-    constructor(user:{id?: number, username: string, email: string, password: string}) {
+    constructor(user: { id?: number; username: string; email: string; password: string }) {
         this.validate(user);
         this.id = user.id;
         this.username = user.username;
@@ -15,7 +16,7 @@ export class User {
     public getId(): number | undefined {
         return this.id;
     }
-    
+
     public getUsername(): string {
         return this.username;
     }
@@ -27,14 +28,10 @@ export class User {
     public getPassword(): string {
         return this.password;
     }
-    validate(user :{
-        username: string,
-        email: string,
-        password: string,
-    }) {
+    validate(user: { username: string; email: string; password: string }) {
         if (!user.username?.trim()) {
             throw new Error('Username is required');
-        } 
+        }
         if (!user.email?.trim()) {
             throw new Error('Email is required');
         }
@@ -57,6 +54,9 @@ export class User {
             this.username === user.getUsername() &&
             this.email === user.getEmail() &&
             this.password === user.getPassword()
-        )
+        );
+    }
+    static from({ id, username, email, password }: UserPrisma) {
+        return new User({ id, username, email, password });
     }
 }

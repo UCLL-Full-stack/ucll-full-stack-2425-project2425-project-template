@@ -1,21 +1,24 @@
-import { CartItem } from "./cartItem";
-import { Product } from "./product";
+import { CartItem } from './cartItem';
+import { Product } from './product';
+import {
+    User as UserPrisma,
+    CartItem as CartItemPrisma,
+    Shoppingcart as ShoppingcartPrisma,
+} from '@prisma/client';
 
 export class Shoppingcart {
     private id?: number;
     private cartItems: CartItem[];
     private totalPrice: number;
 
-    constructor(shoppingcart: { id?: number; cartItems: CartItem[] }) {
+    constructor(shoppingcart: { id?: number; cartItems: CartItem[]; totalPrice: number }) {
         this.id = shoppingcart.id;
         this.cartItems = shoppingcart.cartItems;
         this.totalPrice = this.calculateTotalPrice();
     }
 
     public addProductToCart(product: Product, quantity: number): void {
-        const existingCartItem = this.cartItems.find(
-            (item) => item.getProduct().equals(product)
-        );
+        const existingCartItem = this.cartItems.find((item) => item.getProduct().equals(product));
 
         if (existingCartItem) {
             existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
@@ -27,9 +30,7 @@ export class Shoppingcart {
     }
 
     public removeProductFromCart(product: Product): void {
-        this.cartItems = this.cartItems.filter(
-            (item) => !item.getProduct().equals(product)
-        );
+        this.cartItems = this.cartItems.filter((item) => !item.getProduct().equals(product));
         this.totalPrice = this.calculateTotalPrice();
     }
 
@@ -52,8 +53,19 @@ export class Shoppingcart {
     equals(shoppingcart: Shoppingcart): boolean {
         return (
             this.id === shoppingcart.getId() &&
-            JSON.stringify(this.cartItems) === JSON.stringify(shoppingcart.getCartItems()) &&
+            this.cartItems === shoppingcart.getCartItems() &&
             this.totalPrice === shoppingcart.getTotalPrice()
         );
+    }
+    static from({
+        id,
+        cartItems,
+        totalPrice,
+    }: ShoppingcartPrisma & { cartItems: CartItemPrisma[] }) {
+        return new Shoppingcart({
+            id,
+            cartItems: cartItems.map((item) => CartItem.from(item)),
+            totalPrice,
+        });
     }
 }

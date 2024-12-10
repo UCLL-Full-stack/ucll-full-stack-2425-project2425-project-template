@@ -1,4 +1,5 @@
-import { Product } from "./product";
+import { Product } from './product';
+import { CartItem as CartItemPrisma, Product as ProductPrisma } from '@prisma/client';
 
 export class CartItem {
     private product: Product;
@@ -36,5 +37,8 @@ export class CartItem {
         if (cartItem.quantity <= 0) {
             throw new Error('Quantity must be greater than 0');
         }
+    }
+    static from({ product, quantity }: CartItemPrisma & { product: ProductPrisma }) {
+        return new CartItem({ product: Product.from(product), quantity });
     }
 }
