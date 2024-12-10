@@ -44,13 +44,10 @@ const create = async (shoppingcart: Shoppingcart): Promise<Shoppingcart> => {
         const shoppingcartPrisma = await db.shoppingcart.create({
             data: {
                 name: shoppingcart.getName(),
-                deliveryDate: shoppingcart.getDeliveryDate(),
-                items: {
-                    connect: shoppingcart.getItems().map((item) => ({ id: item.getId() })),
-                },
+                deliveryDate: new Date(shoppingcart.getDeliveryDate()),
                 user: {
                     connect: {
-                        id: shoppingcart.getUser()?.getId(),
+                        id: 0,
                     },
                 },
             },

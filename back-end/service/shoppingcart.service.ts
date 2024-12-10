@@ -2,6 +2,7 @@ import shoppingcartDb from '../repository/shoppingcart.db';
 import { Shoppingcart } from '../model/shoppingcart';
 import itemDb from '../repository/item.db';
 import { ShoppingcartInput } from '../types';
+import { User } from '../model/user';
 
 const getAllShoppingcarts = async (): Promise<Shoppingcart[]> => {
     const shoppingcarts = await shoppingcartDb.getAll();
@@ -33,6 +34,16 @@ const addItemToShoppingcart = async ({
 
 const createShoppingcart = async (shoppingcart: ShoppingcartInput): Promise<Shoppingcart> => {
     const newShoppingcart = new Shoppingcart(shoppingcart);
+
+    // temp user
+    const tempUser = new User({
+        id: 0,
+        email: 'john@mail.com',
+        password: 'john123!',
+        role: 'admin',
+    });
+
+    newShoppingcart.setUser(tempUser);
 
     const createdShoppingcart = await shoppingcartDb.create(newShoppingcart);
 
