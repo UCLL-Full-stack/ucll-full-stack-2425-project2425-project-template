@@ -10,21 +10,6 @@ const main = async () => {
     await prisma.user.deleteMany();
     await prisma.nutritionlabel.deleteMany();
 
-    const nutritionlabels = await Promise.all([
-        prisma.nutritionlabel.create({
-            data: {
-                id: 1,
-                energy: 33,
-                fat: 0.3,
-                saturatedFats: 0.0,
-                carbohydrates: 7.7,
-                sugar: 7.7,
-                protein: 0.8,
-                salts: 0.0,
-            },
-        }),
-    ]);
-
     const items = await Promise.all([
         prisma.item.create({
             data: {
@@ -34,7 +19,6 @@ const main = async () => {
                 pathToImage:
                     'https://www.health.com/thmb/zvfL1rCWAPg3XzidfAqURuCmttk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Strawberries-c5f434e7729e47c5b32c0deaa029386c.jpg',
                 category: 'fruits',
-                nutritionlabel: { connect: { id: nutritionlabels[0].id } },
             },
         }),
         prisma.item.create({
@@ -154,6 +138,12 @@ const main = async () => {
                 itemId: items[0].id,
             },
         }),
+        prisma.shoppingcartItems.create({
+            data: {
+                shoppingcartId: 1,
+                itemId: items[0].id,
+            },
+        }),
     ]);
 
     await Promise.all([
@@ -172,7 +162,7 @@ const main = async () => {
             data: {
                 items: {
                     connect: [
-                        { shoppingcartId_itemId: { shoppingcartId: 0, itemId: items[0].id } },
+                        { shoppingcartId_itemId: { shoppingcartId: 1, itemId: items[0].id } },
                     ],
                 },
             },
