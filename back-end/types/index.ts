@@ -36,4 +36,18 @@ type UserInput = {
     role: Role;
 };
 
-export { Role, Category, ItemInput, NutritionlabelInput, ShoppingcartInput, UserInput };
+type AuthenticationResponse = {
+    token: string;
+    email: string;
+    role: Role;
+};
+
+export {
+    Role,
+    Category,
+    ItemInput,
+    NutritionlabelInput,
+    ShoppingcartInput,
+    UserInput,
+    AuthenticationResponse,
+};

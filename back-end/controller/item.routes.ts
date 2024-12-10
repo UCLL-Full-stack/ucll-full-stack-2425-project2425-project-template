@@ -336,6 +336,55 @@ itemRouter.post(
     }
 );
 
+/**
+ * @swagger
+ * /items/{itemId}:
+ *   delete:
+ *     summary: Delete an item by ID
+ *     description: Remove a specific item from the store's inventory
+ *     tags:
+ *       - Items
+ *     parameters:
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Numeric ID of the item to delete
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Item deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item successfully deleted"
+ *       404:
+ *         description: Item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error occurred"
+ */
+
 itemRouter.delete('/:itemId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const itemId = parseInt(req.params.itemId);

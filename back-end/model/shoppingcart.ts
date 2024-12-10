@@ -7,14 +7,19 @@ import {
     Item as ItemPrisma,
 } from '@prisma/client';
 
+interface CartItem {
+    item: Item;
+    quantity: number;
+}
+
 export class Shoppingcart {
     private id?: number | undefined;
     private name: string;
     private deliveryDate: Date;
     private user?: User;
-    private items: Item[] = [];
+    private items: CartItem[] = [];
 
-    constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date; items: Item[] }) {
+    constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date; items: CartItem[] }) {
         this.validate(shoppingcart);
         this.id = shoppingcart.id;
         this.name = shoppingcart.name;
@@ -37,16 +42,24 @@ export class Shoppingcart {
             throw new Error('Delivery date should be after today');
         }
     }
-
     addItem(item: Item) {
-        this.items.push(item);
+        const existingCartItem = this.items.find(cartItem => cartItem.item.equals(item));
+        if (existingCartItem) {
+            existingCartItem.quantity++;
+        } else {
+            this.items.push({
+                item,
+                quantity: 1
+            });
+        }
     }
 
     removeItem(item: Item) {
-        if (!this.items.includes(item)) {
+        const cartItem = this.items.find(cartItem => cartItem.item.equals(item));
+        if (!cartItem) {
             throw new Error('This item does not exist in this shopping cart');
         }
-        this.items.splice(this.items.indexOf(item), 1);
+        this.items.splice(this.items.indexOf(cartItem), 1);
     }
 
     getId(): number | undefined {
@@ -65,7 +78,7 @@ export class Shoppingcart {
         return this.user;
     }
 
-    getItems(): Item[] {
+    getItems(): CartItem[] {
         return this.items;
     }
 
@@ -87,12 +100,21 @@ export class Shoppingcart {
         name,
         deliveryDate,
         items,
-    }: ShoppingcartPrisma & { user: UserPrisma; items: ItemPrisma[] }) {
-        return new Shoppingcart({
+        user,
+    }: ShoppingcartPrisma & {
+        items: { item: ItemPrisma; quantity: number }[];
+        user: UserPrisma;
+    }): Shoppingcart {
+        const shoppingcart = new Shoppingcart({
             id,
             name,
             deliveryDate,
-            items: items.map((item) => Item.from(item)),
+            items: items.map(({ item, quantity }) => ({
+                item: Item.from(item),
+                quantity,
+            })),
         });
+        shoppingcart.setUser(User.from(user));
+        return shoppingcart;
     }
 }

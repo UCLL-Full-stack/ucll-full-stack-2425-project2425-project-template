@@ -1,4 +1,3 @@
-import Header from '@components/Header';
 import ItemOverview from '@components/items/ItemOverview';
 import NutritionLabel from '@components/items/NutritionLabel';
 import ItemsService from '@services/ItemsService';

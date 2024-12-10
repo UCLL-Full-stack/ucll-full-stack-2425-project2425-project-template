@@ -36,6 +36,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -71,6 +72,111 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ message: (error as Error).message });
+    }
+});
+
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: Create a new user
+ *     tags:
+ *       - users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *               - role
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email address
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *                 format: password
+ *               role:
+ *                 $ref: '#/components/schemas/Role'
+ *     responses:
+ *       200:
+ *         description: User successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request - Invalid user data
+ *       409:
+ *         description: Conflict - User already exists
+ *       500:
+ *         description: Internal server error
+ */
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newUser = req.body as UserInput;
+        const user = await userService.createUser(newUser);
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Authenticate a user
+ *     tags:
+ *       - users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email address
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *                 format: password
+ *     responses:
+ *       200:
+ *         description: Successfully authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT authentication token
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized - Invalid credentials
+ *       500:
+ *         description: Internal server error
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, password } = req.body;
+        const authResponse = await userService.authenticate({ email, password });
+        res.status(200).json(authResponse);
+    } catch (error) {
+        next(error);
     }
 });
 
