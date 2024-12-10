@@ -2,9 +2,7 @@ import { Category } from '../../model/category';
 import Event from '../../model/event';
 import { Location } from '../../model/location';
 import eventDb from '../../repository/event.db';
-import categoryService from '../../service/category.service';
 import eventService from '../../service/event.service';
-import locationService from '../../service/location.service';
 
 const locationInput = {
     id: 1,

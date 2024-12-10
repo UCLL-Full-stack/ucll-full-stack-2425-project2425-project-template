@@ -27,12 +27,14 @@ const EventDetails: React.FC = () => {
   };
 
   useEffect(() => {
-    if (loggedInUser) {
-      fetchEvent();
-    }
     fetchUser();
   }, [router.query.id]);
 
+  useEffect(() => {
+    if (loggedInUser) {
+      fetchEvent();
+    }
+  });
   const handleOnClick = () => {
     console.log("still need to handle the participate");
   };
