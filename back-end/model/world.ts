@@ -25,6 +25,9 @@ export class World {
         this.name = world.name;
         this.owner = world.owner;
         this.floors = world.floors;
+        world.floors.forEach(floor => {
+           floor.setWorldId(world.id); 
+        });
     }
 
     getId(): number | undefined {
