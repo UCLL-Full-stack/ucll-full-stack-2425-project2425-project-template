@@ -4,9 +4,11 @@ import db from './db';
 
 const getAll = async (): Promise<Item[]> => {
     try {
-        const itemPrisma = await db.item.findMany();
+        const itemsPrisma = await db.item.findMany({ include: { nutritionlabel: true } });
 
-        return itemPrisma.map((itemPrisma) => Item.from(itemPrisma));
+        return itemsPrisma.map((itemPrisma) =>
+            Item.from({ ...itemPrisma, nutritionlabel: itemPrisma.nutritionlabel ?? undefined })
+        );
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

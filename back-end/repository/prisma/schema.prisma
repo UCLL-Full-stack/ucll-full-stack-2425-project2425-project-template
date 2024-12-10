@@ -49,7 +49,7 @@ model Item {
     price          Float
     pathToImage    String
     category       Category
-    Shoppingcart   Shoppingcart[]
+    shoppingcart   Shoppingcart[]
     nutritionlabel Nutritionlabel?
 
     @@map("items")
