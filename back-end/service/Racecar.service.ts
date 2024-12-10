@@ -1,5 +1,5 @@
 import racecarDb from '../repository/Racecar.db';
-import { Racecar } from '../model/racecar';
+import { Racecar } from '../model/Racecar';
 
 const getRacecarById = async (id: number): Promise<Racecar | null> => {
     return racecarDb.getRacecarById(id);

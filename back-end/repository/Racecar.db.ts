@@ -1,4 +1,4 @@
-import { Racecar } from '../model/racecar';
+import { Racecar } from '../model/Racecar';
 import database from '../util/database';
 
 const getAllRacecars = async (): Promise<Racecar[] | null> => {

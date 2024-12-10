@@ -1,6 +1,6 @@
 import { User as UserPrisma, Submission as SubmissionPrisma } from '@prisma/client';
 import { Permission } from '../types'
-import { Submission } from './submission';
+import { Submission } from './Submission';
 
 export class User {
     private _id?: number | undefined;

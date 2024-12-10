@@ -1,6 +1,6 @@
 import { Race } from '../../model/race';
-import { Driver } from '../../model/driver';
-import { Racecar } from '../../model/racecar';
+import { Driver } from '../../model/Driver';
+import { Racecar } from '../../model/Racecar';
 import { Crash } from '../../model/crash';
 import { Admin } from '../../model/admin';
 

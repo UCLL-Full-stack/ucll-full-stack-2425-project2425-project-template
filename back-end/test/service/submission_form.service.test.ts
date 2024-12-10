@@ -1,11 +1,11 @@
 import submissionService from '../../service/submission.service';
 import submissionDb from '../../repository/submission.db';
-import { Submission } from '../../model/submission';
+import { Submission } from '../../model/Submission';
 import { Race } from '../../model/race';
-import { Driver } from '../../model/driver';
-import { Racecar } from '../../model/racecar';
+import { Driver } from '../../model/Driver';
+import { Racecar } from '../../model/Racecar';
 import { Crash } from '../../model/crash';
-import { User } from '../../model/user';
+import { User } from '../../model/User';
 
 jest.mock('../../repository/submission.db');
 

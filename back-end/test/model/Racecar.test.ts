@@ -1,4 +1,4 @@
-import { Racecar } from '../../model/racecar';
+import { Racecar } from '../../model/Racecar';
 
 test('given: valid values for Racecar, when: Racecar is created, then: Racecar is created with those values', () => {
     // given

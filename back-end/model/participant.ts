@@ -1,5 +1,5 @@
-import { Driver } from './driver';
-import { Racecar } from './racecar';
+import { Driver } from './Driver';
+import { Racecar } from './Racecar';
 import { Participant as ParticipantPrisma, Driver as DriverPrisma, Racecar as RacecarPrisma } from '@prisma/client';
 
 export class Participant {

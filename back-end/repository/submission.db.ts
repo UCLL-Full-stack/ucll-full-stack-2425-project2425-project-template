@@ -1,4 +1,4 @@
-import { Submission } from '../model/submission';
+import { Submission } from '../model/Submission';
 import database from '../util/database';
 
 const createSubmission = async ({ submission }: { submission: Submission }): Promise<Submission> => {

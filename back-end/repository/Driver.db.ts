@@ -1,4 +1,4 @@
-import { Driver } from '../model/driver';
+import { Driver } from '../model/Driver';
 import database from '../util/database';
 
 const getAllDrivers = async ():Promise<Driver[] | null> => {

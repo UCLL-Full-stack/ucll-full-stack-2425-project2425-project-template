@@ -1,5 +1,5 @@
 import SubmissionDb from '../repository/submission.db';
-import { Submission } from '../model/submission';
+import { Submission } from '../model/Submission';
 import RaceService from './Race.service';
 import { RaceInput, DriverInput, CrashInput } from '../types';
 

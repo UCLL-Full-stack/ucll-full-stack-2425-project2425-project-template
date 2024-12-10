@@ -1,5 +1,5 @@
-import { Driver } from '../../model/driver';
-import { Racecar } from '../../model/racecar';
+import { Driver } from '../../model/Driver';
+import { Racecar } from '../../model/Racecar';
 import { Crash } from '../../model/crash';
 
 test('given: valid values for Driver, when: Driver is created, then: Driver is created with those values', () => {
