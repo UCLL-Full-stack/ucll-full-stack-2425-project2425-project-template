@@ -65,6 +65,7 @@ const UserLoginForm: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/');
+                router.reload();
             }, 2000);
         } catch (error) {
             setStatusMessages([

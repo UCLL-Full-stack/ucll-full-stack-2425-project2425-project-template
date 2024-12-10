@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 const Header: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
+    const logout = () => {
+        sessionStorage.removeItem('loggedInUser');
+        setLoggedInUser(null);
+    };
+
     useEffect(() => {
         const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
         setLoggedInUser(token);
@@ -35,10 +40,7 @@ const Header: React.FC = () => {
 
                         {loggedInUser ? (
                             <li>
-                                <Link
-                                    onClick={() => sessionStorage.removeItem('loggedInUser')}
-                                    href={'/login'}
-                                >
+                                <Link onClick={logout} href={'/login'}>
                                     Logout
                                 </Link>
                             </li>
