@@ -33,11 +33,13 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
     if (!raceInput.location) {
         throw new Error('Race location is required');
     }
+    if (!raceInput.date) {
+        throw new Error('Race date is required');
+    }
 
     const crashes = (raceInput.crashes || []).map((crashInput: CrashInput) => {
-
         const participants = crashInput.participants.map((participantInput: ParticipantInput) => {
-            const driver =  new Driver({
+            const driver = new Driver({
                 name: participantInput.driver.name,
                 surname: participantInput.driver.surname,
                 birthdate: participantInput.driver.birthdate,
@@ -58,9 +60,8 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
                 racecar: racecar,
             });
         });
-        
+
         return new Crash({
-            id: crashInput.id,
             type: crashInput.type,
             description: crashInput.description,
             casualties: crashInput.casualties,
@@ -70,17 +71,15 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
     });
 
     const newRace = new Race({
-        id: raceInput.id,
         name: raceInput.name,
         type: raceInput.type,
         description: raceInput.description,
         location: raceInput.location,
         date: raceInput.date,
-        crashes,
+        crashes: crashes,
     });
 
-    raceDb.createRace({ race: newRace });
-    return newRace;
+    return raceDb.createRace({ race: newRace });
 };
 
 const getAllCrashes = async (): Promise<Crash[] | null> => {
@@ -215,16 +214,49 @@ const getCrashByRaceId = async (id: number): Promise<Race | null> => {
     return race || null;
 }
 
-export default {
-    getRaceById,
-    getAllRaces,
-    createRace,
-    getAllCrashes,
-    createCrash,
-    getAllRacecars,
-    createRacecar,
-    getAllDrivers,
-    createDriver,
-    updateRace,
-    getCrashByRaceId,
+const addCrashToRace = async (raceId: number, crashData: CrashInput): Promise<Race | null> => {
+    const crash = new Crash({
+        type: crashData.type,
+        description: crashData.description,
+        casualties: crashData.casualties,
+        deaths: crashData.deaths,
+        participants: crashData.participants.map(participantInput => new Participant({
+            driver: new Driver(participantInput.driver),
+            racecar: new Racecar({
+                name: participantInput.racecar.car_name,
+                type: participantInput.racecar.type,
+                brand: participantInput.racecar.brand,
+                hp: participantInput.racecar.hp,
+            })
+        }))
+    });
+
+    return raceDb.addCrashToRace(raceId, crash);
 };
+
+const removeCrashFromRace = async (raceId: number, crashId: number): Promise<Race | null> => {
+    return raceDb.removeCrashFromRace(raceId, crashId);
+};
+
+const editCrash = async (crashId: number, crashData: Partial<CrashInput>): Promise<Crash | null> => {
+    const crash = new Crash({
+        id: crashId,
+        type: crashData.type || '',
+        description: crashData.description || '',
+        casualties: crashData.casualties || 0,
+        deaths: crashData.deaths || 0,
+        participants: crashData.participants?.map(participantInput => new Participant({
+            driver: new Driver(participantInput.driver),
+            racecar: new Racecar({
+                name: participantInput.racecar.car_name,
+                type: participantInput.racecar.type,
+                brand: participantInput.racecar.brand,
+                hp: participantInput.racecar.hp,
+            })
+        })) || []
+    });
+
+    return raceDb.editCrash(crashId, crash);
+};
+
+export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getCrashByRaceId };
