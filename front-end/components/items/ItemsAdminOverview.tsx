@@ -6,7 +6,7 @@ import ItemsService from '@services/ItemsService';
 
 const ItemAdminOverview: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
-    const [menuOpenId, setMenuOpenId] = useState<number | null>(null);
+    const [menuOpenId, setMenuOpenId] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -22,13 +22,13 @@ const ItemAdminOverview: React.FC = () => {
         fetchItems();
     }, []);
 
-    const toggleMenu = (itemId: number) => {
-        setMenuOpenId(menuOpenId === itemId ? null : itemId);
+    const toggleMenu = (itemId: number | undefined) => {
+        setMenuOpenId(menuOpenId === itemId ? undefined : itemId);
     };
 
-    async function handleDeleteItem(id: number): Promise<void> {
+    async function handleDeleteItem(id: number | undefined): Promise<void> {
         try {
-            await ItemsService.deleteItem(id);
+            id && (await ItemsService.deleteItem(id));
             setItems((prevItems) => prevItems.filter((item) => item.id !== id));
         } catch (error) {
             console.error(error);

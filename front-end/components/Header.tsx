@@ -19,12 +19,19 @@ const Header: React.FC = () => {
         loggedInUser && setLoggedInUser(loggedInUser);
     };
 
+    const checkLoggedInUser = () => {
+        if (!loggedInUser) {
+            router.push('/login');
+        }
+    };
+
     useEffect(() => {
         getLoggedInUser();
     }, []);
 
     useInterval(() => {
         getLoggedInUser();
+        checkLoggedInUser();
     }, 1000);
 
     return (
