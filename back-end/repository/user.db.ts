@@ -35,7 +35,6 @@ const createUser = async (user: User): Promise<User> => {
         const userPrisma = await db.user.create({
             data: {
                 email: user.getEmail(),
-                role: user.getRole(),
                 password: user.getPassword(),
             },
         });

@@ -54,10 +54,6 @@ export class User {
         if (!user.password?.trim()) {
             throw new Error('Password is required');
         }
-
-        if (!user.role?.trim()) {
-            throw new Error('Role is required');
-        }
     }
 
     equals(user: User): boolean {
