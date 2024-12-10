@@ -36,6 +36,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -71,6 +72,70 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ message: (error as Error).message });
+    }
+});
+
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: post a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       200:
+ *         description: Create a new user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/User'
+ */
+
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newUser = req.body as UserInput;
+        const user = await userService.createUser(newUser);
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: login a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/AuthenticationRequest'
+ *     responses:
+ *       200:
+ *         description: Login a user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/AuthenticationResponse'
+ */
+
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { username, password } = req.body;
+        const authResponse = await userService.authenticate({ username, password });
+        res.status(200).json(authResponse);
+    } catch (error) {
+        next(error);
     }
 });
 
