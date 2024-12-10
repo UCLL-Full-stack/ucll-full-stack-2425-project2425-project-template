@@ -131,8 +131,8 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
 
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { username, password } = req.body;
-        const authResponse = await userService.authenticate({ username, password });
+        const { email, password } = req.body;
+        const authResponse = await userService.authenticate({ email, password });
         res.status(200).json(authResponse);
     } catch (error) {
         next(error);
