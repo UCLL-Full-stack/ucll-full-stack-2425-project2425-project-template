@@ -47,7 +47,7 @@ const create = async (shoppingcart: Shoppingcart): Promise<Shoppingcart> => {
                 deliveryDate: new Date(shoppingcart.getDeliveryDate()),
                 user: {
                     connect: {
-                        id: 0,
+                        id: shoppingcart.getUser()?.getId(),
                     },
                 },
             },

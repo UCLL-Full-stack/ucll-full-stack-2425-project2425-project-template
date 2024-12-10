@@ -71,9 +71,16 @@ const addNutritionlabel = async (item: Item, nutritionlabel: Nutritionlabel): Pr
                     connect: { id: nutritionlabelPrisma.id },
                 },
             },
+
+            include: {
+                nutritionlabel: true,
+            },
         });
 
-        return Item.from(updatedItem);
+        return Item.from({
+            ...updatedItem,
+            nutritionlabel: updatedItem.nutritionlabel ?? undefined,
+        });
     } catch (error) {
         console.log(error);
         throw new Error('Could not add nutritionlabel to item');
