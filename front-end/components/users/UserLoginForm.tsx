@@ -54,7 +54,14 @@ const UserLoginForm: React.FC = () => {
                 },
             ]);
 
-            sessionStorage.setItem('loggedInUser', loggedInUser);
+            sessionStorage.setItem(
+                'loggedInUser',
+                JSON.stringify({
+                    token: loggedInUser.token,
+                    email: loggedInUser.email,
+                    role: loggedInUser.role,
+                })
+            );
 
             setTimeout(() => {
                 router.push('/');

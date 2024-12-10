@@ -1,12 +1,13 @@
+import { User } from '@types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const Header: React.FC = () => {
-    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
     useEffect(() => {
-        console.log('busy');
-        setLoggedInUser(sessionStorage.getItem('loggedInUser'));
+        const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
+        setLoggedInUser(token);
     });
 
     return (
@@ -23,9 +24,12 @@ const Header: React.FC = () => {
                                 <li>
                                     <Link href="/items">Items</Link>
                                 </li>
-                                <li>
-                                    <Link href="/itemOverview">Admin overview</Link>
-                                </li>
+
+                                {loggedInUser.role === 'admin' && (
+                                    <li>
+                                        <Link href="/itemOverview">Admin overview</Link>
+                                    </li>
+                                )}
                             </>
                         )}
 

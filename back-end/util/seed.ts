@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 const main = async () => {
+    await prisma.shoppingcartItems.deleteMany();
     await prisma.shoppingcart.deleteMany();
     await prisma.item.deleteMany();
     await prisma.user.deleteMany();
@@ -122,7 +123,7 @@ const main = async () => {
                 id: 1,
                 email: 'jane.doe@mail.com',
                 password: await bcrypt.hash('Jane123!', 12),
-                role: 'user',
+                role: 'admin',
             },
         }),
     ]);
@@ -133,7 +134,6 @@ const main = async () => {
                 id: 0,
                 name: 'Shoppingcart 1',
                 deliveryDate: new Date('2026-12-24'),
-                items: { connect: [items[0]] },
                 userId: 0,
             },
         }),
@@ -142,8 +142,39 @@ const main = async () => {
                 id: 1,
                 name: 'Shoppingcart 2',
                 deliveryDate: new Date('2026-09-16'),
-                items: { connect: [items[1]] },
                 userId: 1,
+            },
+        }),
+    ]);
+
+    const shoppingcartItems = await Promise.all([
+        prisma.shoppingcartItems.create({
+            data: {
+                shoppingcartId: 0,
+                itemId: items[0].id,
+            },
+        }),
+    ]);
+
+    await Promise.all([
+        prisma.shoppingcart.update({
+            where: { id: 0 },
+            data: {
+                items: {
+                    connect: [
+                        { shoppingcartId_itemId: { shoppingcartId: 0, itemId: items[0].id } },
+                    ],
+                },
+            },
+        }),
+        prisma.shoppingcart.update({
+            where: { id: 1 },
+            data: {
+                items: {
+                    connect: [
+                        { shoppingcartId_itemId: { shoppingcartId: 0, itemId: items[0].id } },
+                    ],
+                },
             },
         }),
     ]);

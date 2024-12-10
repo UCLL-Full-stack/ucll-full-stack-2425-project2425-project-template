@@ -1,4 +1,4 @@
-import { Item } from '@types';
+import { Item, User } from '@types';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -7,6 +7,7 @@ import AddNutritionLabelForm from '@components/nutritionlabel/AddNutritionlabelF
 import Head from 'next/head';
 
 const NutritionlabelForm: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const params = useParams<{ itemId?: string }>();
     const itemId = params?.itemId;
     const [item, setItem] = useState<Item>();
@@ -23,8 +24,19 @@ const NutritionlabelForm: React.FC = () => {
             }
         };
 
+        const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
+        setLoggedInUser(token);
+
         fetchItem();
     }, [itemId]);
+
+    if (!loggedInUser || loggedInUser.role !== 'admin') {
+        return (
+            <p className="pt-4 text-lg text-red-600 text-center italic font-bold">
+                Unauthorized to access this page!
+            </p>
+        );
+    }
 
     return (
         <>

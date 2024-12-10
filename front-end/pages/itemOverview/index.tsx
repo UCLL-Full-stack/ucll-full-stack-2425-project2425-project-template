@@ -2,8 +2,25 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import ItemAdminOverview from '@components/items/ItemsAdminOverview';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { User } from '@types';
 
 const AdminPage: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
+        setLoggedInUser(token);
+    });
+
+    if (!loggedInUser || loggedInUser.role !== 'admin') {
+        return (
+            <p className="pt-4 text-lg text-red-600 text-center italic font-bold">
+                Unauthorized to access this page!
+            </p>
+        );
+    }
+
     return (
         <>
             <Head>

@@ -1,4 +1,11 @@
 export type Category = 'fruits' | 'vegetables' | 'dairy';
+export type Role = 'user' | 'admin';
+
+export type User = {
+    id?: number;
+    email: string;
+    role: Role;
+};
 
 export type Item = {
     id?: number;
