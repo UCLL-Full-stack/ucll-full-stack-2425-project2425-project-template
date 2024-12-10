@@ -2,9 +2,11 @@ import UserService from "@/services/UserService";
 import { useState } from "react";
 import { StatusMessage } from "@/types";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const LoginForm: React.FC = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState("");
@@ -53,6 +55,7 @@ const LoginForm: React.FC = () => {
           role: user.role,
         })
       );
+      router.push("/events");
     } else if (response.status === 401) {
       const { errorMessage } = await response.json();
       setStatusMessages([{ message: errorMessage, type: "error" }]);
