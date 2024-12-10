@@ -9,7 +9,7 @@ const NutritionlabelForm: React.FC = () => {
     useEffect(() => {
         const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
         setLoggedInUser(token);
-    });
+    }, []);
 
     if (!loggedInUser || loggedInUser.role !== 'admin') {
         return (

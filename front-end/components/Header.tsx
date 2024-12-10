@@ -8,7 +8,7 @@ const Header: React.FC = () => {
     useEffect(() => {
         const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
         setLoggedInUser(token);
-    });
+    }, []);
 
     return (
         <header className="bg-primary text-white flex justify-between uppercase py-6">
