@@ -59,4 +59,4 @@ const authenticate = async ({
     return authresponse;
 };
 
-export default { getAllUsers };
+export default { getAllUsers, createUser, authenticate };
