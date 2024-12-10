@@ -1,7 +1,7 @@
 export type Category = 'fruits' | 'vegetables' | 'dairy';
 
 export type Item = {
-    id: number;
+    id?: number;
     name: string;
     price: number;
     pathToImage: string;
@@ -19,6 +19,11 @@ export type Nutritionlabel = {
     protein: number;
     salts: number;
     item?: Item;
+};
+
+export type StatusMessage = {
+    message: string;
+    type: 'error' | 'success';
 };
 
 export default {};
