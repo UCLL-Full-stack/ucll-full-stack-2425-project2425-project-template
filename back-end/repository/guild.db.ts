@@ -62,7 +62,7 @@ const getGuildById = async (guildId: string): Promise<Guild> => {
 const addGuild = async (guildData: {
     guildId: string;
     guildName: string;
-    guildOwnerId: string;
+    guildOwnerId?: string | null;
     settings?: PermissionEntry[];
     roleIds?: string[];
     members?: Member[];
@@ -80,12 +80,25 @@ const addGuild = async (guildData: {
             userIds = [],
             boardIds = [],
         } = guildData;
-        for( const userId of userIds){
-            const user = await database.user.findUnique({
-                where: {userId},
+
+        let validatedGuildOwnerId: string | null = guildOwnerId || null;
+        if (guildOwnerId) {
+            const ownerExists = await database.user.findUnique({
+                where: { userId: guildOwnerId },
             });
-            if(!user){
-                userIds.splice(userIds.indexOf(userId), 1);
+            if (!ownerExists) {
+                validatedGuildOwnerId = null; // Set guildOwnerId to null if the user does not exist
+            }
+        }
+
+        // Validate user IDs for connecting to the guild
+        const validUserIds = [];
+        for (const userId of userIds) {
+            const user = await database.user.findUnique({
+                where: { userId },
+            });
+            if (user) {
+                validUserIds.push(userId); // Add only valid user IDs
             }
         }
         const settingsJson = JSON.stringify(settings);
@@ -95,16 +108,14 @@ const addGuild = async (guildData: {
             data: {
             guildId,
             guildName,
-            guildOwner: {
-                connect: { userId: guildOwnerId },
-            },
+            guildOwnerId: validatedGuildOwnerId,
             settings: settingsJson,
             roles: {
                 connect: roleIds.map((roleId) => ({ roleId })),
             },
             members: membersJson,
             users: {
-                connect: userIds.map((userId) => ({ userId })),
+                connect: validUserIds.map((userId) => ({ userId })),
             },
             boards: {
                 connect: boardIds.map((boardId) => ({ boardId })),

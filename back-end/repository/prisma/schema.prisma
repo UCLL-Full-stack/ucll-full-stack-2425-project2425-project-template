@@ -21,8 +21,8 @@ model User {
 model Guild {
     guildId      String  @id
     guildName    String
-    guildOwner   User    @relation(fields: [guildOwnerId], references: [userId])
-    guildOwnerId String
+    guildOwner   User?   @relation(fields: [guildOwnerId], references: [userId])
+    guildOwnerId String?
     settings     Json
     roles        Role[]
     members      Json

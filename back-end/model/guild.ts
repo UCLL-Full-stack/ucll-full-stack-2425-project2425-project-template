@@ -6,13 +6,13 @@ import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column 
 export class Guild {
   private guildId: string;
   private guildName: string;
-  private guildOwnerId: string;
+  private guildOwnerId: string | null;
   private settings: PermissionEntry[];
   private roleIds: string[];
   private members: Member[];
   private boardIds: string[];
 
-  constructor(guildId: string, guildName: string, guildOwnerId: string, settings: PermissionEntry[], roleIds: string[], members: Member[], boardIds: string[]) {
+  constructor(guildId: string, guildName: string, guildOwnerId: string | null, settings: PermissionEntry[], roleIds: string[], members: Member[], boardIds: string[]) {
     this.validate(guildName, settings, members);
     this.guildId = guildId;
     this.guildName = guildName;
@@ -47,11 +47,11 @@ export class Guild {
     return this.guildId;
   }
 
-  setGuildOwnerId(guildOwnerId: string): void {
+  setGuildOwnerId(guildOwnerId: string | null): void {
     this.guildOwnerId = guildOwnerId;
   }
 
-  getGuildOwnerId(): string {
+  getGuildOwnerId(): string | null {
     return this.guildOwnerId;
   }
 
