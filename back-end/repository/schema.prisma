@@ -26,6 +26,5 @@ model User {
     email       String  @unique
     password    String
     age         Int
-    participant Participant?
     role        String
 }

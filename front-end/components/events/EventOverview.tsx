@@ -14,6 +14,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
   const router = useRouter();
 
   const handleEventClick = (eventId: number) => {
+    sessionStorage.setItem('eventId', eventId.toString());
     router.push(`/upcoming-events/${eventId}`);
   };
 

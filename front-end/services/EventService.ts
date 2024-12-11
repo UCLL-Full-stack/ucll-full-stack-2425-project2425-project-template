@@ -1,7 +1,9 @@
+import { User } from "@types";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const getAll = async () => {
-  return await fetch(apiUrl + "/events", {
+const getAll = () => {
+
+  return fetch(apiUrl + "/events", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -9,20 +11,30 @@ const getAll = async () => {
   });
 };
 
-const getEventById = (eventId: string) => {
-  return fetch(apiUrl + `/events/${eventId}`, {
+const getEventById = async (eventId: string) => {
+  const response = await fetch(apiUrl + `/events/details/${eventId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     }
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch event details');
+  }
+
+  return response;
 };
 
 const addParticipantToEvent = async (email: string, eventId: string) => {
+  const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+
   const response = await fetch(apiUrl + `/events/${eventId}/${email}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     }
   });
 
@@ -34,29 +46,25 @@ const addParticipantToEvent = async (email: string, eventId: string) => {
   return response.json();
 };
 
-const getEventsByUserEmail = async (email: string) => {
-  const response = await fetch(apiUrl + `/users/${email}`, {
+const getEventsByUserEmail = (email: string) => {
+  const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+
+  return fetch(apiUrl + `/events/${email}`, {
     method: "GET",
     headers: {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     }
   });
-
-  if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to retrieve events for this user.');
-  }
-
-  return response.json();
 };
 
-const removeFromMyEvents = async(email: string, eventId: number) => {
+const removeFromMyEvents = async (email: string, eventId: number) => {
   // const response = await fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
-  
-    return fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
+
+  return fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
     method: "PUT",
     headers: {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
     }
   });
 

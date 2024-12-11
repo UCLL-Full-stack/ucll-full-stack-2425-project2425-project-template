@@ -57,10 +57,10 @@ const UserLoginForm: React.FC = () => {
             setShowSuccessIcon(true);
 
             const user = await response.json();
-            localStorage.setItem(
-                'loggedInUser',
+            localStorage.setItem("loggedInUser",
                 JSON.stringify({
                     token: user.token,
+                    email: user.email,
                     username: user.username,
                     name: user.name,
                     role: user.role,

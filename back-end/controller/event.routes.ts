@@ -67,6 +67,19 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
+eventRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
+        console.log("byEMail");
+        console.log(req.params.email);
+        const events = await eventService.getEventsByUserEmail(req.params.email);
+        console.log(events);
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(400).json({ status: 'error' });
+    }
+});
+
 /**
  * @swagger
  * /events/{id}:
@@ -92,7 +105,7 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  *       400:
  *         description: Error occurred while fetching the event.
  */
-eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+eventRouter.get('/details/:id', async (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id, 10);
 
     try {

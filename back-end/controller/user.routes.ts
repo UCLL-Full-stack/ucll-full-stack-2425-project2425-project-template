@@ -15,16 +15,6 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
-
-    try {
-        const events = await eventService.getEventsByUserEmail(req.params.email);
-        res.status(200).json(events);
-    } catch (error) {
-        res.status(400).json({ status: 'error' });
-    }
-});
-
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const createdUser = await userService.createUser(req.body as UserInput);

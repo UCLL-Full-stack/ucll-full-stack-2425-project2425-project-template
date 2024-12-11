@@ -18,15 +18,29 @@ const RenderEventDetailsById: React.FC = () => {
     const [showError, setShowError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    // const [eventId, setEventId] = useState<string>(null);
+
     const router = useRouter();
     const { eventId } = router.query;
 
+    useEffect(() => {
+        if (eventId) {
+            getEventById();
+        }
+    }, [eventId]);
+
+    // Why when I do this, eventId turns null when refresh the page?
+    // useEffect(() => {
+    //     getEventById();
+    // }, []);
+
     const getEventById = async () => {
         try {
+            
             const response = await EventService.getEventById(eventId as string);
-            const event = await response.json();
-
-            setEvent(event);
+            const eventData = await response.json();
+            setEvent(eventData);
+            
         } catch (error) {
             console.error("Failed to fetch event:", error);
         }
@@ -40,7 +54,7 @@ const RenderEventDetailsById: React.FC = () => {
             setShowAddButton(true);
             const response = await EventService.addParticipantToEvent(email, eventId as string);
             setEvent(response);
-            
+
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(error.message);
@@ -51,20 +65,17 @@ const RenderEventDetailsById: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-            getEventById();
-    }, [event]);
 
-    const handleAddParticipant = () => {
+
+    const handleAddParticipant = async () => {
         setShowError(false);
         setShowForm(true);
         setShowAddButton(false);
     };
 
-    const handleFormSubmit = (e: React.FormEvent) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         addParticipantToEvent();
-
     };
 
     return (
@@ -85,13 +96,13 @@ const RenderEventDetailsById: React.FC = () => {
                 ) : (
                     <p>Loading event details...</p>
                 )}
-                
+
                 {showError && (
                     <p className={styles.errorMessage}>{errorMessage}</p>
                 )}
 
                 {showAddButton && (
-                    <button 
+                    <button
                         onClick={handleAddParticipant}
                         className={styles.addParticipantButton}
                     >
@@ -100,8 +111,8 @@ const RenderEventDetailsById: React.FC = () => {
                 )}
 
                 {showForm && (
-                    <form 
-                        onSubmit={handleFormSubmit} 
+                    <form
+                        onSubmit={handleFormSubmit}
                         className={styles.addParticipantForm}>
                         <label htmlFor="email">Email:</label>
                         <input
@@ -111,8 +122,8 @@ const RenderEventDetailsById: React.FC = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                    <button type="submit">Submit</button>
-                </form>
+                        <button type="submit">Submit</button>
+                    </form>
                 )}
             </main>
         </>

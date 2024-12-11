@@ -39,6 +39,7 @@ app.use(
             '/api-docs',
             /^\/api-docs\/.*/,
             '/events',
+            /^\/events\/details\/.*/,
             '/users/login',
             '/status',
             '/users/signup'
