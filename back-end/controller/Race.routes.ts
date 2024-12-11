@@ -484,4 +484,43 @@ raceRouter.put('/crashes/:crashId', async (req: Request, res: Response, next: Ne
     }
 });
 
+/**
+ * @swagger
+ * /races/crash/{id}:
+ *   get:
+ *     summary: Retrieve a crash by ID
+ *     tags: [Races]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The crash ID
+ *     responses:
+ *       200:
+ *         description: A crash object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Crash'
+ *       404:
+ *         description: Crash not found
+ *       500:
+ *         description: Internal server error
+ */
+raceRouter.get('/crash/:id', async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10);
+    try {
+        const crash = await raceService.getRaceByCrashId(id);
+        if (crash) {
+            res.json(crash);
+        } else {
+            res.status(404).json({ message: 'Crash not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 export { raceRouter };

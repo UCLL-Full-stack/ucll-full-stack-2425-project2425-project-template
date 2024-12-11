@@ -213,4 +213,13 @@ const editCrash = async (crashId: number, crashData: Crash): Promise<Crash | nul
     }
 };
 
-export default { addCrashToRace, removeCrashFromRace, editCrash, getAllRaces, getRaceById, createRace };
+const getRaceByCrashId = async (id: number): Promise<Race | null> => {
+    try {
+        const races = await getAllRaces();
+        return races ? races.find(race => race.getCrashes().some(crash => crash.getId() === id)) || null : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
+};
+export default { addCrashToRace, removeCrashFromRace, editCrash, getAllRaces, getRaceById, createRace, getRaceByCrashId };

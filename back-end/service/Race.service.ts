@@ -206,11 +206,10 @@ const updateRace = (id: number, raceInput: RaceInput) => {
         throw new Error(`Race not found with ID ${id}`);
     }
     createRace(raceInput);
-}
+};
 
-const getCrashByRaceId = async (id: number): Promise<Race | null> => {
-    const race = await getRaceById(id);
-    return race || null;
+const getRaceByCrashId = async (id: number): Promise<Race | null> => {
+    return raceDb.getRaceByCrashId(id);
 }
 
 const addCrashToRace = async (raceId: number, crashData: CrashInput): Promise<Race | null> => {
@@ -258,4 +257,4 @@ const editCrash = async (crashId: number, crashData: Partial<CrashInput>): Promi
     return raceDb.editCrash(crashId, crash);
 };
 
-export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getCrashByRaceId };
+export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getRaceByCrashId };
