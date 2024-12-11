@@ -40,7 +40,7 @@ const EditCrash: React.FC = () => {
           if (crash.participants && crash.participants.length > 0) {
             setDriverName(crash.participants[0].driver.name);
             setDriverSurname(crash.participants[0].driver.surname);
-            setDriverBirthdate(crash.participants[0].driver.birthdate.toISOString().split('T')[0]);
+            setDriverBirthdate(new Date(crash.participants[0].driver.birthdate).toISOString().split('T')[0]);
             setDriverTeam(crash.participants[0].driver.team);
             setDriverCountry(crash.participants[0].driver.country);
             setDriverDescription(crash.participants[0].driver.description);
