@@ -4,6 +4,10 @@ import {
     WorkoutExercise as WorkoutExercisePrisma,
 } from '@prisma/client';
 import { Exercise } from './exercise';
+import {
+    Workout as WorkoutPrisma, 
+    Exercise as ExercisePrisma
+} from '@prisma/client'
 
 export class Workout {
     readonly id: number;

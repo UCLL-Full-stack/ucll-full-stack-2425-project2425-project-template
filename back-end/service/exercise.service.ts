@@ -1,5 +1,6 @@
-import exerciseDb from '../model/data-access/exercise.db';
+
 import { Exercise } from '../model/exercise';
+import exerciseDb from '../repository/exercise.db';
 
 const getAllExercises = (): Exercise[] => {
     const exercises = exerciseDb.getAllExercises();

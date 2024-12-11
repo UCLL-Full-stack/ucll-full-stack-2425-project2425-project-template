@@ -1,4 +1,5 @@
-import workoutexerciseDb from "../../model/data-access/workoutexercise.db";
+
+import workoutexerciseDb from "../../repository/workoutexercise.db";
 import workoutexerciseService from "../../service/workoutexercise.service";
 import { WorkoutExerciseInput } from "../../types";
 

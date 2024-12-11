@@ -1,5 +1,6 @@
-import workoutexerciseDb from '../model/data-access/workoutexercise.db';
+
 import { WorkoutExercise } from '../model/workoutexercise';
+import workoutexerciseDb from '../repository/workoutexercise.db';
 import { WorkoutExerciseInput } from '../types';
 
 const getAllWorkoutExercises = (): WorkoutExercise[] => {
