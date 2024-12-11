@@ -59,12 +59,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const userData = await userResponse.data;
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
-                // const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
-                //     const permissions = BigInt(guild.permissions);
-                //     const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
-                //     const hasManageServer = (permissions & BigInt(0x00000020)) === BigInt(0x00000020);
-                //     return hasAdmin || hasManageServer;
-                // })
+                if (user.error) {
+                    if (user.error === 'User not found') {
+                        await UserService.addUser({
+                            userId: userData.id,
+                            username: userData.username,
+                            globalName: userData.global_name,
+                            userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                        });
+                    }
+                } else if (user.userId) {
+                    await UserService.updateUser(userData.id, {
+                        username: userData.username,
+                        globalName: userData.global_name,
+                        userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                    });
+                }
+                const adminOrManageServerGuilds = guildsData.filter((guild: { id: string, permissions: string | number | bigint; })=>{
+                    const permissions = BigInt(guild.permissions);
+                    const hasAdmin = (permissions & BigInt(0x00000008)) === BigInt(0x00000008);
+                    const hasManageServer = (permissions & BigInt(0x00000020)) === BigInt(0x00000020);
+                    return hasAdmin || hasManageServer;
+                })
                 const ownerGuilds = guildsData.filter((guild: {owner: boolean}) => guild.owner === true);
                 const botGuildData = await Promise.all(
                     guildsData.map(async (guild: {id: string, name: string, ownerId: string}) => {
@@ -156,24 +172,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 });
                 const guildsInDb = await GuildService.getGuilds();
                 const guildsInDbUserIsIn = guildsInDb.filter((guild: any) => guildsData.some((guildData: any) => guildData.id === guild.guildId));
-                if(user.error){
-                    if(user.error === "User not found"){
-                        await UserService.addUser({
-                            userId: userData.id,
-                            username: userData.username,
-                            globalName: userData.global_name,
-                            userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
-                            guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
-                        });
-                    }
-                }else if(user.userId){
-                    await UserService.updateUser(userData.id, {
-                        username: userData.username,
-                        globalName: userData.global_name,
-                        userAvatar: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
-                        guildIds: guildsInDbUserIsIn.map((guild: any) => guild.guildId),
-                    });
-                }
+                const userGuildIds = guildsInDb
+                    .filter((guild: any) => guild.members.some((member: any) => member.userId === user.userId))
+                    .map((guild: any) => guild.guildId);
+                
+                await UserService.updateUser(userData.id, {
+                    guilds: userGuildIds,
+                });
                 const data = {
                     userId: userData.id,
                     username: userData.username,
@@ -191,7 +196,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             : `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&guild_id=${guild.guildId}&permissions=8&scope=bot`,
                         };
                 });
-                const enhancedOwner = ownerGuilds.map((guild: {id: string, name: string}) => {
+                const enhancedOwner = adminOrManageServerGuilds.map((guild: {id: string, name: string}) => {
                     const botInGuild = client.guilds.cache.has(guild.id);
                     return {
                         guildId: guild.id,
