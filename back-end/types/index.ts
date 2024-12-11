@@ -1,4 +1,4 @@
-type Role = 'admin' | 'trainer' | 'nurse';
+type Role = 'admin' | 'trainer' | 'nurse' | 'guest';
 
 type PokemonInput = {
   id?: number;

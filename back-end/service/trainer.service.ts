@@ -35,6 +35,8 @@ const addPokemonToTrainerById = (id:number,{
     if (stats.speed <= 0) throw new Error('speed cannot be smaller then or equal to 0.');
     if (stats.hp < health) throw new Error('current health cannot be higher then hp.');
 
+    //hier boven is een domain test en geen service test 
+
     const pokemon = new Pokemon({name:name,type:type,stats:stats,health:health,canEvolve:canEvolve})
     const trainer = trainerDb.addPokemonToTrainerById({id, pokemon});
     if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);

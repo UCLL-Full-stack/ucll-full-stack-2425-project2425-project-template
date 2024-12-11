@@ -1,4 +1,8 @@
 import { Role } from '../types';
+import {
+    User as UserPrisma
+    
+ } from '@prisma/client';
 
 export class User {
     private id?: number;
@@ -70,5 +74,27 @@ export class User {
         if (!user.role) {
             throw new Error('Role is required');
         }
+    }
+
+    equals(user: User): boolean{
+        return(
+            this.id === user.getId() &&
+            this.firstName === user.getFirstName() &&
+            this.lastName === user.getLastName() &&
+            this.email === user.getEmail() &&
+            this.password === user.getPassword() &&
+            this.role === user.getRole()
+        );
+    }
+
+    static from({id,firstName,lastName,email,password,role}: UserPrisma){
+        return new User({
+            id,
+            firstName,
+            lastName,
+            email,
+            password,
+            role: role as Role,
+        })
     }
 }

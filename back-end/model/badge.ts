@@ -1,16 +1,25 @@
+import { Badge as BadgePrisma } from "@prisma/client";
+
 export class Badge{
+    private id?: number;
     private name: string;
     private location: string;
     private difficulty: number;
 
     constructor(badge:{
-        name:string,
-        location:string,
-        difficulty:number
+        id?: number;
+        name:string;
+        location:string;
+        difficulty:number;
     }) {
+        this.id = badge.id;
         this.name = badge.name;
         this.location = badge.location;
         this.difficulty = badge.difficulty;
+    }
+
+    getId(): number| undefined{
+        return this.id;
     }
 
     getName(): string {
@@ -23,5 +32,23 @@ export class Badge{
 
     getDifficulty(): number {
         return this.difficulty
+    }
+
+    equals(badge: Badge): boolean{
+        return(
+            this.id === badge.getId() &&
+            this.name === badge.getName() &&
+            this.location === badge.getLocation() &&
+            this.difficulty === badge.getDifficulty()
+        );
+    }
+
+    static from({id,name,location,difficulty}: BadgePrisma){
+        return new Badge({
+            id,
+            name,
+            location,
+            difficulty,
+        });
     }
 }

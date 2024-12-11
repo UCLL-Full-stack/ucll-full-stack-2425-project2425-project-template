@@ -1,5 +1,8 @@
 import { Badge } from "./badge";
-
+import { 
+    GymBattle as GymBattlePrisma,
+    Badge as BadgePrisma
+ } from "@prisma/client";
 export class GymBattle {
     private id?: number;
     private date: Date;
@@ -32,5 +35,23 @@ export class GymBattle {
 
     getBadge(): Badge {
         return this.badge;
+    }
+
+    equals(gymBattle: GymBattle): boolean{
+        return(
+            this.id === gymBattle.getId() &&
+            this.date === gymBattle.getDate() &&
+            this.time === gymBattle.getTime() &&
+            this.badge.equals(gymBattle.getBadge())
+        );
+    }
+
+    static from({id,date,time,badge}:GymBattlePrisma & {badge: BadgePrisma}) {
+        return new GymBattle({
+            id,
+            date,
+            time,
+            badge: Badge.from(badge),
+        });
     }
 }

@@ -1,3 +1,9 @@
+import { th } from "date-fns/locale";
+import {
+    Pokemon as PokemonPrisma,
+    Stats as StatsPrisma
+    } from "@prisma/client";
+
 export class Pokemon {
     private id?: number;
     private name: string;
@@ -44,5 +50,37 @@ export class Pokemon {
 
     getCanEvolve(): boolean {
         return this.canEvolve;
+    }
+
+    equals(pokemon: Pokemon): boolean{
+        return(
+            this.id === pokemon.getId() &&
+            this.name === pokemon.getName() &&
+            this.type === pokemon.getType() &&
+            JSON.stringify(this.stats) === JSON.stringify(pokemon.getStats()) &&
+            this.health === pokemon.getHealth() &&
+            this.canEvolve === pokemon.getCanEvolve()
+        );
+    }
+
+    static from(
+        { id, name, type, health, canEvolve }: PokemonPrisma,
+        stats: StatsPrisma
+    ): Pokemon {
+        return new Pokemon({
+            id,
+            name,
+            type,
+            stats: {
+                hp: stats.hp,
+                attack: stats.attack,
+                defence: stats.defence,
+                specialAttack: stats.specialAttack,
+                specialDefence: stats.specialDefence,
+                speed: stats.speed,
+            },
+            health,
+            canEvolve,
+        });
     }
 }

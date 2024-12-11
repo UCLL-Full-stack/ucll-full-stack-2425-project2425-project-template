@@ -3,6 +3,15 @@ import {Pokemon} from './pokemon'
 import {Badge} from './badge'
 import {GymBattle} from './gymBattle'
 
+import {
+    Trainer as TrainerPrisma,
+    Badge as BadgePrisma,
+    GymBattle as GymBattlePrisma,
+    Pokemon as PokemonPrisma,
+    Stats as StatsPrisma,
+    User as UserPrisma,
+ } from '@prisma/client'
+
 export class Trainer {
     private id?: number;
     private user: User
@@ -44,8 +53,49 @@ export class Trainer {
         return this.gymBattles;
     }
 
-    public addPokemon(pokemon: Pokemon): void {
-        this.pokemon.push(pokemon); // Allow adding Pokémon
+    equals(trainer: Trainer): boolean {
+        return (
+            this.id === trainer.getId() &&
+            this.user.equals(trainer.getUser()) &&
+            this.pokemon.length === trainer.getPokemon().length &&
+            this.pokemon.every((course, index) => course.equals(trainer.getPokemon()[index])) &&
+            this.badges.length === trainer.getBadges().length &&
+            this.badges.every((badge, index) => badge.equals(trainer.getBadges()[index])) &&
+            this.gymBattles.length === trainer.getGymBattles().length &&
+            this.gymBattles.every((battle, index) => battle.equals(trainer.getGymBattles()[index]))
+        );
     }
+
+    static from({
+        id,
+        user,
+        pokemon,
+        badge,
+        gymBattle,
+      }: TrainerPrisma & { user: UserPrisma; pokemon: (PokemonPrisma & { stats: StatsPrisma })[]; badge: BadgePrisma[]; gymBattle: GymBattlePrisma[] }) {
+        return new Trainer({
+          id,
+          user: User.from(user),
+          pokemon: pokemon.map((pokemonData) => {
+            return Pokemon.from(pokemonData, pokemonData.stats); // Pass the stats object here
+          }),
+          badges: badge.map((badge) => Badge.from(badge)),
+          gymBattles: gymBattle.map((gymBattleData) => {
+            // Make sure that the badge is included in the gymBattleData
+            return GymBattle.from({
+              ...gymBattleData,
+              badge: badge.find((b) => b.id === gymBattleData.badgeId) || {} as BadgePrisma, // Find the full badge by ID
+            });
+          }),
+        });
+      }
+
+
+
+    public addPokemon(pokemon: Pokemon): void {
+        this.pokemon.push(pokemon); 
+    }
+
+
 
 }

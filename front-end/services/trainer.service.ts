@@ -30,3 +30,6 @@ const TrainerService = {
 };
 
 export default TrainerService;
+
+
+// alert hoeven hiert niet moet enkel de simple dingen zijn 
