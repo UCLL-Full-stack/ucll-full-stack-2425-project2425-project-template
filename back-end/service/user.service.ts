@@ -36,6 +36,7 @@ const createUser = async (user: UserInput): Promise<User> => {
         email: user.email,
         role: user.role,
         password: hashedPassword,
+        shoppingcarts: [],
     });
 
     return userDb.createUser(newUser);

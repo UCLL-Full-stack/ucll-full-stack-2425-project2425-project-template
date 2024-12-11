@@ -110,12 +110,11 @@ export class Shoppingcart {
         name,
         deliveryDate,
         items,
-        user,
     }: ShoppingcartPrisma & {
         items: { item: ItemPrisma; quantity: number }[];
         user: UserPrisma;
     }): Shoppingcart {
-        const shoppingcart = new Shoppingcart({
+        return new Shoppingcart({
             id,
             name,
             deliveryDate,
@@ -124,7 +123,5 @@ export class Shoppingcart {
                 quantity,
             })),
         });
-        shoppingcart.setUser(User.from(user));
-        return shoppingcart;
     }
 }

@@ -3,7 +3,19 @@ import db from './db';
 
 const getAll = async (): Promise<User[]> => {
     try {
-        const userPrisma = await db.user.findMany({ include: { shoppingcarts: true } });
+        const userPrisma = await db.user.findMany({
+            include: {
+                shoppingcarts: {
+                    include: {
+                        items: {
+                            include: {
+                                item: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
         console.log('Raw userPrisma:', JSON.stringify(userPrisma, null, 2));
 
         return userPrisma.map((userPrisma) => User.from(userPrisma));
@@ -20,7 +32,15 @@ const getByEmail = async ({ email }: { email: string }): Promise<User | null> =>
                 email,
             },
             include: {
-                shoppingcarts: true,
+                shoppingcarts: {
+                    include: {
+                        items: {
+                            include: {
+                                item: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 
@@ -41,6 +61,18 @@ const createUser = async (user: User): Promise<User> => {
             data: {
                 email: user.getEmail(),
                 password: user.getPassword(),
+            },
+
+            include: {
+                shoppingcarts: {
+                    include: {
+                        items: {
+                            include: {
+                                item: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 

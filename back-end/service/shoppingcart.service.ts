@@ -41,6 +41,7 @@ const createShoppingcart = async (shoppingcart: ShoppingcartInput): Promise<Shop
         email: 'john@mail.com',
         password: 'john123!',
         role: 'admin',
+        shoppingcarts: [],
     });
 
     newShoppingcart.setUser(tempUser);
