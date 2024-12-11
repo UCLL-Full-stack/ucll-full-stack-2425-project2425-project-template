@@ -1,11 +1,16 @@
+import Link from 'next/link';
+
 const Home: React.FC = () => {
     return (
         <>
-            <h2>Welcome to our app!</h2>
-            <p>
-                This is a shopping cart app. You can view items and add them to your cart. You can
-                also view the cart and remove items from it.
-            </p>
+            <h3>You currently don't have any shoppingcarts :(</h3>
+            <Link
+                href={'/addShoppingcart'}
+                className="inline-block mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300 cursor-pointer"
+                type="submit"
+            >
+                Create one!
+            </Link>
         </>
     );
 };

@@ -19,7 +19,12 @@ export class Shoppingcart {
     private user?: User;
     private items: CartItem[] = [];
 
-    constructor(shoppingcart: { id?: number; name: string; deliveryDate: Date; items: CartItem[] }) {
+    constructor(shoppingcart: {
+        id?: number;
+        name: string;
+        deliveryDate: Date;
+        items: CartItem[];
+    }) {
         this.validate(shoppingcart);
         this.id = shoppingcart.id;
         this.name = shoppingcart.name;
@@ -33,29 +38,31 @@ export class Shoppingcart {
         }
 
         const deliveryDate = new Date(shoppingcart.deliveryDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
         if (!deliveryDate || isNaN(deliveryDate.getTime())) {
             throw new Error('Delivery date is required');
         }
 
-        if (deliveryDate.getTime() < Date.now()) {
+        if (deliveryDate < today) {
             throw new Error('Delivery date should be after today');
         }
     }
     addItem(item: Item) {
-        const existingCartItem = this.items.find(cartItem => cartItem.item.equals(item));
+        const existingCartItem = this.items.find((cartItem) => cartItem.item.equals(item));
         if (existingCartItem) {
             existingCartItem.quantity++;
         } else {
             this.items.push({
                 item,
-                quantity: 1
+                quantity: 1,
             });
         }
     }
 
     removeItem(item: Item) {
-        const cartItem = this.items.find(cartItem => cartItem.item.equals(item));
+        const cartItem = this.items.find((cartItem) => cartItem.item.equals(item));
         if (!cartItem) {
             throw new Error('This item does not exist in this shopping cart');
         }

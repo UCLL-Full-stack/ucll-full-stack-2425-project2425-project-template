@@ -28,6 +28,13 @@ export type Nutritionlabel = {
     item?: Item;
 };
 
+export type Shoppingcart = {
+    id?: number;
+    name: string;
+    deliveryDate: Date;
+    items: Item[];
+};
+
 export type StatusMessage = {
     message: string;
     type: 'error' | 'success';
