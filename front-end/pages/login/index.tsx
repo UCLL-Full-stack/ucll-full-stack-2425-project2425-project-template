@@ -5,9 +5,6 @@ import styles from '../../styles/login/login.module.css';  // Import the styles
 
 // Simulate a simple login service
 const loginService = async (email: string, password: string, role: string) => {
-  // In a real scenario, you would use a backend service for authentication.
-  // Here, we're assuming a simple check based on hardcoded values for demonstration.
-
   if (role === "trainer") {
     if (email === "trainer@example.com" && password === "trainer123") {
       // Save trainer info to localStorage (can replace with your auth logic)
@@ -44,12 +41,11 @@ const LoginPage: React.FC = () => {
     const response = await loginService(email, password, role);
 
     if (response.success) {
-      // Redirect based on role
-      if (response.role === "trainer") {
-        router.push("/pokemons"); // Redirect to the trainer's Pokémon page
-      } else if (response.role === "nurse") {
-        router.push("/nurseDashboard"); // Redirect to the nurse's dashboard (implement this page)
-      }
+      console.log("Login successful, redirecting to home...");
+      router.push("/"); // Redirect to home page
+    } else {
+      console.log("Login failed: ", response.message);
+      setErrorMessage(response.message || "Login failed.");
     }
   };
 
