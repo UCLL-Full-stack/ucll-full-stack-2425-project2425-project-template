@@ -1,7 +1,4 @@
-import { 
-    User as UserPrisma,
-} from "@prisma/client"; 
-import { fromUnixTime } from "date-fns";
+import { User as UserPrisma } from '@prisma/client';
 
 export class User {
     private id?: number;
@@ -11,7 +8,14 @@ export class User {
     private birthday: Date;
     private accountBirthday?: Date; // will be added by the database (dunno if possible)
 
-    constructor(user: { id?: number ;name: string; email: string; password: string; birthday: Date; accountBirthday?: Date}) {
+    constructor(user: {
+        id?: number;
+        name: string;
+        email: string;
+        password: string;
+        birthday: Date;
+        accountBirthday?: Date;
+    }) {
         this.validate(user);
 
         this.id = user.id;
@@ -71,14 +75,7 @@ export class User {
         return expression.test(email);
     }
 
-    static from({
-        id,
-        name,
-        email,
-        password,
-        birthday,
-        accountBirthday,
-    }: UserPrisma) {
+    static from({ id, name, email, password, birthday, accountBirthday }: UserPrisma) {
         return new User({
             id,
             name,
@@ -86,6 +83,6 @@ export class User {
             password,
             birthday,
             accountBirthday,
-        })
+        });
     }
 }

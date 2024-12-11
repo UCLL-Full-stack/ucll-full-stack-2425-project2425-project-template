@@ -4,6 +4,9 @@ import { User } from '../model/user';
 import { Player } from '../model/player';
 import { World } from '../model/world';
 import { Floor } from '../model/floor';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -116,14 +119,12 @@ const lines = [
 ];
 */
 
-
 async function main() {
-
-    await prisma.line.deleteMany();
-    await prisma.floor.deleteMany();
-    await prisma.world.deleteMany();
-    await prisma.player.deleteMany();
-    await prisma.user.deleteMany();
+    // await prisma.line.deleteMany();
+    // await prisma.floor.deleteMany();
+    // await prisma.world.deleteMany();
+    // await prisma.player.deleteMany();
+    // await prisma.user.deleteMany();
 
     // Create Users
     let createdUsers = [];
@@ -197,7 +198,13 @@ async function main() {
         const createdWorld = await prisma.world.create({
             data: {
                 name: world.getName(),
-                owner: { connect: { id: world.getOwner().getId(), name: world.getOwner().getName(), email: world.getOwner().getEmail() } },
+                owner: {
+                    connect: {
+                        id: world.getOwner().getId(),
+                        name: world.getOwner().getName(),
+                        email: world.getOwner().getEmail(),
+                    },
+                },
             },
         });
         for (const floor of floors) {
@@ -207,7 +214,7 @@ async function main() {
                     world: { connect: { id: createdWorld.id } },
                 },
             });
-    
+
             const tiles = floor.getTiles();
             if (!tiles) break;
             // Create lines

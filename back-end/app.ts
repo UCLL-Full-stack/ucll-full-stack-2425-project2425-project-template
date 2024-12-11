@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { playerRouter } from './controller/player.routes';
 import { worldRouter } from './controller/world.routes';
+import { userRouter } from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 // routes
+app.use('/users', userRouter);
 app.use('/players', playerRouter);
 app.use('/world', worldRouter);
 

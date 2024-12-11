@@ -1,10 +1,6 @@
-import { 
-    Floor as FloorPrisma,
-    Line as LinePrisma,
-} from "@prisma/client"; 
+import { Floor as FloorPrisma, Line as LinePrisma } from '@prisma/client';
 
-import { Line } from "./line";
-import { link } from "fs";
+import { Line } from './line';
 
 export class Floor {
     private id?: number;
@@ -12,12 +8,8 @@ export class Floor {
     private tiles?: Line[];
     private worldId?: number;
 
-    constructor(floor: {
-        id?: number;
-        tiles?: Line[];
-        floornumber: number;
-    }) {
-        if (floor.tiles == undefined || floor.tiles.length === 0){
+    constructor(floor: { id?: number; tiles?: Line[]; floornumber: number }) {
+        if (floor.tiles == undefined || floor.tiles.length === 0) {
             floor.tiles = this.generateTiles();
         }
         this.validate(floor);
@@ -47,10 +39,7 @@ export class Floor {
         this.worldId = id;
     }
 
-    validate(floor: {
-        floornumber: number;
-        tiles?: Line[];
-    }) {
+    validate(floor: { floornumber: number; tiles?: Line[] }) {
         if (floor.floornumber <= 0) {
             throw new Error('Needs to be above 0.');
         }
@@ -59,24 +48,21 @@ export class Floor {
         }
     }
 
-    generateTiles(): Line[]{
+    generateTiles(): Line[] {
         let tiles = new Array<Line>();
         for (let i = 0; i < 20; i++) {
-            tiles[i] = new Line({floorId: this.id, tiles: [], lineNum: i});
-            for (let j = 0; j < 20; j++){
-                if (i === 0 || i === 19 || j === 0 || j === 19){
-                    tiles[i].setTile(j, "void");
-                }
-                else if (i === 1 || i === 18 || j === 1 || j === 18){
-                    tiles[i].setTile(j, "wall");
-                }
-                else{
+            tiles[i] = new Line({ floorId: this.id, tiles: [], lineNum: i });
+            for (let j = 0; j < 20; j++) {
+                if (i === 0 || i === 19 || j === 0 || j === 19) {
+                    tiles[i].setTile(j, 'void');
+                } else if (i === 1 || i === 18 || j === 1 || j === 18) {
+                    tiles[i].setTile(j, 'wall');
+                } else {
                     const randomnum = getRandomInt(0, 10);
-                    if (randomnum <= 2){
-                        tiles[i].setTile(j, "wall");
-                    }
-                    else {
-                        tiles[i].setTile(j, "floor");
+                    if (randomnum <= 2) {
+                        tiles[i].setTile(j, 'wall');
+                    } else {
+                        tiles[i].setTile(j, 'floor');
                     }
                 }
             }
@@ -94,8 +80,8 @@ export class Floor {
         return new Floor({
             id,
             floornumber,
-            tiles: tiles.map((tile) => Line.from(tile))
-        })
+            tiles: tiles.map((tile) => Line.from(tile)),
+        });
     }
 }
 
