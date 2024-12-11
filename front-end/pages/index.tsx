@@ -3,36 +3,44 @@ import UserService from '@services/userService';
 import { User } from '@types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import useInterval from 'use-interval';
 
 const Home: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [user, setUser] = useState<User | null>(null);
 
+    const fetchUser = async () => {
+        try {
+            if (!loggedInUser) {
+                return;
+            }
+
+            const response = await UserService.getUserByEmail(loggedInUser.email);
+
+            if (!response.ok) {
+                throw new Error('User not found');
+            }
+
+            const fetchedUser = await response.json();
+            console.log(fetchedUser);
+            setUser(fetchedUser);
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
+
     useEffect(() => {
         const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
         setLoggedInUser(token);
 
-        if (!loggedInUser) {
-            return;
+        if (token) {
+            fetchUser();
         }
-
-        const fetchUser = async () => {
-            try {
-                const response = await UserService.getUserByEmail(loggedInUser.email);
-
-                if (response.ok) {
-                    throw new Error('User not found');
-                }
-
-                const fetchedUser = await response.json();
-                setUser(fetchedUser);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
-
-        fetchUser();
     }, []);
+
+    useInterval(() => {
+        fetchUser;
+    }, 2000);
 
     if (!loggedInUser) {
         return (

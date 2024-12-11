@@ -3,7 +3,9 @@ import db from './db';
 
 const getAll = async (): Promise<User[]> => {
     try {
-        const userPrisma = await db.user.findMany();
+        const userPrisma = await db.user.findMany({ include: { shoppingcarts: true } });
+        console.log('Raw userPrisma:', JSON.stringify(userPrisma, null, 2));
+
         return userPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
         console.log(error);
@@ -16,6 +18,9 @@ const getByEmail = async ({ email }: { email: string }): Promise<User | null> =>
         const userPrisma = await db.user.findUnique({
             where: {
                 email,
+            },
+            include: {
+                shoppingcarts: true,
             },
         });
 

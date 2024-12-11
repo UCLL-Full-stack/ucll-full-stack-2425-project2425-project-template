@@ -41,6 +41,9 @@ export class Shoppingcart {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
+        console.log('delivery' + deliveryDate);
+        console.log('today' + today);
+
         if (!deliveryDate || isNaN(deliveryDate.getTime())) {
             throw new Error('Delivery date is required');
         }
