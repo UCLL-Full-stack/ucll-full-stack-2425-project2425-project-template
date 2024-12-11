@@ -77,14 +77,13 @@ export class Trainer {
           id,
           user: User.from(user),
           pokemon: pokemon.map((pokemonData) => {
-            return Pokemon.from(pokemonData, pokemonData.stats); // Pass the stats object here
+            return Pokemon.from(pokemonData, pokemonData.stats);
           }),
           badges: badge.map((badge) => Badge.from(badge)),
           gymBattles: gymBattle.map((gymBattleData) => {
-            // Make sure that the badge is included in the gymBattleData
             return GymBattle.from({
               ...gymBattleData,
-              badge: badge.find((b) => b.id === gymBattleData.badgeId) || {} as BadgePrisma, // Find the full badge by ID
+              badge: badge.find((badge) => badge.id === gymBattleData.badgeId) || {} as BadgePrisma, 
             });
           }),
         });
