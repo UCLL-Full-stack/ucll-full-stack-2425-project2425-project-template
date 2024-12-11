@@ -6,6 +6,7 @@ const addShoppingcart = async (shoppingcart: Shoppingcart) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('loggedInUser')}`,
             },
             body: JSON.stringify(shoppingcart),
         });
