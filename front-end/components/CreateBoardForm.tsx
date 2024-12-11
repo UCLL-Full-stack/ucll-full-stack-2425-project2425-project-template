@@ -32,6 +32,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
         setError(null);
         setBoardName('');
         setColumns('');
+        setFilteredGuilds(guilds);
         if (typeof selectedGuildId === 'string') {
             setSelectedGuild(selectedGuildId);
         }

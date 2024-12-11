@@ -45,11 +45,20 @@ const Home: FC = () => {
   }
 
   const handleFormSubmit = async (boardData: { boardName: string; columns: string[]; guild: string }) => {
+    if (!user) {
+      console.error('User not logged in');
+      return;
+    }
+    if(boardData.columns.length === 0) {
+      boardData.columns = ['To Do', 'In Progress', 'Done'];
+    } else {
+      boardData.columns = boardData.columns.map(column => column.trim());
+    }
     const boardPayload = {
       boardName: boardData.boardName,
-      createdByUser: user!.userId,
-      guild: boardData.guild,
-      columns: boardData.columns.map(column => ({ columnName: column.trim() })),
+      createdByUserId: user.userId,
+      guildId: boardData.guild,
+      columns: boardData.columns,
       permissions: []
     };
 
@@ -58,11 +67,11 @@ const Home: FC = () => {
       console.log('Created board with data:', boardPayload);
       if (selectedGuildId) {
         const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId);
+        console.log('Fetched boards:', fetchedBoards);
         setBoards(fetchedBoards || []);
     }
     } catch (error) {
       console.error('Error creating board', error);
-      
     }
     handleFormClose();
   };

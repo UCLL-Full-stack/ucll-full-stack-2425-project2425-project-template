@@ -155,6 +155,11 @@ const getBoardsOfGuild = async (guildId: string): Promise<Board[]> => {
                 guild: {select: {guildId: true}},
             }
         });
+
+        if (!boardPrisma || boardPrisma.length === 0) {
+            return [];
+        }
+        
         return boardPrisma.map((boardPrisma) => {
             const columnIds = boardPrisma.columns?.map(column => column.columnId) || [];
             const board = Board.from(boardPrisma);

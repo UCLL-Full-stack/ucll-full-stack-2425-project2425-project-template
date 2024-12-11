@@ -121,8 +121,8 @@ export interface Task{
 export interface Board{
     boardId: string;
     boardName: string;
-    createdByUser: string;
-    guild: string;
-    columns: Column[];
+    createdByUserId: string;
+    guildId: string;
+    columnIds: string[];
     permissions: PermissionEntry[];
 }

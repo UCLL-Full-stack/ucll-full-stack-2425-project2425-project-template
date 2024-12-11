@@ -159,7 +159,16 @@ const updateGuild = async (guildId: string, updateData: {
         const { guildName, guildOwnerId, settings, roleIds, members, userIds, boardIds } = updateData;
         const data: any = {};
         if (guildName !== undefined) data.guildName = guildName;
-        if (guildOwnerId !== undefined) data.guildOwner = { connect: { userId: guildOwnerId } };
+        if (guildOwnerId !== undefined) {
+            if (guildOwnerId) {
+                const ownerExists = await database.user.findUnique({ where: { userId: guildOwnerId } });
+                if (ownerExists) {
+                    data.guildOwner = { connect: { userId: guildOwnerId } };
+                }
+            } else if (guildOwnerId === null) {
+                data.guildOwner = { disconnect: true };
+            }
+        }
         if (settings !== undefined) data.settings = JSON.stringify(settings);
         if (roleIds !== undefined) {
             data.roles = {
@@ -171,10 +180,14 @@ const updateGuild = async (guildId: string, updateData: {
             data.members = JSON.stringify(members);
         }
         if (userIds !== undefined) {
-            data.users = {
-                set: userIds.map((userId) => ({ userId })),
-            };
-            data.userIds = userIds;
+            const validUserIds = [];
+            for (const userId of userIds) {
+                const user = await database.user.findUnique({ where: { userId } });
+                if (user) {
+                    validUserIds.push(userId);
+                }
+            }
+            data.users = { set: validUserIds.map((userId) => ({ userId })) };
         }
         if (boardIds !== undefined) {
             data.boards = {
