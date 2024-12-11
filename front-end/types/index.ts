@@ -5,6 +5,7 @@ export type User = {
     id?: number;
     email: string;
     role: Role;
+    shoppingcarts: Shoppingcart[];
 };
 
 export type Item = {
