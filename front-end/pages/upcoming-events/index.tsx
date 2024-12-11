@@ -16,7 +16,12 @@ const UpcomingEvents: React.FC = () => {
 
     const getAll = async () => {
         const response = await EventService.getAll();
+
+        console.log(response);
+
         const events = await response.json();
+
+        console.log(events);
 
         // Sort events by date
         const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());

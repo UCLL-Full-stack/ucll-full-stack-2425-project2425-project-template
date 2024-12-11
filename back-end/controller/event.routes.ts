@@ -62,7 +62,8 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
         const events = await eventService.getAllEvents();
         res.status(200).json(events);
     } catch (error) {
-        res.status(400).json({ status: 'error' });
+        // res.status(400).json({ status: 'error' });
+        next(error);
     }
 });
 

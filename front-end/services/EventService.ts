@@ -1,7 +1,7 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const getAll = () => {
-  return fetch(apiUrl + "/events", {
+const getAll = async () => {
+  return await fetch(apiUrl + "/events", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

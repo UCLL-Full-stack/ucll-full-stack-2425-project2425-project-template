@@ -8,13 +8,26 @@ import { eventRouter } from './controller/event.routes';
 // import { participantRouter } from './controller/participant.routes';
 import { userRouter } from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
 
 const app = express();
+app.use(helmet());
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            // Allow connections to own server and the external API
+            connectSrc: ["'self'", 'https://api.ucll.be'],
+        },
+    })
+);
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors());
+
+app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.use(
@@ -22,7 +35,14 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, '/events/upcoming-events', '/users/login', '/status', '/users/signup'],
+        path: [
+            '/api-docs',
+            /^\/api-docs\/.*/,
+            '/events',
+            '/users/login',
+            '/status',
+            '/users/signup'
+        ],
     })
 );
 
