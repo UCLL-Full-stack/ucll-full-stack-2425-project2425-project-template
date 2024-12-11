@@ -85,15 +85,16 @@ const Home: FC = () => {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
           const dbGuilds = await UserService.getGuilds(parsedUser.userId);
-          const displayGuilds = sessionGuilds.map((guild: any)=> {
-            const inDb = dbGuilds.some((dbGuild: any)=> dbGuild.guildId === guild.id);
+          const displayGuilds = sessionGuilds.map((guild: any) => {
+            const matchingDbGuild = dbGuilds.find((dbGuild: any) => dbGuild.guildId === guild.guildId);
             return {
               ...guild,
-              greyedOut: !inDb && !guild.botInGuild,
+              guildName: matchingDbGuild?.guildName || guild.guildName,
+              greyedOut: !matchingDbGuild && !guild.botInGuild,
             };
-          })
-          setGuilds(dbGuilds);
+          });
           displayGuilds.sort((a: any, b: any) => a.greyedOut - b.greyedOut);
+          setGuilds(dbGuilds);
           setDisplayGuilds(displayGuilds);
           const permissions = await Promise.all(dbGuilds.map(async (guild: { guildId: string; }) => {
             const permission = await UserService.getUserGuildKanbanPermissions(parsedUser.userId, guild.guildId);
