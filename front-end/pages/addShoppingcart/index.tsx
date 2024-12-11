@@ -11,6 +11,14 @@ const ShoppingcartForm: React.FC = () => {
         setLoggedInUser(token);
     }, []);
 
+    if (!loggedInUser || loggedInUser.role !== 'admin') {
+        return (
+            <p className="pt-4 text-lg text-red-600 text-center italic font-bold">
+                Unauthorized to access this page!
+            </p>
+        );
+    }
+
     return (
         <>
             <Head>
@@ -19,11 +27,7 @@ const ShoppingcartForm: React.FC = () => {
 
             <section className="w-3/4 m-auto">
                 <h1 className="mb-8">Create a shoppingcart</h1>
-                {loggedInUser ? (
-                    <AddShoppingcartForm />
-                ) : (
-                    <span>You need to be logged in in order to create a shoppingcart</span>
-                )}
+                {loggedInUser && <AddShoppingcartForm />}
             </section>
         </>
     );
