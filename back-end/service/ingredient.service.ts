@@ -43,8 +43,29 @@ const getIngredientById = async (id: number): Promise<Ingredient | null> => {
     }
 }
 
+const updateIngredient = async (id: number, { naam, type, aantal, prijs, ingredientLimit }: IngredientInput): Promise<Ingredient> => {
+
+    const newIngredient = await ingredientDb.getIngredientById({ id: id });
+
+    if (!newIngredient) {
+        throw new Error(`Ingredient ${id} doesn't exists.`);
+    }
+
+    const ingredient = new Ingredient({
+        naam: naam,
+        type: type,
+        aantal: aantal,
+        prijs: prijs,
+        ingredientLimit: ingredientLimit
+    });
+    ingredientDb.updateIngredient(id, ingredient);
+
+    return ingredient;
+};
+
 export default {
     getAllIngredienten,
     addIngredient,
-    getIngredientById
+    getIngredientById,
+    updateIngredient
 }

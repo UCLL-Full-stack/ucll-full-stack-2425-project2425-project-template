@@ -1,7 +1,7 @@
 import { User } from "../../model/user"
 
 test("given: valid values for user, when: creating user, then: user is created", () => {
-    const user = new User({ naam: "Timmermans", voornaam: "Ashley", email: "ashley.timmermans@student.ucll.be", wachtwoord: "pass", adres: "adresstraat 1", gebruikersnaam: "AshleyT", rol: "admin" })
+    const user = new User({ naam: "Timmermans", voornaam: "Ashley", email: "ashley.timmermans@student.ucll.be", wachtwoord: "pass", adres: "adresstraat 1", gebruikersnaam: "AshleyT", rol: "Admin" })
 
     expect(user.getNaam()).toEqual("Timmermans");
     expect(user.getVoornaam()).toEqual("Ashley");

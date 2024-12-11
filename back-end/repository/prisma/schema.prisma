@@ -37,6 +37,7 @@ model Ingredient {
   type Type
   aantal Int
   prijs Float
+  ingredientLimit Int
   pokebowl Pokebowl[]
 }
 

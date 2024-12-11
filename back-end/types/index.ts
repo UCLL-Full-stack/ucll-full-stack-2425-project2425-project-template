@@ -27,7 +27,8 @@ type IngredientInput = {
     naam: string,
     type: Type,
     aantal: number,
-    prijs: number
+    prijs: number,
+    ingredientLimit?: number
 };
 
 type PokebowlInput = {

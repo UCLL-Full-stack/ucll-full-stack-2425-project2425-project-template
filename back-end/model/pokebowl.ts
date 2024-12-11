@@ -116,6 +116,7 @@ export class Pokebowl {
     }
 
     addIngredient(ingredient: Ingredient) {
+        let limit = ingredient.getIngredientLimit() ?? 0;
         const aantalIngredienten = this.ingredienten.filter(
             (ingr) => ingr.getNaam() === ingredient.getNaam()).length;
         console.log(aantalIngredienten);
@@ -123,7 +124,8 @@ export class Pokebowl {
         if (this.ingredienten.length >= this.maxAantalIngredienten) {
             throw new Error('Cannot add more ingredienten.');
         }
-        if (aantalIngredienten >= ingredient.getIngredientLimit()) {
+
+        if (aantalIngredienten >= limit) {
             throw new Error(`Cannot add more ${ingredient.getNaam()}.`);
         }
         if (ingredient.getAantal() <= 0) {
@@ -131,7 +133,7 @@ export class Pokebowl {
         }
 
         let aantal = ingredient.getAantal();
-        ingredient.setAantal(aantal -= 1);
+        ingredient.setAantal(aantal - 1);
         this.ingredienten.push(ingredient);
     }
 

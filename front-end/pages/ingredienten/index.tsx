@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 const Ingredienten: React.FC = () => {
     const [ingredienten, setIngredienten] = useState<Array<Ingredient>>();
+    const [selectedIngredient, setSelectedIngredient] = useState<Ingredient>();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [error, setError] = useState<string>();
 
@@ -47,7 +48,7 @@ const Ingredienten: React.FC = () => {
                 <section>
                     {error && <p className="error-field">{error}</p>}
                     {ingredienten && (
-                        <IngredientenOverzicht ingredienten={ingredienten} />
+                        <IngredientenOverzicht ingredienten={ingredienten} selectIngredient={setSelectedIngredient} />
                     )}
                     {!error && (<button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>)}
                 </section>

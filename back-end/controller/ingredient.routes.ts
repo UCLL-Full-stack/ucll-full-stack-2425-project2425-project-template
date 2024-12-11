@@ -59,6 +59,15 @@ ingredientRouter.get('/', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+ingredientRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const ingredient = await ingredientService.getIngredientById(parseInt(req.params.id));
+        res.status(200).json(ingredient);
+    } catch (error) {
+        next(error);
+    }
+});
+
 /**
  * @swagger
  * /ingredienten:
@@ -90,5 +99,40 @@ ingredientRouter.post('/', async (req: Request, res: Response, next: NextFunctio
         next(error);
     }
 });
+
+
+/**
+ * @swagger
+ * /ingredienten:
+ *  put:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Update existing Ingredient
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                     $ref: '#/components/schemas/IngredientInput'
+ *      responses:
+ *        200:
+ *           description: 'Update existing Ingredient'
+ *           content:
+ *              application/json:
+ *                  schema:
+ *                     $ref: '#/components/schemas/Ingredient'
+ * 
+ */
+ingredientRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = req.params.id;
+        const ingredient = <IngredientInput>req.body;
+        const result = await ingredientService.updateIngredient(parseInt(id), ingredient);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 export { ingredientRouter };

@@ -132,7 +132,9 @@ const PokebowlAanmaken: React.FC<Props> = ({ ingredienten }: Props) => {
                     <label>Pokebowl ingredienten</label>
                     {ingredienten && ingredienten.map((ingr) => (
                         <div key={ingr.id}>
-                            <input type="checkbox" value={ingr.id} onChange={handleIngredientenChange} />
+                            {ingr.aantal != 0 && (
+                                <input type="checkbox" value={ingr.id} onChange={handleIngredientenChange} />
+                            )}
                             <label htmlFor={`ingredient-${ingr.id}`}>{ingr.naam} - {ingr.type}</label>
                         </div>
                     ))}
