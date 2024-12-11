@@ -1,5 +1,4 @@
-import { tr } from 'date-fns/locale';
-import { Crash } from '../model/crash';
+import { Crash } from '../model/Crash';
 import database from '../util/database';
 
 const createCrash = async ({ crash }: { crash: Crash }): Promise<Crash> => {

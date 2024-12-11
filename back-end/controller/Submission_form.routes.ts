@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import submissionFormService from '../service/submission_form.service';
+import submissionFormService from '../service/Submission.service';
 import { SubmissionInput } from '../types';
 
 const submissionFormRouter = express.Router();

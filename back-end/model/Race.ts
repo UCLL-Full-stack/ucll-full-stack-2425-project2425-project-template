@@ -1,4 +1,4 @@
-import { Crash } from "./crash";
+import { Crash } from "./Crash";
 import { Race as RacePrisma, 
     Crash as CrashPrisma,
     Participant as ParticipantPrisma,

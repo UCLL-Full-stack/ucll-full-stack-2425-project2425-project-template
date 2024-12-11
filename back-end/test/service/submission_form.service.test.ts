@@ -1,112 +1,76 @@
-import submissionService from '../../service/submission.service';
-import submissionDb from '../../repository/submission.db';
+import submissionService from '../../service/Submission.service';
+import submissionDb from '../../repository/Submission.db';
 import { Submission } from '../../model/Submission';
-import { Race } from '../../model/race';
-import { Driver } from '../../model/Driver';
-import { Racecar } from '../../model/Racecar';
-import { Crash } from '../../model/crash';
 import { User } from '../../model/User';
+import Permissions from '../../model/Permissions';
 
 jest.mock('../../repository/submission.db');
 
-const userInput = {
-    username: 'user1',
-    password: 'password1',
-    id: 1
-};
-
-const racecarInput = {
-    car_name: 'Mercedes W12',
-    type: 'Formula 1',
-    description: 'A fast racecar',
-    hp: 1000
-};
-
-const crashInput = {
-    type: 'Collision',
-    description: 'A severe crash',
-    casualties: 5,
-    deaths: 2
-};
-
-const driverInput = {
-    name: 'Lewis Hamilton',
-    team: 'Mercedes',
-    description: 'A skilled driver',
-    age: 36,
-    racecar: racecarInput,
-    crash: crashInput,
-    id: 1
-};
-
-const raceInput = {
-    name: 'Grand Prix Monaco',
-    type: 'Formula 1',
-    description: 'A high-speed race',
-    location: 'Monaco',
-    drivers: [driverInput],
-    crashes: [crashInput],
-    admin: { id: 1, username: 'adminuser', password: 'adminpassword' }
-};
-
-const submissionFormInput = {
+const submissionInput = {
     title: 'Race Application 1',
     content: 'This is the first race application form.',
-    user: new User(userInput),
-    race: new Race({
-        ...raceInput,
-        drivers: [new Driver({ ...driverInput, racecar: new Racecar(driverInput.racecar), crash: new Crash(driverInput.crash) })],
-        crashes: [new Crash(crashInput)],
-        admin: new Admin(raceInput.admin)
-    })
+    type: "TEST",
+    createdAt: new Date('2021-05-23'),
+    createdBy: 1,
+    id: 1
+};
+
+const userInput = {
+    username: "user1",
+    password: "password1",
+    name: "John",
+    surname: "Doe",
+    email: "john.doe@gmail.com",
+    permission: Permissions.USER,
+    submissions: [],
+    createdAt: new Date()
 };
 
 const user = new User(userInput);
-const driver = new Driver({ ...driverInput, racecar: new Racecar(driverInput.racecar), crash: new Crash(driverInput.crash) });
-const race = new Race({ ...raceInput, drivers: [driver], crashes: [driver.getCrash()], admin: new Admin(raceInput.admin) });
 
-let createSubmissionFormMock: jest.Mock;
-let mockSubmissionFormDbGetAllSubmissionForms: jest.Mock;
+let createSubmissionMock: jest.Mock;
+let mockSubmissionDbGetAllSubmission: jest.Mock;
 
 beforeEach(() => {
-    createSubmissionFormMock = jest.fn();
-    mockSubmissionFormDbGetAllSubmissionForms = jest.fn();
+    createSubmissionMock = jest.fn();
+    mockSubmissionDbGetAllSubmission = jest.fn();
 
-    submissionDb.createSubmission = createSubmissionFormMock;
-    submissionDb.getAllSubmissions = mockSubmissionFormDbGetAllSubmissionForms;
+    submissionDb.createSubmission = createSubmissionMock;
+    submissionDb.getAllSubmissions = mockSubmissionDbGetAllSubmission;
 });
 
 afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('should create a submission form successfully', () => {
+test('should create a submission form successfully', async () => {
     // Given
-    createSubmissionFormMock.mockReturnValue(new Submission(submissionInput));
+    createSubmissionMock.mockReturnValue(new Submission(submissionInput));
 
     // When
-    const result = submissionService.createSubmission(submissionFormInput);
+    const result = await submissionService.createSubmission(submissionInput);
 
     // Then
-    expect(createSubmissionFormMock).toHaveBeenCalledTimes(1);
-    expect(createSubmissionFormMock).toHaveBeenCalledWith(expect.objectContaining({
-        title: submissionFormInput.title,
-        content: submissionFormInput.content,
-        user,
-        race,
+    expect(createSubmissionMock).toHaveBeenCalledTimes(1);
+    expect(createSubmissionMock).toHaveBeenCalledWith(expect.objectContaining({
+        submission: expect.objectContaining({
+            title: submissionInput.title,
+            content: submissionInput.content,
+            type: submissionInput.type,
+            createdAt: submissionInput.createdAt,
+            createdBy: submissionInput.createdBy,
+        })
     }));
     expect(result).toEqual(expect.objectContaining({
-        title: submissionFormInput.title,
-        content: submissionFormInput.content,
-        user,
-        race,
+        title: submissionInput.title,
+        content: submissionInput.content,
     }));
 });
 
-test('should throw an error when title is missing', () => {
+test('given missing title when creating submission, throw new error', async () => {
     // Given
-    const invalidSubmissionFormInput = { ...submissionFormInput, title: '' };
+    const invalidSubmissionInput = { ...submissionInput, title: '' };
 
     // When / Then
-    expect(() => submissionService.createSubmission(invalidSubmissionFormInput)).toThrowError('Title is required');
+    await expect(submissionService.createSubmission(invalidSubmissionInput)).rejects.toThrowError('Title is required');
 });

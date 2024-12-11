@@ -1,4 +1,4 @@
-import { Crash } from '../model/crash';
+import { Crash } from '../model/Crash';
 import crashdb from '../repository/Crash.db';
 
 const getCrashById = async (id: number): Promise<Crash | null> => {

@@ -1,7 +1,7 @@
 import { Race } from '../model/Race';
 import { Driver } from '../model/Driver';
 import { Racecar } from '../model/Racecar';
-import { Crash } from '../model/crash';
+import { Crash } from '../model/Crash';
 import raceDb from '../repository/Race.db';
 import driverDb from '../repository/Driver.db';
 import racecarDb from '../repository/Racecar.db';
@@ -77,7 +77,8 @@ const createRace = async (raceInput: RaceInput): Promise<Race> => {
         crashes: crashes,
     });
 
-    return raceDb.createRace({ race: newRace });
+    raceDb.createRace({ race: newRace });
+    return newRace;
 };
 
 const getAllCrashes = async (): Promise<Crash[] | null> => {

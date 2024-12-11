@@ -1,5 +1,5 @@
 import { Race } from '../model/Race';
-import { Crash } from '../model/crash';
+import { Crash } from '../model/Crash';
 import database from '../util/database';
 import { Prisma } from '@prisma/client';
 
