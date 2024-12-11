@@ -101,11 +101,13 @@ async function main() {
     });
 }
 
-main()
-    .catch((e) => {
-        console.error(e);
-        process.exit(1);
-    })
-    .finally(async () => {
+(async () => {
+    try {
+        await main();
         await prisma.$disconnect();
-    });
+    } catch (error) {
+        console.error(error);
+        await prisma.$disconnect();
+        process.exit(1);
+    }
+})();
