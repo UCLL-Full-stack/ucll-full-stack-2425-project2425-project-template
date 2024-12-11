@@ -215,7 +215,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 res.end(`
                     <script>
                         sessionStorage.setItem('user', '${JSON.stringify(data)}');
-                        sessionStorage.setItem('guilds', ${JSON.stringify(JSON.stringify(enhancedGuilds))});
+                        sessionStorage.setItem('guilds', '${JSON.stringify(enhancedGuilds).replace(/'/g, "\\'").replace(/"/g, '\\"')}');
                         window.location.href = '/';
                     </script>    
                 `);
