@@ -34,4 +34,19 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
     }
 })
 
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const response = await userService.authentication(userInput);
+        res.status(200).json({ message: 'Authentication successful', ... response});
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(401).json({ message: "Incorrect username or password.", type: 'error'});
+        } else {
+            next(error);
+        }
+    }
+
+})
+
 export { userRouter };

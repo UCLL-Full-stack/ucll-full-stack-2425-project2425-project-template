@@ -34,10 +34,18 @@ type TicketInput = {
     cost: number,
 };
 
+type AuthenticationResponse = {
+    token: string;
+    email: string;
+    username: string;
+    role: Role;
+};
+
 export {
     Role,
     EventInput,
     UserInput,
     InviteInput,
     TicketInput,
+    AuthenticationResponse,
 };

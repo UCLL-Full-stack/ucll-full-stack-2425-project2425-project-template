@@ -1,7 +1,8 @@
 import { User } from "../model/user";
 import userDb from "../repository/user.db"
-import { UserInput } from "../types";
+import { AuthenticationResponse, Role, UserInput } from "../types";
 import bcrypt, { hash } from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const getAllUsers = async (): Promise<User[]> => {
     return userDb.getAllUsers();
@@ -11,8 +12,14 @@ const getUserById = async (id: number): Promise<User | null> => {
     return userDb.getUserById({ id });
 };
 
-const getUserByEmail = async (email: string): Promise<User | null> => {
-    return userDb.getUserByEmail(email);
+const getUserByEmail = async (email: string): Promise<User> => {
+    const user = await userDb.getUserByEmail(email);
+
+    if (user === null){
+        throw new Error("User does not exist.");
+    }
+
+    return user;
 };
 
 const createUser = async (user: UserInput): Promise<User> => {
@@ -36,9 +43,46 @@ const createUser = async (user: UserInput): Promise<User> => {
     return userDb.createUser(newUser);
 }
 
+//log-in authentication
+const authentication = async ({email, password}: UserInput): Promise<AuthenticationResponse> => {
+    const user  = await userDb.getUserByEmail(email);
+
+    if (!user) {
+        throw new Error('User does not exist.');
+    }
+
+    const result = await bcrypt.compare(password, user.getPassword());
+
+    if (!result){
+        throw new Error('Incorrect username or password');
+    }
+
+    return {
+        token: generateJwtToken(user.getUsername(), user.getRole()),
+        email: user.getEmail(),
+        username: user.getUsername(),
+        role: user.getRole(),
+    }
+}
+
+const generateJwtToken = (username: string, role: Role) => {
+    const options = {expiresIn: `${process.env.JWT_EXPIRES_HOURS}h`, issuer: 'eventora'};
+
+    try {
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        return jwt.sign({username, role}, process.env.JWT_SECRET, options);
+    } catch (error) {
+        console.log('Error generating token', error);
+        throw new Error('Error generating JWT token, see server log for details.');
+    }
+};
+
 export default {
     getAllUsers,
     getUserById,
     getUserByEmail,
     createUser,
+    authentication,
 }

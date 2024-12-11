@@ -3,6 +3,7 @@ import styles from '@styles/home.module.css';
 import { StatusMessage } from "types";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import UserService from "@services/UserService";
 
 const UserLoginForm: React.FC = () => {
     const router = useRouter();
@@ -19,19 +20,19 @@ const UserLoginForm: React.FC = () => {
 
     const validation = (): boolean => {
         if (!email || email.trim() === "") {
-            setErrorMessage("Please fill in your email.");
+            setErrorMessage("Email is required.");
             return false;
         }
 
         if (!password || password.trim() === "") {
-            setErrorMessage("Please fill in your password.");
+            setErrorMessage("Password is required.");
             return false;
         }
 
         return true;
     }
 
-    const handleFormSubmit = (e: React.FormEvent) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Validation
@@ -42,13 +43,46 @@ const UserLoginForm: React.FC = () => {
         // Clear all errors
         clearErrors();
 
-        setStatusMessages([{ message: "Login successful. Redirecting to homepage...", type: "success" }]);
-        sessionStorage.setItem("loggedUserEmail", email);
-        sessionStorage.setItem("loggedUserPassword", password);
+        const user = {email: email, password: password};
+        const response = await UserService.loginUser(user);
 
-        setTimeout(() => {
-            router.push('/');
-        }, 2000);
+        console.log(response.status);
+
+        if (response.status === 200){
+            setStatusMessages([{ message: "Login successful. Redirecting to homepage...", type: "success" }]);
+            // sessionStorage.setItem("loggedUserEmail", email);
+            // sessionStorage.setItem("loggedUserPassword", password);
+    
+            const user = await response.json();
+            localStorage.setItem(
+                'loggedInUser',
+                JSON.stringify({
+                    token: user.token,
+                    username: user.username,
+                    name: user.name,
+                    role: user.role,
+                })
+            );
+
+            setTimeout(() => {
+                router.push('/');
+            }, 2000);
+
+        } else if (response.status === 401){
+            // console.log(response);
+            const responseBody = await response.json();
+            // console.log(responseBody);
+
+            setStatusMessages([{message: responseBody.message, type: 'error'}]);
+        
+        } else {
+            setStatusMessages([
+                {
+                    message: 'An error has occured. Please try again later.',
+                    type: 'error',
+                }
+            ]);
+        };
     }
 
     const handleShowSignupForm = () => {
@@ -92,12 +126,16 @@ const UserLoginForm: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <div className={styles.myEventsLoginSignupButtons}>
-                    <button type="submit">Log in</button>
+                    <button type="submit">
+                        Log in
+                    </button>
+
                     <button
                         type="button"
                         className={styles.myEventsSignupButton}
-                        onClick={handleShowSignupForm}
-                    >Sign up</button>
+                        onClick={handleShowSignupForm}>
+                        Sign up
+                    </button>
                 </div>
 
                 {errorMessage && (

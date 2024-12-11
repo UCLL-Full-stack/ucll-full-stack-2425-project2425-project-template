@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { eventRouter } from './controller/event.routes';
 // import { participantRouter } from './controller/participant.routes';
 import { userRouter } from './controller/user.routes';
+import { expressjwt } from 'express-jwt';
 
 
 const app = express();
@@ -16,6 +17,14 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/events/upcoming-events', '/users/login', '/status', '/users/signup'],
+    })
+);
 
 const swaggerOptions = {
     definition: {

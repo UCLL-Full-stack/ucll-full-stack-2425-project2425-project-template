@@ -2,12 +2,12 @@ export type Role = 'PARTICIPANT' | 'ORGANIZER';
 
 export type UserInput = {
     id?: number,
-    username: string,
-    name: string,
-    email: string,
-    password: string,
-    age: number,
-    role: Role,
+    username?: string,
+    name?: string,
+    email?: string,
+    password?: string,
+    age?: number,
+    role?: Role,
 };
 
 export type EventInput = {
