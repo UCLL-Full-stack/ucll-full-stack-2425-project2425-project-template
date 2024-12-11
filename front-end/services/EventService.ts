@@ -59,21 +59,15 @@ const getEventsByUserEmail = (email: string) => {
 };
 
 const removeFromMyEvents = async (email: string, eventId: number) => {
-  // const response = await fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
+  const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
 
   return fetch(apiUrl + `/events/remove/${eventId}/${email}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     }
   });
-
-  // if (!response.ok) {
-  //     const errorData = await response.json();
-  //     throw new Error(errorData.message || 'Failed to remove the event from the user"s list.');
-  // }
-
-  // return response.json();
 };
 
 

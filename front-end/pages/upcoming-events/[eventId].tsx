@@ -65,8 +65,6 @@ const RenderEventDetailsById: React.FC = () => {
         }
     };
 
-
-
     const handleAddParticipant = async () => {
         setShowError(false);
         setShowForm(true);
