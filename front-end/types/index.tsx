@@ -1,7 +1,7 @@
 export type Role = 'PARTICIPANT' | 'ORGANIZER';
 
 export type UserInput = {
-    id?: number,
+    // id?: number,
     username?: string,
     name?: string,
     email?: string,

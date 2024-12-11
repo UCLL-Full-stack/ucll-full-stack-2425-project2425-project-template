@@ -1,22 +1,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { UserInput } from '@types';
 
 const Header: React.FC = () => {
-
-    const [loggedUser, setLoggedUser] = useState<string | null>(null);
+    const [loggedUser, setLoggedUser] = useState<UserInput>(null);
 
     useEffect(() => {
-        const sessionUser = sessionStorage.getItem("loggedUserEmail");
-
-        if (sessionUser) {
-            setLoggedUser(sessionUser);
-        }
+        setLoggedUser(JSON.parse(localStorage.getItem('loggedInUser')));
     }, []);
 
     // Handle log out
     const handleLogout = () => {
-        sessionStorage.removeItem("loggedUserEmail");
+        localStorage.removeItem("loggedInUser");
         setLoggedUser(null);
     }
 
@@ -59,7 +55,7 @@ const Header: React.FC = () => {
                             Logout
                         </Link>
                         <Link href="/" className="nav-link px-4 fs-5 text-white-50">
-                            Welcome {loggedUser}!
+                            Welcome {loggedUser.name}!
                         </Link>
                     </>
                 ) : (

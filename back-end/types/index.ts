@@ -38,6 +38,7 @@ type AuthenticationResponse = {
     token: string;
     email: string;
     username: string;
+    name: string;
     role: Role;
 };
 

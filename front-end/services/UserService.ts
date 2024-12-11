@@ -12,7 +12,7 @@ const createUser = async (user: UserInput) => {
     });
 }
 
-const loginUser = (user: UserInput) => {
+const loginUser = async (user: UserInput) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
         method: "POST",
         headers: {

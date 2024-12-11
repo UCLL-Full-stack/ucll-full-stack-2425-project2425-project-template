@@ -290,6 +290,22 @@
     color: black;
 }
 
+.loginStatusMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loginSuccessIcon { 
+    align-self: center;
+}
+
+.loginStatusMessage,
+.loginErrorMessage { 
+    color: #FF0000;
+}
+
 .myEventsLoginSignupButtons {
     display: flex;
     flex-direction: row;

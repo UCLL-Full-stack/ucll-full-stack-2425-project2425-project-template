@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import styles from '@styles/home.module.css';
 import { StatusMessage } from "types";
-import classNames from "classnames";
 import { useRouter } from "next/router";
 import UserService from "@services/UserService";
+import classNames from "classnames";
 
 const UserLoginForm: React.FC = () => {
     const router = useRouter();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [errorMessage, setErrorMessage] = useState<string | null>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+    const [showSuccessIcon, setShowSuccessIcon] = useState<boolean>(false);
 
 
     const clearErrors = () => {
@@ -43,16 +44,18 @@ const UserLoginForm: React.FC = () => {
         // Clear all errors
         clearErrors();
 
-        const user = {email: email, password: password};
+        const user = { email: email, password: password };
         const response = await UserService.loginUser(user);
 
         console.log(response.status);
 
-        if (response.status === 200){
-            setStatusMessages([{ message: "Login successful. Redirecting to homepage...", type: "success" }]);
-            // sessionStorage.setItem("loggedUserEmail", email);
-            // sessionStorage.setItem("loggedUserPassword", password);
-    
+        if (response.status === 200) {
+            // setStatusMessages([{ message: "Login successful. Redirecting to homepage...", type: "success" }]);
+            // // sessionStorage.setItem("loggedUserEmail", email);
+            // // sessionStorage.setItem("loggedUserPassword", password);
+
+            setShowSuccessIcon(true);
+
             const user = await response.json();
             localStorage.setItem(
                 'loggedInUser',
@@ -68,13 +71,13 @@ const UserLoginForm: React.FC = () => {
                 router.push('/');
             }, 2000);
 
-        } else if (response.status === 401){
+        } else if (response.status === 401) {
             // console.log(response);
             const responseBody = await response.json();
             // console.log(responseBody);
 
-            setStatusMessages([{message: responseBody.message, type: 'error'}]);
-        
+            setStatusMessages([{ message: responseBody.message, type: 'error' }]);
+
         } else {
             setStatusMessages([
                 {
@@ -96,27 +99,29 @@ const UserLoginForm: React.FC = () => {
                 className={styles.loginMyEvents}>
                 {statusMessages && (
                     <div className="row">
-                        <ul className="list-none mb-3 mx-auto ">
+                        <ul>
                             {statusMessages.map(({ message, type }, index) => (
                                 <li
                                     key={index}
-                                    className={classNames({
-                                        "text-red-800": type === "error",
-                                        "text-green-800": type === "success",
-                                    })}
+                                    className={styles.loginStatusMessage}
                                 >
-                                    {message}
+                                    <img src="/icons/close-red.png" alt="error" width="40px" height="40px" />
+                                    <p >{message}</p>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 )}
+
+                {showSuccessIcon &&
+                    <img src="/icons/check-green.png" alt="success" width="40px" height="40px" className={styles.loginSuccessIcon} />
+                }
+                
                 <label htmlFor="email">Email:</label>
                 <input
                     type="email"
                     id="email"
                     onChange={(e) => setEmail(e.target.value)}
-                    required
                 />
                 <label htmlFor="password">Password:</label>
 
@@ -139,7 +144,7 @@ const UserLoginForm: React.FC = () => {
                 </div>
 
                 {errorMessage && (
-                    <p className="text-red-800">
+                    <p className={styles.loginErrorMessage}>
                         {errorMessage}
                     </p>
                 )}
