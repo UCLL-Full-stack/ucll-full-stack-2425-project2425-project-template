@@ -13,11 +13,11 @@ const createRace = async ({ race }: { race: Race }): Promise<Race> => {
                 location: race.getLocation(),
                 date: race.getDate(),
                 crashes: {
-                    connect: race.getCrashes().map((crash) => ({ id: crash.getId()})),
+                    connect: race.getCrashes().map((crash) => ({ id: crash.getId() })),
                 },
             },
             include: {
-                crashes: { include: { participants: { include : { driver: true, racecar: true } } } },
+                crashes: { include: { participants: { include: { driver: true, racecar: true } } } },
             },
         });
 
@@ -32,7 +32,7 @@ const getAllRaces = async (): Promise<Race[] | null> => {
     try {
         const racePrisma = await database.race.findMany({
             include: {
-                crashes: { include: { participants: { include : { driver: true, racecar: true } } } },
+                crashes: { include: { participants: { include: { driver: true, racecar: true } } } },
             },
         });
         return racePrisma.map((racePrisma) => Race.from(racePrisma));
@@ -47,7 +47,7 @@ const getRaceById = async (id: number): Promise<Race | null> => {
         const racePrisma = await database.race.findFirst({
             where: { id },
             include: {
-                crashes: { include: { participants: { include : { driver: true, racecar: true } } } },
+                crashes: { include: { participants: { include: { driver: true, racecar: true } } } },
             },
         });
         return racePrisma ? Race.from(racePrisma) : null;
@@ -151,6 +151,13 @@ const removeCrashFromRace = async (raceId: number, crashId: number): Promise<Rac
 
 const editCrash = async (crashId: number, crashData: Crash): Promise<Crash | null> => {
     try {
+
+        // Step 1: Find the race associated with the old crash
+        const Race_to_connect_crash_to = await getRaceByCrashId(crashId);
+        if (!Race_to_connect_crash_to) {
+            throw new Error(`Race not found for crash ID ${crashId}`);
+        }
+
         // Delete the existing crash
         await database.crash.delete({
             where: { id: crashId },
@@ -202,6 +209,9 @@ const editCrash = async (crashId: number, crashData: Crash): Promise<Crash | nul
                 participants: { include: { driver: true, racecar: true } }
             }
         });
+
+        const crashInstance = Crash.from(newCrash);
+        await addCrashToRace(Race_to_connect_crash_to.getId()!, crashInstance);
 
         return Crash.from(newCrash);
     } catch (error) {
