@@ -1,6 +1,7 @@
-import { Exercise } from '../exercise';
-import { Workout } from '../workout';
-import { WorkoutExercise } from '../workoutexercise';
+import { Exercise } from "../model/exercise";
+import { Workout } from "../model/workout";
+import { WorkoutExercise } from "../model/workoutexercise";
+
 
 const defaultWorkoutExercise = new WorkoutExercise({
     workout_exercise_id: 0,

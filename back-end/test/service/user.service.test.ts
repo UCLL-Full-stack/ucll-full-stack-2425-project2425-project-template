@@ -1,4 +1,5 @@
-import userDb from '../../model/data-access/user.db';
+
+import userDb from '../../repository/user.db';
 import userService from '../../service/user.service';
 import { UserInput } from '../../types';
 

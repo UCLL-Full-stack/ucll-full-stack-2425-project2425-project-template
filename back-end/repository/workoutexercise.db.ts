@@ -1,4 +1,5 @@
-import { WorkoutExercise } from "../workoutexercise";
+import { WorkoutExercise } from "../model/workoutexercise";
+
 
 
 const workoutexercises: WorkoutExercise[] = [

@@ -1,4 +1,5 @@
-import { User } from "../user";
+import { User } from "../model/user";
+
 
 const users: User[] = [
     new User({ user_id: 1, firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', password: 't'}),

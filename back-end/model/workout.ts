@@ -1,4 +1,8 @@
 import { Exercise } from './exercise';
+import {
+    Workout as WorkoutPrisma, 
+    Exercise as ExercisePrisma
+} from '@prisma/client'
 
 export class Workout {
     readonly workout_id: number;
@@ -62,4 +66,5 @@ export class Workout {
             this.exercises.every((exercise, index) => exercise.equals(exercises[index]))
         );
     }
+
 }

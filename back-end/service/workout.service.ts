@@ -1,6 +1,8 @@
-import userDb from '../model/data-access/user.db';
-import workoutDb from '../model/data-access/workout.db';
+
+
 import { Workout } from '../model/workout';
+import userDb from '../repository/user.db';
+import workoutDb from '../repository/workout.db';
 import { WorkoutInput } from '../types';
 import exerciseService from './exercise.service';
 

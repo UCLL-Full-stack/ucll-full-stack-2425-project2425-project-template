@@ -1,5 +1,6 @@
-import userDb from '../model/data-access/user.db';
+
 import { User } from '../model/user';
+import userDb from '../repository/user.db';
 
 const getAllUsers = (): User[] => {
     const users = userDb.getAllUsers();

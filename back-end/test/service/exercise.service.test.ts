@@ -1,4 +1,5 @@
-import exerciseDb from '../../model/data-access/exercise.db';
+
+import exerciseDb from '../../repository/exercise.db';
 import exerciseService from '../../service/exercise.service';
 import { ExerciseInput } from '../../types';
 
