@@ -25,7 +25,7 @@ const AddShoppingcartForm: React.FC = () => {
         event.preventDefault();
         try {
             await ShoppingcartService.addShoppingcart(shoppingcart);
-            router.push('/itemOverview');
+            router.push('/items');
         } catch (error) {
             console.error('Error adding shoppingcart:', error);
         }

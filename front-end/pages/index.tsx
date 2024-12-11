@@ -1,4 +1,4 @@
-import ShoppingcartOverview from '@components/shoppingcart/ShoppincartOverview';
+import ShoppingcartOverview from '@components/shoppingcart/ShoppingcartOverview';
 import UserService from '@services/userService';
 import { User } from '@types';
 import Link from 'next/link';
@@ -22,7 +22,6 @@ const Home: React.FC = () => {
             }
 
             const fetchedUser = await response.json();
-            console.log(fetchedUser);
             setUser(fetchedUser);
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -32,15 +31,13 @@ const Home: React.FC = () => {
     useEffect(() => {
         const token = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
         setLoggedInUser(token);
-
-        if (token) {
-            fetchUser();
-        }
     }, []);
 
-    useInterval(() => {
-        fetchUser;
-    }, 2000);
+    useEffect(() => {
+        if (loggedInUser) {
+            fetchUser();
+        }
+    }, [loggedInUser]);
 
     if (!loggedInUser) {
         return (
