@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import Header from '@components/header';
+import styles from '../../styles/login/login.module.css';  // Import the styles
 
 // Simulate a simple login service
 const loginService = async (email: string, password: string, role: string) => {
@@ -48,140 +50,68 @@ const LoginPage: React.FC = () => {
       } else if (response.role === "nurse") {
         router.push("/nurseDashboard"); // Redirect to the nurse's dashboard (implement this page)
       }
-    } else {
-      setErrorMessage(response.message);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>PokéPal</h1>
-      <form onSubmit={handleLogin} style={styles.form}>
-        <div style={styles.radioGroup}>
-          <label style={styles.radioLabel}>
+    <div className={styles.container}>
+      <h1 className={styles.header}>PokéPal</h1>
+      <form onSubmit={handleLogin} className={styles.form}>
+        <div className={styles.radioGroup}>
+          <label className={styles.radioLabel}>
             <input
               type="radio"
               name="role"
               value="trainer"
               checked={role === "trainer"}
               onChange={() => setRole("trainer")}
-              style={styles.radio}
+              className={styles.radio}
             />
             Trainer
           </label>
-          <label style={styles.radioLabel}>
+          <label className={styles.radioLabel}>
             <input
               type="radio"
               name="role"
               value="nurse"
               checked={role === "nurse"}
               onChange={() => setRole("nurse")}
-              style={styles.radio}
+              className={styles.radio}
             />
             Nurse
           </label>
         </div>
 
-        <div style={styles.inputGroup}>
-          <label htmlFor="email" style={styles.label}>Email:</label>
+        <div className={styles.inputGroup}>
+          <label htmlFor="email" className={styles.label}>Email:</label>
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={styles.input}
+            className={styles.input}
           />
         </div>
 
-        <div style={styles.inputGroup}>
-          <label htmlFor="password" style={styles.label}>Password:</label>
+        <div className={styles.inputGroup}>
+          <label htmlFor="password" className={styles.label}>Password:</label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={styles.input}
+            className={styles.input}
           />
         </div>
 
-        <button type="submit" style={styles.button}>Login</button>
+        <button type="submit" className={styles.button}>Login</button>
 
-        {errorMessage && <p style={styles.error}>{errorMessage}</p>}
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
       </form>
     </div>
   );
-};
-
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
-    backgroundColor: "#f7f7f7",
-    padding: "20px",
-  },
-  header: {
-    fontSize: "3rem",
-    marginBottom: "20px",
-    color: "#333",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    width: "300px",
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  },
-  radioGroup: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  radioLabel: {
-    fontSize: "1rem",
-  },
-  radio: {
-    marginRight: "5px",
-  },
-  inputGroup: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  label: {
-    fontSize: "1rem",
-    marginBottom: "5px",
-  },
-  input: {
-    padding: "8px",
-    fontSize: "1rem",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-  },
-  button: {
-    padding: "10px",
-    fontSize: "1rem",
-    backgroundColor: "#007BFF",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-  },
-  buttonHover: {
-    backgroundColor: "#0056b3",
-  },
-  error: {
-    color: "red",
-    fontSize: "0.9rem",
-    marginTop: "10px",
-  },
 };
 
 export default LoginPage;
