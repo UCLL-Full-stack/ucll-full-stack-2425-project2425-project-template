@@ -1,27 +1,32 @@
+import {
+    Exercise as ExercisePrisma,
+    Workout as WorkoutPrisma,
+    WorkoutExercise as WorkoutExercisePrisma,
+} from '@prisma/client';
 import { Exercise } from './exercise';
 
 export class Workout {
-    readonly workout_id: number;
-    readonly user_id: number;
+    readonly id: number;
+    readonly userId: number;
     readonly name: string;
     readonly description: string;
     readonly exercises: Exercise[];
 
     constructor(workout: {
-        workout_id: number;
-        user_id: number;
+        id: number;
+        userId: number;
         name: string;
         description: string;
         exercises: Exercise[];
     }) {
         this.validate(workout);
-        this.workout_id = workout.workout_id;
-        this.user_id = workout.user_id;
+        this.id = workout.id;
+        this.userId = workout.userId;
         this.name = workout.name;
         this.description = workout.description;
         this.exercises = workout.exercises || [];
     }
-    validate(workout: { workout_id: number; user_id: number; name: string; description: string }) {
+    validate(workout: { id: number; userId: number; name: string; description: string }) {
         if (!workout.name || typeof workout.name !== 'string' || workout.name.trim().length === 0) {
             throw new Error('Workout name is required and cannot be empty.');
         }
@@ -42,24 +47,42 @@ export class Workout {
     }
 
     equals({
-        workout_id,
-        user_id,
+        id,
+        userId,
         name,
         description,
         exercises,
     }: {
-        workout_id: number;
-        user_id: number;
+        id: number;
+        userId: number;
         name: string;
         description: string;
         exercises: Exercise[];
     }): boolean {
         return (
-            this.workout_id === workout_id &&
-            this.user_id === user_id &&
+            this.id === id &&
+            this.userId === userId &&
             this.name === name &&
             this.description === description &&
             this.exercises.every((exercise, index) => exercise.equals(exercises[index]))
         );
+    }
+
+    static from({
+        id,
+        userId,
+        name,
+        description,
+        exercises,
+    }: WorkoutPrisma & {
+        exercises: (ExercisePrisma & { workoutExercise: WorkoutExercisePrisma })[];
+    }) {
+        return new Workout({
+            id,
+            userId,
+            name,
+            description,
+            exercises: exercises.map((exercise) => Exercise.from(exercise)),
+        });
     }
 }

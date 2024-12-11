@@ -10,7 +10,7 @@ const userRouter = Router();
  *     User:
  *       type: object
  *       properties:
- *         user_id:
+ *         id:
  *           type: number
  *           format: int64
  *         firstName:
