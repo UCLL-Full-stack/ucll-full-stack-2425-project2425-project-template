@@ -62,11 +62,17 @@ export class Shoppingcart {
     }
 
     removeItem(item: Item) {
-        const cartItem = this.items.find((cartItem) => cartItem.item.equals(item));
-        if (!cartItem) {
+        const existingCartItem = this.items.find((cartItem) => cartItem.item.equals(item));
+
+        if (existingCartItem) {
+            if (existingCartItem.quantity > 1) {
+                existingCartItem.quantity--;
+            } else {
+                this.items = this.items.filter((cartItem) => !cartItem.item.equals(item));
+            }
+        } else {
             throw new Error('This item does not exist in this shopping cart');
         }
-        this.items.splice(this.items.indexOf(cartItem), 1);
     }
 
     getId(): number | undefined {
