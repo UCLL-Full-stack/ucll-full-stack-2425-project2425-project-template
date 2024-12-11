@@ -25,5 +25,11 @@ export type World = {
 export type Floor = {
   id?: number;
   floornumber: number;
-  tiles: string[][];
+  tiles: Line[];
+}
+
+export type Line = {
+  id?: number;
+  tiles: string[];
+  lineNum: number;
 }
