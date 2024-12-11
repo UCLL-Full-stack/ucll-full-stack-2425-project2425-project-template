@@ -43,9 +43,9 @@ const authenicate = async ({
         if (!isValidPassword) throw new Error('Incorrect password.');
 
         return {
-            token: generateJWTtoken({ username: userName, role: role }),
+            token: generateJWTtoken({ username: userName, role: user.getRole() }),
             userName,
-            role: role,
+            role: user.getRole(),
         };
     } catch (error) {
         throw new Error(`Error: ${error}`);

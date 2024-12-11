@@ -22,6 +22,7 @@ const addEvent = async (event: Event) => {
 const getEventById = async (id: number) => {
   const user = sessionStorage.getItem("loggedInUser");
   const token = user ? JSON.parse(user).token : null;
+  console.log(id);
   const result = await fetch(
     process.env.NEXT_PUBLIC_API_URL + `/events/${id}`,
     {

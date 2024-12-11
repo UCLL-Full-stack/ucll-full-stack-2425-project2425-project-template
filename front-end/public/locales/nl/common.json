@@ -49,6 +49,15 @@
     }
   },
   "event": {
-    "button": "Maak event aan"
+    "button": "Maak evenement aan",
+    "details": {
+      "loginerror": "Meld eerst aan.",
+      "editeventbutton": "wijzig evenement",
+      "date": "Datum: ",
+      "minparticipants": "Minimum deelnemers: ",
+      "maxparticipants": "Maximum deelnemers: ",
+      "location": "Locatie: ",
+      "participate": "Schrijf je in"
+    }
   }
 }

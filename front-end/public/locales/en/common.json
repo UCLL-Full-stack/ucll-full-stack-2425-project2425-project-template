@@ -49,6 +49,15 @@
     }
   },
   "event": {
-    "button": "Add event"
+    "button": "Add event",
+    "details": {
+      "loginerror": "Please log in first.",
+      "editeventbutton": "Edit event",
+      "date": "Date: ",
+      "minparticipants": "Minimum participants: ",
+      "maxparticipants": "Maximum participants: ",
+      "location": "Location: ",
+      "participate": "Participate"
+    }
   }
 }
