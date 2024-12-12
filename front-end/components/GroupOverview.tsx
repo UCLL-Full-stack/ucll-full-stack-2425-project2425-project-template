@@ -1,12 +1,21 @@
 import React from 'react';
 import { Group } from '@/types';
+import { useRouter } from 'next/router';
 
-interface GroupOverviewProps {
+interface Props {
     groups: Group[];
 }
 
-const GroupOverview: React.FC<GroupOverviewProps> = ({ groups }) => {
-    console.log(groups);
+const GroupOverview: React.FC<Props> = ({ groups }) => {
+    const router = useRouter();
+    
+    const goToGroupBoards = (groupId?: number) => () => {
+        if (!groupId) {
+            return;
+        }
+        router.push(`/groups/${groupId}`);
+    };
+
     return (
         <>
             {groups &&
@@ -19,7 +28,7 @@ const GroupOverview: React.FC<GroupOverviewProps> = ({ groups }) => {
                     </thead>
                     <tbody>
                         {groups.map(group => (
-                            <tr key={group.id} className="hover:bg-gray-50">
+                            <tr key={group.id} className="hover:bg-gray-50" onClick={goToGroupBoards(group.id)}>
                                 <td className="py-2 px-4 border-b border-gray-200">{group.name}</td>
                                 <td className="py-2 px-4 border-b border-gray-200">{group.description}</td>
                             </tr>

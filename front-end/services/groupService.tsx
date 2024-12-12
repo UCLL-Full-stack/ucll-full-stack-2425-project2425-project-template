@@ -8,7 +8,7 @@ const getGroups = () => {
     const token = getToken();
 
     return fetch(`${process.env.NEXT_PUBLIC_API_URL}/groups`, {
-        method: 'Get',
+        method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
         },

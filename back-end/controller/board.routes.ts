@@ -11,5 +11,15 @@ boardRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
     return res.status(200).json(await boardService.getBoardById(parseInt(req.params.id)));
 });
 
+boardRouter.get('/group', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const groupId = Number(req.query.groupId);;
+        const boards = await boardService.getBoardsWithGroupId(groupId);
+        return res.status(200).json(boards);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 export { boardRouter };
