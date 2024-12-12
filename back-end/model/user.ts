@@ -4,6 +4,7 @@ export class User {
     private id?: number;
     private name: string;
     private email: string;
+    private role: string;
     private password: string;
     private birthday: Date;
     private accountBirthday?: Date; // will be added by the database (dunno if possible)
@@ -12,6 +13,7 @@ export class User {
         id?: number;
         name: string;
         email: string;
+        role: string;
         password: string;
         birthday: Date;
         accountBirthday?: Date;
@@ -21,6 +23,7 @@ export class User {
         this.id = user.id;
         this.name = user.name;
         this.email = user.email;
+        this.role = user.role;
         this.password = user.password;
         this.birthday = user.birthday;
         this.accountBirthday = user.accountBirthday;
@@ -50,6 +53,10 @@ export class User {
         return this.accountBirthday;
     }
 
+    getRole(): string {
+        return this.role;
+    }
+
     validate(user: { name: string; email: string; password: string; birthday: Date }) {
         if (!user.name) {
             throw new Error('Name is required.');
@@ -75,11 +82,12 @@ export class User {
         return expression.test(email);
     }
 
-    static from({ id, name, email, password, birthday, accountBirthday }: UserPrisma) {
+    static from({ id, name, email, role, password, birthday, accountBirthday }: UserPrisma) {
         return new User({
             id,
             name,
             email,
+            role,
             password,
             birthday,
             accountBirthday,
