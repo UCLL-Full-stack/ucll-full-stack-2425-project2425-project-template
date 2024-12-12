@@ -7,6 +7,7 @@ const getAllPlayers = async () => {
     });
 };
 
-export default {
+const playerService = {
     getAllPlayers,
 };
+export default playerService;
