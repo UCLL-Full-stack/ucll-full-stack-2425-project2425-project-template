@@ -3,14 +3,19 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Event, User } from "@/types";
 import Head from "next/head";
+import styles from "@/styles/home.module.css";
+import EditEventForm from "@/components/editEventForm";
+import Header from "@/components/header";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const EditEventPage: React.FC = () => {
   const router = useRouter();
   const [event, setEvent] = useState<Event | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const { id } = router.query;
   const fetchEvent = async () => {
-    const { id } = router.query;
     const response = await EventService.getEventById(Number(id));
     setEvent(response);
   };
@@ -20,12 +25,15 @@ const EditEventPage: React.FC = () => {
     if (result) {
       setLoggedInUser(JSON.parse(result));
     }
+    setIsUserLoaded(true);
   };
 
   useEffect(() => {
-    fetchEvent();
     fetchUser();
-  }, [router.query.id]);
+  }, []);
+  useEffect(() => {
+    if (isUserLoaded && id && loggedInUser) fetchEvent();
+  }, [id, isUserLoaded, loggedInUser]);
 
   return (
     event && (
@@ -35,9 +43,21 @@ const EditEventPage: React.FC = () => {
           <meta name="description" content="Eventer home page" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <>test</>
+        <Header></Header>
+        <main className={styles.main}>
+          <EditEventForm event={event}></EditEventForm>
+        </main>
       </>
     )
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 export default EditEventPage;

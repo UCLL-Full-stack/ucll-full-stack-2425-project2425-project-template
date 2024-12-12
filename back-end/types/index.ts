@@ -1,4 +1,4 @@
-type Role = 'User' | 'Admin';
+type Role = 'User' | 'Admin' | 'Mod';
 
 type UserInput = {
     id?: number;

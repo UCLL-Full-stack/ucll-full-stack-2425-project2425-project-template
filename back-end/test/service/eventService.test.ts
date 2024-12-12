@@ -49,6 +49,7 @@ let getEventsMock: jest.Mock;
 let mockEventDbAddEvent: jest.Mock;
 let mockEventDbGetEventById: jest.Mock;
 let mockEventDbDeleteEventById: jest.Mock;
+let mockEventDbEditEvent: jest.Mock;
 
 beforeEach(() => {
     addEventMock = jest.fn();
@@ -56,6 +57,7 @@ beforeEach(() => {
     mockEventDbAddEvent = jest.fn();
     mockEventDbGetEventById = jest.fn();
     mockEventDbDeleteEventById = jest.fn();
+    mockEventDbEditEvent = jest.fn();
 });
 
 afterEach(() => {
@@ -117,4 +119,44 @@ test('given a admin, when deleting an event, an error is thrown', async () => {
 
     expect(mockEventDbDeleteEventById).toHaveBeenCalledTimes(1);
     expect(mockEventDbDeleteEventById).toHaveBeenCalledWith(1);
+});
+
+test('given valid eventInput and right role, when editting an event, then event is changed', async () => {
+    //given
+    eventDb.editEvent = mockEventDbEditEvent;
+    const eventInput = {
+        id: 1,
+        name: 'test',
+        date: new Date(),
+        price: 5,
+        minParticipants: 5,
+        maxParticipants: 10,
+        location: locationInput,
+        category: categoryInput,
+    };
+    //when
+    await eventService.editEvent(1, eventInput, 'Mod');
+
+    expect(mockEventDbEditEvent).toHaveBeenCalledTimes(1);
+    expect(mockEventDbEditEvent).toHaveBeenCalledWith(1, eventInput);
+});
+test('given valid eventInput and false role, when editting an event, then event is changed', async () => {
+    //given
+    eventDb.editEvent = mockEventDbEditEvent;
+    const eventInput = {
+        id: 1,
+        name: 'test',
+        date: new Date(),
+        price: 5,
+        minParticipants: 5,
+        maxParticipants: 10,
+        location: locationInput,
+        category: categoryInput,
+    };
+    //when
+    await expect(eventService.editEvent(1, eventInput, 'User')).rejects.toThrow(
+        'Error: Only an administrator or event moderator can edit events.'
+    );
+
+    expect(mockEventDbEditEvent).toHaveBeenCalledTimes(0);
 });

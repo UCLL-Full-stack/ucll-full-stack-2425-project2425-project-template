@@ -33,7 +33,7 @@ const EventDetails: React.FC = () => {
     fetchUser();
   }, []);
   useEffect(() => {
-    if (id && isUserLoaded) {
+    if (id && isUserLoaded && loggedInUser) {
       fetchEvent();
     }
   }, [isUserLoaded, id]);
@@ -74,9 +74,6 @@ const EventDetails: React.FC = () => {
           <div
             key={event.id}
             className="event-card p-3 m-2 border rounded d-flex flex-column justify-content-center"
-            onClick={() => {
-              router.push(`/events/${event.id}`);
-            }}
           >
             {loggedInUser.role === "Admin" && (
               <button className={styles.editButton} onClick={handleEdit}>

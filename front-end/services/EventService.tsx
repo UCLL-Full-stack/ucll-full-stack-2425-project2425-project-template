@@ -19,10 +19,22 @@ const addEvent = async (event: Event) => {
   });
 };
 
+const editEvent = async (id: number, event: Event) => {
+  const user = sessionStorage.getItem("loggedInUser");
+  const token = user ? JSON.parse(user).token : null;
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(event),
+  });
+};
+
 const getEventById = async (id: number) => {
   const user = sessionStorage.getItem("loggedInUser");
   const token = user ? JSON.parse(user).token : null;
-  console.log(id);
   const result = await fetch(
     process.env.NEXT_PUBLIC_API_URL + `/events/${id}`,
     {
@@ -39,4 +51,4 @@ const getEventById = async (id: number) => {
   return result.json();
 };
 
-export default { getAllEvents, addEvent, getEventById };
+export default { getAllEvents, addEvent, editEvent, getEventById };

@@ -1,4 +1,5 @@
 import { Event } from '../model/event';
+import { EventInput } from '../types';
 import database from './database';
 
 const addEvent = async (event: Event): Promise<Event> => {
@@ -61,6 +62,41 @@ const deleteEventById = async (id: number) => {
     }
 };
 
+const editEvent = async (id: number, changes: EventInput) => {
+    try {
+        await database.event.update({
+            where: {
+                id: id,
+            },
+            data: {
+                name: changes.name,
+                date: changes.date,
+                price: changes.price,
+                minParticipants: changes.minParticipants,
+                maxParticipants: changes.maxParticipants,
+                location: {
+                    connect: {
+                        id: changes.location.id,
+                    },
+                },
+                category: {
+                    connect: {
+                        id: changes.category.id,
+                    },
+                },
+                lastEdit: new Date(),
+            },
+            include: {
+                location: true,
+                category: true,
+            },
+        });
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, see server logs for more detail');
+    }
+};
+
 const getEvents = async (): Promise<Event[]> => {
     try {
         const eventPrisma = await database.event.findMany({
@@ -77,5 +113,6 @@ export default {
     addEvent,
     getEventById,
     deleteEventById,
+    editEvent,
     getEvents,
 };
