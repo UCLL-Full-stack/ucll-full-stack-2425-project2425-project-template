@@ -1,3 +1,4 @@
+import userService from '@services/userService';
 import userSerivce from '@services/userService';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -44,7 +45,7 @@ const UserLogin: React.FC = () => {
         });
 
         localStorage.setItem('loggedInUser', email);
-        const response = await userSerivce.authenticateUser(email, password);
+        const response = await userService.authenticateUser({ email, password });
 
         if (response.status === 200) {
             setStatusMessages({ message: 'Login successful', type: 'success' });

@@ -1,3 +1,5 @@
+import { Auth } from '@types';
+
 const getAllUsers = async () => {
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
         method: 'GET',
@@ -16,13 +18,13 @@ const getUserByEmail = async (email: string) => {
     });
 };
 
-const authenticateUser = async (email: string, password: string) => {
-    return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/authenticate', {
+const authenticateUser = async (auth: Auth) => {
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/login', {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(auth),
     });
 };
 
