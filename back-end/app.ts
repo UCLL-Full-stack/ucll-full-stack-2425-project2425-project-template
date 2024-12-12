@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -9,8 +9,9 @@ import { studentRouter } from './controller/student.routes';
 import { bookingRouter } from './controller/booking.routes';
 import { reviewRouter } from './controller/review.routes';
 
-const app = express();
 dotenv.config();
+
+const app = express();
 const port = process.env.APP_PORT || 3000;
 // app.use(helmet())
 // app.use(
@@ -51,6 +52,10 @@ const swaggerOpts = {
   
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
+  res.status(400).json({ status: 'error', message: err.message})
+});
 
 // app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 //   if(err.name === 'UnauthorizedError'){

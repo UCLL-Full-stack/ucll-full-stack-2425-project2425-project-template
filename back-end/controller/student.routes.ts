@@ -1,5 +1,6 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import studentService from '../service/student.service';
+import { StudentInput } from '../types';
 
 const studentRouter = express.Router();
 
@@ -128,7 +129,7 @@ studentRouter.get('/:id', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /students:
+ * /students/signup:
  *   post:
  *     summary: Create a new student
  *     description: Creates a new student with the provided details.
@@ -181,14 +182,13 @@ studentRouter.get('/:id', async (req: Request, res: Response) => {
  *                   type: string
  *                   example: An error occurred while creating the student.
  */
-studentRouter.post('/', async (req: Request, res: Response) => {
+studentRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const studentInput = req.body;
+    const studentInput = <StudentInput>req.body;
     const newStudent = await studentService.createStudent(studentInput);
     res.status(201).json(newStudent);
   } catch (error) {
-    const err = error as Error;
-    res.status(400).json({ status: 'error', errorMessage: err.message });
+    next(error);
   }
 });
 

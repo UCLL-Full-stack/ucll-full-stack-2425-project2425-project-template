@@ -35,7 +35,12 @@ test('should create a new student', async () => {
 
     // Then
     expect(student).toEqual(mockStudent);
-    expect(mockStudentDbCreateStudent).toHaveBeenCalledWith(studentInput);
+    expect(mockStudentDbCreateStudent).toHaveBeenCalledWith(expect.objectContaining({
+        username: 'student1',
+        email: 'student1@example.com',
+        password: expect.any(String),
+        studentNumber: '123456'
+    }));
 });
 
 test('should throw an error if required fields are missing when creating a student', async () => {

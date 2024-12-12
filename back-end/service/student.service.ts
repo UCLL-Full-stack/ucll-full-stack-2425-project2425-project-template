@@ -1,34 +1,44 @@
 import studentDb from "../repository/student.db";
 import { Student } from "../model/student";
 import { StudentInput } from "../types";
+import bcrypt from 'bcrypt';
 
 const createStudent = async (input: StudentInput): Promise<Student> => {
+  
   const { username, email, password, studentNumber } = input;
+  
+  const existing = await studentDb.getStudentByUsername(username);
 
-  if (!username || username.trim().length === 0) {
-      throw new Error("Username is required.");
+  if (existing) {
+      throw new Error(`User with Username ${username} is already exists.`);
   }
 
-  if (!email || email.trim().length === 0) {
-      throw new Error("Email is required.");
-  }
+//   if (!username || username.trim().length === 0) {
+//       throw new Error("Username is required.");
+//   }
 
-  if (!password || password.trim().length === 0) {
-      throw new Error("Password is required.");
-  }
+//   if (!email || email.trim().length === 0) {
+//       throw new Error("Email is required.");
+//   }
 
-  if (!studentNumber || studentNumber.trim().length === 0) {
-      throw new Error("Student number is required.");
-  }
+//   if (!password || password.trim().length === 0) {
+//       throw new Error("Password is required.");
+//   }
 
-  const newStudent = new Student({ username, email, password, studentNumber });
+//   if (!studentNumber || studentNumber.trim().length === 0) {
+//       throw new Error("Student number is required.");
+//   }
+
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  const newStudent = new Student({ username, email, password: hashedPassword, studentNumber });
   newStudent.validate();
 
   try {
       return await studentDb.createStudent({
         username,
         email,
-        password,
+        password: hashedPassword,
         studentNumber,
       });
   } catch (error) {
