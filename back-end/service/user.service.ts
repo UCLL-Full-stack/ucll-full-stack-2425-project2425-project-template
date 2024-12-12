@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { User } from '../model/user';
 import userDB from '../repository/user.db';
-import { AuthenticationResponse, AuthInput, UserInput } from '../types';
+import { AuthenticationResponse, UserInput } from '../types';
 import { generateJwtToken } from '../util/jwt';
 
 const getAllUsers = async (): Promise<User[]> => {
@@ -50,7 +50,7 @@ const createUser = async ({ name, email, password, birthday }: UserInput): Promi
     }
 };
 
-const authenticate = async ({ email, password }: AuthInput): Promise<AuthenticationResponse> => {
+const authenticate = async ({ email, password }: UserInput): Promise<AuthenticationResponse> => {
     const user = await getUserByEmail(email);
     const isPasswordValid = await bcrypt.compare(password, user.getPassword());
     if (!isPasswordValid) {

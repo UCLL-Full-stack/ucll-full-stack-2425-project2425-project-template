@@ -5,15 +5,10 @@ type UserInput = {
     birthday: Date;
 };
 
-type AuthInput = {
-    email: string;
-    password: string;
-};
-
 type AuthenticationResponse = {
     token: string;
     email: string;
     role: string;
 };
 
-export { UserInput, AuthInput, AuthenticationResponse };
+export { UserInput, AuthenticationResponse };

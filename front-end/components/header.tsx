@@ -1,6 +1,10 @@
+import { User } from '@types';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const Header: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<User | undefined>(undefined);
+
     return (
         <header className="bg-[#e60042] flex items-center justify-between h-32">
             <div className="flex-shrink-0">

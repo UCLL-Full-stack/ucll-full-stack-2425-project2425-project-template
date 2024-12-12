@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, response, Response } from 'express';
 import userService from '../service/user.service';
-import { AuthInput } from '../types';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -8,6 +8,15 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+});
+
+userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.getUserByEmail(req.params.email);
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
@@ -24,7 +33,7 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
 
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authInput = <AuthInput>req.body;
+        const authInput = <UserInput>req.body;
         const response = await userService.authenticate(authInput);
         res.status(200).json({ message: 'Login successful', ...response });
     } catch (error) {
