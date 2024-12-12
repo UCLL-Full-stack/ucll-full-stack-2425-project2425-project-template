@@ -32,45 +32,50 @@ const UserLogin: React.FC = () => {
         return result;
     };
 
+    const clearErrors = () => {
+        setEmailNameError('');
+        setPasswordError('');
+        setStatusMessages({ message: '', type: '' });
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log('submit');
+        clearErrors();
         if (!validate()) {
             return;
         }
 
-        setStatusMessages({
-            message: 'Login successful. Redirecting to homepage...',
-            type: 'success',
-        });
-
-        localStorage.setItem('loggedInUser', email);
         const response = await userService.authenticateUser({ email, password });
 
         if (response.status === 200) {
             setStatusMessages({ message: 'Login successful', type: 'success' });
+            const userByEmailResponse = await userService.getUserByEmail(email);
+            const userByEmail = await userByEmailResponse.json();
             const user = await response.json();
 
             localStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({
-                    token: user.token,
+                    name: userByEmail.name,
                     email: user.email,
                     role: user.role,
                 })
             );
+            setStatusMessages({
+                message: 'Login successful. Redirecting to homepage...',
+                type: 'success',
+            });
 
             setTimeout(() => {
                 router.push('/');
             }, 2000);
         } else {
-            setStatusMessages({ message: 'Login failed', type: 'error' });
+            setStatusMessages({ message: 'E-mail or password is incorrect', type: 'error' });
         }
     };
 
     return (
         <div className="flex flex-col items-center justify-center ">
-            {/* error komt hier nog xDD */}
             {statusMessages.message && (
                 <div
                     className={`${
@@ -80,31 +85,34 @@ const UserLogin: React.FC = () => {
                     {statusMessages.message}
                 </div>
             )}
-            <h1>User Login</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center">
+
+            <h1 className="mt-10">User Login</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center mt-10">
                 <div className="flex flex-col items-start">
-                    <label htmlFor="emailInput" className="mb-2">
+                    <label htmlFor="emailInput" className="">
                         e-mail:
                     </label>
+                    {emailNameError && <div className="text-red-500 mb-1">{emailNameError}</div>}
                     <input
                         id="emailInput"
                         type="text"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
-                        className="border-2"
+                        className="border-2 mt-2"
                     />
                 </div>
 
                 <div className="flex flex-col items-start mt-4">
-                    <label htmlFor="passwordInput" className="mb-2">
+                    <label htmlFor="passwordInput" className="">
                         password:
                     </label>
+                    {passwordError && <div className="text-red-500 mb-1">{passwordError}</div>}
                     <input
                         id="passwordInput"
                         type="text"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        className="border-2"
+                        className="border-2 mt-2 "
                     />
                 </div>
                 <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">

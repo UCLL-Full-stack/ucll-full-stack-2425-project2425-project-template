@@ -10,7 +10,7 @@ const getAllUsers = async () => {
 };
 
 const getUserByEmail = async (email: string) => {
-    return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/' + email, {
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + `/users/${email}`, {
         method: 'GET',
         headers: {
             'content-type': 'application/json',
