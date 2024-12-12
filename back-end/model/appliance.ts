@@ -3,7 +3,7 @@ export class Appliance {
     private name: string
     private description: string
     private created_at: Date
-    private updated_at: Date | undefined
+    private updated_at?: Date | undefined
 
     constructor(appliance: {
         applianceId?: number,
