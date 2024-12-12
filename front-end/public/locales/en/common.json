@@ -29,7 +29,8 @@
     },
     "role": {
       "user": "User",
-      "admin": "Administrator"
+      "admin": "Administrator",
+      "mod": "Event moderator"
     }
   },
   "header": {
@@ -49,6 +50,16 @@
     }
   },
   "event": {
-    "button": "Add event"
+    "button": "Add event",
+    "details": {
+      "loginerror": "Please log in first.",
+      "editeventbutton": "Edit event",
+      "date": "Date: ",
+      "minparticipants": "Minimum participants: ",
+      "maxparticipants": "Maximum participants: ",
+      "location": "Location: ",
+      "category": "Category: ",
+      "participate": "Participate"
+    }
   }
 }

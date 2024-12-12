@@ -1,4 +1,4 @@
-type Role = 'User' | 'Admin';
+type Role = 'User' | 'Admin' | 'Mod';
 
 type UserInput = {
     id?: number;
@@ -37,9 +37,9 @@ type ProfileInput = {
     id?: number;
     firstName: string;
     lastName: string;
-    email: string;
     age: number;
-    administrator: boolean;
+    category: CategoryInput;
+    location: LocationInput;
 };
 type AuthenticationResponse = {
     token: string;

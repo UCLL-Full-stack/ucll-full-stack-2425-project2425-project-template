@@ -20,20 +20,20 @@ export type Event = {
   minParticipants: number;
   maxParticipants: number;
   location: Location;
-  category?: Category;
+  category: Category;
   lastEdit?: Date;
   dateCreated?: Date;
 };
-export type Role = "User" | "Admin" | "Guest";
+export type Role = "User" | "Admin" | "Mod";
 
 export type Profile = {
   id?: number;
-  firstName: string;
-  lastName: string;
-  age: number;
-  location: Location;
-  category: Category;
-  events: Event[];
+  firstName?: string;
+  lastName?: string;
+  age?: number;
+  location?: Location;
+  category?: Category;
+  events?: Event[];
 };
 
 export type StatusMessage = {

@@ -4,17 +4,20 @@ import { useEffect, useState } from "react";
 import { Event, User } from "@/types";
 import styles from "@/styles/eventDetails.module.css";
 import Head from "next/head";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { GetServerSideProps } from "next";
 import Header from "@/components/header";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const EventDetails: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const [event, setEvent] = useState<Event | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const { id } = router.query;
 
   const fetchEvent = async () => {
-    const { id } = router.query;
     const response = await EventService.getEventById(Number(id));
     setEvent(response);
   };
@@ -24,31 +27,38 @@ const EventDetails: React.FC = () => {
     if (result) {
       setLoggedInUser(JSON.parse(result));
     }
+    setIsUserLoaded(true);
   };
-
   useEffect(() => {
-    if (loggedInUser) {
+    fetchUser();
+  }, []);
+  useEffect(() => {
+    if (id && isUserLoaded && loggedInUser) {
       fetchEvent();
     }
-    fetchUser();
-  }, [router.query.id]);
-
+  }, [isUserLoaded, id]);
   const handleOnClick = () => {
     console.log("still need to handle the participate");
   };
 
   const handleEdit = () => {
-    router.push(`edit/${router.query.id}`);
+    router.push(`edit/${id}`);
   };
 
   if (!loggedInUser) {
     return (
       <>
+        <Head>
+          <title>Event details - Eventer</title>
+          <meta name="description" content="Eventer home page" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
         <Header></Header>
-        <p className={styles.error}>Please log in first</p>
+        <p className={styles.error}>{t("event.details.loginerror")}</p>
       </>
     );
   }
+
   return (
     event && (
       <>
@@ -57,46 +67,46 @@ const EventDetails: React.FC = () => {
           <meta name="description" content="Eventer home page" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
+        <Header></Header>
         <div>
           <h1 className={styles.title}>{event.name}</h1>
 
           <div
             key={event.id}
             className="event-card p-3 m-2 border rounded d-flex flex-column justify-content-center"
-            onClick={() => {
-              router.push(`/events/${event.id}`);
-            }}
           >
-            {loggedInUser?.role === "Admin" && (
+            {(loggedInUser.role === "Admin" || loggedInUser.role === "Mod") && (
               <button className={styles.editButton} onClick={handleEdit}>
-                Edit event
+                {t("event.details.editeventbutton")}
               </button>
             )}
             <p className={styles.p}>
-              Date: {new Date(event.date).toLocaleDateString()}
+              {t("event.details.date")}{" "}
+              {new Date(event.date).toLocaleDateString()}
             </p>
             <p className={styles.p}>Price: {event.price}</p>
             <p className={styles.p}>
-              Min Participants: {event.minParticipants}
+              {t("event.details.minparticipants")} {event.minParticipants}
             </p>
             <p className={styles.p}>
-              Max Participants: {event.maxParticipants}
+              {t("event.details.maxparticipants")} {event.maxParticipants}
             </p>
-            {event.location ? (
-              <p className={styles.p}>
-                Location: {event.location.street} {event.location.number},{" "}
-                {event.location.city}, {event.location.country}
-              </p>
-            ) : (
-              <p className={styles.p}>Location: Not available</p>
-            )}
+
+            <p className={styles.p}>
+              {t("event.details.location")} {event.location.street}{" "}
+              {event.location.number}, {event.location.city},{" "}
+              {event.location.country}
+            </p>
+            <p className={styles.p}>
+              {t("event.details.category")} {event.category.name}
+            </p>
             <button
               className={styles.button}
               onClick={() => {
                 handleOnClick();
               }}
             >
-              <strong>Participate</strong>
+              <strong>{t("event.details.participate")}</strong>
             </button>
           </div>
         </div>

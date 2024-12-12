@@ -19,6 +19,7 @@ const Language: React.FC = () => {
       <select
         id="language"
         onChange={handleLanguageChange}
+        value={locale}
         className="form-select"
       >
         <option value="nl">{t("header.languageSelect.nl")}</option>

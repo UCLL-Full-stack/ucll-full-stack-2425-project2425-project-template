@@ -54,7 +54,7 @@ const RegisterForm: React.FC = () => {
         })
       );
       setTimeout(() => {
-        router.push("/profile");
+        router.push(`/profile`);
       }, 300);
     } else if (result.status === 400) {
       const errorMessage = await result.json();
@@ -143,6 +143,7 @@ const RegisterForm: React.FC = () => {
             >
               <option value="User">{t("register.role.user")}</option>
               <option value="Admin">{t("register.role.admin")}</option>
+              <option value="Mod">{t("register.role.mod")}</option>
             </select>
           </div>
           <button type="submit" className={styles.button}>

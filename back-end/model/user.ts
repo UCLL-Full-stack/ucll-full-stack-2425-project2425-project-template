@@ -46,11 +46,18 @@ export class User {
         if (!user.email?.trim()) throw new Error('Email is required.');
         if (!this.isValidEmail(user.email)) throw new Error('Email is not of right format.');
         if (!user.role?.trim()) throw new Error('Role is required.');
-        if (!['User', 'Admin'].includes(user.role)) throw new Error('Role should be User or Admin');
+        if (!['User', 'Admin', 'Mod'].includes(user.role))
+            throw new Error('Role should be User or Admin');
         if (!user.password?.trim()) throw new Error('Password is required.');
         // Profile is validated with creation of profile
     }
 
+    getId(): number {
+        if (this.id) {
+            return this.id;
+        }
+        return 0;
+    }
     getUserName(): string {
         return this.userName;
     }

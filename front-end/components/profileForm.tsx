@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/Form.module.css";
-import { Category, StatusMessage, User } from "@/types";
+import { Category, Profile, StatusMessage, User } from "@/types";
 import CategoryService from "@/services/CategoryService";
+import ProfileService from "@/services/ProfileService";
+import { useRouter } from "next/router";
 
 const ProfileForm: React.FC = () => {
+  const router = useRouter();
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
@@ -27,8 +30,6 @@ const ProfileForm: React.FC = () => {
   const [numberError, setNumberError] = useState<string>("");
   const [cityError, setCityError] = useState<string>("");
   const [countryError, setCountryError] = useState<string>("");
-  //category
-  const [categoryNameError, setCategoryNameError] = useState<string>("");
 
   useEffect(() => {
     const user = sessionStorage.getItem("loggedInUser");
@@ -36,6 +37,10 @@ const ProfileForm: React.FC = () => {
       setLoggedInUser(JSON.parse(user));
     }
   }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  });
 
   const validate = (): boolean => {
     let result = true;
@@ -69,10 +74,6 @@ const ProfileForm: React.FC = () => {
       setCountryError("Country is required.");
       result = false;
     }
-    if (categoryName?.trim() === "") {
-      setCategoryNameError("Category is required.");
-      result = false;
-    }
     return result;
   };
 
@@ -87,10 +88,28 @@ const ProfileForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const user = sessionStorage.getItem("loggedInUser");
-    if (user) setLoggedInUser(JSON.parse(user));
+
     if (!validate()) {
       return;
+    }
+    const profile: Profile = {
+      firstName,
+      lastName,
+      age,
+      category: categories.find((category) => category.name === categoryName),
+      location: { street, number, city, country },
+    };
+    const response = await ProfileService.completeProfile(profile);
+    if (response) {
+      setStatusMessages([
+        {
+          message: "Profile Completed, redirecting to homepage",
+          type: "success",
+        },
+      ]);
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
     }
   };
 
@@ -98,6 +117,12 @@ const ProfileForm: React.FC = () => {
     <main className={styles.main}>
       {loggedInUser ? (
         <main className={styles.main}>
+          {statusMessages &&
+            statusMessages.map((statusMessage) => (
+              <p className={styles[statusMessage.type]}>
+                {statusMessage.message}
+              </p>
+            ))}
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.div}>
               {statusMessages && (
@@ -202,12 +227,37 @@ const ProfileForm: React.FC = () => {
                 <strong className={styles.error}>{cityError}</strong>
               )}
             </div>
-
+            <div className={styles.div}>
+              <label htmlFor="country" className={styles.label}>
+                Country:
+              </label>
+              <input
+                className={styles.input}
+                type="text"
+                id="country"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+              />
+              {cityError && (
+                <strong className={styles.error}>{countryError}</strong>
+              )}
+            </div>
             <div className={styles.div}>
               <label htmlFor="categoryName" className={styles.label}>
-                Category:
+                Preferred category:
               </label>
-              <input className={styles.input} type="" />
+              <select
+                id="categoryName"
+                value={categoryName}
+                className={styles.input}
+                onChange={(e) => setCategoryName(e.target.value)}
+              >
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <button type="submit" className={styles.button}>
               Register

@@ -89,6 +89,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import eventService from '../service/event.service';
 import { EventInput, Role } from '../types';
+import Event from '../model/event';
 
 const eventRouter = express.Router();
 
@@ -170,7 +171,20 @@ eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
     try {
         const event = <EventInput>req.body;
         const result = await eventService.addEvent(event);
-        res.json(result);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+eventRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { userName: string; role: string } };
+        const { role } = request.auth;
+        const id = Number(request.params.id);
+        const changedEvent = <EventInput>request.body;
+        const result = await eventService.editEvent(id, changedEvent, role as Role);
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }
