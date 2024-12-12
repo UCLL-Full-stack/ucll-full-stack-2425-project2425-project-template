@@ -5,6 +5,7 @@ import {
     World as WorldPrisma,
     Floor as FloorPrisma,
     Line as LinePrisma,
+    Position as PositionPrisma,
 } from "@prisma/client"; 
 
 export class World {
@@ -69,7 +70,7 @@ export class World {
         floors,
     }: WorldPrisma & {
         owner: UserPrisma;
-        floors: (FloorPrisma & { tiles: LinePrisma[] })[];
+        floors: (FloorPrisma & { tiles: LinePrisma[], positions: PositionPrisma[] })[];
     }) {
         return new World({
             id,

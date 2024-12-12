@@ -78,47 +78,18 @@ const worlds = [
     }),
 ];
 
-// Create Lines
-// Tile legend:
-//      'x': wall
-//      '@': player
-//      ' ': open space
-/*
-const tiles = [
-    ['x', ' ', ' ', '', 'x'],
-    ['x', 'x', ' ', '', 'x'],
-    ['x', 'x', '@', '', 'x'],
-    ['x', 'x', ' ', '', 'x'],
-    ['x', 'x', ' ', 'x', 'x'],
-];
-
-const lines = [
-    new Line({
-        tiles: tiles[0],
-        lineNum: 1,
-    }),
-    new Line({
-        tiles: tiles[1],
-        lineNum: 2,
-    }),
-    new Line({
-        tiles: tiles[2],
-        lineNum: 3,
-    }),
-    new Line({
-        tiles: tiles[3],
-        lineNum: 4, 
-    }),
-    new Line({
-        tiles: tiles[4],
-        lineNum: 5,
-    }),
-];
-*/
 
 
 async function main() {
 
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "User_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Player_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "World_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Floor_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Line_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Position_id_seq" RESTART WITH 1');
+
+    await prisma.position.deleteMany();
     await prisma.line.deleteMany();
     await prisma.floor.deleteMany();
     await prisma.world.deleteMany();
@@ -220,10 +191,24 @@ async function main() {
                     },
                 });
             }
+
+
+            const positions = floor.getPositions();
+            if (!positions) break;
+            // Create Positions
+            for (const pos of positions) {
+                await prisma.position.create({
+                    data: {
+                        x: pos.getX(),
+                        y: pos.getY(),
+                        type: pos.getType(),
+                        active: pos.getActive(),
+                        floor: { connect: { id: createdFloor.id } },
+                    },
+                });
+            }
         }
     }
-
-    // Create Floors
 }
 
 main()
@@ -234,6 +219,44 @@ main()
     .finally(async () => {
         await prisma.$disconnect();
     });
+
+// Create Lines
+// Tile legend:
+//      'x': wall
+//      '@': player
+//      ' ': open space
+/*
+const tiles = [
+    ['x', ' ', ' ', '', 'x'],
+    ['x', 'x', ' ', '', 'x'],
+    ['x', 'x', '@', '', 'x'],
+    ['x', 'x', ' ', '', 'x'],
+    ['x', 'x', ' ', 'x', 'x'],
+];
+
+const lines = [
+    new Line({
+        tiles: tiles[0],
+        lineNum: 1,
+    }),
+    new Line({
+        tiles: tiles[1],
+        lineNum: 2,
+    }),
+    new Line({
+        tiles: tiles[2],
+        lineNum: 3,
+    }),
+    new Line({
+        tiles: tiles[3],
+        lineNum: 4, 
+    }),
+    new Line({
+        tiles: tiles[4],
+        lineNum: 5,
+    }),
+];
+*/
 
 // // Execute: npx ts-node util/seed.ts
 

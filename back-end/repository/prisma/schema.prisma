@@ -15,6 +15,7 @@ model Player {
   currency  Int
   userId    Int
   user      User       @relation(fields: [userId], references: [id])
+  Positions Position[]
 }
 
 model User {
@@ -40,6 +41,7 @@ model Floor {
 id          Int     @id @default(autoincrement())
 floornumber Int
 tiles       Line[] 
+positions   Position[]
 world       World   @relation(fields: [worldId], references: [id])
 worldId     Int
 }
@@ -50,4 +52,16 @@ model Line {
   lineNum Int
   floor   Floor     @relation(fields: [floorId], references: [id])
   floorId Int
+}
+
+model Position {
+  id      Int       @id @default(autoincrement())
+  x       Int
+  y       Int
+  type    String
+  active  Boolean
+  floor   Floor     @relation(fields: [floorId], references: [id])
+  floorId Int
+  player  Player     @relation(fields: [playerId], references: [id])
+  playerId Int
 }

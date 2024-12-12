@@ -1,29 +1,38 @@
 import { 
     Floor as FloorPrisma,
     Line as LinePrisma,
+    Position as PositionPrisma
 } from "@prisma/client"; 
 
 import { Line } from "./line";
-import { link } from "fs";
+import { Position } from "./position";
 
 export class Floor {
     private id?: number;
     private floornumber: number;
     private tiles?: Line[];
+    private positions?: Position[];
 
     constructor(floor: {
         id?: number;
         tiles?: Line[];
+        positions?: Position[];
         floornumber: number;
     }) {
         if (floor.tiles == undefined || floor.tiles.length === 0){
             floor.tiles = this.generateTiles();
+            if (floor.positions == undefined || floor.positions.length === 0){
+                floor.positions = this.generatePositions(floor.tiles);
+            }
         }
         this.validate(floor);
+
+
 
         this.id = floor.id;
         this.floornumber = floor.floornumber;
         this.tiles = floor.tiles;
+        this.positions = floor.positions;
     }
 
     getId(): number | undefined {
@@ -36,6 +45,10 @@ export class Floor {
 
     getTiles(): Line[] | undefined {
         return this.tiles;
+    }
+
+    getPositions(): Position[] | undefined {
+        return this.positions;
     }
 
     validate(floor: {
@@ -75,17 +88,37 @@ export class Floor {
         return tiles;
     }
 
+    generatePositions(input: Line[]): Position[]{
+        let positions = new Array<Position>();
+        if (input !== undefined){
+            input.map((line, y) => {
+                line.getTiles().map((tile, x) => {
+                    if (tile === "floor"){
+                        const rando = getRandomInt(0, 10);
+                        if (rando === 1){
+                            positions.push(new Position({x: x, y: y, type: "ball", active: true}))
+                        }
+                    }
+                });
+            });
+        }
+        return positions;
+    }
+
     static from({
         id,
         floornumber,
         tiles,
+        positions,
     }: FloorPrisma & {
         tiles: LinePrisma[];
+        positions: PositionPrisma[];
     }) {
         return new Floor({
             id,
             floornumber,
-            tiles: tiles.map((tile) => Line.from(tile))
+            tiles: tiles.map((tile) => Line.from(tile)),
+            positions: positions.map((pos) =>Position.from(pos))
         })
     }
 }

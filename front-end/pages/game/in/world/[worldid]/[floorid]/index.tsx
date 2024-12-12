@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
 import worldService from "@services/worldService";
-import { World, Floor, Line } from '@types';
+import { World, Floor, Line, Position } from '@types';
 import useInterval from 'use-interval';
+import floorService from '@services/floorService';
 
 const GameMap: React.FC = () => {
     const router = useRouter();
@@ -13,7 +14,8 @@ const GameMap: React.FC = () => {
     const [update, setUpdate] = useState(0);
     const [world, setWorld] = useState<World | null>(null);
     const [floor, setFloor] = useState<Floor | null>(null);
-    const [position, setPosition] = useState({ x: 10, y: 10 });
+    const [playerPosition, setPlayerPosition] = useState({ x: 10, y: 10 });
+    const [positions, setPositions] = useState<Position[]>([]);
 
     useEffect(() => {
         getWorld();
@@ -22,7 +24,9 @@ const GameMap: React.FC = () => {
 
     const getWorld = async () => {
         if (worldid) {
-            setWorld(await worldService.getWorldById(worldid as string));
+            const result = await worldService.getWorldById(worldid as string)
+            setWorld(result);
+            setPositions(result.positions);
         }
     }
 
@@ -31,9 +35,15 @@ const GameMap: React.FC = () => {
             world?.floors.forEach(aFloor => {
                 if (aFloor.floornumber === parseInt(floorid as string)){
                     setFloor(aFloor);
-                    console.log("floor is set" + aFloor.floornumber);
                 }
             });
+        }
+    }
+
+    const getPositions = async() => {
+        if (floor){
+            const res = await floorService.getFloorPositions(floor.id);
+            setPositions(res);
         }
     }
 
@@ -46,11 +56,12 @@ const GameMap: React.FC = () => {
 
     useEffect(() => {
         getFloor();
+        getPositions();
     }, [update]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            setPosition((prev) => {
+            setPlayerPosition((prev) => {
                 let newPosition = prev;
                 switch (e.key) {
                     case 'ArrowUp':
@@ -88,8 +99,8 @@ const GameMap: React.FC = () => {
             <div
             className="absolute transform"
             style={{
-                top: `calc(50% - ${(position.y + 0.5) * 64}px)`,
-                left: `calc(50% - ${(position.x + 0.5) * 64}px)`
+                top: `calc(50% - ${(playerPosition.y + 0.5) * 64}px)`,
+                left: `calc(50% - ${(playerPosition.x + 0.5) * 64}px)`
             }}
             >
                 {floor.tiles.map((line, lineIndex) => (
@@ -106,6 +117,22 @@ const GameMap: React.FC = () => {
                     />
                     ))}
                 </div>
+                ))}
+
+                {positions && positions.map((pos, posIndex) => (
+                    pos.active ? (
+                        <div
+                            key={pos.id}
+                            className="absolute w-16 h-16"
+                            style={{
+                                top: `${pos.y * 64}px`,
+                                left: `${pos.x * 64}px`,
+                                backgroundImage: `url(/images/${pos.type}.png)`,
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                            }}
+                        ></div>
+                    ):(<></>)
                 ))}
             </div>
 
