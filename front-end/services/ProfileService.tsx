@@ -37,7 +37,11 @@ const getEventsByUserName = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (response.ok) return response.json();
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  }
+  throw new Error("Failed to fetch events by user name");
 };
 
 export default { completeProfile, getEventsByProfile, getEventsByUserName };

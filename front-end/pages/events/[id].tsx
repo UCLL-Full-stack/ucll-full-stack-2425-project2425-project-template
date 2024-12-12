@@ -17,7 +17,6 @@ const EventDetails: React.FC = () => {
   const [event, setEvent] = useState<Event | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
-  const [joinedEvents, setJoinedEvents] = useState([]);
   const { id } = router.query;
 
   const fetchEvent = async () => {
@@ -54,10 +53,7 @@ const EventDetails: React.FC = () => {
       );
   };
 
-  // useSWR(`/api/events/${id}/participants`, async () => {
-  //   const response = await ProfileService.getEventsByProfile(Number(id));
-  //   setJoinedEvents(response);
-  // });
+
 
   const handleEdit = () => {
     router.push(`edit/${id}`);
