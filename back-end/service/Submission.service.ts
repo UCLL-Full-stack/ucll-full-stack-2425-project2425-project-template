@@ -1,4 +1,4 @@
-import SubmissionDb from '../repository/Submission.db';
+import SubmissionDb from '../repository/submission.db';
 import { Submission } from '../model/Submission';
 
 const getAllSubmissions = async (): Promise<Submission[] | null> => {
