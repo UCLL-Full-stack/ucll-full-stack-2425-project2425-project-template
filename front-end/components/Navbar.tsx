@@ -22,9 +22,9 @@ const Navbar: React.FC = () => {
     
     return (
         <nav className={styles.navbar}>
-            <div className={styles['navbar-logo']}>
+            {/* <div className={styles['navbar-logo']}>
                 <h1>EuroStudent Travel</h1>
-            </div>
+            </div> */}
             <ul className={styles['navbar-links']}>
                 <li>
                     <Link href="/">
@@ -60,10 +60,12 @@ const Navbar: React.FC = () => {
                     {t("nav.login")}
                 </Link>
                 )}
-                    </ul>
-            <div className="ml-4 mt-2 md:mt-0">
-                <Language />
-            </div>
+
+                <div className={styles.languageButton}>
+                    <Language />
+                </div>
+            </ul>
+            
         </nav>
     );
 };
