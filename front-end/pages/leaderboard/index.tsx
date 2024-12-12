@@ -13,8 +13,6 @@ const Leaderboard: React.FC = () => {
     const getLeaderboard = async () => {
         const response = await playerService.getAllPlayers();
         const players = await response.json();
-        console.log(players);
-        console.log('hallo');
         const sorted = players.sort((a: Player, b: Player) => {
             if (a.currency < b.currency) {
                 return 1;

@@ -32,17 +32,18 @@ const UserLogin: React.FC = () => {
         return result;
     };
 
+    const clearErrors = () => {
+        setEmailNameError('');
+        setPasswordError('');
+        setStatusMessages({ message: '', type: '' });
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log('submit');
+        clearErrors();
         if (!validate()) {
             return;
         }
-
-        setStatusMessages({
-            message: 'Login successful. Redirecting to homepage...',
-            type: 'success',
-        });
 
         localStorage.setItem('loggedInUser', email);
         const response = await userService.authenticateUser({ email, password });
@@ -59,18 +60,21 @@ const UserLogin: React.FC = () => {
                     role: user.role,
                 })
             );
+            setStatusMessages({
+                message: 'Login successful. Redirecting to homepage...',
+                type: 'success',
+            });
 
             setTimeout(() => {
                 router.push('/');
             }, 2000);
         } else {
-            setStatusMessages({ message: 'Login failed', type: 'error' });
+            setStatusMessages({ message: 'E-mail or password is incorrect', type: 'error' });
         }
     };
 
     return (
         <div className="flex flex-col items-center justify-center ">
-            {/* error komt hier nog xDD */}
             {statusMessages.message && (
                 <div
                     className={`${
@@ -80,6 +84,8 @@ const UserLogin: React.FC = () => {
                     {statusMessages.message}
                 </div>
             )}
+            {emailNameError && <div className="text-red-500">{emailNameError}</div>}
+            {passwordError && <div className="text-red-500">{passwordError}</div>}
             <h1>User Login</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center">
                 <div className="flex flex-col items-start">
