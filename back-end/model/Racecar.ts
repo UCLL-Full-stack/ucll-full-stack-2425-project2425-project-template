@@ -24,7 +24,7 @@ export class Racecar {
             throw new Error('Type is required');
         }
         if (!racecar.brand) {
-            throw new Error('Description is required');
+            throw new Error('Brand is required');
         }
         if (racecar.hp === undefined) {
             throw new Error('Horsepower is required');
