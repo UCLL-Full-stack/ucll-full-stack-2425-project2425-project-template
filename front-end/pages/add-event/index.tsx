@@ -1,7 +1,7 @@
 import Header from "@/components/header";
 import Head from "next/head";
 import styles from "@/styles/home.module.css";
-import AddEventForm from "@/components/addEventForm";
+import AddEventForm from "@/components/events/addEventForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 

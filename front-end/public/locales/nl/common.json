@@ -29,7 +29,8 @@
     },
     "role": {
       "user": "Gebruiker",
-      "admin": "Administrator"
+      "admin": "Administrator",
+      "mod": "evenenment moderator"
     }
   },
   "header": {
@@ -57,6 +58,7 @@
       "minparticipants": "Minimum deelnemers: ",
       "maxparticipants": "Maximum deelnemers: ",
       "location": "Locatie: ",
+      "category": "Categorie: ",
       "participate": "Schrijf je in"
     }
   }

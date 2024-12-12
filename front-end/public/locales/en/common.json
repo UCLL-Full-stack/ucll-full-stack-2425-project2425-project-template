@@ -29,7 +29,8 @@
     },
     "role": {
       "user": "User",
-      "admin": "Administrator"
+      "admin": "Administrator",
+      "mod": "Event moderator"
     }
   },
   "header": {
@@ -57,6 +58,7 @@
       "minparticipants": "Minimum participants: ",
       "maxparticipants": "Maximum participants: ",
       "location": "Location: ",
+      "category": "Category: ",
       "participate": "Participate"
     }
   }

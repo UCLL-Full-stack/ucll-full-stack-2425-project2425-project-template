@@ -8,6 +8,7 @@ import { eventRouter } from './controller/event.routes';
 import { expressjwt } from 'express-jwt';
 import userRouter from './controller/user.routes';
 import { categoryRouter } from './controller/category.routes';
+import profileRouter from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(
 app.use('/events', eventRouter);
 app.use('/users', userRouter);
 app.use('/categories', categoryRouter);
+app.use('/profiles', profileRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });

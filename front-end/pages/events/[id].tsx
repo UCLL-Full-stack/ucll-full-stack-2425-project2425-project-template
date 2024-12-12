@@ -75,7 +75,7 @@ const EventDetails: React.FC = () => {
             key={event.id}
             className="event-card p-3 m-2 border rounded d-flex flex-column justify-content-center"
           >
-            {loggedInUser.role === "Admin" && (
+            {(loggedInUser.role === "Admin" || loggedInUser.role === "Mod") && (
               <button className={styles.editButton} onClick={handleEdit}>
                 {t("event.details.editeventbutton")}
               </button>
@@ -97,7 +97,9 @@ const EventDetails: React.FC = () => {
               {event.location.number}, {event.location.city},{" "}
               {event.location.country}
             </p>
-
+            <p className={styles.p}>
+              {t("event.details.category")} {event.category.name}
+            </p>
             <button
               className={styles.button}
               onClick={() => {
