@@ -72,11 +72,15 @@ app.get('/status', (req: Request, res: Response) => {
 app.use('/events', eventRouter);
 app.use('/users', userRouter);
 
-
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(500).json({ status: 'error', message: err.message });
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ message: 'Invalid token' });
+    } else if (err.name === 'ValidationError') {
+        res.status(400).json({ message: err.message });
+    } else {
+        res.status(500).json({ message: 'Application error.' });
+    }
 });
-
 
 app.listen(port, () => {
     console.log(`Back-end is running on port ${port}.`);

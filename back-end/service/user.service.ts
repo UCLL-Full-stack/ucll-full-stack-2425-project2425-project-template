@@ -23,10 +23,10 @@ const getUserByEmail = async (email: string): Promise<User> => {
 };
 
 const createUser = async (user: UserInput): Promise<User> => {
-    const userExisted = await getUserByEmail(user.email);
+    const userExisted = await userDb.getUserByEmail(user.email);
 
-    if (userExisted){
-        throw new Error("This email has already been used.");
+    if (userExisted !== null){
+        throw new Error("User already exists.");
     }
 
     const hashedPass = await bcrypt.hash(user.password, 12);
@@ -40,7 +40,7 @@ const createUser = async (user: UserInput): Promise<User> => {
             role: user.role,
     });
 
-    return userDb.createUser(newUser);
+    return await userDb.createUser(newUser);
 }
 
 //log-in authentication

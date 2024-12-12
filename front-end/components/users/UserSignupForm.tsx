@@ -2,14 +2,13 @@ import UserService from '@services/UserService';
 import styles from '@styles/home.module.css';
 import { useRouter } from 'next/router';
 import { use, useState } from 'react';
-
-type Role = 'PARTICIPANT' | 'ORGANIZER';
+import { Role } from 'types';
 
 const UserSignupForm: React.FC = () => {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [role, setRole] = useState<Role>('' as Role);
+    const [role, setRole] = useState<Role>('PARTICIPANT');
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
     
@@ -68,7 +67,7 @@ const UserSignupForm: React.FC = () => {
 
         if (validateForm()){
 
-            const response = UserService.createUser({
+            const response = await UserService.createUser({
                 username,
                 name,
                 email,
@@ -76,14 +75,16 @@ const UserSignupForm: React.FC = () => {
                 age: parseInt(age),
                 role,
             });
+
+            console.log(response);
     
-            if ((await response).ok) {
+            if (response.ok) {
                 alert('User created successfully!');
             } else {
                 alert('User creation failed!');
             }
     
-            router.push('/');
+            // router.push('/');
         }
     };
 
@@ -98,7 +99,7 @@ const UserSignupForm: React.FC = () => {
                     type="text"
                     name="username"
                     id="username"
-                    placeholder='taylor123'
+                    placeholder='example: taylor123'
                     onChange={(e) => setUsername(e.target.value)}
                 />
                 {usernameError && <p>{usernameError}</p>}
@@ -108,7 +109,7 @@ const UserSignupForm: React.FC = () => {
                     type="text"
                     name="name"
                     id="name"
-                    placeholder='Taylor Swift'
+                    placeholder='example: Taylor Swift'
                     onChange={(e) => setName(e.target.value)}
                 />
                 {nameError && <p>{nameError}</p>}
@@ -118,7 +119,7 @@ const UserSignupForm: React.FC = () => {
                     type="email"
                     name="email"
                     id="email"
-                    placeholder='taylor.swift@ucll.be'
+                    placeholder='example: taylor.swift@ucll.be'
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 {emailError && <p>{emailError}</p>}
@@ -135,8 +136,8 @@ const UserSignupForm: React.FC = () => {
 
                 <label htmlFor="age">Age</label>
                 <select
-                    name="birthday"
-                    id="birthday"
+                    name="age"
+                    id="age"
                     onChange={(e) => setAge(e.target.value)}
                 >
                     <option value="">Select your age</option>

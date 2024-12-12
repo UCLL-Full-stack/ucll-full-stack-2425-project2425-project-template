@@ -17,9 +17,13 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const createdUser = await userService.createUser(req.body as UserInput);
-        res.status(201).json(createdUser);
+        //failed here
+        const userInput: UserInput = req.body;
+        const createdUser = await userService.createUser(userInput);
+
+        res.status(200).json(createdUser);
     } catch (error){
+
         next(error);
     }
 })

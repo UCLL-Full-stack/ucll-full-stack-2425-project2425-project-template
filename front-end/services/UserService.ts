@@ -18,9 +18,9 @@ const createUser = async (user: UserInput) => {
     return fetch(apiUrl + '/users/signup', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(user),
     });
 }
 
