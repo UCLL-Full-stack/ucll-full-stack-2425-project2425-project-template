@@ -1,22 +1,29 @@
 import Header from "@/components/header";
 import PokebowlAanmaken from "@/components/pokebowls/PokebowlAanmaken";
 import IngredientenService from "@/services/IngredientService";
-import { Ingredient } from "@/types";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 const AddNewPokebowl: React.FC = () => {
-    const [ingredienten, setIngredienten] = useState<Array<Ingredient>>([]);
 
     const getIngredienten = async () => {
-        const response = await IngredientenService.getAllIngredienten();
-        const ingredienten = await response.json();
-        setIngredienten(ingredienten);
+        const responses = await Promise.all([
+            IngredientenService.getAllIngredienten()
+        ]);
+
+        const [ingredientResponse] = responses;
+
+        if (ingredientResponse.ok) {
+            const ingredienten = await ingredientResponse.json();
+            return { ingredienten }
+        }
     }
 
-    useEffect(() => {
-        getIngredienten();
-    }, []);
+    const { data, isLoading, error } = useSWR(
+        "ingredienten",
+        getIngredienten
+    );
+
     return (
         <>
             <Head>
@@ -29,7 +36,9 @@ const AddNewPokebowl: React.FC = () => {
             <main>
                 <h1>New Pokebowl</h1>
                 <section>
-                    <PokebowlAanmaken ingredienten={ingredienten} />
+                    {error && <div className="error-field">{error}</div>}
+                    {isLoading && <p className="text-green-800">Loading...</p>}
+                    {data && <PokebowlAanmaken ingredienten={data.ingredienten} />}
                 </section>
             </main>
         </>

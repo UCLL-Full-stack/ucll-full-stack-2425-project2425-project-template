@@ -5,23 +5,26 @@ import { Ingredient } from '@/types';
 import Header from '@/components/header';
 import IngredientenService from '@/services/IngredientService';
 import IngredientInfo from '@/components/ingredienten/IngredientInfo';
+import useSWR from 'swr';
 
 const IngredientId = () => {
-    const [ingredient, setIngredient] = useState<Ingredient | null>(null);
     const router = useRouter();
     const { ingredientId } = router.query;
 
     const getIngredientById = async () => {
-        const response = await IngredientenService.getIngredientById(ingredientId as string);
-        const result = await response.json();
-        setIngredient(result);
+        const responses = await Promise.all([IngredientenService.getIngredientById(ingredientId as string)]);
+        const [ingredientResponses] = responses;
+
+        if (ingredientResponses.ok) {
+            const ingredient = await ingredientResponses.json();
+            return { ingredient }
+        }
     }
 
-    useEffect(() => {
-        if (ingredientId) {
-            getIngredientById();
-        }
-    }, [ingredientId]);
+    const { data, isLoading, error } = useSWR(
+        "ingredienten",
+        getIngredientById
+    );
 
     return (
         <>
@@ -30,10 +33,11 @@ const IngredientId = () => {
             </Head>
             <Header />
             <main>
-                <h1>Ingredient: {ingredient && ingredient.naam}</h1>
+                <h1>Ingredient</h1>
                 <section>
-                    {!ingredientId && <p>Loading ingredient info...</p>}
-                    {ingredientId && <IngredientInfo ingredient={ingredient} />}
+                    {error && <p className="error-field">{error}</p>}
+                    {!isLoading && <p>Loading ingredient info...</p>}
+                    {data && <IngredientInfo ingredient={data.ingredient} />}
                 </section>
             </main>
         </>

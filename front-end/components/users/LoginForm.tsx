@@ -57,7 +57,7 @@ const LoginForm: React.FC = () => {
             sessionStorage.setItem("loggedInUser", JSON.stringify(user));
 
             setTimeout(() => {
-                router.push("/");
+                router.push("/users/" + result.id);
             }, 2000);
         } else {
             setStatusMessages([{ message: "Error", type: "error" }])

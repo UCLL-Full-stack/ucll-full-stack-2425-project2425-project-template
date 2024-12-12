@@ -5,21 +5,34 @@ import { Bestelling } from "@/types";
 import Head from "next/head";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import useSWR, { mutate } from "swr";
+import useInterval from "use-interval";
 
 const Bestellingen: React.FC = () => {
 
-    const [bestellingen, setBestellingen] = useState<Array<Bestelling>>();
     const [selectedBestelling, setSelectedBestelling] = useState<Bestelling>();
 
     const getBestellingen = async () => {
-        const response = await BestellingService.getAllBestellingen();
-        const bestellingen = await response.json();
-        setBestellingen(bestellingen);
+        const responses = await Promise.all([
+            BestellingService.getAllBestellingen()
+        ]);
+
+        const [bestellingResponses] = responses;
+
+        if (bestellingResponses.ok) {
+            const bestellingen = await bestellingResponses.json();
+            return { bestellingen }
+        }
     }
 
-    useEffect(() => {
-        getBestellingen();
-    }, []);
+    const { data, isLoading, error } = useSWR(
+        "bestellingen",
+        getBestellingen
+    );
+
+    useInterval(() => {
+        mutate("bestellingen", getBestellingen());
+    }, 5000);
 
     return (
         <>
@@ -34,8 +47,10 @@ const Bestellingen: React.FC = () => {
                 <h1>Bestellingen</h1>
                 <p>Lijst van alle bestellingen</p>
                 <section>
-                    {bestellingen && (
-                        <BestellingenOverzicht bestellingen={bestellingen} selectBestelling={setSelectedBestelling} />
+                    {error && <p className="error-field">{error.message}</p>}
+                    {!isLoading && <p>Loading...</p>}
+                    {data && (
+                        <BestellingenOverzicht bestellingen={data.bestellingen} selectBestelling={setSelectedBestelling} />
                     )}
                 </section>
                 <button onClick={() => { router.push(`/bestellingen/create-bestelling`); }}>Create new bestelling</button>

@@ -5,24 +5,32 @@ import { Ingredient, User } from "@/types";
 import Head from "next/head";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import useSWR, { mutate } from "swr";
+import useInterval from "use-interval";
 
 const Ingredienten: React.FC = () => {
-    const [ingredienten, setIngredienten] = useState<Array<Ingredient>>();
     const [selectedIngredient, setSelectedIngredient] = useState<Ingredient>();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-    const [error, setError] = useState<string>();
 
     const getIngredienten = async () => {
-        setError("");
-        const response = await IngredientenService.getAllIngredienten();
-        if (response.ok) {
-            const ingredienten = await response.json();
-            setIngredienten(ingredienten);
-        } else {
-            setError("Unauthorized Access");
+
+        const responses = await Promise.all([IngredientenService.getAllIngredienten()]);
+        const [ingredientResponses] = responses;
+
+        if (ingredientResponses.ok) {
+            const ingredienten = await ingredientResponses.json();
+            return { ingredienten }
         }
 
     }
+    const { data, isLoading, error } = useSWR(
+        "ingredienten",
+        getIngredienten
+    );
+
+    useInterval(() => {
+        mutate("ingredienten", getIngredienten());
+    }, 5000);
 
     useEffect(() => {
         const getUser = sessionStorage.getItem("loggedInUser")
@@ -30,7 +38,6 @@ const Ingredienten: React.FC = () => {
             const parsedUser = JSON.parse(getUser);
             setLoggedInUser(parsedUser as User);
         }
-        getIngredienten();
     }, []);
 
     return (
@@ -46,9 +53,10 @@ const Ingredienten: React.FC = () => {
                 <h1>Ingredienten</h1>
                 <p>Lijst van alle ingredienten</p>
                 <section>
-                    {error && <p className="error-field">{error}</p>}
-                    {ingredienten && (
-                        <IngredientenOverzicht ingredienten={ingredienten} selectIngredient={setSelectedIngredient} />
+                    {error && <p className="error-field">{error.message}</p>}
+                    {!isLoading && <p>Loading...</p>}
+                    {data && (
+                        <IngredientenOverzicht ingredienten={data.ingredienten} selectIngredient={setSelectedIngredient} />
                     )}
                     {!error && (<button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>)}
                 </section>
