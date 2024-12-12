@@ -1,4 +1,4 @@
-type Role = 'participant' | 'organizer';
+type Role = 'ADMIN' | 'PARTICIPANT' | 'ORGANIZER';
 
 type UserInput = {
     id?: number,

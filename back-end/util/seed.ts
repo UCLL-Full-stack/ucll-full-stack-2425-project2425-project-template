@@ -9,6 +9,17 @@ const main = async () => {
     await prisma.event.deleteMany();
     await prisma.user.deleteMany();
 
+    const admin = await prisma.user.create({
+        data: {
+            username: 'admin',
+            name: 'admin',
+            email: 'admin@admin',
+            password: await bcrypt.hash('admin', 12),
+            age: 99,
+            role: 'ADMIN',
+        }
+    });
+
     const john = await prisma.user.create({
         data: {
             username: 'john_doe',
@@ -16,7 +27,7 @@ const main = async () => {
             email: 'john.doe@ucll.be',
             password: await bcrypt.hash('passwordJohn',12),
             age: 26,
-            role: 'PARTICIPANT',
+            role: 'ORGANIZER',
         }
     });
 

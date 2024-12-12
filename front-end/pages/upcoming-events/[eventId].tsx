@@ -23,6 +23,19 @@ const RenderEventDetailsById: React.FC = () => {
     const router = useRouter();
     const { eventId } = router.query;
 
+    const [showParticipantList, setShowParticipantList] = useState(true);
+
+    // If user is a participant, he can not see participant list
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const user = loggedInUser ? JSON.parse(loggedInUser) : null;
+        
+        if (user.role === 'PARTICIPANT'){
+            setShowAddButton(false);
+            setShowParticipantList(false);
+        }
+    }, []);
+
     useEffect(() => {
         if (eventId) {
             getEventById();
@@ -89,7 +102,7 @@ const RenderEventDetailsById: React.FC = () => {
                 <h1>Event Details</h1>
                 {event ? (
                     <section className={styles.eventDetails}>
-                        <EventDetails event={event} />
+                        <EventDetails event={event} showParticipantList={showParticipantList} />
                     </section>
                 ) : (
                     <p>Loading event details...</p>

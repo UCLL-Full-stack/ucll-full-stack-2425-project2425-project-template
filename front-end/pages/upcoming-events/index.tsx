@@ -9,6 +9,7 @@ import { EventInput } from "types";
 const UpcomingEvents: React.FC = () => {
     const [otherEvents, setOtherEvents] = useState<Array<Event>>();
     const [trendingEvents, setTrendingEvents] = useState<Array<Event>>();
+    // const [showParticipantList, setShowParticipantList] = useState(true);
 
     useEffect(() => {
         getAll();
