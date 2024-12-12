@@ -48,6 +48,13 @@ const Header: React.FC = () => {
           )}
           {loggedInUser && (
             <>
+            <Link
+            
+              href="/my-events"
+              className="nav-link px-4 fs-5 text-white"
+              >
+              {t("header.nav.myEvents")}
+            </Link>
               <Link
                 href="/login"
                 onClick={handleLogout}
@@ -58,13 +65,6 @@ const Header: React.FC = () => {
               <p className="text-white fs-5 px-4">
                 {t("header.welcome")} {loggedInUser.userName}
               </p>
-              <Link
-              
-                href="/my-events"
-                className="nav-link px-4 fs-5 text-white"
-                >
-                {t("header.nav.myEvents")}
-              </Link>
             </>
           
           )}

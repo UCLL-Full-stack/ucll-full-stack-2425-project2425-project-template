@@ -43,7 +43,7 @@
       "register": "Register",
       "login": "Login",
       "logout": "Logout",
-      "myevents": "My events"
+      "myEvents": "My events"
     },
     "languageSelect": {
       "en": "English",
