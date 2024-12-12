@@ -10,7 +10,6 @@ export class Floor {
     private id?: number;
     private floornumber: number;
     private tiles?: Line[];
-    private worldId?: number;
 
     constructor(floor: {
         id?: number;
@@ -39,14 +38,6 @@ export class Floor {
         return this.tiles;
     }
 
-    getWorldId(): number | undefined {
-        return this.worldId;
-    }
-
-    setWorldId(id: number | undefined) {
-        this.worldId = id;
-    }
-
     validate(floor: {
         floornumber: number;
         tiles?: Line[];
@@ -62,7 +53,7 @@ export class Floor {
     generateTiles(): Line[]{
         let tiles = new Array<Line>();
         for (let i = 0; i < 20; i++) {
-            tiles[i] = new Line({floorId: this.id, tiles: [], lineNum: i});
+            tiles[i] = new Line({tiles: [], lineNum: i});
             for (let j = 0; j < 20; j++){
                 if (i === 0 || i === 19 || j === 0 || j === 19){
                     tiles[i].setTile(j, "void");
