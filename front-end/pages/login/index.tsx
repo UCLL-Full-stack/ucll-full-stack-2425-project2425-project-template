@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Header from '@components/header';
 import styles from '../../styles/login/login.module.css';  // Import the styles
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serversideTranslations";
 
 // Simulate a simple login service
 const loginService = async (email: string, password: string, role: string) => {
@@ -29,6 +31,8 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
+  const {t} = useTranslation();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -51,7 +55,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>PokéPal</h1>
+      <h1 className={styles.header}>{t("app.title")}</h1>
       <form onSubmit={handleLogin} className={styles.form}>
         <div className={styles.radioGroup}>
           <label className={styles.radioLabel}>
@@ -63,7 +67,7 @@ const LoginPage: React.FC = () => {
               onChange={() => setRole("trainer")}
               className={styles.radio}
             />
-            Trainer
+            {t("login.Trainer")}
           </label>
           <label className={styles.radioLabel}>
             <input
@@ -74,12 +78,12 @@ const LoginPage: React.FC = () => {
               onChange={() => setRole("nurse")}
               className={styles.radio}
             />
-            Nurse
+            {t("login.Nurse")}
           </label>
         </div>
 
         <div className={styles.inputGroup}>
-          <label htmlFor="email" className={styles.label}>Email:</label>
+          <label htmlFor="email" className={styles.label}>{t("login.email")}</label>
           <input
             type="email"
             id="email"
@@ -91,7 +95,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className={styles.inputGroup}>
-          <label htmlFor="password" className={styles.label}>Password:</label>
+          <label htmlFor="password" className={styles.label}>{t("login.password")}</label>
           <input
             type="password"
             id="password"
@@ -102,12 +106,22 @@ const LoginPage: React.FC = () => {
           />
         </div>
 
-        <button type="submit" className={styles.button}>Login</button>
+        <button type="submit" className={styles.button}>{t("login.login")}</button>
 
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
       </form>
     </div>
   );
+};
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+  const {locale} = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"]))
+      },
+  };
 };
 
 export default LoginPage;

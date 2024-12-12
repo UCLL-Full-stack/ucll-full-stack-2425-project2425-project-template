@@ -1,0 +1,20 @@
+{
+    "app.title": "PokéPal",
+    "main": {
+        "introductionText" : "Ondek de wereld van Pokémon zoals nooit tevore, met PokéPal, de essensiele app gemaakt voor trainers en gym uitdagers! Of je al een ervaren Pokémon Meester bent of je nog maar net begint met je avontuur, PokéPal maakt het gemakkelijk om je Pokémon collectie to overzien en om je volgende duels te plannen."
+    },
+    "header" : {
+        "login" : "login",
+        "pokemon" : "pokemon",
+        "calender" : "kalender",
+        "badges" : "badges",
+        "language" : "taal"
+    },
+    "login" : {
+        "Trainer": "Trainer",
+        "Nurse" : "zuster",
+        "email" : "email:",
+        "password" : "wachtwoord:",
+        "login" : "login"
+    }
+}
