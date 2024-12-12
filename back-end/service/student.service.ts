@@ -10,7 +10,7 @@ const createStudent = async (input: StudentInput): Promise<Student> => {
   const existing = await studentDb.getStudentByUsername(username);
 
   if (existing) {
-      throw new Error(`User with Username ${username} is already exists.`);
+      throw new Error(`User with Username ${username} already exists.`);
   }
 
 //   if (!username || username.trim().length === 0) {
