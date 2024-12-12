@@ -30,7 +30,8 @@ const RenderEventDetailsById: React.FC = () => {
         const loggedInUser = localStorage.getItem('loggedInUser');
         const user = loggedInUser ? JSON.parse(loggedInUser) : null;
         
-        if (user.role === 'PARTICIPANT'){
+        // Only user exists people can see the participant list
+        if ((user && user.role === 'PARTICIPANT') || !user){
             setShowAddButton(false);
             setShowParticipantList(false);
         }
