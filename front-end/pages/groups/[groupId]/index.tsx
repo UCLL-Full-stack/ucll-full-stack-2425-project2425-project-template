@@ -28,7 +28,7 @@ const Boards: React.FC = () => {
             <Header />
             <main className={styles.main}>
                 <h1>Your Boards</h1>
-                {error && <div>Failed to load groups</div>}
+                {error && <div>Failed to load boards</div>}
                 {!error && <BoardOverview boards={boards} />}
             </main>
         </>
