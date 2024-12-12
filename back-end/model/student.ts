@@ -69,4 +69,8 @@ export class Student {
             bookings: bookings.map((booking) => Booking.from({...booking, trip: booking.trip, students: []})),
         });
     }
+
+    public getPassword(): string {
+        return this.password;
+    }
 }

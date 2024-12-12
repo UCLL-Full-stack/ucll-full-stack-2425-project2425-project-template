@@ -35,12 +35,19 @@ type ReviewInput = {
     rating: number;      
     comment: string;
 }
+
 type Role = 'admin' | 'user' | 'guest';
+
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+}
 
 export{
     TripInput,
     BookingInput,
     StudentInput,
     ReviewInput,
-    Role
+    Role,
+    AuthenticationResponse
 }

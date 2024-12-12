@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import studentService from '../service/student.service';
 import { StudentInput } from '../types';
+import { Student } from '@prisma/client';
 
 const studentRouter = express.Router();
 
@@ -187,6 +188,84 @@ studentRouter.post('/signup', async (req: Request, res: Response, next: NextFunc
     const studentInput = <StudentInput>req.body;
     const newStudent = await studentService.createStudent(studentInput);
     res.status(201).json(newStudent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+/**
+ * @swagger
+ * /students/login:
+ *   post:
+ *     summary: Authenticate a student
+ *     description: Authenticates a student using their username and password, and returns a token if successful.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The username of the student.
+ *               password:
+ *                 type: string
+ *                 description: The password of the student.
+ *     responses:
+ *       200:
+ *         description: Authentication successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authentication successful
+ *                 token:
+ *                   type: string
+ *                   description: JWT token for authentication
+ *                 userId:
+ *                   type: string
+ *                   description: The ID of the authenticated student
+ *       400:
+ *         description: Invalid username or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Invalid username or password
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: An error occurred while processing the request.
+ */
+
+studentRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  try{
+    const studentInput = <StudentInput>req.body
+    const response = await studentService.authenticate(studentInput);
+    res.status(200).json({ message: "Authentication successful", ...response });
   } catch (error) {
     next(error);
   }

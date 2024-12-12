@@ -8,6 +8,7 @@ import { tripRouter } from './controller/trip.routes';
 import { studentRouter } from './controller/student.routes';
 import { bookingRouter } from './controller/booking.routes';
 import { reviewRouter } from './controller/review.routes';
+import { expressjwt } from 'express-jwt';
 
 dotenv.config();
 
@@ -23,14 +24,16 @@ const port = process.env.APP_PORT || 3000;
 // );
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(
-//   expressjwt({
-//     secret: process.env.JWT_SECRET,
-//     algorithms: ['HS256'],
-//   }).unless({
-//   path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
-//   })
-// )
+
+app.use(
+  expressjwt({
+    secret: process.env.JWT_SECRET || (() => { throw new Error('JWT_SECRET is not defined'); })(),
+    algorithms: ['HS256'],
+  }).unless({
+  path: ['/api-docs', /^\/api-docs\/.*/, '/students/login', '/students/signup', '/status'],
+  })
+)
+
 app.use('/students', studentRouter)
 app.use('/bookings', bookingRouter)
 app.use('/trips', tripRouter)
@@ -54,7 +57,11 @@ const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
-  res.status(400).json({ status: 'error', message: err.message})
+  if(err.name === 'UnauthorizedError'){
+    res.status(401).json({ status: 'application error', message: err.message});
+  } else {
+    res.status(400).json({ status: 'application error', message: err.message})
+  }
 });
 
 // app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

@@ -1,7 +1,8 @@
 import studentDb from "../repository/student.db";
 import { Student } from "../model/student";
-import { StudentInput } from "../types";
+import { AuthenticationResponse, StudentInput } from "../types";
 import bcrypt from 'bcrypt';
+import { generateJwtToken } from "../util/jwt";
 
 const createStudent = async (input: StudentInput): Promise<Student> => {
   
@@ -81,4 +82,22 @@ const getStudentByUsername = async (username: string): Promise<Student | null> =
     return student;
 };
 
-export default { createStudent, getStudentById, getAllStudents, getStudentByUsername };
+const authenticate = async ({ username, password }: StudentInput): Promise<AuthenticationResponse> => {
+    const student = await getStudentByUsername(username);
+
+    if (!student) {
+        throw new Error("Student not found.");
+    }
+
+    const isValidPassword = await bcrypt.compare(password, student.getPassword());
+    if (!isValidPassword) {
+        throw new Error("Incorrect password.");
+    }
+
+    return {
+        token: generateJwtToken({ username }),
+        username
+    }
+}
+
+export default { createStudent, getStudentById, getAllStudents, getStudentByUsername, authenticate };
