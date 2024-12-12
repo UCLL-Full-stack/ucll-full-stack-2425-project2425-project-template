@@ -2,6 +2,18 @@ import { UserInput } from "types";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+const getAll = async () => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+
+    return fetch(apiUrl + '/users', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 const createUser = async (user: UserInput) => {
     return fetch(apiUrl + '/users/signup', {
         method: 'POST',
@@ -23,6 +35,7 @@ const loginUser = async (user: UserInput) => {
 }
 
 const UserService = {
+    getAll,
     createUser,
     loginUser,
 }

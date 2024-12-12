@@ -35,7 +35,7 @@ const Header: React.FC = () => {
                     Upcoming events
                 </Link>
 
-                {loggedUser && (
+                {loggedUser && loggedUser.role !== 'ADMIN' && (
                     <Link href="/my-events" className={`nav-link px-4 fs-5 ${isActive('/my-events') ? 'text-white' : 'text-white-50'}`}>
                         My events
                     </Link>
@@ -47,6 +47,15 @@ const Header: React.FC = () => {
 
                 {loggedUser ? (
                     <>
+                        {loggedUser.role === 'ADMIN' && (
+                            <Link
+                                href="/users"
+                                className={`nav-link px-4 fs-5 ${isActive('/users') ? 'text-white' : 'text-white-50'}`}
+                            >
+                                Users
+                            </Link>
+                        )}
+
                         <Link
                             href="/login"
                             className="nav-link px-4 fs-5 text-white-50"
