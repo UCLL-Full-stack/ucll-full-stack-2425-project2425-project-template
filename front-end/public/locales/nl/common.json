@@ -30,7 +30,8 @@
         "login": "Login",
         "gebruikersnaam": "Gebruikersnaam",
         "wachtwoord": "Wachtwoord",
-        "success": "Login succesvol. Doorsturen naar de homepage..."
+        "success": "Login succesvol. Doorsturen naar de homepage...",
+        "registreer": "Registreren"
     },
 
     "nav": {
@@ -40,5 +41,14 @@
         "welkom": "Welkom, ",
         "logout": "Logout",
         "login": "Login"
+    },
+
+    "register": {
+        "titel": "Registreren",
+        "registreer": "Registreren",
+        "gebruikersnaam": "Gebruikersnaam",
+        "email": "Email",
+        "wachtwoord": "Wachtwoord",
+        "bevestigwachtwoord": "Bevestig Wachtwoord"
     }
 }
