@@ -1,52 +1,67 @@
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
 const prisma = new PrismaClient();
 
+async function clearDatabase() {
+    await prisma.coach.deleteMany();
+    await prisma.player.deleteMany();
+    await prisma.user.deleteMany();
+    await prisma.team.deleteMany();
+    await prisma.competition.deleteMany();
+  }
+
 const main = async () => {
+    await clearDatabase();
+    const hashedPassword1 = await bcrypt.hash("password123", 12);
     const user1 = await prisma.user.create({
         data: {
             name: "John Doe",
             email: "john.doe@example.com",
-            password: "password123",
+            password: hashedPassword1,
             role: "player",
         },
     });
 
+    const hashedPassword2 = await bcrypt.hash("password123", 12);
     const user2 = await prisma.user.create({
         data: {
             name: "Jane Smith",
             email: "jane.smith@example.com",
-            password: "password123",
+            password: hashedPassword2,
             role: "coach",
         },
     });
 
+    const hashedPassword3 = await bcrypt.hash("password123", 12);
     const user3 = await prisma.user.create({
         data: {
             name: "Alice Johnson",
             email: "alice.johnson@example.com",
-            password: "password123",
+            password: hashedPassword3,
             role: "player",
         },
     });
 
+    const hashedPassword4 = await bcrypt.hash("password123", 12);
     const user4 = await prisma.user.create({
         data: {
             name: "Bob Brown",
             email: "bob.brown@example.com",
-            password: "password123",
+            password: hashedPassword4,
             role: "coach",
         },
     });
 
+    const hashedPassword5 = await bcrypt.hash("password123", 12);
     const user5 = await prisma.user.create({
         data: {
             name: "Robbe Kemps",
             email: "robbe.kemps@example.com",
-            password: "password123",
+            password: hashedPassword5,
             role: "admin",
         },
     });

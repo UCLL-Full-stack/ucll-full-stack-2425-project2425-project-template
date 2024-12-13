@@ -37,7 +37,7 @@ const authenticate = async (name: string, password: string): Promise<Authenticat
         throw new Error('Invalid username or password.');
     }
 
-    const isPasswordValid = password === user.getPassword();
+    const isPasswordValid = await bcrypt.compare(password, user.getPassword());
     if (!isPasswordValid) {
         console.log("DATABASE: ", user.getPassword()); 
         console.log("INPUT: ", password);   
