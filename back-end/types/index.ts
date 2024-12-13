@@ -1,4 +1,5 @@
 type Role = 'ADMIN' | 'PARTICIPANT' | 'ORGANIZER';
+type TicketType = 'VIP' | 'REGULAR' | 'FREE';
 
 type UserInput = {
     id?: number,
@@ -30,7 +31,7 @@ type InviteInput = {
 
 type TicketInput = {
     id?: number,
-    type: 'VIP' | 'Regular',
+    type: TicketType,
     cost: number,
 };
 
@@ -44,6 +45,7 @@ type AuthenticationResponse = {
 
 export {
     Role,
+    TicketType,
     EventInput,
     UserInput,
     InviteInput,

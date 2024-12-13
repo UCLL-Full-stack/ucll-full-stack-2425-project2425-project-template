@@ -1,11 +1,16 @@
+import { TicketType } from "../types";
+import {
+    Ticket as TicketPrisma,
+} from '@prisma/client';
+
 export class Ticket {
     private id?: number;
-    private type: 'VIP' | 'Regular';
+    private type: TicketType;
     private cost: number;
 
     constructor(ticket: {
         id?: number,
-        type: 'VIP' | 'Regular',
+        type: TicketType,
         cost: number;
     }) {
         this.id = ticket.id;
@@ -17,7 +22,7 @@ export class Ticket {
         return this.id;
     }
 
-    getType(): string {
+    getType(): TicketType {
         return this.type;
     }
 
@@ -30,5 +35,17 @@ export class Ticket {
             this.type === ticket.getType() &&
             this.cost === ticket.getCost()
         );
+    }
+
+    static from({
+        id,
+        type,
+        cost,
+    }: TicketPrisma) {
+        return new Ticket({
+            id,
+            type: type as TicketType,
+            cost,
+        });
     }
 }

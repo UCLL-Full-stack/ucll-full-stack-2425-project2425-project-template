@@ -28,4 +28,12 @@ model Event {
     backgroundImage String @default("")
     users           User[]
     isTrending      Boolean
+    tickets         Ticket[]
+}
+
+model Ticket {
+    id    Int   @id   @default(autoincrement())
+    type  String
+    cost  Int
+    events  Event[]
 }

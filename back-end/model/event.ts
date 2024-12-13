@@ -1,9 +1,11 @@
 import {
     Event as EventPrisma,
     // user as userPrisma,
+    Ticket as TicketPrisma,
     User as UserPrisma,
 } from '@prisma/client';
 import { User } from './user';
+import { Ticket } from './ticket';
 
 
 export class Event {
@@ -16,6 +18,7 @@ export class Event {
     private backgroundImage?: string;
     private users: User[];
     private isTrending: boolean;
+    private tickets: Ticket[];
 
     constructor(event: {
         id?: number,
@@ -27,6 +30,7 @@ export class Event {
         backgroundImage?: string;
         users: User[];
         isTrending: boolean;
+        tickets: Ticket[];
     }) {
         // Validate the date
         if (isNaN(event.date.getTime())) {
@@ -55,6 +59,7 @@ export class Event {
         this.backgroundImage = event.backgroundImage;
         this.users = event.users;
         this.isTrending = event.isTrending;
+        this.tickets = event.tickets;
     }
 
     getIsTrending(): boolean {
@@ -104,6 +109,10 @@ export class Event {
         return this.backgroundImage;
     }
 
+    getTickets(): Ticket[] {
+        return this.tickets;
+    }
+
     equals(event: Event): boolean {
         return (
             this.name === event.getName() &&
@@ -124,7 +133,8 @@ export class Event {
         backgroundImage,
         users,
         isTrending,
-    }: EventPrisma & { users: UserPrisma[] }) {
+        tickets,
+    }: EventPrisma & { users: UserPrisma[]; tickets: TicketPrisma[]}) {
         return new Event({
             id,
             name,
@@ -135,6 +145,7 @@ export class Event {
             backgroundImage,
             users: users.map((user) => User.from(user)),
             isTrending,
+            tickets: tickets.map((ticket) => Ticket.from(ticket)),
         })
     }
 

@@ -24,7 +24,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
   const removeEvent = async (eventId: number) => {
     await EventService.removeFromMyEvents(email, eventId);
 
-  // Renew the events list when an event is removed
+    // Renew the events list when an event is removed
     setMyEvents(myEvents.filter(event => event.id !== eventId));
   }
 
@@ -47,6 +47,11 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
                 <p>{new Date(event.date).toLocaleDateString()}</p>
                 <p className={styles.hiddenOb}>{event.location}</p>
                 <p className={styles.hiddenOb}>{event.category}</p>
+                <ul>
+                  {event.tickets.map((ticket, index) => (
+                    <li key={index}>{ticket}</li>
+                  ))}
+                </ul>
 
                 <div>
                   {showDeleteButton === true &&
@@ -65,7 +70,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
             ))}
           </div>
         ) : (
-            <p className="text-white">You don't have any upcoming events...</p>
+          <p className="text-white">You don't have any upcoming events...</p>
         )}
       </section>
     </>

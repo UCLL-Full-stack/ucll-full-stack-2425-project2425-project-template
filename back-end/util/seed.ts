@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 const main = async () => {
     await prisma.event.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.ticket.deleteMany();
 
     const admin = await prisma.user.create({
         data: {
@@ -25,7 +26,7 @@ const main = async () => {
             username: 'john_doe',
             name: 'John Doe',
             email: 'john.doe@ucll.be',
-            password: await bcrypt.hash('passwordJohn',12),
+            password: await bcrypt.hash('passwordJohn', 12),
             age: 26,
             role: 'ORGANIZER',
         }
@@ -36,7 +37,7 @@ const main = async () => {
             username: 'jane_doe',
             name: 'Jane Doe',
             email: 'jane.doe@ucll.be',
-            password: await bcrypt.hash('passwordJane',12),
+            password: await bcrypt.hash('passwordJane', 12),
             age: 30,
             role: 'PARTICIPANT',
         }
@@ -47,45 +48,45 @@ const main = async () => {
             username: 'alice_smith',
             name: 'Alice Smith',
             email: 'alice.smith@ucll.be',
-            password: await bcrypt.hash('passwordAlice',12),
+            password: await bcrypt.hash('passwordAlice', 12),
             age: 24,
             role: 'PARTICIPANT',
         }
     });
-    
+
     const bob = await prisma.user.create({
         data: {
             username: 'bob_brown',
             name: 'Bob Brown',
             email: 'bob.brown@ucll.be',
-            password: await bcrypt.hash('passwordBob',12),
+            password: await bcrypt.hash('passwordBob', 12),
             age: 29,
             role: 'PARTICIPANT',
         }
     });
-    
+
     const charlie = await prisma.user.create({
         data: {
             username: 'charlie_miller',
             name: 'Charlie Miller',
             email: 'charlie.miller@ucll.be',
-            password: await bcrypt.hash('passwordCharlie',12),
+            password: await bcrypt.hash('passwordCharlie', 12),
             age: 22,
             role: 'PARTICIPANT',
         }
     });
-    
+
     const diana = await prisma.user.create({
         data: {
             username: 'diana_jones',
             name: 'Diana Jones',
             email: 'diana.jones@ucll.be',
-            password: await bcrypt.hash('passwordDiana',12),
+            password: await bcrypt.hash('passwordDiana', 12),
             age: 27,
             role: 'PARTICIPANT',
         }
     });
-    
+
     const eve = await prisma.user.create({
         data: {
             username: 'eve_white',
@@ -97,6 +98,27 @@ const main = async () => {
         }
     });
 
+    const ticketVIP = await prisma.ticket.create({
+        data: {
+            type: 'VIP',
+            cost: 100,
+        }
+    });
+
+    const ticketREGULAR = await prisma.ticket.create({
+        data: {
+            type: 'REGULAR',
+            cost: 50,
+        }
+    });
+
+    const ticketFREE = await prisma.ticket.create({
+        data: {
+            type: 'FREE',
+            cost: 0,
+        }
+    });
+
     const taylorswiftconcert = await prisma.event.create({
         data: {
             name: 'Taylor Swift Concert',
@@ -105,10 +127,16 @@ const main = async () => {
             location: 'Amsterdam',
             category: 'Concert',
             backgroundImage: '/images/taylor-swift-concert.jpg',
-            users:{
-                connect: [{id: john.id}, {id: jane.id}]
+            users: {
+                connect: [{ id: john.id }, { id: jane.id }]
             },
             isTrending: true,
+            tickets: {
+                connect: [
+                    { id: ticketVIP.id },
+                    { id: ticketREGULAR.id },
+                ]
+            }
         }
     });
 
@@ -126,6 +154,11 @@ const main = async () => {
                 ]
             },
             isTrending: true,
+            tickets: {
+                connect: [
+                    { id: ticketFREE.id },
+                ]
+            }
         }
     });
 
@@ -140,6 +173,12 @@ const main = async () => {
             backgroundImage: '/images/food-festival.jpg',
             users: {},
             isTrending: false,
+            tickets: {
+                connect: [
+                    { id: ticketREGULAR.id },
+                    { id: ticketFREE.id },
+                ]
+            }
         }
     });
 
@@ -160,6 +199,11 @@ const main = async () => {
                 ]
             },
             isTrending: true,
+            tickets: {
+                connect: [
+                    { id: ticketFREE.id },
+                ]
+            }
         }
     });
 
@@ -174,6 +218,12 @@ const main = async () => {
             backgroundImage: '/images/art-exhibition.jpg',
             users: {},
             isTrending: false,
+            tickets : {
+                connect: [
+                    { id: ticketVIP.id },
+                    { id: ticketREGULAR.id },
+                ]
+            }
         }
     });
 
@@ -187,6 +237,7 @@ const main = async () => {
             backgroundImage: '/images/yoga-workshop.jpg',
             users: {},
             isTrending: false,
+            tickets: {},
         }
     });
 
@@ -201,6 +252,7 @@ const main = async () => {
             backgroundImage: '/images/startup-pitch-competition.jpg',
             users: {},
             isTrending: false,
+            tickets: {},
         }
     });
 
@@ -214,6 +266,12 @@ const main = async () => {
             backgroundImage: '/images/wine-tasting-evening.jpg',
             users: {},
             isTrending: false,
+            tickets: {
+                connect: [
+                    { id: ticketVIP.id },
+                    { id: ticketREGULAR.id },
+                ]
+            },
         }
     });
 
