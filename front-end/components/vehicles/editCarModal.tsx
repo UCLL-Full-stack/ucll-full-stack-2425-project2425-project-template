@@ -32,7 +32,7 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
         "Acura": ["ILX", "Integra", "Legend", "MDX", "NSX", "RDX", "RLX", "RSX", "TL", "TLX", "TSX", "Vigor", "ZDX"],
         "Alfa Romeo": ["147", "155", "156", "159", "164", "166", "4C", "8C Competizione", "Giulia", "Giulietta", "GTV", "MiTo", "Spider", "Stelvio", "Tonale"],
         "Aston Martin": ["Cygnet", "DB11", "DB7", "DB9", "DBS", "Lagonda", "Rapide", "V8 Vantage", "V12 Vantage", "Vanquish", "Virage"],
-        "Audi": ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8", "R8", "RS4", "RS6", "RS7", "S3", "S4", "S5", "S6", "S7", "S8", "TT", "TTS"],
+        "Audi": ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q1", "Q2", "Q3", "Q5", "Q7", "Q8", "R8", "RS4", "RS6", "RS7", "S3", "S4", "S5", "S6", "S7", "S8", "TT", "TTS"],
         "Bentley": ["Arnage", "Azure", "Bentayga", "Brooklands", "Continental GT", "Flying Spur", "Mulsanne", "Turbo R"],
         "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "6 Series", "7 Series", "8 Series", "i3", "i8", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Z3", "Z4", "Z8"],
         "Bugatti": ["Chiron", "Divo", "EB110", "La Voiture Noire", "Veyron"],
@@ -169,6 +169,7 @@ const EditCarModal: React.FC<EditCarModalProps> = ({ isOpen, onClose, onAddCar, 
         const res = await onAddCar(newCar);
         onClose(); 
     };
+
 
     if (!isOpen) return null;
 

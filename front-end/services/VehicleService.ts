@@ -9,7 +9,17 @@ const getAllVehicles = ()=>{
     })
 }
 
-const addVehicle = (vehicle: any)=>{
+const getVehicleById = async (vehicleId: number): Promise<Vehicle> => {
+    const  vehicle = await fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/${vehicleId}`,{
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    })
+    return await vehicle.json()
+}
+
+const addVehicle = (vehicle: any) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + '/vehicles',{
         method: 'POST',
         headers:{
@@ -42,7 +52,8 @@ const VehicleService = {
     getAllVehicles,
     addVehicle,
     deleteVehicle,
-    editVehicle
+    editVehicle,
+    getVehicleById
 }
 
 export default VehicleService;

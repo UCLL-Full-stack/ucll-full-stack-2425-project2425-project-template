@@ -18,6 +18,8 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
     const [transmissionType, setTransmissionType] = useState("");
     const [vehicleType, setVehicleType] = useState("");
     const [selectedModels, setSelectedModels] = useState<string[]>([]);
+    const [engineCapacity, setEngineCapacity] = useState("");
+    const [photos, setPhotos] = useState<File[]>([]);
     const [selectedVehicleType, setSelectedVehicleType] = useState<string>("");
 
 
@@ -150,167 +152,271 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
             model_name: modelName,
             year: parseInt(year),
             price: parseFloat(price),
-            fuel_type: fuelType,
-            transmission_type: transmissionType,
-            vehicle_type: vehicleType,
-            body_type: bodyType,
-            mileage: parseInt(mileage)
+            fuelType: fuelType,
+            transmissionType: transmissionType,
+            vehicleType: vehicleType,
+            bodyType: bodyType,
+            mileage: parseInt(mileage),
+            engineCapacity: parseInt(engineCapacity) 
         };
 
         await onAddCar(newCar);
         onClose();
     };
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            // If e.target.files is not null, it will be a FileList
+            // Limit the number of files to 10
+            if (e.target.files.length + photos.length > 10) {
+                alert("You can only upload up to 10 photos.");
+                return; // Prevent adding more than 10 files
+            }
+    
+            // Convert FileList to an array and update state
+            setPhotos((prevPhotos) => [
+                ...prevPhotos,
+                ...Array.from(e.target.files as FileList), // Cast to FileList to ensure correct type
+            ]);
+        }
+    };
+    
+    const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        if (e.dataTransfer.files) {
+            const droppedFiles = Array.from(e.dataTransfer.files);
+            if (photos.length + droppedFiles.length <= 10) {
+                setPhotos((prevPhotos) => [...prevPhotos, ...droppedFiles]);
+            } else {
+                alert("You can only upload up to 10 files.");
+            }
+        }
+    };
+    
+
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-screen max-w-md">
-                <h2 className="text-2xl font-bold mb-4">Add a New Car</h2>
-                <form onSubmit={handleSubmit}>
-
-                <div className="mb-4">
-                        <label className="flex text-sm font-medium">Vehicle Type</label>
-                        <select
-                            value={vehicleType}
-                            onChange={(e) => setVehicleType(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        >
-                            <option value="" disabled>Select a Vehicle Type</option>
-                            <option value="Car">Car</option>
-                            <option value="Motorcycle">Motorcycle</option>
-                        </select>
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Manufacturer</label>
-                        <select
-                            value={manufacturer}
-                            onChange={handleManufacturerChange}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        >
-                            <option value="" disabled>Select a manufacturer</option>
-                            {Object.keys(manufacturersDictionary).map((manufacturer) => (
-                                <option key={manufacturer} value={manufacturer}>
-                                    {manufacturer}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Model Name</label>
-                        <select
-                            value={modelName}
-                            onChange={(e) => setModelName(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                            disabled={!selectedModels.length}
-                        >
-                            <option value="" disabled>Select Model</option>
-                            {selectedModels.map((model) => (
-                                <option key={model} value={model}>
-                                    {model}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Year</label>
-                        <input
-                            type="number"
-                            value={year}
-                            onChange={(e) => setYear(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Mileage</label>
-                        <input
-                            type="number"
-                            value={mileage}
-                            onChange={(e) => setMileage(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Price</label>
-                        <input
-                            type="number"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Body Type</label>
-                        <select
-                            value={bodyType}
-                            onChange={(e) => setBodyType(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        >
-                            <option value=""disabled>Select a Body Type</option>
-                            {bodyDictionary.map((body) => (
-                                <option key={body} value={body}>
-                                    {body}
-                                </option>
-                            ))}
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl"> {/* Increased width */}
+                <h2 className="text-2xl font-bold mb-6 text-center">Edit Car</h2>
+                <form onSubmit={handleSubmit}>    
+                    <div className="grid grid-cols-2 gap-6"> {/* Two-column layout */}
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Vehicle Type</label>
+                            <select
+                                value={vehicleType}
+                                onChange={(e) => setVehicleType(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            >
+                                <option value="" disabled>Select a Vehicle Type</option>
+                                <option value="Car">Car</option>
+                                <option value="Motorcycle">Motorcycle</option>
+                            </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Manufacturer</label>
+                            <select
+                                value={manufacturer}
+                                onChange={handleManufacturerChange}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            >
+                                <option value="" disabled>Select a manufacturer</option>
+                                {Object.keys(manufacturersDictionary).map((manufacturer) => (
+                                    <option key={manufacturer} value={manufacturer}>
+                                        {manufacturer}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Model Name</label>
+                            <select
+                                value={modelName}
+                                onChange={(e) => setModelName(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                                disabled={!selectedModels.length}
+                            >
+                                <option value="" disabled>Select Model</option>
+                                {selectedModels.map((model) => (
+                                    <option key={model} value={model}>
+                                        {model}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Year</label>
+                            <input
+                                type="number"
+                                value={year}
+                                onChange={(e) => setYear(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Engine Capacity</label>
+                            <input
+                                type="number"
+                                value={engineCapacity}
+                                onChange={(e) => setEngineCapacity(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Mileage</label>
+                            <input
+                                type="number"
+                                value={mileage}
+                                onChange={(e) => setMileage(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Price</label>
+                            <input
+                                type="number"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Body Type</label>
+                            <select
+                                value={bodyType}
+                                onChange={(e) => setBodyType(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            >
+                                <option value="" disabled>Select a Body Type</option>
+                                {bodyDictionary.map((body) => (
+                                    <option key={body} value={body}>
+                                        {body}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Fuel Type</label>
+                            <select
+                                value={fuelType}
+                                onChange={(e) => setFuelType(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            >
+                                <option value="" disabled>Select a Fuel Type</option>
+                                {fuelDictionary.map((fuel) => (
+                                    <option key={fuel} value={fuel}>
+                                        {fuel}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Transmission Type</label>
+                            <select
+                                value={transmissionType}
+                                onChange={(e) => setTransmissionType(e.target.value)}
+                                className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
+                                required
+                            >
+                                <option value="" disabled>Select a Transmission Type</option>
+                                <option value="Automatic">Automatic</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Semi-Automatic">Semi-Automatic</option>
+                            </select>
+                        </div>
     
-                        </select>
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Fuel Type</label>
-                        <select
-                            value={fuelType}
-                            onChange={(e) => setFuelType(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
+                        <div className="mb-4 col-span-2 border-2 border-dashed p-6 rounded-md text-center hover:bg-gray-50 cursor-pointer"
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={handleFileDrop}
                         >
-                            <option value="" disabled>Select a Fuel Type</option>
-                            {fuelDictionary.map((fuel) => (
-                                <option key={fuel} value={fuel}>
-                                    {fuel}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="mb-4">
-                        <label className="flex text-sm font-medium">Transmission Type</label>
-                        <select
-                            value={transmissionType}
-                            onChange={(e) => setTransmissionType(e.target.value)}
-                            className="w-full px-4 mt-1 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300"
-                            required
-                        >
-                            <option value=""disabled>Select a Transmission Type</option>
-                            <option value="Automatic">Automatic</option>
-                            <option value="Manual">Manual</option>
-                            <option value="Semi-Automatic">Semi-Automatic</option>
-                        </select>
-                    </div>
-                    <div className="flex justify-end space-x-4">
+                            <label htmlFor="photos" className="text-lg font-medium mb-4 block">
+                                Upload Photos (max 10)
+                            </label>
+                            <input
+                                type="file"
+                                id="photos"
+                                name="photos"
+                                accept="image/*"
+                                multiple
+                                onChange={handleFileChange}
+                                className="hidden"
+                            />
+                            <p className="text-gray-500">
+                                Drag & Drop files here or click to select files
+                            </p>
+
+                            {/* Display uploaded files */}
+                            <div className="mt-4">
+                                {photos.length > 0 && (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {photos.map((file, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex justify-between items-center p-4 border border-gray-300 rounded-md"
+                                            >
+                                                {/* File Preview (Image or Name) */}
+                                                <div className="flex items-center space-x-2">
+                                                    {file.type.startsWith("image/") ? (
+                                                        <img
+                                                            src={URL.createObjectURL(file)} // Image preview
+                                                            alt={file.name}
+                                                            className="w-16 h-16 object-cover rounded-md"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-sm text-gray-700">{file.name}</span> // File name for non-images
+                                                    )}
+                                                </div>
+
+                                                {/* Remove Button (Red X) */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        // Remove file from the state
+                                                        setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+                                                    }}
+                                                    className="text-red-500 hover:text-red-700 text-xl font-bold"
+                                                >
+                                                    &times;
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                            
+                        </div>
+    
+                    <div className="flex justify-end space-x-4 mt-6">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex items-center px-4 py-2 text-lg font-medium text-black drop-shadow-lg align-middle rounded-lg transition duration-500 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                            className="px-4 py-2 text-lg font-medium bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="flex items-center px-4 py-2 text-lg font-normal text-black bg-[#FCBA04] hover:bg-[#FDCD49] drop-shadow-lg align-middle rounded-lg transition duration-500"
+                            className="px-4 py-2 text-lg font-medium bg-[#FCBA04] text-black rounded-lg hover:bg-[#FDCD49]"
                         >
-                            Add Vehicle
+                            Save
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     );
-};
+};    
 
 export default AddCarModal;
