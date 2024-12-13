@@ -16,10 +16,6 @@ const loginUser = async ({name, password}: UserLogin) => {
     });
   };
 
-const UserService = {
-    loginUser,
-};
-
 const createUser = (user: User) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/signup", {
         method: "POST",

@@ -149,8 +149,8 @@ userRouter.post(
     '/login',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { name, password, role }: AuthenticationRequest = req.body;
-            const authResponse = await userService.authenticate(name, password, role);
+            const { name, password}: AuthenticationRequest = req.body;
+            const authResponse = await userService.authenticate(name, password);
             res.status(200).json(authResponse);
         } catch (error) {
             next(error);

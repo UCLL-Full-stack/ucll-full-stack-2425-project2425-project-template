@@ -30,16 +30,22 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     return await userDB.createUser(newUser);
 };
 
-const authenticate = async (name: string, password: string, role: Role): Promise<AuthenticationResponse> => {
+const authenticate = async (name: string, password: string): Promise<AuthenticationResponse> => {
     const user = await userDB.getUserByName({ name });
     if (!user) {
+        console.log('User not found.');
         throw new Error('Invalid username or password.');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.getPassword());
+    const isPasswordValid = password === user.getPassword();
     if (!isPasswordValid) {
+        console.log("DATABASE: ", user.getPassword()); 
+        console.log("INPUT: ", password);   
+        console.log('Invalid password.');
         throw new Error('Invalid username or password.');
     }
+
+    const role = user.getRole() as Role;
 
     const token = generateSWTtoken(user.getName(), role);
     const username = user.getName();
