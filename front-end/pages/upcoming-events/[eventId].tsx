@@ -29,9 +29,9 @@ const RenderEventDetailsById: React.FC = () => {
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
         const user = loggedInUser ? JSON.parse(loggedInUser) : null;
-        
+
         // Only user exists people can see the participant list
-        if ((user && user.role === 'PARTICIPANT') || !user){
+        if ((user && user.role === 'PARTICIPANT') || !user) {
             setShowAddButton(false);
             setShowParticipantList(false);
         }
@@ -50,11 +50,11 @@ const RenderEventDetailsById: React.FC = () => {
 
     const getEventById = async () => {
         try {
-            
+
             const response = await EventService.getEventById(eventId as string);
             const eventData = await response.json();
             setEvent(eventData);
-            
+
         } catch (error) {
             console.error("Failed to fetch event:", error);
         }
@@ -67,6 +67,25 @@ const RenderEventDetailsById: React.FC = () => {
             setShowForm(false);
             setShowAddButton(true);
             const response = await EventService.addParticipantToEvent(email, eventId as string);
+            setEvent(response);
+
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("An unknown error occurred");
+            }
+            setShowError(true);
+        }
+    };
+
+    const addSelfToEvent = async (selfEmail: string) => {
+        try {
+            setShowError(false);
+            setEmail("");
+            setShowForm(false);
+            setShowAddButton(true);
+            const response = await EventService.addParticipantToEvent(selfEmail, eventId as string);
             setEvent(response);
 
         } catch (error) {
@@ -103,7 +122,7 @@ const RenderEventDetailsById: React.FC = () => {
                 <h1>Event Details</h1>
                 {event ? (
                     <section className={styles.eventDetails}>
-                        <EventDetails event={event} showParticipantList={showParticipantList} />
+                        <EventDetails event={event} showParticipantList={showParticipantList} addSelfToEvent={addSelfToEvent} />
                     </section>
                 ) : (
                     <p>Loading event details...</p>

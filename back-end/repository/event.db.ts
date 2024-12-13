@@ -6,6 +6,7 @@ const getAllEvents = async (): Promise<Event[]> => {
     const eventsPrisma = await database.event.findMany({
         include: {
             users: true,
+            tickets: true,
         },
     });
     return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma));
@@ -18,6 +19,7 @@ const getEventById = async (id: number): Promise<Event> => {
         },
         include: {
             users: true,
+            tickets: true,
         },
     });
 
@@ -57,6 +59,7 @@ const addParticipantToEvent = async (email: string, eventId: number): Promise<Ev
         },
         include: {
             users: true,
+            tickets: true,
         },
     });
 
@@ -86,6 +89,7 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
         },
         include: {
             users: true,
+            tickets : true,
         },
     });
     return events.map((event) => Event.from(event));
