@@ -148,9 +148,13 @@
 
 .eventDetailTickets {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 1rem;
+    border-top: 2px solid black;
+    margin-top: 2rem;
+    padding-top: 2rem;
 }
 
 .eventDetailTickets button {
@@ -225,7 +229,7 @@
     color: black;
     /* background-color: white; */
     padding: 0.5rem 1rem;
-    display: inline-block;
+    /* display: inline-block; */
     width: min-content;
     background-color: rgba(255, 255, 255, 0.4);
     margin: 0;
@@ -406,6 +410,10 @@
     color: #FF0000;
 }
 
+.loginSuccessMessage {
+    color: #00FF00;
+}
+
 .myEventsLoginSignupButtons {
     display: flex;
     flex-direction: row;
@@ -440,6 +448,10 @@
 
 .errorMessage {
     color: red;
+}
+
+.statusMessage {
+    color: green;
 }
 
 .description {

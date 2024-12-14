@@ -1,5 +1,6 @@
 import { Event } from "../model/event";
 import eventDb from "../repository/event.db";
+import ticketDb from "../repository/ticket.db";
 import userService from "./user.service";
 
 
@@ -17,27 +18,30 @@ const getEventById = async (id: number): Promise<Event> => {
     return event;
 };
 
-const addParticipantToEvent = async (email: string, eventId: number): Promise<Event> => {
-    return await eventDb.addParticipantToEvent(email, eventId);
-};
+// const addParticipantToEvent = async (email: string, eventId: number): Promise<Event> => {
+//     return await eventDb.addParticipantToEvent(email, eventId);
+// };
 
 const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
-    return await eventDb.getEventsByUserEmail(email);
+    const tickets = await ticketDb.getTicketsByUserEmail(email);
+    const events = tickets.map((ticket) => ticket.event);
+
+    return events;
 };
 
 
-const removeEvent = async (email: string, eventId: number) => {
-    return await eventDb.removeFromMyEvents(email, eventId);
-};
+// const removeEvent = async (email: string, eventId: number) => {
+//     return await eventDb.removeFromMyEvents(email, eventId);
+// };
 
 
 export default {
     // createEvent,
     getAllEvents,
     getEventById,
-    addParticipantToEvent,
+    // addParticipantToEvent,
     // getEventsByParticipantEmail,
     getEventsByUserEmail,
-    removeEvent,
+    // removeEvent,
     
 };

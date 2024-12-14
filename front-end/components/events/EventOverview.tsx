@@ -15,15 +15,6 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
   const [user, setUsers] = useState<UserInput[]>();
   const [showTickets, setShowTickets] = useState<boolean>(false);
 
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    const userData = loggedInUser ? JSON.parse(loggedInUser) : null;
-
-    if (userData) {
-      setShowTickets(true);
-    }
-  }, []);
-
   const handleEventClick = (eventId: number) => {
     sessionStorage.setItem('eventId', eventId.toString());
     router.push(`/upcoming-events/${eventId}`);
@@ -55,32 +46,9 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
                 <div className={styles.overlay}></div>
                 <h3>{event.name}</h3>
                 <p className={styles.desc}>{event.description}</p>
-                {/* <p>{new Date(event.date).toLocaleDateString()}</p> */}
+                <p>{new Date(event.date).toLocaleDateString()}</p>
                 {/* <p className={styles.hiddenOb}>{event.location}</p>
                 <p className={styles.hiddenOb}>{event.category}</p> */}
-                {showTickets && (
-                  event.tickets.length > 0 ? (
-                    <div className={styles.eventTickets}>
-                      {/* <h4>Tickets:</h4> */}
-                      {event.tickets.map((ticket, index) => (
-                        <div key={index}>
-                          <button
-                            type="button"
-                            className="px-4 py-2 bg-white rounded"
-                          >{ticket.type} €{ticket.cost}</button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      className="px-4 py-2 bg-white rounded mb-1"
-                      className={styles.noTickets}
-                    >
-                      Tickets not available yet.
-                    </button>
-                  )
-                )}
 
                 <div>
                   {showDeleteButton === true &&
@@ -99,7 +67,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, email }: Pro
             ))}
           </div>
         ) : (
-          <p className="text-white">You don't have any upcoming events...</p>
+          <p className="text-white">There are no upcoming events...</p>
         )}
       </section>
     </>

@@ -1,6 +1,7 @@
 import EventDetails from "@components/events/EventDetails";
 import Header from "@components/header";
 import EventService from "@services/EventService";
+import TicketService from "@services/TicketService";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,10 @@ const RenderEventDetailsById: React.FC = () => {
     // Show error message
     const [showError, setShowError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+
+    // Show success message
+    const [showStatus, setShowStatus] = useState(false);
+    const [statusMessage, setStatusMessage] = useState("");
 
     // const [eventId, setEventId] = useState<string>(null);
 
@@ -60,40 +65,21 @@ const RenderEventDetailsById: React.FC = () => {
         }
     };
 
-    const addParticipantToEvent = async () => {
+    const addSelfToEvent = async (ticketId: string, selfEmail: string) => {
         try {
-            setShowError(false);
-            setEmail("");
-            setShowForm(false);
-            setShowAddButton(true);
-            const response = await EventService.addParticipantToEvent(email, eventId as string);
-            setEvent(response);
+            const response = await TicketService.userBuyTicket(ticketId, selfEmail);
+
+            getEventById();
+
+            setStatusMessage("Event has been successfully added to your 'My events' page. Redirecting...");
+            setShowStatus(true);
+
+            setTimeout(() => {
+                router.push("/my-events");
+            }, 2000);
 
         } catch (error) {
-            if (error instanceof Error) {
-                setErrorMessage(error.message);
-            } else {
-                setErrorMessage("An unknown error occurred");
-            }
-            setShowError(true);
-        }
-    };
-
-    const addSelfToEvent = async (selfEmail: string) => {
-        try {
-            setShowError(false);
-            setEmail("");
-            setShowForm(false);
-            setShowAddButton(true);
-            const response = await EventService.addParticipantToEvent(selfEmail, eventId as string);
-            setEvent(response);
-
-        } catch (error) {
-            if (error instanceof Error) {
-                setErrorMessage(error.message);
-            } else {
-                setErrorMessage("An unknown error occurred");
-            }
+            setErrorMessage("You are already a participant of this event.");
             setShowError(true);
         }
     };
@@ -102,11 +88,6 @@ const RenderEventDetailsById: React.FC = () => {
         setShowError(false);
         setShowForm(true);
         setShowAddButton(false);
-    };
-
-    const handleFormSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        addParticipantToEvent();
     };
 
     return (
@@ -132,29 +113,8 @@ const RenderEventDetailsById: React.FC = () => {
                     <p className={styles.errorMessage}>{errorMessage}</p>
                 )}
 
-                {showAddButton && (
-                    <button
-                        onClick={handleAddParticipant}
-                        className={styles.addParticipantButton}
-                    >
-                        Add participant
-                    </button>
-                )}
-
-                {showForm && (
-                    <form
-                        onSubmit={handleFormSubmit}
-                        className={styles.addParticipantForm}>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <button type="submit">Submit</button>
-                    </form>
+                {showStatus && (
+                    <p className={styles.statusMessage}>{statusMessage}</p>
                 )}
             </main>
         </>
