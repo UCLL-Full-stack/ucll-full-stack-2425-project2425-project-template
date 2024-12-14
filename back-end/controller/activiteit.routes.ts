@@ -75,8 +75,8 @@
  *         $ref: "#/components/schemas/Groep"
  */
 import express, {NextFunction, Request, Response} from "express";
-import activiteitService from "../service/activiteit.service";
 import e from "express";
+import activiteitService from "../service/activiteit.service";
 import { Activiteit } from "../model/activiteit";
 
 const activiteitRouter = express.Router();
@@ -84,39 +84,10 @@ const activiteitRouter = express.Router();
 /**
  * @swagger
  * /activiteit/{groepNaam}:
- *  get:
- *     summary: Geeft alle activiteiten van een groep
- *     parameters:
- *          - in: path
- *            name: groepNaam
- *            schema:
- *             type: string
- *             required: true
- *             description: De naam van de groep waarvan je de activiteiten wilt opvragen
- *     responses:
- *         200:
- *            description: Een array van activiteiten
- *            content:
- *                application/json:
- *                   schema:
- *                     type: array
- *                     items:
- *                        $ref: "#/components/schemas/Activiteit"
- */
-activiteitRouter.get("/:groepNaam", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const activiteiten = await activiteitService.getActiviteitenByGroepNaam(String(req.params.groepNaam));
-        res.status(200).json(activiteiten);
-    } catch (e) {
-        next(e);
-    }
-});
-
-/**
- * @swagger
- * /activiteit/{groepNaam}:
  *  post:
  *   summary: Voeg een activiteit toe aan een groep
+ *   tags:
+ *    - activiteit
  *   parameters:
  *         - in: path
  *           name: groepNaam
@@ -160,23 +131,89 @@ activiteitRouter.post("/:groepNaam", async (req: Request, res: Response, next: N
 
 /**
  * @swagger
- * /activiteit:
- *  get:
- *     summary: Geeft alle activiteiten
- *     responses:
- *         200:
- *            description: Een array van activiteiten
- *            content:
- *                application/json:
- *                   schema:
- *                     type: array
- *                     items:
- *                        $ref: "#/components/schemas/Activiteit"
+ * /activiteit/{groepNaam}:
+ *  put:
+ *   summary: Verander een activiteit
+ *   tags:
+ *    - activiteit
+ *   parameters:
+ *         - in: path
+ *           name: groepNaam
+ *           schema:
+ *             type: string
+ *             required: true
+ *             description: De naam van de groep waarvan je de activiteit wilt veranderen
+ *   requestBody:
+ *        required: true
+ *        content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Activiteit"
+ *   responses:
+ *     200:
+ *      description: De veranderde activiteit
+ *      content:
+ *       application/json:
+ *        schema:
+ *         $ref: "#/components/schemas/Activiteit"
+ *     400:
+ *      description: Fout in de request
+ *     404:
+ *      description: Groep niet gevonden/Activiteit niet gevonden
  */
-activiteitRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+activiteitRouter.put("/:groepNaam", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const activiteiten = await activiteitService.getAllActiviteiten();
-        res.status(200).json(activiteiten);
+        const activiteit = new Activiteit ({
+            id: req.body.id,
+            naam: req.body.naam,
+            beschrijving: req.body.beschrijving,
+            begindatum: new Date(req.body.begindatum),
+            einddatum: new Date(req.body.einddatum)
+        });
+        const result = await activiteitService.updateActiviteit(activiteit, String(req.params.groepNaam));
+        res.status(200).json(result);
+    } catch (e) {
+        next(e);
+    }
+});
+
+/**
+ * @swagger
+ * /activiteit/{groepNaam}/{activiteitId}:
+ *  delete:
+ *      summary: Verwijder een activiteit
+ *      tags:
+ *        - activiteit
+ *      parameters:
+ *        - in: path
+ *          name: groepNaam
+ *          schema:
+ *              type: string
+ *              required: true
+ *              description: De naam van de groep waarvan je de activiteit wilt verwijderen
+ *        - in: path
+ *          name: activiteitId
+ *          schema:
+ *              type: number
+ *              required: true
+ *              description: Het id van de activiteit die je wilt verwijderen
+ *      responses:
+ *          200:
+ *              description: De verwijderde activiteit
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/Activiteit"
+ *          400:
+ *              description: Fout in de request
+ *          404:
+ *              description: Groep niet gevonden/Activiteit niet gevonden
+ *  
+ */
+activiteitRouter.delete("/:groepNaam/:activiteitId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await activiteitService.deleteActiviteit(req.params.groepNaam, Number(req.params.activiteitId));
+        res.status(200).json(result);
     } catch (e) {
         next(e);
     }

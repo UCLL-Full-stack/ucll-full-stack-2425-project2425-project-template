@@ -1,3 +1,10 @@
+// This is your Prisma schema file,
+// start-up: npx prisma migrate dev
+// generate client: npx prisma generate
+// seed: npx ts-node util/seed.ts
+
+// als er issues zijn met de prisma client, run: npx prisma migrate reset
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,17 +19,18 @@ model Leiding {
   naam      String   
   voornaam  String
   email     String   @unique
+  wachtwoord String
   telefoon  String
-  hoofdleiding Boolean
+  rol       String
   totem     String
-  groepId   Int      @unique
-  groep     Groep    @relation(fields: [groepId], references: [id])
-  nieuwsberichten Nieuwsbericht[]
+  nieuwsberichten Nieuwsbericht[] 
+  groepId   Int  
+  groep     Groep @relation(fields: [groepId], references: [id])
 }
 
 model Groep {
   id      Int      @id @default(autoincrement())
-  naam    String
+  naam    String 
   beschrijving String
   activiteiten Activiteit[]
   leiding Leiding[]
@@ -42,6 +50,6 @@ model Nieuwsbericht {
     titel     String
     inhoud    String
     datum     DateTime
-    auteurId Int      @unique
-    auteur    Leiding  @relation(fields: [auteurId], references: [id])
+    leidingId Int     
+    leiding   Leiding @relation(fields: [leidingId], references: [id])
 }

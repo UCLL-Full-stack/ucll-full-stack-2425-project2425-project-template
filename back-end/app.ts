@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { activiteitRouter } from './controller/activiteit.routes';
+import  groepRouter from './controller/groep.routes';
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.use('/activiteit', activiteitRouter);
+app.use('/groep', groepRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

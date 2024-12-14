@@ -1,15 +1,21 @@
 import { Activiteit } from "./activiteit";
 import { Leiding } from "./leiding";
+import { 
+    Activiteit as ActiviteitPrisma,
+    Leiding as LeidingPrisma,
+    Groep as GroepPrisma,
+    Nieuwsbericht as NieuwsberichtPrisma,
+}  from "@prisma/client";
 
 export class Groep {
-    private id?: number;
+    private id: number;
     private naam: string;
     private beschrijving: string;
     private activiteiten?: Activiteit[];
     private leiding?: Leiding[];
 
     constructor(groep:{
-        id?: number,
+        id: number,
         naam: string
         beschrijving: string
         activiteiten?: Activiteit[]
@@ -20,10 +26,6 @@ export class Groep {
         this.beschrijving = groep.beschrijving;
         this.activiteiten = groep.activiteiten;
         this.leiding = groep.leiding;
-
-        if (this.leiding !== undefined) {
-            this.leiding.forEach((l) => l.setGroep(this));
-        }
     }
 
     public getId(): number | undefined {
@@ -88,6 +90,29 @@ export class Groep {
             return;
         }
         this.leiding = this.leiding.filter((l) => !l.equals(leiding));
+    }
+
+    static from({
+        id,
+        naam,
+        beschrijving,
+        activiteiten,
+        leiding
+        }: GroepPrisma & {
+            activiteiten: ActiviteitPrisma[];
+            leiding: LeidingPrisma[];
+        }) {
+        return new Groep({
+            id,
+            naam,
+            beschrijving,
+            activiteiten: activiteiten.map((activiteit) => Activiteit.from({
+                ...activiteit,
+                begindatum: activiteit.beginDatum,
+                einddatum: activiteit.eindDatum
+            })),
+            leiding: leiding.map((l) => Leiding.from({ ...l, nieuwsberichten: [] }))
+        });
     }
 
     equals(groep: any): boolean {

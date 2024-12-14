@@ -1,55 +1,62 @@
 import groepService from './groep.service';
 import {Activiteit} from '../model/activiteit';
-import activiteitDB from '../repository/activiteit.db';
+import activiteitRepo from '../repository/activiteit.db';
 import { Groep } from '../model/groep';
 
-const getActiviteitenByGroepNaam = async (groepNaam: string): Promise<Activiteit[]> => {
-    const groep = await groepService.getGroepByNaam(groepNaam);
-    if (groep === undefined) {
-        throw new Error(`Groep met naam ${groepNaam} werd niet gevonden`);
-    }else{
-        const activiteiten = groep.getActiviteiten();
-        if (activiteiten === undefined || activiteiten.length === 0) {
-            throw new Error(`Geen activiteiten, voor ${groepNaam} gevonden`);
-        }
-        return activiteiten;
+const addActiviteit = async (activiteit: Activiteit, groepNaam: string): Promise<Activiteit> => {
+    try {
+        const activiteitDB = await activiteitRepo.createActiviteit(activiteit);
+        await groepService.addActiviteitToGroep(groepNaam, activiteitDB);
+        return activiteitDB;
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while adding an activiteit');
     }
 }
 
-const getAllActiviteiten = async (): Promise<Activiteit[]> => {
-    const groepen = await groepService.getAllGroepen();
-    const activiteiten: Activiteit[] = [];
-
-    if (groepen === undefined){
-        throw new Error('Er zijn geen groepen gevonden');
+const deleteActiviteit = async (groepNaam: string, activiteitId: number): Promise<String> => {
+    try {
+        if (!activiteitId) {
+            throw new Error('Activiteit not found');
+        }
+        const groepActiviteiten = await groepService.getActiviteitenForGroep(groepNaam);
+        if (!groepActiviteiten) {
+            throw new Error('Groep not found');
+        }
+        const dbActiviteit = await activiteitRepo.getActiviteitById({id: activiteitId});
+        if (!(groepActiviteiten.includes(dbActiviteit))) {
+            throw new Error('Activiteit not found in groep');
+        }
+        const res = await activiteitRepo.verwijderActiviteit(dbActiviteit);
+        return res;
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while deleting an activiteit');
     }
-    else {
-        groepen.forEach(groep => {
-            const groepActiviteiten = groep.getActiviteiten();
-            if (groepActiviteiten === undefined || groepActiviteiten.length === 0) {
-                throw new Error(`Geen activiteiten gevonden`);
+}
+
+const updateActiviteit = async (activiteit: Activiteit, groepNaam: string): Promise<Activiteit> => {
+    try {
+        const groepActiviteiten = await groepService.getActiviteitenForGroep(groepNaam);
+        if (!groepActiviteiten) {
+            throw new Error('Groep not found');
+        }
+        for (const act of groepActiviteiten) {
+            if (act.getId() === activiteit.getId()) {
+                break;
             }
-
-            groepActiviteiten.forEach(activiteit => activiteiten.push(activiteit));
-        });
-    }
-    return activiteiten;
-}
-
-const addActiviteit = async (activiteit: Activiteit, groepNaam: string): Promise<Activiteit []> => {
-    const groep = await groepService.getGroepByNaam(groepNaam);
-    if (groep === undefined) {
-        throw new Error(`Groep met naam ${groepNaam} werd niet gevonden`);
-    }else{
-        if (!activiteit || !activiteit.getNaam() || !activiteit.getBeschrijving() || !activiteit.getBegindatum() || !activiteit.getEinddatum()) {
-            throw new Error(`Activiteit is niet correct`);
-        } else if (activiteit.getBegindatum() > activiteit.getEinddatum()) {
-            throw new Error(`Begindatum moet voor einddatum zijn`);
+            throw new Error('Activiteit not found in groep');
         }
-        const nActiviteit = await activiteitDB.addActiviteitToPool(activiteit);
-        const nGroep =  await groepService.addActiviteitToGroep(nActiviteit, groep);
-        return nGroep.getActiviteiten() || [];
+        const res = await activiteitRepo.veranderActiviteit(activiteit);
+        return res;
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while updating an activiteit');
     }
 }
 
-export default {getActiviteitenByGroepNaam, getAllActiviteiten, addActiviteit};
+export default {
+    addActiviteit,
+    deleteActiviteit,
+    updateActiviteit
+};

@@ -1,40 +1,49 @@
+import Rol from "../types";
 import { Groep } from "./groep";
+import { 
+    Leiding as LeidingPrisma,
+    Groep as GroepPrisma,
+    Nieuwsbericht as NieuwsberichtPrisma
+} from "@prisma/client";
+import { Nieuwsbericht } from "./nieuwsbericht";
 
 export class Leiding{
-    private id?: number;
+    private id: number;
     private naam: string;
     private voornaam: string;
     private email: string;
     private telefoon: string;
-    private hoofdleiding: boolean;
+    private rol: Rol;
     private totem: string;
-    private groep?: Groep;
+    private nieuwsbericht: Nieuwsbericht[];
+    private wachtwoord: string;
+    private groepId: number;
 
     constructor(leiding:{
-        id?: number,
+        id: number,
         naam: string,
         voornaam: string,
         email: string,
         telefoon: string,
-        hoofdleiding: boolean,
+        rol: Rol,
         totem: string,
-        groep?: Groep
+        nieuwsberichten: Nieuwsbericht[],
+        wachtwoord: string
+        groepId: number
     }) {
         this.id = leiding.id;
         this.naam = leiding.naam;
         this.voornaam = leiding.voornaam;
         this.email = leiding.email;
         this.telefoon = leiding.telefoon;
-        this.hoofdleiding = leiding.hoofdleiding;
+        this.rol = leiding.rol;
         this.totem = leiding.totem;
-        this.groep = leiding.groep;
-
-        if (this.groep !== undefined) {
-            this.groep.addLeiding(this);
-        }
+        this.nieuwsbericht = leiding.nieuwsberichten;
+        this.wachtwoord = leiding.wachtwoord;
+        this.groepId = leiding.groepId;
     }
 
-    public getId(): number | undefined {
+    public getId(): number {
         return this.id;
     }
 
@@ -54,16 +63,24 @@ export class Leiding{
         return this.telefoon;
     }
 
-    public getHoofdleiding(): boolean {
-        return this.hoofdleiding;
+    public getRol(): Rol {
+        return this.rol;
     }
 
     public getTotem(): string {
         return this.totem;
     }
 
-    public getGroep(): Groep | undefined {
-        return this.groep;
+    public getNieuwsberichten(): Nieuwsbericht[] {
+        return this.nieuwsbericht ?? [];
+    }
+
+    public getWachtwoord(): string {
+        return this.wachtwoord;
+    }
+
+    public getGroepId(): number {
+        return this.groepId;
     }
 
     public setNaam(naam: string): void {
@@ -82,16 +99,72 @@ export class Leiding{
         this.telefoon = telefoon;
     }
 
-    public setHoofdleiding(hoofdleiding: boolean): void {
-        this.hoofdleiding = hoofdleiding;
+    public setRol(rol: Rol): void {
+        this.rol = rol;
     }
 
     public setTotem(totem: string): void {
         this.totem = totem;
     }
 
-    public setGroep(groep: Groep): void {
-        this.groep = groep;
+    public addNieuwsbericht(nieuwsbericht: Nieuwsbericht): void {
+        this.nieuwsbericht?.push(nieuwsbericht);
+    }
+
+    public removeNieuwsbericht(nieuwsbericht: Nieuwsbericht): void {
+        this.nieuwsbericht = this.nieuwsbericht?.filter(n => n.equals(nieuwsbericht));
+    }
+
+    static from({
+        id,
+        naam,
+        voornaam,
+        email,
+        telefoon,
+        rol,
+        totem,
+        nieuwsberichten,
+        wachtwoord,
+        groepId
+    }: LeidingPrisma  & {
+        nieuwsberichten: NieuwsberichtPrisma[];
+    }): Leiding {
+        return new Leiding({
+            id,
+            naam,
+            voornaam,
+            email,
+            telefoon,
+            rol: rol as Rol,
+            totem,
+            nieuwsberichten: nieuwsberichten.map((nieuwsbericht) => Nieuwsbericht.from({ ...nieuwsbericht, auteurId: nieuwsbericht.leidingId })),
+            wachtwoord,
+            groepId
+        });
+    }
+
+    public toPlainObject(): {
+        id: number;
+        naam: string;
+        voornaam: string;
+        email: string;
+        wachtwoord: string;
+        telefoon: string;
+        rol: string;
+        totem: string;
+        groepId: number;
+    } {
+        return {
+            id: this.id,
+            naam: this.naam,
+            voornaam: this.voornaam,
+            email: this.email,
+            wachtwoord: this.wachtwoord,
+            telefoon: this.telefoon,
+            rol: this.rol,
+            totem: this.totem,
+            groepId: this.groepId
+        };
     }
 
     equals(leiding: any): boolean {
@@ -104,10 +177,58 @@ export class Leiding{
             this.voornaam === leiding.getVoornaam() && 
             this.email === leiding.getEmail() && 
             this.telefoon === leiding.getTelefoon() && 
-            this.hoofdleiding === leiding.getHoofdleiding() &&
+            this.rol === leiding.getRol() &&
             this.totem === leiding.getTotem() 
         } else {
             return false;
         }
+    }
+}
+
+export class PublicLeiding{
+    private id: number;
+    private naam: string;
+    private voornaam: string;
+    private email: string;
+    private telefoon: string;
+    private totem: string;
+    private rol: Rol;
+    private groepId: number;
+
+    constructor(leiding:{
+        id: number,
+        naam: string,
+        voornaam: string,
+        email: string,
+        telefoon: string,
+        totem: string,
+        rol: Rol,
+        groepId: number
+    }) {
+        this.id = leiding.id;
+        this.naam = leiding.naam;
+        this.voornaam = leiding.voornaam;
+        this.email = leiding.email;
+        this.telefoon = leiding.telefoon;
+        this.totem = leiding.totem;
+        this.rol = leiding.rol;
+        this.groepId = leiding.groepId;
+    }
+
+    static from({
+        leiding,
+    }: {
+        leiding: Leiding;
+    }): PublicLeiding {
+        return new PublicLeiding({
+            id: leiding.getId(),
+            naam: leiding.getNaam(),
+            voornaam: leiding.getVoornaam(),
+            email: leiding.getEmail(),
+            telefoon: leiding.getTelefoon(),
+            totem: leiding.getTotem(),
+            rol: leiding.getRol(),
+            groepId: leiding.getGroepId()
+        });
     }
 }

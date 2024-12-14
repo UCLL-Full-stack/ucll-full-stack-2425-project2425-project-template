@@ -1,63 +1,91 @@
 import { Activiteit } from "../model/activiteit";
-import { Groep } from "../model/groep";
+import database from "../util/database";
 
-const activiteiten = [
-    new Activiteit({
-        id: 1,
-        naam: 'Activiteit 1',
-        beschrijving: 'Dit is activiteit 1',
-        begindatum: new Date(),
-        einddatum: new Date()
-    }),
-    new Activiteit({
-        id: 2,
-        naam: 'Activiteit 2',
-        beschrijving: 'Dit is activiteit 2',
-        begindatum: new Date(),
-        einddatum: new Date()
-    }),
-    new Activiteit({
-        id: 3,
-        naam: 'Activiteit 3',
-        beschrijving: 'Dit is activiteit 3',
-        begindatum: new Date(),
-        einddatum: new Date()
-    }),
-    new Activiteit({
-        id: 4,
-        naam: 'Activiteit 4',
-        beschrijving: 'Dit is activiteit 4',
-        begindatum: new Date(),
-        einddatum: new Date()
-    })
-];
-
-const addActiviteitToPool = async (activiteit: Activiteit): Promise<Activiteit> => {
-    let i = 1;
-    let notFound = true;
-    while (notFound) {
-        const n = activiteiten.length;
-        let amount = 0;
-        for (let nActiviteit of activiteiten) {
-            if (nActiviteit.getId() !== i) {
-                amount++;
-            }
-        }
-        if (amount === n) {
-            notFound = false;
-            activiteit = new Activiteit({
-                id: i,
+const createActiviteit = async (activiteit: Activiteit): Promise<Activiteit> => {
+    try{
+        const activiteitPrisma = await database.activiteit.create({
+            data: {
                 naam: activiteit.getNaam(),
                 beschrijving: activiteit.getBeschrijving(),
-                begindatum: activiteit.getBegindatum(),
-                einddatum: activiteit.getEinddatum()
-            });
-        } else {
-            i++;
-        }
+                beginDatum: activiteit.getBegindatum(),
+                eindDatum: activiteit.getEinddatum()
+            }
+        });
+
+        return Activiteit.from({
+            ...activiteitPrisma,
+            begindatum: activiteitPrisma.beginDatum,
+            einddatum: activiteitPrisma.eindDatum
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while creating an activiteit');
     }
-    activiteiten.push(activiteit);
-    return activiteit;
 }
 
-export default {activiteiten, addActiviteitToPool};
+const getActiviteitById = async ({id}: {id: number}): Promise<Activiteit> => {
+    try{
+        const activiteitPrisma = await database.activiteit.findUnique({
+            where: {
+                id: id
+            }
+        });
+
+        if (!activiteitPrisma || !activiteitPrisma.naam || !activiteitPrisma.beschrijving) {
+            throw new Error('Invalid activiteit data');
+        }
+
+        return Activiteit.from({
+            id: activiteitPrisma.id,
+            naam: activiteitPrisma.naam,
+            beschrijving: activiteitPrisma.beschrijving,
+            begindatum: activiteitPrisma.beginDatum,
+            einddatum: activiteitPrisma.eindDatum
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while fetching an activiteit');
+    }
+}
+const veranderActiviteit = async (activiteit: Activiteit): Promise<Activiteit> => {
+    try{
+        const activiteitPrisma = await database.activiteit.update({
+            where: {
+                id: activiteit.getId()
+            },
+            data: {
+                naam: activiteit.getNaam(),
+                beschrijving: activiteit.getBeschrijving(),
+                beginDatum: activiteit.getBegindatum(),
+                eindDatum: activiteit.getEinddatum()
+            }
+        });
+
+        return Activiteit.from({
+            ...activiteitPrisma,
+            begindatum: activiteitPrisma.beginDatum,
+            einddatum: activiteitPrisma.eindDatum
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while updating an activiteit');
+    }
+}
+
+const verwijderActiviteit = async (activiteit: Activiteit): Promise<String> => {
+    try{
+        const activiteitPrisma = await database.activiteit.delete({
+            where: {
+                id: activiteit.getId()
+            }
+        });
+
+        return "Activiteit succesvol verwijderd";
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while deleting an activiteit');
+        return "Activiteit niet verwijderd";
+    }
+}
+
+export default {createActiviteit, getActiviteitById, veranderActiviteit, verwijderActiviteit};
