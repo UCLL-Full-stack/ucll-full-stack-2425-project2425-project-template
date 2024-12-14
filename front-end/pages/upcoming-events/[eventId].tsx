@@ -5,15 +5,18 @@ import TicketService from "@services/TicketService";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { EventInput } from "types";
+import { EventInput, InviteInput } from "types";
 import styles from '@styles/home.module.css';
+import InviteService from "@services/InviteService";
+import InviteOverview from "@components/invites/InviteOverview";
 
 const RenderEventDetailsById: React.FC = () => {
 
     const [event, setEvent] = useState<EventInput>();
     const [showForm, setShowForm] = useState(false);
-    const [showAddButton, setShowAddButton] = useState(true);
+    const [showInviteButton, setShowInviteButton] = useState(false);
     const [email, setEmail] = useState("");
+    const [invites, setInvites] = useState<InviteInput[]>();
 
     // Show error message
     const [showError, setShowError] = useState(false);
@@ -37,14 +40,18 @@ const RenderEventDetailsById: React.FC = () => {
 
         // Only user exists people can see the participant list
         if ((user && user.role === 'PARTICIPANT') || !user) {
-            setShowAddButton(false);
             setShowParticipantList(false);
+        }
+
+        if (user && (user.role === 'ADMIN' || user.role === 'ORGANIZER')) {
+            setShowInviteButton(true);
         }
     }, []);
 
     useEffect(() => {
         if (eventId) {
             getEventById();
+            getInvitesByEventId(eventId as string);
         }
     }, [eventId]);
 
@@ -84,10 +91,24 @@ const RenderEventDetailsById: React.FC = () => {
         }
     };
 
-    const handleAddParticipant = async () => {
-        setShowError(false);
-        setShowForm(true);
-        setShowAddButton(false);
+    const createInvite = async (email: string, eventId: string) => {
+        try {
+            const response = await InviteService.createInvite(email, eventId);
+            const invite = await response.json();
+
+            getInvitesByEventId(eventId);
+
+        } catch (error) {
+
+            setErrorMessage(error.message);
+            setShowError(true);
+        }
+    };
+
+    const getInvitesByEventId = async (eventId: string) => {
+        const responseAll = await InviteService.getInvitesByEventId(eventId);
+        const invites = await responseAll.json();
+        setInvites(invites);
     };
 
     return (
@@ -112,9 +133,44 @@ const RenderEventDetailsById: React.FC = () => {
                 {showError && (
                     <p className={styles.errorMessage}>{errorMessage}</p>
                 )}
-
                 {showStatus && (
                     <p className={styles.statusMessage}>{statusMessage}</p>
+                )}
+
+                {showInviteButton && (
+                    <>
+                        <div className={styles.inviteComponent}>
+                            <h3>Invite Overview</h3>
+                            {invites && invites.length > 0 ? (
+                                <InviteOverview invites={invites} showEventName={false} showUserName={true} />
+                            ) : (
+                                <p>No invites yet...</p>
+                            )}
+                            <form className={styles.inviteForm}>
+                                <label
+                                    htmlFor="email"
+                                >
+                                    Invite a user to this event
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        // Implement the invite functionality
+                                        createInvite(email, eventId as string);
+                                    }}
+                                    type="submit"
+                                    className="px-4 py-2 bg-grey-500 rounded"
+                                >Invite</button>
+                            </form>
+                        </div>
+                    </>
                 )}
             </main>
         </>

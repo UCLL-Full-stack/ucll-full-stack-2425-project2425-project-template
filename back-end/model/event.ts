@@ -17,7 +17,6 @@ export class Event {
     private category: string;
     private backgroundImage?: string;
     private isTrending: boolean;
-    // private tickets: Ticket[];
 
     constructor(event: {
         id?: number,
@@ -28,7 +27,6 @@ export class Event {
         category: string;
         backgroundImage?: string;
         isTrending: boolean;
-        // tickets?: Ticket[];
     }) {
         // Validate the date
         if (isNaN(event.date.getTime())) {
@@ -118,10 +116,7 @@ export class Event {
         category,
         backgroundImage,
         isTrending,
-        // tickets,
-    }: EventPrisma & {
-        // tickets: TicketPrisma[];
-    }) {
+    }: EventPrisma) {
         return new Event({
             id,
             name,
@@ -131,7 +126,6 @@ export class Event {
             category,
             backgroundImage,
             isTrending,
-            // tickets: tickets.map((ticket) => Ticket.from(ticket)),
         });
     }
 

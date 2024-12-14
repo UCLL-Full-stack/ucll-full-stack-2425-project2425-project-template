@@ -10,6 +10,7 @@ import { userRouter } from './controller/user.routes';
 import { ticketRouter } from './controller/ticket.routes';
 import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
+import { inviteRouter } from './controller/invite.routes';
 
 
 const app = express();
@@ -73,6 +74,7 @@ app.get('/status', (req: Request, res: Response) => {
 app.use('/events', eventRouter);
 app.use('/users', userRouter);
 app.use('/tickets', ticketRouter);
+app.use('/invites', inviteRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {

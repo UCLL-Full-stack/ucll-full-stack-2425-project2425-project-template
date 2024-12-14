@@ -54,16 +54,29 @@ const EventDetails: React.FC<Props> = ({ event, showParticipantList, addSelfToEv
     return (
         <>
             <div>
-                <h2>{event.name}</h2>
-                <p><img src="/icons/description.png" alt="Description icon" width="20px" height="20px" /> {event.description}</p>
-                <p><img src="/icons/calendar.png" alt="Calendar icon" width="20px" height="20px" /> {new Date(event.date).toLocaleDateString()}</p>
-                <p><img src="/icons/location.png" alt="Location icon" width="20px" height="20px" /> {event.location}</p>
-                <p><img src="/icons/category.png" alt="Category icon" width="20px" height="20px" /> {event.category}</p>
-
+                <div className={styles.eventDescription}>
+                    <h2>{event.name}</h2>
+                    <div>
+                        <img src="/icons/description.png" alt="Description icon" width="20px" height="20px" />
+                        <p>{event.description}</p>
+                    </div>
+                    <div>
+                        <img src="/icons/calendar.png" alt="Calendar icon" width="20px" height="20px" />
+                        <p>{new Date(event.date).toLocaleDateString()}</p>
+                    </div>
+                    <div>
+                        <img src="/icons/location.png" alt="Location icon" width="20px" height="20px" />
+                        <p>{event.location}</p>
+                    </div>
+                    <div>
+                        <img src="/icons/category.png" alt="Category icon" width="20px" height="20px" />
+                        <p>{event.category}</p>
+                    </div>
+                </div>
                 {showTickets ? (
                     tickets.length !== 0 ? (
                         <div className={styles.eventDetailTickets}>
-                            <h3>Available tickets:</h3>
+                            <h3>Available tickets</h3>
                             {tickets.map((ticket, index) => (
                                 <div key={index}>
                                     <button
@@ -75,7 +88,7 @@ const EventDetails: React.FC<Props> = ({ event, showParticipantList, addSelfToEv
                             ))}
                         </div>) : (
                         <p className="px-4 py-2 bg-black rounded mb-1 mt-3 text-white text-center">
-                            Sorry... Tickets for this events have been sold out.
+                            Sorry... Tickets for this event have been sold out.
                         </p>
                     )
                 ) : (

@@ -1,5 +1,6 @@
 type Role = 'ADMIN' | 'PARTICIPANT' | 'ORGANIZER';
 type TicketType = 'VIP' | 'REGULAR' | 'STUDENT' | 'FREE';
+type InviteStatus = 'PENDING' | 'CONFIRMED' | 'DECLINED';
 
 type UserInput = {
     id?: number,
@@ -24,8 +25,9 @@ type EventInput = {
 
 type InviteInput = {
     id?: number,
-    status: 'pending' | 'confirmed' | 'declined',
-    email: string,
+    status: InviteStatus,
+    user: UserInput,
+    event: EventInput,
 };
 
 type TicketInput = {
@@ -47,6 +49,7 @@ type AuthenticationResponse = {
 export {
     Role,
     TicketType,
+    InviteStatus,
     EventInput,
     UserInput,
     InviteInput,

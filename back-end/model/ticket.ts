@@ -15,8 +15,8 @@ export class Ticket {
     readonly event: Event;
 
     constructor(ticket: {
-        id?: number,
-        type: TicketType,
+        id?: number;
+        type: TicketType;
         cost: number;
         user: User | null;
         event: Event;
