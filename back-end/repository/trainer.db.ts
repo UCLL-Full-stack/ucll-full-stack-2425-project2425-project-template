@@ -3,8 +3,9 @@ import {Trainer} from '../model/trainer';
 import {Pokemon} from '../model/pokemon';
 import {Badge} from '../model/badge';
 import { GymBattle } from '../model/gymBattle';
+import database from '../util/database';
 
-const pokemonRed = [
+/*const pokemonRed = [
     new Pokemon({
         id:1,
         name:"pikachu",
@@ -93,17 +94,114 @@ const trainers = [
         gymBattles: [],
     })
 ];
+*/
+const getAllTrainers = async (): Promise<Trainer[]> => {
+    const TrainerPrisma = await database.trainer.findMany({
+        include: {
+            user: true,
+            pokemon: { include: { stats: true } }, 
+            gymBattles: true, 
+            badges: true,
+        },
+    });
 
-const getAllTrainers = (): Trainer[] =>trainers;
+    return TrainerPrisma.map((trainerPrisma) => {
+        return Trainer.from({
+            ...trainerPrisma,
+            badge: trainerPrisma.badges, 
+            gymBattle: trainerPrisma.gymBattles, 
+        });
+    });
+};
+const getTrainerById = async (id: number): Promise<Trainer | null> => {
+    const trainerPrisma = await database.trainer.findUnique({
+        where: { id },
+        include: {
+            user: true, 
+            pokemon: { include: { stats: true } }, 
+            badges: true, 
+            gymBattles: true, 
+        },
+    });
 
-const getTrainerById = ({id}: {id:number}): Trainer | null =>{
-    return trainers.find((trainer) => trainer.getId() ===id) || null;
+    if (!trainerPrisma) {
+        return null;
+    }
+
+    return Trainer.from({
+        ...trainerPrisma,
+        badge: trainerPrisma.badges,
+        gymBattle: trainerPrisma.gymBattles,
+    });
 };
 
-const addPokemonToTrainerById = ({id, pokemon}: {id:number, pokemon:Pokemon}): Trainer | null => {
-    trainers.find((trainer) => trainer.getId() ===id)?.addPokemon(pokemon);
-    return trainers.find((trainer) => trainer.getId() ===id) || null;
-}
+const addPokemonToTrainerById = async ({ id, pokemon }: { id: number, pokemon: Pokemon }): Promise<Trainer | null> => {
+    // First, ensure that the trainer exists in the database
+    const trainerPrisma = await database.trainer.findUnique({
+        where: { id },
+        include: {
+            pokemon: true, // Include current Pokémon
+        },
+    });
+
+    if (!trainerPrisma) {
+        throw new Error(`Trainer with id ${id} does not exist.`);
+    }
+
+    // Create the new Pokemon in the database
+    const newPokemon = await database.pokemon.create({
+        data: {
+            name: pokemon.getName(),
+            type: pokemon.getType(),
+            health: pokemon.getHealth(),
+            canEvolve: pokemon.getCanEvolve(),
+            stats: {
+                create: {
+                    hp: pokemon.getStats().hp,
+                    attack: pokemon.getStats().attack,
+                    defence: pokemon.getStats().defence,
+                    specialAttack: pokemon.getStats().specialAttack,
+                    specialDefence: pokemon.getStats().specialDefence,
+                    speed: pokemon.getStats().speed,
+                },
+            },
+            trainer: {
+                connect: { id }, // Associate this Pokemon with the trainer
+            },
+        },
+        include: { stats: true }, // Include stats when returning the new Pokemon
+    });
+
+    // After adding the Pokemon, retrieve the updated trainer with the new Pokemon
+    const updatedTrainer = await database.trainer.findUnique({
+        where: { id },
+        include: {
+            user: true,
+            pokemon: { include: { stats: true } },
+            gymBattles: true,
+            badges: true,
+        },
+    });
+
+    // Return the updated trainer by using the correct shape expected by Trainer.from()
+    if (!updatedTrainer) {
+        return null;
+    }
+
+    // Ensure we provide the correct shape to `Trainer.from`
+    const trainerData = {
+        id: updatedTrainer.id,
+        userId: updatedTrainer.userId, // Ensure userId is included
+        user: updatedTrainer.user,
+        pokemon: updatedTrainer.pokemon,
+        badge: updatedTrainer.badges,
+        gymBattle: updatedTrainer.gymBattles,
+    };
+
+    return Trainer.from(trainerData); // Pass correctly shaped data to `Trainer.from()`
+};
+
+
 
 export default {
     getAllTrainers,

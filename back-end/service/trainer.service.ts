@@ -3,27 +3,28 @@ import { Trainer } from "../model/trainer";
 import trainerDb from "../repository/trainer.db";
 import { Pokemon } from "../model/pokemon";
 
-const getAllTrainers = (): Trainer[] => trainerDb.getAllTrainers();
 
-const getTrainerById = (id: number): Trainer => {
-    const trainer = trainerDb.getTrainerById({id});
-    if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);
-    return trainer
-}; 
+const getAllTrainers = async (): Promise<Trainer[]> => trainerDb.getAllTrainers();
 
-const getTrainerWithPokemon = (id: number): Trainer | null => {
-    const trainer = trainerDb.getTrainerById({ id });
+const getTrainerById = async (id: number): Promise<Trainer> => {
+    const trainer = await trainerDb.getTrainerById(id);  // Pass `id` directly, not an object
     if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);
     return trainer;
 };
 
-const addPokemonToTrainerById = (id:number,{
+const getTrainerWithPokemon = async (id: number): Promise<Trainer | null> => {
+    const trainer = await trainerDb.getTrainerById(id);
+    if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);
+    return trainer;
+};
+
+const addPokemonToTrainerById = async (id:number,{
     name,
     type,
     stats,
     health,
     canEvolve
-}:PokemonInput): Trainer | null => {
+}:PokemonInput): Promise<Trainer | null> => {
     if (name=='') throw new Error('name is required.');
     if (type=='') throw new Error('type is required.')
     if (health <0) throw new Error('health cannot be negative.');
