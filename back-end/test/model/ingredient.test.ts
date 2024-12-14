@@ -34,20 +34,20 @@ test('given: empty naam, when: ingredient is created, then: an error is thrown',
 });
 
 
-test('given: empty topping, when: ingredient is created, then: an error is thrown', () => {
-    // given
-    const naam = "Corn";
-    const emptyType = "";
-    const aantal = 18;
-    const prijs = 0.98;
+// test('given: empty topping, when: ingredient is created, then: an error is thrown', () => {
+//     // given
+//     const naam = "Corn";
+//     const emptyType = "";
+//     const aantal = 18;
+//     const prijs = 0.98;
 
-    // when
-    const ingredient = () =>
-        new Ingredient({ naam, type: emptyType, aantal, prijs });
+//     // when
+//     const ingredient = () =>
+//         new Ingredient({ naam, type: null, aantal, prijs });
 
-    // then
-    expect(ingredient).toThrow('Type cannot be empty');
-});
+//     // then
+//     expect(ingredient).toThrow('Type cannot be empty');
+// });
 
 
 

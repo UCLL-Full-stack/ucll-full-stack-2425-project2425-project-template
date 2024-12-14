@@ -34,10 +34,17 @@ const getBestellingentById = async (id: string) => {
 }
 
 const createBestelling = async (bestelling: Bestelling) => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/bestellingen", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(bestelling),
     })

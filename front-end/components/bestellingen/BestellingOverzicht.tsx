@@ -7,7 +7,7 @@ type Props = {
 }
 const BestellingenOverzicht: React.FC<Props> = ({ bestellingen, selectBestelling }: Props) => {
     const router = useRouter();
-
+    console.log(bestellingen);
     return (
         <>
             {bestellingen && (
@@ -24,7 +24,7 @@ const BestellingenOverzicht: React.FC<Props> = ({ bestellingen, selectBestelling
                             <tr key={index} onClick={() => { router.push(`/bestellingen/${bestelling.id}`); selectBestelling(bestelling) }} role="button">
                                 <td>#{bestelling.id}</td>
                                 <td>{bestelling.user.voornaam + " " + bestelling.user.naam}</td>
-                                <td>{bestelling.datum ? bestelling.datum.toLocaleString() : null}</td>
+                                <td>{bestelling.datum ? new Date(bestelling.datum).toLocaleDateString('nl-BE', { day: "numeric", month: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }) : 'null'}</td>
                             </tr>
                         ))
                         }

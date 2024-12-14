@@ -1,11 +1,14 @@
 import { Type } from "@prisma/client";
 import { Ingredient } from "../model/ingredient";
-import database from "./database";
+import database from "../util/database";
 
 
 const getAllIngredienten = async (): Promise<Ingredient[]> => {
     try {
         const ingredientenPrisma = await database.ingredient.findMany({
+            orderBy: {
+                id: 'asc'
+            }
         });
         return ingredientenPrisma.map((ingredientPrisma) => Ingredient.from(ingredientPrisma));
     } catch (err) {
@@ -22,7 +25,8 @@ const addIngredient = async (ingredient: Ingredient): Promise<Ingredient> => {
                 naam: ingredient.getNaam(),
                 type: ingredient.getType() as Type,
                 aantal: ingredient.getAantal(),
-                prijs: ingredient.getPrijs()
+                prijs: ingredient.getPrijs(),
+                ingredientLimit: ingredient.getIngredientLimit() ?? 0
             }
         });
         return Ingredient.from(ingredientenPrisma);
@@ -31,6 +35,27 @@ const addIngredient = async (ingredient: Ingredient): Promise<Ingredient> => {
         throw new Error('Database error. See server logs for details.')
     }
 };
+
+const updateIngredient = async (id: number, ingredient: Ingredient): Promise<Ingredient> => {
+    try {
+        const ingredientenPrisma = await database.ingredient.update({
+            where: {
+                id: id
+            },
+            data: {
+                naam: ingredient.getNaam(),
+                type: ingredient.getType() as Type,
+                aantal: ingredient.getAantal(),
+                prijs: ingredient.getPrijs(),
+                ingredientLimit: ingredient.getIngredientLimit() ?? 0
+            }
+        });
+        return Ingredient.from(ingredientenPrisma);
+    } catch (err) {
+        console.error(err);
+        throw new Error('Database error. See server logs for details.')
+    }
+}
 
 const getIngredientById = async ({ id }: { id: number }): Promise<Ingredient | null> => {
     try {
@@ -70,5 +95,6 @@ export default {
     getAllIngredienten,
     addIngredient,
     getIngredientById,
-    getIngredientByNaam
+    getIngredientByNaam,
+    updateIngredient
 }

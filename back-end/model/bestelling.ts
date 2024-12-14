@@ -11,13 +11,13 @@ export class Bestelling {
     static from({
         id,
         user,
-        //datum,
+        datum,
         pokebowls
     }: BestellingPrisma & { user: UserPrisma, pokebowls: PokebowlPrisma[] }) {
         return new Bestelling({
             id,
             user: User.from(user),
-            //datum,
+            datum,
             pokebowls: pokebowls.map((pokebowl) => Pokebowl.from(pokebowl))
         });
     }
@@ -25,19 +25,19 @@ export class Bestelling {
 
     private id?: number;
     private user: User;
-    //private datum: Date;
+    private datum: Date;
     private totaalPrijs: number = 0;
     private pokebowls: Pokebowl[];
 
     constructor(bestelling: {
         id?: number;
         user: User;
-        //datum: Date;
+        datum: Date;
         pokebowls: Pokebowl[];
     }) {
         this.id = bestelling.id;
         this.user = bestelling.user;
-        //this.datum = bestelling.datum;
+        this.datum = bestelling.datum;
         this.pokebowls = bestelling.pokebowls;
         this.calculateTotaalPrijs();
     }
@@ -53,9 +53,9 @@ export class Bestelling {
         return this.user;
     }
 
-    // getDatum(): Date {
-    //     return this.datum;
-    // }
+    getDatum(): Date {
+        return this.datum;
+    }
 
     getTotaalPrijs(): number {
         return this.totaalPrijs;

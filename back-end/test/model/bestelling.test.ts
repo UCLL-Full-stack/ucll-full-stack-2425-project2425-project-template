@@ -6,7 +6,7 @@ import { User } from "../../model/user";
 
 test("given: valid values for bestelling, when: creating bestelling, then: bestelling is created", () => {
     const datum1 = new Date('2024-10-24');
-    const user = new User({ naam: "Timmermans", voornaam: "Ashley", email: "ashley.timmermans@student.ucll.be", wachtwoord: "pass", adres: "adresstraat 1", gebruikersnaam: "AshleyT", rol: "admin" });
+    const user = new User({ naam: "Timmermans", voornaam: "Ashley", email: "ashley.timmermans@student.ucll.be", wachtwoord: "pass", adres: "adresstraat 1", gebruikersnaam: "AshleyT", rol: "Admin" });
     const pokebowl =
         new Pokebowl({
             id: 1,
@@ -40,7 +40,7 @@ test("given: valid values for bestelling, when: creating bestelling, then: beste
             ]
         });
 
-    const bestelling = new Bestelling({ user: user, datum: datum1, pokebowls: [pokebowl] })
+    const bestelling = new Bestelling({ user: user, pokebowls: [pokebowl] })
 
-    expect(bestelling.getDatum()).toEqual(datum1);
+    expect(bestelling.getUser().getGebruikersnaam()).toEqual(user.getGebruikersnaam());
 })

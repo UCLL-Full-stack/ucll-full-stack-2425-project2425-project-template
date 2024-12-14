@@ -4,7 +4,7 @@ import PokebowlService from "@/services/PokebowlService";
 import { Pokebowl } from "@/types";
 import Head from "next/head";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
 

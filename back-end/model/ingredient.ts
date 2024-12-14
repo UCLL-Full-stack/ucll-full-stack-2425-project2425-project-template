@@ -7,14 +7,16 @@ export class Ingredient {
         naam,
         type,
         aantal,
-        prijs
+        prijs,
+        ingredientLimit
     }: IngredientPrisma): Ingredient {
         return new Ingredient({
             id,
             naam,
             type,
             aantal,
-            prijs
+            prijs,
+            ingredientLimit
         });
     }
 
@@ -24,7 +26,7 @@ export class Ingredient {
     private type: Type;
     private aantal: number;
     private prijs: number;
-    private ingredientLimit: number = 0;
+    private ingredientLimit: number;
 
     constructor(ingredient: {
         id?: number;
@@ -32,6 +34,7 @@ export class Ingredient {
         type: Type;
         aantal: number;
         prijs: number;
+        ingredientLimit?: number;
     }) {
         this.validate(ingredient);
 
@@ -40,18 +43,19 @@ export class Ingredient {
         this.type = ingredient.type;
         this.aantal = ingredient.aantal;
         this.prijs = ingredient.prijs;
-        this.basicIngredientLimit();
+        //this.basicIngredientLimit();
+        this.ingredientLimit = ingredient.ingredientLimit ?? 5;
     }
-    validate(ingredient: { naam: string, type: Type, aantal: number, prijs: number }) {
+    validate(ingredient: { naam: string, type: Type, aantal: number, prijs: number, ingredientLimit?: number }) {
         if (!ingredient.naam) {
             throw new Error("Naam cannot be empty");
         }
         if (!ingredient.type) {
             throw new Error("Type cannot be empty");
         }
-        // if (!ingredient.aantal) {
-        //     throw new Error("Aantal cannot be empty");
-        // }
+        if (!ingredient.aantal) {
+            throw new Error("Aantal cannot be empty");
+        }
         if (!ingredient.prijs) {
             throw new Error("Prijs cannot be empty");
         }
@@ -61,6 +65,12 @@ export class Ingredient {
         if (ingredient.prijs < 0) {
             throw new Error("Prijs must be a positive number");
         }
+        if (ingredient.ingredientLimit) {
+            if (ingredient.ingredientLimit > 15 || ingredient.ingredientLimit < 5) {
+                throw new Error("Choose a number between 5 and 15");
+            }
+        }
+
     }
 
     getId(): number | undefined {
@@ -86,22 +96,24 @@ export class Ingredient {
     getPrijs(): number {
         return this.prijs;
     }
-
-    setIngredientLimit(limit: number) {
-        this.ingredientLimit = limit;
-    }
-
-    getIngredientLimit() {
+    getIngredientLimit(): number | undefined {
         return this.ingredientLimit;
     }
 
-    basicIngredientLimit() {
-        if (this.type === "Protein") {
-            this.setIngredientLimit(2);
-        } else if (this.type === "Sauce") {
-            this.setIngredientLimit(1);
-        } else {
-            this.setIngredientLimit(5);
-        }
+    setIngredientLimit(limit: number) {
+
+        this.ingredientLimit = limit;
     }
+
+
+
+    // basicIngredientLimit() {
+    //     if (this.type === "Protein") {
+    //         this.setIngredientLimit(2);
+    //     } else if (this.type === "Sauce") {
+    //         this.setIngredientLimit(1);
+    //     } else {
+    //         this.setIngredientLimit(5);
+    //     }
+    // }
 }

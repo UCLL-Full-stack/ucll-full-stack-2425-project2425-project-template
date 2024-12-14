@@ -4,13 +4,14 @@ import { Pokebowl } from "../model/pokebowl";
 import { User } from "../model/user";
 import bestellingDb from "../repository/bestelling.db";
 import { BestellingInput, PokebowlInput } from "../types";
-import userService from "./user.service";
+
 
 const createBestelling = async ({ user, pokebowls }: BestellingInput): Promise<Bestelling> => {
     const newUser = new User({ id: user.id, naam: user.naam, voornaam: user.voornaam, email: user.email, wachtwoord: user.wachtwoord, adres: user.adres, gebruikersnaam: user.gebruikersnaam, rol: user.rol })
     console.log(newUser);
     const bestelling = new Bestelling({
         user: newUser,
+        datum: new Date(),
         pokebowls: []
     });
 

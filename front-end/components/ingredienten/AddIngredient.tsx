@@ -51,7 +51,7 @@ const AddIngredient: React.FC = () => {
         }
 
         const response = await IngredientenService.addIngredient({ naam: naam, type: type as Type, aantal: parseInt(aantal), prijs: parseFloat(prijs) });
-        const result = response.json();
+        const result = await response.json();
 
         if (response.status === 200) {
             setStatusMessages([{ message: `Ingredient ${naam} is aangemaakt`, type: "success" }]);
@@ -59,7 +59,7 @@ const AddIngredient: React.FC = () => {
                 router.push("/ingredienten");
             }, 2000);
         } else {
-            setStatusMessages([{ message: "Error", type: "error" }])
+            setStatusMessages([{ message: result.message, type: "error" }])
         }
 
 

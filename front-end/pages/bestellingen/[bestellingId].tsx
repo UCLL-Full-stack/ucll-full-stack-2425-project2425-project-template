@@ -5,23 +5,26 @@ import { Bestelling } from '@/types';
 import Header from '@/components/header';
 import BestellingService from '@/services/BestellingService';
 import BestellingInfo from '@/components/bestellingen/BestellingInfo';
+import useSWR from 'swr';
 
 const BestellingId = () => {
-    const [bestelling, setBestelling] = useState<Bestelling | null>(null);
     const router = useRouter();
     const { bestellingId } = router.query;
 
     const getBestellingById = async () => {
-        const response = await BestellingService.getBestellingentById(bestellingId as string);
-        const result = await response.json();
-        setBestelling(result);
+        const responses = await Promise.all([BestellingService.getBestellingentById(bestellingId as string)]);
+        const [bestellingResponses] = responses;
+
+        if (bestellingResponses.ok) {
+            const bestelling = await bestellingResponses.json();
+            return { bestelling }
+        }
     }
 
-    useEffect(() => {
-        if (bestellingId) {
-            getBestellingById();
-        }
-    }, [bestellingId]);
+    const { data, isLoading, error } = useSWR(
+        "bestellingen",
+        getBestellingById
+    );
 
     return (
         <>
@@ -30,10 +33,11 @@ const BestellingId = () => {
             </Head>
             <Header />
             <main>
-                <h1>Bestelling nummber: #{bestelling && bestelling.id}</h1>
+                <h1>Bestelling</h1>
                 <section>
-                    {!bestellingId && <p>Loading pokebowl info...</p>}
-                    {bestellingId && <BestellingInfo bestelling={bestelling} />}
+                    {error && <p className="error-field">{error}</p>}
+                    {!isLoading && <p>Loading bestelling info...</p>}
+                    {bestellingId && <BestellingInfo bestelling={data?.bestelling} />}
                 </section>
             </main>
         </>

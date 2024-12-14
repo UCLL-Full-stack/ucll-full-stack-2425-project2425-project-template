@@ -6,7 +6,8 @@ export type Ingredient = {
     naam: string,
     type: Type,
     aantal: number,
-    prijs: number
+    prijs: number,
+    ingredientLimit?: number
 }
 
 export type Pokebowl = {

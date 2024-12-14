@@ -11,6 +11,7 @@ type Props = {
 
 
 const BestellingAanmaken: React.FC<Props> = ({ user: user, pokebowls: pokebowls }: Props) => {
+    let [standardPrijs, setStandardPrijs] = useState<number>(0);
     const [totaalPrijs, setTotaalPrijs] = useState<number>();
     const [selectedPokebowls, setSelectedPokebowls] = useState<Array<Pokebowl>>([]);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
@@ -28,7 +29,6 @@ const BestellingAanmaken: React.FC<Props> = ({ user: user, pokebowls: pokebowls 
 
     const handlePokebowls = (event: any) => {
         console.log(user.id);
-
         const selectedPokebowl = parseInt(event.target.value);
         const pokebowl = pokebowls.find(pokebowl => pokebowl.id === selectedPokebowl);
 
@@ -38,18 +38,9 @@ const BestellingAanmaken: React.FC<Props> = ({ user: user, pokebowls: pokebowls 
 
         const getAllPokebowls = [...selectedPokebowls, pokebowl];
         setSelectedPokebowls(getAllPokebowls);
-        calculatePrice();
+        setTotaalPrijs(standardPrijs += pokebowl.prijs || 0);
+        setStandardPrijs(standardPrijs += pokebowl.prijs || 0);
         console.log(getAllPokebowls);
-    }
-
-    const calculatePrice = () => {
-        let prijs = 0;
-        selectedPokebowls.forEach(pokebowl => {
-            if (pokebowl.prijs != undefined) {
-                prijs += pokebowl.prijs
-            }
-        });
-        setTotaalPrijs(prijs);
     }
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -61,7 +52,7 @@ const BestellingAanmaken: React.FC<Props> = ({ user: user, pokebowls: pokebowls 
         }
 
         const response = await BestellingService.createBestelling({ user: user, pokebowls: selectedPokebowls });
-        const result = response.json();
+        const result = await response.json();
         console.log(result);
         console.log({ user: user, pokebowls: selectedPokebowls });
 
@@ -71,7 +62,7 @@ const BestellingAanmaken: React.FC<Props> = ({ user: user, pokebowls: pokebowls 
                 router.push("/bestellingen");
             }, 2000);
         } else {
-            setStatusMessages([{ message: "Error", type: "error" }])
+            setStatusMessages([{ message: result.message, type: "error" }])
         }
 
 

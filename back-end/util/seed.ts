@@ -91,7 +91,8 @@ const main = async () => {
             naam: "Salmon",
             type: "Protein",
             aantal: 180,
-            prijs: 2.30
+            prijs: 2.30,
+            ingredientLimit: 5
         }
     });
 
@@ -100,7 +101,8 @@ const main = async () => {
             naam: "Tuna",
             type: "Protein",
             aantal: 245,
-            prijs: 1.97
+            prijs: 1.97,
+            ingredientLimit: 5
         }
     });
 
@@ -109,7 +111,8 @@ const main = async () => {
             naam: "Tofu",
             type: "Protein",
             aantal: 82,
-            prijs: 2.24
+            prijs: 2.24,
+            ingredientLimit: 5
         }
     });
 
@@ -118,7 +121,8 @@ const main = async () => {
             naam: "Mango",
             type: "Topping",
             aantal: 476,
-            prijs: 0.85
+            prijs: 0.85,
+            ingredientLimit: 5
         }
     });
 
@@ -127,7 +131,8 @@ const main = async () => {
             naam: "Cucumber",
             type: "Topping",
             aantal: 621,
-            prijs: 0.43
+            prijs: 0.43,
+            ingredientLimit: 5
         }
     });
 
@@ -136,7 +141,8 @@ const main = async () => {
             naam: "Seaweed",
             type: "Topping",
             aantal: 179,
-            prijs: 0.77
+            prijs: 0.77,
+            ingredientLimit: 5
         }
     });
 
@@ -145,7 +151,8 @@ const main = async () => {
             naam: "Spicy Mayo",
             type: "Sauce",
             aantal: 56,
-            prijs: 0.21
+            prijs: 0.21,
+            ingredientLimit: 5
         }
     });
 
@@ -154,7 +161,8 @@ const main = async () => {
             naam: "Srirachia",
             type: "Sauce",
             aantal: 47,
-            prijs: 0.23
+            prijs: 0.23,
+            ingredientLimit: 5
         }
     });
 

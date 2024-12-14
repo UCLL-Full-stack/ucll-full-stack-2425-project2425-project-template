@@ -5,27 +5,39 @@ import UserService from "@/services/UserService";
 import { Pokebowl, User } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 const createNewBestelling: React.FC = () => {
-    const [pokebowls, setPokebowls] = useState<Array<Pokebowl>>([]);
-    const [user, setUser] = useState<User>();
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-    const getPokebowls = async () => {
-        const response = await PokebowlService.getAllPokebowls();
-        const pokebowls = await response.json();
-        setPokebowls(pokebowls);
+
+    const fetchUserWithBestellingen = async () => {
+        if (loggedInUser != undefined) {
+            const [userResponses, pokebowlResponses] = await Promise.all([
+                UserService.getUserById(loggedInUser.id as unknown as string),
+                PokebowlService.getAllPokebowls()
+            ]);
+
+            if (userResponses.ok && pokebowlResponses.ok) {
+                const [user, pokebowl] = await Promise.all([
+                    userResponses.json(),
+                    pokebowlResponses.json(),
+                ]);
+                return { user, pokebowl };
+            }
+        }
     }
 
-    const getUser = async (id: string) => {
-        const response = await UserService.getUserById(id);
-        const user = await response.json();
-        setUser(user);
-    }
+    const { data, isLoading, error } = useSWR("users", fetchUserWithBestellingen);
 
     useEffect(() => {
-        getPokebowls();
-        getUser("14");
+        const getUser = sessionStorage.getItem("loggedInUser")
+        if (getUser) {
+            const parsedUser = JSON.parse(getUser);
+            setLoggedInUser(parsedUser as User);
+        }
     }, []);
+
     return (
         <>
             <Head>
@@ -38,8 +50,10 @@ const createNewBestelling: React.FC = () => {
             <main>
                 <h1>Bestelling</h1>
                 <section>
-                    {user && pokebowls &&
-                        <BestellingAanmaken user={user} pokebowls={pokebowls} />
+                    {error && <p className="error-field">{error.message}</p>}
+                    {!isLoading && <p>Loading...</p>}
+                    {data?.user && data.pokebowl &&
+                        <BestellingAanmaken user={data.user} pokebowls={data.pokebowl} />
                     }
                 </section>
             </main>

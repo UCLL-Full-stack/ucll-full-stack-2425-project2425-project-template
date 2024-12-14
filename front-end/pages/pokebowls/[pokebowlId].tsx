@@ -5,23 +5,26 @@ import { Pokebowl } from '@/types';
 import PokebowlService from '@/services/PokebowlService';
 import Header from '@/components/header';
 import PokebowlInfo from '@/components/pokebowls/PokebowlInfo';
+import useSWR from 'swr';
 
 const PokebowlId = () => {
-    const [pokebowl, setPokebowl] = useState<Pokebowl | null>(null);
     const router = useRouter();
     const { pokebowlId } = router.query;
 
     const getPokebowlById = async () => {
-        const response = await PokebowlService.getPokebowlById(pokebowlId as string);
-        const result = await response.json();
-        setPokebowl(result);
+        const responses = await Promise.all([PokebowlService.getPokebowlById(pokebowlId as string)]);
+        const [pokebowlResponses] = responses;
+
+        if (pokebowlResponses.ok) {
+            const pokebowl = await pokebowlResponses.json();
+            return { pokebowl }
+        }
     }
 
-    useEffect(() => {
-        if (pokebowlId) {
-            getPokebowlById();
-        }
-    }, [pokebowlId]);
+    const { data, isLoading, error } = useSWR(
+        "pokebowls",
+        getPokebowlById
+    );
 
 
     return (
@@ -34,10 +37,11 @@ const PokebowlId = () => {
             </Head>
             <Header />
             <main>
-                <h1>Pokebowl: {pokebowl && pokebowl.naam}</h1>
+                <h1>Pokebowl</h1>
                 <section>
-                    {!pokebowlId && <p>Loading pokebowl info...</p>}
-                    {pokebowlId && <PokebowlInfo pokebowl={pokebowl} />}
+                    {error && <p className="error-field">{error}</p>}
+                    {!isLoading && <p>Loading pokebowl info...</p>}
+                    {data && <PokebowlInfo pokebowl={data.pokebowl} />}
                 </section>
             </main>
         </>

@@ -1,5 +1,5 @@
 import { Pokebowl } from "../model/pokebowl";
-import database from "./database";
+import database from "../util/database";
 
 const getAllPokebowls = async (): Promise<Pokebowl[]> => {
     try {
