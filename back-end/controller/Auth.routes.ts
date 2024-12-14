@@ -38,7 +38,8 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
  *               - password
  *           example:
  *             username: "admin"
- *             password: "adminpassword"
+ *             password: "Password1"
+ *             role: "admin"
  *     responses:
  *       200:
  *         description: Successful login
@@ -61,11 +62,8 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
 authRouter.post('/login', async (req: Request, res: Response) => {
   const { username, password, role } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and Password are required' });
-  }
-
   try {
+    await AuthService.validateLoginInput(username, password, role);
     let user = await AuthService.getUserByUsername(username);
 
     if (!user || !(await bcrypt.compare(password, user.getPassword()))) {

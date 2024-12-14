@@ -83,9 +83,6 @@ export class User {
         if (!user.username) {
             throw new Error('Username is required');
         }
-        if (!user.password) {
-            throw new Error('Password is required');
-        }
         if (!user.name) {
             throw new Error('Name is required');
         }
@@ -98,6 +95,10 @@ export class User {
         if (!user.permission) {
             throw new Error('Permission is required');
         }
+        if (!user.password) {
+            throw new Error('Password is required');
+        }
+        
     }
 
     equals({ id, username, password, name, surname, email, permission, createdAt, submissions }: { id?: number, username: string, password: string, name: string, surname: string, email: string, permission: Permission, createdAt: Date, submissions?: Submission[] }): boolean {

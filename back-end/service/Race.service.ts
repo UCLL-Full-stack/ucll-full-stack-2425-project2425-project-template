@@ -7,7 +7,7 @@ import driverDb from '../repository/Driver.db';
 import racecarDb from '../repository/Racecar.db';
 import crashDb from '../repository/Crash.db';
 import { RaceInput, CrashInput, ParticipantInput, DriverInput, RacecarInput } from '../types';
-import { Participant } from '../model/Participant';
+import { Participant } from '../model/participant';
 
 const getAllRaces = async (): Promise<Race[] | null> => {
     return raceDb.getAllRaces();

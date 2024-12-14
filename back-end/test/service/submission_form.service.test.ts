@@ -1,10 +1,10 @@
 import submissionService from '../../service/Submission.service';
-import submissionDb from '../../repository/Submission.db';
+import submissionDb from '../../repository/submission.db';
 import { Submission } from '../../model/Submission';
 import { User } from '../../model/User';
 import Permissions from '../../model/Permissions';
 
-jest.mock('../../repository/submission.db');
+jest.mock('../../repository/Submission.db');
 
 const submissionInput = {
     title: 'Race Application 1',
@@ -29,21 +29,27 @@ const userInput = {
 const user = new User(userInput);
 
 let createSubmissionMock: jest.Mock;
-let mockSubmissionDbGetAllSubmission: jest.Mock;
+let getAllSubmissionsMock: jest.Mock;
+let getSubmissionByIdMock: jest.Mock;
+let deleteSubmissionByIdMock: jest.Mock;
 
 beforeEach(() => {
     createSubmissionMock = jest.fn();
-    mockSubmissionDbGetAllSubmission = jest.fn();
+    getAllSubmissionsMock = jest.fn();
+    getSubmissionByIdMock = jest.fn();
+    deleteSubmissionByIdMock = jest.fn();
 
     submissionDb.createSubmission = createSubmissionMock;
-    submissionDb.getAllSubmissions = mockSubmissionDbGetAllSubmission;
+    submissionDb.getAllSubmissions = getAllSubmissionsMock;
+    submissionDb.getSubmissionById = getSubmissionByIdMock;
+    submissionDb.deleteSubmissionById = deleteSubmissionByIdMock;
 });
 
 afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('should create a submission form successfully', async () => {
+test('given valid submission input, when createSubmission is called, then submission is created successfully', async () => {
     // Given
     createSubmissionMock.mockReturnValue(new Submission(submissionInput));
 
@@ -67,10 +73,58 @@ test('should create a submission form successfully', async () => {
     }));
 });
 
-test('given missing title when creating submission, throw new error', async () => {
+test('given missing title when creating submission, then throw error', async () => {
     // Given
     const invalidSubmissionInput = { ...submissionInput, title: '' };
 
     // When / Then
     await expect(submissionService.createSubmission(invalidSubmissionInput)).rejects.toThrowError('Title is required');
+});
+
+test('given missing content when creating submission, then throw error', async () => {
+    // Given
+    const invalidSubmissionInput = { ...submissionInput, content: '' };
+
+    // When / Then
+    await expect(submissionService.createSubmission(invalidSubmissionInput)).rejects.toThrowError('Content is required');
+});
+
+test('given missing type when creating submission, then throw error', async () => {
+    // Given
+    const invalidSubmissionInput = { ...submissionInput, type: '' };
+
+    // When / Then
+    await expect(submissionService.createSubmission(invalidSubmissionInput)).rejects.toThrowError('Type is required');
+});
+
+test('given missing createdBy when creating submission, then throw error', async () => {
+    // Given
+    const invalidSubmissionInput = { ...submissionInput, createdBy: undefined };
+
+    // When / Then
+    await expect(submissionService.createSubmission(invalidSubmissionInput)).rejects.toThrowError('ID of user is required');
+});
+
+test('given valid submissions, when getAllSubmissions is called, then return all submissions', async () => {
+    // Given
+    const submissions = [new Submission(submissionInput)];
+    getAllSubmissionsMock.mockReturnValue(submissions);
+
+    // When
+    const result = await submissionService.getAllSubmissions();
+
+    // Then
+    expect(getAllSubmissionsMock).toHaveBeenCalledTimes(1);
+    expect(result).toEqual(submissions);
+});
+test('given valid submission ID, when deleteSubmission is called, then delete the submission', async () => {
+    // Given
+    const submissionId = 1;
+
+    // When
+    await submissionService.deleteSubmission(submissionId);
+
+    // Then
+    expect(deleteSubmissionByIdMock).toHaveBeenCalledTimes(1);
+    expect(deleteSubmissionByIdMock).toHaveBeenCalledWith({ submissionId });
 });

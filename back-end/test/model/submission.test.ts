@@ -22,7 +22,6 @@ test('given: valid values for SubmissionForm, when: SubmissionForm is created, t
     const createdBy = 1;
     const id = user.getId();
     
-
     // when
     const submissionForm = new Submission({ title, content, type, createdAt, createdBy, id });
 
@@ -32,4 +31,47 @@ test('given: valid values for SubmissionForm, when: SubmissionForm is created, t
     expect(submissionForm.getType()).toBe(type);
     expect(submissionForm.getCreatedAt()).toBe(createdAt);
     expect(submissionForm.getCreatedBy()).toBe(createdBy);
+    expect(submissionForm.getId()).toBe(id);
+});
+
+test('given: missing title, when: SubmissionForm is created, then: an error is thrown', () => {
+    // given
+    const submissionData = {
+        title: '',
+        content: 'This is a race application form.',
+        type: "TEST",
+        createdAt: new Date('2021-05-23'),
+        createdBy: 1,
+    };
+
+    // when / then
+    expect(() => new Submission(submissionData)).toThrowError('Title is required');
+});
+
+test('given: missing content, when: SubmissionForm is created, then: an error is thrown', () => {
+    // given
+    const submissionData = {
+        title: 'Race Application',
+        content: '',
+        type: "TEST",
+        createdAt: new Date('2021-05-23'),
+        createdBy: 1,
+    };
+
+    // when / then
+    expect(() => new Submission(submissionData)).toThrowError('Content is required');
+});
+
+test('given: missing type, when: SubmissionForm is created, then: an error is thrown', () => {
+    // given
+    const submissionData = {
+        title: 'Race Application',
+        content: 'This is a race application form.',
+        type: '',
+        createdAt: new Date('2021-05-23'),
+        createdBy: 1,
+    };
+
+    // when / then
+    expect(() => new Submission(submissionData)).toThrowError('Type is required');
 });
