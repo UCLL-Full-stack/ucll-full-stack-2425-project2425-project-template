@@ -7,6 +7,7 @@ import { scheduleRouter } from './controller/schedule.routes';
 import { recipeRouter } from './controller/recipe.routes';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { expressjwt } from 'express-jwt';
 
 const app = express();
 dotenv.config();
@@ -35,6 +36,20 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// app.use(
+//     expressjwt({
+//         secret: process.env.JWT_SECRET || 'default_secret',
+//         algorithms: ['HS256'],
+//     }).unless({
+//         path: [
+//             { url: /^\/api-docs(\/.*)?$/, methods: ['GET'] },
+//             '/users/login',
+//             '/users/signup',
+//             '/status'
+//         ]
+//     })
+// );
 
 app.use('/schedules', scheduleRouter);
 app.use('/users', userRouter);

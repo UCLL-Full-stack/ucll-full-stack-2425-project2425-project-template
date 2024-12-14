@@ -1,8 +1,6 @@
-// ---- Not Yet Used ----
-
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service.ts';
-import { UserSignupInput } from '../types/index.js';
+import { UserSignupInput, UserLoginInput } from '../types/index.js';
 
 const userRouter = express.Router();
 
@@ -96,6 +94,41 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
         const user = <UserSignupInput>req.body;
         const result = await userService.createUser(user);
         res.status(200).json(result.toJSON());
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Authenticate a user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserLoginInput'
+ *     responses:
+ *       200:
+ *         description: Authentication successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthenticationResponse'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const loginData = <UserLoginInput>req.body;
+        const result = await userService.authenticate(loginData);
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }

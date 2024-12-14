@@ -1,17 +1,27 @@
 import { Ingredient } from '../model/ingredient';
 
+type Role = 'admin' | 'user' | 'guest';
+
 type UserSignupInput = {
     firstName: string;
     lastName: string;
     username: string;
     email: string;
     password: string;
+    // role: string;
 };
 
 type UserLoginInput = {
     username: string;
     password: string;
 };
+
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    // role: string;
+  };
 
 type ProfileUpdateInput = {
     firstName: string;
@@ -67,4 +77,6 @@ export {
     NewRecipeInput,
     RecipeUpdateInput,
     RecipeCategory,
+    AuthenticationResponse,
+    Role
 };

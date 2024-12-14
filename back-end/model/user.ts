@@ -1,6 +1,7 @@
 import { Profile } from './profile';
 import { Recipe } from './recipe';
 import { Schedule } from './schedule';
+import { Role } from '../types';
 import {
     User as UserPrisma,
     Profile as ProfilePrisma,
@@ -13,25 +14,28 @@ export class User {
     private id?: number;
     private username: string;
     private password: string;
-    private profile: Profile;
+    private profile?: Profile | null;
     private recipes?: Recipe[];
-    private schedule?: Schedule;
+    private schedule?: Schedule | null;
+    // private role: Role;
 
     constructor(user: {
         id?: number;
         username: string;
         password: string;
-        profile: Profile;
+        profile?: Profile | null;
         recipes?: Recipe[];
-        schedule?: Schedule;
+        schedule?: Schedule | null;
+        // role: Role;
     }) {
         this.validate(user);
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
-        this.profile = user.profile;
+        this.profile = user.profile ?? null;
         this.recipes = user.recipes || [];
-        this.schedule = user.schedule;
+        this.schedule = user.schedule ?? null;
+        // this.role = user.role;
     }
 
     static from({
@@ -42,28 +46,30 @@ export class User {
         recipes,
         schedule,
     }: UserPrisma & {
-        profile: ProfilePrisma;
-        recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
+        profile?: ProfilePrisma | null;
+        recipes?: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
         schedule?: SchedulePrisma & {
             recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
-        };
+        } | null;
     }): User {
         return new User({
             id,
             username,
             password,
-            profile: Profile.from(profile),
-            recipes: recipes.map((recipe) => Recipe.from(recipe)),
-            schedule: schedule ? Schedule.from(schedule) : undefined,
+            profile: profile ? Profile.from(profile) : null,
+            recipes: recipes ? recipes.map((recipe) => Recipe.from(recipe)) : undefined,
+            schedule: schedule ? Schedule.from(schedule) : null,
         });
     }
+
     validate(user: {
         id?: number;
         username: string;
         password: string;
-        profile: Profile;
+        profile?: Profile | null;
         recipes?: Recipe[];
-        schedule?: Schedule;
+        schedule?: Schedule | null;
+        // role: Role;
     }): void {
         if (user.id !== undefined && (!Number.isInteger(user.id) || user.id <= 0)) {
             throw new Error('ID must be a positive integer');
@@ -74,15 +80,15 @@ export class User {
         if (!user.password || user.password.trim().length === 0) {
             throw new Error('Password is required and cannot be empty');
         }
-        if (!user.profile) {
-            throw new Error('Profile is required');
-        }
         if (user.recipes !== undefined && !Array.isArray(user.recipes)) {
             throw new Error('Recipes must be an array');
         }
         if (user.schedule !== undefined && !(user.schedule instanceof Schedule)) {
             throw new Error('Schedule must be an instance of Schedule');
         }
+        // if (!user.role) {
+        //     throw new Error('Role is required');
+        // }
     }
 
     getId(): number | undefined {
@@ -97,7 +103,7 @@ export class User {
         return this.password;
     }
 
-    getProfile(): Profile {
+    getProfile(): Profile | null | undefined {
         return this.profile;
     }
 
@@ -109,15 +115,19 @@ export class User {
         return this.recipes;
     }
 
-    getSchedules(): Schedule | undefined {
+    getSchedules(): Schedule | null | undefined {
         return this.schedule;
     }
+
+    // getRole(): Role {
+    //     return this.role;
+    // }
 
     addRecipe(recipe: Recipe): void {
         this.recipes?.push(recipe);
     }
 
-    getSchedule(): Schedule | undefined {
+    getSchedule(): Schedule | null | undefined {
         return this.schedule;
     }
 
