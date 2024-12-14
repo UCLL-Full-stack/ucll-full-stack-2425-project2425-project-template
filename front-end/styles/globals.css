@@ -57,3 +57,52 @@ body {
     background-color: #0dd62e;
 }
 
+.cocktail-form {
+  border: 15px solid #f42cff;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #2e24b3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.submit-btn {
+  background-color: #f42cff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #d337ff;
+}
+
