@@ -1,5 +1,5 @@
 import { Bestelling } from "../model/bestelling";
-import database from "./database";
+import database from "../util/database";
 
 const createBestelling = async (bestelling: Bestelling): Promise<Bestelling> => {
     try {
@@ -8,7 +8,6 @@ const createBestelling = async (bestelling: Bestelling): Promise<Bestelling> => 
                 user: {
                     connect: { id: bestelling.getUser().getId() }
                 },
-                datum: new Date(),
                 pokebowls: {
                     connect: bestelling.getPokebowls().map((pokebowl) => ({
                         id: pokebowl.getId()
@@ -35,12 +34,17 @@ const getAllBestellingen = async (): Promise<Bestelling[]> => {
                 user: true,
                 pokebowls: true
             },
+            orderBy: {
+                datum: 'desc'
+            }
         });
+        console.log(bestellingenPrisma.map((bestellingPrisma) => Bestelling.from(bestellingPrisma)));
         return bestellingenPrisma.map((bestellingPrisma) => Bestelling.from(bestellingPrisma));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
+
 };
 
 

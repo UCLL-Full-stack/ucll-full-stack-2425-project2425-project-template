@@ -1,11 +1,14 @@
 import { Type } from "@prisma/client";
 import { Ingredient } from "../model/ingredient";
-import database from "./database";
+import database from "../util/database";
 
 
 const getAllIngredienten = async (): Promise<Ingredient[]> => {
     try {
         const ingredientenPrisma = await database.ingredient.findMany({
+            orderBy: {
+                id: 'asc'
+            }
         });
         return ingredientenPrisma.map((ingredientPrisma) => Ingredient.from(ingredientPrisma));
     } catch (err) {

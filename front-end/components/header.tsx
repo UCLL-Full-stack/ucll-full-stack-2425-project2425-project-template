@@ -30,11 +30,22 @@ const Header: React.FC = () => {
                             Home
                         </Link>
                     </li>
-                    <li>
-                        <Link href="/bestellingen">
-                            Bestellingen
-                        </Link>
-                    </li>
+                    {loggedInUser && (
+                        (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
+                            <li>
+                                <Link href="/bestellingen">
+                                    Bestellingen
+                                </Link>
+                            </li>))
+                    }
+                    {loggedInUser && (
+                        (loggedInUser.rol == "Klant") && (
+                            <li>
+                                <Link href="/bestellingen/create-bestelling">
+                                    Bestellen
+                                </Link>
+                            </li>))
+                    }
                     {loggedInUser && (
                         (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
                             <li>

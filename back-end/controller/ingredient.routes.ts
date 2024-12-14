@@ -92,8 +92,10 @@ ingredientRouter.get('/:id', async (req: Request, res: Response, next: NextFunct
  */
 ingredientRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const request = req as Request & { auth: { rol: Rol } };
+        const { rol } = request.auth;
         const ingredient = <IngredientInput>req.body;
-        const result = await ingredientService.addIngredient(ingredient);
+        const result = await ingredientService.addIngredient({ rol }, ingredient);
         res.status(200).json(result);
     } catch (error) {
         next(error);

@@ -1,6 +1,6 @@
 import { Rol } from "@prisma/client";
 import { User } from "../model/user";
-import database from "./database";
+import database from "../util/database";
 
 const getAllUsers = async (): Promise<User[]> => {
     try {

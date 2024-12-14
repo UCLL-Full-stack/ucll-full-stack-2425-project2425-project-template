@@ -57,7 +57,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import pokebowlService from '../service/pokebowl.service';
-import { PokebowlInput } from '../types';
+import { PokebowlInput, Rol } from '../types';
 
 const pokebowlRouter = express.Router();
 
@@ -132,8 +132,10 @@ pokebowlRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
  */
 pokebowlRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const request = req as Request & { auth: { rol: Rol } };
+        const { rol } = request.auth;
         const pokebowl = <PokebowlInput>req.body;
-        const result = await pokebowlService.createPokebowl(pokebowl);
+        const result = await pokebowlService.createPokebowl({ rol }, pokebowl);
         res.status(200).json(result);
     } catch (error) {
         next(error);

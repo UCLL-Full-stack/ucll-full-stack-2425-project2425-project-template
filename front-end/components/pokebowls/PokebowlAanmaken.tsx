@@ -83,7 +83,7 @@ const PokebowlAanmaken: React.FC<Props> = ({ ingredienten }: Props) => {
         }
 
         const response = await PokebowlService.createPokebowl({ naam: naam, type: type, beschrijving: beschrijving, maxAantalIngredienten: parseInt(maxAantalIngredienten), prijs: prijs, ingredienten: selectedIngredienten });
-        const result = response.json();
+        const result = await response.json();
         console.log(result);
         console.log({ naam: naam, type: type, beschrijving: beschrijving, maxAantalIngredienten: parseInt(maxAantalIngredienten), prijs: prijs, ingredienten: selectedIngredienten });
 
@@ -93,7 +93,7 @@ const PokebowlAanmaken: React.FC<Props> = ({ ingredienten }: Props) => {
                 router.push("/pokebowls");
             }, 2000);
         } else {
-            setStatusMessages([{ message: "Error", type: "error" }])
+            setStatusMessages([{ message: result.message || "Error", type: "error" }])
         }
 
 

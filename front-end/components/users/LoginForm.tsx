@@ -60,7 +60,7 @@ const LoginForm: React.FC = () => {
                 router.push("/users/" + result.id);
             }, 2000);
         } else {
-            setStatusMessages([{ message: "Error", type: "error" }])
+            setStatusMessages([{ message: result.message, type: "error" }])
         }
 
 
