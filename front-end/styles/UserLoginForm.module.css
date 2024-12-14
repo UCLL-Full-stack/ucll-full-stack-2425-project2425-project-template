@@ -60,7 +60,6 @@
     list-style-type: none;
     display: flex;
     justify-content: center;
-    margin-top: 2em;
   }
   
   .userLoginStatusMessages .success {

@@ -31,7 +31,8 @@
         "gebruikersnaam": "Username",
         "wachtwoord": "Password",
         "success": "Login successful. Redirecting to homepage...",
-        "registreer": "Register"
+        "registreer": "Register",
+        "error": "Invalid username or password. Please try again."
     },
 
     "nav": {
@@ -50,5 +51,34 @@
         "email": "Email",
         "wachtwoord": "Password",
         "bevestigwachtwoord": "Confirm Password"
+    },
+
+    "validation": {
+        "username": {
+            "required": "Username is required",
+            "min": "Username must be at least 3 characters",
+            "max": "Username must be at most 20 characters"
+        },
+
+        "email": {
+            "required": "Email is required",
+            "invalid": "Email is invalid"
+        },
+
+        "password": {
+            "required": "Password is required",
+            "min": "Password must be at least 6 characters",
+            "format": "Password must contain at least one uppercase letter and one number"
+        },
+
+        "confirmPassword": {
+            "required": "Please confirm your password",
+            "match": "Passwords do not match"
+        },
+
+        "studentNumber": {
+            "required": "Student number is required",
+            "format": "Student number must start with a letter followed by 8 numbers"
+        }
     }
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import styles from '../styles/UserLoginForm.module.css';
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
+import errorStyles from '../styles/errorMessage.module.css';
 
 const UserRegisterForm: React.FC = () => {
   const { t } = useTranslation("common");
@@ -34,21 +35,25 @@ const UserRegisterForm: React.FC = () => {
 
     // Username validation
     if (!name.trim()) {
-      setNameError("Username is required");
+      setNameError(t("validation.username.required"));
       isValid = false;
     } else if (name.length < 3) {
-      setNameError("Username must be at least 3 characters long");
+      setNameError(t("validation.username.min"));
       isValid = false;
-    } else {
+    } else if (name.length > 20) {
+      setNameError(t("validation.username.max"));
+      isValid = false;
+    } 
+    else {
       setNameError(null);
     }
 
     // Email validation
     if (!email.trim()) {
-      setEmailError("Email is required");
+      setEmailError(t("validation.email.required"));
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Please enter a valid email address");
+      setEmailError(t("validation.email.invalid"));
       isValid = false;
     } else {
       setEmailError(null);
@@ -56,32 +61,37 @@ const UserRegisterForm: React.FC = () => {
 
     // Password validation
     if (!password.trim()) {
-      setPasswordError("Password is required");
+      setPasswordError(t("validation.password.required"));
       isValid = false;
     } else if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long");
+      setPasswordError(t("validation.password.min"));
       isValid = false;
     } else if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      setPasswordError("Password must contain at least one uppercase letter and one number");
+      setPasswordError(t("validation.password.format"));
       isValid = false;
     } else {
       setPasswordError(null);
     }
 
     // Confirm password validation
-    if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
+    if (!confirmPassword.trim()) {
+    setConfirmPasswordError(t("validation.confirmPassword.required"));
+    isValid = false;
+    
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordError(t("validation.password.match"));
       isValid = false;
+    
     } else {
       setConfirmPasswordError(null);
     }
 
     // Student Number validation
     if (!studentNumber.trim()) {
-      setStudentNumberError("Student number is required");
+      setStudentNumberError(t("validation.studentNumber.required"));
       isValid = false;
-    } else if (studentNumber.length < 6 || studentNumber.length > 12) {
-      setStudentNumberError("Student number must be between 6 and 12 characters long");
+    } else if (!/^[A-Za-z]\d{7}$/.test(studentNumber)) {
+      setStudentNumberError(t("validation.studentNumber.format"));
       isValid = false;
     } else {
       setStudentNumberError(null);
@@ -125,7 +135,7 @@ const UserRegisterForm: React.FC = () => {
           value={name}
           onChange={(event) => setName(event.target.value)}
         />
-        {nameError && <p className={styles.errorMessage}>{nameError}</p>}
+        {nameError && <p className={errorStyles.errorMessage}>{nameError}</p>}
 
         {/* Student Number Field */}
         <label className={styles.formLabels} htmlFor="studentNumberInput">{t("register.studentnummer")}</label>
@@ -135,7 +145,7 @@ const UserRegisterForm: React.FC = () => {
           value={studentNumber}
           onChange={(event) => setStudentNumber(event.target.value)}
         />
-        {studentNumberError && <p className={styles.errorMessage}>{studentNumberError}</p>}
+        {studentNumberError && <p className={errorStyles.errorMessage}>{studentNumberError}</p>}
 
         {/* Email Field */}
         <label className={styles.formLabels} htmlFor="emailInput">{t("register.email")}</label>
@@ -145,7 +155,7 @@ const UserRegisterForm: React.FC = () => {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-        {emailError && <p className={styles.errorMessage}>{emailError}</p>}
+        {emailError && <p className={errorStyles.errorMessage}>{emailError}</p>}
 
         {/* Password Field */}
         <label className={styles.formLabels} htmlFor="passwordInput">{t("register.wachtwoord")}</label>
@@ -155,7 +165,7 @@ const UserRegisterForm: React.FC = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {passwordError && <p className={styles.errorMessage}>{passwordError}</p>}
+        {passwordError && <p className={errorStyles.errorMessage}>{passwordError}</p>}
 
         {/* Confirm Password Field */}
         <label className={styles.formLabels} htmlFor="confirmPasswordInput">{t("register.bevestigwachtwoord")}</label>
@@ -165,7 +175,7 @@ const UserRegisterForm: React.FC = () => {
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
         />
-        {confirmPasswordError && <p className={styles.errorMessage}>{confirmPasswordError}</p>}
+        {confirmPasswordError && <p className={errorStyles.errorMessage}>{confirmPasswordError}</p>}
 
         {/* Status Messages */}
         {statusMessages.length > 0 && (

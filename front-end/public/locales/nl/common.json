@@ -31,7 +31,8 @@
         "gebruikersnaam": "Gebruikersnaam",
         "wachtwoord": "Wachtwoord",
         "success": "Login succesvol. Doorsturen naar de homepage...",
-        "registreer": "Registreren"
+        "registreer": "Registreren",
+        "error": "Ongeldige gebruikersnaam of wachtwoord. Probeer opnieuw."
     },
 
     "nav": {
@@ -50,5 +51,34 @@
         "email": "Email",
         "wachtwoord": "Wachtwoord",
         "bevestigwachtwoord": "Bevestig Wachtwoord"
+    },
+
+    "validation": {
+        "username": {
+            "required": "Gebruikersnaam is verplicht",
+            "min": "Gebruikersnaam moet minimaal 3 tekens bevatten",
+            "max": "Gebruikersnaam mag maximaal 20 tekens bevatten"
+        },
+
+        "email": {
+            "required": "Email is verplicht",
+            "invalid": "Email is ongeldig"
+        },
+
+        "password": {
+            "required": "Wachtwoord is verplicht",
+            "min": "Wachtwoord moet minimaal 6 tekens bevatten",
+            "format": "Wachtwoord moet ten minste één hoofdletter en één cijfer bevatten"
+        },
+
+        "confirmPassword": {
+            "required": "Bevestig je wachtwoord",
+            "match": "Wachtwoorden komen niet overeen"
+        },
+
+        "studentNumber": {
+            "required": "Studentnummer is verplicht",
+            "format": "Studentnummer moet beginnen met een letter gevolgd door 8 cijfers"
+        }
     }
 }

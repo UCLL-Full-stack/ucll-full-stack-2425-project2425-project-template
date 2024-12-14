@@ -5,6 +5,7 @@ import styles from '../styles/UserLoginForm.module.css';
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import StudentService from "../services/StudentServices";
+import errorStyles from '../styles/errorMessage.module.css';
 
 const UserLoginForm: React.FC = () => {
   const { t } = useTranslation("common");
@@ -24,26 +25,30 @@ const UserLoginForm: React.FC = () => {
   const validate = (): boolean => {
     let isValid = true;
 
-    // Username 
+    // Username validation
     if (!name.trim()) {
-      setNameError("Username is required");
+      setNameError(t("validation.username.required"));
       isValid = false;
     } else if (name.length < 3) {
-      setNameError("Username must be at least 3 characters long");
+      setNameError(t("validation.username.min"));
       isValid = false;
-    } else {
+    } else if (name.length > 20) {
+      setNameError(t("validation.username.max"));
+      isValid = false;
+    } 
+    else {
       setNameError(null);
     }
 
-    // Password
+    // Password validation
     if (!password.trim()) {
-      setPasswordError("Password is required");
+      setPasswordError(t("validation.password.required"));
       isValid = false;
     } else if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long");
+      setPasswordError(t("validation.password.min"));
       isValid = false;
     } else if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      setPasswordError("Password must contain at least one uppercase letter and one number");
+      setPasswordError(t("validation.password.format"));
       isValid = false;
     } else {
       setPasswordError(null);
@@ -54,9 +59,8 @@ const UserLoginForm: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     clearErrors();
-  
+
     if (!validate()) {
       setStatusMessages([
         { message: "Validation failed", type: "error" },
@@ -64,34 +68,32 @@ const UserLoginForm: React.FC = () => {
       return;
     }
 
-    const student = { username: name, password};
-    const response = await StudentService.loginStudent(student)
+    const credentials = { username: name, password };
+    const response = await StudentService.loginStudent(credentials);
 
     if (response.status === 200) {
       setStatusMessages([{ message: t("login.success"), type: "success" }]);
-
-      const student =  await response.json();
+      
+      const student = await response.json();
       localStorage.setItem(
         "loggedInUser", 
         JSON.stringify({
           token: student.token,
           username: student.username,
           email: student.email,
-          studentNumber: student.student,
+          studentNumber: student.studentNumber,
           role: student.role
-          })
-        );
+        })
+      );
       
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
 
     } else {
-      console.log(student);
       setStatusMessages([{ message: t("login.error"), type: "error" }]);
     }
   };
-  
 
   return (
     <div className={styles.userLoginPage}>
@@ -105,7 +107,7 @@ const UserLoginForm: React.FC = () => {
           value={name}
           onChange={(event) => setName(event.target.value)}
         />
-        {nameError && <p className={styles.errorMessage}>{nameError}</p>}
+        {nameError && <p className={errorStyles.errorMessage}>{nameError}</p>}
 
         <label className={styles.formLabels} htmlFor="passwordInput">{t("login.wachtwoord")}</label>
         <input className={styles.inputField}
@@ -114,12 +116,12 @@ const UserLoginForm: React.FC = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {passwordError && <p className={styles.errorMessage}>{passwordError}</p>}
+        {passwordError && <p className={errorStyles.errorMessage}>{passwordError}</p>}
 
         {statusMessages.length > 0 && (
-          <ul className={styles.userLoginStatusMessages}>
+          <ul className={errorStyles.userLoginStatusMessages}>
             {statusMessages.map(({ message, type }, index) => (
-              <li key={index} className={type === "error" ? styles.error : styles.success}>
+              <li key={index} className={type === "error" ? errorStyles.error : errorStyles.success}>
                 {message}
               </li>
             ))}
