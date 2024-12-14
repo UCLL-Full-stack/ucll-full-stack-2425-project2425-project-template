@@ -197,10 +197,10 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl"> {/* Increased width */}
+        <div className="fixed inset-0 h-70 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto no-scrollbar">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-5xl max-h-screen overflow-y-auto no-scrollbar">
                 <h2 className="text-2xl font-bold mb-6 text-center">Edit Car</h2>
-                <form onSubmit={handleSubmit}>    
+                <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-2 gap-6"> {/* Two-column layout */}
                         <div className="mb-4">
                             <label className="flex text-sm font-medium">Vehicle Type</label>
@@ -334,7 +334,6 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 <option value="Semi-Automatic">Semi-Automatic</option>
                             </select>
                         </div>
-    
                         <div className="mb-4 col-span-2 border-2 border-dashed p-6 rounded-md text-center hover:bg-gray-50 cursor-pointer"
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={handleFileDrop}
@@ -351,38 +350,32 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 onChange={handleFileChange}
                                 className="hidden"
                             />
-                            <p className="text-gray-500">
-                                Drag & Drop files here or click to select files
-                            </p>
-
-                            {/* Display uploaded files */}
-                            <div className="mt-4">
+                            <p className="text-gray-500">Drag & Drop files here or click to select files</p>
+                            <div className="mt-4 max-h-48 overflow-y-scroll, no-scrollbar">
                                 {photos.length > 0 && (
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-5 gap-4">
                                         {photos.map((file, index) => (
                                             <div
                                                 key={index}
                                                 className="flex justify-between items-center p-4 border border-gray-300 rounded-md"
                                             >
-                                                {/* File Preview (Image or Name) */}
                                                 <div className="flex items-center space-x-2">
                                                     {file.type.startsWith("image/") ? (
                                                         <img
-                                                            src={URL.createObjectURL(file)} // Image preview
+                                                            src={URL.createObjectURL(file)}
                                                             alt={file.name}
                                                             className="w-16 h-16 object-cover rounded-md"
                                                         />
                                                     ) : (
-                                                        <span className="text-sm text-gray-700">{file.name}</span> // File name for non-images
+                                                        <span className="text-sm text-gray-700">{file.name}</span>
                                                     )}
                                                 </div>
-
-                                                {/* Remove Button (Red X) */}
                                                 <button
                                                     type="button"
                                                     onClick={() => {
-                                                        // Remove file from the state
-                                                        setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+                                                        setPhotos((prevPhotos) =>
+                                                            prevPhotos.filter((_, i) => i !== index)
+                                                        );
                                                     }}
                                                     className="text-red-500 hover:text-red-700 text-xl font-bold"
                                                 >
@@ -394,10 +387,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 )}
                             </div>
                         </div>
-
-                            
-                        </div>
-    
+                    </div>
                     <div className="flex justify-end space-x-4 mt-6">
                         <button
                             type="button"
@@ -417,6 +407,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
             </div>
         </div>
     );
+    
 };    
 
 export default AddCarModal;

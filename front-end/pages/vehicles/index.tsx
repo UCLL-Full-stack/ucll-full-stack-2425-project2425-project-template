@@ -28,7 +28,7 @@ const Vehicles: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <main className="flex justify-center bg-white p-7 min-h-screen">
+            <main className="flex justify-center bg-white p-7 min-h-screen overflow-y-auto no-scrollbar">
             
                 <div className="items-center mb-6">
                     <section>
