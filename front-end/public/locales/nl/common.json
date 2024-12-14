@@ -1,0 +1,35 @@
+{
+    "app.title": "Sip Happens Online",
+    "general.error": "Er is een fout opgetreden, probeer het later opnieuw.",
+    "home": {
+        "title": "Welkom bij Sip Happens Online",
+        "description1": "Ontdek een wereld van voortreffelijke cocktails en verbeter je mixologievaardigheden. Sip Happens Online is jouw ultieme bestemming voor alles wat met cocktails te maken heeft. Meld je aan en log in om je favoriete drankjes toe te voegen en te bekijken, en verken een centrale lijst van alle cocktails met een teller die aangeeft hoeveel gebruikers elke cocktail als favoriet hebben gemarkeerd.",
+        "description2": "Onze uitgebreide collectie cocktailrecepten bevat gedetailleerde ingrediënten, en je kunt cocktails eenvoudig filteren op basis van je ingrediëntvoorkeuren. Of je nu een ervaren mixoloog bent of net begint, Sip Happens Online heeft voor ieder wat wils. Word lid van onze gemeenschap en begin vandaag nog met het mixen van je perfecte drankje!",
+        "userInformation": {
+            "title": "Gebruikersinformatie",
+            "username": "Gebruikersnaam",
+            "password": "Wachtwoord",
+            "role": "Rol"
+        }
+    },
+    "header": {
+        "home": "Home",
+        "cocktails": "Cocktails",
+        "addCocktial": "Cocktail Toevoegen",
+        "search": "Zoeken",
+        "login": "Inloggen",
+        "logout": "Uitloggen",
+        "register": "Registreren"
+    },
+    "addCocktail": {
+        "title": "Cocktail Toevoegen",
+        "id": "ID",
+        "name": "Naam",
+        "description": "Beschrijving",
+        "strongness": "Sterkte (0-5)",
+        "addIngredient": "Ingrediënt Toevoegen",
+        "removeIngredient": "Ingrediënt Verwijderen",
+        "save": "Opslaan",
+        "cancel": "Annuleren"
+    }
+}

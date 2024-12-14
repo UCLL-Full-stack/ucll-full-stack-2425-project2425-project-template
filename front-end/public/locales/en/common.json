@@ -1,0 +1,36 @@
+{
+    "app.title": "Sip Happens Online",
+    "general.error": "An error occurred, please try again later.",
+    "home": {
+        "title": "Welcome to Sip Happens Online",
+        "description1": "Discover a world of exquisite cocktails and elevate your mixology skills. Sip Happens Online is your ultimate destination for all things cocktails. Sign up and log in to add and view your favorite drinks, and explore a central list of all cocktails with a counter showing how many users have favorited each one.",
+        "description2": "Our extensive collection of cocktail recipes includes detailed ingredients, and you can easily filter cocktails based on your ingredient preferences. Whether you're a seasoned mixologist or just starting out, Sip Happens Online has something for everyone. Join our community and start mixing your perfect drink today!",
+        "userInformation": {
+            "title": "User Information",
+            "username": "Username",
+            "password": "Password",
+            "role": "Role"
+        }
+    },
+    "header": {
+        "home": "Home",
+        "cocktails": "Cocktails",
+        "addCocktial": "Add Cocktail",
+        "search": "Search",
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register"
+    },
+    "addCocktail": {
+        "title": "Add Cocktail",
+        "id": "ID",
+        "name": "Name",
+        "description": "Description",
+        "strongness": "Strongness (0-5)",
+        "addIngredient": "Add Ingredient",
+        "removeIngredient": "Remove Ingredient",
+        "save": "Save",
+        "cancel": "Cancel"
+    }
+
+}

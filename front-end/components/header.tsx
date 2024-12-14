@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Language from './language/Language';
 
 const Header: React.FC = () => {
   const banners = [
@@ -38,6 +39,11 @@ const Header: React.FC = () => {
             Home
           </button>
         </Link>
+        <Link href="http://localhost:8080/cocktails/">
+          <button className="navbarbutton-stylah">
+            Cocktails
+          </button>
+        </Link>
         <Link href="http://localhost:8080/addcocktail/">
           <button className="navbarbutton-stylah">
             Add Cocktail
@@ -48,6 +54,7 @@ const Header: React.FC = () => {
             Search
           </button>
         </Link>
+        <Language />
       </nav>
     </header>
   );
