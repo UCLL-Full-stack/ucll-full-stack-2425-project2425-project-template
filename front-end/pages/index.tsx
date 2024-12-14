@@ -1,8 +1,17 @@
+import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import Login from "../components/Login"; // Import Login component
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
+  const [showLogin, setShowLogin] = useState(false); // Show login form state
+
+  const toggleLogin = () => {
+    setShowLogin((prev) => !prev); // Toggle the Login form visibility
+  };
+
   return (
     <>
       <Head>
@@ -12,6 +21,19 @@ export default function Home() {
         <link rel="icon" href="/images/shittylogo.png" />
       </Head>
       <main className="flex flex-col items-center justify-center min-h-screen bg-black text-yellow-500 px-4 py-8">
+        {/* Top Right Login/Logout Button */}
+        <div className="absolute top-4 right-4">
+          <button
+            onClick={toggleLogin}
+            className="bg-yellow-500 text-black font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition"
+          >
+            {isLoggedIn ? "Logout" : "Login"}
+          </button>
+        </div>
+
+        {/* Show Login Component */}
+        {showLogin && <Login onClose={toggleLogin} />}
+
         {/* Logo Section */}
         <div className="mb-6">
           <Image
@@ -29,7 +51,7 @@ export default function Home() {
         </h1>
 
         {/* Navigation Links */}
-        <nav className="flex  gap-8 mb-12">
+        <nav className="flex gap-8 mb-12">
           {/* Players Button */}
           <Link
             href="/players"
