@@ -1,28 +1,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Header from '@components/header';
-import styles from '../../styles/login/login.module.css';  // Import the styles
+import styles from '../../styles/login/login.module.css';
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serversideTranslations";
-
-// Simulate a simple login service
-const loginService = async (email: string, password: string, role: string) => {
-  if (role === "trainer") {
-    if (email === "trainer@example.com" && password === "trainer123") {
-      // Save trainer info to localStorage (can replace with your auth logic)
-      localStorage.setItem("trainerId", "trainer12345");
-      return { success: true, role: "trainer" };
-    }
-  } else if (role === "nurse") {
-    if (email === "nurse@example.com" && password === "nurse123") {
-      // Save nurse info to localStorage (can replace with your auth logic)
-      localStorage.setItem("nurseId", "nurse12345");
-      return { success: true, role: "nurse" };
-    }
-  }
-
-  return { success: false, message: "Wrong email or password." };
-};
+import TrainerService from "../../services/trainer.service"; // Import the updated service function
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -31,25 +13,41 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Basic validation (can be enhanced)
+  
+    // Basic validation
     if (!email || !password) {
       setErrorMessage("Please enter both email and password.");
       return;
     }
-
-    const response = await loginService(email, password, role);
-
-    if (response.success) {
+  
+    try {
+      const trainer = await TrainerService.getTrainerByEmail(email); // Fetch trainer data by email
+  
+      if (!trainer) {
+        setErrorMessage("Trainer not found.");
+        return;
+      }
+  
+      // Validate role and password
+      const { user } = trainer; // Ensure you access the `user` object within `trainer`
+      if (user.role !== role || user.password !== password) {
+        setErrorMessage("Invalid email, password, or role.");
+        return;
+      }
+  
+  
+      // Save trainer info to localStorage
+      localStorage.setItem('userEmail', trainer.user.email);  // Save the email as 'userEmail'
+  
       console.log("Login successful, redirecting to home...");
       router.push("/"); // Redirect to home page
-    } else {
-      console.log("Login failed: ", response.message);
-      setErrorMessage(response.message || "Login failed.");
+    } catch (error) {
+      setErrorMessage("Login failed: User not found or incorrect credentials.");
+      console.error("Login error:", error);
     }
   };
 
@@ -115,12 +113,12 @@ const LoginPage: React.FC = () => {
 };
 
 export const getServerSideProps = async (context: { locale: any; }) => {
-  const {locale} = context;
+  const { locale } = context;
 
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? "en", ["common"]))
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"]))
+    },
   };
 };
 

@@ -2,6 +2,7 @@ import { PokemonInput } from "../types";
 import { Trainer } from "../model/trainer";
 import trainerDb from "../repository/trainer.db";
 import { Pokemon } from "../model/pokemon";
+import { User } from "../model/user";
 
 
 const getAllTrainers = async (): Promise<Trainer[]> => trainerDb.getAllTrainers();

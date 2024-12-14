@@ -1,5 +1,5 @@
 
-import { Pokemon, Trainer } from '@types';
+import { Pokemon, Trainer, User } from '@types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,6 +11,21 @@ const TrainerService = {
     }
     const data = await response.json();
     return data as Trainer[]; 
+  },
+
+
+
+  getTrainerByEmail: async (email: string): Promise<Trainer> => {
+    const response = await fetch(`${API_URL}/trainers/email?email=${encodeURIComponent(email)}`);
+    
+    if (!response.ok) {
+      const errorText = await response.text();  // Read response as text if error
+      console.error('Error response:', errorText);
+      throw new Error('Failed to fetch trainer data');
+    }
+    
+    const data = await response.json();  // Parse the JSON if the response is OK
+    return data as Trainer;
   },
 
   addPokemonToTrainerById: async(id:number,pokemon:Pokemon): Promise<Trainer> => {
@@ -27,7 +42,11 @@ const TrainerService = {
     const trainer = await response.json();
     return trainer as Trainer;
   }
+
+  
 };
+
+
 
 export default TrainerService;
 

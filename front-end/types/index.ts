@@ -1,8 +1,12 @@
+type Role = 'admin' | 'trainer' | 'nurse' | 'guest';
+
 
 export type User ={
+    role: Role;
     firstName: string;
     lastName: string;
     email: string;
+    password:string
 }
 
 export type PokemonStats ={
