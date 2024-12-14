@@ -35,6 +35,6 @@ playerRouter.post('/add', async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({status: 'error' ,message: error}); 
     }
-})
+});
 
 export default playerRouter;

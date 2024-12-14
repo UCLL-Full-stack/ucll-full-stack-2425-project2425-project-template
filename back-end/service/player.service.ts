@@ -1,6 +1,7 @@
 import playerDb from "../repository/player.db"
 import { Player } from "../model/player";
 import { PlayerInput } from "../types/types";
+import { fi } from "date-fns/locale";
 
 const getAllPlayers = async (): Promise<Player[]> => {
     return playerDb.findAll();
@@ -14,8 +15,16 @@ const getPlayerById = async (id: number): Promise<Player | undefined> => {
     return player;
 }
 
-const addPlayer = async ({name, position, birthdate}: PlayerInput): Promise<Player> => {
-    return playerDb.addPlayer({name, position, birthdate});
+const findPlayerByNumber = async (number: number): Promise<Player | undefined> => {
+    return playerDb.findByNumber(number);
 }
 
-export default {getAllPlayers, getPlayerById, addPlayer};
+const addPlayer = async ({name, number ,position, birthdate}: PlayerInput): Promise<Player> => {
+    if (await findPlayerByNumber(number)) {
+        throw new Error(`Player with number ${number} already exists`);
+    }
+
+    return playerDb.addPlayer({name, number, position, birthdate});
+}
+
+export default {getAllPlayers, addPlayer, getPlayerById};
