@@ -6,17 +6,14 @@ import { Pokemon } from "../model/pokemon";
 
 const getAllTrainers = async (): Promise<Trainer[]> => trainerDb.getAllTrainers();
 
-const getTrainerById = async (id: number): Promise<Trainer> => {
-    const trainer = await trainerDb.getTrainerById(id);  // Pass `id` directly, not an object
-    if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);
-    return trainer;
-};
 
-const getTrainerWithPokemon = async (id: number): Promise<Trainer | null> => {
-    const trainer = await trainerDb.getTrainerById(id);
-    if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`);
-    return trainer;
-};
+
+
+const getTrainerByEmail = async (email: string): Promise<Trainer| null > => {
+    const trainer = await trainerDb.getTrainerByEmail(email);
+    return trainer
+}
+
 
 const addPokemonToTrainerById = async (id:number,{
     name,
@@ -47,7 +44,6 @@ const addPokemonToTrainerById = async (id:number,{
 
 export default {
     getAllTrainers,
-    getTrainerById,
-    getTrainerWithPokemon,
+    getTrainerByEmail,
     addPokemonToTrainerById,
 };

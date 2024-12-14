@@ -16,13 +16,10 @@
  *           description: Unique identifier for the trainer
  *         name:
  *           type: string
- *           description: Trainer name
+ *           description: Trainer's name
  *         user:
  *           type: object
  *           properties:
- *             id:
- *               type: number
- *               description: Unique identifier for the user
  *             firstName:
  *               type: string
  *               description: First name of the user
@@ -39,15 +36,18 @@
  *     Pokemon:
  *       type: object
  *       properties:
- *         id:
- *           type: number
- *           description: Unique identifier for the Pokemon
  *         name:
  *           type: string
  *           description: Name of the Pokemon
  *         type:
  *           type: string
  *           description: Type of the Pokemon (e.g., fire, water)
+ *         health:
+ *           type: number
+ *           description: Health points of the Pokemon
+ *         canEvolve:
+ *           type: boolean
+ *           description: if the pokemon can evolve
  *         stats:
  *           type: object
  *           properties:
@@ -105,82 +105,57 @@ trainerRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
 });
 
 
+
 /**
  * @swagger
- * /trainers/{id}:
+ * /trainers/email:
  *   get:
- *     summary: Get a trainer by ID
+ *     summary: Get a trainer by email
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - in: query
+ *         name: email
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: Numeric ID of the trainer
+ *         description: Email of the trainer
  *     responses:
  *       200:
- *         description: A single trainer object
+ *         description: A trainer object corresponding to the provided email
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Trainer'
  *       404:
- *         description: Trainer not found
+ *         description: Trainer with the s  pecified email not found
  *       500:
  *         description: Server error
  */
-
-trainerRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+trainerRouter.get('/email', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const trainer = await trainerService.getTrainerById(Number(req.params.id));
-        res.status(200).json(trainer)
-    } catch (error) {
-        next(error)
-    }
-})
+        const { email } = req.query; // Get email from query parameters
 
-/**
- * @swagger
- * /trainers/{id}/pokemon:
- *   get:
- *     summary: Get all Pokemon for a specific trainer
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: Numeric ID of the trainer
- *     responses:
- *       200:
- *         description: List of Pokemon for the specified trainer
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Pokemon'
- *       404:
- *         description: Trainer not found
- *       500:
- *         description: Server error
- */
-trainerRouter.get('/:id/pokemon', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const trainer = await trainerService.getTrainerById(Number(req.params.id));
-        if (!trainer) {
-            return res.status(404).json({ message: 'Trainer not found' });
+        // Validate email parameter
+        if (!email || typeof email !== 'string') {
+            return res.status(400).json({ message: 'Email is required and should be a string.' });
         }
-        const pokemon = trainer.getPokemon();
-        res.status(200).json(pokemon);
+
+        // Fetch the trainer by email using the service
+        const trainer = await trainerService.getTrainerByEmail(email as string); // Make sure email is treated as a string
+
+        if (!trainer) {
+            return res.status(404).json({ message: 'Trainer with the specified email not found' });
+        }
+
+        // Return the trainer object
+        res.status(200).json(trainer);
     } catch (error) {
-        next(error);
+        next(error); // Global error handling
     }
 });
+
+
 
 
 /**
@@ -193,10 +168,10 @@ trainerRouter.get('/:id/pokemon', async (req: Request, res: Response, next: Next
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
- *         description: Numeric ID of the trainer
+ *         description: The numeric ID of the trainer
  *     requestBody:
  *       required: true
  *       content:
@@ -205,13 +180,13 @@ trainerRouter.get('/:id/pokemon', async (req: Request, res: Response, next: Next
  *             $ref: '#/components/schemas/Pokemon'
  *     responses:
  *       200:
- *         description: Pokemon successfully added
+ *         description: Pokemon successfully added to the trainer
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Pokemon'
  *       400:
- *         description: Invalid input
+ *         description: Invalid input or data
  *       404:
  *         description: Trainer not found
  *       500:

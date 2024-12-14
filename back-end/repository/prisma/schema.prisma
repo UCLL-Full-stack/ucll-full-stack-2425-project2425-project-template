@@ -34,11 +34,11 @@ model Pokemon {
   type      String
   health    Int
   canEvolve Boolean
+
   trainerId Int
-
   trainer   Trainer @relation(fields: [trainerId], references: [id])
-  stats     Stats   @relation(fields: [statsId], references: [id])
 
+  stats     Stats   @relation(fields: [statsId], references: [id])
   statsId   Int     @unique
 }
 

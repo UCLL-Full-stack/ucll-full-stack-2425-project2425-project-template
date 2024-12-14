@@ -4,6 +4,7 @@ import {Pokemon} from '../model/pokemon';
 import {Badge} from '../model/badge';
 import { GymBattle } from '../model/gymBattle';
 import database from '../util/database';
+import { emit } from 'process';
 
 /*const pokemonRed = [
     new Pokemon({
@@ -113,27 +114,55 @@ const getAllTrainers = async (): Promise<Trainer[]> => {
         });
     });
 };
-const getTrainerById = async (id: number): Promise<Trainer | null> => {
-    const trainerPrisma = await database.trainer.findUnique({
-        where: { id },
+
+// In trainer.service.ts (or wherever the service functions are defined)
+const getTrainerByEmail = async (email: string): Promise<Trainer | null> => {
+    // First, find the user by email
+    const user = await database.user.findFirst({
+        where: { email },
+    });
+
+    if (!user) {
+        throw new Error(`User with email ${email} not found.`);
+    }
+
+    // Then, find the trainer using the userId
+    const trainerPrisma = await database.trainer.findFirst({ // Use findFirst here
+        where: {
+            userId: user.id, // Use userId to find the trainer
+        },
         include: {
-            user: true, 
-            pokemon: { include: { stats: true } }, 
-            badges: true, 
-            gymBattles: true, 
+            user: true,
+            pokemon: {
+                include: {
+                    stats: true,
+                },
+            },
+            badges: true,
+            gymBattles: true,
         },
     });
 
     if (!trainerPrisma) {
-        return null;
+        throw new Error(`Trainer with userId ${user.id} not found.`);
     }
 
+    // Return the transformed trainer object
     return Trainer.from({
         ...trainerPrisma,
         badge: trainerPrisma.badges,
         gymBattle: trainerPrisma.gymBattles,
     });
 };
+
+
+
+
+
+
+
+
+
 
 const addPokemonToTrainerById = async ({ id, pokemon }: { id: number, pokemon: Pokemon }): Promise<Trainer | null> => {
     // First, ensure that the trainer exists in the database
@@ -205,6 +234,6 @@ const addPokemonToTrainerById = async ({ id, pokemon }: { id: number, pokemon: P
 
 export default {
     getAllTrainers,
-    getTrainerById,
     addPokemonToTrainerById,
+    getTrainerByEmail,
 };
