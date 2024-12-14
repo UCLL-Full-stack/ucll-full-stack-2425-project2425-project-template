@@ -19,7 +19,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/shittylogo.png" />
       </Head>
-      <main className="flex flex-col items-center justify-center min-h-screen bg-black text-yellow-500 px-4 py-8">
+      <main className="flex flex-col items-center justify-center min-h-screen bg-zinc-950 text-yellow-500 px-4 py-8">
         <div className="absolute top-4 right-4">
         <button
           onClick={toggleLogin}
@@ -43,6 +43,7 @@ export default function Home() {
             width={450}
             height={350}
             priority
+            draggable={false}
           />
         </div>
 
