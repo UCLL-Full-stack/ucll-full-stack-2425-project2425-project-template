@@ -1,3 +1,4 @@
+import { Build as BuildPrisma } from "@prisma/client";
 import { Part } from "./part";
 
 export class Build {
@@ -32,6 +33,15 @@ export class Build {
         if (build.price <= 0) {
             throw new Error('Build must have positive and non zero price')
         }
+    }
+
+    static from ({ id, price, preBuild }: BuildPrisma) {
+        return new Build({
+            id,
+            parts: [],
+            price,
+            preBuild,
+        })
     }
 
     getId(): number | undefined {

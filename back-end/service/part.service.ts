@@ -1,12 +1,24 @@
 import partDB from '../repository/part.db';
 import { Part } from '../model/part';
 
-const getAllParts = (): Part[] => partDB.getAllParts();
+const getAllParts = async (): Promise<Part[]> => {
+    return await partDB.getAllParts();
+};
 
-const getPartById = (id: number): Part => {
-    const part = partDB.getPartById({ id });
-    if (!part) throw new Error(`Part with id ${id} does not exist`);
+const getPartById = async (id: number): Promise<Part> => {
+    const part = await partDB.getPartById({ id });
+    if (!part) throw new Error(`Part with id ${id} not found`);
     return part;
 };
 
-export default { getAllParts, getPartById };
+const getPartByName = async (name: string): Promise<Part> => {
+    const part = await partDB.getPartByName({ name });
+    if (!part) throw new Error(`Part with name ${name} not found`);
+    return part;
+};
+
+export default {
+    getAllParts,
+    getPartById,
+    getPartByName,
+};

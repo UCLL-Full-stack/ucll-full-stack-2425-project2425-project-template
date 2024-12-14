@@ -28,7 +28,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-import { User } from '../model/user';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -118,7 +118,7 @@ userRouter.get('/email/:email', async (req: Request, res: Response, next: NextFu
  *                              description: The user's address
  *      responses:
  *          201:
- *              description: A user object.
+ *              description: Registered a user object.
  *              content:
  *                  application/json:
  *                      schema:
@@ -126,15 +126,9 @@ userRouter.get('/email/:email', async (req: Request, res: Response, next: NextFu
  */
 userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newUser = new User({
-            name: req.body.name,
-            email: req.body.email.toLowerCase(),
-            password: req.body.password,
-            address: req.body.address,
-        });
-
-        const registeredUser = await userService.registerUser(newUser);
-        res.status(201).json(registeredUser);
+        const userInput = <UserInput>req.body;
+        const user = await userService.registerUser(userInput);
+        res.status(201).json(user);
     } catch (error) {
         next(error);
     }

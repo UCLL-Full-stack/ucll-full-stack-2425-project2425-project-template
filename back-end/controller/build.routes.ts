@@ -73,7 +73,7 @@ buildRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  */
 buildRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const build = await buildService.getBuildById(Number(req.params.id));
+        const build = await buildService.getBuildById({ id: Number(req.params.id) });
         res.status(200).json(build);
     } catch (error) {
         next(error);

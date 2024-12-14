@@ -1,0 +1,56 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider        = "postgresql"
+    url             = env("DATABASE_URL")
+}
+
+model Build {
+    id              Int             @id @default(autoincrement())
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    parts           Part[]
+    price           Int
+    preBuild        Boolean
+
+    orderId         Int?            // Order is optional
+    order           Order?          @relation("OrderBuilds", fields: [orderId], references: [id])
+}
+
+model Order {
+    id              Int             @id @default(autoincrement())
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    builds          Build[]         @relation("OrderBuilds")
+    price           Int
+    orderStatus     String
+    orderDate       DateTime
+
+    userId          Int
+    user            User            @relation("UserOrders", fields: [userId], references: [id])
+}
+
+model Part {
+    id              Int             @id @default(autoincrement())
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    name            String          @unique
+    brand           String
+    type            String
+    price           Int
+
+    builds          Build[]
+}
+
+model User {
+    id              Int             @id @default(autoincrement())
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    email           String          @unique
+    name            String
+    password        String
+    address         String
+    orders          Order[]         @relation("UserOrders")
+}

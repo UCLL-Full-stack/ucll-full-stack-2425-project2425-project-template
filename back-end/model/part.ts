@@ -1,6 +1,9 @@
-
+import { Part as PartPrisma } from "@prisma/client";
 
 export class Part {
+    static Part(partPrisma: any): import("./build").Build | PromiseLike<import("./build").Build | null> | null {
+        throw new Error('Method not implemented.');
+    }
     private id?: number;
     private name: string;
     private brand: string;
@@ -36,6 +39,16 @@ export class Part {
         if (part.price <= 0) {
             throw new Error('Price must be positive and non zero');
         }
+    }
+
+    static from ({ id, name, brand, type, price}: PartPrisma) {
+        return new Part({
+            id,
+            name,
+            brand,
+            type,
+            price,
+        })
     }
 
     getId(): number | undefined {

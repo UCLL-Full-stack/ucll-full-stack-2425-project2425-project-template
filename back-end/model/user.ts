@@ -1,3 +1,4 @@
+import { User as UserPrisma } from "@prisma/client";
 import { Order } from "./order";
 
 
@@ -44,6 +45,16 @@ export class User {
         }
     }
 
+    static from ({ id, name, email, password, address }: UserPrisma) {
+        return new User({
+            id,
+            name,
+            email,
+            password,
+            address,
+        })
+    }
+
     private validateEmail(email: string): boolean {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -86,5 +97,9 @@ export class User {
 
     getAddress(): string {
         return this.address;
+    }
+
+    getOrders(): Order[] {
+        return this.orders;
     }
 }

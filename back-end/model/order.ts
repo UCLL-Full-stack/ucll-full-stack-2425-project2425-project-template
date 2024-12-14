@@ -1,4 +1,10 @@
+import {
+    Order as OrderPrisma,
+    Build as BuildPrisma,
+    User as UserPrisma,
+} from "@prisma/client";
 import { Build } from "./build";
+import { User } from "./user";
 
 export class Order {
     private id?: number;
@@ -6,6 +12,7 @@ export class Order {
     private price: number;
     private orderStatus: string;
     private orderDate: Date;
+    private user: User;
 
     constructor(order: {
         id?: number;
@@ -13,6 +20,7 @@ export class Order {
         price: number;
         orderStatus: string;
         orderDate: Date;
+        user: User;
     }) {
         this.validate(order)
 
@@ -21,6 +29,7 @@ export class Order {
         this.price = order.price;
         this.orderStatus = order.orderStatus;
         this.orderDate = order.orderDate;
+        this.user = order.user;
     }
 
     validate(order: {
@@ -28,9 +37,11 @@ export class Order {
         price: number;
         orderStatus: string;
         orderDate: Date ;
+        user: User;
     }) {
-        if (!order.orderStatus) {throw new Error('OrderStatus cannot be empty');}
-
+        if (!order.orderStatus) {
+            throw new Error('OrderStatus cannot be empty');
+        }
         if (order.builds.length == 0) {
             throw new Error('Order must have at least 1 build')
         }
@@ -40,6 +51,27 @@ export class Order {
         if (new Date(order.orderDate) > new Date()) {
             throw new Error('Order date cannot be in the future');
         }
+        if (!order.user) {
+            throw new Error('Order must be associated with a user');
+        }
+    }
+
+    static from ({
+        id,
+        builds,
+        price,
+        orderStatus,
+        orderDate,
+        user,
+    }: OrderPrisma & { user: UserPrisma, builds: BuildPrisma[] }): Order {
+        return new Order({
+            id,
+            builds: builds.map((build) => Build.from(build)),
+            price,
+            orderStatus,
+            orderDate,
+            user: User.from(user),
+        });
     }
 
     public getSummary() {
@@ -49,6 +81,7 @@ export class Order {
             price: this.price,
             orderStatus: this.orderStatus,
             orderDate: this.orderDate,
+            userId: this.user.getId(),
         }
     }
 
@@ -70,5 +103,9 @@ export class Order {
 
     getOrderDate(): Date {
         return this.orderDate;
+    }
+
+    getUser(): User {
+        return this.user;
     }
 }

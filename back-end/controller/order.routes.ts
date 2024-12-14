@@ -29,6 +29,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import orderService from '../service/order.service';
+import { OrderInput } from '../types';
 
 const orderRouter = express.Router();
 
@@ -84,5 +85,18 @@ orderRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
         next(error);
     }
 });
+
+// /**
+//  * @swagger
+//  */
+// orderRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const orderInput = <OrderInput>req.body;
+//         const order = await orderService.createOrder(orderInput);
+//         res.status(201).json(order);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 export { orderRouter };

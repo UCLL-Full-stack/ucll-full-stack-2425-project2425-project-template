@@ -84,4 +84,33 @@ partRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+// /**
+//  * @swagger
+//  * /parts/name/{name}:
+//  *  get:
+//  *      summary: Get a part by name.
+//  *      parameters:
+//  *          - in: path
+//  *            name: name
+//  *            schema:
+//  *              type: string
+//  *              required: true
+//  *              description: The part name.
+//  *      responses:
+//  *          200:
+//  *              description: A part object.
+//  *              content:
+//  *                  application/json:
+//  *                      schema:
+//  *                          $ref: '#/components/schemas/Part'
+//  */
+partRouter.get('/name/:name', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const part = await partService.getPartByName(String(req.params.name));
+        res.status(200).json(part);
+    } catch (error) {
+        next (error);
+    }
+});
+
 export { partRouter }
