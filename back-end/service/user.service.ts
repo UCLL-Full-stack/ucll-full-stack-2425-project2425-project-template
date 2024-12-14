@@ -5,7 +5,7 @@ import { UserInput } from '../types';
 
 const createUser = ({username, email, password}: UserInput): User => {
 
-    if (password.length !== 8) {
+    if (password.length < 8) {
         throw new Error("Password needs to be 8 characters long.");
     }
 
