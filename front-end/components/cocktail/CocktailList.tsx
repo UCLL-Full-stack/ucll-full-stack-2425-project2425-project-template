@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CocktailContainer from './cocktailContainer';
+import CocktailContainer from './CocktailContainer';
 import CocktailService from '@services/CocktailService';
 import { Cocktail } from '@types';
 
