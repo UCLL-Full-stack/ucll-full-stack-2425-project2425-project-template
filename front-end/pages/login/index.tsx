@@ -25,7 +25,7 @@ const Login: React.FC = () => {
     if (!validateInput()) return;
 
     try {
-      const response = await authService.login({ username, password, role });
+      const response = await authService.login({ username, password });
       if (response.ok) {
         const userData = await response.json();
         localStorage.setItem('loggedInUser', JSON.stringify({ username: userData.username, role: userData.role }));
@@ -47,16 +47,7 @@ const Login: React.FC = () => {
       <Header />
       <main className="container">
         <h1 className="text-center my-4">Login</h1>
-        <UserLoginForm
-          username={username}
-          password={password}
-          role={role}
-          error={error}
-          setUsername={setUsername}
-          setPassword={setPassword}
-          setRole={setRole}
-          handleLogin={handleLogin}
-        />
+        <UserLoginForm />
         <div className="text-center mt-3">
           <button className="btn btn-secondary" onClick={() => router.push('/register')}>
             Register

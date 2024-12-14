@@ -36,11 +36,9 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
  *             required:
  *               - username
  *               - password
- *               - role
  *           example:
  *             username: "admin"
  *             password: "adminpassword"
- *             role: "admin"
  *     responses:
  *       200:
  *         description: Successful login
@@ -53,8 +51,6 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
  *                   type: string
  *                 username:
  *                   type: string
- *                 role:
- *                   type: string
  *       400:
  *         description: Missing username, password, or role
  *       401:
@@ -65,8 +61,8 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
 authRouter.post('/login', async (req: Request, res: Response) => {
   const { username, password, role } = req.body;
 
-  if (!username || !password || !role) {
-    return res.status(400).json({ message: 'Username, password, and role are required' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and Password are required' });
   }
 
   try {

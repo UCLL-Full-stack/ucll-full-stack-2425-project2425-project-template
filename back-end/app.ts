@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { submissionFormRouter } from './controller/Submission_form.routes';
 import { raceRouter } from './controller/Race.routes';
 import { authRouter } from './controller/Auth.routes';
-import { crashRouter } from './controller/crash.routes';
+import { crashRouter } from './controller/Crash.routes';
 import { userRouter } from './controller/User.routes';
 import { racecarRouter } from './controller/Racecar.routes';
 import { driverRouter } from './controller/Driver.routes';

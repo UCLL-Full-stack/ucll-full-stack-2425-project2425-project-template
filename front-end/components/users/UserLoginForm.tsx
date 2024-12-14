@@ -7,7 +7,6 @@ const UserLoginForm: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("user");
     const [error, setError] = useState("");
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
@@ -29,11 +28,6 @@ const UserLoginForm: React.FC = () => {
             result = false;
         }
 
-        if (!role || role.trim() === "") {
-            setError("Role is required");
-            result = false;
-        }
-
         return result;
     };
 
@@ -46,7 +40,7 @@ const UserLoginForm: React.FC = () => {
         }
 
         try {
-            const response = await authService.login({ username, password, role });
+            const response = await authService.login({ username, password });
             if (response.ok) {
                 const userData = await response.json();
                 setStatusMessages([{ message: "Logging in...", type: "success" }]);
@@ -86,21 +80,8 @@ const UserLoginForm: React.FC = () => {
                         required
                     />
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="role" className="form-label">Role</label>
-                    <select
-                        id="role"
-                        className="form-select"
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                        required
-                    >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
                 {error && <div className="alert alert-danger">{error}</div>}
-                <button type="submit" className="btn btn-primary w-100">Login</button>
+                <button type="submit" className="btn btn-primary w-100" style={{ marginTop: '30px' }}>Login</button>
             </form>
         </>
     );
