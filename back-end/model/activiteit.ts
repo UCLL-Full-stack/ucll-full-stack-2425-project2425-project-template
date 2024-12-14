@@ -6,7 +6,7 @@ export class Activiteit {
     private einddatum: Date;
 
     constructor(activiteit:{
-        id?: number,
+        id: number,
         naam: string,
         beschrijving: string,
         begindatum: Date,
@@ -53,6 +53,28 @@ export class Activiteit {
 
     public setEinddatum(einddatum: Date): void {
         this.einddatum = einddatum;
+    }
+
+    public static from({
+        id,
+        naam,
+        beschrijving,
+        begindatum,
+        einddatum
+    }:{
+        id: number,
+        naam: string,
+        beschrijving: string,
+        begindatum: Date,
+        einddatum: Date
+    }): Activiteit {
+        return new Activiteit({
+            id,
+            naam,
+            beschrijving,
+            begindatum,
+            einddatum
+        });
     }
 
     equals(activiteit: any): boolean {

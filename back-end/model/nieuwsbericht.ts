@@ -1,18 +1,18 @@
 import { Leiding } from "./leiding";
 
 export class Nieuwsbericht {
-    private id?: number;
+    private id: number;
     private titel: string;
     private inhoud: string;
     private datum: Date;
-    private auteur: Leiding;
+    private auteur: number;
 
     constructor(nieuwsbericht:{
-        id?: number,
+        id: number,
         titel: string,
         inhoud: string,
         datum: Date,
-        auteur: Leiding
+        auteur: number
     }) {
         this.id = nieuwsbericht.id;
         this.titel = nieuwsbericht.titel;
@@ -37,7 +37,7 @@ export class Nieuwsbericht {
         return this.datum;
     }
 
-    public getAuteur(): Leiding {
+    public getAuteur(): number {
         return this.auteur;
     }
 
@@ -53,8 +53,30 @@ export class Nieuwsbericht {
         this.datum = datum;
     }
 
-    public setAuteur(auteur: Leiding): void {
+    public setAuteur(auteur: number): void {
         this.auteur = auteur;
+    }
+
+    public static from({
+        id,
+        titel,
+        inhoud,
+        datum,
+        auteurId
+    }: {
+        id: number,
+        titel: string,
+        inhoud: string,
+        datum: Date,
+        auteurId: number
+    }): Nieuwsbericht {
+        return new Nieuwsbericht({
+            id,
+            titel,
+            inhoud,
+            datum,
+            auteur: auteurId
+        });
     }
 
     equals(nieuwsbericht: any): boolean {
