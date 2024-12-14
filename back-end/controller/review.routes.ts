@@ -5,10 +5,19 @@ const reviewRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
  * /reviews:
  *   get:
  *     summary: Retrieve all reviews
  *     description: Returns a list of all reviews, including details about the reviewer and the trip reviewed.
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of reviews
@@ -74,6 +83,8 @@ reviewRouter.get('/', async (req: Request, res: Response) => {
  *   post:
  *     summary: Create a new review
  *     description: Adds a new review for a trip by a student.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -134,6 +145,8 @@ reviewRouter.post('/', async (req: Request, res: Response) => {
  *   get:
  *     summary: Retrieve a review by ID
  *     description: Returns details of a specific review identified by its ID.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path

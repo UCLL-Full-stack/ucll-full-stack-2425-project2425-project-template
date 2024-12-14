@@ -11,6 +11,8 @@ const studentRouter = express.Router();
  *   get:
  *     summary: Retrieve all students
  *     description: Returns a list of all students, including their details.
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of students
@@ -70,6 +72,8 @@ studentRouter.get('/', async (req: Request, res: Response) => {
  *         description: The ID of the student to retrieve.
  *         schema:
  *           type: integer
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Student details
@@ -260,7 +264,6 @@ studentRouter.post('/signup', async (req: Request, res: Response, next: NextFunc
  *                   type: string
  *                   example: An error occurred while processing the request.
  */
-
 studentRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try{
     const studentInput = <StudentInput>req.body

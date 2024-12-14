@@ -6,10 +6,19 @@ const bookingRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
  * /bookings:
  *   get:
  *     summary: Retrieve all bookings
  *     description: Returns a list of all bookings with their details, including student and trip information.
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of bookings
@@ -82,6 +91,8 @@ bookingRouter.get('/', async (req: Request, res: Response) => {
  *   post:
  *     summary: Create a new booking
  *     description: Creates a new booking with the provided details.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -142,12 +153,15 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
     res.status(400).json({ status: 'error', errorMessage: err.message });
   }
 });
+
 /**
  * @swagger
  * /bookings/{bookingId}:
  *   get:
  *     summary: Retrieve a booking by ID
  *     description: Returns the details of a specific booking by its ID.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: bookingId
@@ -219,6 +233,5 @@ bookingRouter.get('/:bookingId', async (req: Request, res: Response) => {
     }
   }
 });
-
 
 export { bookingRouter };

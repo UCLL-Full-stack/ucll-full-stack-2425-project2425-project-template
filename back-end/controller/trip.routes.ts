@@ -5,9 +5,18 @@ const tripRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ * 
  * /trips:
  *   get:
  *     summary: Get all trips
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of trips
@@ -61,6 +70,8 @@ tripRouter.get('/', async (req: Request, res: Response) => {
  *   post:
  *     summary: Create a new trip
  *     description: Creates a new trip with the provided details.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -137,6 +148,8 @@ tripRouter.post('/', async (req: Request, res: Response) => {
  *   get:
  *     summary: Retrieve a trip by ID
  *     description: Returns details of a specific trip identified by its ID.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
