@@ -12,10 +12,12 @@ const UserRegisterForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [studentNumber, setStudentNumber] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
+  const [studentNumberError, setStudentNumberError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
   const clearErrors = () => {
@@ -23,6 +25,7 @@ const UserRegisterForm: React.FC = () => {
     setEmailError(null);
     setPasswordError(null);
     setConfirmPasswordError(null);
+    setStudentNumberError(null);
     setStatusMessages([]);
   };
 
@@ -73,6 +76,17 @@ const UserRegisterForm: React.FC = () => {
       setConfirmPasswordError(null);
     }
 
+    // Student Number validation
+    if (!studentNumber.trim()) {
+      setStudentNumberError("Student number is required");
+      isValid = false;
+    } else if (studentNumber.length < 6 || studentNumber.length > 12) {
+      setStudentNumberError("Student number must be between 6 and 12 characters long");
+      isValid = false;
+    } else {
+      setStudentNumberError(null);
+    }
+
     return isValid;
   };
 
@@ -82,7 +96,7 @@ const UserRegisterForm: React.FC = () => {
 
     if (!validate()) {
       setStatusMessages([
-        { message: "", type: "error" },
+        { message: "Validation failed", type: "error" },
       ]);
       return;
     }
@@ -91,10 +105,10 @@ const UserRegisterForm: React.FC = () => {
       { message: t("register.success"), type: "success" },
     ]);
 
-    sessionStorage.setItem("registeredUser", name);
+    sessionStorage.setItem("registeredUser", JSON.stringify({ name, email, studentNumber }));
 
     setTimeout(() => {
-      router.push("/login"); // Redirect to login page after successful registration
+      router.push("/login");
     }, 2000);
   };
 
@@ -112,6 +126,16 @@ const UserRegisterForm: React.FC = () => {
           onChange={(event) => setName(event.target.value)}
         />
         {nameError && <p className={styles.errorMessage}>{nameError}</p>}
+
+        {/* Student Number Field */}
+        <label className={styles.formLabels} htmlFor="studentNumberInput">{t("register.studentnummer")}</label>
+        <input className={styles.inputField}
+          id="studentNumberInput"
+          type="text"
+          value={studentNumber}
+          onChange={(event) => setStudentNumber(event.target.value)}
+        />
+        {studentNumberError && <p className={styles.errorMessage}>{studentNumberError}</p>}
 
         {/* Email Field */}
         <label className={styles.formLabels} htmlFor="emailInput">{t("register.email")}</label>

@@ -1,4 +1,4 @@
-import bookingService from "@/services/bookingService";
+import bookingService from "@/services/BookingService";
 import { Booking } from "@/types";
 import { useEffect, useState } from "react";
 import Navbar from '@/components/Navbar';

@@ -9,22 +9,22 @@ const Navbar: React.FC = () => {
     const { t } = useTranslation();
 
     useEffect(() => {
-        const user = sessionStorage.getItem('loggedInUser');
-        setLoggedInUser(user);
-        console.log("Logged-in user from session storage:", user);
+        const user = localStorage.getItem('loggedInUser');
+        if (user) {
+            const parsedStudent = JSON.parse(user);
+            setLoggedInUser(parsedStudent.username);
+            console.log("Logged-in user from local storage:", parsedStudent.username);
+        }
     }, []);
 
     const handleLogout = () => {
-        sessionStorage.removeItem('loggedInUser');
+        localStorage.removeItem('loggedInUser');
         setLoggedInUser(null);
-        console.log("User logged out and session storage cleared");
+        console.log("User logged out and local storage cleared");
     }
     
     return (
         <nav className={styles.navbar}>
-            {/* <div className={styles['navbar-logo']}>
-                <h1>EuroStudent Travel</h1>
-            </div> */}
             <ul className={styles['navbar-links']}>
                 <li>
                     <Link href="/">
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
                 {loggedInUser ? (
                     <>
                     <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
-                        {t("nav.welkom")} {loggedInUser}!
+                        {`${t("nav.welkom")} ${loggedInUser}`}!
                     </div>
                     <button
                         onClick={handleLogout}

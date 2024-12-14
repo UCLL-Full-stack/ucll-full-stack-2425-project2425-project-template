@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from '../styles/UserLoginForm.module.css';
 import { useTranslation } from "next-i18next";
-import Link from "next/link"; // Import Link from next/link
+import Link from "next/link";
+import StudentService from "../services/StudentServices";
 
 const UserLoginForm: React.FC = () => {
   const { t } = useTranslation("common");
@@ -47,29 +48,48 @@ const UserLoginForm: React.FC = () => {
     } else {
       setPasswordError(null);
     }
+
     return isValid;
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
     clearErrors();
   
     if (!validate()) {
       setStatusMessages([
-        { message: "", type: "error" },
+        { message: "Validation failed", type: "error" },
       ]);
       return;
     }
-  
-    setStatusMessages([
-      { message: t("login.success"), type: "success" }
-    ]);
-  
-    sessionStorage.setItem("loggedInUser", name);
-  
-    setTimeout(() => {
-      router.push("/");
-    }, 2000);
+
+    const student = { username: name, password};
+    const response = await StudentService.loginStudent(student)
+
+    if (response.status === 200) {
+      setStatusMessages([{ message: t("login.success"), type: "success" }]);
+
+      const student =  await response.json();
+      localStorage.setItem(
+        "loggedInUser", 
+        JSON.stringify({
+          token: student.token,
+          username: student.username,
+          email: student.email,
+          studentNumber: student.student,
+          role: student.role
+          })
+        );
+      
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+
+    } else {
+      console.log(student);
+      setStatusMessages([{ message: t("login.error"), type: "error" }]);
+    }
   };
   
 
@@ -78,7 +98,6 @@ const UserLoginForm: React.FC = () => {
       <form onSubmit={handleSubmit} className={styles.userLoginForm}>
         <h3 className={styles.titleForm}>{t("login.login")}</h3>
         
-        {/* Username Field */}
         <label className={styles.formLabels} htmlFor="nameInput">{t("login.gebruikersnaam")}</label>
         <input className={styles.inputField}
           id="nameInput"
@@ -88,7 +107,6 @@ const UserLoginForm: React.FC = () => {
         />
         {nameError && <p className={styles.errorMessage}>{nameError}</p>}
 
-        {/* Password Field */}
         <label className={styles.formLabels} htmlFor="passwordInput">{t("login.wachtwoord")}</label>
         <input className={styles.inputField}
           id="passwordInput"
@@ -98,7 +116,6 @@ const UserLoginForm: React.FC = () => {
         />
         {passwordError && <p className={styles.errorMessage}>{passwordError}</p>}
 
-        {/* Status Messages */}
         {statusMessages.length > 0 && (
           <ul className={styles.userLoginStatusMessages}>
             {statusMessages.map(({ message, type }, index) => (
