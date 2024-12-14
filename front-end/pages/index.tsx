@@ -2,14 +2,13 @@ import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import Login from "../components/Login"; // Import Login component
-
+import Login from "../components/Login"; 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
-  const [showLogin, setShowLogin] = useState(false); // Show login form state
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [showLogin, setShowLogin] = useState(false); 
 
   const toggleLogin = () => {
-    setShowLogin((prev) => !prev); // Toggle the Login form visibility
+    setShowLogin((prev) => !prev); 
   };
 
   return (
@@ -21,20 +20,22 @@ export default function Home() {
         <link rel="icon" href="/images/shittylogo.png" />
       </Head>
       <main className="flex flex-col items-center justify-center min-h-screen bg-black text-yellow-500 px-4 py-8">
-        {/* Top Right Login/Logout Button */}
         <div className="absolute top-4 right-4">
-          <button
-            onClick={toggleLogin}
-            className="bg-yellow-500 text-black font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition"
-          >
-            {isLoggedIn ? "Logout" : "Login"}
-          </button>
+        <button
+          onClick={toggleLogin}
+          className={`font-bold py-2 px-4 rounded-lg transition ${
+            isLoggedIn
+              ? "bg-yellow-500 text-black hover:bg-red-500"
+              : "bg-yellow-500 text-black hover:bg-green-500"
+          }`}
+        >
+          {isLoggedIn ? "Logout" : "Login"}
+        </button>
+
         </div>
 
-        {/* Show Login Component */}
         {showLogin && <Login onClose={toggleLogin} />}
 
-        {/* Logo Section */}
         <div className="mb-6">
           <Image
             src="/images/shittylogo.svg"
@@ -45,14 +46,11 @@ export default function Home() {
           />
         </div>
 
-        {/* Title Section */}
         <h1 className="text-7xl font-extrabold text-center mb-8 font-bebas">
           Welcome to Manchester Shitty
         </h1>
 
-        {/* Navigation Links */}
         <nav className="flex gap-8 mb-12">
-          {/* Players Button */}
           <Link
             href="/players"
             className="relative block w-56 h-20 bg-yellow-500 text-black rounded-lg overflow-hidden group transition-transform transform hover:scale-105"
@@ -65,7 +63,6 @@ export default function Home() {
             </span>
           </Link>
 
-          {/* Coaches Button */}
           <Link
             href="/coaches"
             className="relative block w-56 h-20 bg-yellow-500 text-black rounded-lg overflow-hidden group transition-transform transform hover:scale-105"
@@ -78,7 +75,6 @@ export default function Home() {
             </span>
           </Link>
 
-          {/* Table Button */}
           <Link
             href="/table"
             className="relative block w-56 h-20 bg-yellow-500 text-black rounded-lg overflow-hidden group transition-transform transform hover:scale-105"
