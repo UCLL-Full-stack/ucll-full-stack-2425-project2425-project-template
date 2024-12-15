@@ -7,39 +7,17 @@ datasource db {
     url      = env("DATABASE_URL") 
 }
 
-model Album{
-    id Int @id @default(autoincrement())
-    title String @db.VarChar(255)
-    duration DateTime @db.Time
-    artists Artist[]
-    songs Song[]
-    releaseDate DateTime
-    lists List[]
-}
-
-model Song{
-    id Int @id @default(autoincrement())
-    title String @db.VarChar(255)
-    duration DateTime @db.Time
-    album Album @relation(fields: [albumId], references: [id])
-    albumId Int 
-    Artists Artist[]
-}
-
-model Artist{
-    id Int @id @default(autoincrement())
-    name String
-    bio String
-    albums Album[]
-    Songs Song[]
-}
-
 model User{
     id Int @id @default(autoincrement())
     createdAt DateTime @default(now())
     email String @unique
-    userName String @unique
+    username String @unique
     password String
+    followedBy User[] @relation("UserFollows")
+    following User[] @relation("UserFollows")
+    lists List[]
+    reviews Review[]
+    comments Comment[]
 }
 
 model List{
@@ -47,5 +25,31 @@ model List{
     createdAt DateTime @default(now())
     title String @db.VarChar(255)
     description String
-    albums Album[]
+    authorId Int
+    author User @relation(fields: [authorId], references: [id])
+    albumIds String[]
+}
+
+model Review{
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    title String @db.VarChar(255)
+    body String @db.VarChar(2048)
+    starRating Int
+    albumID String @db.VarChar(255)
+    likeCount Int
+    authorId Int
+    author User @relation(fields: [authorId], references: [id])
+    comments Comment[]
+}
+
+model Comment{
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    body String @db.VarChar(2048)
+    likeCount Int
+    authorId Int
+    author User @relation(fields: [authorId], references: [id])
+    reviewId Int
+    review Review @relation(fields: [reviewId], references: [id])
 }

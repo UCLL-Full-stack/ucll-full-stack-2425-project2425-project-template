@@ -4,8 +4,10 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import {albumRouter} from './controller/album.routes';
 import { listRouter } from './controller/list.routes';
+import { userRouter } from './controller/user.routes';
+import { expressjwt } from 'express-jwt';
+import { reviewRouter } from './controller/review.routes';
 
 const app = express();
 dotenv.config();
@@ -18,10 +20,26 @@ app.get('/status', (req: Request, res: Response) => {
     res.json({ message: 'Back-end is running...' });
 });
 
-app.use('/albums', albumRouter);
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET??'default_secret',
+        algorithms: ['HS256']
+    }).unless({
+        path: [
+            {url: '/users/login', methods: ['POST']},
+            {url: '/users/signup', methods: ['POST']},
+            {url: '/lists', methods: ['GET']},
+            {url: '/reviews', methods: ['GET']},
+        ]
+    })
+);
+
+app.use('/users', userRouter);
 app.use('/lists', listRouter);
+app.use('/reviews', reviewRouter);
 app.use((err: Error, req: Request, res: Response, next: NextFunction)=>{
-    res.status(400).json({status: 'application error', message: err.message});
+    console.log(err.message);
+    res.status(400).json({status: 'application error', message: "check server Log for error details"});
 });
 
 const swaggerOpts = {

@@ -1,9 +1,3 @@
-export type Duration = {
-    hours : number,
-    minutes: number,
-    seconds: number
-}
-
 export type Artist= {
     id?: number,
     name: string,
@@ -11,7 +5,14 @@ export type Artist= {
     albums: Album[] 
 }
 
-export type Song = {
+export type Album = {
+    id: string,
+    name: string,
+    artist: string,
+    image: {"#text": string, size: string}[],
+}
+
+export type Track= {
     id?: number,
     title: string,
     duration: Duration,
@@ -19,25 +20,98 @@ export type Song = {
     artists: Artist
 }
 
-export type Album = {
-    id?: number,
-    title: string,
-    duration: Duration,
-    artists: Artist[],
-    songs: Song[],
-    releaseDate: Date 
+export type ArtistResponse = {
+    results: {
+        artistmatches:{
+            artist: Artist[];
+        }
+    }
+}
+
+export type AlbumResponse = {
+    results: {
+        albummatches:{
+            album: Album[];
+        }
+    }
+}
+
+export type TrackResponse = {
+    results: {
+        trackmatches:{
+            track: Track[];
+        }
+    }
+}
+
+export type UserInput = {
+    username?: string,
+    email: string,
+    password: string
 }
 
 export type ListInput = {
+    authorId: number,
     title: string,
     description: string,
-    albums: number[]
+    albums: string[]
+}
+
+export type ReviewInput = {
+    authorId: number,
+    title: string,
+    body: string,
+    albumId: string,
+    starRating: number
+}
+
+export type CommentInput = {
+    authorId: number,
+    body: string,
+    reviewId: Review,
+}
+
+export type User = {
+    id: number,
+    createdAt: Date,
+    email: string,
+    password: string,
+    username: string,
+    lists: List[],
+    reviews: Review[]
 }
 
 export type List = {
-    id?: number,
+    id: number,
+    author: User,
     createdAt: number,
     title: string,
     description: string,
-    albums: Album[]
+    albumIds: string[]
+}
+
+export type Review = {
+    id: number,
+    author: User,
+    createdAt: number,
+    title: string,
+    body: string,
+    albumId: string,
+    likeCount: number,
+    starRating: number,
+    comments: Comment[]
+}
+
+export type Comment = {
+    id: number,
+    author: User, 
+    createdAt: number,
+    body: string,
+    reviewId: number
+}
+
+export type JWTobject = {
+    token: string,
+    email: string,
+    id: string
 }

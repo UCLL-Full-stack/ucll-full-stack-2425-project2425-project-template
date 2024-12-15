@@ -1,14 +1,34 @@
-import { User } from "../model/user"
-
-export type Duration = {
-    hours : number,
-    minutes: number,
-    seconds: number
-}
 
 export type ListInput = {
-    user?: User,
     title: string,
     description: string,
-    albums: number[],
+    albums: string[],
+    authorId: number
+}
+
+export type ReviewInput = {
+    title: string,
+    body: string,
+    albumId: string,
+    starRating: number,
+    authorId: number
+}
+
+export type CommentInput = {
+    body: string,
+    authorId: number,
+    reviewId: number
+}
+
+export type UserInput = {
+    username: string,
+    email: string,
+    password: string
+}
+
+export type AuthResponse = {
+    token: string,
+    email: string,
+    id: number,
+    username: string
 }

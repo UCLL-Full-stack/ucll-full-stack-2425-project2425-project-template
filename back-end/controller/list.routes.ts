@@ -55,8 +55,12 @@ const listRouter = express.Router();
 *                           $ref: '#/components/schemas/List'
 */
 listRouter.get('/', async (req: Request, res: Response, next: NextFunction)=>{
-    const lists = listService.getLists();
-    res.status(200).json(lists);
+    try{
+        const lists = await listService.getLists();
+        res.status(200).json(lists);
+    }catch(e){
+        next(e);
+    }
 });
 
 /**
@@ -82,10 +86,32 @@ listRouter.get('/', async (req: Request, res: Response, next: NextFunction)=>{
 listRouter.post('/', async (req: Request, res: Response, next: NextFunction)=>{
     const list  = <ListInput> req.body;
     try{
-        const newList = listService.createList(list);
+        const newList = await listService.createList(list);
         res.status(200).json(newList);
     }catch(e){
         next(e);
+    }
+});
+
+listRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)=>{
+    const id = Number(req.params["id"]);
+
+    try{
+        const lists = await listService.getUserLists(id);
+        res.status(200).json(lists);
+    }catch(e){
+        next(e); 
+    }
+});
+
+listRouter.delete('/:id', async (req:Request, res:Response, next: NextFunction)=>{
+    const id = Number(req.params["id"]);
+
+    try{
+        await listService.deleteList(id);
+        res.status(200);
+    }catch(e){
+        next(e); 
     }
 });
 

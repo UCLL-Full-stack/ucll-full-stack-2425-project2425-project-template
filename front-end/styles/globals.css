@@ -19,3 +19,40 @@
   font-style: italic;
 }
 
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.slider-container {
+  overflow: hidden;
+  background: #001A6E;
+  white-space: nowrap;
+  position: relative;
+  padding: 0.25rem;
+}
+
+.slider-container:before,
+.slider-container:after {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  content: "";
+  z-index: 2;
+}
+
+.slider-container:hover .slider {
+  animation-play-state: paused;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: repeat(15,1fr);
+  gap: 1rem;
+  animation: 35s slide infinite linear;
+}

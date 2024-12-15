@@ -10,11 +10,19 @@ module.exports = {
   ],
   theme: {
     extend: {
+        animation:{
+            expand: 'expand 1s ease-out',
+        },
+        keyframes:{
+            '0%': {transform: 'scale(0)', opacity:'0'},
+            '100%': {transform: 'scale(1)', opacity:'1'},
+        },
         colors: {
-            'bg1': '#481E14',
-            'bg2': '#0C0C0C',
-            'text1': '#9B3922',
-            'text2': '#F2613F'
+            'bg1': '#001A6E',
+            'bg2': '#074799',
+            'bg3': '#5797da',
+            'text1': '#111',
+            'text2': '#fff',
         }
     },
   },

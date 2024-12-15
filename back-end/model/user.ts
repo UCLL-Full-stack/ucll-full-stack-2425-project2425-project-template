@@ -1,24 +1,72 @@
+import { 
+    List as ListPrisma, 
+    Review as ReviewPrisma, 
+    User as UserPrisma,
+    Comment as CommentPrisma,
+} from '@prisma/client';
+import { List } from './list';
+import { Review } from './review';
+
 export class User{
 
-    private readonly id?: number;
+    private readonly id: number;
     private readonly createdAt: number;
     private email: string;
-    private userName: string;
+    private username: string;
     private password: string;
+    private lists?: List[];
+    private reviews?: Review[];
 
     constructor(user: {
+        id: number;
+        createdAt: Date;
         email: string, 
-        userName: string, 
-        password: string
+        username: string, 
+        password: string,
+        lists?: List[],
+        reviews?: Review[]
     }){
         this.validate(user);
+        this.id = user.id;
         this.email = user.email;   
-        this.userName = user.userName;
+        this.username = user.username;
         this.password = user.password;
         this.createdAt = Date.now();
+        this.lists = user.lists??[];
+        this.reviews = user.reviews??[];
     }
     
-    getId(): number | undefined{
+    static from({
+        id,
+        createdAt,
+        email,
+        username,
+        password,
+        lists,
+        reviews
+    }: UserPrisma & {
+        lists?: (ListPrisma & {
+            author: UserPrisma
+        })[],
+        reviews?: (ReviewPrisma & {
+            comments: (CommentPrisma & {
+                author: UserPrisma
+            })[],
+            author: UserPrisma
+        })[]
+    }): User{
+        return new User({
+            id: id,
+            createdAt: createdAt,
+            email: email,
+            username: username,
+            password: password,
+            lists: lists?.map((list)=>List.from(list))??[],
+            reviews: reviews?.map((review)=>Review.from(review))??[]
+        });
+    }
+
+    getId(): number {
         return this.id;
     }
 
@@ -26,12 +74,20 @@ export class User{
         return this.email;
     }
 
-    getUserName(): string{
-        return this.userName;
+    getUsername(): string{
+        return this.username;
     }
 
     getPassword(): string{
         return this.password;
+    }
+
+    getLists(): List[]{
+        return this.lists??[];
+    }
+
+    getReviews(): Review[]{
+        return this.reviews??[];
     }
 
     getCreatedAt(): number{
@@ -43,9 +99,8 @@ export class User{
         this.email = email;
     }
 
-    setUserName(userName: string) {
-        this.checkUserName(userName);
-        this.userName = userName;
+    setUsername(userName: string) {
+        this.username = userName;
     }
 
     setPassword(password: string){
@@ -54,14 +109,9 @@ export class User{
     }
 
     private checkEmail(email: string){
-        const re = '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+        const re = /^[\w.-]+@([\w-]+\.)+[a-zA-Z]{2,}$/;
         if(!email.toLowerCase().match(re))
             throw new Error('email is not valid');
-    }
-
-    private checkUserName(userName: string){
-        //TODO: check if userName exists in repo
-        this.userName = userName;
     }
 
     private checkPassword(password: string){
@@ -71,20 +121,19 @@ export class User{
 
     validate(user: {
         email: string, 
-        userName: string, 
+        username: string, 
         password: string
     }) {
         this.checkEmail(user.email);
-        this.checkUserName(user.userName);
         this.checkPassword(user.password);
     }
     
     equals(user: User): boolean{
         return (
             this.id === user.getId() &&
-            this.createdAt == user.getCreatedAt() &&
+            this.createdAt === user.getCreatedAt() &&
             this.email === user.email && 
-            this.userName === user.userName &&
+            this.username === user.username &&
             this.password === user.password
         )
     }
