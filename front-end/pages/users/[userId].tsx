@@ -6,11 +6,14 @@ import Header from '@/components/header';
 import UserService from '@/services/UserService';
 import UserInfo from '@/components/users/UserInfo';
 import useSWR from 'swr';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 const UserId = () => {
     const router = useRouter();
     const { userId } = router.query;
-
+    const { t } = useTranslation();
 
     const fetchUserWithBestellingen = async () => {
         const [userResponses, bestellingResponses] = await Promise.all([
@@ -49,5 +52,16 @@ const UserId = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
+  
 
 export default UserId;
