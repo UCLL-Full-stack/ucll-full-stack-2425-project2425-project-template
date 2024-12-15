@@ -1,0 +1,19 @@
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    /* margin-top: 5px; */
+    margin-bottom: 1em
+  }
+  
+  .userLoginStatusMessages {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .userLoginStatusMessages .error {
+    color: red;
+  }
+  
+  .userLoginStatusMessages .success {
+    color: green;
+  }
