@@ -8,12 +8,8 @@ type Props = {
 };
 
 const TripOverviewTable: React.FC<Props> = ({ trips }) => {
-
     const { t } = useTranslation("common");
-    
-  if (!trips) {
-    return <div className={styles['bookings-table-container']}>Loading...</div>;
-  }
+
     return (
         <div className={styles['trips-table-container']}>
             {trips && (

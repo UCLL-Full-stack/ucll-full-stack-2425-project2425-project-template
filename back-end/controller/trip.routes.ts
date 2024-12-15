@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import tripService from '../service/trip.service';
 
 const tripRouter = express.Router();
@@ -54,13 +54,12 @@ const tripRouter = express.Router();
  *                 errorMessage:
  *                   type: string
  */
-tripRouter.get('/', async (req: Request, res: Response) => {
+tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const trips = await tripService.getAllTrips();
     res.status(200).json(trips);
   } catch (error) {
-    const err = error as Error;
-    res.status(400).json({ status: 'error', errorMessage: err.message });
+    next(error);
   }
 });
 

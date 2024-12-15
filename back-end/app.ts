@@ -17,14 +17,6 @@ const app = express();
 app.use(helmet());
 
 const port = process.env.APP_PORT || 3000;
-// app.use(helmet())
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       connectSrc: ["'self', 'https://api.ucll.be'"]
-//     },
-//   })
-// );
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -53,7 +45,7 @@ const swaggerOpts = {
         version: '1.0.0',
       },
     },
-    apis: ['./controller/*.routes.ts'], // Update this path to your route definitions.
+    apis: ['./controller/*.routes.ts'],
   };
   
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
@@ -67,15 +59,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
   }
 });
 
-// app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-//   if(err.name === 'UnauthorizedError'){
-//       res.status(401).json({ status: 'unauthorized', message: err.message});
-//   } else if (err.name === 'MoviesError') {
-//       res.status(400).json({ status: 'domain error', message: err.message});
-//   } else {
-//       res.status(400).json({ status: 'application error', message: err.message});
-//   }
-// });
 app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
