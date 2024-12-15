@@ -69,12 +69,14 @@
     color: white;
 }
 
-.invitesTableth1 {
+.invitesTableth1,
+.usersTableth1 {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
 }
 
-.invitesTableth2 {
+.invitesTableth2,
+.usersTableth2 {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
@@ -98,6 +100,11 @@
 .usersTable tbody tr td
 .invitesTable tbody tr td {
     padding: 1rem 0;
+}
+
+.usersTable tbody tr td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .invitesTable tbody tr td{

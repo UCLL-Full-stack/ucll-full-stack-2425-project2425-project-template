@@ -57,19 +57,19 @@ const EventDetails: React.FC<Props> = ({ event, showParticipantList, addSelfToEv
                 <div className={styles.eventDescription}>
                     <h2>{event.name}</h2>
                     <div>
-                        <img src="/icons/description.png" alt="Description icon" width="20px" height="20px" />
+                        <img src="/icons/description.png" alt="Description icon" width="30px" height="30px" />
                         <p>{event.description}</p>
                     </div>
                     <div>
-                        <img src="/icons/calendar.png" alt="Calendar icon" width="20px" height="20px" />
+                        <img src="/icons/calendar.png" alt="Calendar icon" width="30px" height="30px" />
                         <p>{new Date(event.date).toLocaleDateString()}</p>
                     </div>
                     <div>
-                        <img src="/icons/location.png" alt="Location icon" width="20px" height="20px" />
+                        <img src="/icons/location.png" alt="Location icon" width="30px" height="30px" />
                         <p>{event.location}</p>
                     </div>
                     <div>
-                        <img src="/icons/category.png" alt="Category icon" width="20px" height="20px" />
+                        <img src="/icons/category.png" alt="Category icon" width="30px" height="30px" />
                         <p>{event.category}</p>
                     </div>
                 </div>

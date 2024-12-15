@@ -13,10 +13,10 @@ const UserOverview: React.FC<Props> = ({ usersData }: Props) => {
             <table className={styles.usersTable}>
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        <th className={styles.usersTableth1}>Username</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Role</th>
+                        <th className={styles.usersTableth2}>Role</th>
                     </tr>
                 </thead>
                 <tbody>
