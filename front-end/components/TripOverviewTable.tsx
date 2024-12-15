@@ -22,6 +22,10 @@ const TripOverviewTable: React.FC<Props> = ({ trips }) => {
         return <div className={errorStyles.logInMessage}>Please log in to view this page</div>;
     }
 
+    if (!Array.isArray(trips) || trips.length === 0) {
+        return <div>No trips available</div>;
+    }
+
     return (
         <div className={styles['trips-table-container']}>
             {trips && (
