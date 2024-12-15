@@ -125,6 +125,17 @@ const Home: FC = () => {
     }
   };
 
+  const handleBoardDelete = async (boardId: string) => {
+    console.log('Deleting board:', boardId);
+    try {
+        await BoardService.deleteBoard(boardId);
+        const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId!);
+        setBoards(fetchedBoards || []);
+    } catch (error) {
+        console.error('Error deleting board:', error);
+    }
+  }
+
   return (
       <div className="bg-[#2C2F33] min-h-screen flex flex-col">
           <Head>
@@ -159,7 +170,7 @@ const Home: FC = () => {
                             <p>No boards available for this server.</p>
                         ) : (
                             boards.map(board => (
-                                <BoardCard key={board.boardId} board={board} />
+                                <BoardCard key={board.boardId} board={board} onDelete={handleBoardDelete}/>
                             ))
                         )}
                       </div>

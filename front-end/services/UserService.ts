@@ -62,6 +62,16 @@ const getUserGuildKanbanPermissions = async (userId: string, guildId: string) =>
     return await response.json();
 };
 
+const getAllKanbanPermissionsForBoard = async (userId: string, boardId: string) => {
+    const response = await fetch(`${API_URL}/api/users/${userId}/boards/${boardId}/kanban-permissions`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
 const UserService = {
     getUsers,
     getUser,
@@ -69,6 +79,7 @@ const UserService = {
     updateUser,
     getGuilds,
     getUserGuildKanbanPermissions,
+    getAllKanbanPermissionsForBoard,
 };
 
 export default UserService;

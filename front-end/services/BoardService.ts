@@ -31,10 +31,21 @@ const createBoard = async (board: any) => {
     return await response.json();
 };
 
+const deleteBoard = async (boardId: string) => {
+    const response = await fetch(`${API_URL}/api/boards/${boardId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
 const BoardService = {
     getBoard,
     getBoardsByGuild,
     createBoard,
+    deleteBoard,
 };
 
 export default BoardService;

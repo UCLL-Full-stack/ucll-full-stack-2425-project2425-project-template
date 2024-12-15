@@ -95,5 +95,19 @@ userRouter.get("/:userId/guilds/:guildId/kanban-permissions", async (req, res) =
     }
 });
 
+userRouter.get("/:userId/boards/:boardId/kanban-permissions", async (req, res) => {
+    const { userId, boardId } = req.params;
+    try {
+        const kanbanPermissions = await userService.getAllKanbanPermissionsForBoard(userId, boardId);
+        res.status(200).json(kanbanPermissions);
+    } catch (error) {
+        if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+        } else {
+        res.status(404).json({ error: "An unknown error occurred" });
+        }
+    }
+});
+
 
 export default userRouter;
