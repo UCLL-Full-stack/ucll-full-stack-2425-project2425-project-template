@@ -6,3 +6,65 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  password     String
+  role         String
+  phone_number String   @unique
+  birth_date   DateTime
+  reviews      Review[]
+  Cart         Cart?
+  Address      Address?
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  text      String
+  createdAt DateTime @default(now())
+  userId    Int      
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  price       Float
+  description String
+  rating      Int
+  carts       Cart[]
+  reviews     Review[]
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  totalPrice Float
+  orderDate  DateTime @default(now())
+  cartId     Int      @unique
+  cart       Cart     @relation(fields: [cartId], references: [id])
+}
+
+model Cart {
+  id         Int       @id @default(autoincrement())
+  totalPrice Float
+  products   Product[]
+  userId     Int       @unique
+  user       User      @relation(fields: [userId], references: [id])
+  Order      Order?
+}
+
+model Address {
+  id          Int    @id @default(autoincrement())
+  city        String
+  country     String
+  postCode    String
+  street      String
+  houseNumber Int
+  userId      Int    @unique
+  user        User   @relation(fields: [userId], references: [id])
+}
