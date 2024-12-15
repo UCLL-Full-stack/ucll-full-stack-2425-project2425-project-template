@@ -7,9 +7,13 @@ import router from "next/router";
 import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 const Ingredienten: React.FC = () => {
     const [selectedIngredient, setSelectedIngredient] = useState<Ingredient>();
+    const { t } = useTranslation();
 
     const getIngredienten = async () => {
 
@@ -54,6 +58,16 @@ const Ingredienten: React.FC = () => {
             </main>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default Ingredienten
