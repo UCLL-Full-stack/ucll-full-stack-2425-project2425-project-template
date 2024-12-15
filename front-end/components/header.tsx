@@ -54,6 +54,11 @@ const Header: React.FC = () => {
             Search
           </button>
         </Link>
+        <Link href="http://localhost:8080/login/">
+          <button className="navbarbutton-stylah">
+            Login
+          </button>
+        </Link>
         <Language />
       </nav>
     </header>
