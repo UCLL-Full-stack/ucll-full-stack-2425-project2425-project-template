@@ -1,32 +1,32 @@
 import {Account} from '../model/account';
 import {User} from '../model/user';
+import database from './database';
 
-const accounts: Account[] = [
-    new Account({
-        id: 1,
-        bio: 'Hi, I am an admin',
-        user: new User({
-            id: 1,
-            username: 'admin',
-            email: 'admin@ucll.be',
-            password: 'admin',
-        }),
-    }),
-];
+export const createAccount = async ({
+    bio,
+    userId,
+}: {
+    bio: string;
+    userId: number;
+}): Promise<Account> => {
+    const user = await database.user.findUnique({ where: { id: userId } });
+    if (!user) {
+        throw new Error(`User with ID ${userId} not found`);
+    }
 
-const createAccount = ({id, bio, user}: {id: number; bio: string; user: User;}): Account => {
-    const account = new Account({
-        id,
-        bio,
-        user: new User({
-            id: user.getId(),
-            username: user.getUsername(),
-            email: user.getEmail(),
-            password: user.getPassword(),
-        }),
+    const createdAccount = await database.account.create({
+        data: {
+            bio,
+            userId,
+        },
+        include: { user: true },
     });
-    accounts.push(account);
-    return account;
+
+    return new Account({
+        id: createdAccount.id,
+        bio: createdAccount.bio ?? '',
+        user: User.from(createdAccount.user),
+    });
 };
 
 export default{createAccount}

@@ -24,13 +24,6 @@ export class Account {
         return this.user;
     }
 
-    equals(account: Account): boolean {
-        return (
-            this.bio === account.getBio() &&
-            this.user.equals(account.getUser())
-        );
-    }
-
     validate(account: {
         bio: string;
         user: User;
@@ -41,6 +34,12 @@ export class Account {
         if (!account.user) {
             throw new Error('User is required');
         }
+    }
+    equals(account: Account): boolean {
+        return (
+            this.bio === account.getBio() &&
+            this.user.equals(account.getUser())
+        );
     }
 
 }

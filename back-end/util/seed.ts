@@ -6,45 +6,44 @@ import { set } from 'date-fns';
 const prisma = new PrismaClient();
 
 const main = async () => {
-
-    // await prisma.watchlist.deleteMany({});
-    // await prisma.review.deleteMany({});
-    // await prisma.movie.deleteMany({});
     await prisma.user.deleteMany({});
     await prisma.account.deleteMany({});
 
-
     const user1 = await prisma.user.create({
-      data: {
-        name: 'john_doe',
-        email: 'john@example.com',
-        password: 'password123', // Hash this in production!
-      },
-    });
-  
-    const user2 = await prisma.user.create({
-      data: {
-        name: 'jane_doe',
-        email: 'jane@example.com',
-        password: 'securepassword', // Hash this in production!
-      },
-    });
-
-    const account1 = await prisma.account.create({
         data: {
-          bio: 'Hi, I am an admin',
-          userId: user1.id,
+            username: 'john_doe',
+            email: 'john@example.com',
+            password: await bcrypt.hash('password123', 12), 
         },
     });
-    
+
+    const user2 = await prisma.user.create({
+        data: {
+            username: 'jane_doe',
+            email: 'jane@example.com',
+            password: await bcrypt.hash('securepassword', 12),
+        },
+    });
+
+    // Create accounts and link them to the created users
+    const account1 = await prisma.account.create({
+        data: {
+            bio: 'Hi, I am an admin',
+            user: {
+                connect: { id: user1.id }, // Connect to user1
+            },
+        },
+    });
+
     const account2 = await prisma.account.create({
         data: {
-          bio: 'Hi, I am a user',
-          userId: user2.id,
+            bio: 'Hi, I am a user',
+            user: {
+                connect: { id: user2.id }, // Connect to user2
+            },
         },
     });
 };
-  
 //     // Seed Movies
 //     const movie1 = await prisma.movie.create({
 //       data: {
