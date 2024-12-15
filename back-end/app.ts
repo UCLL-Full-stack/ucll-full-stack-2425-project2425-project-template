@@ -9,11 +9,12 @@ import { pokebowlRouter } from './controller/pokebowl.routes';
 import { orderRouter } from './controller/bestelling.router';
 import { userRouter } from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
-
+app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
 
