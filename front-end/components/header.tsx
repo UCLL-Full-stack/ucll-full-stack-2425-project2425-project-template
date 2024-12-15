@@ -35,6 +35,11 @@ const Header: React.FC = () => {
                         </Link>
                     )}
                     {loggedInUser && (
+                        <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
+                            Welcome, {loggedInUser}!
+                        </div>
+                    )}
+                    {loggedInUser && (
                         <a
                             href="/login"
                             onClick={handleClick}
@@ -42,11 +47,6 @@ const Header: React.FC = () => {
                         >
                             Logout
                         </a>
-                    )}
-                    {loggedInUser && (
-                        <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
-                            Welcome, {loggedInUser}!
-                        </div>
                     )}
                 </nav>
             </div>
