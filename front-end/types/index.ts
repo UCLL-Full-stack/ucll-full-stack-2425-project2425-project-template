@@ -5,6 +5,7 @@ export interface Player {
     number: number;
     birthdate: Date;
     stat?: Stats;
+    pictureUrl?: string;
 }
 
 export interface Team {
