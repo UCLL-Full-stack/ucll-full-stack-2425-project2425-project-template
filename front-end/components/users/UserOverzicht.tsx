@@ -1,5 +1,4 @@
 import { User } from "@/types";
-import { table } from "console";
 import { useRouter } from "next/router";
 
 type Props = {
@@ -23,13 +22,12 @@ const UserOverzicht: React.FC<Props> = ({ users, selectUser }: Props) => {
                     </thead>
                     <tbody>
                         {users.map((user, index) => (
-                            <tr key={index} onClick={() => { router.push(`/users/${user.id}`); selectUser(user) }} role="button">
+                            <tr key={index} onClick={() => { router.push(`/users/${user.id}`); selectUser(user), console.log(selectUser) }} role="button">
                                 <td>{user.voornaam}</td>
                                 <td>{user.naam}</td>
                                 <td>{user.email}</td>
                             </tr>
-                        ))
-                        }
+                        ))}
                     </tbody>
                 </table>
             )}

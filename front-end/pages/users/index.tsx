@@ -21,17 +21,17 @@ const Users: React.FC = () => {
 
         if (userResponse.ok) {
             const users = await userResponse.json();
-            return {users};
+            return { users };
         }
     };
 
-    const {data, isLoading, error} = useSWR("users", getUsers);
+    const { data, isLoading, error } = useSWR("users", getUsers);
 
     useInterval(() => {
         mutate("users", getUsers());
     }, 5000);
 
-    return(
+    return (
         <>
             <Head>
                 <title>Users</title>
@@ -44,9 +44,9 @@ const Users: React.FC = () => {
                 <h1>Users</h1>
                 <p>Lijst van alle gebruikers</p>
                 <section>
-                    {error && <p className="error-field">{error.message}</p>}
+                    {error && <p className="error-field">{error}</p>}
                     {data && (
-                        <UserOverzicht users={data.users} selectUser={setSelectedUser}/>
+                        <UserOverzicht users={data.users} selectUser={setSelectedUser} />
                     )}
                 </section>
             </main>
@@ -57,7 +57,7 @@ const Users: React.FC = () => {
 
 export const getServerSideProps = async (context: { locale: any; }) => {
     const { locale } = context;
-  
+
     return {
         props: {
             ...(await serverSideTranslations(locale ?? "en", ["common"])),

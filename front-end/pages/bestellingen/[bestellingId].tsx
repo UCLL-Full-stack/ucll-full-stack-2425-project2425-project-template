@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const BestellingId = () => {
+const BestellingId: React.FC = () => {
     const router = useRouter();
     const { bestellingId } = router.query;
     const { t } = useTranslation();
@@ -49,13 +49,13 @@ const BestellingId = () => {
 
 export const getServerSideProps = async (context: { locale: any; }) => {
     const { locale } = context;
-  
+
     return {
         props: {
             ...(await serverSideTranslations(locale ?? "en", ["common"])),
         },
     };
 };
-  
+
 
 export default BestellingId;
