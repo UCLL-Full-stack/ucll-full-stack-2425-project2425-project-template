@@ -17,7 +17,11 @@ const Trips: React.FC = () => {
     const getAllTrips = async () => {
         const response = await tripService.getAllTrips();
         const newTrips = await response.json();
-        setTrips(newTrips);
+        if (Array.isArray(newTrips)) {
+            setTrips(newTrips);
+        } else {
+            setTrips([]);
+        }
     };
 
     useEffect(() => {
