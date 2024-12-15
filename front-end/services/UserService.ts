@@ -43,10 +43,27 @@ const getUserBestellingen = async (id: string) => {
     })
 }
 
+const getAllUsers = () => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/users", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
 const UserService = {
     login,
     getUserById,
-    getUserBestellingen
+    getUserBestellingen,
+    getAllUsers
 };
 
 export default UserService;

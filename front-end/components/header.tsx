@@ -54,6 +54,14 @@ const Header: React.FC = () => {
                                 </Link>
                             </li>))
                     }
+                    {loggedInUser && (
+                        (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
+                            <li>
+                                <Link href="/users">
+                                    Users
+                                </Link>
+                            </li>))
+                    }
                     <li>
                         <Link href="/pokebowls">
                             Pokebowls
