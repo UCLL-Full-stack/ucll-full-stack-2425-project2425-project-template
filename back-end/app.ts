@@ -9,10 +9,13 @@ import { studentRouter } from './controller/student.routes';
 import { bookingRouter } from './controller/booking.routes';
 import { reviewRouter } from './controller/review.routes';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
 dotenv.config();
 
 const app = express();
+app.use(helmet());
+
 const port = process.env.APP_PORT || 3000;
 // app.use(helmet())
 // app.use(
