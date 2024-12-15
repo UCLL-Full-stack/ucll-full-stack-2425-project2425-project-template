@@ -1,9 +1,14 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { User } from '@/types';
+import { useTranslation } from "next-i18next";
+import Language from './language/Language';
+
 
 const Header: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         const getUser = sessionStorage.getItem("loggedInUser")
@@ -27,14 +32,14 @@ const Header: React.FC = () => {
                 <ul>
                     <li>
                         <Link href="/">
-                            Home
+                            {t("header.nav.home")}
                         </Link>
                     </li>
                     {loggedInUser && (
                         (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
                             <li>
                                 <Link href="/bestellingen">
-                                    Bestellingen
+                                    {t("header.nav.orders")}
                                 </Link>
                             </li>))
                     }
@@ -42,7 +47,7 @@ const Header: React.FC = () => {
                         (loggedInUser.rol == "Klant") && (
                             <li>
                                 <Link href="/bestellingen/create-bestelling">
-                                    Bestellen
+                                    {t("header.nav.order")}
                                 </Link>
                             </li>))
                     }
@@ -50,7 +55,7 @@ const Header: React.FC = () => {
                         (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
                             <li>
                                 <Link href="/ingredienten">
-                                    Ingredienten
+                                    {t("header.nav.ingredients")}
                                 </Link>
                             </li>))
                     }
@@ -64,25 +69,28 @@ const Header: React.FC = () => {
                     }
                     <li>
                         <Link href="/pokebowls">
-                            Pokebowls
+                            {t("header.nav.pokebowls")}
                         </Link>
                     </li>
                     <li>{!loggedInUser && (
                         <Link href="/login">
-                            Login
+                            {t("header.nav.login")}
                         </Link>
                     )}
                         {loggedInUser && (
-                            <a href="/login" onClick={handleClick}>Logout</a>
+                            <a href="/login" onClick={handleClick}>{t("header.nav.logout")}</a>
                         )}
                     </li>
                     {
                         loggedInUser && (
                             <li>
-                                <Link href={`/users/${loggedInUser.id}`}>Profiel</Link>
+                                <Link href={`/users/${loggedInUser.id}`}>{t("header.nav.profile")}</Link>
                             </li>
                         )
                     }
+                    <li>                    
+                        <Language />
+                    </li>
                 </ul>
             </nav>
         </header>

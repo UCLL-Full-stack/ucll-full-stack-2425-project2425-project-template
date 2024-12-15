@@ -6,10 +6,14 @@ import Header from '@/components/header';
 import IngredientenService from '@/services/IngredientService';
 import IngredientInfo from '@/components/ingredienten/IngredientInfo';
 import useSWR from 'swr';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 const IngredientId = () => {
     const router = useRouter();
     const { ingredientId } = router.query;
+    const { t } = useTranslation();
 
     const getIngredientById = async () => {
         const responses = await Promise.all([IngredientenService.getIngredientById(ingredientId as string)]);
@@ -43,5 +47,16 @@ const IngredientId = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
+  
 
 export default IngredientId;

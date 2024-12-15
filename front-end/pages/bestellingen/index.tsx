@@ -7,10 +7,13 @@ import router from "next/router";
 import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Bestellingen: React.FC = () => {
 
     const [selectedBestelling, setSelectedBestelling] = useState<Bestelling>();
+    const { t } = useTranslation();
 
     const getBestellingen = async () => {
         const responses = await Promise.all([
@@ -58,5 +61,15 @@ const Bestellingen: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+  };
 
 export default Bestellingen
