@@ -79,7 +79,6 @@ const GameMap: React.FC = () => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const now = Date.now();
-            console.log(now - lastMoveTime)
             if (now - lastMoveTime < 200){
                 return;
             }
@@ -128,7 +127,7 @@ const GameMap: React.FC = () => {
     }
 
     return (
-        <div className="relative overflow-hidden w-screen h-screen">
+        <div className="relative overflow-hidden w-screen h-screen bg-black">
             <div
             className="absolute transform"
             style={{

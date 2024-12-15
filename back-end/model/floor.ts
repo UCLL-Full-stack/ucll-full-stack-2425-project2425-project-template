@@ -24,7 +24,7 @@ export class Floor {
         if (floor.tiles == undefined || floor.tiles.length === 0){
             floor.tiles = this.generateTiles();
             if (floor.positions == undefined || floor.positions.length === 0){
-                floor.positions = this.generatePositions(floor.tiles);
+                floor.positions = this.generatePositions(floor.tiles, floor.floornumber);
             }
         }
         this.validate(floor);
@@ -106,19 +106,36 @@ export class Floor {
         return tiles;
     }
 
-    generatePositions(input: Line[]): Position[]{
+    generatePositions(input: Line[], floorNumber: number): Position[]{
         let positions = new Array<Position>();
+        let needDown = true;
+        let needUp = true;
+        if (floorNumber === 1) needUp = false;
         if (input !== undefined){
-            input.map((line, y) => {
-                line.getTiles().map((tile, x) => {
-                    if (tile === "floor"){
-                        const rando = getRandomInt(0, 10);
-                        if (rando === 1){
-                            positions.push(new Position({x: x, y: y, type: "ball", active: true}))
+            while (true){
+                positions = new Array<Position>();
+                needDown = true;
+                needUp = true;
+                input.map((line, y) => {
+                    line.getTiles().map((tile, x) => {
+                        if (tile === "floor"){
+                            const rando = getRandomInt(0, 20);
+                            if (rando === 1){
+                                positions.push(new Position({x: x, y: y, type: "enemy", active: true}));
+                            }
+                            else if (rando === 2 && needDown){
+                                positions.push(new Position({x: x, y: y, type: "stairdown", active: true}));
+                                needDown = false;
+                            }
+                            else if (rando === 3 && needUp){
+                                positions.push(new Position({x: x, y: y, type: "stairup", active: true}));
+                                needUp = false;
+                            }
                         }
-                    }
+                    });
                 });
-            });
+                if (!needDown && !needUp) break;
+            }
         }
         return positions;
     }
