@@ -12,9 +12,11 @@ import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
 
 const app = express();
+app.use(helmet());
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
-app.use(helmet());
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -51,7 +53,10 @@ const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (err.name == "IngredientenError") {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    }
+    else if (err.name == "IngredientenError") {
         res.status(400).json({ status: "domain error", message: err.message });
     } else {
         res.status(400).json({ status: "application error", message: err.message });
