@@ -10,8 +10,17 @@ const everything = {
                 }
             }
         }
-    }
-};
+    },
+    users: {
+        include: {
+            profile: true
+        }
+    },
+    leader: {
+        include: {
+            profile: true
+        }
+    }};
 
 const getAllGroups = async (): Promise<Group[]> => {
     try {
