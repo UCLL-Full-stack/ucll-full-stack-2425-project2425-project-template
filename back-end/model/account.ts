@@ -127,9 +127,9 @@ export class Account {
         this.users.push(user);
     }
 
-    // addTransaction(transaction: Transaction): void {
-        
-    // }
+    calculateBalance(amount: number): void {
+        this.balance += amount;
+    }
 
     toJSON() {
         return {
@@ -145,16 +145,7 @@ export class Account {
         };
     }
 
-    
-    static from({
-        id,
-        balance,
-        isShared,
-        startDate,
-        endDate,
-        status,
-        type,
-    }: AccountPrisma) {
+    static from({ id, balance, isShared, startDate, endDate, status, type }: AccountPrisma) {
         return new Account({
             id,
             balance,
@@ -162,8 +153,7 @@ export class Account {
             startDate,
             endDate,
             status,
-            type
+            type,
         });
     }
 }
-

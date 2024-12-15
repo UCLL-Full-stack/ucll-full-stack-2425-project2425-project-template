@@ -3,55 +3,42 @@ import { Account } from './account';
 import { TransactionType } from '../types';
 
 export class Expense extends Transaction {
-    private destination: string;
-
     constructor(expense: {
         amount: number;
         currency: string;
-        destination: string;
-        account: Account;
+        sourceAccount: Account;
+        destinationAccount: Account;
         id?: number;
     }) {
         super({
             amount: expense.amount,
             currency: expense.currency,
-            transactionType: 'Expense' as TransactionType,
-            account: expense.account,
+            transactionType: 'EXPENSE' as TransactionType,
+            sourceAccount: expense.sourceAccount,
+            destinationAccount: expense.destinationAccount,
             id: expense.id,
         });
-        this.validateExpense(expense);
-        this.destination = expense.destination;
-    }
-
-    getDestination(): string {
-        return this.destination;
-    }
-
-    validateExpense(expense: { destination: string }) {
-        if (!expense.destination?.trim()) {
-            throw new Error('Destination is required');
-        }
     }
 
     static from({
         id,
         amount,
         currency,
-        destination,
-        account,
+        destinationAccount,
+        sourceAccount,
     }: {
         id?: number;
         amount: number;
         currency: string;
-        destination: string;
-        account: Account;
+        destinationAccount: Account;
+        sourceAccount: Account;
     }) {
         return new Expense({
             id,
             amount,
             currency,
-            destination,
-            account,
+            destinationAccount,
+            sourceAccount,
         });
     }
 }

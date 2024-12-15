@@ -30,8 +30,9 @@ type TransactionInput = {
     date?: Date;
     amount: number;
     currency: string;
-    type: string;
-    account: AccountInput;
+    transactionType: TransactionType;
+    destinationAccountNumber: string;
+    sourceAccountNumber: string;
 };
 
 type AuthenticationRequest = {

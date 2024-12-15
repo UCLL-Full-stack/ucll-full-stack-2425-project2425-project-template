@@ -3,55 +3,42 @@ import { Account } from './account';
 import { TransactionType } from '../types';
 
 export class Income extends Transaction {
-    private source: string;
-
     constructor(income: {
         amount: number;
         currency: string;
-        source: string;
-        account: Account;
+        sourceAccount: Account;
+        destinationAccount: Account;
         id?: number;
     }) {
         super({
             amount: income.amount,
             currency: income.currency,
-            transactionType: 'Income' as TransactionType,
-            account: income.account,
+            transactionType: 'INCOME' as TransactionType,
+            sourceAccount: income.sourceAccount,
+            destinationAccount: income.destinationAccount,
             id: income.id,
         });
-        this.validateIncome(income);
-        this.source = income.source;
-    }
-
-    getSource(): string {
-        return this.source;
-    }
-
-    validateIncome(income: { source: string }) {
-        if (!income.source?.trim()) {
-            throw new Error('Source is required');
-        }
     }
 
     static from({
         id,
         amount,
         currency,
-        source,
-        account,
+        sourceAccount,
+        destinationAccount,
     }: {
         id?: number;
         amount: number;
         currency: string;
-        source: string;
-        account: Account;
+        sourceAccount: Account;
+        destinationAccount: Account;
     }) {
         return new Income({
             id,
             amount,
             currency,
-            source,
-            account,
+            sourceAccount,
+            destinationAccount,
         });
     }
 }

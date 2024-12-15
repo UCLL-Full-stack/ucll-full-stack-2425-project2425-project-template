@@ -1,7 +1,5 @@
 import { User } from '../model/user';
-import { Account } from '../model/account';
 import database from '../util/database';
-
 
 // const johnDoe = new User({
 //     nationalRegisterNumber: '99.01.01-123.45',
@@ -27,10 +25,10 @@ import database from '../util/database';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
-        const usersPrisma = await database.user.findMany({ include: { accounts: true }});
+        const usersPrisma = await database.user.findMany({ include: { accounts: true } });
         return usersPrisma.map((userPrisma) => User.from(userPrisma));
-    } catch(error: any) {
-        throw new Error("Database error. See server log for details.");
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
     }
 };
 
@@ -59,7 +57,7 @@ const getAllUsers = async (): Promise<User[]> => {
 const createUser = async (user: User): Promise<User> => {
     // Dit gaat waarschijnlijk nog moeten worden aangepast => accounts => addAccounts
     const accounts = user.getAccounts();
-    
+
     try {
         const userPrisma = await database.user.create({
             data: {
@@ -86,36 +84,41 @@ const createUser = async (user: User): Promise<User> => {
                                 transactionType: transaction.getTransactionType(),
                                 referenceNumber: transaction.getReferenceNumber(),
                                 date: transaction.getDate(),
+                                sourceAccount: {
+                                    connect: { accountNumber: account.getAccountNumber() },
+                                },
                             })),
                         },
                     })),
                 },
             },
-            include: { accounts: { include: { transactions: true } } }, 
+            include: { accounts: { include: { transactions: true } } },
         });
 
-        return User.from(userPrisma); 
+        return User.from(userPrisma);
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
 };
 
-
-const getUserByNationalRegisterNumber = async (nationalRegisterNumber: string): Promise<User | null> => {
+const getUserByNationalRegisterNumber = async (
+    nationalRegisterNumber: string
+): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
             where: {
                 nationalRegisterNumber: nationalRegisterNumber,
-            }, include: { accounts: { include: { transactions: true } } },
+            },
+            include: { accounts: { include: { transactions: true } } },
         });
         if (userPrisma) {
             return User.from(userPrisma);
         } else {
             return null;
-        } 
-    } catch (error: any) {
-            throw new Error("Database error. See server log for details.");
         }
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
 // DIT IS VOOR LOGIN => BCRYPT en JWT
@@ -128,7 +131,8 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
         const userPrisma = await database.user.findUnique({
             where: {
                 email: email,
-            }, include: { accounts: { include: {transactions: true} } },
+            },
+            include: { accounts: { include: { transactions: true } } },
         });
 
         if (userPrisma) {
@@ -136,8 +140,8 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
         } else {
             return null;
         }
-    } catch(error: any) {
-        throw new Error("Database error. See server log for details.");
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
     }
 };
 
@@ -155,14 +159,15 @@ const updateUser = async (updatedUser: User): Promise<User> => {
                 phoneNumber: updatedUser.getPhoneNumber(),
                 email: updatedUser.getEmail(),
                 password: updatedUser.getPassword(),
-            }, include: { accounts: { include: {transactions: true} } },
+            },
+            include: { accounts: { include: { transactions: true } } },
         });
-        
+
         return User.from(updatedPrisma);
-    } catch(error: any) {
-        throw new Error("Database error. See server log for details.");
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
     }
-    
+
     // const index = users.findIndex(
     //     (user) => user.getNationalRegisterNumber() === updatedUser.getNationalRegisterNumber()
     // );
@@ -177,20 +182,20 @@ const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
         const deletedPrisma = await database.user.delete({
             where: {
                 nationalRegisterNumber: nationalRegisterNumber,
-            }, include: { accounts: { include: {transactions: true} } },
+            },
+            include: { accounts: { include: { transactions: true } } },
         });
-        
+
         // if (deletedPrisma) {
-        //     return User.from(deletedPrisma);    
+        //     return User.from(deletedPrisma);
         // } else {
         //     return null;
         // }
-        return User.from(deletedPrisma);    
-        
-    } catch(error: any) {
-        throw new Error("Database error. See server log for details.");
+        return User.from(deletedPrisma);
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
     }
-    
+
     // const index = users.findIndex(
     //     (user) => user.getNationalRegisterNumber() === nationalRegisterNumber
     // );
@@ -210,10 +215,10 @@ const addAccount = async (nationalRegisterNumber: string, accountNumber: string)
                 },
             },
             include: { accounts: { include: { transactions: true } } },
-        }); 
+        });
         return User.from(updatedUser);
     } catch (error: any) {
-        throw new Error("Database error. See server log for details.");
+        throw new Error('Database error. See server log for details.');
     }
 };
 

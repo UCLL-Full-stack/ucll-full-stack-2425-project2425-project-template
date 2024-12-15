@@ -17,7 +17,7 @@ const createAccount = async (account: Account): Promise<Account> => {
                 endDate: account.getEndDate(),
                 status: account.getStatus(),
                 type: account.getType(),
-            }
+            },
         });
 
         return Account.from(accountPrisma);
@@ -34,10 +34,10 @@ const getAccountById = async ({ id }: { id: number }): Promise<Account | null> =
         const accountPrisma = await database.account.findUnique({
             where: {
                 id: id,
-            }
+            },
         });
 
-        return accountPrisma ? Account.from(accountPrisma): null;
+        return accountPrisma ? Account.from(accountPrisma) : null;
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
@@ -49,14 +49,37 @@ const getAccountByAccountNumber = async (accountNumber: string): Promise<Account
     try {
         const accountPrisma = await database.account.findUnique({
             where: {
-                accountNumber: accountNumber
-            }
+                accountNumber: accountNumber,
+            },
         });
 
-        return accountPrisma ? Account.from(accountPrisma): null;
+        return accountPrisma ? Account.from(accountPrisma) : null;
     } catch (error: any) {
-        throw new Error("Database error. See server log for details.");
+        throw new Error('Database error. See server log for details.');
     }
 };
 
-export default { createAccount, getAccountById, getAccountByAccountNumber };
+const updateAccount = async (account: Account): Promise<Account> => {
+    try {
+        const accountPrisma = await database.account.update({
+            where: {
+                id: account.getId(),
+            },
+            data: {
+                balance: account.getBalance(),
+                accountNumber: account.getAccountNumber(),
+                isShared: account.getIsShared(),
+                startDate: account.getStartDate(),
+                endDate: account.getEndDate(),
+                status: account.getStatus(),
+                type: account.getType(),
+            },
+        });
+
+        return Account.from(accountPrisma);
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { createAccount, getAccountById, getAccountByAccountNumber, updateAccount };

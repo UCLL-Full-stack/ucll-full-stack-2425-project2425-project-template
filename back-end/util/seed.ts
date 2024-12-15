@@ -12,7 +12,11 @@ const generateAccountNumber = (type: string): string => {
     return `${today}-${accountType}-${randomNumbers}`;
 };
 
-const generateReferenceNumber = (transactionType: string, accountNumber: string, date: Date): string => {
+const generateReferenceNumber = (
+    transactionType: string,
+    accountNumber: string,
+    date: Date
+): string => {
     const lastThreeNumbers = accountNumber.slice(-3).split('').join(' '); // Last 3 digits of account number with spaces
     const firstTwoLettersType = transactionType.substring(0, 3).toUpperCase(); // First 3 letters of the transaction type
     const year = date.getUTCFullYear().toString(); // Year of the transaction date
@@ -72,7 +76,10 @@ const main = async () => {
             email: 'alice.johnson@example.com',
             password: alicePassword,
             accounts: {
-                connect: [{ accountNumber: account1.accountNumber }, { accountNumber: account2.accountNumber }],
+                connect: [
+                    { accountNumber: account1.accountNumber },
+                    { accountNumber: account2.accountNumber },
+                ],
             },
         },
     });
@@ -100,10 +107,8 @@ const main = async () => {
             amount: 100,
             currency: 'EUR',
             transactionType: 'INCOME',
-            account: {
-                connect: { id: account1.id },
-            },
-            source: 'Salary',
+            sourceAccountNumber: account1.accountNumber,
+            destinationAccountNumber: account2.accountNumber,
         },
     });
 
@@ -114,10 +119,8 @@ const main = async () => {
             amount: 50,
             currency: 'USD',
             transactionType: 'EXPENSE',
-            account: {
-                connect: { id: account2.id },
-            },
-            destination: 'Groceries',
+            sourceAccountNumber: account2.accountNumber,
+            destinationAccountNumber: account1.accountNumber,
         },
     });
 };

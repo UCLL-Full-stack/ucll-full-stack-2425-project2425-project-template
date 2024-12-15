@@ -3,6 +3,7 @@ import { Account } from './account';
 import { TransactionType } from '../types';
 import { Income } from './income';
 import { Expense } from './expense';
+
 export abstract class Transaction {
     private id?: number;
     private referenceNumber: string;
@@ -10,19 +11,22 @@ export abstract class Transaction {
     private amount: number;
     private currency: string;
     private transactionType: TransactionType;
-    private account: Account;
+    private sourceAccount: Account;
+    private destinationAccount: Account;
 
     constructor(transaction: {
         amount: number;
         currency: string;
         transactionType: TransactionType;
-        account: Account;
+        sourceAccount: Account;
+        destinationAccount: Account;
         id?: number;
     }) {
         this.validate(transaction);
         this.id = transaction.id;
         this.transactionType = transaction.transactionType;
-        this.account = transaction.account;
+        this.sourceAccount = transaction.sourceAccount;
+        this.destinationAccount = transaction.destinationAccount;
         this.date = new Date();
         this.referenceNumber = this.generateReferenceNumber();
         this.amount = transaction.amount;
@@ -53,8 +57,12 @@ export abstract class Transaction {
         return this.transactionType;
     }
 
-    getAccount(): Account {
-        return this.account;
+    getSourceAccount(): Account {
+        return this.sourceAccount;
+    }
+
+    getDestinationAccount(): Account {
+        return this.destinationAccount;
     }
 
     validate(transaction: {
@@ -79,7 +87,11 @@ export abstract class Transaction {
     }
 
     generateReferenceNumber(): string {
-        const lastThreeNumbers = this.account.getAccountNumber().slice(-3).split('').join(' ');
+        const lastThreeNumbers = this.sourceAccount
+            .getAccountNumber()
+            .slice(-3)
+            .split('')
+            .join(' ');
         const firstTwoLettType = this.transactionType.substring(0, 3).toUpperCase();
         const year = this.date.getUTCFullYear().toString();
         const uniqueNumber =
@@ -88,31 +100,32 @@ export abstract class Transaction {
         return referenceNumber;
     }
 
-    static from ({
+    static from({
         id,
         amount,
         currency,
         transactionType,
-        account,
-        source,
-        destination,
-    }: TransactionPrisma & { account: AccountPrisma }) {
-        if (transactionType as TransactionType == 'INCOME') {
+        sourceAccount,
+        destinationAccount,
+        referenceNumber,
+        date,
+    }: TransactionPrisma & { sourceAccount: AccountPrisma; destinationAccount: AccountPrisma }) {
+        if (transactionType === 'INCOME') {
             return new Income({
                 id,
                 amount,
                 currency,
-                account: Account.from(account),
-                source: source || '',
+                sourceAccount: Account.from(sourceAccount),
+                destinationAccount: Account.from(destinationAccount),
             });
         } else {
             return new Expense({
                 id,
                 amount,
                 currency,
-                account: Account.from(account),
-                destination: destination || '',
+                sourceAccount: Account.from(sourceAccount),
+                destinationAccount: Account.from(destinationAccount),
             });
-        } 
+        }
     }
 }
