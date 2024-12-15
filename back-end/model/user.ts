@@ -57,4 +57,8 @@ export class User {
     isCaretaker(): boolean {
         return this.role === "caretaker";
     }
+
+    isVisitor(): boolean {
+        return this.role === "visitor";
+    }
 }

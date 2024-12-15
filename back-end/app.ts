@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import animalRouter from './controller/animal.routes';
 import { Request, Response, NextFunction } from 'express';
 import expenseRouter from './controller/expense.routes';
+import userRouter from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -26,6 +27,8 @@ app.listen(port || 3000, () => {
 app.use('/animals', animalRouter);
 
 app.use('/expenses', expenseRouter);
+
+app.use('/users', userRouter);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     res.status(400).json({

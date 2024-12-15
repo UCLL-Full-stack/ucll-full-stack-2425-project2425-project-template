@@ -1,4 +1,4 @@
-type Role = 'admin' | 'caretaker';
+type Role = 'admin' | 'caretaker' | 'visitor';
 
 interface UserInput {
     id?: number;
