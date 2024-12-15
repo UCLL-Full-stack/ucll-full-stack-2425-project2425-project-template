@@ -109,7 +109,7 @@ export class User {
         profile,
         memberOfGroups,
         leaderOfGroups,
-    }: UserPrisma & { profile: ProfilePrisma | null, memberOfGroups: (GroupPrisma & {leader: (UserPrisma & {profile: (ProfilePrisma)}), boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]})[], leaderOfGroups: (GroupPrisma & {leader: (UserPrisma & {profile: (ProfilePrisma)}), boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]})[]}) {
+    }: UserPrisma & { profile: ProfilePrisma | null, memberOfGroups: (GroupPrisma & {leader: (UserPrisma & {profile: (ProfilePrisma | null)}), boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]})[], leaderOfGroups: (GroupPrisma & {leader: (UserPrisma & {profile: (ProfilePrisma | null)}), boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]})[]}) {
         return new User({
             id,
             username,

@@ -20,7 +20,8 @@ const everything = {
         include: {
             profile: true
         }
-    }};
+    }
+};
 
 const getAllGroups = async (): Promise<Group[]> => {
     try {

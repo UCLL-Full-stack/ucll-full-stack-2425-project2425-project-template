@@ -145,7 +145,7 @@ export class Group {
         createdAt,
         leader,
         boards
-    }: GroupPrisma & { leader: (UserPrisma & {profile: (ProfilePrisma)}),boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]}): Group {
+    }: GroupPrisma & { leader: (UserPrisma & {profile: (ProfilePrisma | null)}),boards: (BoardPrisma & {statuses: (StatusPrisma & {tasks: TaskPrisma[]})[]})[]}): Group {
         return new Group({
             id,
             name,
