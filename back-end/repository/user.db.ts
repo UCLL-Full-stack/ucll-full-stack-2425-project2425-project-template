@@ -2,9 +2,8 @@ import { User } from '../model/user'
 
 const users: User[] = [];
 
-const createUser = ({id, username, email, password}: {id: number ,username: string; email: string; password: string;}): User => {
+const createUser = ({username, email, password}: {username: string; email: string; password: string;}): User => {
     const user = new User({
-        id,
         username,
         email,
         password
