@@ -1,4 +1,4 @@
-import { PositionUpdate } from "@types";
+import { Position, PositionUpdate } from "@types";
 
 const getFloorById = async (id: string) => {
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/floor/' + id, {
@@ -11,7 +11,7 @@ const getFloorById = async (id: string) => {
     return await res.json();
 };
 
-const getFloorPositions = async (id: number) => {
+const getFloorPositions = async (id: number): Promise<Position[]> => {
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/floor/' + id + '/positions', {
         method: 'GET',
         headers: {

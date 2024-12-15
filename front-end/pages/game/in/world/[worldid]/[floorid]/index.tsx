@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
 import worldService from "@services/worldService";
-import { World, Floor, Line, Position, Player, PositionUpdate } from '@types';
+import { World, Floor, Line, Position, Player, PositionUpdate, coordinate } from '@types';
 import useInterval from 'use-interval';
 import floorService from '@services/floorService';
 import playerService from '@services/playerService';
@@ -15,9 +15,10 @@ const GameMap: React.FC = () => {
     const [update, setUpdate] = useState(0);
     const [world, setWorld] = useState<World | null>(null);
     const [floor, setFloor] = useState<Floor | null>(null);
-    const [playerPosition, setPlayerPosition] = useState({ x: 10, y: 10, posID: 0 });
+    const [playerPosition, setPlayerPosition] = useState<coordinate | null>(null);
     const [positions, setPositions] = useState<Position[]>([]);
     const [player, setPlayer] = useState<Player | null>(null);
+    const [lastMoveTime, setLastMoveTime] = useState<number>(0)
 
     useEffect(() => {
         getWorld();
@@ -47,17 +48,7 @@ const GameMap: React.FC = () => {
         if (floor){
             const res = await floorService.getFloorPositions(floor.id);
             setPositions(res);
-        }
-    }
-
-    const getPlayer = async() => {
-        const res = await playerService.getPlayerById("1");
-        setPlayer(res);
-    }
-
-    const setPlayerPos = async() => {
-        if (positions){
-            positions.forEach(pos => {
+            res.forEach(pos => {
                 if (pos.type === "player" && pos.active === true){
                     if (pos.playerID === player?.id){
                         setPlayerPosition({x: pos.x, y: pos.y, posID: pos.id});
@@ -65,6 +56,11 @@ const GameMap: React.FC = () => {
                 }
             });
         }
+    }
+
+    const getPlayer = async() => {
+        const res = await playerService.getPlayerById("1");
+        setPlayer(res);
     }
 
     useInterval(() => {
@@ -78,12 +74,22 @@ const GameMap: React.FC = () => {
         getFloor();
         getPlayer();
         getPositions();
-        setPlayerPos();
     }, [update]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            const now = Date.now();
+            console.log(now - lastMoveTime)
+            if (now - lastMoveTime < 200){
+                return;
+            }
+            setLastMoveTime(now);
+
             const prev = playerPosition;
+            if (!prev){
+                return;
+            }
+            
             let newPosition = prev;
             switch (e.key) {
                 case 'ArrowUp':
@@ -101,11 +107,7 @@ const GameMap: React.FC = () => {
                 default:
                     return prev;
             }
-            console.log(newPosition);
-            console.log(floor);
-            console.log(player);
             if (floor && player){
-                console.log("hallo")
                 const res: PositionUpdate = {posID: newPosition.posID, floorID: floor.id, playerID: player.id, x: newPosition.x, y: newPosition.y, active: true};
                 floorService.updatePosition(res);
             }
@@ -118,7 +120,11 @@ const GameMap: React.FC = () => {
     }, [floor, player]);
 
     if (!floor) {
-        return <div className="text-center">Loading floor...</div>;
+        return <div className="text-center">Loading Floor...</div>;
+    }
+
+    if (!playerPosition) {
+        return <div className="text-center">Spawning Player...</div>;
     }
 
     return (

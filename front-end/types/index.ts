@@ -51,3 +51,9 @@ export type PositionUpdate = {
   y: number;
   active: boolean;
 }
+
+export type coordinate = {
+  x: number;
+  y: number;
+  posID: number;
+}

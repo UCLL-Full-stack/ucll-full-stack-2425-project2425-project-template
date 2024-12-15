@@ -55,17 +55,18 @@ export class Floor {
 
     canMoveToPosition(x: number, y: number): boolean {
         const line = this.tiles?.at(y);
+        let res = false;
         if (line?.getTiles().at(x) === "floor"){
+            res = true;
             if (this.positions){
                 this.positions.forEach(pos => {
-                    if (pos.getX() === x && pos.getY() === y && pos.getActive() === true){
-                        return false;
+                    if (pos.getX() === x && pos.getY() === y && pos.getActive()){
+                        res = false;
                     }
                 });
             }
-            return true;
         }
-        return false;
+        return res;
     }
 
     validate(floor: {
