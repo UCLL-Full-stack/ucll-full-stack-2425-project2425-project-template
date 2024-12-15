@@ -48,9 +48,12 @@ import { User } from "../model/user";
 const getAllOrders = async (): Promise<Order[]> => {
     try {
         const orderPrisma = await database.order.findMany({
-            include: { builds: true, user: true },
+            include: {
+                builds: { include: { parts: true } },
+                user: true,
+            },
         });
-        return orderPrisma.flatMap((orderPrisma) => Order.from(orderPrisma));
+        return orderPrisma.map((orderPrisma) => Order.from(orderPrisma));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -61,7 +64,10 @@ const getOrderById = async ({ id }: { id: number }): Promise<Order | null> => {
     try {
         const orderPrisma = await database.order.findUnique({
             where: { id },
-            include: { builds: true, user: true },
+            include: {
+                builds: { include: { parts: true } },
+                user: true,
+            },
         });
         return orderPrisma ? Order.from(orderPrisma) : null;
     } catch (error) {
@@ -84,7 +90,10 @@ const createOrder = async (order: Order): Promise<Order> => {
                     connect: { id: order.getUser().getId() },
                 },
             },
-            include: { user: true, builds: true },
+            include: {
+                builds: { include: { parts: true } },
+                user: true,
+            },
         });
 
         return Order.from(orderPrisma);

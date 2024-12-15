@@ -1,4 +1,7 @@
-import { Build as BuildPrisma } from "@prisma/client";
+import {
+    Build as BuildPrisma ,
+    Part as PartPrisma,
+} from "@prisma/client";
 import { Part } from "./part";
 
 export class Build {
@@ -35,12 +38,17 @@ export class Build {
         }
     }
 
-    static from ({ id, price, preBuild }: BuildPrisma) {
+    static from ({
+        id,
+        price,
+        preBuild,
+        parts
+    }: BuildPrisma & { parts: PartPrisma[] }): Build {
         return new Build({
             id,
-            parts: [],
             price,
             preBuild,
+            parts: parts.map((part) => Part.from(part)),
         })
     }
 

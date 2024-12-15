@@ -2,6 +2,7 @@ import {
     Order as OrderPrisma,
     Build as BuildPrisma,
     User as UserPrisma,
+    Part as PartPrisma,
 } from "@prisma/client";
 import { Build } from "./build";
 import { User } from "./user";
@@ -63,7 +64,10 @@ export class Order {
         orderStatus,
         orderDate,
         user,
-    }: OrderPrisma & { user: UserPrisma, builds: BuildPrisma[] }): Order {
+    }: OrderPrisma & {
+        user: UserPrisma,
+        builds: (BuildPrisma & {parts: PartPrisma[] })[]
+    }): Order {
         return new Order({
             id,
             builds: builds.map((build) => Build.from(build)),

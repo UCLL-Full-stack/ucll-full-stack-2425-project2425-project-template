@@ -31,7 +31,6 @@ const getAllBuilds = async (): Promise<Build[]> => {
         const buildPrisma = await database.build.findMany({
             include: {
                 parts: true,
-                order: false,
             },
         });
         return buildPrisma.length > 0 ? buildPrisma.map(Build.from) : [];
@@ -45,6 +44,7 @@ const getBuildById = async ({ id }: { id: number }): Promise<Build | null> => {
     try {
         const buildPrisma = await database.build.findUnique({
             where: { id },
+            include: {parts: true},
         });
         return buildPrisma ? Build.from(buildPrisma) : null;
     } catch (error) {
@@ -63,6 +63,7 @@ const createBuild = async (build: Build): Promise<Build> => {
                 price: build.getPrice(),
                 preBuild: build.getPreBuild(),
             },
+            include: {parts: true},
         });
 
         return Build.from(buildPrisma);
