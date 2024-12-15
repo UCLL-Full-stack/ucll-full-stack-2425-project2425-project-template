@@ -1,7 +1,8 @@
 import { Trip } from '@/types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/Trips.module.css';
 import { useTranslation } from 'next-i18next';
+import errorStyles from '../styles/errorMessage.module.css';
 
 type Props = {
     trips: Array<Trip>;
@@ -9,6 +10,17 @@ type Props = {
 
 const TripOverviewTable: React.FC<Props> = ({ trips }) => {
     const { t } = useTranslation("common");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+        setIsLoggedIn(!!token);
+    }, []);
+
+    if (!isLoggedIn) {
+        return <div className={errorStyles.logInMessage}>Please log in to view this page</div>;
+    }
 
     return (
         <div className={styles['trips-table-container']}>

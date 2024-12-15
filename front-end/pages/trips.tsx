@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import TripOverviewTable from "@/components/TripOverviewTable";
-import tripService from "@/services/TripService";
+import tripService from "@/services/tripService";
 import { Trip } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";

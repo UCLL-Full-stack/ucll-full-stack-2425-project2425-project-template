@@ -1,7 +1,8 @@
 import { Booking } from '@/types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/Bookings.module.css';
 import { useTranslation } from 'next-i18next';
+import errorStyles from '../styles/errorMessage.module.css';
 
 type Props = {
     bookings: Array<Booking>;
@@ -9,8 +10,20 @@ type Props = {
 
 const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
     const { t } = useTranslation("common");
-    if (!bookings) {
-        return <div className={styles['bookings-table-container']}>Loading...</div>;
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+        useEffect(() => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+            setIsLoggedIn(!!token);
+        }, []);
+
+    if (!isLoggedIn) {
+        return <div className={errorStyles.logInMessage}>Please log in to view this page</div>;
+    }
+
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+        return <div>No bookings available</div>;
     }
     return (
         <div className={styles['bookings-table-container']}>
