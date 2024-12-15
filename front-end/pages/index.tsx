@@ -89,7 +89,6 @@ export default function Home() {
           </Link>
         </nav>
 
-        {/* Footer */}
         <footer className="absolute bottom-4 text-sm text-gray-500">
           © {new Date().getFullYear()} Manchester Shitty. All Rights Reserved.
         </footer>
