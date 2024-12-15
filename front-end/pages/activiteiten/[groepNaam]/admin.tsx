@@ -62,7 +62,7 @@ const Activiteiten: React.FC = () => {
                 <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Activiteiten {groepNaam}</h1>
 
                 <div className="flex justify-end mr-4">
-                    <button className="bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-600"
+                    <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-800"
                             onClick={() => setShowModal(true)}>Activiteit toevoegen
                     </button>
                 </div>

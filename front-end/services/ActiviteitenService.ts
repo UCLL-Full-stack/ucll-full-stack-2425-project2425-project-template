@@ -1,5 +1,5 @@
 const getAllActiviteiten = async () => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + '/activiteit', {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/groep`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -8,7 +8,7 @@ const getAllActiviteiten = async () => {
 };
 
 const getActiviteitenByGroupName = async (groepNaam: string) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/activiteit/${groepNaam}`, {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/groep/${groepNaam}/activiteiten`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ const Header: React.FC = () => {
                 <h1 className="text-3xl font-bold">Agenda Scouts Overijse</h1>
                 <nav>
                     <ul className="flex space-x-4">
-                        <li>
+                        {/* <li>
                             <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/groep%201/admin" : "/activiteiten/groep%201"}>
                                 Groep 1
                             </Link>
@@ -21,6 +21,31 @@ const Header: React.FC = () => {
                         <li>
                             <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/groep%202/admin" : "/activiteiten/groep%202"}>
                                 Groep 2
+                            </Link>
+                        </li> */}
+                        <li>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={"/"}>
+                                Home
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/admin" : "/activiteiten"}>
+                                Alle activiteiten
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/losse leden/admin" : "/activiteiten/losse leden"}>
+                                Losse leden
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/kapoenen/admin" : "/activiteiten/kapoenen"}>
+                                Kapoenen
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/welpen/admin" : "/activiteiten/welpen"}>
+                                Welpen
                             </Link>
                         </li>
                     </ul>

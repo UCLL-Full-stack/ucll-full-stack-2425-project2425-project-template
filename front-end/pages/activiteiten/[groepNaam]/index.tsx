@@ -11,6 +11,14 @@ const Activiteiten: React.FC = () => {
 
     const router = useRouter();
     const { groepNaam } = router.query;
+    const formatGroupName = (name: string) => {
+        return name
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+
+    const formattedGroupName = groepNaam ? formatGroupName(groepNaam as string) : '';
 
     const getActiviteitenByGroupName = async () => {
         const [activiteitenResponse] = await Promise.all([ActiviteitService.getActiviteitenByGroupName(groepNaam as string)]);
@@ -27,10 +35,10 @@ const Activiteiten: React.FC = () => {
     };
 
     useEffect(() => {
-        if (groepNaam) {
+        if (formattedGroupName) {
             getActiviteitenByGroupName();
         }
-    }, [groepNaam]);
+    }, [formattedGroupName]);
 
     return (
         <>
@@ -39,7 +47,7 @@ const Activiteiten: React.FC = () => {
             </Head>
             <Header />
             <main>
-                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Activiteiten {groepNaam}</h1>
+                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Activiteiten {formattedGroupName}</h1>
                 <section className="relative mt-8">
                     {activiteiten && activiteiten.length > 0 ? (
                         <ActiviteitenOverviewTable activiteiten={activiteiten} />

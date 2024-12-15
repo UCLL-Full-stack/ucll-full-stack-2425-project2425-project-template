@@ -15,33 +15,25 @@ const Home: React.FC = () => {
             </Head>
             <Header />
             <main>
-        <span>
-          <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Welkom op de agenda van Scouts Overijse!</h1>
-        </span>
-
-                {/*<div>*/}
-                {/*    <p>*/}
-                {/*        Klik om de huidige activiteiten te zien*/}
-                {/*    </p>*/}
-                {/*    <Link href="/activiteiten" className="nav-link px-4 fs-5 text-black hover:text-blue-200">*/}
-                {/*        Activiteiten*/}
-                {/*    </Link>*/}
-                {/*</div>*/}
-                <div>
-                    <p className="pl-4">
-                        Klik om huidige activiteiten van groep 1 te zien
+                <span>
+                    <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Welkom op de agenda van Scouts Overijse!</h1>
+                </span>
+                <div className="m-5">
+                    <h3>Nieuws</h3>
+                    <h4>Inschrijvingen scoutsjaar 2024-2025</h4>
+                    <p>Beste ouders en leden,
+                        na weer twee lange maanden zonder scouts zijn we eindelijk weer terug! Zondag 29 september start het nieuwe fantastische scoutsjaar, van 14u tot 17u is elke jongen van 6 tot 17 jaar van harte welkom. Hieronder vindt u de inschrijvingslink voor het scoutsjaar 2024-2025
                     </p>
-                    <Link href="/activiteiten/groep 1" className="nav-link p-6 underline hover:text-amber-800">
-                        Activiteiten groep 1
-                    </Link>
+                    <a className="underline text-blue-700 hover:text-gray-500" href="https://forms.office.com/Pages/ResponsePage.aspx?id=G4Y45tkV5k2mXbSHia4fCIrv-xVnqwhGiPRhhKckvedUN1ROQ1kyWTdGQ1ZGN1ZHQzI3MTNLUU5QRC4u">Forum</a>
+                    <p>Stevige Linker</p>
+                    <p>De groepsleiding</p>
                 </div>
-                <div>
-                    <p className="pl-4">
-                        Klik om huidige activiteiten van groep 2 te zien
-                    </p>
-                    <Link href="/activiteiten/groep 2" className="nav-link p-6 underline hover:text-amber-800">
-                        Activiteiten groep 2
-                    </Link>
+                <div className="m-5">
+                    <h4>GDPR wetgeving</h4>
+                    <p>Beste ouders, Via deze link kan u naar onze GDPR wetgeving pagina gaan.</p>
+                    <a className="underline text-blue-700 hover:text-gray-500" href="https://docs.google.com/document/d/1pe6MTjk5iv7z-8TXW39-I7fcgSCO77TT7c1QmWDROIc/edit?usp=sharing">GDPR link</a>
+                    <p>Met scoutieve groeten,</p>
+                    <p>De leiding</p>
                 </div>
             </main>
         </>
