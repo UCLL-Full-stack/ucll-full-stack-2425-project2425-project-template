@@ -8,6 +8,8 @@ import styles from '@styles/home.module.css';
 import { useRouter } from "next/router";
 import { log } from "console";
 import TicketOverview from "@components/tickets/TicketOverview";
+import { get } from "http";
+import InviteService from "@services/InviteService";
 
 const MyEvents: React.FC = () => {
     const router = useRouter();
@@ -25,6 +27,7 @@ const MyEvents: React.FC = () => {
     useEffect(() => {
         if (loggedUser?.email) {
             getEventsByUserEmail(loggedUser.email);
+            getInvitesByUserEmail(loggedUser.email);
         }
     }, [loggedUser]);
 
@@ -32,11 +35,14 @@ const MyEvents: React.FC = () => {
         const response = await EventService.getEventsByUserEmail(email);
         const ticketsData = await response.json();
         setTickets(ticketsData);
+    }
 
-        // const events = ticketsData.map((ticket) => ticket.event);
-        // const sortedEvents = events.sort((a: EventInput, b: EventInput) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-        // setMyEvents(sortedEvents);
+    const getInvitesByUserEmail = async (email: string) => {
+        const response = await InviteService.getInvitesByUserEmail(email);
+        const invitesData = await response.json();
+        const acceptedInvites = invitesData.filter(invite => invite.status === 'ACCEPT');
+        const eventsData = acceptedInvites.map(invite => invite.event);
+        setMyEvents(eventsData);
     }
 
     return (
@@ -52,11 +58,18 @@ const MyEvents: React.FC = () => {
                 {tickets && (
                     tickets.length > 0 ? (
                         <section className={styles.myEvents}>
-                            <h1>My events</h1>
-                            <TicketOverview tickets={tickets} showDeleteButton={true}/>
+                            <h1>Events Purchased</h1>
+                            <TicketOverview tickets={tickets} showDeleteButton={true} />
                         </section>
-                    ) : <p className="text-white">You don't have any upcoming events...</p>
+                    ) : <p className="text-white">You have not purchased any events yet...</p>
                 )}
+                {myEvents && (
+                    myEvents.length > 0 && (
+                        <section className={styles.myEvents}>
+                            <h1>Events Invited</h1>
+                            <EventOverview events={myEvents} showDeleteButton={false} email={loggedUser.email} />
+                        </section>
+                    ))}
             </main>
         </>
     )

@@ -26,7 +26,9 @@ const RenderEventDetailsById: React.FC = () => {
     const [showStatus, setShowStatus] = useState(false);
     const [statusMessage, setStatusMessage] = useState("");
 
-    // const [eventId, setEventId] = useState<string>(null);
+    // Show invite error message
+    const [showInviteErrorMessage, setShowInviteErrorMessage] = useState(false);
+    const [InviteErrorMessage, setInviteErrorMessage] = useState("");
 
     const router = useRouter();
     const { eventId } = router.query;
@@ -92,16 +94,23 @@ const RenderEventDetailsById: React.FC = () => {
     };
 
     const createInvite = async (email: string, eventId: string) => {
+        setEmail("");
+        setShowInviteErrorMessage(false);
+
         try {
             const response = await InviteService.createInvite(email, eventId);
-            const invite = await response.json();
 
-            getInvitesByEventId(eventId);
+            if (!response.ok) {
+                const responseData = await response.json();
+                setInviteErrorMessage(responseData.message);
+                setShowInviteErrorMessage(true);
+            } else {
+                getInvitesByEventId(eventId);
+            }
 
         } catch (error) {
-
-            setErrorMessage(error.message);
-            setShowError(true);
+            setInviteErrorMessage(error.message);
+            setShowInviteErrorMessage(true);
         }
     };
 
@@ -142,11 +151,22 @@ const RenderEventDetailsById: React.FC = () => {
                         <div className={styles.inviteComponent}>
                             <h3>Invite Overview</h3>
                             {invites && invites.length > 0 ? (
-                                <InviteOverview invites={invites} showEventName={false} showUserName={true} />
+                                <InviteOverview
+                                    invites={invites}
+                                    showEventName={false}
+                                    showUserName={true}
+                                    showReactButtons={false}
+                                    showNotifications={false}
+                                    showDownloadButton={false}
+                                />
                             ) : (
                                 <p>No invites yet...</p>
                             )}
+
                             <form className={styles.inviteForm}>
+                                {showInviteErrorMessage && (
+                                    <p className={styles.errorMessage}>{InviteErrorMessage}</p>
+                                )}
                                 <label
                                     htmlFor="email"
                                 >

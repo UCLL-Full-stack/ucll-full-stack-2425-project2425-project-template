@@ -12,6 +12,18 @@ const getAll = async () => {
     });
 };
 
+const getTicketsByUserEmail = async (email: string) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+
+    return fetch(apiUrl + `/tickets/${email}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 const getTicketsByEventId = async (eventId: string) => {
     const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
 
@@ -63,6 +75,7 @@ const TicketService = {
     getTicketsByEventId,
     userBuyTicket,
     removeTicketFromUser,
+    getTicketsByUserEmail,
 };
 
 export default TicketService;

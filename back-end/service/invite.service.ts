@@ -3,9 +3,20 @@ import userDb from "../repository/user.db";
 import eventDb from "../repository/event.db";
 import { Invite } from "../model/invite";
 
+const getAll = async (): Promise<Invite[]> => {
+    const invites = await inviteDb.getAll();
+    return invites;
+};
+
 const createInvite = async (userEmail: string, eventId: string): Promise<Invite> => {
     const userData = await userDb.getUserByEmail(userEmail);
     const event = await eventDb.getEventById(Number(eventId));
+
+    const checkIfInviteExisted = await inviteDb.checkInviteExisted(userEmail, eventId);
+
+    if (checkIfInviteExisted === true) {
+        throw new Error(`User [${userData?.getName()}] has already been invited to ${event?.getName()}.`);
+    }
 
     if (!userData) {
         throw new Error('User not found.');
@@ -31,8 +42,15 @@ const getInvitesByUserEmail = async (email: string): Promise<Invite[]> => {
     return invites;
 }
 
+const changeInviteStatus = async (inviteId: string, status: string): Promise<Invite> => {
+    const inviteStatusChange = await inviteDb.changeInviteStatus(inviteId, status);
+    return inviteStatusChange;
+}
+
 export default {
+    getAll,
     createInvite,
     getInvitesByEventId,
     getInvitesByUserEmail,
+    changeInviteStatus,
 };

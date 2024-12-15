@@ -8,6 +8,23 @@ type Props = {
 
 const UserOverview: React.FC<Props> = ({ usersData }: Props) => {
 
+    const downloadCSV = () => {
+        const headers = ['Username', 'Name', 'Email', 'Role'];
+        const rows = usersData.map(user => [user.username, user.name, user.email, user.role]);
+
+        let csvContent = "data:text/csv;charset=utf-8,"
+            + headers.join(",") + "\n"
+            + rows.map(e => e.join(",")).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "users_list.csv");
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+    };
+
     return (
         <div className="overflow-x-auto mt-5 pb-5">
             <table className={styles.usersTable}>
@@ -32,6 +49,13 @@ const UserOverview: React.FC<Props> = ({ usersData }: Props) => {
                     }
                 </tbody>
             </table>
+            <div className={styles.downloadButtonHolder}>
+                <button
+                    onClick={downloadCSV}
+                    className={styles.downloadButton}>
+                    Download Users List
+                </button>
+            </div>
         </div>
     );
 };

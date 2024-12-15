@@ -10,11 +10,16 @@ import styles from '@styles/home.module.css';
 const MyInvites: React.FC = () => {
     const [loggedUser, setLoggedUser] = useState<UserInput | null>(null);
     const [invites, setInvites] = useState<InviteInput[]>([]);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
         if (loggedInUser) {
             setLoggedUser(JSON.parse(loggedInUser));
+        } else {
+            setErrorMessage("You are not authorised to see this page.");
+            setShowErrorMessage(true);
         }
     }, []);
 
@@ -23,6 +28,12 @@ const MyInvites: React.FC = () => {
             getInvitesByUserEmail(loggedUser.email);
         }
     }, [loggedUser]);
+
+    useEffect(() => {
+        if (loggedUser?.email) {
+            getInvitesByUserEmail(loggedUser.email);
+        }
+    }, [invites]);
 
     const getInvitesByUserEmail = async (email: string) => {
         const response = await InviteService.getInvitesByUserEmail(email);
@@ -40,8 +51,25 @@ const MyInvites: React.FC = () => {
             </Head>
             <Header />
             <main className={styles.invitesMain}>
-                <h1>My invites</h1>
-                <InviteOverview invites={invites} showEventName={true} showUserName={false}/>
+                {loggedUser && (
+                    <>
+                        <h1>My invites</h1>
+                        <InviteOverview
+                            invites={invites}
+                            showEventName={true}
+                            showUserName={false}
+                            showReactButtons={true}
+                            showNotifications={true}
+                            showDownloadButton={false}
+                        />
+                    </>
+                )}
+
+                {showErrorMessage &&
+                    <p className="mt-3">
+                        {errorMessage}
+                    </p>
+                }
             </main>
         </>
     )

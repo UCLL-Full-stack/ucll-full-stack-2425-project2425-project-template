@@ -3,15 +3,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 6rem;
-    min-height: 100vh;
-    border-top: 1px solid white;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    padding-top: 25rem;
+    padding-bottom: 25rem;
+    height: 85vh;
 
     background-image: url('/images/home-cover.jpg'); /* Path to the image */
     background-size: cover; /* Ensures the image covers the entire main area */
     background-position: center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
+
+    margin-left: 5rem;
+    margin-right: 5rem;
+    border-radius: 20px;
 }
 
 .main h1 {
@@ -32,7 +35,8 @@
     padding-bottom: 5rem;
 }
 
-.usersMain {
+.usersMain,
+.invitesOverviewMain {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,10 +46,42 @@
     /* padding: 1rem 1rem; */
     border-radius: 20px;
     border: 1px solid black;
-    margin-left: 4rem;
-    margin-right: 4rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
     margin-bottom: 4rem;
     /* margin-top: 2rem; */
+}
+
+.invitesOverviewMain {
+    padding: 3rem 0;
+}
+
+.invitesOverviewMain h1 {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.downloadButtonHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    width: 100%;
+    margin-top: 2rem;
+    /* margin-bottom: 1rem; */
+}
+
+.downloadButtonHolder button {
+    padding: 1rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.downloadButtonHolder button:hover {
+    scale: 1.05;
 }
 
 .invitesTable {
@@ -67,6 +103,10 @@
     padding: 1rem 5rem;
     background-color: black;
     color: white;
+}
+
+.invitesTable thead th {
+    padding: 1rem 10rem !important;
 }
 
 .invitesTableth1,
@@ -93,8 +133,18 @@
     border-bottom: 1px dotted black;
 }
 
-.usersTable tbody tr:hover {
+.usersTable tbody tr:hover
+.invitesTable tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.invitesTableRows {
+    transition: 0.3s ease-in-out;
+}
+
+.invitesTableRows:hover {
+    cursor: pointer;
+    scale: 1.05;
 }
 
 .usersTable tbody tr td
@@ -110,6 +160,58 @@
 .invitesTable tbody tr td{
     padding-top: 1rem;
     padding-bottom: 1rem;
+}
+
+.inviteReact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inviteReactStatus {
+    font-weight: 600;
+
+}
+
+.inviteReactButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.inviteReactButtons button {
+    border-radius: 10px;
+    border: none;
+    color: white;
+}
+
+.inviteReactButtons .acceptButton {
+    background-color: #27CD41;
+}
+
+.inviteReactButtons .declineButton {
+    background-color: #FF3B2F;
+}
+
+.inviteComponentNotifications {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+    gap: 0.5rem;
+}
+
+.inviteComponentNotifications p,
+.inviteStatusMessage {
+    background-color: black;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 0 !important;
+    text-align: center;
 }
 
 .inviteForm {
@@ -332,8 +434,9 @@
     padding-bottom: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
-    margin-left: 10rem;
-    margin-right: 10rem;
+    margin-left: 5rem !important;
+    margin-right: 5rem !important;
+    margin-bottom: 5rem;
     border-radius: 20px;
 }
 
@@ -483,15 +586,13 @@
     align-self: center;
 }
 
-
-
 .loginStatusMessage,
 .loginErrorMessage { 
-    color: #FF0000;
+    color: #FF3B2F;
 }
 
 .loginSuccessMessage {
-    color: #00FF00;
+    color: #27CD41;
 }
 
 .myEventsLoginSignupButtons {

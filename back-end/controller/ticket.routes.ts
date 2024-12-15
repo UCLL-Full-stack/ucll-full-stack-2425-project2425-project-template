@@ -12,6 +12,16 @@ ticketRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
     }
 });
 
+ticketRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const email = req.params.email;
+        const tickets = await ticketService.getTicketsByUserEmail(email);
+        res.status(200).json(tickets);
+    } catch (error) {
+        next(error);
+    }
+});
+
 ticketRouter.get('/:eventId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const eventId = parseInt(req.params.eventId, 10);

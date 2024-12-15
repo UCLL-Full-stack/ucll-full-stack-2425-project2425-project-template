@@ -49,11 +49,24 @@ const getInvitesByUserEmail = async (email: string) => {
     });
 };
 
+const changeInviteStatus = async (inviteId: string, answer: string) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+
+    return fetch(apiUrl + '/invites/status/' + inviteId + '/' + answer, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        }
+    });
+};
+
 const InviteService = {
     getAll,
     createInvite,
     getInvitesByEventId,
     getInvitesByUserEmail,
+    changeInviteStatus,
 }
 
 export default InviteService;

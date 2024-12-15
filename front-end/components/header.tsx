@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { UserInput, InviteInput } from '@types';
+import { UserInput, InviteInput, TicketInput } from '@types';
 import InviteService from '../services/InviteService';
+import TicketService from '../services/TicketService';
+import useInterval from "use-interval";
 
 const Header: React.FC = () => {
     const [loggedUser, setLoggedUser] = useState<UserInput>(null);
     const [invites, setInvites] = useState<InviteInput[]>();
+    const [tickets, setTickets] = useState<TicketInput[]>([]);
+    const [eventsTotal, setEventsTotal] = useState<number>(0);
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('loggedInUser')));
@@ -15,6 +19,7 @@ const Header: React.FC = () => {
     useEffect(() => {
         if (loggedUser?.email) {
             getInvitesByUserEmail(loggedUser.email);
+            getTicketsByUserEmail(loggedUser.email);
         }
     }, [loggedUser]);
 
@@ -23,6 +28,12 @@ const Header: React.FC = () => {
         const invitesData = await response.json();
         setInvites(invitesData);
     };
+
+    const getTicketsByUserEmail = async (email: string) => {
+        const response = await TicketService.getTicketsByUserEmail(email);
+        const ticketsData = await response.json();
+        setTickets(ticketsData);
+    }
 
     // Handle log out
     const handleLogout = () => {
@@ -45,10 +56,10 @@ const Header: React.FC = () => {
                     Home
                 </Link>
 
-                {loggedUser && (
+                {loggedUser && loggedUser.role !== 'ADMIN' && (
                     <Link href="/my-invites" className={`nav-link px-4 fs-5 ${isActive('/my-invites') ? 'text-white' : 'text-white-50'}`}>
                         My invites {invites && (
-                            <span className="badge bg-danger">{invites.length}</span>
+                            <span className="badge bg-danger">{invites.filter(invite => invite.status === 'PENDING').length}</span>
                         )}
                     </Link>
                 )}
@@ -59,7 +70,9 @@ const Header: React.FC = () => {
 
                 {loggedUser && loggedUser.role !== 'ADMIN' && (
                     <Link href="/my-events" className={`nav-link px-4 fs-5 ${isActive('/my-events') ? 'text-white' : 'text-white-50'}`}>
-                        My events
+                        My events {tickets && invites && (
+                            <span className="badge bg-danger">{tickets.length + invites.filter(invite => invite.status === 'ACCEPT').length}</span>
+                        )}
                     </Link>
                 )}
 
@@ -70,12 +83,21 @@ const Header: React.FC = () => {
                 {loggedUser ? (
                     <>
                         {loggedUser.role === 'ADMIN' && (
-                            <Link
-                                href="/users"
-                                className={`nav-link px-4 fs-5 ${isActive('/users') ? 'text-white' : 'text-white-50'}`}
-                            >
-                                Users
-                            </Link>
+                            <>
+                                <Link
+                                    href="/users"
+                                    className={`nav-link px-4 fs-5 ${isActive('/users') ? 'text-white' : 'text-white-50'}`}
+                                >
+                                    Users
+                                </Link>
+
+                                <Link
+                                    href="/invites-overview"
+                                    className={`nav-link px-4 fs-5 ${isActive('/invites-overview') ? 'text-white' : 'text-white-50'}`}
+                                >
+                                    Invites overview
+                                </Link>
+                            </>
                         )}
 
                         <Link

@@ -3,6 +3,15 @@ import inviteService from '../service/invite.service';
 
 const inviteRouter = express.Router();
 
+inviteRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const invites = await inviteService.getAll();
+        res.status(200).json(invites);
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Create an invitation
 inviteRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -11,7 +20,11 @@ inviteRouter.post('/', async (req: Request, res: Response, next: NextFunction) =
         const invite = await inviteService.createInvite(userEmail, eventId);
         res.status(200).json(invite);
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -34,5 +47,16 @@ inviteRouter.get('/user/:email', async (req: Request, res: Response, next: NextF
         next(error);
     }
 });
+
+inviteRouter.put('/status/:inviteId/:answer', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const inviteId = req.params.inviteId;
+        const status = req.params.answer;
+        const inviteStatusChange = await inviteService.changeInviteStatus(inviteId, status);
+        res.status(200).json(inviteStatusChange);
+    } catch (error) {
+        next(error);
+    }
+})
 
 export { inviteRouter };
