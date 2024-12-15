@@ -78,7 +78,6 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *                      type: array
  *                      items:
  *                          $ref: '#/components/schemas/User'
- * 
  */
 userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
