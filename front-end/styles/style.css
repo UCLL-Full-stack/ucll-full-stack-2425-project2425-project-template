@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    background-color: antiquewhite;
+}
+
+main {
+    margin: 30px;
+}
+
+section {
+    margin: auto;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin: auto;
+}
+
+tr {
+    border: 1px solid black;
+}
+
+tr[role="button"] {
+    cursor: pointer;
+}
+
+td,
+th {
+    padding: 20px 60px 20px 60px;
+}
+
+td img {
+    width: 200px;
+}
+
+.totaalPrijs {
+    border-top: 2px solid black;
+    width: 20%;
+}
+
+
+.addForms {
+    padding: 10px;
+    background-color: green;
+    width: 40%;
+    margin: auto;
+    padding: 40px;
+}
+
+.addForms form {
+    margin: auto;
+}
+
+.addForms label {
+    color: white;
+}
+
+.addForms input[type="text"],
+input[type="number"],
+input[type="password"],
+select {
+    padding: 7px;
+    width: 95%;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.addForms input[type="submit"] {
+    background-color: rgb(1, 105, 6);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.addForms input[type="submit"]:hover {
+    background-color: rgb(0, 40, 2);
+}
+
+.error-field {
+    color: darkred;
+    font-weight: bold;
+}
+
+.ok-field {
+    color: darkgreen;
+    font-weight: bold;
+}
