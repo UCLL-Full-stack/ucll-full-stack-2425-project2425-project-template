@@ -15,6 +15,20 @@
         "Nurse" : "Nurse",
         "email" : "email:",
         "password" : "password:",
-        "login" : "login"
+        "login" : "login",
+        "error" : {
+            "empty" : "Please enter both email and password.",
+            "not-found" : "Trainer not found.",
+            "invalid" : "Invalid email, password, or role.",
+            "failed" : "Login failed: User not found or incorrect credentials."
+        },
+        "success" : "Login successful, redirecting to home..."
+    },
+    "pokemon" : {
+        "name" : "name",
+        "type": "type",
+        "add": "Add Pokémon",
+        "users-pokemon": "'s Pokémon",
+        "pokemon" : "Pokémon"
     }
 }

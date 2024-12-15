@@ -15,6 +15,20 @@
         "Nurse" : "zuster",
         "email" : "email:",
         "password" : "wachtwoord:",
-        "login" : "login"
+        "login" : "login",
+        "error" : {
+            "empty" : "Vul email en wachtwoord allebei in.",
+            "not-found" : "Trainer niet gevonden.",
+            "invalid" : "Verkeerde email, wachtwoord of rol.",
+            "failed" : "Login gefaald: Gebruiker niet gevonden of incorrecte toegangsgegevens."
+        },
+        "success" : "Login was een success, terug naar homepagina..."
+    },
+    "pokemon" : {
+        "name" : "naam",
+        "type": "type",
+        "add": "Voeg pokemon toe",
+        "users-pokemon": "'s Pokémon",
+        "pokemon" : "Pokémon"
     }
 }

@@ -6,6 +6,8 @@ import { Pokemon, Trainer } from '@types';
 import PokemonDetails from '@components/pokemon/pokemonDetails';
 import TrainerOverviewTable from '@components/trainer/trainerOverviewTable';
 import AddPokemonModal from '@components/pokemon/addPokemonModal';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serversideTranslations';
 
 const Pokemons: React.FC = () => {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
@@ -13,6 +15,8 @@ const Pokemons: React.FC = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loggedInEmail, setLoggedInEmail] = useState<string>('');
+
+  const { t } = useTranslation();
 
   // Check if the code is running in the browser and then access localStorage
   useEffect(() => {
@@ -79,7 +83,7 @@ const Pokemons: React.FC = () => {
     <>
       <Header />
       <main>
-        <h1>Pokémon</h1>
+        <h1>{t("pokemon.pokemon")}</h1>
         {trainers.length === 0 ? (
           <p>No trainers found for the logged-in email.</p>
         ) : (
@@ -87,8 +91,8 @@ const Pokemons: React.FC = () => {
             {/* Ensure selectedTrainer is not null before accessing its properties */}
             {selectedTrainer && (
               <>
-                <h2>{selectedTrainer.user.firstName}'s Pokémon</h2>
-                <button onClick={() => setIsModalOpen(true)}>Add Pokémon</button>
+                <h2>{selectedTrainer.user.firstName}{t("pokemon.users-pokemon")}</h2>
+                <button onClick={() => setIsModalOpen(true)}>{t("pokemon.add")}</button>
                 <PokemonOverviewTable 
                   pokemon={selectedTrainer.pokemon} 
                   selectPokemon={handleSelectPokemon} 
@@ -108,6 +112,16 @@ const Pokemons: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+  const {locale} = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"]))
+      },
+  };
 };
 
 export default Pokemons;
