@@ -1,7 +1,9 @@
 import { 
     Floor as FloorPrisma,
     Line as LinePrisma,
-    Position as PositionPrisma
+    Position as PositionPrisma,
+    Player as PlayerPrisma,
+    User as UserPrisma,
 } from "@prisma/client"; 
 
 import { Line } from "./line";
@@ -49,6 +51,21 @@ export class Floor {
 
     getPositions(): Position[] | undefined {
         return this.positions;
+    }
+
+    canMoveToPosition(x: number, y: number): boolean {
+        const line = this.tiles?.at(y);
+        if (line?.getTiles().at(x) === "floor"){
+            if (this.positions){
+                this.positions.forEach(pos => {
+                    if (pos.getX() === x && pos.getY() === y && pos.getActive() === true){
+                        return false;
+                    }
+                });
+            }
+            return true;
+        }
+        return false;
     }
 
     validate(floor: {

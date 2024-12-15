@@ -1,4 +1,4 @@
-import { Position as PositionPrisma, Player as PlayerPrisma} from '@prisma/client';
+import { Position as PositionPrisma, Player as PlayerPrisma, User as UserPrisma} from '@prisma/client';
 import { Player } from './player';
 
 export class Position {
@@ -7,11 +7,11 @@ export class Position {
     private y: number;
     private type: string;
     private active: boolean;
-    private player?: Player;
+    private playerID?: number | null;
 
-    constructor(position: { id?: number; player?: Player; x: number; y: number, type: string, active: boolean }) {
+    constructor(position: { id?: number; playerID?: number | null; x: number; y: number, type: string, active: boolean }) {
         this.id = position.id;
-        this.player = position.player;
+        this.playerID = position.playerID;
         this.x = position.x;
         this.y = position.y;
         this.type = position.type;
@@ -38,17 +38,18 @@ export class Position {
         return this.active;
     }
 
-    getPlayer(): Player | undefined {
-        return this.player;
+    getPlayer(): number | undefined | null {
+        return this.playerID;
     }
 
-    static from({ id, x, y, type, active }: PositionPrisma) {
+    static from({ id, x, y, type, active, playerId }: PositionPrisma) {
         return new Position({
             id,
             x,
             y,
             type,
-            active
+            active,
+            playerID: playerId,
         });
     }
 }

@@ -62,6 +62,6 @@ model Position {
   active  Boolean
   floor   Floor     @relation(fields: [floorId], references: [id])
   floorId Int
-  player  Player     @relation(fields: [playerId], references: [id])
-  playerId Int
+  player  Player?     @relation(fields: [playerId], references: [id])
+  playerId Int?
 }

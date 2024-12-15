@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import floorService from '../service/floor.service';
-import { PositionInput } from '../types';
+import { PositionInput, PositionUpdate } from '../types';
 
 const floorRouter = express.Router();
 
@@ -54,7 +54,7 @@ swagger documentation to be added.
 
 floorRouter.put('/:id/position', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const position = <PositionInput>req.body;
+        const position = <PositionUpdate>req.body;
         const result = await floorService.updatePosition(position);
         res.status(200).json(result);
     } catch (error) {

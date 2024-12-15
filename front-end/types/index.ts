@@ -40,4 +40,14 @@ export type Position = {
   y: number;
   type: string;
   active: boolean;
+  playerID?: number | null;
+}
+
+export type PositionUpdate = {
+  posID: number;
+  floorID: number;
+  playerID: number;
+  x: number;
+  y: number;
+  active: boolean;
 }

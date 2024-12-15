@@ -4,6 +4,7 @@ import { User } from '../model/user';
 import { Player } from '../model/player';
 import { World } from '../model/world';
 import { Floor } from '../model/floor';
+import { Position } from '../model/position';
 
 const prisma = new PrismaClient();
 
@@ -151,6 +152,8 @@ async function main() {
         }),
     ];
 
+    const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
+
     for (const player of players) {
         await prisma.player.create({
             data: {
@@ -204,9 +207,20 @@ async function main() {
                         type: pos.getType(),
                         active: pos.getActive(),
                         floor: { connect: { id: createdFloor.id } },
+                        player: undefined,
                     },
                 });
             }
+            await prisma.position.create({
+                data: {
+                    x: playerpos.getX(),
+                    y: playerpos.getY(),
+                    type: playerpos.getType(),
+                    active: playerpos.getActive(),
+                    floor: { connect: { id: createdFloor.id } },
+                    player: { connect: { id: 1 } },
+                },
+            });
         }
     }
 }
