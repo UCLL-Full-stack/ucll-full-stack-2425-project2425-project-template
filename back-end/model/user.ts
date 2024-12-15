@@ -39,7 +39,7 @@ export class User {
             throw new Error('Username is required');
         }
         if (!user.password?.trim()) {
-            throw new Error('Password name is required');
+            throw new Error('Password is required');
     }
     }
     equals(user: User): boolean {
