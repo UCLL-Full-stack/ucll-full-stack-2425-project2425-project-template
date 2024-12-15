@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import router from "next/router";
 import LoginButton from "@/components/loginButton";
+import NavbarSheet from "@/components/NavbarSheet";
 
 const players: Player[] = [
   {
@@ -33,6 +34,42 @@ const players: Player[] = [
     stat: { playerId: 3, appearances: 28, goals: 3, assists: 5 },
     pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
   },
+  {
+    id: 4,
+    name: "Michael Jordan",
+    position: "Defender",
+    number: 4,
+    birthdate: new Date("2000-03-20"),
+    stat: { playerId: 3, appearances: 28, goals: 3, assists: 5 },
+    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
+  },
+  {
+    id: 5,
+    name: "Lionel Messi",
+    position: "Defender",
+    number: 4,
+    birthdate: new Date("2000-03-20"),
+    stat: { playerId: 3, appearances: 28, goals: 3, assists: 5 },
+    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
+  },
+  {
+    id: 6,
+    name: "Jeff The Land Shark",
+    position: "Defender",
+    number: 4,
+    birthdate: new Date("2000-03-20"),
+    stat: { playerId: 3, appearances: 28, goals: 3, assists: 5 },
+    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
+  },
+  {
+    id: 7,
+    name: "HEE HEE",
+    position: "Defender",
+    number: 4,
+    birthdate: new Date("2000-03-20"),
+    stat: { playerId: 3, appearances: 28, goals: 3, assists: 5 },
+    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
+  },
 ];
 
 const Players: React.FC = () => {
@@ -55,8 +92,8 @@ const Players: React.FC = () => {
         <link rel="icon" href="/images/shittylogo.png" />
       </Head>
       <div className="min-h-screen bg-zinc-900 py-8">
-        <div className="absolute top-4 right-4">
-          <LoginButton isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+        <div className="absolute top-12 right-8">
+        <NavbarSheet />
         </div>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center mb-8">
