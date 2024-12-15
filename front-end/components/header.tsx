@@ -26,9 +26,6 @@ const Header: React.FC = () => {
                     <Link href="/competitions" className="text-lg hover:text-orange-500">
                         Competitions
                     </Link>
-                    <Link href="/" className="text-lg hover:text-orange-500">
-                        Home
-                    </Link>
                     {!loggedInUser && (
                         <Link
                             href="/login"
