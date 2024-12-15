@@ -10,7 +10,6 @@ import useInterval from "use-interval";
 
 const Ingredienten: React.FC = () => {
     const [selectedIngredient, setSelectedIngredient] = useState<Ingredient>();
-    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
     const getIngredienten = async () => {
 
@@ -31,14 +30,6 @@ const Ingredienten: React.FC = () => {
     useInterval(() => {
         mutate("ingredienten", getIngredienten());
     }, 5000);
-
-    useEffect(() => {
-        const getUser = sessionStorage.getItem("loggedInUser")
-        if (getUser) {
-            const parsedUser = JSON.parse(getUser);
-            setLoggedInUser(parsedUser as User);
-        }
-    }, []);
 
     return (
         <>
