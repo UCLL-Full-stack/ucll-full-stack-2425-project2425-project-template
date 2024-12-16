@@ -1,23 +1,23 @@
-type Role = 'admin' | 'user';
+export type Role = 'admin' | 'user';
 
-type Team = {
+export type Team = {
     id?: number;
     name: string;
     points: number;
     owner: User[];
-    competition?: Competition[];
-}
+    competitionId: number;
+};
 
-type Competition = {
+export type Competition = {
     id?: number;
     name: string;
     matchesPlayed: number;
     teams: Team[];
-}
+};
 
-type User = {
+export type User = {
     id?: number;
     name: string;
     password: string;
     role: Role;
-}
+};
