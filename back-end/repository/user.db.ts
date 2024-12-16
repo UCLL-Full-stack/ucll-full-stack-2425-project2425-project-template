@@ -1,7 +1,6 @@
 import { User } from '../model/user'
 import bcrypt from 'bcrypt'
 import database from './database'
-import React from 'react';
 import { Account } from '@prisma/client';
 
 type UserPrisma = {
