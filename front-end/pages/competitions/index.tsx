@@ -1,4 +1,4 @@
-import CompetitionOverviewTable from "@/components/competitions/competitionOvervieuwTable";
+import CompetitionOverviewTable from "@/components/competitions/competitionOverviewTable";
 import Header from "@/components/header";
 import TeamOverviewTable from "@/components/teams/teamOverviewTable";
 import CompetitionService from "@/services/CompetitionService";
