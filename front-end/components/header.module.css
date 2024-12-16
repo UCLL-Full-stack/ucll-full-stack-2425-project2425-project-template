@@ -8,6 +8,9 @@
     display: flex;
     justify-content: center;
   }
+  .nav.hover {
+    background-color: #ED0909FF;
+  }
   
   .link {
     color: #ffffff;
