@@ -46,8 +46,7 @@ const createList = async (list: List, authorId: number): Promise<List> => {
         })
         return List.from(listPrisma);
     }catch(e){
-        console.log(e);
-        throw e;
+       throw new Error("DB Error");
     }
 }
 
@@ -57,7 +56,7 @@ const deleteList = async (id: number)=>{
             where: {id}
         })
     }catch(e){
-
+        throw new Error("DB Error");
     }
 }
 
