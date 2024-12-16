@@ -14,6 +14,7 @@ const UserOverzicht: React.FC<Props> = ({ users, selectUser }: Props) => {
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [formData, setFormData] = useState<Partial<User>>({});
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -24,6 +25,11 @@ const UserOverzicht: React.FC<Props> = ({ users, selectUser }: Props) => {
     }, []);
 
     const handleDelete = async (id: number) => {
+        if (loggedInUser?.id === id) {
+            setStatusMessage("Je kunt je eigen account niet verwijderen.");
+            setTimeout(() => setStatusMessage(null), 3000);
+            return;
+        }
         try {
             const response = await UserService.deleteUser(id);
             if (response.ok) {
@@ -74,6 +80,11 @@ const UserOverzicht: React.FC<Props> = ({ users, selectUser }: Props) => {
         setFormData(prevState => ({ ...prevState, [name]: value }));
     };
 
+    const handleSelectUser = (user: User) => {
+        setSelectedUser(user);
+        selectUser(user);
+    };
+
     console.log(users);
     return (
         <>
@@ -106,26 +117,34 @@ const UserOverzicht: React.FC<Props> = ({ users, selectUser }: Props) => {
                         </thead>
                         <tbody>
                             {userList.map((user, index) => (
-                                <tr key={index} onClick={() => { router.push(`/users/${user.id}`); selectUser(user), console.log(selectUser) }} role="button">
+                                <tr key={index} onClick={() => { handleSelectUser(user); }} role="button">
                                     <td>{user.voornaam}</td>
                                     <td>{user.naam}</td>
                                     <td>{user.email}</td>
                                     <td>
-                                        {loggedInUser?.id !== user.id && (
-                                            <>
-                                                <button type="button" onClick={(e) => { e.stopPropagation(); if (user.id !== undefined) handleDelete(user.id); }}>
-                                                    Verwijder
-                                                </button>
-                                                <button onClick={(e) => { e.stopPropagation(); handleEdit(user); }}>
-                                                    Aanpassen
-                                                </button>
-                                            </>
-                                        )}
+                                        <>
+                                            <button type="button" onClick={(e) => { e.stopPropagation(); if (user.id !== undefined) handleDelete(user.id); }}>
+                                                Verwijder
+                                            </button>
+                                            <button onClick={(e) => { e.stopPropagation(); handleEdit(user); }}>
+                                                Aanpassen
+                                            </button>
+                                        </>
                                     </td>                           
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                </div>
+            )}
+            {selectedUser && (
+                <div className="user-details">
+                    <h2>Gebruikersdetails</h2>
+                    <p><strong>Voornaam:</strong> {selectedUser.voornaam}</p>
+                    <p><strong>Achternaam:</strong> {selectedUser.naam}</p>
+                    <p><strong>Email:</strong> {selectedUser.email}</p>
+                    <p><strong>Adres:</strong> {selectedUser.adres}</p>
+                    <p><strong>Rol:</strong> {selectedUser.rol}</p>
                 </div>
             )}
         </>
