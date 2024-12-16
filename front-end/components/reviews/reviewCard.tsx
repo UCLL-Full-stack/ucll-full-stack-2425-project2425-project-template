@@ -104,10 +104,10 @@ const ReviewCard: React.FC<Props> = ({review, onDelete, userId}: Props) => {
                         <IconEdit width={25} height={25}/>
                     </button>
                 }
-                <button 
-                    className="rounded-lg px-2 sm:px-3 py-1 w-full flex justify-center sm:py-1 main-thin text-xs sm:text-sm bg-text1 text-text2 hover:text-bg1 hover:bg-text2 transition-colors duration-100">
-                    <IconDetails width={25} height={25}/>
-                </button>
+                    <button 
+                        className="rounded-lg px-2 sm:px-3 py-1 w-full flex justify-center sm:py-1 main-thin text-xs sm:text-sm bg-text1 text-text2 hover:text-bg1 hover:bg-text2 transition-colors duration-100">
+                        <IconDetails width={25} height={25}/>
+                    </button>
                 </div>
             </div>
         </div>

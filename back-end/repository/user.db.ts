@@ -24,7 +24,8 @@ const findById = async (id: number) => {
             include:{
                 lists: {
                     include: {
-                        author: true
+                        author: true,
+                        likes: true
                     }
                 },
                 reviews: {

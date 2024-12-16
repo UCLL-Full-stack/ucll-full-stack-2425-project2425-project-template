@@ -63,19 +63,19 @@ const Home = ({ lists, reviews, albums }: Props) => {
                                 <div className="slider">
                                     {lists &&
                                         lists.slice(0, Math.min(lists.length, 15)).map((list) => (
-                                            <ListCard key={list.id} list={list} />
+                                            <ListCard key={list.id} list={list} userId={user?.id}/>
                                     ))}
                                     {lists &&
                                         lists.slice(0, Math.min(lists.length, 15)).map((list) => (
-                                            <ListCard key={list.id} list={list} />
+                                            <ListCard key={list.id} list={list} userId={user?.id}/>
                                     ))}
                                     {lists &&
                                         lists.slice(0, Math.min(lists.length, 15)).map((list) => (
-                                            <ListCard key={list.id} list={list} />
+                                            <ListCard key={list.id} list={list} userId={user?.id}/>
                                     ))}
                                     {lists &&
                                         lists.slice(0, Math.min(lists.length, 15)).map((list) => (
-                                            <ListCard key={list.id} list={list} />
+                                            <ListCard key={list.id} list={list} userId={user?.id}/>
                                     ))}
                                 </div>
                             </div>

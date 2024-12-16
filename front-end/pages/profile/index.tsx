@@ -144,7 +144,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 pt-6 sm:pt-10 gap-4">
                                         {user && user.lists.length > 0 ? user.lists.map((list) => (
-                                            <ListCard key={list.id} list={list}  onDelete={toggleDeleteList}/>
+                                            <ListCard key={list.id} list={list}  onDelete={toggleDeleteList} userId={user.id}/>
                                         )) : (
                                             <h2 className="col-span-1 sm:col-span-2 text-center main-font text-white">No Lists To Show</h2>
                                         )}
