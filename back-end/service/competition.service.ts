@@ -5,4 +5,10 @@ const getAllCompetitions = (): Competition[] => {
     return competitionDb.getAllCompetitions();
 };
 
-export default { getAllCompetitions };
+const getCompetitionById = (id: number): Competition => {
+    const competition = competitionDb.getCompetitionById({ id });
+    if (!competition) throw new Error(`Competition with id ${id} does not exist.`);
+    return competition;
+};
+
+export default { getAllCompetitions, getCompetitionById };

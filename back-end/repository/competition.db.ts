@@ -11,6 +11,11 @@ const getAllCompetitions = (): Competition[] => {
     return competitions;
 };
 
+const getCompetitionById = ({ id }: { id: number }): Competition | null => {
+    return competitions.find((competition) => competition.getId() === id) || null;
+};
+
 export default {
     getAllCompetitions,
+    getCompetitionById,
 };

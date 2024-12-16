@@ -7,7 +7,7 @@
  *      scheme: bearer
  *      bearerFormat: JWT
  *    schemas:
- *      Competition:
+ *      User:
  *          type: object
  *          properties:
  *            id:
@@ -16,35 +16,36 @@
  *              description: Unique identifier for the team.
  *            name:
  *              type: string
- *              description: Competition name.
+ *              description: User name.
  *
  */
 import express, { NextFunction, Request, Response } from 'express';
 import competitionService from '../service/competition.service';
-const competitionRouter = express.Router();
+import userService from '../service/user.service';
+const userRouter = express.Router();
 
 /**
  * @swagger
- * /competitions:
+ * /users:
  *   get:
- *     summary: Get a list of all Competitions.
+ *     summary: Get a list of all Users.
  *     responses:
  *       200:
- *         description: A list of Competitions.
+ *         description: A list of Users.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                  $ref: '#/components/schemas/Competition'
+ *                  $ref: '#/components/schemas/User'
  */
-competitionRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
     try {
-        const competitons = competitionService.getAllCompetitions();
-        res.status(200).json(competitons);
+        const user = userService.getAllUsers();
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
 });
 
-export default competitionRouter;
+export default userRouter;

@@ -1,35 +1,27 @@
+import { Competition } from '../model/competition';
 import { Team } from '../model/team';
 import { User } from '../model/user';
+import { CompetitionInput } from '../types';
 import { competitions } from './competition.db';
+import { users } from './user.db';
 
-const [amateurLeague] = competitions;
+let nextId = 1;
 
 const teams = [
     new Team({
-        id: 1,
+        id: nextId++,
         name: 'sk diamant',
         points: 0,
-        owner: new User({ id: 1, name: 'Jente', password: 'jente', role: 'admin' }),
-        competitionId: amateurLeague.getId()!,
-    }),
-    new Team({
-        id: 2,
-        name: 'fc heist goor',
-        points: 0,
-        owner: new User({ id: 2, name: 'Tyas', password: 'tyas', role: 'admin' }),
-        competitionId: amateurLeague.getId()!,
-    }),
-    new Team({
-        id: 3,
-        name: 'Real sas',
-        points: 0,
-        owner: new User({ id: 3, name: 'Fons', password: 'sas', role: 'admin' }),
-        competitionId: amateurLeague.getId()!,
+        owner: users[0],
+        competitionId: competitions[0].getId()!,
     }),
 ];
 
-teams.forEach((team) => amateurLeague.addTeam(team));
-
+const createTeam = (team: Team): Team => {
+    team['id'] = nextId++;
+    teams.push(team);
+    return team;
+};
 const getAllTeams = (): Team[] => {
     return teams;
 };
@@ -43,8 +35,11 @@ const getTeamById = (id: number): Team | undefined => {
     }
 };
 
-const getTeamsByCompetition = (competitionId: number): Team[] => {
-    return teams.filter((team) => team.getCompetitionId() === competitionId);
+const getTeamsByCompetition = ({ competitionId }: { competitionId: number }): Team[] => {
+    if (!competitionId) {
+        throw new Error('The competition is required');
+    }
+    return teams.filter((team) => team.getCompetition() === competitionId);
 };
 
-export default { getAllTeams, getTeamById, getTeamsByCompetition };
+export default { getAllTeams, getTeamById, getTeamsByCompetition, createTeam };
