@@ -13,9 +13,7 @@ type UserInput = {
     email?: string;
     name?: string;
     password?: string;
-    phone_number?: number;
-    listOfCarsForSelling?: VehicleInput[];
-    list_of_favorite_cars?: VehicleInput[];
+    phoneNumber?: number;
 };
 
 type VehicleInput = {

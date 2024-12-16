@@ -1,14 +1,53 @@
-import { Seller } from "../domain/model/seller";
+
+import { PrismaClient } from "@prisma/client";
 import { User } from "../domain/model/user";
-import UserDb from "../repository/user.db";
-import { SellerInput } from "../types";
+import { UserInput } from "../types";
+import bcrypt from "bcrypt";
+import { generateToken } from "../types/util/token";
+
+const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+});
+
+const getAllUsers = async () => {
+    try {
+        const cars = await prisma.user.findMany();
+        return cars;
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        throw error;
+    }
+};
+
+const signupUser = async (email : string , name : string, password : string, phoneNumber : string) => {
+  
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await prisma.user.create({
+        data: {
+            email: email, 
+            name: name,
+            password: hashedPassword,
+            phoneNumber: phoneNumber
+        }
+    })
+    // return generateToken({ id: newUser.id, email: newUser.email });
+    return await prisma.user.findMany()
+  };
 
 
-const getAllUSers = async (): Promise<User[]> => UserDb.getAllUsers();
+  
+//   export const loginUser = async (email: string, password: string): Promise<string> => {
+//     const user = await findUserByEmail(email);
+//     if (!user) {
+//       throw new Error("User not found.");
+//     }
+  
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+//     if (!isPasswordValid) {
+//       throw new Error("Invalid credentials.");
+//     }
+  
+//     return generateToken({ id: user.id, email: user.email });
+//   };
 
-// const createSeller = ({email, name,phone_number }: SellerInput): Seller => {
-
-// return null;
-// }
-
-export default { getAllUSers };
+export default { getAllUsers, signupUser };

@@ -7,7 +7,7 @@ export class User {
     readonly email: string;
     readonly name: string;
     private password: string;
-    readonly phoneNumber: number;
+    readonly phoneNumber: string;
 
 
     constructor(user: {
@@ -15,7 +15,7 @@ export class User {
         email: string,
         name: string,
         password: string,
-        phoneNumber: number
+        phoneNumber: string
         listOfCarsForSelling: Car[];
         listOfFavoriteCars: Car[];
     }) {
