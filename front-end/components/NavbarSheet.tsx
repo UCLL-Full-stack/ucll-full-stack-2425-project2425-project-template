@@ -10,7 +10,7 @@ import {
   FaChalkboardTeacher,
   FaTable,
 } from "react-icons/fa";
-import LoginButton from "./loginButton";
+import LoginButton from "./LoginButton";
 
 const NavbarSheet: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +23,10 @@ const NavbarSheet: React.FC = () => {
 
   const toggleSheet = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  const closeSheet = () => {
+    setIsOpen(false);
   };
 
   const getLinkClass = (path: string) =>
@@ -39,8 +43,15 @@ const NavbarSheet: React.FC = () => {
         {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </button>
 
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={closeSheet}
+        />
+      )}
+
       <div
-        className={`fixed top-0 right-0 h-screen w-80 bg-zinc-900 text-yellow-500 border-l border-yellow-500 shadow-2xl transform transition-transform duration-500 ${
+        className={`fixed top-0 right-0 h-screen w-80 bg-zinc-900 text-yellow-500 border-l border-yellow-500 shadow-2xl transform transition-transform duration-500 z-50 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
