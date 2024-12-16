@@ -53,10 +53,10 @@ export class Product {
             throw new Error('name is required');
         }
         if (!product.price) {
-            throw new Error('First name is required');
+            throw new Error('Price is required');
         }
         if (!product.description?.trim()) {
-            throw new Error('Last name is required');
+            throw new Error('Description is required');
         }
         if (!product.rating) {
             throw new Error('rating is required');
