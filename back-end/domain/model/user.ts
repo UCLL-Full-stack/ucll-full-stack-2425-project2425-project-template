@@ -1,10 +1,12 @@
 import { Car } from "./car";
+import bcrypt from "bcrypt";
+
 
 export class User {
     readonly id?: number | undefined;
     readonly email: string;
     readonly name: string;
-    readonly password: string;
+    private password: string;
     readonly phoneNumber: number;
 
 
@@ -14,6 +16,8 @@ export class User {
         name: string,
         password: string,
         phoneNumber: number
+        listOfCarsForSelling: Car[];
+        listOfFavoriteCars: Car[];
     }) {
 
         this.id = user.id;
@@ -24,6 +28,15 @@ export class User {
         listOfCarsForSelling: Car: [];
         listOfFavoriteCars: Car: [];
     }
+
+    async hashPassword(): Promise<void> {
+        this.password = await bcrypt.hash(this.password, 10);
+      }
+
+    async validatePassword(inputPassword: string): Promise<boolean> {
+    return bcrypt.compare(inputPassword, this.password);
+    }
+    
 
     getId(): number | undefined {
         return this.id
