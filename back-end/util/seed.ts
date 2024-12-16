@@ -107,7 +107,7 @@ async function main() {
       { cocktailId: 1, ingredientId: 4, amount: "2 tsp" },
       { cocktailId: 1, ingredientId: 5, amount: "Top off" },
       { cocktailId: 1, ingredientId: 6, amount: "As needed" },
-      // Additional cocktail-ingredient relationships...
+      // Additional cocktail-ingredient relationships... hmm, I'm not going to type all of them
     ],
   });
 
