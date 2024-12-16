@@ -17,21 +17,29 @@ const ReadUserByNationalRegisterNumber = () => {
   const { userNationalRegisterNumber } = router.query;
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+        console.log("Logged In User:", loggedInUser);
+
+        if (!loggedInUser.nationalRegisterNumber) {
+          throw new Error("No national register number found in loggedInUser");
+        }
+
+        const userData = await UserService.getUserByNationalRegisterNumber(
+          loggedInUser.nationalRegisterNumber
+        );
+        console.log("Fetched User Data:", userData);
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (userNationalRegisterNumber) {
       console.log("Query Parameter:", userNationalRegisterNumber);
-      const fetchUser = async () => {
-        try {
-          const userData = await UserService.getUserByNationalRegisterNumber(
-            userNationalRegisterNumber as string
-          );
-          console.log("Fetched User Data:", userData);
-          setUser(userData);
-        } catch (error) {
-          console.error("Failed to fetch user:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
       fetchUser();
     } else {
       console.log("No userNationalRegisterNumber provided");

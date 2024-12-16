@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { accountRouter } from './controller/account.routes';
+import { transactionRouter } from './controller/transaction.routes';
 import { expressjwt } from 'express-jwt';
 
 const app = express();
@@ -20,13 +21,13 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status']
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
     })
 );
 
-
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
+app.use('/transaction/expenses', transactionRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
@@ -70,8 +71,6 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     });
 });
 
-
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-

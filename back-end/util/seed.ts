@@ -12,13 +12,17 @@ const generateAccountNumber = (type: string): string => {
     return `${today}-${accountType}-${randomNumbers}`;
 };
 
-const generateReferenceNumber = (transactionType: string, accountNumber: string, date: Date): string => {
+const generateReferenceNumber = (
+    transactionType: string,
+    accountNumber: string,
+    date: Date
+): string => {
     const lastThreeNumbers = accountNumber.slice(-3).split('').join(' '); // Last 3 digits of account number with spaces
-    const firstTwoLettersType = transactionType.substring(0, 3).toUpperCase(); // First 3 letters of the transaction type
+    const firstThreeLettersType = transactionType.substring(0, 3).toUpperCase(); // First 3 letters of the transaction type
     const year = date.getUTCFullYear().toString(); // Year of the transaction date
     const uniqueNumber = Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5); // Unique number
 
-    return `${firstTwoLettersType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
+    return `${firstThreeLettersType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
 };
 
 const main = async () => {
@@ -72,7 +76,7 @@ const main = async () => {
             email: 'alice.johnson@example.com',
             password: alicePassword,
             accounts: {
-                connect: [{ accountNumber: account1.accountNumber }, { accountNumber: account2.accountNumber }],
+                connect: [{ id: account1.id }, { id: account2.id }],
             },
         },
     });
@@ -87,7 +91,7 @@ const main = async () => {
             email: 'bob.smith@example.com',
             password: bobPassword,
             accounts: {
-                connect: [{ accountNumber: account2.accountNumber }],
+                connect: [{ id: account2.id }],
             },
         },
     });
@@ -95,29 +99,25 @@ const main = async () => {
     // Create transactions
     const transaction1 = await prisma.transaction.create({
         data: {
-            referenceNumber: generateReferenceNumber('INCOME', account1.accountNumber, new Date()),
+            referenceNumber: generateReferenceNumber('income', account1.accountNumber, new Date()),
             date: new Date(),
             amount: 100,
             currency: 'EUR',
-            transactionType: 'INCOME',
-            account: {
-                connect: { id: account1.id },
-            },
-            source: 'Salary',
+            type: 'income',
+            sourceAccountId: account1.id,
+            destinationAccountId: account2.id,
         },
     });
 
     const transaction2 = await prisma.transaction.create({
         data: {
-            referenceNumber: generateReferenceNumber('EXPENSE', account2.accountNumber, new Date()),
+            referenceNumber: generateReferenceNumber('expense', account2.accountNumber, new Date()),
             date: new Date(),
             amount: 50,
             currency: 'USD',
-            transactionType: 'EXPENSE',
-            account: {
-                connect: { id: account2.id },
-            },
-            destination: 'Groceries',
+            type: 'expense',
+            sourceAccountId: account2.id,
+            destinationAccountId: account1.id,
         },
     });
 };

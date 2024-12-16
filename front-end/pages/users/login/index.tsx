@@ -1,42 +1,11 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import Head from "next/head";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import UserService from "@/services/UserService";
-import { Authentication } from "@/types";
 import styles from '@/styles/Home.module.css';
 import LoginForm from "@/components/users/LoginForm";
 
-const Login = () => {
-  const [credentials, setCredentials] = useState<Authentication>({
-    email: "",
-    password: "",
-  });
-  const router = useRouter();
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    try {
-      const user = await UserService.getUserByEmailAndPassword(credentials);
-      
-      // Check the response structure
-      if (user && user.email) {
-        alert("Login successful!");
-        router.push(`/accounts/${user.nationalRegisterNumber}`);
-      } else {
-        alert("Login failed. User not found.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Invalid email or password.");
-    }
-  };
-
-  const handleInputChange = (field: keyof Authentication, value: any) => {
-    setCredentials({ ...credentials, [field]: value });
-  };
-
+const Login: React.FC = () => {
   return (
     <>
       <Head>
@@ -49,7 +18,7 @@ const Login = () => {
       <main className={styles.main}>
         <h1>Login</h1>
         <section>
-        <LoginForm credentials={credentials} handleSubmit={handleSubmit} handleInputChange={handleInputChange} />
+          <LoginForm />
         </section>
       </main>
       <Footer />

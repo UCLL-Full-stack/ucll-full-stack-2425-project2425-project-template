@@ -16,6 +16,13 @@ const createUser = async (user: User): Promise<void> => {
 const getUserByEmailAndPassword = async (
   credentials: Authentication
 ): Promise<User> => {
+  console.log("Request payload:", JSON.stringify(credentials));
+  if (!credentials.email || !credentials.password) {
+    throw new Error(
+      "Credentials object is missing required fields: email and password"
+    );
+  }
+
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + "/users/login",
     {
@@ -23,7 +30,7 @@ const getUserByEmailAndPassword = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(credentials), // Corrected payload format
+      body: JSON.stringify(credentials),
     }
   );
 
@@ -44,24 +51,61 @@ const getUserByEmailAndPassword = async (
 const getUserByNationalRegisterNumber = async (
   userNationalRegisterNumber: string
 ): Promise<User> => {
+  try {
+    const token = JSON.parse(
+      localStorage.getItem("loggedInUser") || "{}"
+    )?.token;
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${userNationalRegisterNumber}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch user by national register number ${userNationalRegisterNumber}`
+      );
+    }
+
+    const user = await response.json();
+    return user;
+  } catch (error) {
+    console.error("Error fetching user by national register number:", error);
+    throw error;
+  }
+};
+
+const loginUser = async (credentials: Authentication) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/${userNationalRegisterNumber}`
+    process.env.NEXT_PUBLIC_API_URL + "/users/login",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
   );
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch user by national register number ${userNationalRegisterNumber}`
-    );
+    throw new Error("Login failed");
   }
 
-  const user = await response.json();
-  return user;
+  const userData = await response.json();
+  return userData;
 };
 
 const UserService = {
   createUser,
   getUserByEmailAndPassword,
   getUserByNationalRegisterNumber,
+  loginUser,
 };
 
 export default UserService;

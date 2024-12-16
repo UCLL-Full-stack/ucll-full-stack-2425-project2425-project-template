@@ -1,7 +1,7 @@
 import { set } from 'date-fns';
 import { Account } from '../../model/account';
 import { User } from '../../model/user';
-import { Expense } from '../../model/expense';
+import { Expense } from '../../model/transaction';
 
 const user = new User({
     nationalRegisterNumber: '01.01.01-001.01',

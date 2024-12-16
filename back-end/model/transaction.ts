@@ -1,32 +1,34 @@
-import { Account as AccountPrisma, Transaction as TransactionPrisma } from '@prisma/client';
 import { Account } from './account';
+import { Account as AccountPrisma, Transaction as TransactionPrisma } from '@prisma/client';
 import { TransactionType } from '../types';
-import { Income } from './income';
-import { Expense } from './expense';
-export abstract class Transaction {
+
+export class Transaction {
     private id?: number;
-    private referenceNumber: string;
-    private date: Date;
     private amount: number;
     private currency: string;
-    private transactionType: TransactionType;
-    private account: Account;
+    private sourceAccount: Account;
+    private destinationAccount: Account;
+    private date: Date;
+    private referenceNumber: string;
+    private type: TransactionType;
 
     constructor(transaction: {
         amount: number;
         currency: string;
-        transactionType: TransactionType;
-        account: Account;
+        sourceAccount: Account;
+        destinationAccount: Account;
+        type: TransactionType;
         id?: number;
     }) {
         this.validate(transaction);
         this.id = transaction.id;
-        this.transactionType = transaction.transactionType;
-        this.account = transaction.account;
-        this.date = new Date();
-        this.referenceNumber = this.generateReferenceNumber();
         this.amount = transaction.amount;
         this.currency = transaction.currency;
+        this.sourceAccount = transaction.sourceAccount;
+        this.destinationAccount = transaction.destinationAccount;
+        this.type = transaction.type;
+        this.date = new Date();
+        this.referenceNumber = this.generateReferenceNumber(transaction.type);
     }
 
     getId(): number | undefined {
@@ -49,20 +51,27 @@ export abstract class Transaction {
         return this.currency;
     }
 
+    getSourceAccount(): Account {
+        return this.sourceAccount;
+    }
+
+    getDestinationAccount(): Account {
+        return this.destinationAccount;
+    }
+
+    getSourceAccountId(): number | undefined {
+        return this.sourceAccount.getId();
+    }
+
+    getDestinationAccountId(): number | undefined {
+        return this.destinationAccount.getId();
+    }
+
     getTransactionType(): TransactionType {
-        return this.transactionType;
+        return this.type;
     }
 
-    getAccount(): Account {
-        return this.account;
-    }
-
-    validate(transaction: {
-        amount: number;
-        currency: string;
-        transactionType: TransactionType;
-        id?: number;
-    }) {
+    validate(transaction: { amount: number; currency: string; id?: number }) {
         if (transaction.amount <= 0) {
             throw new Error('Amount must be greater than 0.');
         }
@@ -73,46 +82,35 @@ export abstract class Transaction {
         ) {
             throw new Error('Currency must be either USD, EUR or GBP.');
         }
-        if (transaction.transactionType !== 'INCOME' && transaction.transactionType !== 'EXPENSE') {
-            throw new Error('Type must be either income or expense.');
-        }
     }
 
-    generateReferenceNumber(): string {
-        const lastThreeNumbers = this.account.getAccountNumber().slice(-3).split('').join(' ');
-        const firstTwoLettType = this.transactionType.substring(0, 3).toUpperCase();
+    generateReferenceNumber(type: string): string {
+        const lastThreeNumbers = this.sourceAccount.getAccountNumber().split('').join(' ');
+        const firstThreeLettType = type.slice(0, 3).toUpperCase();
         const year = this.date.getUTCFullYear().toString();
         const uniqueNumber =
             Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5);
-        const referenceNumber = `${firstTwoLettType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
+        const referenceNumber = `${firstThreeLettType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
         return referenceNumber;
     }
 
-    static from ({
+    static from({
         id,
         amount,
         currency,
-        transactionType,
-        account,
-        source,
-        destination,
-    }: TransactionPrisma & { account: AccountPrisma }) {
-        if (transactionType as TransactionType == 'INCOME') {
-            return new Income({
-                id,
-                amount,
-                currency,
-                account: Account.from(account),
-                source: source || '',
-            });
-        } else {
-            return new Expense({
-                id,
-                amount,
-                currency,
-                account: Account.from(account),
-                destination: destination || '',
-            });
-        } 
+        type,
+        sourceAccount,
+        destinationAccount,
+    }: TransactionPrisma & { sourceAccount: AccountPrisma; destinationAccount: AccountPrisma }) {
+        return new Transaction({
+            id,
+            amount,
+            currency,
+            sourceAccount: Account.from({ ...sourceAccount }),
+            destinationAccount: Account.from({
+                ...destinationAccount,
+            }),
+            type,
+        });
     }
 }

@@ -48,6 +48,8 @@ const accountRouter = express.Router();
  * @swagger
  * /account:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new account
  *     requestBody:
  *       required: true
@@ -87,6 +89,8 @@ accountRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
  * /account/{id}:
  *   get:
  *     summary: Get account by id.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

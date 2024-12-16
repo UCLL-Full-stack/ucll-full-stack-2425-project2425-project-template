@@ -1,6 +1,7 @@
 import { Account as AccountPrisma } from '@prisma/client';
 import { User } from './user';
 import { Transaction } from './transaction';
+import { TransactionType } from '../types';
 
 export class Account {
     private id?: number;
@@ -16,6 +17,7 @@ export class Account {
 
     constructor(account: {
         id?: number;
+        accountNumber?: string;
         isShared: boolean;
         type: string;
         // users?: User[];
@@ -23,12 +25,14 @@ export class Account {
         startDate?: Date;
         endDate?: Date | null;
         status?: string;
+        transactions?: Transaction[];
+        users?: User[];
     }) {
         this.validate(account);
 
         this.id = account.id;
         this.type = account.type;
-        this.accountNumber = this.generateAccountNumber();
+        this.accountNumber = account.accountNumber || this.generateAccountNumber();
         this.balance = account.balance || 0;
         this.isShared = account.isShared;
         this.startDate = account.startDate || new Date();
@@ -70,40 +74,12 @@ export class Account {
         return this.type;
     }
 
-    getTransactions(): Transaction[] {
-        return this.transactions;
-    }
-
     getUsers(): User[] {
         return this.users;
     }
 
-    // getLoans(): Loan[] {
-    //     return this.loans;
-    // }
-
-    // getBudgetgoals(): Budgetgoal[] {
-    //     return this.budgetgoals;
-    // }
-
-    validate(account: { isShared: boolean; type: string; users?: User[]; id?: number }) {
-        const validTypes = ['transaction', 'savings', 'emergency fund'];
-
-        if (account.isShared && account.users && account.users.length < 2) {
-            throw new Error('Shared accounts must have at least two users.');
-        } else if (!account.isShared && account.users && account.users.length > 1) {
-            throw new Error('A personal account can only have one user.');
-        }
-        if (!account.type?.trim()) {
-            throw new Error('Account type is required.');
-        } else if (!validTypes.includes(account.type.toLowerCase())) {
-            throw new Error(
-                `Invalid account type. Valid types are: ${validTypes.join(' account, ')} account.`
-            );
-        }
-        if (account.users && account.users.length === 0) {
-            throw new Error('An account must have at least one user.');
-        }
+    getTransactions(): Transaction[] {
+        return this.transactions;
     }
 
     generateAccountNumber(): string {
@@ -127,9 +103,36 @@ export class Account {
         this.users.push(user);
     }
 
-    // addTransaction(transaction: Transaction): void {
-        
-    // }
+    calculateBalance(amount: number, type: string): number {
+        if (type === 'income') {
+            return (this.balance += amount);
+        } else if (type === 'expense') {
+            return (this.balance -= amount);
+        } else {
+            throw new Error('Transaction type must be either "income" or "expense".');
+        }
+    }
+
+    validate(account: {
+        id?: number;
+        accountNumber?: string;
+        balance?: number;
+        isShared: boolean;
+        startDate?: Date;
+        endDate?: Date | null;
+        status?: string;
+        type: string;
+    }) {
+        if (account.balance < 0) {
+            throw new Error('Balance must be greater than or equal to 0.');
+        }
+        if (!account.accountNumber) {
+            throw new Error('Account number is required.');
+        }
+        if (!account.type) {
+            throw new Error('Account type is required.');
+        }
+    }
 
     toJSON() {
         return {
@@ -145,25 +148,16 @@ export class Account {
         };
     }
 
-    
-    static from({
-        id,
-        balance,
-        isShared,
-        startDate,
-        endDate,
-        status,
-        type,
-    }: AccountPrisma) {
+    static from(accountPrisma: AccountPrisma): Account {
         return new Account({
-            id,
-            balance,
-            isShared,
-            startDate,
-            endDate,
-            status,
-            type
+            id: accountPrisma.id,
+            accountNumber: accountPrisma.accountNumber,
+            balance: accountPrisma.balance,
+            isShared: accountPrisma.isShared,
+            startDate: accountPrisma.startDate,
+            endDate: accountPrisma.endDate,
+            status: accountPrisma.status,
+            type: accountPrisma.type,
         });
     }
 }
-

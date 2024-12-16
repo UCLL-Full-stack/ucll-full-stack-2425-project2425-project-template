@@ -1,4 +1,4 @@
-type TransactionType = 'EXPENSE' | 'INCOME';
+type TransactionType = 'expense' | 'income';
 
 type UserInput = {
     id?: number;
@@ -30,8 +30,9 @@ type TransactionInput = {
     date?: Date;
     amount: number;
     currency: string;
-    type: string;
-    account: AccountInput;
+    destinationAccountNumber: string;
+    sourceAccountNumber: string;
+    type: TransactionType;
 };
 
 type AuthenticationRequest = {
@@ -44,8 +45,8 @@ type AuthenticationResponse = {
     id?: number;
     email: string;
     name: string;
+    nationalRegisterNumber: string;
 };
-
 
 export {
     TransactionType,

@@ -175,7 +175,7 @@ export class User {
         if (userInput.password) this.password = userInput.password;
     }
 
-    static from ({
+    static from({
         id,
         nationalRegisterNumber,
         name,
@@ -185,7 +185,7 @@ export class User {
         email,
         password,
         accounts,
-    }: UserPrisma & {accounts: AccountPrisma[]}) {
+    }: UserPrisma & { accounts: AccountPrisma[] }) {
         return new User({
             id,
             nationalRegisterNumber,
@@ -195,7 +195,7 @@ export class User {
             phoneNumber,
             email,
             password,
-            accounts: accounts.map((account) => Account.from(account)),
+            accounts: accounts.map((account) => Account.from({ ...account })),
         });
     }
 }

@@ -13,7 +13,7 @@ const createAccount = async (accountInput: AccountInput): Promise<Account> => {
 
 const getAccountById = async ({ id }: { id: number }): Promise<Account> => {
     const account = await accountDb.getAccountById({ id });
-    
+
     if (account === null) {
         throw new Error(`Account with id: ${id} was not found.`);
     }
@@ -23,7 +23,7 @@ const getAccountById = async ({ id }: { id: number }): Promise<Account> => {
 
 const getAccountByAccountNumber = async (accountNumber: string): Promise<Account> => {
     const account = await accountDb.getAccountByAccountNumber(accountNumber);
-    
+
     if (account == null) {
         throw new Error(`Account with account number: ${accountNumber} was not found.`);
     }
