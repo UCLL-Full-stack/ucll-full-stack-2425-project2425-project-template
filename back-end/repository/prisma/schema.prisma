@@ -21,7 +21,11 @@ model Player {
   position  String
   number    Int
   birthdate DateTime
-  stat      Stats? @relation("PlayerToStats") // Define the relationship name here
+  imageUrl  String?
+  teamId    Int?
+  team      Team?  @relation(fields: [teamId], references: [id])
+  stat      Stats? @relation("PlayerToStats")
+  matches   Match[]
 }
 
 model Stats {
@@ -32,3 +36,36 @@ model Stats {
   assists     Int
   player      Player @relation("PlayerToStats", fields: [playerId], references: [id]) // Specify fields and references only here
 }
+
+model Coach {
+  id        Int    @id @default(autoincrement())
+  name      String
+  job      String
+  team     Team?   @relation(fields: [teamId], references: [id])
+  teamId   Int     
+}
+
+model Team {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  players   Player[]
+  coaches   Coach[]
+  homeMatches Match[]  @relation("HomeTeam") // Relationship with home games
+  awayMatches Match[]  @relation("AwayTeam") // Relationship with away games
+}
+
+model Match {
+  match_id       Int       @id @default(autoincrement())
+  location       String
+  date           DateTime
+  homeTeamName   String
+  awayTeamName   String
+  homeScore      Int?
+  awayScore      Int?
+  players        Player[]
+  home           Team?     @relation(name: "HomeTeam", fields: [homeTeamName], references: [name])
+  away           Team?     @relation(name: "AwayTeam", fields: [awayTeamName], references: [name])
+}
+
+
+
