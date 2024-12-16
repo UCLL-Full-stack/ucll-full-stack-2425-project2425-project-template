@@ -7,7 +7,17 @@ const getAllPlayers = async () => {
     });
 };
 
-const playerService = {
-    getAllPlayers,
+const getPlayerById = async (id: string) => {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/players/' + id, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+        },
+    });
+    return await res.json();
 };
-export default playerService;
+
+export default {
+    getAllPlayers,
+    getPlayerById,
+};

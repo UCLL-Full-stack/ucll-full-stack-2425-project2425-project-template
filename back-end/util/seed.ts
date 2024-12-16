@@ -4,6 +4,7 @@ import { User } from '../model/user';
 import { Player } from '../model/player';
 import { World } from '../model/world';
 import { Floor } from '../model/floor';
+import { Position } from '../model/position';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 
@@ -11,86 +12,99 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
+// Creating constants
+const users = [
+    new User({
+        name: 'Alice',
+        email: 'alice@example.com',
+        password: 'password123',
+        role: 'player',
+        birthday: new Date(1990, 1, 1),
+        accountBirthday: new Date(2020, 1, 1),
+    }),
+    new User({
+        name: 'Xander',
+        email: 'Xander@example.com',
+        password: 'password0233',
+        role: 'player',
+        birthday: new Date(2004, 2, 18),
+        accountBirthday: new Date(2024, 9, 12),
+    }),
+];
+
+const players = [
+    new Player({
+        name: 'Player1',
+        statistics: 'Stats1',
+        class: 'Warrior',
+        currency: 100,
+        user: users[0],
+    }),
+    new Player({
+        name: 'Cedinvu',
+        statistics: 'hp: 20, power: veel',
+        class: 'JAS 39 Gripen',
+        currency: 2389,
+        user: users[0],
+    }),
+    new Player({
+        name: 'Cedinvu2',
+        statistics: 'hp: 2000, power: -1',
+        class: 'Impostor',
+        currency: 100004,
+        user: users[1],
+    }),
+    new Player({
+        name: 'usersiscool',
+        statistics: 'hp: 100, power: 100',
+        class: 'Warrior',
+        currency: 1454,
+        user: users[0],
+    }),
+    new Player({
+        name: 'MasterPieck',
+        statistics: 'hp: 2000, power: 1500',
+        class: 'Teacher',
+        currency: 15474,
+        user: users[1],
+    }),
+];
+
+const floors = [
+    new Floor({
+        floornumber: 1,
+    }),
+];
+
+const worlds = [
+    new World({
+        id: 1,
+        name: 'Eorzea',
+        owner: users[0],
+        floors: floors,
+    }),
+];
+
+
+
 async function main() {
+
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "User_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Player_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "World_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Floor_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Line_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Position_id_seq" RESTART WITH 1');
+
+    await prisma.position.deleteMany();
     await prisma.line.deleteMany();
     await prisma.floor.deleteMany();
     await prisma.world.deleteMany();
     await prisma.player.deleteMany();
     await prisma.user.deleteMany();
 
-    // Creating constants
-    const users = [
-        new User({
-            name: 'Alice',
-            email: 'alice@example.com',
-            role: 'user',
-            password: await bcrypt.hash('password123', 12),
-            birthday: new Date(1990, 1, 1),
-            accountBirthday: new Date(2020, 1, 1),
-        }),
-        new User({
-            name: 'Xander',
-            email: 'alnea@example.com',
-            role: 'user',
-            password: await bcrypt.hash('password0233', 12),
-            birthday: new Date(2004, 2, 18),
-            accountBirthday: new Date(2024, 9, 12),
-        }),
-    ];
+    const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
 
-    const players = [
-        new Player({
-            name: 'Player1',
-            statistics: 'Stats1',
-            class: 'Warrior',
-            currency: 100,
-            user: users[0],
-        }),
-        new Player({
-            name: 'Cedinvu',
-            statistics: 'hp: 20, power: veel',
-            class: 'JAS 39 Gripen',
-            currency: 2389,
-            user: users[0],
-        }),
-        new Player({
-            name: 'Cedinvu2',
-            statistics: 'hp: 2000, power: -1',
-            class: 'Impostor',
-            currency: 100004,
-            user: users[1],
-        }),
-        new Player({
-            name: 'usersiscool',
-            statistics: 'hp: 100, power: 100',
-            class: 'Warrior',
-            currency: 1454,
-            user: users[0],
-        }),
-        new Player({
-            name: 'MasterPieck',
-            statistics: 'hp: 2000, power: 1500',
-            class: 'Teacher',
-            currency: 15474,
-            user: users[1],
-        }),
-    ];
-
-    const floors = [
-        new Floor({
-            floornumber: 1,
-        }),
-    ];
-
-    const worlds = [
-        new World({
-            id: 1,
-            name: 'Eorzea',
-            owner: users[0],
-            floors: floors,
-        }),
-    ];
-    // Create Users
     let createdUsers = [];
 
     for (const user of users) {
@@ -153,10 +167,35 @@ async function main() {
                     },
                 });
             }
+
+
+            const positions = floor.getPositions();
+            if (!positions) break;
+            // Create Positions
+            for (const pos of positions) {
+                await prisma.position.create({
+                    data: {
+                        x: pos.getX(),
+                        y: pos.getY(),
+                        type: pos.getType(),
+                        active: pos.getActive(),
+                        floor: { connect: { id: createdFloor.id } },
+                        player: undefined,
+                    },
+                });
+            }
+            await prisma.position.create({
+                data: {
+                    x: playerpos.getX(),
+                    y: playerpos.getY(),
+                    type: playerpos.getType(),
+                    active: playerpos.getActive(),
+                    floor: { connect: { id: createdFloor.id } },
+                    player: { connect: { id: 1 } },
+                },
+            });
         }
     }
-
-    // Create Floors
 }
 
 main()

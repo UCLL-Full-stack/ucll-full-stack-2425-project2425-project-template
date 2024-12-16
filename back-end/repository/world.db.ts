@@ -10,7 +10,7 @@ FUNCTIONALITY
 const getAllWorlds = async (): Promise<World[]> => {
     try {
         const result = await database.world.findMany({
-            include: {owner: true, floors: {include: {tiles: true}}},
+            include: {owner: true, floors: {include: {tiles: true, positions: true}}},
         });
         return result.map((worldprisma) => World.from(worldprisma));
     } catch(error){
@@ -26,13 +26,13 @@ const getWorldById = async (id: number): Promise<World> => {
                 where: {
                     id: id
                 },
-                include: {owner: true, floors: {include: {tiles: true}}},
+                include: {owner: true, floors: {include: {tiles: true, positions: true}}},
             }
         )
         return World.from(result);
     } catch(error){
         console.error(error);
-        throw new Error("Player not found");
+        throw new Error("World not found");
     }
 }
 
