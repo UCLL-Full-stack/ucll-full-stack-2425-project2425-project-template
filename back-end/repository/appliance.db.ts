@@ -1,13 +1,23 @@
 import {Appliance} from "../model/appliance";
 
 const appliances: Appliance[] = [
-   new Appliance({applianceId: 1, name: 'Air Fryer', description: 'Healthy fast cooking appliance.', created_at: new Date() }),
-    new Appliance({applianceId: 2, name: 'kooking pan', description: 'Versatile  stove top cooking tool.', created_at: new Date()}),
-]
+    new Appliance({
+        applianceId: 1,
+        name: 'Air Fryer',
+        description: 'Healthy fast cooking appliance.',
+        created_at: new Date()
+    }),
+    new Appliance({
+        applianceId: 2,
+        name: 'cooking pan',
+        description: 'Versatile stove top cooking tool.',
+        created_at: new Date()
+    })
+];
 
 const createAppliance = ({ appliance }: { appliance: Appliance }): Appliance => {
     const newAppliance: Appliance = new Appliance({
-        applianceId: appliance.getApplianceId(),
+        applianceId: appliances.length + 1,
         name: appliance.getName(),
         description: appliance.getDescription(),
         created_at: appliance.getCreatedAt(),
