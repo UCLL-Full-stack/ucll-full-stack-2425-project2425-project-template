@@ -32,9 +32,11 @@ export type Trainer = {
     id?: number;
     user: User;
     pokemon: Pokemon[];
+    badges: Badge[];
 }
 
 export type Badge = {
+    id: number;
     name: string;
     location: string;
     difficulty: number;
