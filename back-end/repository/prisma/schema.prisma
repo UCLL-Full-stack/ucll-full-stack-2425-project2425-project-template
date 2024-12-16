@@ -1,52 +1,60 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id                      Int             @id @default(autoincrement())
-    nationalRegisterNumber  String          @unique
-    name                    String
-    birthDate               DateTime
-    isAdministrator         Boolean
-    phoneNumber             String
-    email                   String          @unique
-    password                String      
-    accounts                Account[] 
+  id                     Int       @id @default(autoincrement())
+  nationalRegisterNumber String    @unique
+  name                   String
+  birthDate              DateTime
+  isAdministrator        Boolean
+  phoneNumber            String
+  email                  String    @unique
+  password               String
+  accounts               Account[] @relation("UserAccounts")
 }
 
 model Account {
-    id                      Int             @id @default(autoincrement())
-    accountNumber           String          @unique
-    balance                 Float
-    isShared                Boolean
-    startDate               DateTime    
-    endDate                 DateTime?
-    status                  String
-    type                    String
-    transactions            Transaction[]   @relation("DestinationAccount")
-    sourceTransactions      Transaction[]   @relation("SourceAccount")
-    users                   User[]
+  id               Int       @id @default(autoincrement())
+  accountNumber    String    @unique
+  balance          Float
+  isShared         Boolean
+  startDate        DateTime
+  endDate          DateTime?
+  status           String
+  type             String
+  users            User[]    @relation("UserAccounts")
+  expenses         Expense[] @relation("SourceAccount")
+  incomes          Income[]  @relation("SourceAccount")
+  receivedExpenses Expense[] @relation("DestinationAccount")
+  receivedIncomes  Income[]  @relation("DestinationAccount")
 }
 
-model Transaction {
-    id                      Int             @id @default(autoincrement())
-    referenceNumber         String          @unique
-    date                    DateTime
-    amount                  Int
-    currency                String
-    transactionType         TransactionType
-    destinationAccount      Account         @relation("DestinationAccount", fields: [destinationAccountNumber], references: [accountNumber])
-    destinationAccountNumber String
-    sourceAccount           Account         @relation("SourceAccount", fields: [sourceAccountNumber], references: [accountNumber])
-    sourceAccountNumber     String
+model Expense {
+  id                   Int      @id @default(autoincrement())
+  referenceNumber      String   @unique
+  date                 DateTime
+  amount               Float
+  currency             String
+  destinationAccount   Account  @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
+  destinationAccountId Int
+  sourceAccount        Account  @relation("SourceAccount", fields: [sourceAccountId], references: [id])
+  sourceAccountId      Int
 }
 
-enum TransactionType {
-  INCOME
-  EXPENSE
+model Income {
+  id                   Int      @id @default(autoincrement())
+  referenceNumber      String   @unique
+  date                 DateTime
+  amount               Float
+  currency             String
+  destinationAccount   Account  @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
+  destinationAccountId Int
+  sourceAccount        Account  @relation("SourceAccount", fields: [sourceAccountId], references: [id])
+  sourceAccountId      Int
 }

@@ -1,15 +1,12 @@
 import accountDb from '../repository/account.db';
-import transactionDb from '../repository/transaction.db';
-import { TransactionInput, TransactionType } from '../types';
-import { Transaction } from '../model/transaction';
+import expenseDb from '../repository/expense.db';
+import incomeDb from '../repository/income.db';
+import { ExpenseInput } from '../types';
 import { Expense } from '../model/expense';
 import { Income } from '../model/income';
 
-const createTransaction = async (
-    transactionInput: TransactionInput
-): Promise<{ expense: Transaction; income: Transaction }> => {
-    const { amount, currency, transactionType, sourceAccountNumber, destinationAccountNumber } =
-        transactionInput;
+const createExpense = async (ExpenseInput: ExpenseInput): Promise<Expense> => {
+    const { amount, currency, sourceAccountNumber, destinationAccountNumber } = ExpenseInput;
 
     const sourceAccount = await accountDb.getAccountByAccountNumber(sourceAccountNumber);
     const destinationAccount = await accountDb.getAccountByAccountNumber(destinationAccountNumber);
@@ -24,12 +21,8 @@ const createTransaction = async (
         );
     }
 
-    if (transactionType !== 'EXPENSE') {
-        throw new Error('Invalid transaction type. Only EXPENSE transactions are supported.');
-    }
-
-    sourceAccount.calculateBalance(-amount);
-    destinationAccount.calculateBalance(amount);
+    sourceAccount.calculateBalance(amount, 'expense');
+    destinationAccount.calculateBalance(amount, 'income');
 
     await accountDb.updateAccount(sourceAccount);
     await accountDb.updateAccount(destinationAccount);
@@ -48,12 +41,12 @@ const createTransaction = async (
         destinationAccount: destinationAccount,
     });
 
-    const createdExpense = await transactionDb.createTransaction(expenseTransaction);
-    const createdIncome = await transactionDb.createTransaction(incomeTransaction);
+    const createdExpense = await expenseDb.createExpense(expenseTransaction);
+    const createdIncome = await incomeDb.createIncome(incomeTransaction);
 
-    return { expense: createdExpense, income: createdIncome };
+    return createdExpense;
 };
 
 export default {
-    createTransaction,
+    createExpense,
 };

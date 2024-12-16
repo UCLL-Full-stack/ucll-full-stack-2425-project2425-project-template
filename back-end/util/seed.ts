@@ -18,17 +18,18 @@ const generateReferenceNumber = (
     date: Date
 ): string => {
     const lastThreeNumbers = accountNumber.slice(-3).split('').join(' '); // Last 3 digits of account number with spaces
-    const firstTwoLettersType = transactionType.substring(0, 3).toUpperCase(); // First 3 letters of the transaction type
+    const firstThreeLettersType = transactionType.substring(0, 3).toUpperCase(); // First 3 letters of the transaction type
     const year = date.getUTCFullYear().toString(); // Year of the transaction date
     const uniqueNumber = Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5); // Unique number
 
-    return `${firstTwoLettersType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
+    return `${firstThreeLettersType}-${lastThreeNumbers}-${year}-${uniqueNumber}`;
 };
 
 const main = async () => {
     await prisma.user.deleteMany();
     await prisma.account.deleteMany();
-    await prisma.transaction.deleteMany();
+    await prisma.expense.deleteMany();
+    await prisma.income.deleteMany();
 
     // Reusable date values
     const startDate1 = set(new Date(), { year: 2023, month: 0, date: 1 });
@@ -76,10 +77,7 @@ const main = async () => {
             email: 'alice.johnson@example.com',
             password: alicePassword,
             accounts: {
-                connect: [
-                    { accountNumber: account1.accountNumber },
-                    { accountNumber: account2.accountNumber },
-                ],
+                connect: [{ id: account1.id }, { id: account2.id }],
             },
         },
     });
@@ -94,33 +92,31 @@ const main = async () => {
             email: 'bob.smith@example.com',
             password: bobPassword,
             accounts: {
-                connect: [{ accountNumber: account2.accountNumber }],
+                connect: [{ id: account2.id }],
             },
         },
     });
 
     // Create transactions
-    const transaction1 = await prisma.transaction.create({
+    const transaction1 = await prisma.income.create({
         data: {
             referenceNumber: generateReferenceNumber('INCOME', account1.accountNumber, new Date()),
             date: new Date(),
             amount: 100,
             currency: 'EUR',
-            transactionType: 'INCOME',
-            sourceAccountNumber: account1.accountNumber,
-            destinationAccountNumber: account2.accountNumber,
+            sourceAccountId: account1.id,
+            destinationAccountId: account2.id,
         },
     });
 
-    const transaction2 = await prisma.transaction.create({
+    const transaction2 = await prisma.expense.create({
         data: {
             referenceNumber: generateReferenceNumber('EXPENSE', account2.accountNumber, new Date()),
             date: new Date(),
             amount: 50,
             currency: 'USD',
-            transactionType: 'EXPENSE',
-            sourceAccountNumber: account2.accountNumber,
-            destinationAccountNumber: account1.accountNumber,
+            sourceAccountId: account2.id,
+            destinationAccountId: account1.id,
         },
     });
 };

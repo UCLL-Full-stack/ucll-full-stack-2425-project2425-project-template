@@ -1,27 +1,8 @@
 import { User } from '../model/user';
+import { Account } from '../model/account';
+import { Income } from '../model/income';
+import { Expense } from '../model/expense';
 import database from '../util/database';
-
-// const johnDoe = new User({
-//     nationalRegisterNumber: '99.01.01-123.45',
-//     name: 'John Doe',
-//     birthDate: new Date('1990-01-01'),
-//     isAdministrator: false,
-//     phoneNumber: '+32 12 34 56 78',
-//     email: 'john.doe@example.com',
-//     password: 'P@ssw0rd!',
-//     accounts: [
-//         new Account({
-//             isShared: false,
-//             type: 'Savings',
-//         }),
-//         new Account({
-//             isShared: true,
-//             type: 'Transaction',
-//         }),
-//     ],
-// });
-
-// const users: User[] = [johnDoe];
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
@@ -32,30 +13,7 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-// const createUser = ({
-//     nationalRegisterNumber,
-//     name,
-//     birthDate,
-//     isAdministrator,
-//     phoneNumber,
-//     email,
-//     password,
-// }: User): User => {
-//     const user = new User({
-//         nationalRegisterNumber,
-//         name,
-//         birthDate,
-//         isAdministrator,
-//         phoneNumber,
-//         email,
-//         password,
-//     });
-//     users.push(user);
-//     return user;
-// };
-
 const createUser = async (user: User): Promise<User> => {
-    // Dit gaat waarschijnlijk nog moeten worden aangepast => accounts => addAccounts
     const accounts = user.getAccounts();
 
     try {
@@ -77,22 +35,30 @@ const createUser = async (user: User): Promise<User> => {
                         endDate: account.getEndDate(),
                         status: account.getStatus(),
                         type: account.getType(),
-                        transactions: {
-                            create: account.getTransactions().map((transaction) => ({
-                                amount: transaction.getAmount(),
-                                currency: transaction.getCurrency(),
-                                transactionType: transaction.getTransactionType(),
-                                referenceNumber: transaction.getReferenceNumber(),
-                                date: transaction.getDate(),
-                                sourceAccount: {
-                                    connect: { accountNumber: account.getAccountNumber() },
-                                },
+                        expenses: {
+                            create: account.getExpenses().map((expense) => ({
+                                referenceNumber: expense.getReferenceNumber(),
+                                date: expense.getDate(),
+                                amount: expense.getAmount(),
+                                currency: expense.getCurrency(),
+                                sourceAccountId: account.getId(),
+                                destinationAccountId: expense.getDestinationAccountId(),
+                            })),
+                        },
+                        incomes: {
+                            create: account.getIncomes().map((income) => ({
+                                referenceNumber: income.getReferenceNumber(),
+                                date: income.getDate(),
+                                amount: income.getAmount(),
+                                currency: income.getCurrency(),
+                                sourceAccountId: account.getId(),
+                                destinationAccountId: income.getDestinationAccountId(),
                             })),
                         },
                     })),
                 },
             },
-            include: { accounts: { include: { transactions: true } } },
+            include: { accounts: { include: { expenses: true, incomes: true } } },
         });
 
         return User.from(userPrisma);
@@ -109,7 +75,7 @@ const getUserByNationalRegisterNumber = async (
             where: {
                 nationalRegisterNumber: nationalRegisterNumber,
             },
-            include: { accounts: { include: { transactions: true } } },
+            include: { accounts: { include: { expenses: true, incomes: true } } },
         });
         if (userPrisma) {
             return User.from(userPrisma);
@@ -121,18 +87,13 @@ const getUserByNationalRegisterNumber = async (
     }
 };
 
-// DIT IS VOOR LOGIN => BCRYPT en JWT
-// const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
-//     return users.find((user) => user.getEmail() === email && user.getPassword() === password);
-// };
-
 const getUserByEmail = async (email: string): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
             where: {
                 email: email,
             },
-            include: { accounts: { include: { transactions: true } } },
+            include: { accounts: { include: { expenses: true, incomes: true } } },
         });
 
         if (userPrisma) {
@@ -149,7 +110,7 @@ const updateUser = async (updatedUser: User): Promise<User> => {
     try {
         const updatedPrisma = await database.user.update({
             where: {
-                email: updatedUser.getNationalRegisterNumber(),
+                nationalRegisterNumber: updatedUser.getNationalRegisterNumber(),
             },
             data: {
                 nationalRegisterNumber: updatedUser.getNationalRegisterNumber(),
@@ -160,21 +121,13 @@ const updateUser = async (updatedUser: User): Promise<User> => {
                 email: updatedUser.getEmail(),
                 password: updatedUser.getPassword(),
             },
-            include: { accounts: { include: { transactions: true } } },
+            include: { accounts: { include: { expenses: true, incomes: true } } },
         });
 
         return User.from(updatedPrisma);
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
-
-    // const index = users.findIndex(
-    //     (user) => user.getNationalRegisterNumber() === updatedUser.getNationalRegisterNumber()
-    // );
-    // if (index !== -1) {
-    //     users[index] = updatedUser;
-    // }
-    // return updatedUser;
 };
 
 const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
@@ -183,26 +136,13 @@ const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
             where: {
                 nationalRegisterNumber: nationalRegisterNumber,
             },
-            include: { accounts: { include: { transactions: true } } },
+            include: { accounts: { include: { expenses: true, incomes: true } } },
         });
 
-        // if (deletedPrisma) {
-        //     return User.from(deletedPrisma);
-        // } else {
-        //     return null;
-        // }
         return User.from(deletedPrisma);
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
-
-    // const index = users.findIndex(
-    //     (user) => user.getNationalRegisterNumber() === nationalRegisterNumber
-    // );
-    // if (index !== -1) {
-    //     users.splice(index, 1);
-    // }
-    // return 'User deleted successfully.';
 };
 
 const addAccount = async (nationalRegisterNumber: string, accountNumber: string): Promise<User> => {
@@ -214,7 +154,7 @@ const addAccount = async (nationalRegisterNumber: string, accountNumber: string)
                     connect: { accountNumber },
                 },
             },
-            include: { accounts: { include: { transactions: true } } },
+            include: { accounts: { include: { expenses: true, incomes: true } } },
         });
         return User.from(updatedUser);
     } catch (error: any) {
@@ -225,7 +165,6 @@ const addAccount = async (nationalRegisterNumber: string, accountNumber: string)
 export default {
     createUser,
     getUserByNationalRegisterNumber,
-    // getUserByEmailAndPassword,
     getUserByEmail,
     getAllUsers,
     updateUser,

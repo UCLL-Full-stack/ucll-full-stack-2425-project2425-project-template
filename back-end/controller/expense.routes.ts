@@ -7,7 +7,7 @@
  *       scheme: bearer
  *       bearerFormat: JWT
  *   schemas:
- *     Transaction:
+ *     Expense:
  *       type: object
  *       properties:
  *         id:
@@ -22,13 +22,11 @@
  *           type: number
  *         currency:
  *           type: string
- *         transactionType:
- *           type: string
  *         destinationAccountNumber:
  *           type: string
  *         sourceAccountNumber:
  *           type: string
- *     TransactionInput:
+ *     ExpenseInput:
  *       type: object
  *       properties:
  *         amount:
@@ -41,18 +39,18 @@
  */
 
 import express, { NextFunction, Request, Response } from 'express';
-import transactionService from '../service/transaction.service';
-import { TransactionInput } from '../types';
+import expenseService from '../service/expense.service';
+import { ExpenseInput } from '../types';
 
-const transactionRouter = express.Router();
+const expenseRouter = express.Router();
 
 /**
  * @swagger
- * /transaction/{accountNumber}:
+ * /transaction/expenses/{accountNumber}:
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Create a new transaction
+ *     summary: Create a new expense
  *     parameters:
  *       - in: path
  *         name: accountNumber
@@ -65,14 +63,14 @@ const transactionRouter = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TransactionInput'
+ *             $ref: '#/components/schemas/ExpenseInput'
  *     responses:
  *       200:
- *         description: The transaction was successfully created
+ *         description: The expense was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Transaction'
+ *               $ref: '#/components/schemas/Expense'
  *       400:
  *         description: Bad request
  *         content:
@@ -83,23 +81,20 @@ const transactionRouter = express.Router();
  *                 message:
  *                   type: string
  */
-transactionRouter.post(
-    '/:accountNumber',
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { accountNumber } = req.params;
-            const { destinationAccountNumber, ...transactionData } = req.body;
-            const transaction: TransactionInput = {
-                ...transactionData,
-                sourceAccountNumber: accountNumber,
-                destinationAccountNumber,
-            };
-            const result = await transactionService.createTransaction(transaction);
-            res.status(200).json(result);
-        } catch (error) {
-            next(error);
-        }
+expenseRouter.post('/:accountNumber', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { accountNumber } = req.params;
+        const { destinationAccountNumber, ...expenseData } = req.body;
+        const expense: ExpenseInput = {
+            ...expenseData,
+            sourceAccountNumber: accountNumber,
+            destinationAccountNumber,
+        };
+        const result = await expenseService.createExpense(expense);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
     }
-);
+});
 
-export { transactionRouter };
+export { expenseRouter };

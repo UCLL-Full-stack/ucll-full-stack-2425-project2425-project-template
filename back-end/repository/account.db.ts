@@ -20,7 +20,7 @@ const createAccount = async (account: Account): Promise<Account> => {
             },
         });
 
-        return Account.from(accountPrisma);
+        return Account.from({ ...accountPrisma, transactions: [], users: [] });
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
@@ -37,7 +37,9 @@ const getAccountById = async ({ id }: { id: number }): Promise<Account | null> =
             },
         });
 
-        return accountPrisma ? Account.from(accountPrisma) : null;
+        return accountPrisma
+            ? Account.from({ ...accountPrisma, transactions: [], users: [] })
+            : null;
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
@@ -53,7 +55,9 @@ const getAccountByAccountNumber = async (accountNumber: string): Promise<Account
             },
         });
 
-        return accountPrisma ? Account.from(accountPrisma) : null;
+        return accountPrisma
+            ? Account.from({ ...accountPrisma, transactions: [], users: [] })
+            : null;
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
@@ -76,7 +80,7 @@ const updateAccount = async (account: Account): Promise<Account> => {
             },
         });
 
-        return Account.from(accountPrisma);
+        return Account.from({ ...accountPrisma, transactions: [], users: [] });
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }

@@ -1,5 +1,3 @@
-type TransactionType = 'EXPENSE' | 'INCOME';
-
 type UserInput = {
     id?: number;
     nationalRegisterNumber: string;
@@ -21,16 +19,25 @@ type AccountInput = {
     endDate?: Date | null;
     status?: string;
     type: string;
-    transactions?: TransactionInput[];
+    transactions?: (IncomeInput | ExpenseInput)[];
 };
 
-type TransactionInput = {
+type IncomeInput = {
     id?: number;
     referenceNumber?: string;
     date?: Date;
     amount: number;
     currency: string;
-    transactionType: TransactionType;
+    destinationAccountNumber: string;
+    sourceAccountNumber: string;
+};
+
+type ExpenseInput = {
+    id?: number;
+    referenceNumber?: string;
+    date?: Date;
+    amount: number;
+    currency: string;
     destinationAccountNumber: string;
     sourceAccountNumber: string;
 };
@@ -49,10 +56,10 @@ type AuthenticationResponse = {
 };
 
 export {
-    TransactionType,
     UserInput,
     AccountInput,
-    TransactionInput,
+    IncomeInput,
+    ExpenseInput,
     AuthenticationRequest,
     AuthenticationResponse,
 };
