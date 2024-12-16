@@ -14,12 +14,14 @@ const Signup: React.FC = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState("");
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         const user: UserSignUp = {
             name,
             email,
+            phoneNumber,
             password,
             confirmPassword
 
@@ -58,6 +60,17 @@ const Signup: React.FC = () => {
                             placeholder="Enter your Email"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email} 
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="flex text-sm font-medium">Phone Number</label>
+                            <input
+                            className="w-full px-4 mt-2 py-2 border rounded-md hover:border-[#2C2C34] focus:border-[#2C2C34] focus:outline-none transition duration-300" 
+                            type="tel"
+                            placeholder="Enter your Phone Number"
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={phoneNumber} 
                             />
                         </div>
 

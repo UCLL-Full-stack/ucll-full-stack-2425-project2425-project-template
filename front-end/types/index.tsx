@@ -20,6 +20,7 @@ export type UserLogIn = {
 export type UserSignUp = {
     name: string;
     email: string;
+    phoneNumber: string;
     password: string;
     confirmPassword: string;
 }
