@@ -11,8 +11,7 @@ import { userRouter } from './controller/user.routes';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
-
-app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(cors({ origin: ['http://localhost:8080', 'http://www.cedvinvu.be'] }));
 app.use(bodyParser.json());
 
 // routes
