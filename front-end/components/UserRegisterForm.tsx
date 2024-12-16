@@ -9,46 +9,82 @@ import errorStyles from '../styles/errorMessage.module.css';
 const UserRegisterForm: React.FC = () => {
   const { t } = useTranslation("common");
   const router = useRouter();
-  const [name, setName] = useState("");
+  
+  // Update state to handle first and last name separately
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [studentNumber, setStudentNumber] = useState("");
-  const [nameError, setNameError] = useState<string | null>(null);
+  const [role, setRole] = useState<"guest" | "student" | "admin">("guest");
+
+  const [firstNameError, setFirstNameError] = useState<string | null>(null);
+  const [lastNameError, setLastNameError] = useState<string | null>(null);
+  const [usernameError, setUsernameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
   const [studentNumberError, setStudentNumberError] = useState<string | null>(null);
+  const [roleError, setRoleError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
   const clearErrors = () => {
-    setNameError(null);
+    setFirstNameError(null);
+    setLastNameError(null);
+    setUsernameError(null);
     setEmailError(null);
     setPasswordError(null);
     setConfirmPasswordError(null);
     setStudentNumberError(null);
+    setRoleError(null);
     setStatusMessages([]);
   };
 
   const validate = (): boolean => {
     let isValid = true;
 
-    // Username validation
-    if (!name.trim()) {
-      setNameError(t("validation.username.required"));
+    // First Name Validation
+    if (!firstName.trim()) {
+      setFirstNameError(t("validation.firstName.required"));
       isValid = false;
-    } else if (name.length < 3) {
-      setNameError(t("validation.username.min"));
+    } else if (firstName.length < 3) {
+      setFirstNameError(t("validation.firstName.min"));
       isValid = false;
-    } else if (name.length > 20) {
-      setNameError(t("validation.username.max"));
+    } else if (firstName.length > 20) {
+      setFirstNameError(t("validation.firstName.max"));
       isValid = false;
-    } 
-    else {
-      setNameError(null);
+    } else {
+      setFirstNameError(null);
     }
 
-    // Email validation
+    // Last Name Validation
+    if (!lastName.trim()) {
+      setLastNameError(t("validation.lastName.required"));
+      isValid = false;
+    } else if (lastName.length < 3) {
+      setLastNameError(t("validation.lastName.min"));
+      isValid = false;
+    } else if (lastName.length > 20) {
+      setLastNameError(t("validation.lastName.max"));
+      isValid = false;
+    } else {
+      setLastNameError(null);
+    }
+
+    // Username Validation
+    if (!username.trim()) {
+      setUsernameError(t("validation.username.required"));
+      isValid = false;
+    } else if (username.length < 3) {
+      setUsernameError(t("validation.username.min"));
+      isValid = false;
+    } else {
+      setUsernameError(null);
+    }
+
+    // Email Validation
     if (!email.trim()) {
       setEmailError(t("validation.email.required"));
       isValid = false;
@@ -59,7 +95,7 @@ const UserRegisterForm: React.FC = () => {
       setEmailError(null);
     }
 
-    // Password validation
+    // Password Validation
     if (!password.trim()) {
       setPasswordError(t("validation.password.required"));
       isValid = false;
@@ -73,20 +109,18 @@ const UserRegisterForm: React.FC = () => {
       setPasswordError(null);
     }
 
-    // Confirm password validation
+    // Confirm Password Validation
     if (!confirmPassword.trim()) {
-    setConfirmPasswordError(t("validation.confirmPassword.required"));
-    isValid = false;
-    
+      setConfirmPasswordError(t("validation.confirmPassword.required"));
+      isValid = false;
     } else if (password !== confirmPassword) {
       setConfirmPasswordError(t("validation.password.match"));
       isValid = false;
-    
     } else {
       setConfirmPasswordError(null);
     }
 
-    // Student Number validation
+    // Student Number Validation
     if (!studentNumber.trim()) {
       setStudentNumberError(t("validation.studentNumber.required"));
       isValid = false;
@@ -97,6 +131,14 @@ const UserRegisterForm: React.FC = () => {
       setStudentNumberError(null);
     }
 
+    // Role Validation
+    if (role === "admin" && username !== "admin_user") {
+      setRoleError(t("validation.role.restricted"));
+      isValid = false;
+    } else {
+      setRoleError(null);
+    }
+
     return isValid;
   };
 
@@ -105,17 +147,16 @@ const UserRegisterForm: React.FC = () => {
     clearErrors();
 
     if (!validate()) {
-      setStatusMessages([
-        { message: "Validation failed", type: "error" },
-      ]);
+      setStatusMessages([ { message: t("validation.failed"), type: "error" } ]);
       return;
     }
 
-    setStatusMessages([
-      { message: t("register.success"), type: "success" },
-    ]);
+    setStatusMessages([ { message: t("register.success"), type: "success" } ]);
 
-    sessionStorage.setItem("registeredUser", JSON.stringify({ name, email, studentNumber }));
+    sessionStorage.setItem(
+      "registeredUser",
+      JSON.stringify({ firstName, lastName, username, email, studentNumber, role })
+    );
 
     setTimeout(() => {
       router.push("/login");
@@ -126,54 +167,95 @@ const UserRegisterForm: React.FC = () => {
     <div className={styles.userLoginPage}>
       <form onSubmit={handleSubmit} className={styles.userLoginForm}>
         <h3 className={styles.titleForm}>{t("register.registreer")}</h3>
-        
-        {/* Username Field */}
-        <label className={styles.formLabels} htmlFor="nameInput">{t("register.gebruikersnaam")}</label>
-        <input className={styles.inputField}
-          id="nameInput"
-          type="text"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        {nameError && <p className={errorStyles.errorMessage}>{nameError}</p>}
 
-        {/* Student Number Field */}
-        <label className={styles.formLabels} htmlFor="studentNumberInput">{t("register.studentnummer")}</label>
-        <input className={styles.inputField}
+        {/* First Name */}
+        <label className={styles.formLabels} htmlFor="firstNameInput">{t("register.firstName")}</label>
+        <input
+          className={styles.inputField}
+          id="firstNameInput"
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        {firstNameError && <p className={errorStyles.errorMessage}>{firstNameError}</p>}
+
+        {/* Last Name */}
+        <label className={styles.formLabels} htmlFor="lastNameInput">{t("register.lastName")}</label>
+        <input
+          className={styles.inputField}
+          id="lastNameInput"
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        {lastNameError && <p className={errorStyles.errorMessage}>{lastNameError}</p>}
+
+        {/* Username */}
+        <label className={styles.formLabels} htmlFor="usernameInput">{t("register.username")}</label>
+        <input
+          className={styles.inputField}
+          id="usernameInput"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        {usernameError && <p className={errorStyles.errorMessage}>{usernameError}</p>}
+
+        {/* Role */}
+        <label className={styles.formLabels} htmlFor="roleInput">{t("register.role")}</label>
+        <select
+          className={styles.inputField}
+          id="roleInput"
+          value={role}
+          onChange={(e) => setRole(e.target.value as "guest" | "student" | "admin")}
+        >
+          <option value="guest">{t("register.roles.guest")}</option>
+          <option value="student">{t("register.roles.student")}</option>
+          <option value="admin">{t("register.roles.admin")}</option>
+        </select>
+        {roleError && <p className={errorStyles.errorMessage}>{roleError}</p>}
+
+        {/* Other Fields (Student Number, Email, Password) */}
+        <label className={styles.formLabels} htmlFor="studentNumberInput">{t("register.studentNumber")}</label>
+        <input
+          className={styles.inputField}
           id="studentNumberInput"
           type="text"
           value={studentNumber}
-          onChange={(event) => setStudentNumber(event.target.value)}
+          onChange={(e) => setStudentNumber(e.target.value)}
         />
         {studentNumberError && <p className={errorStyles.errorMessage}>{studentNumberError}</p>}
 
-        {/* Email Field */}
+        {/* Email */}
         <label className={styles.formLabels} htmlFor="emailInput">{t("register.email")}</label>
-        <input className={styles.inputField}
+        <input
+          className={styles.inputField}
           id="emailInput"
           type="email"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         {emailError && <p className={errorStyles.errorMessage}>{emailError}</p>}
 
-        {/* Password Field */}
-        <label className={styles.formLabels} htmlFor="passwordInput">{t("register.wachtwoord")}</label>
-        <input className={styles.inputField}
+        {/* Password */}
+        <label className={styles.formLabels} htmlFor="passwordInput">{t("register.password")}</label>
+        <input
+          className={styles.inputField}
           id="passwordInput"
           type="password"
           value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
         {passwordError && <p className={errorStyles.errorMessage}>{passwordError}</p>}
 
-        {/* Confirm Password Field */}
-        <label className={styles.formLabels} htmlFor="confirmPasswordInput">{t("register.bevestigwachtwoord")}</label>
-        <input className={styles.inputField}
+        {/* Confirm Password */}
+        <label className={styles.formLabels} htmlFor="confirmPasswordInput">{t("register.confirmPassword")}</label>
+        <input
+          className={styles.inputField}
           id="confirmPasswordInput"
           type="password"
           value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.target.value)}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
         {confirmPasswordError && <p className={errorStyles.errorMessage}>{confirmPasswordError}</p>}
 
@@ -195,7 +277,6 @@ const UserRegisterForm: React.FC = () => {
             {t("login.login")}
           </button>
         </Link>
-        
       </form>
     </div>
   );

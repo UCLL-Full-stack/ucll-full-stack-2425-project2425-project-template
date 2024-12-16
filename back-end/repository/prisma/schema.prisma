@@ -15,10 +15,13 @@ model Student {
   id            Int           @id @default(autoincrement())
   username      String        @unique
   email         String        @unique
-  password      String        @unique
+  password      String        
   studentNumber String        @unique
   bookings      Booking[]     
   review        Review[]
+  firstName     String
+  lastName      String
+  role          String
 }
 
 // Trip model
@@ -49,7 +52,6 @@ enum PaymentStatus {
   Paid
   Confirmed
 }
-
 // Review model
 model Review {
   id            Int           @id @default(autoincrement())

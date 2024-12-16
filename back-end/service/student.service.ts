@@ -3,51 +3,52 @@ import { Student } from "../model/student";
 import { AuthenticationResponse, StudentInput } from "../types";
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from "../util/jwt";
+import database from "../util/database";
 
-const createStudent = async (input: StudentInput): Promise<Student> => {
-  
-  const { username, email, password, studentNumber } = input;
-  
-  const existing = await studentDb.getStudentByUsername(username);
-
-  if (existing) {
-      throw new Error(`User with Username ${username} already exists.`);
-  }
-
-//   if (!username || username.trim().length === 0) {
-//       throw new Error("Username is required.");
-//   }
-
-//   if (!email || email.trim().length === 0) {
-//       throw new Error("Email is required.");
-//   }
-
-//   if (!password || password.trim().length === 0) {
-//       throw new Error("Password is required.");
-//   }
-
-//   if (!studentNumber || studentNumber.trim().length === 0) {
-//       throw new Error("Student number is required.");
-//   }
-
-  const hashedPassword = await bcrypt.hash(password, 12);
-
-  const newStudent = new Student({ username, email, password: hashedPassword, studentNumber });
-  newStudent.validate();
-
-  try {
-      return await studentDb.createStudent({
-        username,
-        email,
-        password: hashedPassword,
-        studentNumber,
+const createStudent = async ({
+    username,
+    email,
+    password,
+    studentNumber,
+    firstName,
+    lastName,
+    role,
+  }: {
+    username: string;
+    email: string;
+    password: string;
+    studentNumber: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+  }): Promise<Student> => {
+    try {
+      const studentPrisma = await database.student.create({
+        data: {
+          username,
+          email,
+          password,
+          studentNumber,
+          firstName,
+          lastName,
+          role,
+        },
+        include: {
+          bookings: {
+            include: {
+              trip: true,
+            },
+          },
+          review: true,
+        },
       });
-  } catch (error) {
-      console.error("Error creating student:", error);
-      throw new Error("Student creation failed due to a database error.");
-  }
-};
-
+      return Student.from(studentPrisma);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Database error. See server log for details.');
+    }
+  };
+  
 
 const getStudentById = async (studentId: number): Promise<Student | null> => {
     if (typeof studentId !== 'number' || studentId <= 0) {
@@ -95,9 +96,11 @@ const authenticate = async ({ username, password }: StudentInput): Promise<Authe
     }
 
     return {
-        token: generateJwtToken({ username }),
-        username
-    }
+        token: generateJwtToken({ username, role: student.getRole() }),
+        username: username,
+        fullname: `${student.getFirstName()} ${student.getLastName()}`,
+        role: student.getRole(),
+    };
 }
 
 export default { createStudent, getStudentById, getAllStudents, getStudentByUsername, authenticate };

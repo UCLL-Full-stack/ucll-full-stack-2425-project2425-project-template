@@ -265,8 +265,8 @@ studentRouter.post('/signup', async (req: Request, res: Response, next: NextFunc
  *                   example: An error occurred while processing the request.
  */
 studentRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-  try{
-    const studentInput = <StudentInput>req.body
+  try {
+    const studentInput = <StudentInput>req.body;
     const response = await studentService.authenticate(studentInput);
     res.status(200).json({ message: "Authentication successful", ...response });
   } catch (error) {

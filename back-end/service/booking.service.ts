@@ -4,6 +4,7 @@ import tripDb from "../repository/trip.db";
 import { Booking } from "../model/booking";
 import { BookingInput } from "../types";
 import { Student } from "../model/student";
+import { Role } from "../types";
 
 const createBooking = async (input: BookingInput): Promise<Booking> => {
     const { bookingDate, tripId, studentIds, paymentStatus } = input;
@@ -22,6 +23,9 @@ const createBooking = async (input: BookingInput): Promise<Booking> => {
         username: "",
         email: "", 
         password: "",
+        firstName: "",
+        lastName: "",
+        role: "student",
         studentNumber: "",
     }));
 

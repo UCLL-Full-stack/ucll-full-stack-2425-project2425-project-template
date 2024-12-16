@@ -4,6 +4,10 @@ type Student = {
     email: string;
     password: string;
     studentNumber: string;
+    firstName?: string;
+    lastName?: string;
+    fullname?: string;
+    role?: string;
 }
 
 type Trip = {

@@ -7,6 +7,9 @@ type StudentInput = {
     password: string;
     studentNumber: string;
     bookings?: BookingInput[];
+    firstName: string;
+    lastName: string;
+    role: Role;
 }
 
 type TripInput = {
@@ -36,11 +39,14 @@ type ReviewInput = {
     comment: string;
 }
 
-type Role = 'admin' | 'user' | 'guest';
+type Role = 'admin' | 'student' | 'guest';
 
 type AuthenticationResponse = {
     token: string;
     username: string;
+    role: string;
+    fullname: string;
+
 }
 
 export{
