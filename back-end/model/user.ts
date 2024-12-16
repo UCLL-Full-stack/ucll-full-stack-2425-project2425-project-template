@@ -48,9 +48,11 @@ export class User {
     }: UserPrisma & {
         profile?: ProfilePrisma | null;
         recipes?: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
-        schedule?: SchedulePrisma & {
-            recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
-        } | null;
+        schedule?:
+            | (SchedulePrisma & {
+                  recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
+              })
+            | null;
     }): User {
         return new User({
             id,
@@ -83,12 +85,13 @@ export class User {
         if (user.recipes !== undefined && !Array.isArray(user.recipes)) {
             throw new Error('Recipes must be an array');
         }
-        if (user.schedule !== undefined && !(user.schedule instanceof Schedule)) {
-            throw new Error('Schedule must be an instance of Schedule');
+        if (
+            user.schedule !== undefined &&
+            user.schedule !== null &&
+            !(user.schedule instanceof Schedule)
+        ) {
+            throw new Error('Schedule must be an instance of Schedule or null');
         }
-        // if (!user.role) {
-        //     throw new Error('Role is required');
-        // }
     }
 
     getId(): number | undefined {

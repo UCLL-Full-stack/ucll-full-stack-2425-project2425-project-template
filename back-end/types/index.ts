@@ -8,7 +8,6 @@ type UserSignupInput = {
     username: string;
     email: string;
     password: string;
-    // role: string;
 };
 
 type UserLoginInput = {
@@ -21,7 +20,7 @@ type AuthenticationResponse = {
     username: string;
     fullname: string;
     // role: string;
-  };
+};
 
 type ProfileUpdateInput = {
     firstName: string;
@@ -78,5 +77,5 @@ export {
     RecipeUpdateInput,
     RecipeCategory,
     AuthenticationResponse,
-    Role
+    Role,
 };

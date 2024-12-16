@@ -56,7 +56,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await userService.getUserById(Number(req.params.id));
-        res.status(200).json(user.toJSON());
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
@@ -75,11 +75,15 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *           schema:
  *             type: object
  *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
  *               username:
  *                 type: string
- *               password:
- *                 type: string
  *               email:
+ *                 type: string
+ *               password:
  *                 type: string
  *     responses:
  *       200:
@@ -91,9 +95,9 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = <UserSignupInput>req.body;
-        const result = await userService.createUser(user);
-        res.status(200).json(result.toJSON());
+        const userInput = <UserSignupInput>req.body;
+        const user = await userService.createUser(userInput);
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
@@ -124,14 +128,14 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
  *         description: Internal server error
  */
 
-userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const loginData = <UserLoginInput>req.body;
-        const result = await userService.authenticate(loginData);
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
-});
+// userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const loginData = <UserLoginInput>req.body;
+//         const result = await userService.authenticate(loginData);
+//         res.status(200).json(result);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 export { userRouter };
