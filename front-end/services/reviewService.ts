@@ -1,4 +1,4 @@
-import { ReviewInput } from "@/types/index";
+import { Review, ReviewInput } from "@/types/index";
 
 const getAllReviews = async () => {
     return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews`, {
@@ -24,6 +24,21 @@ const createReview = async (review: ReviewInput): Promise<Response> => {
     }); 
 };
 
+const likeReview = async (review: Review): Promise<Response> => {
+    const loggedInUser = sessionStorage.getItem("LoggedInUser");
+    const user = JSON.parse(loggedInUser??"");
+    if (!user) return Response.error();
+
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/like/${review.id}`,{
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}` 
+        },
+        body: JSON.stringify(review.likes)
+    }); 
+}
+
 const deleteReview = async (id: number) => {
     const loggedInUser = sessionStorage.getItem("LoggedInUser");
     const user = JSON.parse(loggedInUser??"");
@@ -41,5 +56,6 @@ const deleteReview = async (id: number) => {
 export default{
     getAllReviews,
     createReview,
+    likeReview,
     deleteReview
 }

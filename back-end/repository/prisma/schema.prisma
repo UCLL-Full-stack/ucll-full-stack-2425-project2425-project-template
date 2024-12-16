@@ -18,6 +18,20 @@ model User{
     lists List[]
     reviews Review[]
     comments Comment[]
+    likedReviews Review[] @relation("userLikesReview")
+}
+
+model Review{
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    title String @db.VarChar(255)
+    body String @db.VarChar(2048)
+    starRating Int
+    albumID String @db.VarChar(255)
+    likes User[] @relation("userLikesReview")
+    authorId Int
+    author User @relation(fields: [authorId], references: [id])
+    comments Comment[]
 }
 
 model List{
@@ -30,24 +44,10 @@ model List{
     albumIds String[]
 }
 
-model Review{
-    id Int @id @default(autoincrement())
-    createdAt DateTime @default(now())
-    title String @db.VarChar(255)
-    body String @db.VarChar(2048)
-    starRating Int
-    albumID String @db.VarChar(255)
-    likeCount Int
-    authorId Int
-    author User @relation(fields: [authorId], references: [id])
-    comments Comment[]
-}
-
 model Comment{
     id Int @id @default(autoincrement())
     createdAt DateTime @default(now())
     body String @db.VarChar(2048)
-    likeCount Int
     authorId Int
     author User @relation(fields: [authorId], references: [id])
     reviewId Int

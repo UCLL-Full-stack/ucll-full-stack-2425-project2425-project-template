@@ -58,7 +58,7 @@ const Home = ({ lists, reviews, albums }: Props) => {
                     <section className="text-center">
                         {/* Popular Lists Section */}
                         <div className="pb-5 grid gap-6 border-b-[1px] border-bg2">
-                            <h2 className="text-2xl main-font text-text2 mb-4">Popular Lists</h2>
+                            <h2 className="text-2xl main-font text-text2">Popular Lists</h2>
                             <div className="slider-container">
                                 <div className="slider">
                                     {lists &&
@@ -91,24 +91,24 @@ const Home = ({ lists, reviews, albums }: Props) => {
 
                         {/* Popular Reviews Section */}
                         <div className="pt-5 grid gap-6">
-                            <h2 className="text-2xl main-font text-text2 mb-4">Popular Reviews</h2>
+                            <h2 className="text-2xl main-font text-text2">Popular Reviews</h2>
                             <div className="slider-container">
                                 <div className="slider">
                                     {reviews &&
                                         reviews.slice(0, Math.min(reviews.length,15)).map((review) => (
-                                            <ReviewCard key={review.id} review={review} />
+                                            <ReviewCard key={review.id} review={review} userId={user?.id}/>
                                     ))}
                                     {reviews &&
                                         reviews.slice(0, Math.min(reviews.length,15)).map((review) => (
-                                            <ReviewCard key={review.id} review={review} />
+                                            <ReviewCard key={review.id} review={review} userId={user?.id}/>
                                     ))}
                                     {reviews &&
                                         reviews.slice(0, Math.min(reviews.length,15)).map((review) => (
-                                            <ReviewCard key={review.id} review={review} />
+                                            <ReviewCard key={review.id} review={review} userId={user?.id}/>
                                     ))}
                                     {reviews &&
                                         reviews.slice(0, Math.min(reviews.length,15)).map((review) => (
-                                            <ReviewCard key={review.id} review={review} />
+                                            <ReviewCard key={review.id} review={review} userId={user?.id}/>
                                     ))}
                                 </div>
                             </div>
@@ -145,6 +145,7 @@ const Home = ({ lists, reviews, albums }: Props) => {
         </>
     );
 };
+
 export const getServerSideProps = async () => {
     try{
         let response = await reviewService.getAllReviews();

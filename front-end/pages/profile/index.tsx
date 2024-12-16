@@ -124,7 +124,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 justify-center pt-6 sm:pt-10 gap-4">
                                     {user && user.reviews.length > 0 ? user.reviews.map((review) => (
-                                            <ReviewCard key={review.id} review={review} onDelete={toggleDeleteReview}/>
+                                            <ReviewCard key={review.id} review={review} onDelete={toggleDeleteReview} userId={user.id}/>
                                     )) : (
                                         <h2 className="pt-6 sm:pt-10 sm:col-span-2 text-center main-font text-white">No Reviews To Show</h2>
                                     )}

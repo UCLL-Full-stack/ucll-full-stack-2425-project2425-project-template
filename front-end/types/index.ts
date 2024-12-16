@@ -1,10 +1,3 @@
-export type Artist= {
-    id?: number,
-    name: string,
-    bio: string,
-    albums: Album[] 
-}
-
 export type Album = {
     id: string,
     name: string,
@@ -12,34 +5,10 @@ export type Album = {
     image: {"#text": string, size: string}[],
 }
 
-export type Track= {
-    id?: number,
-    title: string,
-    duration: Duration,
-    album: Album,
-    artists: Artist
-}
-
-export type ArtistResponse = {
-    results: {
-        artistmatches:{
-            artist: Artist[];
-        }
-    }
-}
-
 export type AlbumResponse = {
     results: {
         albummatches:{
             album: Album[];
-        }
-    }
-}
-
-export type TrackResponse = {
-    results: {
-        trackmatches:{
-            track: Track[];
         }
     }
 }
@@ -97,9 +66,9 @@ export type Review = {
     title: string,
     body: string,
     albumId: string,
-    likeCount: number,
     starRating: number,
-    comments: Comment[]
+    comments: Comment[],
+    likes: number[]
 }
 
 export type Comment = {

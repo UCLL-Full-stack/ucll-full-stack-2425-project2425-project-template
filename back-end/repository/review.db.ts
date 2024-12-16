@@ -12,12 +12,34 @@ const findAllReviews = async(): Promise<Review[]> => {
                         author: true
                     }
                 },
+                likes: true
             }
         }); 
         if(!reviewsPrisma) return [];
         return reviewsPrisma.map(review=>Review.from(review));
     }catch(e){
         throw new Error("DB error");
+    }
+}
+
+const findById = async(id: number): Promise<Review | null> => {
+    try{
+        const reviewPrisma = await database.review.findUnique({
+            where: {id},
+            include: {
+                author: true,
+                comments: {
+                    include: {
+                        author: true
+                    }
+                },
+                likes: true
+            }
+        })
+        if (!reviewPrisma) return null;
+        return Review.from(reviewPrisma);
+    }catch(e){
+        throw new Error("DB Error");
     }
 }
 
@@ -32,6 +54,7 @@ const findUserReviews = async(id: number): Promise<Review[]>=>{
                         author: true
                     }
                 },
+                likes: true
             }
         });
         if(!reviewsPrisma) return [];
@@ -49,7 +72,6 @@ const createReview = async (review: ReviewInput): Promise<Review>=>{
                 body: review.body,
                 albumID: review.albumId,
                 starRating: review.starRating,
-                likeCount: 0,
                 author: {
                     connect: {id: review.authorId}
                 },
@@ -62,6 +84,31 @@ const createReview = async (review: ReviewInput): Promise<Review>=>{
     }catch(e){
         throw new Error("DB ERROR (review)");
     }
+}
+
+const likeReview = async (id:number, likes: number[]): Promise<Review> => {
+    try{
+        const reviewPrisma = await database.review.update({
+            data:{
+                likes: {
+                    set: likes.map(id=>({id}))
+                }
+            },
+            where: {id},
+            include: {
+                author: true,
+                comments: {
+                    include: {
+                        author: true
+                    }
+                },
+                likes: true
+            }
+        })
+        return Review.from(reviewPrisma);
+    }catch(e){
+        throw new Error("DB ERROR");
+    } 
 }
 
 const deleteReview = async (id: number)=>{
@@ -80,7 +127,9 @@ const deleteReview = async (id: number)=>{
 
 export default{
     findAllReviews,
+    findById,
     findUserReviews,
     createReview,
-    deleteReview
+    deleteReview,
+    likeReview
 }

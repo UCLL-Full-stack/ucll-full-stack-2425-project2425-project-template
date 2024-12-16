@@ -1,25 +1,64 @@
+import reviewService from "@/services/reviewService";
 import { Review } from "@/types/index";
 import { Rating } from "@mui/material";
+import { setConfig } from "next/config";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import IconComment from "../ui/comment";
 import IconDelete from "../ui/delete";
 import IconDetails from "../ui/details";
+import IconEdit from "../ui/edit";
 import IconLike from "../ui/like";
 
 type Props = {
     review: Review;
     onDelete?: (id:number)=>void;
+    userId?: number;
 }
 
-const ReviewCard: React.FC<Props> = ({review, onDelete}: Props) => {
+const ReviewCard: React.FC<Props> = ({review, onDelete, userId}: Props) => {
 
+    const router = useRouter();
     const formattedDate = new Date(review.createdAt).toLocaleDateString();
     const [isLiked, setIsLiked] = useState<boolean>(false);
-    const [initialLikes, setLikes] = useState<number>(review.likeCount);
+    const [likeCount, setLikeCount] = useState<number>(review.likes.length);
+    const [clicked, setClicked] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     useEffect(()=>{
-        review.likeCount= isLiked? initialLikes+1: initialLikes;
+        const userLiked = review.likes.find(like=> like === userId);
+        if(userLiked) setIsLiked(true);
+    },[userId]);
+
+    useEffect(()=>{
+        if(!userId || !clicked)return;
+
+        if(isLiked)
+            review.likes.push(userId); 
+        else
+            review.likes = review.likes.filter(like => like !== userId);
+
+        updateLikes();
+        setLikeCount(review.likes.length);
     },[isLiked]);
+    
+    const updateLikes = async () => {
+        console.log(review);
+        const response = await reviewService.likeReview(review);
+        if(!response.ok){
+            setError(await response.json());
+        }
+    }
+
+    const handleLike = ()=>{
+        setClicked(true);
+        if(!userId) {
+            router.push("/login");
+            return;
+        }
+
+        setIsLiked(!isLiked);
+    };
 
     return (
         <div className="bg-bg2 rounded-lg p-4 shadow-md shadow-text1 w-[20vw]">
@@ -29,7 +68,7 @@ const ReviewCard: React.FC<Props> = ({review, onDelete}: Props) => {
                     <IconDelete 
                         className="text-text1 hover:text-red-500 duration-100"
                         width={30} height={30}
-                        onClick={() => { onDelete(review.id) }}
+                        onClick={() => onDelete(review.id) }
                     />
                 }
             </div>
@@ -46,11 +85,11 @@ const ReviewCard: React.FC<Props> = ({review, onDelete}: Props) => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
                 <div className="flex gap-2">
                     <span className="flex items-center gap-2 text-xs sm:text-sm text-text2 main-font">
-                        <p> {review.likeCount} </p>
+                        <p> {likeCount} </p>
                         <IconLike 
                             width={25} height={25} 
-                            className={isLiked?"text-text2 hover:text-green-500 duration-100":"hover:text-text2 text-green-500 duration-100"}
-                            onClick={()=>setIsLiked(!isLiked)}
+                            className={isLiked?"text-green-500 hover:text-text2 duration-100":"text-text2 hover:text-green-500 duration-100"}
+                            onClick={handleLike}
                         /> 
                     </span>
                     <span className="flex items-center gap-2 text-xs sm:text-sm text-text2 main-font">
@@ -58,10 +97,18 @@ const ReviewCard: React.FC<Props> = ({review, onDelete}: Props) => {
                         <IconComment width={25} height={25} className="text-text2 hover:text-bg1"/>
                     </span>
                 </div>
+                <div className="flex gap-2">
+                {onDelete &&
+                    <button
+                        className="rounded-lg px-2 sm:px-3 py-1 w-full flex justify-center sm:py-1 main-thin text-xs sm:text-sm bg-text1 text-text2 hover:text-bg1 hover:bg-text2 transition-colors duration-100">
+                        <IconEdit width={25} height={25}/>
+                    </button>
+                }
                 <button 
-                    className="rounded-lg px-2 sm:px-3 py-1 w-full sm:w-1/4 flex justify-center sm:py-1 main-thin text-xs sm:text-sm bg-text1 text-text2 hover:text-bg1 hover:bg-text2 transition-colors duration-100">
+                    className="rounded-lg px-2 sm:px-3 py-1 w-full flex justify-center sm:py-1 main-thin text-xs sm:text-sm bg-text1 text-text2 hover:text-bg1 hover:bg-text2 transition-colors duration-100">
                     <IconDetails width={25} height={25}/>
                 </button>
+                </div>
             </div>
         </div>
     );

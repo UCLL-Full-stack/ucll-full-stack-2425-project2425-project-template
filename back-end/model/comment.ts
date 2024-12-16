@@ -10,7 +10,6 @@ export class Comment{
     private readonly author: User;
     private body: string;
     private reviewId: number;
-    private likeCount: number;
 
     constructor(comment: {
         id: number
@@ -18,14 +17,12 @@ export class Comment{
         body: string
         reviewId: number 
         createdAt: Date
-        likeCount: number
     }){
         this.id = comment.id;
         this.author = comment.author;
         this.reviewId = comment.reviewId;
         this.body = comment.body;
         this.createdAt = comment.createdAt;
-        this.likeCount = comment.likeCount;
     }
 
     static from({  
@@ -33,7 +30,6 @@ export class Comment{
         createdAt,
         body,
         author,
-        likeCount,
         reviewId,
     }:CommentPrisma & {
         author: UserPrisma
@@ -43,8 +39,7 @@ export class Comment{
             createdAt: createdAt,
             body: body,
             author: User.from(author),
-            reviewId: reviewId,
-            likeCount: likeCount
+            reviewId: reviewId
         });
     }
 
@@ -60,19 +55,11 @@ export class Comment{
         return this.reviewId;
     }
 
-    getLikeCount(): number{
-        return this.likeCount; 
-    }
-    
     getCreatedAt(): Date{
         return this.createdAt;
     }
 
     getUser(): User{
         return this.author;
-    }
-
-    like(){
-        this.likeCount++;
     }
 }

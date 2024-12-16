@@ -30,10 +30,11 @@
 
 .slider-container {
   overflow: hidden;
-  background: #001A6E;
+  background: #111;
   white-space: nowrap;
   position: relative;
-  padding: 0.25rem;
+  padding: 1.25rem;
+  border-radius: 10px;
 }
 
 .slider-container:before,
@@ -52,7 +53,7 @@
 
 .slider {
   display: grid;
-  grid-template-columns: repeat(15,1fr);
+  grid-template-columns: repeat(45,1fr);
   gap: 1rem;
   animation: 35s slide infinite linear;
 }

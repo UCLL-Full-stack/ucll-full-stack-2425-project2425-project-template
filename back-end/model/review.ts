@@ -1,7 +1,7 @@
 import { 
     Review as ReviewPrisma,
     Comment as CommentPrisma,
-    User as UserPrisma,
+    User as UserPrisma
 } from '@prisma/client';
 import { Comment } from './comment';
 import { User } from './user';
@@ -14,8 +14,8 @@ export class Review{
     private body: string;
     private starRating: number; 
     private albumId: string;
-    private likeCount: number; 
     private comments: Comment[];
+    private likes: number[];
 
     constructor(review: {
         id?: number,
@@ -25,8 +25,8 @@ export class Review{
         starRating: number,
         albumId: string,
         createdAt: Date,
-        likeCount: number,
-        comments?: Comment[]
+        comments?: Comment[],
+        likes?: number[]
     }){
         this.validate(review);
         this.id = review.id;
@@ -36,8 +36,8 @@ export class Review{
         this.albumId = review.albumId;
         this.starRating = review.starRating;
         this.createdAt = review.createdAt;
-        this.likeCount = review.likeCount;
-        this.comments = review.comments??[]
+        this.comments = review.comments??[];
+        this.likes = review.likes??[];
     }
 
     static from({
@@ -48,11 +48,12 @@ export class Review{
         body,
         starRating,
         albumID,
-        likeCount,
-        comments
+        comments,
+        likes
     }: ReviewPrisma & {
             comments?: (CommentPrisma & {author: UserPrisma})[];
-            author: UserPrisma
+            likes?: UserPrisma[];
+            author: UserPrisma;
     }){
         return new Review({
             id: id,
@@ -61,9 +62,9 @@ export class Review{
             body: body,
             albumId: albumID,
             starRating: starRating,
-            likeCount: likeCount,
             createdAt: createdAt,
-            comments: comments?.map(comment=>Comment.from(comment))??[]
+            comments: comments?.map(comment=>Comment.from(comment))??[],
+            likes: likes?.map(like=>like.id)
         });
     }
 
@@ -106,6 +107,10 @@ export class Review{
     getComments(): Comment[]{
         return this.comments;
     }
+
+    getLikes(): number[]{
+        return this.likes;
+    }
     
     setStarRating(starRating: number) {
         if(starRating < 0 || starRating > 5)
@@ -121,21 +126,14 @@ export class Review{
         return this.createdAt;
     }
 
-    getLikeCount(): Number{
-        return this.likeCount;
-    }
-
-    like(){
-        this.likeCount++;
-    }
-
     equals(review: Review){
         return (
             this.title === review.title &&
             this.body === review.body &&
             this.starRating === review.starRating &&
             this.albumId === review.albumId &&
-            this.likeCount === review.likeCount
+            this.likes === review.likes &&
+            this.comments === review.comments
         )
     }
 };

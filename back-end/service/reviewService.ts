@@ -8,7 +8,7 @@ const getAllReviews = async(): Promise<Review[]> => {
     }catch(e){
         throw e;
     }
-}
+};
 
 const getUserReviews = async(id: number): Promise<Review[]> => {
     try{
@@ -16,7 +16,7 @@ const getUserReviews = async(id: number): Promise<Review[]> => {
     }catch(e){
         throw e;
     }
-}
+};
 
 const createReview = async (review: ReviewInput): Promise<Review> => {
     try{
@@ -24,7 +24,20 @@ const createReview = async (review: ReviewInput): Promise<Review> => {
     }catch(e){
         throw e;
     }
-}
+};
+
+const likeReview = async (id: number, likes: number[]): Promise<Review> => {
+    const review = await reviewDb.findById(id);
+    if(!review){
+        throw new Error("Review Does not Exist");
+    }
+
+    try{
+        return await reviewDb.likeReview(id, likes);
+    }catch(e){
+        throw e;
+    }
+};
 
 const deleteReview = async (id: number) =>{
     try{
@@ -32,11 +45,12 @@ const deleteReview = async (id: number) =>{
     }catch(e){
         throw e;
     }
-}
+};
 
 export default{
     getAllReviews,
     getUserReviews,
     createReview,
-    deleteReview
+    deleteReview,
+    likeReview
 }

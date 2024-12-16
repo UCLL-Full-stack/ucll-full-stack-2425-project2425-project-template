@@ -34,7 +34,8 @@ const findById = async (id: number) => {
                             include: {
                                 author: true
                             }
-                        }
+                        },
+                        likes: true
                     }
                 }
             }
