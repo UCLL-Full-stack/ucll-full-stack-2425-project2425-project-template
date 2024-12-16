@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
                 </li>
                 {loggedInUser ? (
                     <>
-                    <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
+                    <div className={styles['navbar-item']}>
                         {`${t("nav.welkom")} ${loggedInUser}`}!
                     </div>
                     <button
