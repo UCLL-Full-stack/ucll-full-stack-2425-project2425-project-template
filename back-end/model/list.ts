@@ -10,6 +10,7 @@ export class List{
     private readonly author?: User;
     private title: string;
     private description: string;
+    private likes: number[];
     private albumIds: string[];
 
     constructor(list: {
@@ -18,6 +19,7 @@ export class List{
         title: string, 
         description: string,
         albumIds: string[],
+        likes?: number[],
         createdAt?: Date
     }){
         this.validate(list);
@@ -26,6 +28,7 @@ export class List{
         this.title = list.title;
         this.description = list.description;
         this.albumIds = list.albumIds;
+        this.likes = list.likes??[];
         this.createdAt = list.createdAt;
     }
 
@@ -35,9 +38,11 @@ export class List{
         title,
         description,
         albumIds,
+        likes,
         createdAt
     }: ListPrisma & {
         author?: UserPrisma;
+        likes?: UserPrisma[];
     }){
         return new List({
             id: id,
@@ -45,6 +50,7 @@ export class List{
             title: title,
             description: description,
             albumIds: albumIds,
+            likes: likes?.map(like=>like.id),
             createdAt: createdAt
         });
     }
@@ -79,6 +85,10 @@ export class List{
         return this.description;
     }
 
+    getLikes(): number[]{
+        return this.likes;
+    }
+    
     getAlbums(): string[]{
         return this.albumIds;
     }
@@ -91,6 +101,7 @@ export class List{
         return (
             this.title === list.title &&
             this.description === list.description &&
+            this.likes === list.likes &&
             this.albumIds.toString() === list.albumIds.toString()
         )
     }

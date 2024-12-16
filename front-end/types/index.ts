@@ -56,6 +56,7 @@ export type List = {
     createdAt: number,
     title: string,
     description: string,
+    likes: number[],
     albumIds: string[]
 }
 

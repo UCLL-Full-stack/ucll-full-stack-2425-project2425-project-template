@@ -1,4 +1,4 @@
-import { ListInput } from "@/types/index"
+import { List, ListInput } from "@/types/index"
 
 const getAllLists= async (): Promise<Response> => {
     return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lists`, {
@@ -38,6 +38,21 @@ const createList = async (list: ListInput): Promise<Response> => {
     }); 
 }
 
+const likeList = async (list: List): Promise<Response> => {
+    const loggedInUser = sessionStorage.getItem("LoggedInUser");
+    const user = JSON.parse(loggedInUser??"");
+    if (!user) return Response.error();
+
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lists/like/${list.id}`,{
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}` 
+        },
+        body: JSON.stringify(list.likes)
+    }); 
+}
+
 const deleteList = async (id: number): Promise<Response> =>{
     const loggedInUser = sessionStorage.getItem("LoggedInUser");
     const user = JSON.parse(loggedInUser??"");
@@ -56,5 +71,6 @@ export default {
     getAllLists,
     getUserLists,
     createList,
+    likeList,
     deleteList
 }

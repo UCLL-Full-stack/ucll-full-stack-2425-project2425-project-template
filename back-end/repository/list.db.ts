@@ -5,10 +5,27 @@ const getAllLists = async (): Promise<List[]> => {
     try{
         const listsPrisma = await database.list.findMany({
             include: {
-                author: true
+                author: true,
+                likes: true
             }
         });
         return listsPrisma.map((list) => List.from(list))??[];
+    }catch(e){
+        throw new Error('db Error');
+    }
+};
+
+const getById = async (id: number): Promise<List | null> => {
+    try{
+        const listsPrisma = await database.list.findUnique({
+            where: {id},
+            include: {
+                author: true,
+                likes: true
+            }
+        });
+        if(!listsPrisma) return null;
+        return List.from(listsPrisma);
     }catch(e){
         throw new Error('db Error');
     }
@@ -19,7 +36,8 @@ const getUserLists = async (authorId: number): Promise<List[]> => {
         const listsPrisma = await database.list.findMany({
             where: {authorId},
             include: {
-                author: true
+                author: true,
+                likes: true
             }
         });
         if(!listsPrisma) return [];
@@ -50,6 +68,26 @@ const createList = async (list: List, authorId: number): Promise<List> => {
     }
 }
 
+const likeList = async (id:number, likes: number[]): Promise<List> => {
+    try{
+        const listPrisma = await database.list.update({
+            data:{
+                likes: {
+                    set: likes.map(id=>({id}))
+                }
+            },
+            where: {id},
+            include: {
+                author: true,
+                likes: true
+            }
+        })
+        return List.from(listPrisma);
+    }catch(e){
+        throw new Error("DB ERROR");
+    } 
+}
+
 const deleteList = async (id: number)=>{
     try{
         await database.list.delete({
@@ -62,7 +100,9 @@ const deleteList = async (id: number)=>{
 
 export default {
     getAllLists,
+    getById,
     createList,
     getUserLists,
-    deleteList
+    likeList,
+    deleteList,
 }
