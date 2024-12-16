@@ -17,6 +17,29 @@ table {
     margin: auto;
 }
 
+.table-container {
+    overflow-x: auto;
+}
+
+.table-container table {
+    border-collapse: collapse;
+}
+
+.table-container button {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.table-container button[type="button"] {
+    background-color: #f44336;
+    color: white;
+}
+
 tr {
     border: 1px solid black;
 }
@@ -79,6 +102,47 @@ select {
     background-color: rgb(0, 40, 2);
 }
 
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.edit-form label {
+    margin: 0.5rem 0;
+    font-weight: bold;
+}
+
+.edit-form input,
+.edit-form select {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.edit-form button{
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-form button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.edit-form button[type="button"] {
+    background-color: #f44336;
+    color: white;
+}
+
+
 .error-field {
     color: darkred;
     font-weight: bold;
@@ -87,4 +151,11 @@ select {
 .ok-field {
     color: darkgreen;
     font-weight: bold;
+}
+
+.status-message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
 }

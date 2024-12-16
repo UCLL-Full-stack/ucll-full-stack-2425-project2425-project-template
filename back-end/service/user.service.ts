@@ -80,6 +80,15 @@ const deleteUser = async (id: number): Promise<void> => {
     await userDb.deleteUser({ id});
 }
 
+const updateUser = async (id: number, userData: Partial<User>): Promise<User> => {
+    const user = await userDb.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id ${id} does not exist.`);
+    }
+    const updatedUser = await userDb.updateUser(id, userData);
+    return updatedUser;
+};
+
 export default {
     createUser,
     getAllUsers,
@@ -87,5 +96,6 @@ export default {
     getUserBestellingen,
     getUserByUsername,
     authenticate,
-    deleteUser
+    deleteUser,
+    updateUser
 }

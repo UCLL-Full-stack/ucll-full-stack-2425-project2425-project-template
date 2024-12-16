@@ -145,4 +145,15 @@ userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+userRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const id = parseInt(req.params.id);
+        const user = req.body;
+        const updatedUser = await userService.updateUser(id, user);
+        res.status(200).json(updatedUser);
+    } catch (error){
+        next(error);
+    }
+});
+
 export { userRouter };
