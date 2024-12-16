@@ -12,81 +12,6 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-// Creating constants
-const users = [
-    new User({
-        name: 'Alice',
-        email: 'alice@example.com',
-        password: 'password123',
-        role: 'player',
-        birthday: new Date(1990, 1, 1),
-        accountBirthday: new Date(2020, 1, 1),
-    }),
-    new User({
-        name: 'Xander',
-        email: 'Xander@example.com',
-        password: 'password0233',
-        role: 'player',
-        birthday: new Date(2004, 2, 18),
-        accountBirthday: new Date(2024, 9, 12),
-    }),
-];
-
-const players = [
-    new Player({
-        name: 'Player1',
-        statistics: 'Stats1',
-        class: 'Warrior',
-        currency: 100,
-        user: users[0],
-    }),
-    new Player({
-        name: 'Cedinvu',
-        statistics: 'hp: 20, power: veel',
-        class: 'JAS 39 Gripen',
-        currency: 2389,
-        user: users[0],
-    }),
-    new Player({
-        name: 'Cedinvu2',
-        statistics: 'hp: 2000, power: -1',
-        class: 'Impostor',
-        currency: 100004,
-        user: users[1],
-    }),
-    new Player({
-        name: 'usersiscool',
-        statistics: 'hp: 100, power: 100',
-        class: 'Warrior',
-        currency: 1454,
-        user: users[0],
-    }),
-    new Player({
-        name: 'MasterPieck',
-        statistics: 'hp: 2000, power: 1500',
-        class: 'Teacher',
-        currency: 15474,
-        user: users[1],
-    }),
-];
-
-const floors = [
-    new Floor({
-        floornumber: 1,
-    }),
-];
-
-const worlds = [
-    new World({
-        id: 1,
-        name: 'Eorzea',
-        owner: users[0],
-        floors: floors,
-    }),
-];
-
-
-
 async function main() {
 
     await prisma.$executeRawUnsafe('ALTER SEQUENCE "User_id_seq" RESTART WITH 1');
@@ -102,6 +27,80 @@ async function main() {
     await prisma.world.deleteMany();
     await prisma.player.deleteMany();
     await prisma.user.deleteMany();
+
+    // Creating constants
+    const users = [
+        new User({
+            name: 'Alice',
+            email: 'alice@example.com',
+            role: 'user',
+            password: await bcrypt.hash('password123', 12),
+            birthday: new Date(1990, 1, 1),
+            accountBirthday: new Date(2020, 1, 1),
+        }),
+        new User({
+            name: 'Xander',
+            email: 'alnea@example.com',
+            role: 'user',
+            password: await bcrypt.hash('password0233', 12),
+            birthday: new Date(2004, 2, 18),
+            accountBirthday: new Date(2024, 9, 12),
+        }),
+    ];
+
+
+    const players = [
+        new Player({
+            name: 'Player1',
+            statistics: 'Stats1',
+            class: 'Warrior',
+            currency: 100,
+            user: users[0],
+        }),
+        new Player({
+            name: 'Cedinvu',
+            statistics: 'hp: 20, power: veel',
+            class: 'JAS 39 Gripen',
+            currency: 2389,
+            user: users[0],
+        }),
+        new Player({
+            name: 'Cedinvu2',
+            statistics: 'hp: 2000, power: -1',
+            class: 'Impostor',
+            currency: 100004,
+            user: users[1],
+        }),
+        new Player({
+            name: 'usersiscool',
+            statistics: 'hp: 100, power: 100',
+            class: 'Warrior',
+            currency: 1454,
+            user: users[0],
+        }),
+        new Player({
+            name: 'MasterPieck',
+            statistics: 'hp: 2000, power: 1500',
+            class: 'Teacher',
+            currency: 15474,
+            user: users[1],
+        }),
+    ];
+
+    const floors = [
+        new Floor({
+            floornumber: 1,
+        }),
+    ];
+
+    const worlds = [
+        new World({
+            id: 1,
+            name: 'Eorzea',
+            owner: users[0],
+            floors: floors,
+        }),
+    ];
 
     const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
 
