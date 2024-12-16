@@ -18,12 +18,12 @@ const findPlayerByNumber = async (number: number): Promise<Player | undefined> =
     return playerDb.findByNumber(number);
 }
 
-const addPlayer = async ({name, number ,position, birthdate}: PlayerInput): Promise<Player> => {
+const addPlayer = async ({name, number ,position, birthdate, imageUrl}: PlayerInput): Promise<Player> => {
     if (await findPlayerByNumber(number)) {
         throw new Error(`Player with number ${number} already exists`);
     }
 
-    return playerDb.addPlayer({name, number, position, birthdate});
+    return playerDb.addPlayer({name, number, position, birthdate, imageUrl});
 }
 
 const updatePlayer = async (id: number, {name, number, position, birthdate}: PlayerInput): Promise<Player> => {
