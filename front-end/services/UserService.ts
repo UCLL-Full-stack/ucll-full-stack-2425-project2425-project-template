@@ -59,11 +59,29 @@ const getAllUsers = () => {
     })
 }
 
+const deleteUser = async (id: number) => { 
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
+
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    });
+};
+
 const UserService = {
     login,
     getUserById,
     getUserBestellingen,
-    getAllUsers
+    getAllUsers,
+    deleteUser
 };
 
 export default UserService;

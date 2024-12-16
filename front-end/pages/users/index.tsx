@@ -25,7 +25,7 @@ const Users: React.FC = () => {
         }
     };
 
-    const { data, isLoading, error } = useSWR("users", getUsers);
+    const { data, error } = useSWR("users", getUsers);
 
     useInterval(() => {
         mutate("users", getUsers());

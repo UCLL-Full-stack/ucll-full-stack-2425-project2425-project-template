@@ -135,4 +135,14 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id);
+        await userService.deleteUser(id);
+        res.status(204).send();
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userRouter };

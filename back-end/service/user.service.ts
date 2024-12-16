@@ -72,11 +72,20 @@ const authenticate = async ({ gebruikersnaam, wachtwoord }: UserInput): Promise<
     };
 };
 
+const deleteUser = async (id: number): Promise<void> => {
+    const user = await userDb.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id ${id} does not exist.`);
+    }
+    await userDb.deleteUser({ id});
+}
+
 export default {
     createUser,
     getAllUsers,
     getUserById,
     getUserBestellingen,
     getUserByUsername,
-    authenticate
+    authenticate,
+    deleteUser
 }
