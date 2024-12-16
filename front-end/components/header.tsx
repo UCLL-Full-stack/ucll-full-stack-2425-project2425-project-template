@@ -47,7 +47,7 @@ const Header: React.FC = () => {
             </Link>
           </>
         ):(
-          <Link href="/login" className={styles.link}>
+          <Link href="/login" className="p-2 m-1 fs-6 text-white bg-[#ff8921] hover:bg-[#ff642bbb] rounded-md">
             Login
           </Link>
         )}
