@@ -1,31 +1,31 @@
 import { User } from './user';
+import { Team as TeamPrisma, Competition as CompetitionPrisma } from '@prisma/client';
 import { Competition } from './competition';
 import { CompetitionInput } from '../types';
 
 export class Team {
-    private id?: number;
+    private id: number;
     private name: string;
     private points: number;
-    private owner: User;
-    private competitionId: number;
+
+    private ownerId: number;
+
+    private competition: Competition;
 
     constructor(team: {
-        id?: number;
-        name: string;
-        points: number;
-        owner: User;
-        competitionId: number;
+        id: number,
+        name: string,
+        points: number,
+        ownerId: number,
+        competition: Competition
     }) {
         this.id = team.id;
         this.name = team.name;
         this.points = team.points;
-        this.owner = team.owner;
-        this.competitionId = team.competitionId;
+        this.ownerId = team.ownerId;
+        this.competition = team.competition;
     }
 
-    public getCompetition(): number {
-        return this.competitionId;
-    }
     getId(): number | undefined {
         return this.id;
     }
@@ -38,8 +38,8 @@ export class Team {
         return this.points;
     }
 
-    getOwner(): User {
-        return this.owner;
+    getOwnerId(): number {
+        return this.ownerId;
     }
 
     equals(team: Team): boolean {
@@ -47,8 +47,23 @@ export class Team {
             this.id === team.getId() &&
             this.name === team.getName() &&
             this.points === team.getPoints() &&
-            this.owner.equals(team.getOwner()) &&
-            this.competitionId === team.getCompetition()
+            this.ownerId === team.getOwnerId()
         );
+    }
+
+    static from({
+        id,
+        name,
+        points,
+        userId,
+        competition,
+    }: TeamPrisma & {competition: CompetitionPrisma}) {    
+        return new Team({
+            id,
+            name,
+            points,
+            ownerId : userId,
+            competition: Competition.from(competition),
+        })
     }
 }

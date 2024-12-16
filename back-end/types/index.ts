@@ -1,7 +1,4 @@
-type Role = {
-    id: number;
-    name: 'admin' | 'owner' | 'player';
-};
+type Role = 'admin' | 'owner' | 'player';
 
 type UserInput = {
     id?: number;
@@ -31,6 +28,8 @@ type MatchInput = {
     score: string;
     team1: TeamInput;
     team2: TeamInput;
+    scoreTeam1: number;
+    score2Team2: number;
     competition: CompetitionInput;
 };
 
