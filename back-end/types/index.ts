@@ -16,12 +16,14 @@ type TeamInput = {
 type PlayerInput = {
     id?: number;
     user: UserInput;
+    team: TeamInput;
     number: number;
 }
 
 type CoachInput = {
     id?: number;
     user: UserInput;
+    team: TeamInput;
 }
 
 type UserInput = {

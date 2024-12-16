@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { PlayerInput } from '../types';
+import { PlayerInput, Role } from '../types';
 import Player from '../model/player';
 import { User } from '../model/user';
 import Team from '../model/team';
@@ -15,7 +15,7 @@ const getAllPlayers = async (): Promise<Player[]> => {
     });
 
     return playersPrisma.map(playerPrisma => 
-        Player.from(playerPrisma, new User(playerPrisma.user), new Team(playerPrisma.team))
+        Player.from(playerPrisma, new User({ ...playerPrisma.user, role: playerPrisma.user.role as Role }), new Team(playerPrisma.team))
     );
 };
 
@@ -33,7 +33,7 @@ const addPlayer = async (playerInput: PlayerInput): Promise<Player> => {
         },
     });
 
-    return Player.from(playerPrisma, new User(playerPrisma.user), new Team(playerPrisma.team));
+    return Player.from(playerPrisma, new User({ ...playerPrisma.user, role: playerPrisma.user.role as Role }), new Team(playerPrisma.team));
 };
 
 export default {
