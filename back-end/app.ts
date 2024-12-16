@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { productRouter } from './controller/product.routes';
-import { cartRouter } from './controller/cart.routes';
+// import { cartRouter } from './controller/cart.routes';
 
 const app = express();
 app.use(express.json());
@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use('/products',productRouter);
-app.use('/carts',cartRouter);
+// app.use('/carts',cartRouter);
 
 
 // Generic error handler

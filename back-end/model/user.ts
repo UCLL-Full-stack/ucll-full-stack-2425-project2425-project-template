@@ -1,19 +1,22 @@
+import { Role } from '../types';
+import { User as UserPrisma } from '@prisma/client';
+
 export class User {
-    private id?: number;
-    private name: string;
-    private email: string;
-    private password: string;
-    private role: string;
-    private phone_number: number;
-    private birth_date: Date;
+    readonly id?: number;
+    readonly name: string;
+    readonly email: string;
+    readonly password: string;
+    readonly role: Role;
+    readonly phone_number: string;
+    readonly birth_date: Date;
 
     constructor(user: {
         id?: number;
         name: string;
         email: string;
         password: string;
-        role: string;
-        phone_number: number;
+        role: Role;
+        phone_number: string;
         birth_date: Date;
     }) {
         this.validate(user);
@@ -44,7 +47,7 @@ export class User {
         return this.password;
     }
 
-    getPhoneNumber(): number {
+    getPhoneNumber(): string {
         return this.phone_number;
     }
     
@@ -52,7 +55,7 @@ export class User {
         return this.email;
     }
 
-    getRole(): string {
+    getRole(): Role {
         return this.role;
     }
 
@@ -60,26 +63,26 @@ export class User {
             name: string;
             birth_date: Date;
             password: string;
-            phone_number: number;
+            phone_number: string;
             email: string;
-            role: string;
+            role: Role;
           }) {
-        if (!user.name || user.name.trim().length === 0) {
+        if (!user.name?.trim() || user.name?.trim().length === 0) {
           throw new Error('Name is required');
         }
         if (!(user.birth_date instanceof Date) || isNaN(user.birth_date.getTime())) {
           throw new Error('Valid birth date is required');
         }
-        if (!user.password || user.password.length < 6) {
+        if (!user.password?.trim() || user.password?.trim().length < 6) {
           throw new Error('Password must be at least 6 characters long');
         }
-        if (!user.phone_number || user.phone_number.toString().length < 10) {
+        if (!user.phone_number?.trim() || user.phone_number?.trim().length < 10) {
           throw new Error('Valid phone number is required');
         }
-        if (!user.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+        if (!user.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
           throw new Error('Valid email is required');
         }
-        if (!user.role || user.role.trim().length === 0) {
+        if (!user.role?.trim() || user.role?.trim().length === 0) {
           throw new Error('Role is required');
         }
       }                                                 
@@ -96,5 +99,17 @@ export class User {
           this.role === user.getRole()
         );
       }
+
+      static from({ id, name,email,password,role,birth_date,phone_number }: UserPrisma) {
+        return new User({
+            id,
+            name,
+            email,
+            password,
+            birth_date,
+            phone_number,
+            role: role as Role,
+        });
+    }
 
 }
