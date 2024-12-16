@@ -1,9 +1,7 @@
 import { Account as AccountPrisma } from '@prisma/client';
 import { User } from './user';
-import { Income } from './income';
-import { Expense } from './expense';
-
-type Transaction = Income | Expense;
+import { Transaction } from './transaction';
+import { TransactionType } from '../types';
 
 export class Account {
     private id?: number;
@@ -76,22 +74,12 @@ export class Account {
         return this.type;
     }
 
-    getTransactions(): Transaction[] {
-        return this.transactions;
-    }
-
     getUsers(): User[] {
         return this.users;
     }
 
-    getIncomes(): Income[] {
-        return this.transactions.filter((transaction) => transaction instanceof Income) as Income[];
-    }
-
-    getExpenses(): Expense[] {
-        return this.transactions.filter(
-            (transaction) => transaction instanceof Expense
-        ) as Expense[];
+    getTransactions(): Transaction[] {
+        return this.transactions;
     }
 
     generateAccountNumber(): string {
@@ -160,9 +148,7 @@ export class Account {
         };
     }
 
-    static from(
-        accountPrisma: AccountPrisma & { transactions: Transaction[]; users: User[] }
-    ): Account {
+    static from(accountPrisma: AccountPrisma): Account {
         return new Account({
             id: accountPrisma.id,
             accountNumber: accountPrisma.accountNumber,
@@ -172,8 +158,6 @@ export class Account {
             endDate: accountPrisma.endDate,
             status: accountPrisma.status,
             type: accountPrisma.type,
-            transactions: accountPrisma.transactions,
-            users: accountPrisma.users,
         });
     }
 }

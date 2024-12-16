@@ -29,32 +29,24 @@ model Account {
   status           String
   type             String
   users            User[]    @relation("UserAccounts")
-  expenses         Expense[] @relation("SourceAccount")
-  incomes          Income[]  @relation("SourceAccount")
-  receivedExpenses Expense[] @relation("DestinationAccount")
-  receivedIncomes  Income[]  @relation("DestinationAccount")
+  expense          Transaction[] @relation("SourceAccount")
+  income           Transaction[]   @relation("DestinationAccount")
 }
 
-model Expense {
+model Transaction {
   id                   Int      @id @default(autoincrement())
   referenceNumber      String   @unique
   date                 DateTime
   amount               Float
   currency             String
-  destinationAccount   Account  @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
-  destinationAccountId Int
-  sourceAccount        Account  @relation("SourceAccount", fields: [sourceAccountId], references: [id])
-  sourceAccountId      Int
+  destinationAccount      Account         @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
+  destinationAccountId    Int
+  sourceAccount           Account         @relation("SourceAccount", fields: [sourceAccountId], references: [id])
+  sourceAccountId         Int
+  type                 TransactionType 
 }
 
-model Income {
-  id                   Int      @id @default(autoincrement())
-  referenceNumber      String   @unique
-  date                 DateTime
-  amount               Float
-  currency             String
-  destinationAccount   Account  @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
-  destinationAccountId Int
-  sourceAccount        Account  @relation("SourceAccount", fields: [sourceAccountId], references: [id])
-  sourceAccountId      Int
+enum TransactionType {
+  income
+  expense
 }

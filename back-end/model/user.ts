@@ -195,9 +195,7 @@ export class User {
             phoneNumber,
             email,
             password,
-            accounts: accounts.map((account) =>
-                Account.from({ ...account, transactions: [], users: [] })
-            ),
+            accounts: accounts.map((account) => Account.from({ ...account })),
         });
     }
 }

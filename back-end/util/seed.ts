@@ -28,8 +28,7 @@ const generateReferenceNumber = (
 const main = async () => {
     await prisma.user.deleteMany();
     await prisma.account.deleteMany();
-    await prisma.expense.deleteMany();
-    await prisma.income.deleteMany();
+    await prisma.transaction.deleteMany();
 
     // Reusable date values
     const startDate1 = set(new Date(), { year: 2023, month: 0, date: 1 });
@@ -98,23 +97,25 @@ const main = async () => {
     });
 
     // Create transactions
-    const transaction1 = await prisma.income.create({
+    const transaction1 = await prisma.transaction.create({
         data: {
-            referenceNumber: generateReferenceNumber('INCOME', account1.accountNumber, new Date()),
+            referenceNumber: generateReferenceNumber('income', account1.accountNumber, new Date()),
             date: new Date(),
             amount: 100,
             currency: 'EUR',
+            type: 'income',
             sourceAccountId: account1.id,
             destinationAccountId: account2.id,
         },
     });
 
-    const transaction2 = await prisma.expense.create({
+    const transaction2 = await prisma.transaction.create({
         data: {
-            referenceNumber: generateReferenceNumber('EXPENSE', account2.accountNumber, new Date()),
+            referenceNumber: generateReferenceNumber('expense', account2.accountNumber, new Date()),
             date: new Date(),
             amount: 50,
             currency: 'USD',
+            type: 'expense',
             sourceAccountId: account2.id,
             destinationAccountId: account1.id,
         },

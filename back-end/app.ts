@@ -6,7 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { accountRouter } from './controller/account.routes';
-import { expenseRouter } from './controller/expense.routes';
+import { transactionRouter } from './controller/transaction.routes';
 import { expressjwt } from 'express-jwt';
 
 const app = express();
@@ -27,7 +27,7 @@ app.use(
 
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
-app.use('/transaction/expenses', expenseRouter);
+app.use('/transaction/expenses', transactionRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

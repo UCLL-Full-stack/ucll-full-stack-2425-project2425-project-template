@@ -1,7 +1,6 @@
 import { User } from '../model/user';
 import { Account } from '../model/account';
-import { Income } from '../model/income';
-import { Expense } from '../model/expense';
+import { Transaction } from '../model/transaction';
 import database from '../util/database';
 
 const getAllUsers = async (): Promise<User[]> => {
@@ -35,30 +34,21 @@ const createUser = async (user: User): Promise<User> => {
                         endDate: account.getEndDate(),
                         status: account.getStatus(),
                         type: account.getType(),
-                        expenses: {
-                            create: account.getExpenses().map((expense) => ({
-                                referenceNumber: expense.getReferenceNumber(),
-                                date: expense.getDate(),
-                                amount: expense.getAmount(),
-                                currency: expense.getCurrency(),
-                                sourceAccountId: account.getId(),
-                                destinationAccountId: expense.getDestinationAccountId(),
-                            })),
-                        },
-                        incomes: {
-                            create: account.getIncomes().map((income) => ({
-                                referenceNumber: income.getReferenceNumber(),
-                                date: income.getDate(),
-                                amount: income.getAmount(),
-                                currency: income.getCurrency(),
-                                sourceAccountId: account.getId(),
-                                destinationAccountId: income.getDestinationAccountId(),
+                        transaction: {
+                            create: account.getTransactions().map((transaction) => ({
+                                referenceNumber: transaction.getReferenceNumber(),
+                                date: transaction.getDate(),
+                                amount: transaction.getAmount(),
+                                currency: transaction.getCurrency(),
+                                sourceAccountId: transaction.getSourceAccountId(),
+                                destinationAccountId: transaction.getDestinationAccountId(),
+                                type: transaction.getTransactionType(),
                             })),
                         },
                     })),
                 },
             },
-            include: { accounts: { include: { expenses: true, incomes: true } } },
+            include: { accounts: { include: { expense: true, income: true } } },
         });
 
         return User.from(userPrisma);
@@ -75,7 +65,7 @@ const getUserByNationalRegisterNumber = async (
             where: {
                 nationalRegisterNumber: nationalRegisterNumber,
             },
-            include: { accounts: { include: { expenses: true, incomes: true } } },
+            include: { accounts: { include: { expense: true, income: true } } },
         });
         if (userPrisma) {
             return User.from(userPrisma);
@@ -93,7 +83,7 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
             where: {
                 email: email,
             },
-            include: { accounts: { include: { expenses: true, incomes: true } } },
+            include: { accounts: { include: { expense: true, income: true } } },
         });
 
         if (userPrisma) {
@@ -121,7 +111,7 @@ const updateUser = async (updatedUser: User): Promise<User> => {
                 email: updatedUser.getEmail(),
                 password: updatedUser.getPassword(),
             },
-            include: { accounts: { include: { expenses: true, incomes: true } } },
+            include: { accounts: { include: { expense: true, income: true } } },
         });
 
         return User.from(updatedPrisma);
@@ -136,7 +126,7 @@ const deleteUser = async (nationalRegisterNumber: string): Promise<User> => {
             where: {
                 nationalRegisterNumber: nationalRegisterNumber,
             },
-            include: { accounts: { include: { expenses: true, incomes: true } } },
+            include: { accounts: { include: { expense: true, income: true } } },
         });
 
         return User.from(deletedPrisma);
@@ -154,7 +144,7 @@ const addAccount = async (nationalRegisterNumber: string, accountNumber: string)
                     connect: { accountNumber },
                 },
             },
-            include: { accounts: { include: { expenses: true, incomes: true } } },
+            include: { accounts: { include: { expense: true, income: true } } },
         });
         return User.from(updatedUser);
     } catch (error: any) {

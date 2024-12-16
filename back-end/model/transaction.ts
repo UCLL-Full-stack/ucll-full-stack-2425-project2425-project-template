@@ -1,6 +1,8 @@
 import { Account } from './account';
+import { Account as AccountPrisma, Transaction as TransactionPrisma } from '@prisma/client';
+import { TransactionType } from '../types';
 
-export class Expense {
+export class Transaction {
     private id?: number;
     private amount: number;
     private currency: string;
@@ -8,22 +10,25 @@ export class Expense {
     private destinationAccount: Account;
     private date: Date;
     private referenceNumber: string;
+    private type: TransactionType;
 
-    constructor(expense: {
+    constructor(transaction: {
         amount: number;
         currency: string;
         sourceAccount: Account;
         destinationAccount: Account;
+        type: TransactionType;
         id?: number;
     }) {
-        this.validate(expense);
-        this.id = expense.id;
-        this.amount = expense.amount;
-        this.currency = expense.currency;
-        this.sourceAccount = expense.sourceAccount;
-        this.destinationAccount = expense.destinationAccount;
+        this.validate(transaction);
+        this.id = transaction.id;
+        this.amount = transaction.amount;
+        this.currency = transaction.currency;
+        this.sourceAccount = transaction.sourceAccount;
+        this.destinationAccount = transaction.destinationAccount;
+        this.type = transaction.type;
         this.date = new Date();
-        this.referenceNumber = this.generateReferenceNumber();
+        this.referenceNumber = this.generateReferenceNumber(transaction.type);
     }
 
     getId(): number | undefined {
@@ -54,30 +59,34 @@ export class Expense {
         return this.destinationAccount;
     }
 
+    getSourceAccountId(): number | undefined {
+        return this.sourceAccount.getId();
+    }
+
     getDestinationAccountId(): number | undefined {
         return this.destinationAccount.getId();
     }
 
-    validate(expense: { amount: number; currency: string; id?: number }) {
-        if (expense.amount <= 0) {
+    getTransactionType(): TransactionType {
+        return this.type;
+    }
+
+    validate(transaction: { amount: number; currency: string; id?: number }) {
+        if (transaction.amount <= 0) {
             throw new Error('Amount must be greater than 0.');
         }
         if (
-            expense.currency !== 'USD' &&
-            expense.currency !== 'EUR' &&
-            expense.currency !== 'GBP'
+            transaction.currency !== 'USD' &&
+            transaction.currency !== 'EUR' &&
+            transaction.currency !== 'GBP'
         ) {
             throw new Error('Currency must be either USD, EUR or GBP.');
         }
     }
 
-    generateReferenceNumber(): string {
-        const lastThreeNumbers = this.sourceAccount
-            .getAccountNumber()
-            .slice(-3)
-            .split('')
-            .join(' ');
-        const firstThreeLettType = 'EXP';
+    generateReferenceNumber(type: string): string {
+        const lastThreeNumbers = this.sourceAccount.getAccountNumber().split('').join(' ');
+        const firstThreeLettType = type.slice(0, 3).toUpperCase();
         const year = this.date.getUTCFullYear().toString();
         const uniqueNumber =
             Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5);
@@ -89,21 +98,19 @@ export class Expense {
         id,
         amount,
         currency,
+        type,
         sourceAccount,
         destinationAccount,
-    }: {
-        id?: number;
-        amount: number;
-        currency: string;
-        sourceAccount: Account;
-        destinationAccount: Account;
-    }) {
-        return new Expense({
+    }: TransactionPrisma & { sourceAccount: AccountPrisma; destinationAccount: AccountPrisma }) {
+        return new Transaction({
             id,
             amount,
             currency,
-            sourceAccount,
-            destinationAccount,
+            sourceAccount: Account.from({ ...sourceAccount }),
+            destinationAccount: Account.from({
+                ...destinationAccount,
+            }),
+            type,
         });
     }
 }

@@ -1,12 +1,10 @@
 import accountDb from '../repository/account.db';
-import expenseDb from '../repository/expense.db';
-import incomeDb from '../repository/income.db';
-import { ExpenseInput } from '../types';
-import { Expense } from '../model/expense';
-import { Income } from '../model/income';
+import transactionDb from '../repository/transaction.db';
+import { TransactionInput } from '../types';
+import { Transaction } from '../model/transaction';
 
-const createExpense = async (ExpenseInput: ExpenseInput): Promise<Expense> => {
-    const { amount, currency, sourceAccountNumber, destinationAccountNumber } = ExpenseInput;
+const createExpense = async (ExpenseInput: TransactionInput): Promise<Transaction> => {
+    const { amount, currency, sourceAccountNumber, destinationAccountNumber, type } = ExpenseInput;
 
     const sourceAccount = await accountDb.getAccountByAccountNumber(sourceAccountNumber);
     const destinationAccount = await accountDb.getAccountByAccountNumber(destinationAccountNumber);
@@ -27,22 +25,24 @@ const createExpense = async (ExpenseInput: ExpenseInput): Promise<Expense> => {
     await accountDb.updateAccount(sourceAccount);
     await accountDb.updateAccount(destinationAccount);
 
-    const expenseTransaction = new Expense({
+    const expenseTransaction = new Transaction({
         amount,
         currency,
         sourceAccount: sourceAccount,
         destinationAccount: destinationAccount,
+        type: 'expense',
     });
 
-    const incomeTransaction = new Income({
+    const incomeTransaction = new Transaction({
         amount,
         currency,
         sourceAccount: sourceAccount,
         destinationAccount: destinationAccount,
+        type: 'income',
     });
 
-    const createdExpense = await expenseDb.createExpense(expenseTransaction);
-    const createdIncome = await incomeDb.createIncome(incomeTransaction);
+    const createdExpense = await transactionDb.createTransaction(expenseTransaction);
+    const createdIncome = await transactionDb.createTransaction(incomeTransaction);
 
     return createdExpense;
 };
