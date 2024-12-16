@@ -12,7 +12,7 @@ export type Team = {
 };
 
 export type Player = {
-    id: number;
+    id?: number;
     number: number;
     user: User;
 };
