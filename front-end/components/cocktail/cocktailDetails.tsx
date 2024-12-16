@@ -59,9 +59,9 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
                 </thead>
                 <tbody>
                     {ingredients.map((ingredient) => (
-                        <tr key={ingredient._id}>
-                            <td>{ingredientNames[ingredient._ingredientId] || 'weer kapot'}</td>
-                            <td>{ingredient._amount}</td>
+                        <tr key={ingredient.id}>
+                            <td>{ingredientNames[ingredient.id] || 'weer kapot'}</td>
+                            <td>{ingredient.amount}</td>
                         </tr>
                     ))}
                 </tbody>
