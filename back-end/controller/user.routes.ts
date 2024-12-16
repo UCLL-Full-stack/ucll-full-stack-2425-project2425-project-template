@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service.ts';
-import { UserSignupInput, UserLoginInput } from '../types/index.js';
+import { UserSignupInput, UserLoginInput, Role } from '../types/index.js';
 
 const userRouter = express.Router();
 
@@ -8,24 +8,35 @@ const userRouter = express.Router();
  * @swagger
  * tags:
  *   name: Users
- *   description: User management
+ *   description: Users management
  */
 
 /**
  * @swagger
  * /users:
  *   get:
- *     summary: Get all users
+ *     summary: Get all users (admin only)
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of users
+ *       403:
+ *         description: Unauthorized access
  *       500:
  *         description: Internal server error
  */
 userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const users = await userService.getAllUsers();
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { role } = request.auth;
+
+        if (role !== 'admin') {
+            return res.status(403).json({ message: 'Unauthorized access' });
+        }
+
+        const users = await userService.getAllUsers(role);
         res.status(200).json(users.map((user) => user.toJSON()));
     } catch (error) {
         next(error);
@@ -38,6 +49,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *   get:
  *     summary: Get a user by ID
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -48,6 +61,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *     responses:
  *       200:
  *         description: A user object
+ *       403:
+ *         description: Unauthorized access
  *       404:
  *         description: User not found
  *       500:
@@ -55,7 +70,15 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  */
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await userService.getUserById(Number(req.params.id));
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const userId = Number(req.params.id);
+
+        if (role !== 'admin' && userId !== (await userService.getUserIdFromUsername(username))) {
+            return res.status(403).json({ message: 'Unauthorized access' });
+        }
+
+        const user = await userService.getUserById(userId);
         res.status(200).json(user);
     } catch (error) {
         next(error);
@@ -107,14 +130,19 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
  * @swagger
  * /users/login:
  *   post:
- *     summary: Authenticate a user
+ *     summary: Login using username/password. Returns an object with JWT token and user name when successful.
  *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UserLoginInput'
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Authentication successful
@@ -127,15 +155,18 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
  *       500:
  *         description: Internal server error
  */
-
-// userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const loginData = <UserLoginInput>req.body;
-//         const result = await userService.authenticate(loginData);
-//         res.status(200).json(result);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const loginData = <UserLoginInput>req.body;
+        const result = await userService.authenticate(loginData);
+        res.status(200).json({
+            message: 'Authentication successful',
+            token: result.token,
+            username: result.username,
+        });
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { userRouter };

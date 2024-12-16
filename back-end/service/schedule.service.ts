@@ -10,7 +10,6 @@ const getScheduledRecipeDetails = async (userId: number, date: Date): Promise<Re
     return schedule.getRecipes() || [];
 };
 
-// Not fully implemented yet
 const updateRecipeDate = async (
     userId: number,
     recipeId: number,

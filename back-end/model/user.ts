@@ -17,7 +17,7 @@ export class User {
     private profile?: Profile | null;
     private recipes?: Recipe[];
     private schedule?: Schedule | null;
-    // private role: Role;
+    private role: Role;
 
     constructor(user: {
         id?: number;
@@ -26,16 +26,17 @@ export class User {
         profile?: Profile | null;
         recipes?: Recipe[];
         schedule?: Schedule | null;
-        // role: Role;
+        role: Role;
     }) {
         this.validate(user);
+
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
         this.profile = user.profile ?? null;
         this.recipes = user.recipes || [];
         this.schedule = user.schedule ?? null;
-        // this.role = user.role;
+        this.role = user.role;
     }
 
     static from({
@@ -45,6 +46,7 @@ export class User {
         profile,
         recipes,
         schedule,
+        role,
     }: UserPrisma & {
         profile?: ProfilePrisma | null;
         recipes?: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
@@ -53,6 +55,7 @@ export class User {
                   recipes: (RecipePrisma & { ingredients: RecipeIngredientPrisma[] })[];
               })
             | null;
+        role: Role;
     }): User {
         return new User({
             id,
@@ -61,6 +64,7 @@ export class User {
             profile: profile ? Profile.from(profile) : null,
             recipes: recipes ? recipes.map((recipe) => Recipe.from(recipe)) : undefined,
             schedule: schedule ? Schedule.from(schedule) : null,
+            role: role as Role,
         });
     }
 
@@ -71,7 +75,7 @@ export class User {
         profile?: Profile | null;
         recipes?: Recipe[];
         schedule?: Schedule | null;
-        // role: Role;
+        role: Role;
     }): void {
         if (user.id !== undefined && (!Number.isInteger(user.id) || user.id <= 0)) {
             throw new Error('ID must be a positive integer');
@@ -92,6 +96,9 @@ export class User {
         ) {
             throw new Error('Schedule must be an instance of Schedule or null');
         }
+        if (!user.role) {
+            throw new Error('Role is required');
+        }
     }
 
     getId(): number | undefined {
@@ -110,10 +117,6 @@ export class User {
         return this.profile;
     }
 
-    setProfile(profile: Profile) {
-        this.profile = profile;
-    }
-
     getRecipes(): Recipe[] | undefined {
         return this.recipes;
     }
@@ -122,9 +125,9 @@ export class User {
         return this.schedule;
     }
 
-    // getRole(): Role {
-    //     return this.role;
-    // }
+    getRole(): Role {
+        return this.role;
+    }
 
     addRecipe(recipe: Recipe): void {
         this.recipes?.push(recipe);
@@ -138,6 +141,10 @@ export class User {
         this.schedule = schedule;
     }
 
+    setProfile(profile: Profile) {
+        this.profile = profile;
+    }
+
     toJSON() {
         return {
             id: this.id,
@@ -149,6 +156,10 @@ export class User {
     }
 
     equals(user: User): boolean {
-        return this.username === user.getUsername() && this.password === user.getPassword();
+        return (
+            this.username === user.getUsername() &&
+            this.password === user.getPassword() &&
+            this.role === user.role
+        );
     }
 }

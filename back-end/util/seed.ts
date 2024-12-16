@@ -18,6 +18,7 @@ const main = async () => {
             id: 1,
             username: 'annie',
             password: await bcrypt.hash('@NNie123', 12),
+            role: 'admin',
             profile: {
                 create: {
                     id: 1,
@@ -34,6 +35,7 @@ const main = async () => {
             id: 2,
             username: 'shulin',
             password: await bcrypt.hash('Shul!n123', 12),
+            role: 'user',
             profile: {
                 create: {
                     id: 2,
@@ -50,6 +52,7 @@ const main = async () => {
             id: 3,
             username: 'amelie',
             password: await bcrypt.hash('h0tchOcol@te101', 12),
+            role: 'guest',
             profile: {
                 create: {
                     id: 3,

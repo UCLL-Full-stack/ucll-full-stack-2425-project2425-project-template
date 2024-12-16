@@ -1,6 +1,7 @@
 import { PrismaClient, RecipeCategory } from '@prisma/client';
 import { User } from '../model/user';
 import { Schedule } from '../model/schedule';
+import { Role } from '../types';
 
 const database = new PrismaClient();
 
@@ -25,7 +26,9 @@ const getAllUsers = async (): Promise<User[]> => {
                 },
             },
         });
-        return usersPrisma.map((userPrisma) => User.from(userPrisma));
+        return usersPrisma.map((userPrisma) =>
+            User.from({ ...userPrisma, role: userPrisma.role as Role })
+        );
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -55,7 +58,7 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
             },
         });
 
-        return userPrisma ? User.from(userPrisma) : null;
+        return userPrisma ? User.from({ ...userPrisma, role: userPrisma.role as Role }) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -85,7 +88,7 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
             },
         });
 
-        return userPrisma ? User.from(userPrisma) : null;
+        return userPrisma ? User.from({ ...userPrisma, role: userPrisma.role as Role }) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -115,7 +118,7 @@ const getUserByEmail = async ({ email }: { email: string }): Promise<User | null
             },
         });
 
-        return userPrisma ? User.from(userPrisma) : null;
+        return userPrisma ? User.from({ ...userPrisma, role: userPrisma.role as Role }) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -128,6 +131,7 @@ const addUser = async (user: User): Promise<User> => {
             data: {
                 username: user.getUsername(),
                 password: user.getPassword(),
+                role: user.getRole(),
                 profile: {
                     create: {
                         firstName: user.getProfile()?.getFirstName() ?? '',
@@ -160,7 +164,7 @@ const addUser = async (user: User): Promise<User> => {
             },
         });
 
-        const createdUser = User.from(userPrisma);
+        const createdUser = User.from({ ...userPrisma, role: userPrisma.role as Role });
 
         // create schedule instance and set it for user
         if (userPrisma.schedule) {

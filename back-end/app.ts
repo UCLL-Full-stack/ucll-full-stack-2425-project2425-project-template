@@ -17,9 +17,18 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Meal Planning API',
+            title: 'Plateful API',
             version: '1.0.0',
             description: 'API for managing personal meal schedules and recipes',
+        },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
         },
     },
     apis: ['./controller/*.routes.ts'],
@@ -34,31 +43,26 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ message: 'Something went wrong!' }); // sends an error response
 });
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
-// app.use(
-//     expressjwt({
-//         secret: process.env.JWT_SECRET || 'default_secret',
-//         algorithms: ['HS256'],
-//     }).unless({
-//         path: [
-//             { url: /^\/api-docs(\/.*)?$/, methods: ['GET'] },
-//             '/users/login',
-//             '/users/signup',
-//             '/status'
-//         ]
-//     })
-// );
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
+    })
+);
 
 app.use('/schedules', scheduleRouter);
 app.use('/users', userRouter);
 app.use('/recipes', recipeRouter);
 
 app.get('/status', (req, res) => {
-    res.json({ message: 'Back-end is running...' });
+    res.json({ message: 'Plateful API is running...' });
 });
 
 app.listen(port || 3000, () => {
-    console.log(`Back-end is running on port ${port}.`);
+    console.log(`Plateful API is running on port ${port}.`);
 });
