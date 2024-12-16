@@ -166,17 +166,15 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            // If e.target.files is not null, it will be a FileList
-            // Limit the number of files to 10
+            
             if (e.target.files.length + photos.length > 10) {
                 alert("You can only upload up to 10 photos.");
-                return; // Prevent adding more than 10 files
+                return; 
             }
     
-            // Convert FileList to an array and update state
             setPhotos((prevPhotos) => [
                 ...prevPhotos,
-                ...Array.from(e.target.files as FileList), // Cast to FileList to ensure correct type
+                ...Array.from(e.target.files as FileList), 
             ]);
         }
     };
@@ -197,12 +195,12 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 h-70 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto no-scrollbar">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto no-scrollbar">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-5xl max-h-screen overflow-y-auto no-scrollbar">
                 <h2 className="text-2xl font-bold mb-6 text-center">Edit Car</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-2 gap-6"> {/* Two-column layout */}
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Vehicle Type</label>
                             <select
                                 value={vehicleType}
@@ -215,7 +213,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 <option value="Motorcycle">Motorcycle</option>
                             </select>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Manufacturer</label>
                             <select
                                 value={manufacturer}
@@ -231,7 +229,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 ))}
                             </select>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Model Name</label>
                             <select
                                 value={modelName}
@@ -248,7 +246,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 ))}
                             </select>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Year</label>
                             <input
                                 type="number"
@@ -258,7 +256,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 required
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Engine Capacity</label>
                             <input
                                 type="number"
@@ -268,7 +266,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 required
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Mileage</label>
                             <input
                                 type="number"
@@ -278,7 +276,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 required
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Price</label>
                             <input
                                 type="number"
@@ -288,7 +286,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 required
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Body Type</label>
                             <select
                                 value={bodyType}
@@ -304,7 +302,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 ))}
                             </select>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Fuel Type</label>
                             <select
                                 value={fuelType}
@@ -320,7 +318,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 ))}
                             </select>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label className="flex text-sm font-medium">Transmission Type</label>
                             <select
                                 value={transmissionType}
@@ -334,11 +332,11 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                                 <option value="Semi-Automatic">Semi-Automatic</option>
                             </select>
                         </div>
-                        <div className="mb-4 col-span-2 border-2 border-dashed p-6 rounded-md text-center hover:bg-gray-50 cursor-pointer"
+                        <div className="mb-3 col-span-2 border-2 border-dashed p-6 rounded-md text-center hover:bg-gray-50 cursor-pointer"
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={handleFileDrop}
                         >
-                            <label htmlFor="photos" className="text-lg font-medium mb-4 block">
+                            <label htmlFor="photos" className="text-lg font-medium mb-3 block">
                                 Upload Photos (max 10)
                             </label>
                             <input
@@ -388,7 +386,7 @@ const AddCarModal: React.FC<AddCarModalProps> = ({ isOpen, onClose, onAddCar }) 
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-end space-x-4 mt-6">
+                    <div className="flex justify-end space-x-4 mt-4">
                         <button
                             type="button"
                             onClick={onClose}
