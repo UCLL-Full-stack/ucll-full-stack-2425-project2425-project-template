@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import competitionRouter from './controller/competition.routes';
+import playerRouter from './controller/player.routes';
 import userRouter from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
 
@@ -33,6 +34,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/competitions', competitionRouter);
 
 app.use('/users', userRouter);
+
+app.use('/players', playerRouter);
 
 app.get('/status', (req, res) => {
   res.json({ message: 'Back-end is running...' });

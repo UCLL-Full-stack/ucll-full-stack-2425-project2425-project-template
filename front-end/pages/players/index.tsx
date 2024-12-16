@@ -9,11 +9,16 @@ import { useRouter } from "next/router";
 const Players: React.FC = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const router = useRouter();
+    const { teamId } = router.query;
 
     const getPlayers = async () => {
         try {
             const data = await PlayerService.getAllPlayers();
-            setPlayers(data);
+            if (teamId) {
+                setPlayers(data.filter(player => player.team.id === Number(teamId)));
+            } else {
+                setPlayers(data);
+            }
         } catch (error) {
             console.error('Failed to fetch players:', error);
         }

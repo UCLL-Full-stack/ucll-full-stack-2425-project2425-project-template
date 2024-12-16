@@ -3,8 +3,8 @@ import competitionDb from "../repository/competition.db";
 import { CompetitionInput } from "../types";
 import Team from "../model/team";
 
-const getAllCompetitions = (): Competition[] => {
-    return competitionDb.getAllCompetitions();
+const getAllCompetitions = async (): Promise<Competition[]> => {
+    return await competitionDb.getAllCompetitions();
 }
 
 const createCompetition = ({

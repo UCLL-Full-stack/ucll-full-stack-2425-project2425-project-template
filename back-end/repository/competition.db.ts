@@ -1,39 +1,24 @@
 import Competition from "../model/competition";
 import Team from "../model/team";
+import database from "./database";
 
-const competitions = [
-    new Competition({
-        id: 1,
-        name: "NBA",
-        teams: [
-            new Team({
-                id: 1,
-                name: "Los Angeles Lakers"
-            }),
-            new Team({
-                id: 2,
-                name: "Golden State Warriors"
-            }),
-        ]
-    }),
-    new Competition({
-        id: 2,
-        name: "BNXT League",
-        teams: [
-            new Team({
-                id: 3,
-                name: "Leuven Bears"
-            }),
-            new Team({
-                id: 4,
-                name: "Antwerp Giants"
-            }),
-        ]
-    }),
-];
+const competitions: Competition[] = [];
 
-const getAllCompetitions = (): Competition[] => {
-    return competitions;
+const getAllCompetitions = async (): Promise<Competition[]> => {
+    try {
+        const competitionsPrisma = await database.competition.findMany({
+            include: {
+                teams: true,
+            },
+        });
+
+        return competitionsPrisma.map(competitionPrisma => 
+            new Competition({ ...competitionPrisma, teams: competitionPrisma.teams.map(team => new Team(team)) })
+        );
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
 }
 
 const createCompetition = (competition: Competition): Competition => {
