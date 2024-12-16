@@ -20,6 +20,10 @@ const Header: React.FC = () => {
         if (loggedUser?.email) {
             getInvitesByUserEmail(loggedUser.email);
             getTicketsByUserEmail(loggedUser.email);
+            console.log('invites: ');
+            console.log(invites);
+            console.log('tickets: ');
+            console.log(tickets);
         }
     }, [loggedUser]);
 

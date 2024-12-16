@@ -29,7 +29,7 @@ const getTicketsByEventId = async (eventId: string) => {
 
     console.log(eventId);
 
-    return fetch(apiUrl + `/tickets/${eventId}`, {
+    return fetch(apiUrl + `/tickets/event/${eventId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

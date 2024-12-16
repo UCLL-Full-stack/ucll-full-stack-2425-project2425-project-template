@@ -22,7 +22,7 @@ ticketRouter.get('/:email', async (req: Request, res: Response, next: NextFuncti
     }
 });
 
-ticketRouter.get('/:eventId', async (req: Request, res: Response, next: NextFunction) => {
+ticketRouter.get('/event/:eventId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const eventId = parseInt(req.params.eventId, 10);
         const tickets = await ticketService.getTicketsByEventId(eventId);

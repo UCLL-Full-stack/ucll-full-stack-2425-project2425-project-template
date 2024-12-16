@@ -58,15 +58,20 @@ const MyEvents: React.FC = () => {
                 {tickets && (
                     tickets.length > 0 ? (
                         <section className={styles.myEvents}>
-                            <h1>Events Purchased</h1>
+                            <h1>My Events</h1>
                             <TicketOverview tickets={tickets} showDeleteButton={true} />
                         </section>
-                    ) : <p className="text-white">You have not purchased any events yet...</p>
+                    ) : (
+                        <section className={styles.myEvents}>
+                            <h1>My Events</h1>
+                            <p className="text-white">You have not purchased any events yet...</p>
+                        </section>
+                    )
                 )}
                 {myEvents && (
                     myEvents.length > 0 && (
                         <section className={styles.myEvents}>
-                            <h1>Events Invited</h1>
+                            <h1>My Invites</h1>
                             <EventOverview events={myEvents} showDeleteButton={false} email={loggedUser.email} />
                         </section>
                     ))}

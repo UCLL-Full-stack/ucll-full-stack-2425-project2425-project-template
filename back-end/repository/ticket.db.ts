@@ -15,7 +15,9 @@ const getAllTickets = async (): Promise<Ticket[]> => {
 const getTicketsByEventId = async (eventId: number): Promise<Ticket[]> => {
     const ticketsPrisma = await database.ticket.findMany({
         where: {
-            eventId: eventId,
+            event: {
+                id: eventId,
+            },
         },
         include: {
             user: true,
@@ -42,7 +44,7 @@ const userBuyTicket = async (ticketId: number, email: string) => {
             event: true,
         },
     });
-    
+
     return Ticket.from(ticketPrisma);
 };
 
@@ -64,7 +66,7 @@ const getTicketsByUserEmail = async (email: string): Promise<Ticket[]> => {
 
 const removeUserFromTicket = async (ticketId: string) => {
     const id = parseInt(ticketId, 10);
-    
+
     const ticketPrisma = await database.ticket.update({
         where: {
             id: id,

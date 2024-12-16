@@ -34,13 +34,16 @@ const EventDetails: React.FC<Props> = ({ event, showParticipantList, addSelfToEv
     const getTicketsByEventId = async (eventId: string) => {
         try {
             const response = await TicketService.getTicketsByEventId(eventId);
-
             const ticketData = await response.json();
 
             //Retrieve available tickets
             const availableTickets = ticketData.filter(ticket => ticket.user === null);
 
-            setTickets(availableTickets);
+            // Sort the ticket types in alphabetical order 
+            const sortedTickets = availableTickets.sort((a, b) => a.type.localeCompare(b.type));
+
+            // Set the tickets
+            setTickets(sortedTickets);
 
         } catch (error) {
             console.error("Failed to fetch tickets:", error);
