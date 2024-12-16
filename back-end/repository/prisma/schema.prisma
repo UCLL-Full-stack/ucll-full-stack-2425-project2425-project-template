@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    id       Int     @id @default(autoincrement())
+    username String  @unique
+    password String
+    role     String
+    admin    Admin?
+    caretaker   Caretaker?
+    manager  Manager?
+}
+
+model Admin {
+    id        Int      @id @default(autoincrement())
+    userId    Int      @unique
+    user      User     @relation(fields: [userId], references: [id])
+    name      String
+}
+
+model Caretaker {
+    id        Int      @id @default(autoincrement())
+    userId    Int      @unique
+    user      User     @relation(fields: [userId], references: [id])
+    name      String
+    animals   Animal[]
+}
+
+model Manager {
+    id        Int      @id @default(autoincrement())
+    userId    Int      @unique
+    user      User     @relation(fields: [userId], references: [id])
+    name      String
+}
+
+model Animal {
+    id        Int      @id @default(autoincrement())
+    name      String
+    age       Int
+    speciesId Int
+    species   Species   @relation(fields: [speciesId], references: [id])
+    favouriteFood   String
+    favouriteToy    String
+    expenses  Expense[]
+    caretakerId Int
+    caretaker Caretaker @relation(fields: [caretakerId], references: [id])
+}
+
+model Expense {
+    id        Int      @id @default(autoincrement())
+    totalCost Int
+    month     String
+    animals   Animal[]
+}
+
+model Species {
+    id        Int      @id @default(autoincrement())
+    species   String
+    animals   Animal[]
+}

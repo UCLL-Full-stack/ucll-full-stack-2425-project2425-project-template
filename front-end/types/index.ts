@@ -15,7 +15,7 @@ export type Animal = {
   id: number;
   name: string;
   age: number;
-  species: string;
+  species: Species;
   favouriteFood: string;
   favouritetoy: string;
   costPerMonth: number;
@@ -24,6 +24,17 @@ export type Animal = {
 };
 
 export type Expense = {
+  id: number;
   totalCost: number;
   month: string;
 };
+
+export type Species = {
+  id: number;
+  species: string;
+}
+
+export type StatusMessage = {
+  message: string;
+  type: "error" | "success";
+}

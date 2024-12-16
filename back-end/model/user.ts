@@ -1,4 +1,5 @@
 import { Role } from '../types';
+import { User as UserPrisma } from '@prisma/client';
 
 export class User {
     private id?: number;
@@ -7,17 +8,7 @@ export class User {
     private role: Role;
 
     constructor(user: { id?: number; username: string; password: string; role: Role; }) {
-        
-        
-        if (!user.username || user.username.trim() === "") {
-            throw new Error("Username cannot be empty.");
-        }
-        if (!user.password || user.password.length < 8) {
-            throw new Error("Password must be at least 8 characters long.");
-        }
-        if (!user.role) {
-            throw new Error("Role is required.");
-        }
+        this.validate(user)
 
         this.id = user.id;
         this.username = user.username;
@@ -41,6 +32,22 @@ export class User {
         return this.role;
     }
 
+    validate(user: { username: string; password: string; role: Role }){
+        if (!user.username?.trim()) {
+            throw new Error("Username cannot be empty.");
+        }
+        if (!user.password?.trim()) {
+            throw new Error("Password is required");
+        }
+        if (!user.role) {
+            throw new Error("Role is required.");
+        }
+    }
+
+    static from({ id, username, password, role }: UserPrisma) {
+        return new User({ id, username, password, role: role as Role });
+    }
+
     equals(user: User): boolean {
         return (
             this.username === user.getUsername() &&
@@ -58,7 +65,7 @@ export class User {
         return this.role === "caretaker";
     }
 
-    isVisitor(): boolean {
-        return this.role === "visitor";
+    isManager(): boolean {
+        return this.role === "manager";
     }
 }

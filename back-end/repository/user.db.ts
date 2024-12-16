@@ -1,15 +1,30 @@
 import { User } from '../model/user';
+import database from './database';
 
-const users = [
-    new User({ id: 1, username: 'admin', password: 'admin1234', role: 'admin' }),
-    new User({ id: 2, username: 'user', password: 'user1234', role: 'caretaker' }),
-    new User({ id: 3, username: 'user2', password: 'user4321', role: 'visitor' }),
-];
+const getAllUsers = async (): Promise<User[]> => {
+    try {
+        const userPrisma = await database.user.findMany();
+        return userPrisma.map((userPrisma) => User.from(userPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-const getAllUsers = (): User[] => {
-    return users;
+const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { username },
+        });
+
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
 export default {
-    getAllUsers
+    getAllUsers,
+    getUserByUsername,
 };

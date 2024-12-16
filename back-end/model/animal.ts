@@ -1,58 +1,44 @@
 import { Caretaker } from './caretaker';
+import { Expense } from './expense';
+import { Species } from './species';
+import {
+    Animal as AnimalPrisma,
+    Expense as ExpensePrisma,
+    Species as SpeciesPrisma,
+    Caretaker as CaretakerPrisma,
+    User as UserPrisma,
+} from '@prisma/client';
 
 export class Animal {
     private id?: number;
     private name: string;
     private age: number;
-    private species: string;
+    private species: Species;
     private favouriteFood: string;
-    private favouritetoy: string;
-    private costPerMonth: number;
-    private costPerMonthPerSpecies: number;
-    private caretakers: Caretaker[];
+    private favouritetToy: string;
+    private expenses: Expense[];
+    private caretaker: Caretaker;
 
     constructor(animal: {
         id?: number;
         name: string;
         age: number;
-        species: string;
+        species: Species;
         favouriteFood: string;
-        favouritetoy: string;
-        costPerMonth: number;
-        costPerMonthPerSpecies: number;
-        caretakers?: Caretaker[];
+        favouriteToy: string;
+        expenses: Expense[];
+        caretaker: Caretaker;
     }) {
-        if (!animal.name || animal.name.trim() === "") {
-            throw new Error("Name is required and cannot be empty.");
-        }
-        if (animal.age < 0) {
-            throw new Error("Age must be a non-negative number.");
-        }
-        if (!animal.species || animal.species.trim() === "") {
-            throw new Error("Species is required and cannot be empty.");
-        }
-        if (!animal.favouriteFood || animal.favouriteFood.trim() === "") {
-            throw new Error("Favourite food is required and cannot be empty.");
-        }
-        if (!animal.favouritetoy || animal.favouritetoy.trim() === "") {
-            throw new Error("Favourite toy is required and cannot be empty.");
-        }
-        if (animal.costPerMonth < 0) {
-            throw new Error("Cost per month must be a non-negative number.");
-        }
-        if (animal.costPerMonthPerSpecies < 0) {
-            throw new Error("Cost per month per species must be a non-negative number.");
-        }
-        
+        this.validate(animal);
+
         this.id = animal.id;
         this.name = animal.name;
         this.age = animal.age;
         this.species = animal.species;
         this.favouriteFood = animal.favouriteFood;
-        this.favouritetoy = animal.favouritetoy;
-        this.costPerMonth = animal.costPerMonth;
-        this.costPerMonthPerSpecies = animal.costPerMonthPerSpecies;
-        this.caretakers = animal.caretakers || []; 
+        this.favouritetToy = animal.favouriteToy;
+        this.expenses = animal.expenses;
+        this.caretaker = animal.caretaker;
     }
 
     getId(): number | undefined {
@@ -67,7 +53,7 @@ export class Animal {
         return this.age;
     }
 
-    getSpecies(): string {
+    getSpecies(): Species {
         return this.species;
     }
 
@@ -76,26 +62,70 @@ export class Animal {
     }
 
     getFavouriteToy(): string {
-        return this.favouritetoy;
+        return this.favouritetToy;
     }
 
-    getCostPerMonth(): number {
-        return this.costPerMonth;
+    getExpenses(): Expense[] {
+        return this.expenses;
     }
 
-    getCostPerMonthPerSpecies(): number {
-        return this.costPerMonthPerSpecies;
-    }
-    
-    getCaretakers(): Caretaker[] {
-        return this.caretakers;
+    getCaretakers(): Caretaker {
+        return this.caretaker;
     }
 
-    addCaretaker(caretaker: Caretaker): void {
-        if (!this.caretakers.includes(caretaker)) {
-            this.caretakers.push(caretaker);
-            caretaker.addAnimal(this); 
+    validate(animal: {
+        name: string;
+        age: number;
+        species: Species;
+        favouriteFood: string;
+        favouriteToy: string;
+        expenses: Expense[];
+        caretaker: Caretaker;
+    }) {
+        if (!animal.name?.trim()) {
+            throw new Error('Name is required and cannot be empty.');
         }
+        if (animal.age < 0) {
+            throw new Error('Age must be a non-negative number.');
+        }
+        if (!animal.species) {
+            throw new Error('Species must exist!');
+        }
+        if (!animal.favouriteFood?.trim()) {
+            throw new Error('Favourite food is required and cannot be empty.');
+        }
+        if (!animal.favouriteToy?.trim()) {
+            throw new Error('Favourite toy is required and cannot be empty.');
+        }
+        if (!animal.expenses) {
+            throw new Error('Expenses is required.');
+        }
+    }
+
+    static from({
+        id,
+        name,
+        age,
+        species,
+        favouriteFood,
+        favouriteToy,
+        expenses,
+        caretaker,
+    }: AnimalPrisma & {
+        species: SpeciesPrisma;
+        expenses: ExpensePrisma[];
+        caretaker: CaretakerPrisma & { user: UserPrisma };
+    }) {
+        return new Animal({
+            id,
+            name,
+            age,
+            species: Species.from(species),
+            favouriteFood,
+            favouriteToy,
+            expenses: expenses.map((expense) => Expense.from(expense)),
+            caretaker: Caretaker.from(caretaker),
+        });
     }
 
     equals(animal: Animal): boolean {
@@ -104,7 +134,7 @@ export class Animal {
             this.age === animal.getAge() &&
             this.species === animal.getSpecies() &&
             this.favouriteFood === animal.getFavouriteFood() &&
-            this.favouritetoy === animal.getFavouriteToy()
+            this.favouritetToy === animal.getFavouriteToy()
         );
     }
 }

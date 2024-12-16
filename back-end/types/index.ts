@@ -1,4 +1,4 @@
-type Role = 'admin' | 'caretaker' | 'visitor';
+type Role = 'admin' | 'caretaker' | 'manager';
 
 interface UserInput {
     id?: number;
@@ -25,4 +25,16 @@ interface CaretakerInput {
     name: string;
 }
 
-export { Role, UserInput, AnimalInput, CaretakerInput };
+interface ManagerInput {
+    id?: number;
+    user: UserInput;
+    name: string;
+}
+
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    role: string;
+};
+
+export { Role, UserInput, AnimalInput, CaretakerInput, ManagerInput, AuthenticationResponse };

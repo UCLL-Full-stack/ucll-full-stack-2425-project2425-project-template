@@ -1,27 +1,15 @@
 import { Expense } from "../model/expense";
+import database from "./database";
 
-
-const expenses = [
-    new Expense({
-        totalCost: 1000,
-        month: '01-2021',
-    }),
-
-    new Expense({
-        totalCost: 2000,
-        month: '02-2021',
-    }),
-
-    new Expense({
-        totalCost: 3000,
-        month: '03-2021',
-    }),
-
-];
-
-const getAllExpenses = (): Expense[] => {
-    return expenses;
-}
+const getAllExpenses = async (): Promise<Expense[]> => {
+    try {
+        const expensePrisma = await database.expense.findMany();
+        return expensePrisma.map((expensePrisma) => Expense.from(expensePrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default {  
     getAllExpenses,

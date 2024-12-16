@@ -7,7 +7,7 @@
  *       scheme: bearer
  *       bearerFormat: JWT
  *   schemas:
- *     Animal:
+ *     Species:
  *       type: object
  *       properties:
  *         id:
@@ -15,28 +15,28 @@
  *           format: int64
  *         name:
  *           type: string
- *           description: Animal's name.
+ *           description: Species's name.
  *         age:
  *           type: number
  *           format: int32
- *           description: Animal's age.
+ *           description: Species's age.
  *         species:
  *           type: string
- *           description: Animal's species.
+ *           description: Species's species.
  *         favouriteFood:
  *           type: string
- *           description: Animal's favourite food.
+ *           description: Species's favourite food.
  *         favouriteToy:
  *           type: string
- *           description: Animal's favourite toy.
+ *           description: Species's favourite toy.
  *         costPerMonth:
  *           type: number
  *           format: int32
- *           description: Cost per month to take care of the animal.
+ *           description: Cost per month to take care of the species.
  *         costPerMonthPerSpecies:
  *           type: number
  *           format: int32
- *           description: Cost per month per species to take care of the animal.
+ *           description: Cost per month per species to take care of the species.
  *         caretakers:
  *           type: array
  *           items:
@@ -67,31 +67,31 @@
  */
 
 import express, { NextFunction, Request, Response } from 'express';
-import animalService from '../service/animal.service';
+import speciesService from '../service/species.service';
 
 
-const animalRouter = express.Router();
+const speciesRouter = express.Router();
 
 /**
  * @swagger
- * /animals:
+ * /species:
  *   get:
- *     summary: Get a list of all animals.
+ *     summary: Get a list of all species.
  *     responses:
  *      200:
- *          description: A JSON array containing animal objects.
+ *          description: A JSON array containing species objects.
  *          content:
  *              application/json:
  *                  schema:
  *                      type: array
  *                      items:
- *                          $ref: '#/components/schemas/Animal'
+ *                          $ref: '#/components/schemas/Species'
  */
 
-animalRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+speciesRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const animals = await animalService.getAllAnimals();
-        res.status(200).json(animals);
+        const species = await speciesService.getAllSpecies();
+        res.status(200).json(species);
     } catch (error) {
         next(error);
     }
@@ -99,15 +99,15 @@ animalRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
 
 /**
  * @swagger
- * /animals/{caretaker_username}:
+ * /species/{id}:
  *   get:
- *     summary: animals by caretaker
- *     description: get a list of animals by caretaker username
+ *     summary: animals by species
+ *     description: get a list of animals by species
  *     parameters:
  *       - name: parameterName
  *         in: query
  *         required: true
- *         description: caretaker username
+ *         description: species id
  *         schema:
  *           type: string
  *     responses:
@@ -118,14 +118,14 @@ animalRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
  *             schema:
  *               type: object
  */
-animalRouter.get('/:caretaker_username', async (req: Request, res: Response, next: NextFunction) => {
+speciesRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const username = req.params.caretaker_username;
-        const listOfAnimals = await animalService.getAnimalsByCaretaker({ username });
+        const id = Number(req.params.id);
+        const listOfAnimals = await speciesService.getAnimalsFromSpecies({ id });
         res.status(200).json(listOfAnimals);
     } catch (error) {
         next(error);
     }
 });
 
-export default animalRouter;
+export default speciesRouter;

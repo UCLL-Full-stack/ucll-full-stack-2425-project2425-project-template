@@ -42,8 +42,6 @@ const expenseRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Expense'
  */
-
-
 expenseRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const expenses = await expenseService.getAllExpenses();

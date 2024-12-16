@@ -1,29 +1,24 @@
 import { Expense } from './expense';
 import { User } from './user';
+import { Admin as AdminPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Admin {
     private id?: number;
     private name: string;
     private user: User;
-    private expenses: Expense[];
 
-    constructor(admin: { id?: number; user: User; expenses: Expense[]; name: string }) {
-        
-        if (!admin.name || admin.name.trim() === "") {
-            throw new Error("Name is required and cannot be empty.");
+    constructor(admin: { id?: number; user: User; name: string }) {
+        if (!admin.name || admin.name.trim() === '') {
+            throw new Error('Name is required and cannot be empty.');
         }
-        if (!admin.user) throw new Error("User is required.");
-        if (!admin.expenses) throw new Error("Expense is required.");
+        if (!admin.user) throw new Error('User is required.');
 
-        
         this.id = admin.id;
         this.name = admin.name;
         this.user = admin.user;
-        this.expenses = admin.expenses;
 
-        
         if (!this.userHasAdminRole()) {
-            throw new Error("User does not have admin privileges.");
+            throw new Error('User does not have admin privileges.');
         }
     }
 
@@ -38,19 +33,28 @@ export class Admin {
     getName(): string {
         return this.name;
     }
-    
-    getExpenses(): Expense [] {
-        return this.expenses;   
+
+    static from({ id, name, user }: AdminPrisma & { user: UserPrisma }) {
+        return new Admin({
+            id,
+            name,
+            user: User.from(user),
+        });
+    }
+
+    validate(admin: { name: string; user: User }) {
+        if (!admin.name?.trim()) {
+            throw new Error('Name is required and cannot be empty.');
+        }
+        if (!admin.user.isAdmin()) {
+            throw new Error('User must be admin.');
+        }
     }
 
     equals(admin: Admin): boolean {
-        return (
-            this.id === admin.getId() &&
-            this.user.equals(admin.getUser())
-        );
+        return this.id === admin.getId() && this.user.equals(admin.getUser());
     }
 
-    
     private userHasAdminRole(): boolean {
         return this.user.getRole() === 'admin';
     }

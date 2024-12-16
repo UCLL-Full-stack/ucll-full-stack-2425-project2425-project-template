@@ -17,11 +17,11 @@
 
 .nav {
   display: flex;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
   width: 100%;
   background-color: #121212; /* Donkere achtergrondkleur */
-
+  margin-bottom: 1em;
 }
 
 .navLink {
@@ -31,7 +31,7 @@
   font-weight: 700;
   font-size: 1.25rem;
   padding: 0.5rem 1rem;
-  background-color: #1e1e1e;
+  background-color: #121212;
   border-radius: 5px;
   margin: 1em;
   transition: background-color 0.3s ease;
@@ -48,32 +48,6 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Flexibele kolommen */
   gap: 1.5rem; /* Ruimte tussen de kaarten */
   margin-top: 2rem;
-}
-
-/* Kaartstijl */
-.card {
-  background-color: #1e1e1e; /* Achtergrondkleur van kaarten */
-  padding: 1.5rem;
-  border-radius: 8px; /* Hoekradius voor kaarten */
-  border: 1px solid #333; /* Grijze rand voor kaarten */
-  transition: all 0.3s ease; /* Transitie-effect voor hover */
-  color: #ffffff; /* Witte tekstkleur op kaarten */
-}
-
-.card:hover {
-  border-color: #4caf50; /* Groene randkleur bij hover */
-  background-color: #292929; /* Achtergrondkleur bij hover */
-}
-
-.card h2 {
-  font-size: 1.5rem; /* Grootte van de titel */
-  color: #4caf50; /* Groene kleur voor titels */
-  margin-bottom: 1rem;
-}
-
-.card p {
-  font-size: 0.95rem; /* Groottes van de tekst in de kaart */
-  color: #b3b3b3; /* Lichtgrijze tekstkleur */
 }
 
 /* Titel en beschrijving */
@@ -93,10 +67,18 @@
 }
 
 /* Table styles */
+.tableContainer {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
 .table {
   width: 100%;
+  max-width: 800px; /* Set a maximum width for the table */
   border-collapse: collapse;
-  margin-top: 1rem;
+  background-color: #1e1e1e; /* Dark background color */
+  color: #b3b3b3; /* Light text color */
 }
 
 .table th,
@@ -104,22 +86,19 @@
   padding: 1rem; /* Add padding to table cells */
   text-align: left;
   font-size: 1.1rem; /* Increase font size */
+  border: 1px solid #333; /* Add border to table cells */
 }
 
-.table th {
-  background-color: #333; /* Dark background for table headers */
-  color: #fff; /* White text for table headers */
+.table thead {
+  background-color: #333; /* Darker background for the header */
 }
 
-.table tbody tr {
-  background-color: #1e1e1e; /* Dark background for table rows */
-  color: #fff; /* White text for table rows */
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+.table tbody tr:nth-child(even) {
+  background-color: #2e2e2e; /* Slightly lighter background for even rows */
 }
 
 .table tbody tr:hover {
-  background-color: #292929; /* Slightly lighter background on hover */
-  cursor: pointer; /* Change cursor to pointer on hover */
+  background-color: #4c6149; /* Darker background on hover */
 }
 
 .table tbody tr:active {

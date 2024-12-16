@@ -1,5 +1,6 @@
 import { Animal } from './animal';
 import { User } from './user';
+import { Caretaker as CaretakerPrisma, User as UserPrisma } from "@prisma/client";
 
 export class Caretaker {
     private id?: number;
@@ -31,8 +32,25 @@ export class Caretaker {
         return this.name;
     }
 
-    addAnimal(animal: Animal): void {
-        animal.addCaretaker(this); 
+    validate(caretaker: {user: User; name: string}) {
+        if (!caretaker.user.isCaretaker()) {
+            throw new Error('User must be caretaker.');
+        }
+        if (!caretaker.name?.trim()) {
+            throw new Error('Name is required and cannot be empty.');
+        }
+    }
+
+    static from({
+        id,
+        user,
+        name,
+    }: CaretakerPrisma & { user: UserPrisma }) {
+        return new Caretaker({
+            id,
+            user: User.from(user),
+            name,
+        })
     }
 
     equals(caretaker: Caretaker): boolean {
