@@ -7,6 +7,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id                Int      @id @default(autoincrement())
+  email             String   @unique
+  name              String
+  phoneNumber       Int
+  password          String
+  listOfCarsForSelling Vehicle[]
+}
+
 model Vehicle {
   id                Int       @id @default(autoincrement())
   manufacturer      String
@@ -21,6 +30,8 @@ model Vehicle {
   engineCapacity    Int
   createdAt         DateTime
   updatedAt         DateTime
+  sellerId          Int?
+  seller            User?   @relation(fields: [sellerId], references: [id])
 
 
   car               Car?      
@@ -65,10 +76,4 @@ model Motorcycle {
   updatedAt         DateTime
 }
 
-model User {
-  id                Int      @id @default(autoincrement())
-  email             String   @unique
-  name              String
-  phoneNumber       Int
-  password          String
-}
+

@@ -6,6 +6,47 @@ const main = async () => {
 
   await prisma.vehicle.deleteMany();
 
+  const user1 = await prisma.user.create({
+    data: {
+      email: 'user1@example.com',
+      name: 'John Doe',
+      password: 'password123',
+      phoneNumber: 123456789,
+      listOfCarsForSelling: {
+        create: [
+          {
+            manufacturer: 'Toyota',
+            model_name: 'Yaris',
+            price: 15000,
+            fuelType: 'Petrol',
+            transmissionType: 'Automatic',
+            year: 2021,
+            vehicleType: 'Car',
+            bodyType: 'Hatchback',
+            mileage: 0,
+            engineCapacity: 1500,
+            createdAt: '',
+            updatedAt: ''
+          },
+          {
+            manufacturer: 'Toyota',
+            model_name: 'Highlander',
+            price: 40000,
+            fuelType: 'Petrol',
+            transmissionType: 'Automatic',
+            year: 2021,
+            vehicleType: 'Car',
+            bodyType: 'SUV',
+            mileage: 0,
+            engineCapacity: 3500,
+            createdAt: '',
+            updatedAt: ''
+          },
+        ],
+      },
+    },
+  });
+
   const vehicles = [
     {
       manufacturer: 'Toyota',

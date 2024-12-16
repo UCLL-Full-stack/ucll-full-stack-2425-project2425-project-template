@@ -1,4 +1,5 @@
 import { Car } from "./car";
+import { Vehicle } from "./vehicle";
 
 export class User {
     readonly id?: number | undefined;
@@ -21,8 +22,8 @@ export class User {
         this.name = user.name;
         this.password = user.password;
         this.phoneNumber = user.phoneNumber;
-        listOfCarsForSelling: Car: [];
-        listOfFavoriteCars: Car: [];
+        listOfCarsForSelling: Vehicle: [];
+        listOfFavoriteCars: Vehicle: [];
     }
 
     getId(): number | undefined {
