@@ -72,11 +72,30 @@ const authenticate = async ({ gebruikersnaam, wachtwoord }: UserInput): Promise<
     };
 };
 
+const deleteUser = async (id: number): Promise<void> => {
+    const user = await userDb.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id ${id} does not exist.`);
+    }
+    await userDb.deleteUser({ id});
+}
+
+const updateUser = async (id: number, userData: Partial<User>): Promise<User> => {
+    const user = await userDb.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id ${id} does not exist.`);
+    }
+    const updatedUser = await userDb.updateUser(id, userData);
+    return updatedUser;
+};
+
 export default {
     createUser,
     getAllUsers,
     getUserById,
     getUserBestellingen,
     getUserByUsername,
-    authenticate
+    authenticate,
+    deleteUser,
+    updateUser
 }

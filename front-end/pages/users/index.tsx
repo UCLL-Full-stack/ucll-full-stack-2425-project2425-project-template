@@ -13,6 +13,7 @@ const Users: React.FC = () => {
     const { t } = useTranslation();
 
     const [selectedUser, setSelectedUser] = useState<User>();
+
     const getUsers = async () => {
         const response = await Promise.all([
             UserService.getAllUsers()
@@ -23,9 +24,11 @@ const Users: React.FC = () => {
             const users = await userResponse.json();
             return { users };
         }
+
+        throw new Error("Failed to fetch users");
     };
 
-    const { data, isLoading, error } = useSWR("users", getUsers);
+    const { data, error } = useSWR("users", getUsers);
 
     useInterval(() => {
         mutate("users", getUsers());
