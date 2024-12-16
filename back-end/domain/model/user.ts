@@ -25,8 +25,8 @@ export class User {
         this.name = user.name;
         this.password = user.password;
         this.phoneNumber = user.phoneNumber;
-        listOfCarsForSelling: Car: [];
-        listOfFavoriteCars: Car: [];
+        listOfCarsForSelling: Vehicle: [];
+        listOfFavoriteCars: Vehicle: [];
     }
 
     async hashPassword(): Promise<void> {
