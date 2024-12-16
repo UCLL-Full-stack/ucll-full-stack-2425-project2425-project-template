@@ -1,23 +1,19 @@
 import userDb from "../repository/user.db";
 import { User } from "../model/user";
 
-const getAllUsers = (): User[] => {
-    return userDb.getAllUsers();
-}
+const getAllUsers = async (): Promise<User[]> => userDb.getAllUsers();
 
-const getUserById = (id: number): User => {
-    return userDb.getUserById(id);
-}
 
-const addUser = (userData: { name: string, email: string, password: string }): User => {
-    const newUser = new User({
-        id: 0, //temp will be replaced in db
-        name: userData.name,
-        email: userData.email,
-        password: userData.password
-    });
-    
-    return userDb.addUser(newUser);
-}
+const getUserById = async (id: number): Promise<User> => {
+  const user = await userDb.getUserById({id});
+  
+  if (!user) {
+    throw new Error(`User with id ${id} not found`);
+  }
+  
+  return user;
+};
+
+const addUser = async (user: User): Promise<User> => userDb.addUser(user);
 
 export default { getAllUsers, getUserById, addUser };

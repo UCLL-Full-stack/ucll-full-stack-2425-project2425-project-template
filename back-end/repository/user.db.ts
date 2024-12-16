@@ -1,29 +1,43 @@
-import { User } from "../model/user";
+import { User } from '../model/user';
+import database from './database';
 
-let currentId = 1;
+const getAllUsers = async (): Promise<User[]> => {
+  try {
+      const usersPrisma = await database.user.findMany();
+      return usersPrisma.map((userPrisma) => User.from(userPrisma));
+  } catch (error) {
+      console.error(error);
+      throw new Error('Database error.');
+  }
+};
 
-const users: User[] = [
-    new User({ id: currentId++, name: 'Bazinga', email: 'Bazinga@email.com', password: 'L'}),
-    new User({ id: currentId++, name: 'Badinga', email: 'Badinga@email.com', password: 'L'})
-];
+const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
+  try {
+      const userPrisma = await database.user.findUnique({
+          where: { id },
+      });
 
-const getAllUsers = (): User[] => {
-    return users;
-}
+      return userPrisma ? User.from(userPrisma) : null;
+  } catch (error) {
+      console.error(error);
+      throw new Error('Database error.');
+  }
+};
 
-const getUserById = (id: number): User => {
-    const user = users.find((user) => user.id === id);
-    if (!user) {
-        throw new Error(`User with id ${id} not found`);
-    }
-    return user;
-}
-
-const addUser = (user: { name: string, email: string, password: string }): User => {
-    const newUser = new User({ id: currentId++, name: user.name, email: user.email, password: user.password });
-    users.push(newUser);
-    return newUser;
-}
-
+const addUser = async (user: User): Promise<User> => {
+  try {
+      const userPrisma = await database.user.create({
+          data: {
+              name: user.getName(),
+              password: user.getPassword(),
+              email: user.getEmail(),
+          },
+      });
+      return User.from(userPrisma);
+  } catch (error) {
+      console.error(error);
+      throw new Error('Database error.');
+  }
+};
 
 export default { getAllUsers, getUserById, addUser };

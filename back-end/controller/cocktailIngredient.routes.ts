@@ -43,7 +43,7 @@ const cocktailIngredientRouter = express.Router();
  *       404:
  *         description: Ingredients for cocktail not found
  */
-cocktailIngredientRouter.get("/:cocktailId/ingredients", (req, res) => {
+cocktailIngredientRouter.get("/:cocktailId/ingredients", async (req, res) => {
     const cocktailId = parseInt(req.params.cocktailId, 10);
 
     if (isNaN(cocktailId)) {
@@ -52,7 +52,7 @@ cocktailIngredientRouter.get("/:cocktailId/ingredients", (req, res) => {
 
     const ingredients = cocktailIngredientService.getIngredientsByCocktailId(cocktailId);
 
-    if (!ingredients || ingredients.length === 0) {
+    if (!ingredients || (await ingredients).length === 0) {
         return res.status(404).json({ error: "No ingredients found for this cocktail" });
     }
 
@@ -99,7 +99,7 @@ cocktailIngredientRouter.get("/:cocktailId/ingredients", (req, res) => {
  *       404:
  *         description: Cocktails for ingredient not found
  */
-cocktailIngredientRouter.get("/:ingredientId/cocktails", (req, res) => {
+cocktailIngredientRouter.get("/:ingredientId/cocktails", async (req, res) => {
     const ingredientId = parseInt(req.params.ingredientId, 10);
 
     if (isNaN(ingredientId)) {
@@ -108,7 +108,7 @@ cocktailIngredientRouter.get("/:ingredientId/cocktails", (req, res) => {
 
     const cocktails = cocktailIngredientService.getCocktailsByIngredientId(ingredientId);
 
-    if (!cocktails || cocktails.length === 0) {
+    if (!cocktails || (await cocktails).length === 0) {
         return res.status(404).json({ error: "No cocktails found for this ingredient" });
     }
 

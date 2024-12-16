@@ -1,17 +1,21 @@
+import {
+    Ingredient as IngredientPrisma
+} from '@prisma/client'
+
 export class Ingredient {
-    ingredient_id: number;
-    name: string;
+    private id?: number;
+    private name: string;
 
-
-    constructor(ingredient_id: number, name: string) {
-        this.ingredient_id = ingredient_id;
-        this.name = name;
-
+    constructor(ingredient: { id?: number; name: string;
+    }) {
+        this.id = ingredient.id;
+        this.name = ingredient.name;
     }
 
-    getId(): number {
-        return this.ingredient_id;
+    getId(): number | undefined {
+        return this.id;
     }
+
     getName(): string {
         return this.name;
     }
@@ -20,7 +24,11 @@ export class Ingredient {
     }
 
     equals(other: Ingredient): boolean {
-        return this.ingredient_id === other.ingredient_id &&
+        return this.id === other.id &&
                this.name === other.name
+    }
+
+    static from({ id, name }: IngredientPrisma): Ingredient {
+        return new Ingredient({id, name});
     }
 }

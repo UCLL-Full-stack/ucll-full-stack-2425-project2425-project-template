@@ -77,7 +77,7 @@ cocktailRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
  *               strongness:
  *                 type: integer
  *                 example: 3
- *               imageUrl:
+ *               image:
  *                 type: string
  *                 example: "/placeholder.png"
  *     responses:
@@ -99,13 +99,13 @@ cocktailRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
  */
 cocktailRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, description, strongness, imageUrl } = req.body;
+        const { name, description, strongness, image } = req.body;
 
-        if (!name || !description || strongness === undefined || !imageUrl) {
-            return res.status(400).json({ message: 'All fields are required: name, description, strongness, imageUrl.' });
+        if (!name || !description || strongness === undefined || !image) {
+            return res.status(400).json({ message: 'All fields are required: name, description, strongness, image.' });
         }
 
-        const newCocktail = cocktailService.addCocktail({ name, description, strongness, imageUrl });
+        const newCocktail = cocktailService.addCocktail({ name, description, strongness, image });
         res.status(201).json(newCocktail);
     } catch (error) {
         next(error);

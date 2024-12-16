@@ -1,40 +1,29 @@
-import { Ingredient } from "./ingredient";
+import {Cocktail as CocktailPrisma} from '@prisma/client';
 
 
 export class Cocktail {
-    private id: number;
+    private id?: number;
     private name: string;
     private description: string;
     private strongness: number;
     private image: string;
 
-    constructor(id: number, name: string, description: string, strongness: number, image: string) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.strongness = strongness;
-        this.image = image;
+    constructor(cocktail: { id?: number; name: string; description: string; strongness: number; image: string}) {
+        this.id = cocktail.id;
+        this.name = cocktail.name;
+        this.description = cocktail.description;
+        this.strongness = cocktail.strongness;
+        this.image = cocktail.image;
     }
 
     // Getters
-    getId(): number {
+    getId(): number | undefined{
         return this.id;
     }
 
     getName(): string {
         return this.name;
     }
-    setName(name: string): void {
-        this.name = name;
-    }
-
-    setStrongness(strongness: number): void {
-        this.strongness = strongness;
-    }
-    setDescription(description: string): void {
-        this.description = description
-    }
-
   
     getDescription(): string {
         return this.description;
@@ -48,6 +37,16 @@ export class Cocktail {
         return this.image;
     }
 
+    setName(name: string): void {
+        this.name = name;
+    }
+
+    setStrongness(strongness: number): void {
+        this.strongness = strongness;
+    }
+    setDescription(description: string): void {
+        this.description = description
+    }
 
     equals(cocktail: Cocktail): boolean {
     return (
@@ -57,4 +56,8 @@ export class Cocktail {
         this.strongness === cocktail.getStrongness()
     );
 }
+    static from({ id, name, description, strongness, image }: CocktailPrisma) {    
+        return new Cocktail({id, name, description, strongness, image});
+    }
+
 }
