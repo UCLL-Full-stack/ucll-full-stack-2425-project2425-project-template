@@ -3,7 +3,7 @@ import { Player } from './player';
 
 
 export class Match {
-    readonly match_id: number;
+    readonly id: number;
     readonly location: string;
     readonly date: Date;
     readonly homeTeamName: string;
@@ -12,8 +12,8 @@ export class Match {
     readonly awayScore?: number | null;
     readonly players?: Player[];
 
-    constructor(match: {match_id: number, location: string, date: Date, homeTeamName: string, awayTeamName: string, homeScore: number | null, awayScore: number | null}) {
-        this.match_id = match.match_id;
+    constructor(match: {id: number, location: string, date: Date, homeTeamName: string, awayTeamName: string, homeScore: number | null, awayScore: number | null}) {
+        this.id = match.id;
         this.location = match.location;
         this.date = match.date;
         this.homeTeamName = match.homeTeamName;
@@ -23,7 +23,7 @@ export class Match {
     }
 
     getId(): number {
-        return this.match_id;
+        return this.id;
     }
 
     getLocation(): string {
@@ -52,9 +52,9 @@ export class Match {
 
     
 
-    static from({ match_id, location, date, homeTeamName, awayTeamName, homeScore, awayScore, players }: MatchPrisma & {players?: PlayerPrisma}): Match {
+    static from({ id, location, date, homeTeamName, awayTeamName, homeScore, awayScore, players }: MatchPrisma & {players?: PlayerPrisma}): Match {
         return new Match({
-            match_id,
+            id,
             location,
             date,
             homeTeamName,

@@ -4,7 +4,9 @@ import db from '../util/database';
 
 const findAll = async () => {
     try {
-        const teamsPrisma = await db.team.findMany({});
+        const teamsPrisma = await db.team.findMany({
+            include: {homeMatches: true, awayMatches: true}
+        });
         return teamsPrisma.map((teamPrisma) => Team.from(teamPrisma));
     } catch (error) {
         throw new Error('Database error. See server log for details.');
