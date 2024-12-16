@@ -1,0 +1,17 @@
+{
+    "app.title": "BowlBuddies",
+    "page.title": "BowlBuddies Pokebowls",
+    "header": {
+        "nav": {
+          "home": "Thuis",
+          "orders": "Bestellingen",
+          "order": "Bestelling",
+          "ingredients": "Ingrediënten",
+          "pokebowls": "Pokebowls",
+          "login": "Aanmelden",
+          "logout": "Afmelden",
+          "profile": "Profiel",
+          "language": "Taal"
+        }
+    }
+  }

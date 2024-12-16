@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express-jwt": "^8.4.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "i18next": "^23.7.6",
+    "next-i18next": "^15.0.0",
+    "react-i18next": "^13.4.1"
+  }
+}
