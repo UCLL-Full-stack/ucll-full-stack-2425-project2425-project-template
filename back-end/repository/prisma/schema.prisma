@@ -12,7 +12,7 @@ model Cocktail {
   name        String
   description String
   strongness  Int
-  image       String
+  imageUrl       String
   ingredients CocktailIngredient[]
 }
 
