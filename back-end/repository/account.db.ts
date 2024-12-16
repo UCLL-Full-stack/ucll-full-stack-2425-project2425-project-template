@@ -67,7 +67,6 @@ const updateAccount = async (account: Account): Promise<Account> => {
             },
             data: {
                 balance: account.getBalance(),
-                accountNumber: account.getAccountNumber(),
                 isShared: account.getIsShared(),
                 startDate: account.getStartDate(),
                 endDate: account.getEndDate(),

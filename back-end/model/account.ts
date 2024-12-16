@@ -32,7 +32,7 @@ export class Account {
 
         this.id = account.id;
         this.type = account.type;
-        this.accountNumber = this.generateAccountNumber();
+        this.accountNumber = account.accountNumber || this.generateAccountNumber();
         this.balance = account.balance || 0;
         this.isShared = account.isShared;
         this.startDate = account.startDate || new Date();
