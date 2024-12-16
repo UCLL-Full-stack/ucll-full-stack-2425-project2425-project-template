@@ -26,30 +26,36 @@ const Header: React.FC = () => {
                     <Link href="/competitions" className="text-lg hover:text-orange-500">
                         Competitions
                     </Link>
-                    <Link href="/" className="text-lg hover:text-orange-500">
-                        Home
-                    </Link>
                     {!loggedInUser && (
                         <Link
                             href="/login"
-                            className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+                            className="text-lg hover:text-orange-500"
                         >
                             Login
                         </Link>
                     )}
-                    {loggedInUser && (
-                        <a
-                            href="/login"
-                            onClick={handleClick}
-                            className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+                    {!loggedInUser && (
+                        <Link
+                            href="/register"
+                            className="text-lg hover:text-orange-500"
                         >
-                            Logout
-                        </a>
+                            Register
+                        </Link>
+
                     )}
                     {loggedInUser && (
-                        <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
+                        <div className="text-lg">
                             Welcome, {loggedInUser}!
                         </div>
+                    )}
+                    {loggedInUser && (
+                        <Link
+                            href="/login"
+                            onClick={handleClick}
+                            className="text-lg hover:text-orange-500"
+                        >
+                            Logout
+                        </Link>
                     )}
                 </nav>
             </div>

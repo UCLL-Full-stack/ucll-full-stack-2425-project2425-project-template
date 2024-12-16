@@ -2,8 +2,15 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Header from '@/components/header';
 import styles from '@/styles/Home.module.css';
+import { User } from '@/types';
+import { useEffect, useState } from 'react';
 
 const Home: React.FC = () => {
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        setLoggedInUser(localStorage.getItem("loggedInUser"));
+    }, []);
   return (
     <>
       <Head>
@@ -15,7 +22,7 @@ const Home: React.FC = () => {
       <Header />
       <main className={styles.main}>
         <span>
-          <h1>Welcome!</h1>
+          <h1>Welcome, {loggedInUser}!</h1>
         </span>
       </main>
     </>
