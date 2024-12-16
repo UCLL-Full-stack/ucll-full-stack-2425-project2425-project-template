@@ -1,18 +1,19 @@
 import { Cocktail } from '../model/cocktail';
 import cocktailDb from '../repository/cocktail.db';
 
-const getAllCocktails = (): Cocktail[] => cocktailDb.getAllCocktails();
+const getAllCocktails = async (): Promise<Cocktail[]> => cocktailDb.getAllCocktails();
 
-const getCocktailById = ({ id }: { id: number }): Cocktail => {
-    const cocktail = cocktailDb.getCocktailById({ id });
+const getCocktailById = async ({ id }: { id: number }): Promise<Cocktail> => {
+    const cocktail = await cocktailDb.getCocktailById(id);
     if (!cocktail) {
         throw new Error(`Cocktail with id ${id} not found`);
     }
     return cocktail;
 };
 
-const addCocktail = ({ name, description, strongness, imageUrl }: { name: string; description: string; strongness: number; imageUrl: string }): Cocktail => {
-    return cocktailDb.addCocktail({ name, description, strongness, imageUrl });
+const addCocktail = async ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string }): Promise<Cocktail> => {
+    const newCocktail = await cocktailDb.addCocktail({ name, description, strongness, image });
+    return newCocktail;
 };
 
 export default { getAllCocktails, getCocktailById,addCocktail };

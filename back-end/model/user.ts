@@ -1,38 +1,34 @@
+import {
+    User as UserPrisma
+} from '@prisma/client'
+
 export class User {
-    readonly id: number;
-    private _name: string;
-    private _email: string;
-    private _password: string;
+    private id?: number;
+    private name: string;
+    private email: string;
+    private password: string;
    
-    constructor(user: { id: number, name: string, email: string, password: string }) {
+    constructor(user: { id?: number, name: string, email: string, password: string }) {
         this.id = user.id;
-        this._name = user.name;
-        this._email = user.email;
-        this._password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+        this.password = user.password;
     }
 
-    get name(): string {
-        return this._name;
+    getId(): number | undefined {
+        return this.id;
+    }
+    
+    getName(): string {
+        return this.name;
     }
 
-    get email(): string {
-        return this._email;
+    getEmail(): string {
+        return this.email;
     }
 
-    get password(): string {
-        return this._password;
-    }
-
-    set name(newName: string) {
-        this._name = newName;
-    }
-
-    set email(newEmail: string) {
-        this._email = newEmail;
-    }
-
-    set password(newPassword: string) {
-        this._password = newPassword;
+    getPassword(): string {
+        return this.password;
     }
 
     equals(otherUser: User): boolean {
@@ -42,5 +38,14 @@ export class User {
             this.email === otherUser.email &&
             this.password === otherUser.password
         );
+    }
+
+    static from ({ id, name, email, password}: UserPrisma ) {
+        return new User({
+            id,
+            name,
+            email,
+            password,
+        })
     }
 }

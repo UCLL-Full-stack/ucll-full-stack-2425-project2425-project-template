@@ -1,42 +1,33 @@
-import { Cocktail } from "./cocktail";
-import { Ingredient } from "./ingredient";
+import { CocktailIngredient as CocktailIngredientPrisma} from "@prisma/client";
 
 export class CocktailIngredient {
-    private _id?: number;
-    private _cocktailId!: number;
-    private _ingredientId!: number;
-    private _amount!: string;
+    private id?: number;
+    private cocktailId!: number;
+    private ingredientId!: number;
+    private amount!: string;
 
     constructor(id: number, cocktailId: number, ingredientId: number, amount: string) {
-        this._id = id;
-        this._cocktailId = cocktailId;
-        this._ingredientId = ingredientId;
-        this._amount = amount;
+        this.id = id;
+        this.cocktailId = cocktailId;
+        this.ingredientId = ingredientId;
+        this.amount = amount;
     }
 
-    public get id(): number | undefined {
-        return this._id;
+    public getId(): number | undefined {
+        return this.id;
     }
-    public get cocktailId(): number {
-        return this._cocktailId;
+    public getCocktailId(): number {
+        return this.cocktailId;
     }
-    public get ingredientId(): number {
-        return this._ingredientId;
+    public getIngredientId(): number {
+        return this.ingredientId;
     }
-    public get amount(): string {
-        return this._amount;
+    public getAmount(): string {
+        return this.amount;
     }
 
-    public set id(value: number | undefined) {
-        this._id = value;
+    static from({ id, cocktailId, ingredientId, amount }: CocktailIngredientPrisma) {
+        return new CocktailIngredient(id, cocktailId, ingredientId, amount);
     }
-    public set cocktailId(value: number) {
-        this._cocktailId = value;
-    }
-    public set ingredientId(value: number) {
-        this._ingredientId = value;
-    }
-    public set amount(value: string) {
-        this._amount = value;
-    }
+
 }

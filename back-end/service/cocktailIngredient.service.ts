@@ -8,15 +8,18 @@ import cocktailIngredientDb from "../repository/cocktailIngredient.db";
 
 
 
-const getRelationById = ({ id }: { id: number }): CocktailIngredient => {
-    const cocktailIngredient = cocktailIngredientDb.getRelationById({ id });
+const getRelationById = async ( id: number ): Promise<CocktailIngredient> => {
+    const cocktailIngredient =await cocktailIngredientDb.getRelationById(id);
     if (!cocktailIngredient) {
         throw new Error(`Relation with id ${id} not found`);
     }
     return cocktailIngredient;
 };
 
-const getAllRelations = (): CocktailIngredient[] => cocktailIngredientDb.getAllRelations();
+const getAllRelations = async (): Promise<CocktailIngredient[]> => {
+    const relations = await cocktailIngredientDb.getAllRelations();
+    return relations;
+};
 
 const getIngredientsByCocktailId = (cocktailId: number) => {
     return cocktailIngredientDb.getIngredientsByCocktailId(cocktailId);

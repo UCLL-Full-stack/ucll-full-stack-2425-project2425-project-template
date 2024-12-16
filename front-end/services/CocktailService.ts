@@ -30,7 +30,7 @@ async function addCocktail(cocktailData: {
   name: string;
   description: string;
   strongness: number;
-  imageUrl: string;
+  image: string;
 }) {
   try {
     const response = await fetch(`${apiUrl}/cocktails`, {
