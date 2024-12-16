@@ -81,24 +81,21 @@ export class Floor {
         }
     }
 
-    generateTiles(): Line[]{
+    generateTiles(): Line[] {
         let tiles = new Array<Line>();
         for (let i = 0; i < 20; i++) {
-            tiles[i] = new Line({tiles: [], lineNum: i});
-            for (let j = 0; j < 20; j++){
-                if (i === 0 || i === 19 || j === 0 || j === 19){
-                    tiles[i].setTile(j, "void");
-                }
-                else if (i === 1 || i === 18 || j === 1 || j === 18){
-                    tiles[i].setTile(j, "wall");
-                }
-                else{
+            tiles[i] = new Line({ tiles: [], lineNum: i });
+            for (let j = 0; j < 20; j++) {
+                if (i === 0 || i === 19 || j === 0 || j === 19) {
+                    tiles[i].setTile(j, 'void');
+                } else if (i === 1 || i === 18 || j === 1 || j === 18) {
+                    tiles[i].setTile(j, 'wall');
+                } else {
                     const randomnum = getRandomInt(0, 10);
-                    if (randomnum <= 2){
-                        tiles[i].setTile(j, "wall");
-                    }
-                    else {
-                        tiles[i].setTile(j, "floor");
+                    if (randomnum <= 2) {
+                        tiles[i].setTile(j, 'wall');
+                    } else {
+                        tiles[i].setTile(j, 'floor');
                     }
                 }
             }

@@ -10,10 +10,9 @@ const Leaderboard: React.FC = () => {
     const [leaderboard, setLeaderboard] = useState<Array<Player>>();
     const [user, setUser] = useState<any>();
 
-    const getLeaderboard = async () =>{
+    const getLeaderboard = async () => {
         const response = await playerService.getAllPlayers();
         const players = await response.json();
-        console.log("hallo");
         const sorted = players.sort((a: Player, b: Player) => {
             if (a.currency < b.currency) {
                 return 1;
@@ -25,11 +24,11 @@ const Leaderboard: React.FC = () => {
         });
         setLeaderboard(sorted);
         setTop10(sorted.slice(0, 10));
-    }
+    };
 
     useEffect(() => {
         getLeaderboard();
-    }, [])
+    }, []);
 
     return (
         <>
@@ -62,17 +61,17 @@ const Leaderboard: React.FC = () => {
                                 ))}
                                 {user ? (
                                     <>
-                                    {top10.includes(user) ? (
-                                        <></>
+                                        {top10.includes(user) ? (
+                                            <></>
                                         ) : (
-                                        <tr>
-                                            <td>You</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.score}</td>
-                                        </tr>
-                                     )}
+                                            <tr>
+                                                <td>You</td>
+                                                <td>{user.name}</td>
+                                                <td>{user.score}</td>
+                                            </tr>
+                                        )}
                                     </>
-                                ):(
+                                ) : (
                                     <p>No user logged in</p>
                                 )}
                             </tbody>

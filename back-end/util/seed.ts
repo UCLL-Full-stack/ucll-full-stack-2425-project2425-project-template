@@ -5,6 +5,10 @@ import { Player } from '../model/player';
 import { World } from '../model/world';
 import { Floor } from '../model/floor';
 import { Position } from '../model/position';
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+
+dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -14,6 +18,7 @@ const users = [
         name: 'Alice',
         email: 'alice@example.com',
         password: 'password123',
+        role: 'player',
         birthday: new Date(1990, 1, 1),
         accountBirthday: new Date(2020, 1, 1),
     }),
@@ -21,6 +26,7 @@ const users = [
         name: 'Xander',
         email: 'Xander@example.com',
         password: 'password0233',
+        role: 'player',
         birthday: new Date(2004, 2, 18),
         accountBirthday: new Date(2024, 9, 12),
     }),
@@ -97,7 +103,8 @@ async function main() {
     await prisma.player.deleteMany();
     await prisma.user.deleteMany();
 
-    // Create Users
+    const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
+
     let createdUsers = [];
 
     for (const user of users) {
@@ -105,6 +112,7 @@ async function main() {
             data: {
                 name: user.getName(),
                 email: user.getEmail(),
+                role: user.getRole(),
                 password: user.getPassword(),
                 birthday: user.getBirthday(),
                 accountBirthday: user.getAccountBirthday(),
@@ -112,47 +120,6 @@ async function main() {
         });
         createdUsers.push(createdUser);
     }
-
-    // Create Players
-    const players = [
-        new Player({
-            name: 'Player1',
-            statistics: 'Stats1',
-            class: 'Warrior',
-            currency: 100,
-            user: users[0],
-        }),
-        new Player({
-            name: 'Cedinvu',
-            statistics: 'hp: 20, power: veel',
-            class: 'JAS 39 Gripen',
-            currency: 2389,
-            user: users[0],
-        }),
-        new Player({
-            name: 'Cedinvu2',
-            statistics: 'hp: 2000, power: -1',
-            class: 'Impostor',
-            currency: 100004,
-            user: users[1],
-        }),
-        new Player({
-            name: 'usersiscool',
-            statistics: 'hp: 100, power: 100',
-            class: 'Warrior',
-            currency: 1454,
-            user: users[0],
-        }),
-        new Player({
-            name: 'MasterPieck',
-            statistics: 'hp: 2000, power: 1500',
-            class: 'Teacher',
-            currency: 15474,
-            user: users[1],
-        }),
-    ];
-
-    const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
 
     for (const player of players) {
         await prisma.player.create({
@@ -171,7 +138,13 @@ async function main() {
         const createdWorld = await prisma.world.create({
             data: {
                 name: world.getName(),
-                owner: { connect: { id: world.getOwner().getId(), name: world.getOwner().getName(), email: world.getOwner().getEmail() } },
+                owner: {
+                    connect: {
+                        id: world.getOwner().getId(),
+                        name: world.getOwner().getName(),
+                        email: world.getOwner().getEmail(),
+                    },
+                },
             },
         });
         for (const floor of floors) {
@@ -181,7 +154,7 @@ async function main() {
                     world: { connect: { id: createdWorld.id } },
                 },
             });
-    
+
             const tiles = floor.getTiles();
             if (!tiles) break;
             // Create lines
@@ -233,321 +206,3 @@ main()
     .finally(async () => {
         await prisma.$disconnect();
     });
-
-// Create Lines
-// Tile legend:
-//      'x': wall
-//      '@': player
-//      ' ': open space
-/*
-const tiles = [
-    ['x', ' ', ' ', '', 'x'],
-    ['x', 'x', ' ', '', 'x'],
-    ['x', 'x', '@', '', 'x'],
-    ['x', 'x', ' ', '', 'x'],
-    ['x', 'x', ' ', 'x', 'x'],
-];
-
-const lines = [
-    new Line({
-        tiles: tiles[0],
-        lineNum: 1,
-    }),
-    new Line({
-        tiles: tiles[1],
-        lineNum: 2,
-    }),
-    new Line({
-        tiles: tiles[2],
-        lineNum: 3,
-    }),
-    new Line({
-        tiles: tiles[3],
-        lineNum: 4, 
-    }),
-    new Line({
-        tiles: tiles[4],
-        lineNum: 5,
-    }),
-];
-*/
-
-// // Execute: npx ts-node util/seed.ts
-
-// import { PrismaClient } from '@prisma/client';
-// import { Player } from '../model/player';
-// import { User } from '../model/user';
-// import { Line } from '../model/line';
-// import { World } from '../model/world';
-// import { Floor } from '../model/floor';
-
-// const prisma = new PrismaClient();
-
-// // Creating users
-// const xander = new User({
-//     name: 'Xander',
-//     email: 'xander.dhondt@student.ucll.be',
-//     password: '1234',
-//     birthday: new Date(2004, 2, 18),
-// });
-// const users = new User({
-//     name: 'users',
-//     email: 'users.somethingiforgor@student.ucll.be',
-//     password: '5678',
-//     birthday: new Date(2004, 5, 17),
-// });
-// const johan = new User({
-//     name: 'Johan',
-//     email: 'johan.pieck@teacher.ucll.be',
-//     password: '8080',
-//     birthday: new Date(2000, 1, 1), // sorry johan I don't know your bday :(
-// });
-// const milan = new User({
-//     name: 'Milan',
-//     email: 'milan.storms@student.ucll.be',
-//     password: '6969',
-//     birthday: new Date(2005, 6, 11),
-// });
-// const dean = new User({
-//     name: 'Dean',
-//     email: 'dean.duraku@student.ucll.be',
-//     password: '1984',
-//     birthday: new Date(2005, 12, 1),
-// });
-
-// // Creating players
-// const players = [
-//     new Player({
-//         id: 1,
-//         name: 'Alnea Starholt',
-//         statistics: 'hp: 10, power: 9000+',
-//         class: 'Red Mage',
-//         currency: 10000,
-//         user: xander,
-//     }),
-//     new Player({
-//         id: 2,
-//         name: 'Cedinvu',
-//         statistics: 'hp: 20, power: veel',
-//         class: 'JAS 39 Gripen',
-//         currency: 2389,
-//         user: users,
-//     }),
-//     new Player({
-//         id: 3,
-//         name: 'Cedinvu2',
-//         statistics: 'hp: 2000, power: -1',
-//         class: 'Impostor',
-//         currency: 100004,
-//         user: users,
-//     }),
-//     new Player({
-//         id: 4,
-//         name: 'usersiscool',
-//         statistics: 'hp: 100, power: 100',
-//         class: 'Warrior',
-//         currency: 1454,
-//         user: users,
-//     }),
-//     new Player({
-//         id: 5,
-//         name: 'MasterPieck',
-//         statistics: 'hp: 2000, power: 1500',
-//         class: 'Teacher',
-//         currency: 15474,
-//         user: johan,
-//     }),
-//     new Player({
-//         id: 6,
-//         name: 'Storm',
-//         statistics: 'hp: 50, power: 50',
-//         class: 'Skier',
-//         currency: 457532,
-//         user: milan,
-//     }),
-//     new Player({
-//         id: 7,
-//         name: 'Wild',
-//         statistics: 'hp: 87, power: 147',
-//         class: 'Monkey',
-//         currency: 0,
-//         user: milan,
-//     }),
-//     new Player({
-//         id: 8,
-//         name: 'Epstein',
-//         statistics: 'hp: 64, power: 455',
-//         class: 'Bruh',
-//         currency: 42453,
-//         user: milan,
-//     }),
-//     new Player({
-//         id: 9,
-//         name: 'Deanbanaan1234',
-//         statistics: 'hp: 37, power: 463',
-//         class: 'Boxer',
-//         currency: 9786,
-//         user: dean,
-//     }),
-//     new Player({
-//         id: 10,
-//         name: 'Dracula',
-//         statistics: 'hp: 2000, power: 5000',
-//         class: 'Vampire',
-//         currency: 69420,
-//         user: dean,
-//     }),
-//     new Player({
-//         id: 11,
-//         name: 'Bean',
-//         statistics: 'hp: 2, power: -1',
-//         class: 'Beggar',
-//         currency: 4,
-//         user: dean,
-//     }),
-// ];
-
-// // Creating a list of lines
-// const lines = [
-//     new Line({
-//         tiles: ['x', ' ', ' ', ' ', 'x'],
-//         lineNum: 1,
-//     }),
-//     new Line({
-//         tiles: ['x', 'x', ' ', ' ', 'x'],
-//         lineNum: 2,
-//     }),
-//     new Line({
-//         tiles: ['x', ' ', '@', ' ', 'x'],
-//         lineNum: 3,
-//     }),
-//     new Line({
-//         tiles: ['x', ' ', ' ', 'x', 'x'],
-//         lineNum: 4,
-//     }),
-// ];
-
-// // Creating the floors
-// const floors = [new Floor({ floornumber: 1, tiles: lines })];
-
-// // Creating the world
-// const world = new World({ name: 'world 1', owner: users, floors: floors });
-
-// const main = async () => {
-//     await prisma.player.deleteMany();
-//     await prisma.user.deleteMany();
-//     await prisma.line.deleteMany();
-//     await prisma.floor.deleteMany();
-//     await prisma.world.deleteMany();
-
-//     // User seeding
-//     await prisma.user.create({
-//         data: {
-//             name: xander.getName(),
-//             email: xander.getEmail(),
-//             password: xander.getPassword(),
-//             birthday: xander.getBirthday(),
-//         },
-//     });
-//     await prisma.user.create({
-//         data: {
-//             name: users.getName(),
-//             email: users.getEmail(),
-//             password: users.getPassword(),
-//             birthday: users.getBirthday(),
-//         },
-//     });
-//     await prisma.user.create({
-//         data: {
-//             name: johan.getName(),
-//             email: johan.getEmail(),
-//             password: johan.getPassword(),
-//             birthday: johan.getBirthday(),
-//         },
-//     });
-//     await prisma.user.create({
-//         data: {
-//             name: milan.getName(),
-//             email: milan.getEmail(),
-//             password: milan.getPassword(),
-//             birthday: milan.getBirthday(),
-//         },
-//     });
-//     await prisma.user.create({
-//         data: {
-//             name: dean.getName(),
-//             email: dean.getEmail(),
-//             password: dean.getPassword(),
-//             birthday: dean.getBirthday(),
-//         },
-//     });
-
-//     // Player seeding
-//     for (const player of players) {
-//         await prisma.player.create({
-//             data: {
-//                 name: player.getName(),
-//                 statistics: player.getStatistics(),
-//                 class: player.getClass(),
-//                 currency: player.getCurrency(),
-//                 user: {
-//                     connect: { email: player.getUser().getEmail() },
-//                 },
-//             },
-//         });
-//     }
-
-//     // Line seeding
-//     const linePrisma = [];
-//     for (const line of lines) {
-//         const createdLine = await prisma.line.create({
-//             data: {
-//                 tiles: line.getTiles(),
-//                 lineNum: line.getLineNum(),
-//                 floor: {
-//                     connect: { id: 1 }, // Assuming floor id is 1, adjust as necessary
-//                 },
-//             },
-//         });
-//         linePrisma.push(createdLine);
-//     const floorPrisma: any[] = [];
-
-//     // Floor seeding
-//     const floorPrisma = [];
-//     for (const floor of floors) {
-//         const createdFloor = await prisma.floor.create({
-//             data: {
-//                 floornumber: floor.getFloornumber(),
-//                 tiles: {
-//                     connect: linePrisma.map((line) => ({ id: line.id })),
-//                 },
-//                 world: {
-//                     connect: { id: worldPrisma.id },
-//                 },
-//             },
-//         });
-//         floorPrisma.push(createdFloor);
-//     const worldPrisma: any = await prisma.world.create({
-
-//     // World seeding
-//     const worldPrisma = await prisma.world.create({
-//         data: {
-//             name: world.getName(),
-//             owner: {
-//                 connect: { email: world.getOwner().getEmail() },
-//             },
-//             floors: {
-//                 connect: floorPrisma.map((floor) => ({ id: floor.id })),
-//             },
-//         },
-//     });
-// };
-
-// main()
-//     .catch((e) => {
-//         console.error(e);
-//         process.exit(1);
-//     })
-//     .finally(async () => {
-//         await prisma.$disconnect();
-//     });

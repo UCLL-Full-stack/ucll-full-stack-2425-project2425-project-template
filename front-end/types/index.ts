@@ -1,6 +1,7 @@
 export type User = {
     id: number;
     name: string;
+    role?: string;
     password: string;
     birthday: Date;
     players: Array<Player>;
@@ -57,3 +58,8 @@ export type coordinate = {
   y: number;
   posID: number;
 }
+
+export type Auth = {
+    email: string;
+    password: string;
+};

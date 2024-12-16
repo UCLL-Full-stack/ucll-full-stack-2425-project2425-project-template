@@ -22,6 +22,7 @@ model User {
   id        Int       @id @default(autoincrement())
   name      String    @unique
   email     String    @unique
+  role      String  
   password  String
   birthday  DateTime @default(now())
   accountBirthday   DateTime @default(now())
