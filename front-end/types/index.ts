@@ -23,7 +23,7 @@ export type Coach = {
 };
 
 export type User = {
-    id: number;
+    id?: number;
     name: string;
     email: string;
     role: Role;
