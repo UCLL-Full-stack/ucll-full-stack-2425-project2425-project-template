@@ -1,6 +1,5 @@
 import { CocktailIngredient } from "../model/cocktailIngredients";
 import cocktailIngredientDb from "../repository/cocktailIngredient.db";
-import ingredientDb from "../repository/ingredient.db";
 
 // create or find existing ingredients for function
 // create cocktail for the function

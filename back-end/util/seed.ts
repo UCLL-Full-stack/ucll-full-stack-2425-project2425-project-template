@@ -3,6 +3,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Reset auto-increment IDs and delete existing records
+  await prisma.$executeRaw`TRUNCATE TABLE "Cocktail" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "CocktailIngredient" RESTART IDENTITY CASCADE`;
+
+  console.log("Existing data deleted and IDs reset.");
+
   // Seed Cocktails
   const cocktails = await prisma.cocktail.createMany({
     data: [
