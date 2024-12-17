@@ -125,7 +125,7 @@ const LoginForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="h-9 bg-[#0162ff] rounded text-white hover:bg-[#0022cd] self-stretch"
+          className="p-2 m-1 fs-6 text-white bg-[#ff8921] hover:bg-[#ff642bbb] rounded-md"
         >
           <p>Login</p>
         </button>
