@@ -41,11 +41,23 @@ const deleteBoard = async (boardId: string) => {
     return await response.json();
 };
 
+const updateBoard = async (boardId: string, board: any) => {
+    const response = await fetch(`${API_URL}/api/boards/${boardId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(board),
+    });
+    return await response.json();
+};
+
 const BoardService = {
     getBoard,
     getBoardsByGuild,
     createBoard,
     deleteBoard,
+    updateBoard,
 };
 
 export default BoardService;

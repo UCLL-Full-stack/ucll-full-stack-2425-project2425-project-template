@@ -11,9 +11,10 @@ import { MdEdit } from "react-icons/md"
 interface BoardCardProps {
     board: Board;
     onDelete: (boardId: string) => void;
+    onEdit: (boardId: string) => void;
 }
 
-const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
+const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit }) => {
     const { user } = useUser();
     const [creator, setCreator] = useState<string>('');
     const [columns, setColumns] = useState<string[]>([]);
@@ -23,7 +24,6 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
     useEffect(() => {
-        console.log('Board:', board);
         const fetchData = async () => {
             const userData = await UserService.getUser(board.createdByUserId);
             setCreator(userData.globalName);
@@ -57,7 +57,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
     }
 
     const handleEdit = async () => {
-        console.log('Edit Board');
+        onEdit(board.boardId);
     }
 
     const handleEditPermissions = async () => {

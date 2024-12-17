@@ -11,6 +11,7 @@ import EditGuildSettingsForm from '@/components/EditGuildSettingsForm';
 import dotenv from 'dotenv';
 import { useUser } from '@/context/UserContext';
 import GuildService from '@/services/GuildService';
+import EditBoard from '@/components/EditBoard';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ const Home: FC = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [permissions, setPermissions] = useState<any[]>([]);
   const [isEditingGuildSettings, setIsEditingGuildSettings] = useState(false);
+  const [editingBoardId, setEditingBoardId] = useState<string | null>(null);
 
 
   const handleDiscordLogin = () => {
@@ -168,6 +170,17 @@ const Home: FC = () => {
     }
   }
 
+  const handleBoardEdit = async (boardData: { boardName: string; }) => {
+    try {
+        await BoardService.updateBoard(editingBoardId!, { boardName: boardData.boardName });
+        const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId!);
+        setBoards(fetchedBoards || []);
+        setEditingBoardId(null);
+    } catch (error) {
+        console.error('Error updating board:', error);
+    }
+  };
+
   return (
       <div className="bg-[#2C2F33] min-h-screen flex flex-col">
           <Head>
@@ -202,7 +215,12 @@ const Home: FC = () => {
                             <p>No boards available for this server.</p>
                         ) : (
                             boards.map(board => (
-                                <BoardCard key={board.boardId} board={board} onDelete={handleBoardDelete}/>
+                                <BoardCard
+                                  key={board.boardId}
+                                  board={board}
+                                  onDelete={handleBoardDelete}
+                                  onEdit={()=> {setEditingBoardId(board.boardId);}}
+                                />
                             ))
                         )}
                       </div>
@@ -223,6 +241,13 @@ const Home: FC = () => {
                         guildId={selectedGuildId!}
                         onSubmit={handleUpdatedGuildSettings}
                     />
+                )}
+                {editingBoardId && (
+                  <EditBoard
+                    boardId={editingBoardId}
+                    onClose={() => setEditingBoardId(null)}
+                    onSubmit={handleBoardEdit}
+                  />
                 )}
               </>
             )}
