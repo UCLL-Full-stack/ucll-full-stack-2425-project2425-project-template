@@ -31,7 +31,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
         setError(null);
         setBoardName('');
         setColumns('');
-        setFilteredGuilds(guilds);
+        setFilteredGuilds([]);
         if (typeof selectedGuildId === 'string') {
             setSelectedGuild(selectedGuildId);
         }
@@ -123,11 +123,11 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+                            className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded mr-2"
                         >
                             Cancel
                         </button>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
                             Create Board
                         </button>
                     </div>

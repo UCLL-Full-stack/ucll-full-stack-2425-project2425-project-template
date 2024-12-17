@@ -215,7 +215,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                     <button className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 mr-2" onClick={onClose}>
                         Cancel
                     </button>
-                    <button className="bg-green-600 px-4 py-2 rounded hover:bg-green-700" onClick={handleSubmit}>Save Changes</button>
+                    <button className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" onClick={handleSubmit}>Save Changes</button>
                 </div>
             </div>
         </div>
