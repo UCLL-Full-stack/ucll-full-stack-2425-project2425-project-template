@@ -13,26 +13,29 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Ingredienten: React.FC = () => {
     const [selectedIngredient, setSelectedIngredient] = useState<Ingredient>();
+    const [error, setError] = useState<String | null>(null);
     const { t } = useTranslation();
 
     const getIngredienten = async () => {
-
+        setError("");
         const responses = await Promise.all([IngredientenService.getAllIngredienten()]);
         const [ingredientResponses] = responses;
 
         if (ingredientResponses.ok) {
             const ingredienten = await ingredientResponses.json();
-            return { ingredienten }
+            return ingredienten
+        } else {
+            setError("You aren't authorized to view this page");
         }
-
     }
-    const { data, isLoading, error } = useSWR(
+    const { data, isLoading } = useSWR(
         "ingredienten",
         getIngredienten
     );
 
     useInterval(() => {
         mutate("ingredienten", getIngredienten());
+        console.log(error + " Mooie error");
     }, 5000);
 
     return (
@@ -48,12 +51,14 @@ const Ingredienten: React.FC = () => {
                 <h1>Ingredienten</h1>
                 <p>Lijst van alle ingredienten</p>
                 <section>
-                    {error && <p className="error-field">{error.message}</p>}
-                    {!isLoading && <p>Loading...</p>}
-                    {data && (
-                        <IngredientenOverzicht ingredienten={data.ingredienten} selectIngredient={setSelectedIngredient} />
-                    )}
-                    {!error && (<button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>)}
+                    <>
+                        {error && <p className="error-field">{error}</p>}
+                        {isLoading && <p>Loading...</p>}
+                        {data && (
+                            <IngredientenOverzicht ingredienten={data.ingredienten} selectIngredient={setSelectedIngredient} />
+                        )}
+                        {!error && (<button onClick={() => { router.push(`/ingredienten/add-ingredient`); }}>Add new ingredient</button>)}
+                    </>
                 </section>
             </main>
         </>
@@ -62,7 +67,7 @@ const Ingredienten: React.FC = () => {
 
 export const getServerSideProps = async (context: { locale: any; }) => {
     const { locale } = context;
-  
+
     return {
         props: {
             ...(await serverSideTranslations(locale ?? "en", ["common"])),

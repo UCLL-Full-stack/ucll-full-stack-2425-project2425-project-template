@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Users: React.FC = () => {
     const { t } = useTranslation();
-
+    const [error, setError] = useState<String | null>(null);
     const [selectedUser, setSelectedUser] = useState<User>();
 
     const getUsers = async () => {
@@ -19,16 +19,17 @@ const Users: React.FC = () => {
             UserService.getAllUsers()
         ]);
         const [userResponse] = response;
+        console.log(userResponse.json())
 
         if (userResponse.ok) {
             const users = await userResponse.json();
             return { users };
+        } else {
+            setError("You aren't authorized to view this page");
         }
-
-        throw new Error("Failed to fetch users");
     };
 
-    const { data, error } = useSWR("users", getUsers);
+    const { data, isLoading } = useSWR("users", getUsers);
 
     useInterval(() => {
         mutate("users", getUsers());
@@ -48,6 +49,7 @@ const Users: React.FC = () => {
                 <p>Lijst van alle gebruikers</p>
                 <section>
                     {error && <p className="error-field">{error}</p>}
+                    {isLoading && <p className="text-green-800">Loading...</p>}
                     {data && (
                         <UserOverzicht users={data.users} selectUser={setSelectedUser} />
                     )}

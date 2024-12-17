@@ -31,7 +31,7 @@
  */
 import express, { Request, Response, NextFunction } from 'express';
 import userService from "../service/user.service";
-import { UserInput } from '../types';
+import { Rol, UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -81,7 +81,9 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  */
 userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const users = await userService.getAllUsers();
+        const request = req as Request & { auth: { rol: Rol } };
+        const { rol } = request.auth;
+        const users = await userService.getAllUsers({ rol });
         res.status(200).json(users);
     } catch (error) {
         next(error);
@@ -137,8 +139,10 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 
 userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const request = req as Request & { auth: { rol: Rol } };
+        const { rol } = request.auth;
         const id = parseInt(req.params.id);
-        await userService.deleteUser(id);
+        await userService.deleteUser({ rol }, id);
         res.status(204).send();
     } catch (error) {
         next(error);
@@ -146,12 +150,14 @@ userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
 });
 
 userRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    try{
+    try {
+        const request = req as Request & { auth: { rol: Rol } };
+        const { rol } = request.auth;
         const id = parseInt(req.params.id);
         const user = req.body;
-        const updatedUser = await userService.updateUser(id, user);
+        const updatedUser = await userService.updateUser({ rol }, id, user);
         res.status(200).json(updatedUser);
-    } catch (error){
+    } catch (error) {
         next(error);
     }
 });
