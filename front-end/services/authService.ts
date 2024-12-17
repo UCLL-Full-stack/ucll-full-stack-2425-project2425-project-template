@@ -38,7 +38,8 @@ const login = async (data: LoginData) => {
     }
 
     const result = await response.json();
-    localStorage.setItem('loggedInUser', JSON.stringify(result));
+    localStorage.setItem('token', result.token); 
+    // localStorage.setItem('role', result.role); 
 
   } catch (error) {
     console.error("Error logging in:", error);
@@ -46,14 +47,12 @@ const login = async (data: LoginData) => {
   }
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (token: string) => {
   try {
-    const userToken = localStorage.getItem('loggedInUser');
-    if (!userToken) {
+    const token = localStorage.getItem('token'); 
+    if (!token) {
       throw new Error("No token found");
     }
-
-    const { token } = JSON.parse(userToken);
 
     const response = await fetch(`${apiUrl}/users`, {
       method: "GET",
@@ -74,6 +73,32 @@ const getAllUsers = async () => {
   }
 };
 
-const authService = { register, login, getAllUsers };
+const getUserById = async (userId: number) => {
+  try {
+    const token = localStorage.getItem('token'); 
+    if (!token) {
+      throw new Error("No token found");
+    }
+
+    const response = await fetch(`${apiUrl}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
+
+const authService = { register, login, getAllUsers, getUserById };
 
 export default authService;

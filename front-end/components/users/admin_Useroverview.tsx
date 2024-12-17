@@ -1,65 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import authService from '@/services/authService';
+import React from 'react';
+import { UserTable } from '../../types/auth';
 
-const AdminUserOverview: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+type Props = {
+  users: Array<UserTable>;
+};
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const userToken = localStorage.getItem('loggedInUser');
-        if (!userToken) {
-          throw new Error('No token found');
-        }
-
-        const { token } = JSON.parse(userToken);
-        const users = await authService.getAllUsers(token);
-        setUsers(users);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
+const UserOverviewTable: React.FC<Props> = ({ users }: Props) => {
   return (
-    <div>
-      <h1>User Overview</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
+    <div className="overflow-x-auto">
+      {users && (
+        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-gray-800 text-white">
+            <tr>
+              <th scope="col" className="py-3 px-6 text-left">ID</th>
+              <th scope="col" className="py-3 px-6 text-left">UserName</th>
+              <th scope="col" className="py-3 px-6 text-left">FirstName</th>
+              <th scope="col" className="py-3 px-6 text-left">LastName</th>
+              <th scope="col" className="py-3 px-6 text-left">Email</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+                <td className="py-3 px-6">{user.id}</td>
+                <td className="py-3 px-6">{user.username}</td>
+                <td className="py-3 px-6">{user.firstname}</td>
+                <td className="py-3 px-6">{user.lastname}</td>
+                <td className="py-3 px-6">{user.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
 
-export default AdminUserOverview;
+export default UserOverviewTable;
