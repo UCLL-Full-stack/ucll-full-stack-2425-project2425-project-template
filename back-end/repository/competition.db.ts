@@ -21,17 +21,43 @@ const getAllCompetitions = async (): Promise<Competition[]> => {
     }
 }
 
-const createCompetition = (competition: Competition): Competition => {
-    competitions.push(competition);
-    return competition;
+const createCompetition = async (competition: Competition): Promise<Competition> => {
+    try {
+        const competitionPrisma = await database.competition.create({
+            data: {
+                name: competition.getName(),
+            },
+            include: {
+                teams: true,
+            },
+        });
+
+        return new Competition({ ...competitionPrisma, teams: competitionPrisma.teams.map(team => new Team(team)) });
+    } catch (error) {
+        console.error(error);
+        return competition;
+    }
 }
 
-const editCompetition = (competitionId: number, competition: Competition): Competition => {
-    const index = competitions.findIndex(c => c.getId() === competitionId);
-    if (index >= 0) {
-        competitions[index] = competition;
+const editCompetition = async (competitionId: number, competition: Competition): Promise<Competition> => {
+    try {
+        const competitionPrisma = await database.competition.update({
+            where: {
+                id: competitionId,
+            },
+            data: {
+                name: competition.getName(),
+            },
+            include: {
+                teams: true,
+            },
+        });
+
+        return new Competition({ ...competitionPrisma, teams: competitionPrisma.teams.map(team => new Team(team)) });
+    } catch (error) {
+        console.error(error);
+        return competition;
     }
-    return competition;
 }
 
 export default {

@@ -9,11 +9,11 @@ const AddCompetition: React.FC = () => {
 
     const handleCreateCompetition = async () => {
         try {
+            router.push('/competitions');
             await CompetitionService.addCompetition({
                 name,
                 teams: []
             });
-            router.push('/competitions');
         } catch (error) {
             console.error('Failed to create competition:', error);
         }

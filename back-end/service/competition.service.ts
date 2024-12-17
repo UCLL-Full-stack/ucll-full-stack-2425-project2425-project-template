@@ -7,10 +7,10 @@ const getAllCompetitions = async (): Promise<Competition[]> => {
     return await competitionDb.getAllCompetitions();
 }
 
-const createCompetition = ({
+const createCompetition = async ({
     name,
     teams
-}: CompetitionInput): Competition => {
+}: CompetitionInput): Promise<Competition> => {
     if (!name) {
         throw new Error("Competition name is required.");
     }
@@ -19,10 +19,10 @@ const createCompetition = ({
         name,
         teams: teams.map(teamDTO => new Team(teamDTO))
     });
-    return competitionDb.createCompetition(competition);
+    return await competitionDb.createCompetition(competition);
 }
 
-const editCompetition = (competitionDTO: CompetitionInput): Competition => {
+const editCompetition = async (competitionDTO: CompetitionInput): Promise<Competition> => {
     if (!competitionDTO.id) {
         throw new Error("Competition ID is required.");
     }
@@ -31,7 +31,7 @@ const editCompetition = (competitionDTO: CompetitionInput): Competition => {
     const competitionId = competitionDTO.id;
     const competition = new Competition({ ...competitionDTO, teams });
     competitionDb.editCompetition(competitionId, competition);
-    return competition;
+    return await competition;
 }
 
 export default {
