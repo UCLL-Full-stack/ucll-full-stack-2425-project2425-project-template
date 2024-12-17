@@ -3,13 +3,14 @@ import { FC, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import UserService from '@/services/UserService';
 import GuildCard from '@/components/GuildCard';
-import { Guild, Board, User, KanbanPermission } from '@/types';
+import { Guild, Board, User, KanbanPermission, PermissionEntry } from '@/types';
 import BoardService from '@/services/BoardService';
 import BoardCard from '@/components/BoardCard';
 import CreateBoardForm from '@/components/CreateBoardForm';
 import EditGuildSettingsForm from '@/components/EditGuildSettingsForm';
 import dotenv from 'dotenv';
 import { useUser } from '@/context/UserContext';
+import GuildService from '@/services/GuildService';
 
 dotenv.config();
 
@@ -78,6 +79,26 @@ const Home: FC = () => {
     handleFormClose();
   };
 
+  const handleUpdatedGuildSettings = async (updatedSettings: PermissionEntry[]) => {
+    try {
+      await GuildService.updateGuild(selectedGuildId!, {settings: updatedSettings});
+      const updatedGuild: Guild = await GuildService.getGuild(selectedGuildId!);
+      setPermissions(prev => {
+        const updatedPermissions = prev.map(p => {
+            if (p.guildId === selectedGuildId) {
+                return { guildId: selectedGuildId, permissions: [...updatedGuild.settings] };
+            }
+            return p;
+        });
+        return [...updatedPermissions];
+    });
+      setIsEditingGuildSettings(false);
+      console.log("Guild settings updated successfully");
+    } catch (error) {
+      console.error('Error updating guild settings:', error);
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -98,11 +119,15 @@ const Home: FC = () => {
           displayGuilds.sort((a: any, b: any) => a.greyedOut - b.greyedOut);
           setGuilds(dbGuilds);
           setDisplayGuilds(displayGuilds);
-          const permissions = await Promise.all(dbGuilds.map(async (guild: { guildId: string; }) => {
-            const permission = await UserService.getUserGuildKanbanPermissions(parsedUser.userId, guild.guildId);
-            return {guildId: guild.guildId, permissions: permission };
-          }));
-          setPermissions(permissions);
+          if (permissions.length === 0) {
+            const fetchedPermissions = await Promise.all(
+              dbGuilds.map(async (guild: { guildId: string }) => {
+                const permission = await UserService.getUserGuildKanbanPermissions(parsedUser.userId, guild.guildId);
+                return { guildId: guild.guildId, permissions: permission };
+              })
+            );
+            setPermissions(fetchedPermissions);
+          }
         }
       } catch (error) {
         console.error('Error fetching user data', error);
@@ -196,6 +221,7 @@ const Home: FC = () => {
                     <EditGuildSettingsForm 
                         onClose={() => setIsEditingGuildSettings(false)} 
                         guildId={selectedGuildId!}
+                        onSubmit={handleUpdatedGuildSettings}
                     />
                 )}
               </>

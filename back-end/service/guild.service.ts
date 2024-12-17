@@ -68,7 +68,6 @@ const getGuildMembers = async (guildId: string): Promise<User[]> => {
                 return await userDb.getUserById(userId);
             } catch (error) {
                 if (error instanceof Error && error.message === "User not found") {
-                    console.warn(`User with ID ${userId} not found. Skipping.`);
                     return null;
                 }
                 throw error;
@@ -90,7 +89,6 @@ const getGuildRoles = async (guildId: string): Promise<Role[]> => {
                 return await roleDb.getRoleById(roleId);
             } catch (error) {
                 if (error instanceof Error && error.message === "Role not found") {
-                    console.warn(`Role with ID ${roleId} not found. Skipping.`);
                     return null;
                 }
                 throw error;

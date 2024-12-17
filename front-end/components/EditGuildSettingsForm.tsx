@@ -5,9 +5,10 @@ import React, { useEffect, useState } from "react";
 interface EditGuildSettingsFormProps {
     guildId: string;
     onClose: () => void;
+    onSubmit: (updatedSettings: PermissionEntry[]) => void;
 }
 
-const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, onClose }) => {
+const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, onClose, onSubmit }) => {
     const [guild, setGuild] = useState<Guild | null>(null);
     const [guildSettings, setGuildSettings] = useState<PermissionEntry[]>([]);
     const [allRoles, setAllRoles] = useState<Role[]>([]);
@@ -100,7 +101,12 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
     };
 
     const handleSubmit = async () => {
-        console.log(guildSettings);
+        const validSettings = guildSettings.every(entry => entry.kanbanPermission.length > 0);
+        if (!validSettings) {
+            alert("Each identifier must have at least one permission");
+            return;
+        }
+        onSubmit(guildSettings);
     };
 
     return (
