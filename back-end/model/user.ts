@@ -1,13 +1,5 @@
 import {User as UserPrisma} from '@prisma/client'
 
-type UserPrismaType = {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-};
-
 export class User {
     private id?: number;
     private name: string;
@@ -53,7 +45,7 @@ export class User {
         );
     }
 
-    static from ({ id, name, email, password, role}: UserPrismaType ) {
+    static from ({ id, name, email, password, role}: UserPrisma ) {
         return new User({
             id,
             name,
