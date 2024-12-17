@@ -4,8 +4,27 @@ import CalendarGrid from "@/components/planner/calendar/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
 import ShoppingList from "@/components/planner/ShoppingListSidebar";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
 const MealPlanner: React.FC = () => {
+
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // useEffect(() => {
+  //   const userToken = sessionStorage.getItem("loggedInUser");
+  //   if (userToken) {
+  //     try {
+  //       const user = JSON.parse(userToken);
+  //       if (user.token) {
+  //         setIsLoggedIn(true);
+  //       }
+  //     } catch (e) {
+  //       console.error("Failed to parse LoggedInUser:", e);
+  //       setIsLoggedIn(false);
+  //     }
+  //   }
+  // }, []);
+
   return (
     <>
       <Head>

@@ -1,8 +1,7 @@
-// ---- Not Yet Used ----
-
 import express, { NextFunction, Request, Response } from 'express';
-import { ProfileUpdateInput } from '../types';
+import { ProfileUpdateInput, Role } from '../types';
 import profileService from '../service/profile.service';
+import userService from '../service/user.service.ts';
 
 const profileRouter = express.Router();
 
@@ -10,7 +9,7 @@ const profileRouter = express.Router();
  * @swagger
  * tags:
  *   name: Profiles
- *   description: Profile management
+ *   description: Profiles management
  */
 
 /**
@@ -19,6 +18,8 @@ const profileRouter = express.Router();
  *   get:
  *     summary: Get profile by user ID
  *     tags: [Profiles]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -36,7 +37,16 @@ const profileRouter = express.Router();
  */
 profileRouter.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
         const userId = Number(req.params.userId);
+
+        // check if user is accessing their own profile or if they're an admin
+        const userIdFromUsername = await userService.getUserIdFromUsername(username);
+        if (role !== 'admin' && userId !== userIdFromUsername) {
+            return res.status(403).json({ message: 'Unauthorized access' });
+        }
+
         const profile = await profileService.getProfileByUserId(userId);
         res.status(200).json(profile);
     } catch (error) {
@@ -50,6 +60,8 @@ profileRouter.get('/:userId', async (req: Request, res: Response, next: NextFunc
  *   put:
  *     summary: Update profile
  *     tags: [Profiles]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -82,10 +94,19 @@ profileRouter.get('/:userId', async (req: Request, res: Response, next: NextFunc
  */
 profileRouter.put('/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
         const userId = Number(req.params.userId);
+
+        // check if user is updating their own profile or if they're an admin
+        const userIdFromUsername = await userService.getUserIdFromUsername(username);
+        if (role !== 'admin' && userId !== userIdFromUsername) {
+            return res.status(403).json({ message: 'Unauthorized access' });
+        }
+
         const profileUpdate: ProfileUpdateInput = req.body;
-        const updateProfile = await profileService.updateProfile(userId, profileUpdate);
-        res.status(200).json(updateProfile);
+        const updatedProfile = await profileService.updateProfile(userId, profileUpdate);
+        res.status(200).json(updatedProfile);
     } catch (error) {
         next(error);
     }
