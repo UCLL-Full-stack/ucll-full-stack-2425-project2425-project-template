@@ -10,6 +10,7 @@ import { bookingRouter } from './controller/booking.routes';
 import { reviewRouter } from './controller/review.routes';
 import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
+import { userRouter } from './controller/user.routes';
 
 dotenv.config();
 
@@ -17,7 +18,11 @@ const app = express();
 app.use(helmet());
 
 const port = process.env.APP_PORT || 3000;
-app.use(cors());
+app.use(cors({
+  origin:'http://localhost:8080',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(bodyParser.json());
 
 app.use(
@@ -25,7 +30,7 @@ app.use(
       secret: process.env.JWT_SECRET || 'default_secret',
       algorithms: ['HS256'],
   }).unless({
-  path: ['/api-docs', /^\/api-docs\/.*/, '/students/login', '/students/signup', '/status'],
+  path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
   })
 )
 
@@ -33,6 +38,8 @@ app.use('/students', studentRouter)
 app.use('/bookings', bookingRouter)
 app.use('/trips', tripRouter)
 app.use('/reviews', reviewRouter)
+app.use('/users', userRouter)
+
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

@@ -7,8 +7,9 @@ const getAllReviews = async (): Promise<Review[]> => {
     const reviewsPrisma = await database.review.findMany({
         include: {
             trip: true,
-            student: true
-        }
+            student: {
+                include: { user: true }
+            }        }
     });
     return reviewsPrisma.map((reviewPrisma) => Review.from(reviewPrisma));
 };
@@ -19,8 +20,9 @@ const getReviewById = async (reviewId: number): Promise<Review | null> => {
             where: { id: reviewId },
             include: {
                 trip: true,
-                student: true
-            }
+                student: {
+                    include: { user: true }
+                }            }
         });
         return reviewPrisma ? Review.from(reviewPrisma) : null;
     } catch (error) {
@@ -62,8 +64,9 @@ const createReview = async ({
             },
             include: {
                 trip: true,
-                student: true
-            }
+                student: {
+                    include: { user: true }
+                }            }
         });
         return Review.from(reviewPrisma);
     } catch (error) {

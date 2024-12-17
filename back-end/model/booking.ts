@@ -6,6 +6,7 @@ import {
     Review as ReviewPrisma,
     Student as StudentPrisma,
     PaymentStatus,
+    User as UserPrisma
 } from '@prisma/client';
 import { Student } from './student';
 
@@ -48,13 +49,15 @@ export class Booking {
         paymentStatus,
         trip,
         students,
-    }: BookingPrisma & { trip: TripPrisma, students: StudentPrisma[] }) : Booking {
+    }: BookingPrisma & { trip: TripPrisma; students: (StudentPrisma & { user: UserPrisma })[] }): Booking {
         return new Booking({
-            id: id ? Number(id) : undefined,
+            id: id ? Number(id) : undefined, 
             bookingDate,
             paymentStatus: paymentStatus as PaymentStatus, 
-            trip: Trip.from(trip),
-            students: students.map((student) => Student.from({ ...student, bookings: [] })) 
+            trip: Trip.from(trip), 
+            students: students.map((student) =>
+                Student.from({...student, user: student.user, bookings: []})
+            ),
         });
     }
 }

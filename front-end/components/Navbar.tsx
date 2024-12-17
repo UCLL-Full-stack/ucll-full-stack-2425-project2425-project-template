@@ -3,26 +3,24 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/Navbar.module.css';
 import { useTranslation } from 'next-i18next';
 import Language from './language/Language';
+import { User } from '@/types';
 
 const Navbar: React.FC = () => {
-    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const { t } = useTranslation();
 
     useEffect(() => {
-        const user = localStorage.getItem('loggedInUser');
-        if (user) {
-            const parsedStudent = JSON.parse(user);
-            setLoggedInUser(parsedStudent.username);
-            console.log("Logged-in user from local storage:", parsedStudent.username);
+        const storedUser = localStorage.getItem('loggedInUser');
+        if (storedUser) {
+            setLoggedInUser(JSON.parse(storedUser));
         }
     }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');
         setLoggedInUser(null);
-        console.log("User logged out and local storage cleared");
-    }
-    
+    };
+
     return (
         <nav className={styles.navbar}>
             <ul className={styles['navbar-links']}>
@@ -43,32 +41,29 @@ const Navbar: React.FC = () => {
                 </li>
                 {loggedInUser ? (
                     <>
-                    <div className={styles['navbar-item']}>
-                        {`${t("nav.welkom")} ${loggedInUser}`}!
-                    </div>
-                    <button
-                        onClick={() => {
-                            handleLogout();
-                            window.location.reload();
-                        }}
-                        className={styles.logoutButton}>
-                        {t("nav.logout")}
-                    </button>
-                </>
+                        <div className={styles['navbar-item']}>
+                            {`${t("nav.welkom")} ${loggedInUser.fullname}!`}
+                        </div>
+                        <button
+                            onClick={handleLogout}
+                            className={styles.logoutButton}
+                        >
+                            {t("nav.logout")}
+                        </button>
+                    </>
                 ) : (
-                <Link
-                    href="/login"
-                    className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
-                >
-                    {t("nav.login")}
-                </Link>
+                    <Link
+                        href="/login"
+                        className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+                    >
+                        {t("nav.login")}
+                    </Link>
                 )}
 
                 <div className={styles.languageButton}>
                     <Language />
                 </div>
             </ul>
-            
         </nav>
     );
 };

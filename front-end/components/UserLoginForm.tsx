@@ -4,8 +4,8 @@ import { useState } from "react";
 import styles from '../styles/UserLoginForm.module.css';
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import StudentService from "../services/StudentServices";
 import errorStyles from '../styles/errorMessage.module.css';
+import UserService from "@/services/UserService";
 
 const UserLoginForm: React.FC = () => {
   const { t } = useTranslation("common");
@@ -37,7 +37,8 @@ const UserLoginForm: React.FC = () => {
 
     return isValid;
   };
-  const handleSubmit = async (event: React.FormEvent) => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     clearErrors();
 
@@ -47,31 +48,21 @@ const UserLoginForm: React.FC = () => {
     }
 
     try {
-        const response = await StudentService.login(name, password);
+        const user = { username: name, password };
+        const response = await UserService.loginUser(name, password, user);
 
-        if (response.status === 200) {
-            const user = await response.json(); // Ensure user is returned as a JSON object
-            
-            // Handle user role and redirect
-            if (user.role === "Admin" && localStorage.getItem("adminLoggedIn")) {
-                setStatusMessages([{ message: t("login.adminExists"), type: "error" }]);
-                return;
-            }
+        if (response.success && response.user) {
+          const { token, fullname, username, role } = response.user;
 
-            localStorage.setItem(
-                "loggedInUser",
-                JSON.stringify({
-                    token: user.token,
-                    role: user.role,
-                })
-            );
+            localStorage.setItem("loggedInUser", JSON.stringify({ token, fullname, username, role }));
 
-            if (user.role === "Admin") {
-                localStorage.setItem("adminLoggedIn", "true");
-                router.push("/admin-dashboard");
-            } else {
-                router.push("/student-dashboard");
-            }
+            // // Redirect based on user role
+            // if (role === "Admin") {
+            //     localStorage.setItem("adminLoggedIn", "true");
+            //     router.push("/admin-dashboard");
+            // } else {
+            router.push("/");
+            // }
 
             setStatusMessages([{ message: t("login.success"), type: "success" }]);
         } else {
@@ -81,7 +72,6 @@ const UserLoginForm: React.FC = () => {
         setStatusMessages([{ message: t("login.error.server"), type: "error" }]);
     }
 };
-
 
   return (
     <div className={styles.userLoginPage}>

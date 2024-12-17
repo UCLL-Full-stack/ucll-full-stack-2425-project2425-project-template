@@ -1,37 +1,22 @@
 import studentDb from "../repository/student.db";
 import { Student } from "../model/student";
-import { AuthenticationResponse, StudentInput } from "../types";
-import bcrypt from 'bcrypt';
-import { generateJwtToken } from "../util/jwt";
 import database from "../util/database";
 
 const createStudent = async ({
-    username,
-    email,
-    password,
     studentNumber,
-    firstName,
-    lastName,
-    role,
+    userId,
   }: {
-    username: string;
-    email: string;
-    password: string;
     studentNumber: string;
-    firstName: string;
-    lastName: string;
-    role: string;
+    userId: number;
   }): Promise<Student> => {
     try {
+      if (!studentNumber || !userId) {
+        throw new Error("Student number and user ID are required.");
+    }
       const studentPrisma = await database.student.create({
         data: {
-          username,
-          email,
-          password,
           studentNumber,
-          firstName,
-          lastName,
-          role,
+          user: { connect: { id: userId } },        
         },
         include: {
           bookings: {
@@ -40,6 +25,7 @@ const createStudent = async ({
             },
           },
           review: true,
+          user: true
         },
       });
       return Student.from(studentPrisma);
@@ -71,36 +57,4 @@ const getAllStudents = async (): Promise<Student[]> => {
     }
 };
 
-const getStudentByUsername = async (username: string): Promise<Student | null> => {
-    if (!username || username.trim().length === 0) {
-        throw new Error("Username is required.");
-    }
-
-    const student = await studentDb.getStudentByUsername(username);
-    if (!student) {
-        throw new Error(`Student with username ${username} does not exist.`);
-    }
-    return student;
-};
-
-const authenticate = async ({ username, password }: StudentInput): Promise<AuthenticationResponse> => {
-    const student = await getStudentByUsername(username);
-
-    if (!student) {
-        throw new Error("Student not found.");
-    }
-
-    const isValidPassword = await bcrypt.compare(password, student.getPassword());
-    if (!isValidPassword) {
-        throw new Error("Incorrect password.");
-    }
-
-    return {
-        token: generateJwtToken({ username, role: student.getRole() }),
-        username: username,
-        fullname: `${student.getFirstName()} ${student.getLastName()}`,
-        role: student.getRole(),
-    };
-}
-
-export default { createStudent, getStudentById, getAllStudents, getStudentByUsername, authenticate };
+export default { createStudent, getStudentById, getAllStudents};

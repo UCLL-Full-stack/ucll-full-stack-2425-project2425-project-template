@@ -4,7 +4,8 @@ import { Booking } from './booking';
 import {
     Trip as TripPrisma,
     Review as ReviewPrisma,
-    Student as StudentPrisma
+    Student as StudentPrisma,
+    User as UserPrisma
 } from '@prisma/client';
 export class Review {
     private id?: number; 
@@ -44,14 +45,14 @@ export class Review {
         comment,
         rating,
         trip,
-        student
-    }: ReviewPrisma & { trip: TripPrisma; student: StudentPrisma }) { 
+        student,
+    }: ReviewPrisma & { trip: TripPrisma; student: StudentPrisma & { user: UserPrisma } }): Review {
         return new Review({
             id: id ? Number(id) : undefined,
             comment,
             rating,
-            trip: Trip.from(trip),
-            student: Student.from({ ...student, bookings: [] }),         
+            trip: Trip.from(trip), 
+            student: Student.from({...student, user: student.user, bookings:[]}),
         });
     }
-}
+}    
