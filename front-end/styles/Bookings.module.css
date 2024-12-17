@@ -3,15 +3,14 @@
     color: rgb(0, 164, 0);
     font-family: Arial, sans-serif;
     min-height: 100vh;
-    padding: 2rem;
+    padding: 2rem; /* Add padding similar to trips-page */
 }
 
 .bookings-overview-section {
-    width: 42%;
-    margin: 2rem auto;
+    width: 80%; /* Match the width of trips-overview-section */
+    margin: 2rem auto; /* Add consistent margins */
     background-color: #ffffff;
     border-radius: 8px;
-    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     padding: 2rem;
 }
 
@@ -23,6 +22,31 @@
     margin-top: 1rem;
 }
 
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #dddddd;
+}
+
+.table th {
+    background-color: lightgray; 
+    width: 22.75%; /* Match Trips table column width */
+}
+
+.table tr:nth-child(even) td {
+    background-color: #f2f2f2; 
+}
+
+.table tr:hover td {
+    background-color: #e6ffe6; 
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .bookings-overview-section {
         width: 95%;
@@ -33,7 +57,7 @@
         font-size: 2rem;
     }
 
-    .booking-table th, .booking-table td {
+    .table th, .table td {
         font-size: 0.9rem;
         padding: 0.5rem;
     }

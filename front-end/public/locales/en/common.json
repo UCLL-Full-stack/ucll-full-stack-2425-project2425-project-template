@@ -9,7 +9,7 @@
 
     "trips": {
         "titel": "Trips",
-        "alle": "All Trips",
+        "all": "All Trips",
         "bestemming": "Destination",
         "start": "Start Date",
         "eind": "End Date",
