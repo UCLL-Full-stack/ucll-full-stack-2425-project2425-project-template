@@ -1,4 +1,5 @@
 import { User as UserPrisma } from '@prisma/client';
+
 export class User {
     private id?: number;
     private username: string;
@@ -13,6 +14,7 @@ export class User {
         this.password = user.password;
     }
 
+    // Getters
     public getId(): number | undefined {
         return this.id;
     }
@@ -28,6 +30,31 @@ export class User {
     public getPassword(): string {
         return this.password;
     }
+
+    // Setters
+    public setUsername(username: string): void {
+        this.validate({ username, email: this.email, password: this.password });
+        this.username = username;
+    }
+
+    public setEmail(email: string): void {
+        this.validate({ username: this.username, email, password: this.password });
+        this.email = email;
+    }
+
+    public setPassword(password: string): void {
+        this.validate({ username: this.username, email: this.email, password });
+        this.password = password;
+    }
+
+    // public setId(id: number): void {
+    //     if (id <= 0) {
+    //         throw new Error('ID must be a positive number');
+    //     }
+    //     this.id = id;
+    // }
+    // dont need a setter for setid?
+
     validate(user: { username: string; email: string; password: string }) {
         if (!user.username?.trim()) {
             throw new Error('Username is required');
@@ -48,6 +75,7 @@ export class User {
             throw new Error('Email must be valid');
         }
     }
+
     equals(user: User): boolean {
         return (
             this.id === user.getId() &&
@@ -56,7 +84,8 @@ export class User {
             this.password === user.getPassword()
         );
     }
-    static from({ id, username, email, password }: UserPrisma) {
+
+    static from({ id, username, email, password }: UserPrisma): User {
         return new User({ id, username, email, password });
     }
 }
