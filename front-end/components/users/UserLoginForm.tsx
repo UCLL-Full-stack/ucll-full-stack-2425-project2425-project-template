@@ -1,87 +1,136 @@
+import AuthService from '@services/AuthService';
 import { StatusMessage } from "@types";
-import authService from '@services/authService';
+import classNames from "classnames";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const UserLoginForm: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [usernameError, setUsernameError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+    const { t } = useTranslation();
 
     const clearErrors = () => {
-        setError("");
+        setUsernameError(null);
+        setPasswordError(null);
         setStatusMessages([]);
     };
 
-    const validate = () => {
+    const validate = (): boolean => {
         let result = true;
 
         if (!username || username.trim() === "") {
-            setError("Username is required");
+            setUsernameError(t("login.validate.username"));
             result = false;
         }
 
         if (!password || password.trim() === "") {
-            setError("Password is required");
+            setPasswordError    (t("login.validate.password"));
             result = false;
         }
 
         return result;
     };
 
-    const handleSubmit = async (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
         clearErrors();
 
         if (!validate()) {
             return;
         }
 
-        try {
-            const response = await authService.login({ username, password });
-            if (response.ok) {
-                const userData = await response.json();
-                setStatusMessages([{ message: "Logging in...", type: "success" }]);
-                localStorage.setItem('loggedInUser', JSON.stringify({ username: userData.username, role: userData.role }));
+        const user = { username, password };
+        const response = await AuthService.login(user);
+
+        if (response.status === 200) {
+            setStatusMessages([
+                { 
+                    message: t("login.success"),
+                    type: "success",
+                }
+            ]);
+            const user = await response.json();
+            localStorage.setItem("loggedInUser", 
+                JSON.stringify({
+                    token: user.token,
+                    fullName: user.fullName,
+                    username: user.username,
+                    permission: user.permission
+                })
+            );
+            setTimeout(() => {
                 router.push("/");
-            } else {
-                const errorData = await response.json();
-                setError(errorData.message);
-            }
-        } catch (error) {
-            setError('An unexpected error occurred. Please try again.');
+            }, 2000);
+        } else if (response.status === 400) {
+            const errorMessage = await response.json();
+            setStatusMessages([
+                { 
+                    message: errorMessage.message, 
+                    type: "error",
+                },
+            ]);
+        } else {
+            setStatusMessages([
+                {
+                    message: t("general.error"),
+                    type: 'error',
+                },
+            ]);
         }
     };
 
     return (
         <>
+            <h1 className="text-center my-4">{t("login.title")}</h1>
             <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '400px' }}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>
                     <input
+                        id="nameInput"
                         type="text"
-                        id="username"
-                        className="form-control"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
+                        onChange={(event) => setUsername(event.target.value)}
+                        className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue:500 block w-full p-2.5"
                     />
+                    {usernameError && <div className="text-red-800">{usernameError}</div>}
                 </div>
+                <br />
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <input
+                        id="passwordInput"
                         type="password"
-                        id="password"
-                        className="form-control"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
+                        onChange={(event) => setPassword(event.target.value)}   
+                        className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue:500 block w-full p-2.5"
                     />
+                    {passwordError && <div className="text-red-800">{passwordError}</div>}
                 </div>
-                {error && <div className="alert alert-danger">{error}</div>}
-                <button type="submit" className="btn btn-primary w-100" style={{ marginTop: '30px' }}>Login</button>
+                <br />
+                {statusMessages && (
+                    <div className="row">
+                        <ul className="list-none mb-3 mx-auto ">
+                            {statusMessages.map(({ message, type }, index) => (
+                                <li
+                                    key={index}
+                                    className={classNames({
+                                        "text-red-800": type === "error",
+                                        "text-green-800": type === "success",
+                                    })}
+                                >
+                                    {message}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                <button className="btn btn-primary w-100" type="submit" style={{ marginTop: '30px' }}>Login</button>
             </form>
         </>
     );

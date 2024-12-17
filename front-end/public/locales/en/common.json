@@ -1,0 +1,14 @@
+{
+    "general": {
+        "title": "Racing Website",
+        "error": "An error has occurred. Please try again later."
+    },
+    "login": {
+        "validate": {
+            "username": "Username is required",
+            "password": "Password is required",
+            "error": "Wrong password or username",
+            "success": "Login Successful"
+        }
+    }
+}

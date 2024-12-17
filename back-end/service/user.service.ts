@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import userDB from '../repository/User.db';
 import { User } from '../model/User';
 import { AuthenticationResponse, UserInput } from '../types';
+import { generateJwtToken } from '../util/jwt';
 
 const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
     const user = await userDB.getUserByUsername({ username });
@@ -11,17 +12,27 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     return user;
 };
 
+const findByUsername = async (username: string): Promise<User|null> => {
+    return await userDB.getUserByUsername({ username });
+}
+
 const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
-    const user = await getUserByUsername({ username });
+    const user = await findByUsername(username);
+
+    if (!user) {
+        throw new Error('Incorrect username or password');
+    }
 
     const isValidPassword = await bcrypt.compare(password, user.getPassword());
 
     if (!isValidPassword) {
-        throw new Error('Incorrect password');
+        throw new Error('Incorrect username or password');
     }
     return {
-        token: '',
+        token: generateJwtToken({ username: user.getUsername(), permission: user.getPermission() }),
         username: username,
+        fullName: `${user.getName()} ${user.getSurname()}`,
+        permission: user.getPermission(),
     };
 };
 

@@ -1,0 +1,14 @@
+{
+    "general": {
+        "title": "Racing Website",
+        "error": "Een probleem is opgetreden. Probeer opnieuw later."
+    },
+    "login": {
+        "validate": {
+            "username": "gebruikersnaam is verplicht",
+            "password": "Wachtwoord is verplicht",
+            "error": "Foute wachtwoord of gebruikersnaam",
+            "success": "Login Successvol"
+        }
+    }
+}

@@ -1,7 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import AuthService from '../service/Auth.Service';
+import { UserInput } from '../types';
+import UserService from '../service/User.service';
 
 const authRouter = express.Router();
 const secretKey = process.env.JWT_SECRET || 'your_secret_key';
@@ -59,24 +61,14 @@ const secretKey = process.env.JWT_SECRET || 'your_secret_key';
  *       500:
  *         description: Internal server error
  */
-authRouter.post('/login', async (req: Request, res: Response) => {
-  const { username, password, role } = req.body;
-
-  try {
-    await AuthService.validateLoginInput(username, password, role);
-    let user = await AuthService.getUserByUsername(username);
-
-    if (!user || !(await bcrypt.compare(password, user.getPassword()))) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const response = await UserService.authenticate(userInput);
+        res.status(200).json({ message: 'Authentication succesful', ...response});
+    } catch (error) {
+        next(error);
     }
-
-    const token = jwt.sign({ id: user.id, username: user.getUsername(), role }, secretKey, { expiresIn: '1h' });
-
-    return res.json({ token, username: user.getUsername(), role });
-  } catch (error) {
-    console.error('Login error:', error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
 });
 
 export { authRouter };

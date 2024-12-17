@@ -4,7 +4,7 @@ import Header from '@components/header';
 import styles from '@styles/home.module.css';
 
 const Home: React.FC = () => {
-  const [loggedInUser, setLoggedInUser] = useState<{ username: string; role: string } | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<{ username: string; permission: string } | null>(null);
 
   useEffect(() => {
     // Retrieve logged-in user's info
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
 
         {loggedInUser && (
           <div className="alert alert-success">
-            Logged in as {loggedInUser.username} ({loggedInUser.role})
+            Welcome {loggedInUser.username}, you are logged in as {loggedInUser.permission}
           </div>
         )}
 

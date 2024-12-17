@@ -64,4 +64,6 @@ export type RacecarInput = {
 export type AuthenticationResponse = {
     token: string;
     username: string;
+    fullName: string;
+    permission: Permission;
 };

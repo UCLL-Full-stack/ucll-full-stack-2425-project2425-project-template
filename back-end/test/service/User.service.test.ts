@@ -145,10 +145,12 @@ test('given invalid username, when getUserByUsername is called, then throw error
     await expect(userService.getUserByUsername({ username })).rejects.toThrowError(`No user with username: ${username} does not exist`);
 });
 
-test('given valid username and password, when authenticate is called, then return authentication response', async () => {
+test('given valid values, when authenticate is called, then return authentication response', async () => {
     // Given
     const username = 'testuser';
     const password = 'password123';
+    const fullName = 'John Doe';
+    const permission = 'USER' as Permission;
     const user = new User(userInput);
     getUserByUsernameMock.mockReturnValue(user);
     bcryptCompareMock.mockReturnValue(true);
@@ -156,11 +158,11 @@ test('given valid username and password, when authenticate is called, then retur
     // When
     const result = await userService.authenticate({ 
         username, 
-        password, 
+        password,
         name: userInput.name, 
         surname: userInput.surname, 
         email: userInput.email, 
-        permission: userInput.permission 
+        permission
     });
 
     // Then
@@ -169,8 +171,10 @@ test('given valid username and password, when authenticate is called, then retur
     expect(bcryptCompareMock).toHaveBeenCalledTimes(1);
     expect(bcryptCompareMock).toHaveBeenCalledWith(password, user.getPassword());
     expect(result).toEqual(expect.objectContaining({
-        token: '',
+        token: expect.any(String),
         username: username,
+        fullName: fullName,
+        permission: permission,
     }));
 });
 
