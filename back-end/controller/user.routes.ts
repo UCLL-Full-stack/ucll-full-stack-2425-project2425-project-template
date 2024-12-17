@@ -15,8 +15,8 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res) => {
   try {
-    const { email, name, password, phoneNumber } = req.body;
-    const token = await userService.signupUser( email, name, password, phoneNumber);
+    const newVehicle= req.body;
+    const token = await userService.signupUser(newVehicle);
     res.status(201).json({ message: "Signup successful", token });
   } catch (error) {
     res.status(400).json({message: "error" });

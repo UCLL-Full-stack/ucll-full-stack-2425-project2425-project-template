@@ -19,7 +19,7 @@ const getAllUsers = async () => {
     }
 };
 
-const signupUser = async (email : string , name : string, password : string, phoneNumber : string) => {
+const signupUser = async (newUser: Si) => {
   
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await prisma.user.create({
