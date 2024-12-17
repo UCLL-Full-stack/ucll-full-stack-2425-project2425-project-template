@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import IconAvatar from "./ui/avatar";
 import IconLogout from "./ui/logout";
-import IconLougout from "./ui/logout";
 
 type Props = {
     current: "home" | "profile" | "feed" | "discover" | "login"
@@ -20,7 +19,7 @@ const Header: React.FC<Props> = ({current, isLoggedIn}: Props) => {
     }
 
     return (
-        <div className="bg-bg1 py-6 sm:py-8 md:py-10 px-4 sm:px-10 md:px-[10rem] flex justify-between items-center ">
+        <div className="bg-text1 py-4 sm:py-6 md:py-8 px-4 sm:px-10 md:px-[10rem] flex justify-between items-center ">
             <div className="flex items-center yadig-italic text-4xl sm:text-5xl mr-4 md:text-6xl text-text2 hover:text-bg3 duration-100 ">
                 <Link href="/">yadig?</Link>
             </div>

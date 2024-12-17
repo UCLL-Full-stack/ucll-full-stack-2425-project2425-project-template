@@ -50,6 +50,12 @@ export type User = {
     reviews: Review[]
 }
 
+export type UserSession = {
+    id: number,
+    username: string,
+    email: string,
+}
+
 export type List = {
     id: number,
     author: User,

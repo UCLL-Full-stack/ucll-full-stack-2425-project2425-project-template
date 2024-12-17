@@ -9,6 +9,15 @@ const getAllReviews = async () => {
     });
 };
 
+const getReviewById = async (id:number) => {
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/${id}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+};
+
 const createReview = async (review: ReviewInput): Promise<Response> => {
     const loggedInUser = sessionStorage.getItem("LoggedInUser");
     const user = JSON.parse(loggedInUser??"");
@@ -55,6 +64,7 @@ const deleteReview = async (id: number) => {
 
 export default{
     getAllReviews,
+    getReviewById,
     createReview,
     likeReview,
     deleteReview

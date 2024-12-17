@@ -29,6 +29,8 @@ app.use(
             {url: '/users/login', methods: ['POST']},
             {url: '/users/signup', methods: ['POST']},
             {url: '/lists', methods: ['GET']},
+            {url: /^\/lists\/[^\/]+$/, methods: ['GET']},
+            {url: /^\/reviews\/[^\/]+$/, methods: ['GET']},
             {url: '/reviews', methods: ['GET']},
         ]
     })

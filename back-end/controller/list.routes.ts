@@ -93,12 +93,23 @@ listRouter.post('/', async (req: Request, res: Response, next: NextFunction)=>{
     }
 });
 
-listRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)=>{
+listRouter.get('/user/:id', async (req: Request, res: Response, next: NextFunction)=>{
     const id = Number(req.params["id"]);
 
     try{
         const lists = await listService.getUserLists(id);
         res.status(200).json(lists);
+    }catch(e){
+        next(e); 
+    }
+});
+
+listRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)=>{
+    const id = Number(req.params["id"]);
+
+    try{
+        const list = await listService.getListById(id);
+        res.status(200).json(list);
     }catch(e){
         next(e); 
     }

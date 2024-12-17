@@ -14,8 +14,18 @@ reviewRouter.get("/", async(req: Request, res: Response, next: NextFunction)=>{
 });
 
 reviewRouter.get("/:id", async(req: Request, res: Response, next: NextFunction)=>{
+    const id = Number(req.params["id"])
     try{
-        const id = Number(req.params["id"])
+        const review = await reviewService.getReviewById(id);
+        res.status(200).json(review);
+    }catch(e){
+        next(e);
+    }
+});
+
+reviewRouter.get("/user/:id", async(req: Request, res: Response, next: NextFunction)=>{
+    const id = Number(req.params["id"])
+    try{
         const reviews = await reviewService.getUserReviews(id);
         res.status(200).json(reviews);
     }catch(e){

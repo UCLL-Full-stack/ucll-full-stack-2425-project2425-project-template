@@ -1,6 +1,7 @@
 import Header from "@/components/header";
 import ListCard from "@/components/lists/listCard";
 import ReviewCard from "@/components/reviews/reviewCard";
+import HoverTitle from "@/components/ui/hoverTitle";
 import listService from "@/services/listService";
 import reviewService from "@/services/reviewService";
 import { Album, List, Review, User } from "@/types/index";
@@ -34,14 +35,14 @@ const Home = ({ lists, reviews, albums }: Props) => {
             </Head>
             <div className="flex flex-col h-screen">
                 <Header current="home" isLoggedIn={isLoggedIn} />
-                <div className="bg-bg1 w-screen grid gap-3">
+                <div className="bg-bg1 sm:p-4 lg:p-8 w-screen grid gap-3">
                     {user ? (
                         <>
                             <span className="text-center main-font text-text2 text-4xl">
                                 welcome back {user.username}
                             </span>
                             <span className="text-center yadig-italic text-text2 text-xl">
-                                what are you digging? 
+                                what are you digging today? 
                             </span>
                         </>
                     ):(
@@ -55,10 +56,14 @@ const Home = ({ lists, reviews, albums }: Props) => {
                     )}
                 </div>
                 <main className="flex-1 grid grid-cols-2 gap-4 bg-bg1 p-10 overflow-y-auto">
-                    <section className="text-center">
+                    <section className="p-4 text-center bg-text1 shadow-lg shadow-text1 rounded-xl">
+
                         {/* Popular Lists Section */}
-                        <div className="pb-5 grid gap-6 border-b-[1px] border-bg2">
-                            <h2 className="text-2xl main-font text-text2">Popular Lists</h2>
+                        <div className="pb-5 grid gap-6">
+                            <Link href="/feed" className="pb-5">
+                                <HoverTitle text1="Popular Lists" text2="View More"/>
+                           </Link>
+
                             <div className="slider-container">
                                 <div className="slider">
                                     {lists &&
@@ -78,20 +83,14 @@ const Home = ({ lists, reviews, albums }: Props) => {
                                             <ListCard key={list.id} list={list} userId={user?.id}/>
                                     ))}
                                 </div>
-                            </div>
-                            <div>
-                                <Link
-                                    className="mt-4 px-4 py-2 bg-text1 text-white rounded-lg hover:bg-text2 hover:text-text1"
-                                    href="/feed"
-                                >
-                                    View More
-                                </Link>
                             </div>
                         </div>
 
                         {/* Popular Reviews Section */}
                         <div className="pt-5 grid gap-6">
-                            <h2 className="text-2xl main-font text-text2">Popular Reviews</h2>
+                            <Link href="/feed" className="pb-5">
+                                <HoverTitle text1="Popular Reviews" text2="View More"/>
+                           </Link>
                             <div className="slider-container">
                                 <div className="slider">
                                     {reviews &&
@@ -112,18 +111,11 @@ const Home = ({ lists, reviews, albums }: Props) => {
                                     ))}
                                 </div>
                             </div>
-                            <div>
-                                <Link
-                                    className="mt-4 px-4 py-2 bg-text1 text-white rounded-lg hover:bg-text2 hover:text-text1 "
-                                    href="/feed"
-                                >
-                                    View More
-                                </Link>
-                            </div>
                         </div>
                     </section>
+
                     {/* Most Reviewed Albums Section */}
-                    <section className="text-center border-l border-bg2">
+                    <section className="text-center">
                         <h2 className="text-2xl main-font text-text2 mb-4">Most Reviewed Albums</h2>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                             {/*albums &&
