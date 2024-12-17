@@ -2,7 +2,7 @@
     color: red;
     font-size: 14px;
     /* margin-top: 5px; */
-    margin-bottom: 1em
+    margin-bottom: 1em;
   }
   
   .userLoginStatusMessages {
@@ -12,6 +12,7 @@
   
   .userLoginStatusMessages .error {
     color: red;
+    background-color: white;
   }
   
   .userLoginStatusMessages .success {

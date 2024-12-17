@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import styles from '../../styles/TripDetails.module.css';
 import { useEffect, useState } from 'react';
+import errorStyles from '../../styles/errorMessage.module.css';
 
 type Props = {
     initialTrip: Trip | null;
@@ -18,6 +19,13 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
     const router = useRouter();
     const [trip, setTrip] = useState<Trip | null>(initialTrip);
     const [loading, setLoading] = useState(!initialTrip);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+        setIsLoggedIn(!!token);
+    }, []);
 
     useEffect(() => {
         if (!initialTrip) {
@@ -34,6 +42,18 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
             fetchTrip();
         }
     }, [initialTrip, router.query.id]);
+
+    if (!isLoggedIn) {
+        return (
+            <>
+            <Head><title>Loading...</title></Head>
+            <Navbar/>
+            <div className={styles['trip-details-body']}>
+                <div className={errorStyles.logInMessage}>Please log in to view this page</div>
+            </div>
+            </>
+        )
+    }
 
     if (router.isFallback || loading) {
         return <div>Loading...</div>;
