@@ -26,9 +26,9 @@ const generateReferenceNumber = (
 };
 
 const main = async () => {
+    await prisma.transaction.deleteMany();
     await prisma.user.deleteMany();
     await prisma.account.deleteMany();
-    await prisma.transaction.deleteMany();
 
     // Reusable date values
     const startDate1 = set(new Date(), { year: 2023, month: 0, date: 1 });
@@ -71,7 +71,7 @@ const main = async () => {
             nationalRegisterNumber: '92.05.24-123.45',
             name: 'Alice Johnson',
             birthDate: birthDate1,
-            isAdministrator: true,
+            isAdministrator: false,
             phoneNumber: '+32475123456',
             email: 'alice.johnson@example.com',
             password: alicePassword,

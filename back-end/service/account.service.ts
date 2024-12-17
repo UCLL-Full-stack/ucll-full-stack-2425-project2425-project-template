@@ -1,6 +1,7 @@
 import accountDb from '../repository/account.db';
 import { Account } from '../model/account';
 import { AccountInput } from '../types/index';
+import userDb from '../repository/user.db';
 
 const createAccount = async (accountInput: AccountInput): Promise<Account> => {
     // const { isShared, type } = accountInput;
@@ -31,4 +32,19 @@ const getAccountByAccountNumber = async (accountNumber: string): Promise<Account
     return account;
 };
 
-export default { createAccount, getAccountById, getAccountByAccountNumber };
+const getAccountsOfUser = async (email: string): Promise<Account[]> => {
+    const user = await userDb.getUserByEmail(email);
+    const accountsOfUser = user.getAccounts();
+    
+    if (user == null) {
+        throw new Error('No user was found.')
+    }
+
+    if (user.getIsAdministrator() === true) {
+        return accountsOfUser;    
+    } else {
+        return accountsOfUser.filter((account) => account.getType() === 'transaction');
+    }
+};
+
+export default { createAccount, getAccountById, getAccountByAccountNumber, getAccountsOfUser };

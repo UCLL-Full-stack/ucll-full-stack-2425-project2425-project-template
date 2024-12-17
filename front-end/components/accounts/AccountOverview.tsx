@@ -1,12 +1,23 @@
 import React from 'react';
-import { User } from '@/types';
+import { Account, User } from '@/types';
 import styles from '@/styles/Home.module.css';
+import AccountService from '@/services/AccountService';
+import useSWR, { mutate } from 'swr';
 
 type AccountOverviewProps = {
-  user: User;
+  // user: User;
+  accounts: Account[];
 };
 
-const AccountOverview: React.FC<AccountOverviewProps> = ({ user }) => {
+const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
+  // const getAccountsForUser = async () => {
+  //   const accounts = await AccountService.getAccountsForUser();
+  //   return accounts;
+  // }
+  
+
+  // const { data: accounts, error, isLoading } = useSWR('getAccounts', getAccountsForUser);
+
   return (
     <div className={styles.accountOverview}>
       <table>
@@ -21,8 +32,8 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({ user }) => {
           </tr>
         </thead>
         <tbody>
-          {user.accounts && user.accounts.length > 0 ? (
-            user.accounts.map((account) => (
+          {accounts && accounts.length > 0 ? (
+            accounts.map((account) => (
               <tr key={account.id}>
                 <td>{account.accountNumber}</td>
                 <td>{account.balance}</td>

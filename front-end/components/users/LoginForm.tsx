@@ -20,7 +20,8 @@ const LoginForm: React.FC = () => {
       const user = await UserService.loginUser(credentials);
       localStorage.setItem("loggedInUser", JSON.stringify({
         token: user.token,
-        username: user.username,
+        username: user.name,
+        email: user.email,
         nationalRegisterNumber: user.nationalRegisterNumber
       }));
 
@@ -31,6 +32,7 @@ const LoginForm: React.FC = () => {
         alert("Login failed. User not found.");
       }
     } catch (error) {
+      console.log(credentials);
       console.error("Login error:", error);
       setErrorMessage("Invalid email or password.");
     }

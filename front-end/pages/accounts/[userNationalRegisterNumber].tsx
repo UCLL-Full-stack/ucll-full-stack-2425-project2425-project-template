@@ -8,6 +8,8 @@ import { User } from "@/types";
 import UserDetails from "@/components/users/UserDetails";
 import AccountOverview from "@/components/accounts/AccountOverview";
 import styles from '@/styles/Home.module.css';
+import AccountService from "@/services/AccountService";
+import useSWR, { mutate } from "swr";
 
 const ReadUserByNationalRegisterNumber = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -47,6 +49,19 @@ const ReadUserByNationalRegisterNumber = () => {
     }
   }, [userNationalRegisterNumber]);
 
+  const getAccountsForUser = async () => {
+    const accounts = await AccountService.getAccountsForUser();
+    // console.log(accounts)
+    return accounts;
+  }
+  
+  const { data: accounts, error, isLoading } = useSWR('getAccounts', getAccountsForUser);
+  
+  setInterval(() => {
+      mutate("getAccounts", getAccountsForUser());
+  }, 480000);
+
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -67,7 +82,7 @@ const ReadUserByNationalRegisterNumber = () => {
       <main className={styles.main}>
         <UserDetails user={user} />
         <h2>Account Overview</h2>
-        <AccountOverview user={user} />
+        <AccountOverview accounts={accounts!} />
       </main>
       <Footer />
     </>

@@ -116,4 +116,42 @@ accountRouter.get('/:id', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+
+/**
+ * @swagger
+ * /account:
+ *   get:
+ *     summary: Get account for user by email.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: The user email.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: JSON consisting of account objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Account'
+ */
+accountRouter.get('/', async (req: Request & { auth: any}, res: Response, next: NextFunction) => {
+    try { 
+        const request = req as Request & { auth: { email: string } };
+        const { email } = request.auth;
+        const accounts = await accountService.getAccountsOfUser(email);
+        res.status(200).json(accounts);
+    } catch (error: any) {
+        console.log(error);
+        next(error);
+    }
+});
+
 export { accountRouter };
