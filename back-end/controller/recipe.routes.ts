@@ -159,7 +159,7 @@ recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: Next
         const userId = await userService.getUserIdFromUsername(username);
 
         await recipeService.deleteRecipe(parseInt(recipeId));
-        res.status(204).send();
+        res.status(204).send(); // server processed the request but there's no response body
     } catch (error) {
         next(error);
     }

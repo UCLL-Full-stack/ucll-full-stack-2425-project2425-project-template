@@ -201,7 +201,7 @@ scheduleRouter.delete(
                 parseInt(recipeId),
                 new Date(date)
             );
-            res.status(204).send();
+            res.status(204).send(); // server processed the request but there's no response body
         } catch (error) {
             next(error);
         }
