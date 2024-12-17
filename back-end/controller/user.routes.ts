@@ -137,14 +137,45 @@ userRouter.get('/findbyid/:id', async (req: Request, res: Response, next: NextFu
  *       500:
  *         description: Server error.
  */
-userRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userData = req.body;
-        const newUser = await userService.addUser(userData);
+        const newUser = await userService.createUser(userData);
         res.status(201).json(newUser);
     } catch (error) {
         next(error);
     }
 });
+
+
+
+/**
+ * @swagger
+ * /users/login:
+ *      post:
+ *          summary: Login using username/password. Returns an object with JWT token and user name when successful.
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/AuthenticationRequest'
+ *          responses:
+ *              200:
+ *                  description: Authentication response
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/AuthenticationResponse'
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+    const userInput = req.body;
+    const response = await userService.authenticate(userInput);
+    res.status(200).json({ message: 'Authentication successful', response });
+    } catch (error) {
+    next(error);
+    }
+ })
 
 export default userRouter;
