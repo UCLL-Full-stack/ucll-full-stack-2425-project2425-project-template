@@ -1,6 +1,7 @@
 import UserService from "@/services/UserService";
 import { Rol, StatusMessage } from "@/types";
 import classNames from "classnames";
+import Link from "next/link";
 import router from "next/router";
 import { FormEvent, useState } from "react";
 
@@ -89,6 +90,7 @@ const LoginForm: React.FC = () => {
                     <input type="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                     <input type="submit" value="Login" />
                 </form>
+                <p>Nog geen account? <Link href="/login/register">Registreer hier</Link></p>
             </div>
         </>
     );

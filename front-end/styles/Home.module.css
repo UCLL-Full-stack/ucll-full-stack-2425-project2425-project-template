@@ -1,21 +1,33 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 6rem;
+  padding: 2rem;
   min-height: 100vh;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+  max-width: 800px;
+  text-align: center;
 }
 
 .description {
   display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  max-width: 800px;
   width: 100%;
   z-index: 2;
   font-family: var(--font-mono);
+  margin-bottom: 2rem;
+  color: #666;
+  text-align: center;
+  max-width: 800px;
 }
 
 .description a {
@@ -167,7 +179,7 @@
   .description div {
     display: flex;
     justify-content: center;
-    position: fixed;
+    position: center;
     width: 100%;
   }
 

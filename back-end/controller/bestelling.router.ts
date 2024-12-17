@@ -85,6 +85,29 @@ orderRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
+/**
+ * @swagger
+ * /bestellingen:
+ *   post:
+ *     summary: Create a new bestelling
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/BestellingInput'
+ *     responses:
+ *       200:
+ *         description: The created bestelling
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Bestelling'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const bestelling = <BestellingInput>req.body;
@@ -96,6 +119,23 @@ orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
     }
 });
 
+/**
+ * @swagger
+ * /bestellingen/{id}:
+ *   get:
+ *     summary: Get a bestelling by ID
+ *     responses:
+ *       200:
+ *         description: The bestelling data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Bestelling'
+ *       404:
+ *         description: Bestelling not found
+ *       500:
+ *         description: Internal server error
+ */
 orderRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const bestelling = await bestellingService.getBestellingById(parseInt(req.params.id));

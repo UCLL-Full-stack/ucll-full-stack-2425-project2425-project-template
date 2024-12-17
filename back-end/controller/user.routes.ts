@@ -31,6 +31,7 @@
  */
 import express, { Request, Response, NextFunction } from 'express';
 import userService from "../service/user.service";
+import { User } from '../model/user';
 import { Rol, UserInput } from '../types';
 
 const userRouter = express.Router();
@@ -54,9 +55,9 @@ const userRouter = express.Router();
  *                  schema:
  *                     $ref: '#/components/schemas/User'
  */
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = req.body;
+        const user = <UserInput>req.body;
         const newUser = await userService.createUser(user);
         res.status(200).json(newUser);
     } catch (error) {
@@ -90,6 +91,23 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     responses:
+ *       200:
+ *         description: The user data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await userService.getUserById(parseInt(req.params.id));
@@ -99,6 +117,25 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+/**
+ * @swagger
+ * /users/{id}/bestellingen:
+ *   get:
+ *     summary: Get bestellingen of a user by user ID
+ *     responses:
+ *       200:
+ *         description: The bestellingen data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Bestelling'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.get('/:id/bestellingen', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const bestellingen = await userService.getUserBestellingen(parseInt(req.params.id));
@@ -137,6 +174,25 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /users/{id}/bestellingen:
+ *   get:
+ *     summary: Get bestellingen of a user by user ID
+ *     responses:
+ *       200:
+ *         description: The bestellingen data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Bestelling'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { rol: Rol } };
@@ -149,6 +205,31 @@ userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     security:
+ *      - bearerAuth: []
+ *     summary: Update a user by ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       200:
+ *         description: The updated user data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { rol: Rol } };

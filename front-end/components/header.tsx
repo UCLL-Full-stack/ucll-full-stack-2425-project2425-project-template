@@ -29,7 +29,7 @@ const Header: React.FC = () => {
                 <a className="logo" href='/'>
                     <img src="/assets/logo.png" alt='BowlBuddies logo' />
                 </a>
-                <ul>
+                <ul className="navLinks">
                     <li>
                         <Link href="/">
                             {t("header.nav.home")}

@@ -62,24 +62,34 @@ td img {
     width: 20%;
 }
 
-
 .addForms {
     padding: 10px;
     background-color: green;
     width: 40%;
     margin: auto;
+    border-radius: 8px;
     padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .addForms form {
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }
 
 .addForms label {
     color: white;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .addForms input[type="text"],
+.addForms input[type="number"],
+.addForms input[type="password"],
+.addForms input[type="email"],
 input[type="number"],
 input[type="password"],
 select {
@@ -87,6 +97,8 @@ select {
     width: 95%;
     margin-bottom: 20px;
     display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .addForms input[type="submit"] {
@@ -96,6 +108,8 @@ select {
     padding: 10px;
     cursor: pointer;
     transition: 0.3s;
+    width: 97%;
+    border-radius: 4px;
 }
 
 .addForms input[type="submit"]:hover {
@@ -124,7 +138,7 @@ select {
     border-radius: 4px;
 }
 
-.edit-form button{
+.edit-form button {
     padding: 0.5rem 1rem;
     margin: 0.5rem;
     border: 1px solid #ccc;
@@ -149,12 +163,12 @@ select {
 }
 
 .ok-field {
-    color: darkgreen;
+    color: black;
     font-weight: bold;
 }
 
 .status-message {
-    color: green;
+    color: black;
     font-weight: bold;
     margin-bottom: 1rem;
     text-align: center;
@@ -179,4 +193,13 @@ select {
 
 .user-details strong {
     font-weight: bold;
+}
+
+.homepage-main {
+    display: flex;
+    margin-top: 50px;
+}
+
+.homepage-section {
+    margin: auto;
 }

@@ -142,6 +142,23 @@ pokebowlRouter.post('/', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
+/**
+ * @swagger
+ * /pokebowls/{id}:
+ *   get:
+ *     summary: Get a pokebowl by ID
+ *     responses:
+ *       200:
+ *         description: The pokebowl data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pokebowl'
+ *       404:
+ *         description: Pokebowl not found
+ *       500:
+ *         description: Internal server error
+ */
 pokebowlRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const pokebowl = await pokebowlService.getPokebowlById(parseInt(req.params.id));
