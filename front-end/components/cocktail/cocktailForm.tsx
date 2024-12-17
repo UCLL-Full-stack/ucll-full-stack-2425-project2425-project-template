@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 type CocktailFormProps = {
-  onSubmit: (cocktail: { name: string; description: string; strongness: number; imageUrl: string }) => void;
+  onSubmit: (cocktail: { name: string; description: string; strongness: number; image: string }) => void;
 };
 
 const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
@@ -21,7 +21,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onSubmit({ ...formData, imageUrl: '/placeholder.png' });
+    onSubmit({ ...formData, image: '/placeholder.png' });
   };
 
   return (
