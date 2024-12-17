@@ -31,7 +31,7 @@ const Cars: React.FC = () => {
                 <h1 className="text-3xl font-bold my-6">Car Stock</h1>
                 <section>
                     {cars && <CarOverviewTable cars={cars} selectCar={setSelectedCar} />}
-                    <button className="fixed bottom-6 right-10 bg-blue-500 rounded p-2.5 text-white" 
+                    <button className="fixed bottom-6 right-10 bg-[#ff8921] rounded p-2.5 text-black" 
                     onClick={() => router.push("/cars/add")}
                     >
                         Add new car

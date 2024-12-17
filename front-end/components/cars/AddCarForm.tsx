@@ -57,12 +57,12 @@ const AddCarForm: React.FC = () => {
                 <input type="number" step="0.01" value={price} onChange={(e) => setPrice(Number(e.target.value))} required style={inputStyle} />
             </div>
 
-            <button
+            <button className=' bg-[#ff8921] px-0.75 py-1.5 rounded p-2.5 text-black'
                 type="submit"
                 style={{
                     padding: '0.75rem 1.5rem',
-                    backgroundColor: '#007bff',
-                    color: '#fff',
+                    backgroundColor: '#ff8921',
+                    color: 'black',
                     border: 'none',
                     borderRadius: '4px',
                     fontSize: '1rem',

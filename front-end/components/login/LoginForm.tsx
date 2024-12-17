@@ -63,7 +63,7 @@ const LoginForm: React.FC = () => {
         sessionStorage.setItem("loggedInUser", userData.username);
         setStatusMessages([
           {
-            message: 'login.success',
+            message: 'login successful ',
             type: "success",
           },
         ]);
@@ -77,7 +77,7 @@ const LoginForm: React.FC = () => {
         const errorResponse = await response.json();
         setStatusMessages([
           {
-            message: errorResponse.message || 'login.error',
+            message: errorResponse.message || 'login error',
             type: "error",
           },
         ]);
@@ -85,7 +85,7 @@ const LoginForm: React.FC = () => {
     } else {
       setStatusMessages([
         {
-          message: response.message || 'login.error',
+          message: response.message || 'login error',
           type: "error",
         },
       ]);
