@@ -4,13 +4,25 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { trainerRouter } from './controller/trainer.routes';
+import { expressjwt } from 'express-jwt';
+import { nurseRouter, trainerRouter } from './controller/trainer.routes'; // Ensure this path is correct
+import { userRouter } from './controller/user.routers'; // Ensure you have the user router for login/signup
 
 const app = express();
 
 // Load environment variables
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
+
+// JWT Middleware - Exclude login and signup from JWT verification
+app.use(
+  expressjwt({
+    secret: process.env.JWT_SECRET || 'default_secret',
+    algorithms: ['HS256'],
+  }).unless({
+    path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users','/users/signup', '/status'], // Exclude /users/login, /users/signup
+  })
+);
 
 // CORS configuration
 app.use(cors({ origin: 'http://localhost:8080' }));
@@ -19,35 +31,32 @@ app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 // Swagger setup
-const swaggerOptions = {
+const swaggerOpts = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Pokémon Trainer API',
+      title: 'Courses API',
       version: '1.0.0',
-      description: 'API documentation for the Pokémon Trainer service',
-    },
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
     },
   },
-  // The path to the API route files
-  apis: ['./controller/trainer.routes.ts'], // Make sure this points to your routes where Swagger annotations are written
+  apis: ['./controller/*.routes.ts', './controller/user.routes.ts'], // Ensure user.routes.ts is included here
 };
 
-const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
-// Serve Swagger UI at /api-docs
+// Swagger specification
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+
+// Serve Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Use the trainerRouter for other routes
+// Use the trainerRouter for '/trainers' routes
 app.use('/trainers', trainerRouter);
+
+// Use the userRouter for login/signup routes
+app.use('/users', userRouter);
+
+app.use('/nurses', nurseRouter);  // Mount nurseRoutes under /api/nurses
+
 
 // Status endpoint
 app.get('/status', (req, res) => {

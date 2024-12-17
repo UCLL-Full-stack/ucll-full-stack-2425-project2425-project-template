@@ -1,8 +1,11 @@
-import { PokemonInput } from "../types";
+import { AuthenticationResponse, PokemonInput } from "../types";
 import { Trainer } from "../model/trainer";
 import trainerDb from "../repository/trainer.db";
 import { Pokemon } from "../model/pokemon";
 import { User } from "../model/user";
+import bcrypt from 'bcrypt';
+import { Nurse } from "@prisma/client";
+import { id } from "date-fns/locale";
 
 
 const getAllTrainers = async (): Promise<Trainer[]> => trainerDb.getAllTrainers();
@@ -42,9 +45,15 @@ const addPokemonToTrainerById = async (id:number,{
     return trainer;
 }
 
+const removePokemonAndAddToNurse = async (idPokemon:number,idNurse:number): Promise<Trainer> => {
+    const trainer = await trainerDb.removePokemonAndAddToNurse({idPokemon,idNurse});
+    return trainer
+}
+
 
 export default {
     getAllTrainers,
     getTrainerByEmail,
     addPokemonToTrainerById,
+    removePokemonAndAddToNurse,
 };

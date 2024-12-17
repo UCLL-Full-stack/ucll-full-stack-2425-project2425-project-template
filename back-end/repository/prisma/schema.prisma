@@ -1,10 +1,17 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  trainer
+  nurse
+  guest
 }
 
 model User {
@@ -13,9 +20,10 @@ model User {
   lastName  String
   email     String   @unique
   password  String
-  role      String
+  role      Role
 
   trainer   Trainer?
+  nurse     Nurse?
 }
 
 model Trainer {
@@ -28,41 +36,52 @@ model Trainer {
   gymBattles GymBattle[]
 }
 
+model Nurse {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+
+  pokemon   Pokemon[] @relation("NursePokemon")
+}
+
 model Pokemon {
-  id        Int    @id @default(autoincrement())
-  name      String
-  type      String
-  health    Int
-  canEvolve Boolean
+  id          Int      @id @default(autoincrement())
+  name        String
+  type        String
+  health      Int
+  canEvolve   Boolean
 
-  trainerId Int
-  trainer   Trainer @relation(fields: [trainerId], references: [id])
+  trainerId   Int?
+  trainer     Trainer? @relation(fields: [trainerId], references: [id])
 
-  stats     Stats   @relation(fields: [statsId], references: [id])
-  statsId   Int     @unique
+  nurseId     Int?     // Foreign key column
+  nurse       Nurse?   @relation("NursePokemon", fields: [nurseId], references: [id])
+
+  stats       Stats    @relation(fields: [statsId], references: [id])
+  statsId     Int      @unique
 }
 
 model Stats {
-  id            Int @id @default(autoincrement())
-  hp            Int
-  attack        Int
-  defence       Int
-  specialAttack Int
+  id             Int     @id @default(autoincrement())
+  hp             Int
+  attack         Int
+  defence        Int
+  specialAttack  Int
   specialDefence Int
-  speed         Int
+  speed          Int
 
-  pokemon       Pokemon? @relation
+  pokemon        Pokemon? @relation
 }
 
 model Badge {
-  id        Int         @id @default(autoincrement())
-  name      String
-  location  String
+  id         Int       @id @default(autoincrement())
+  name       String
+  location   String
   difficulty Int
-  trainerId Int
-  trainer   Trainer     @relation(fields: [trainerId], references: [id])
+  trainerId  Int
+  trainer    Trainer   @relation(fields: [trainerId], references: [id])
 
-  gymBattles GymBattle[] 
+  gymBattles GymBattle[]
 }
 
 model GymBattle {
@@ -72,6 +91,6 @@ model GymBattle {
   badgeId   Int
   trainerId Int
 
-  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade) // Specify onDelete if necessary
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
   trainer   Trainer  @relation(fields: [trainerId], references: [id])
 }

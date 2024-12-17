@@ -58,7 +58,7 @@ export class Trainer {
             this.id === trainer.getId() &&
             this.user.equals(trainer.getUser()) &&
             this.pokemon.length === trainer.getPokemon().length &&
-            this.pokemon.every((course, index) => course.equals(trainer.getPokemon()[index])) &&
+            this.pokemon.every((pokemon, index) => pokemon.equals(trainer.getPokemon()[index])) &&
             this.badges.length === trainer.getBadges().length &&
             this.badges.every((badge, index) => badge.equals(trainer.getBadges()[index])) &&
             this.gymBattles.length === trainer.getGymBattles().length &&

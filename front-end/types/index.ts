@@ -1,4 +1,4 @@
-type Role = 'admin' | 'trainer' | 'nurse' | 'guest';
+ export type Role = 'admin' | 'trainer' | 'nurse' | 'guest';
 
 
 export type User ={

@@ -1,44 +1,80 @@
-type Role = 'admin' | 'trainer' | 'nurse' | 'guest';
+// --- Role Definition ---
+type Role = "admin" | "trainer" | "nurse" | "guest";
 
+
+// --- PokemonStats Type ---
+type PokemonStats = {
+  hp: number;
+  attack: number;
+  defence: number;
+  specialAttack: number;
+  specialDefence: number;
+  speed: number;
+};
+
+// --- User Type ---
+type User = {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: Role;
+};
+
+// --- Badge Type ---
+type Badge = {
+  id?: number;
+  name: string;
+  location: string;
+  difficulty: number;
+};
+
+// --- GymBattle Type ---
+type GymBattle = {
+  id?: number;
+  date: Date;
+  time: Date;
+  badge: Badge;
+};
+
+// --- Pokemon Type ---
 type PokemonInput = {
   id?: number;
   name: string;
   type: string;
-  stats: {hp:number,attack:number,defence:number,specialAttack:number,specialDefence:number,speed:number}
+  stats: PokemonStats;
   health: number;
   canEvolve: boolean;
 };
 
-export interface User {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }
-  
-  export interface Pokemon {
-    id?: number;
-    name: string;
-    type: string;
-    stats: {
-      hp: number;
-      attack: number;
-      defence: number;
-      specialAttack: number;
-      specialDefence: number;
-      speed: number;
-    };
-    health: number;
-    canEvolve: boolean;
-  }
-  
-  export interface Trainer {
-    id?: number;
-    user: User;
-    pokemon: Pokemon[];
-  }
-  
+// --- Trainer Type ---
+type Trainer = {
+  id?: number;
+  user: User;
+  pokemon: PokemonInput[];
+  badges: Badge[];
+  gymBattles: GymBattle[];
+};
 
+// --- AuthenticationResponse Type ---
+type AuthenticationResponse = {
+  token: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: Role;
+};
+
+
+// --- Shared Exports ---
 export {
-    Role,
-    PokemonInput,
+  Role,
+  PokemonStats,
+  User,
+  Badge,
+  GymBattle,
+  PokemonInput,
+  Trainer,
+  AuthenticationResponse,
 };

@@ -1,16 +1,16 @@
-import { Role } from '../types';
+import {Role} from '../types';
 import {
     User as UserPrisma
     
  } from '@prisma/client';
 
 export class User {
-    private id?: number;
-    private firstName: string;
-    private lastName: string;
-    private email: string;
-    private password: string;
-    private role: Role;
+    readonly id?: number;
+    readonly firstName: string;
+    readonly lastName: string;
+    readonly email: string;
+    readonly password: string;
+    readonly role: Role;
 
     constructor(user: {
         id?: number, 
@@ -78,12 +78,12 @@ export class User {
 
     equals(user: User): boolean{
         return(
-            this.id === user.getId() &&
-            this.firstName === user.getFirstName() &&
-            this.lastName === user.getLastName() &&
-            this.email === user.getEmail() &&
-            this.password === user.getPassword() &&
-            this.role === user.getRole()
+            this.id === user.id &&
+            this.firstName === user.firstName &&
+            this.lastName === user.lastName &&
+            this.email === user.email &&
+            this.password === user.password &&
+            this.role === user.role
         );
     }
 

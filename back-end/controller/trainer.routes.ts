@@ -70,9 +70,9 @@
  *               type: number
  *               description: Speed of the Pokemon
  */
-import express, { NextFunction, Request, Response } from 'express';
+import express, { NextFunction, Request, response, Response } from 'express';
 import trainerService from '../service/trainer.service';
-import { PokemonInput } from '../types';
+import { PokemonInput, Trainer } from '../types';
 
 const trainerRouter = express.Router();
 
@@ -114,7 +114,7 @@ trainerRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: query
+ *       - in: query    
  *         name: email
  *         schema:
  *           type: string
@@ -205,6 +205,225 @@ trainerRouter.post('/:id', async (req: Request, res: Response, next: NextFunctio
         }
     }
 })
+
+/**
+ * @swagger
+ * /trainers/{id}/pokemon/{idPokemon}/nurse/{idNurse}:
+ *   put:
+ *     summary: Remove a Pokémon from a Trainer and add it to a Nurse
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The numeric ID of the trainer
+ *       - in: path
+ *         name: idPokemon
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Pokémon to be removed
+ *       - in: path
+ *         name: idNurse
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Nurse to add the Pokémon to
+ *     responses:
+ *       200:
+ *         description: Successfully removed Pokémon from Trainer and added to Nurse
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Trainer'
+ *       400:
+ *         description: Invalid input or data
+ *       404:
+ *         description: Trainer or Pokémon not found
+ *       500:
+ *         description: Server error
+ */
+trainerRouter.put('/:id/pokemon/:idPokemon/nurse/:idNurse', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { idPokemon, idNurse } = req.params;
+
+        // Validate the parameters
+        if (isNaN(Number(idPokemon)) || isNaN(Number(idNurse))) {
+            return res.status(400).json({ message: 'Both Pokemon ID and Nurse ID must be valid numbers.' });
+        }
+
+        const updatedTrainer = await trainerService.removePokemonAndAddToNurse(
+            Number(idPokemon),
+            Number(idNurse),
+        );
+
+        res.status(200).json(updatedTrainer);  // Respond with the updated trainer
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            next(error); // Pass other errors to the error handler
+        }
+    }
+});
+
+
+
+import userService from '../service/user.service'; // Ensure correct import path
+
+const userRouter = express.Router();
+
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Retrieve all users
+ *     description: Returns a list of all users.
+ *     responses:
+ *       200:
+ *         description: Successfully fetched all users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   firstName:
+ *                     type: string
+ *                   lastName:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   role:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ */
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const users = await userService.getAllUsers();
+      res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Login a user with username and password.
+ *     description: Returns a JWT token upon successful authentication.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Authentication successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Authentication successful"
+ *                 token:
+ *                   type: string
+ *                   description: The JWT token
+ *       400:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Internal server error
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required.' });
+    }
+
+    const authResponse = await userService.authenticate({ email, password });
+    res.status(200).json({
+      message: "Authentication successful",
+      response: authResponse,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+export { userRouter };
+
+
+
+
+import nurseService from '../service/nurse.service';  // Assuming the service file is nurseService
+
+const nurseRouter = express.Router();
+
+/**
+ * @swagger
+ * /nurses/{email}:
+ *   get:
+ *     summary: Retrieve a nurse by email
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The email of the nurse
+ *     responses:
+ *       200:
+ *         description: A nurse object corresponding to the provided email
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Nurse'
+ *       404:
+ *         description: Nurse with the specified email not found
+ *       500:
+ *         description: Server error
+ */
+
+nurseRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.params; // Get nurse ID from URL parameters
+    const nurse = await nurseService.getNurseByEmail(String(email)); // Fetch nurse by ID
+
+    if (!nurse) {
+      return res.status(404).json({ message: 'Nurse with the specified ID not found' });
+    }
+
+    // Return the nurse object
+    res.status(200).json(nurse);
+  } catch (error) {
+    next(error); // Global error handling
+  }
+});
+
+export { nurseRouter };
+
+
 
 
 export {trainerRouter};

@@ -5,6 +5,7 @@ import {Badge} from '../model/badge';
 import { GymBattle } from '../model/gymBattle';
 import database from '../util/database';
 import { emit } from 'process';
+import { Nurse } from '@prisma/client';
 
 /*const pokemonRed = [
     new Pokemon({
@@ -155,15 +156,6 @@ const getTrainerByEmail = async (email: string): Promise<Trainer | null> => {
     });
 };
 
-
-
-
-
-
-
-
-
-
 const addPokemonToTrainerById = async ({ id, pokemon }: { id: number, pokemon: Pokemon }): Promise<Trainer | null> => {
     // First, ensure that the trainer exists in the database
     const trainerPrisma = await database.trainer.findUnique({
@@ -231,9 +223,80 @@ const addPokemonToTrainerById = async ({ id, pokemon }: { id: number, pokemon: P
 };
 
 
+const removePokemonAndAddToNurse = async ({ idPokemon, idNurse }: { idPokemon: number, idNurse: number }): Promise<Trainer> => {
+    // Step 1: Verify if the Pokémon exists
+    const pokemon = await database.pokemon.findUnique({
+        where: { id: idPokemon },
+        include: { trainer: true }, // Include trainer to access the current trainer's ID
+    });
+
+    if (!pokemon) {
+        throw new Error(`Pokemon with id ${idPokemon} does not exist.`);
+    }
+
+    // Check if the Pokémon has an associated trainer
+    if (!pokemon.trainer) {
+        throw new Error(`Pokemon with id ${idPokemon} is not associated with any trainer.`);
+    }
+
+    // Step 2: Verify if the Nurse exists
+    const nurse = await database.nurse.findUnique({
+        where: { id: idNurse },
+        include: { pokemon: true },
+    });
+
+    if (!nurse) {
+        throw new Error(`Nurse with id ${idNurse} does not exist.`);
+    }
+
+    // Step 3: Disconnect the Pokémon from the current Trainer
+    await database.pokemon.update({
+        where: { id: idPokemon },
+        data: {
+            trainer: { disconnect: true }, // Remove the association with the trainer
+        },
+    });
+
+    // Step 4: Connect the Pokémon to the Nurse
+    await database.pokemon.update({
+        where: { id: idPokemon },
+        data: {
+            nurse: {
+                connect: { id: idNurse }, // Associate the Pokémon with the Nurse
+            },
+        },
+    });
+
+    // Step 5: Retrieve the updated Trainer (trainer with the Pokémon removed)
+    const updatedTrainer = await database.trainer.findUnique({
+        where: { id: pokemon.trainer.id }, // Safe now because we checked `trainer` exists
+        include: {
+            user: true,
+            pokemon: { include: { stats: true } },
+            gymBattles: true,
+            badges: true,
+        },
+    });
+
+    if (!updatedTrainer) {
+        throw new Error(`Trainer with id ${pokemon.trainer.id} not found after update.`);
+    }
+
+    // Step 6: Return the updated Trainer object
+    return Trainer.from({
+        ...updatedTrainer,
+        badge: updatedTrainer.badges,
+        gymBattle: updatedTrainer.gymBattles,
+    });
+};
+
+
+
+
 
 export default {
     getAllTrainers,
     addPokemonToTrainerById,
     getTrainerByEmail,
+    removePokemonAndAddToNurse,
 };
