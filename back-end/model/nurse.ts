@@ -9,9 +9,9 @@ import {
 } from '@prisma/client';
 
 export class Nurse {
-    private id?: number;
-    private user: User;
-    private pokemon: Pokemon[];
+    readonly id?: number;
+    readonly user: User;
+    readonly pokemon: Pokemon[];
 
     constructor(nurse: {
         id?: number;

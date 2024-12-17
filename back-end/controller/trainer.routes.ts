@@ -421,7 +421,235 @@ nurseRouter.get('/:email', async (req: Request, res: Response, next: NextFunctio
   }
 });
 
+
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+/**
+ * @swagger
+ * /nurses/{nurseId}/heal/{pokemonId}:
+ *   patch:
+ *     summary: Heal a Pokémon using a Nurse and reset its health to stats.hp
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: nurseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Nurse performing the heal
+ *       - in: path
+ *         name: pokemonId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Pokémon to heal
+ *     responses:
+ *       200:
+ *         description: Pokémon healed successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Pokemon healed successfully by Nurse"
+ *               pokemon:
+ *                 id: 1
+ *                 name: "Pikachu"
+ *                 type: "Electric"
+ *                 stats:
+ *                   hp: 35
+ *                   attack: 55
+ *                   defence: 40
+ *                   specialAttack: 50
+ *                   specialDefence: 50
+ *                   speed: 90
+ *                 health: 35
+ *                 canEvolve: true
+ *                 healedBy: 2
+ *       404:
+ *         description: Pokémon or Nurse not found
+ *       500:
+ *         description: Server error
+ */
+nurseRouter.patch('/:nurseId/heal/:pokemonId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { nurseId, pokemonId } = req.params;
+
+        // Validate Nurse existence
+        const nurse = await prisma.nurse.findUnique({
+            where: { id: Number(nurseId) },
+        });
+
+        if (!nurse) {
+            return res.status(404).json({ message: `Nurse with ID ${nurseId} not found.` });
+        }
+
+        // Fetch the Pokémon and its stats
+        const pokemonWithStats = await prisma.pokemon.findUnique({
+            where: { id: Number(pokemonId) },
+            include: { stats: true },
+        });
+
+        if (!pokemonWithStats) {
+            return res.status(404).json({ message: `Pokemon with ID ${pokemonId} not found.` });
+        }
+
+        // Update Pokémon's health to match its stats.hp
+        const updatedPokemon = await prisma.pokemon.update({
+            where: { id: Number(pokemonId) },
+            data: {
+                health: pokemonWithStats.stats.hp,
+            },
+        });
+
+        // Return the healed Pokémon details
+        res.status(200).json({
+            message: "Pokemon healed successfully by Nurse",
+            pokemon: {
+                id: updatedPokemon.id,
+                name: updatedPokemon.name,
+                type: updatedPokemon.type,
+                stats: pokemonWithStats.stats,
+                health: updatedPokemon.health,
+                canEvolve: updatedPokemon.canEvolve,
+                healedBy: nurseId, // Optional
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+
+/**
+ * @swagger
+ * /trainers/{id}/pokemon/{idPokemon}:
+ *   post:
+ *     summary: Add a new Pokémon to a specific trainer
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The numeric ID of the trainer
+ *       - in: path
+ *         name: idPokemon
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Pokémon to add to the trainer
+ *     responses:
+ *       200:
+ *         description: Pokémon successfully added to the trainer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Trainer'
+ *       400:
+ *         description: Invalid input or data
+ *       404:
+ *         description: Trainer or Pokémon not found
+ *       500:
+ *         description: Server error
+ */
+trainerRouter.post('/:id/pokemon/:idPokemon', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const idPokemon = Number(req.params.idPokemon);
+        const idTrainer = Number(req.params.id);
+
+        // Validate input parameters
+        if (isNaN(idPokemon) || isNaN(idTrainer)) {
+            return res.status(400).json({ message: 'Trainer ID and Pokémon ID must be valid numbers.' });
+        }
+
+        // Call service to add Pokémon to the Trainer
+        const updatedTrainer = await nurseService.addPokemonToTrainer(idPokemon, idTrainer);
+
+        // Return the updated trainer object if successful
+        res.status(200).json(updatedTrainer);
+
+    } catch (error) {
+        // If the error is related to invalid Pokémon being assigned to a Nurse, 
+        // you can return a 404 or 400 depending on your use case.
+        if (error instanceof Error) {
+            // Now that we know it's an instance of Error, we can access `error.message`
+            if (error.message.includes('Pokémon is not assigned to any Nurse')) {
+                return res.status(404).json({ message: `Pokémon with ID ${req.params.idPokemon} is not assigned to a Nurse.` });
+            }
+        }
+
+        // For other errors, pass it to the global error handler
+        next(error); 
+    }
+});
+
+
+
+
+/**
+ * @swagger
+ * /nurses/{nurseId}/pokemon/{pokemonId}:
+ *   delete:
+ *     summary: Remove a Pokémon from a Nurse and disassociate it
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: nurseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Nurse
+ *       - in: path
+ *         name: pokemonId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the Pokémon to be removed from the Nurse
+ *     responses:
+ *       200:
+ *         description: Successfully removed Pokémon from Nurse
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Pokemon removed from nurse"
+ *                 updatedNurse:
+ *                   $ref: '#/components/schemas/Nurse'
+ *       404:
+ *         description: Pokémon not found or not assigned to any Nurse
+ *       500:
+ *         description: Server error
+ */
+nurseRouter.delete('/:nurseId/pokemon/:pokemonId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { nurseId, pokemonId } = req.params;
+        // Logic to remove the Pokémon from the nurse's care
+        const updatedNurse = await nurseService.removePokemonFromNurse(Number(pokemonId));
+        res.status(200).json({ message: 'Pokemon removed from nurse', updatedNurse });
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+
+
+
+
+
 export { nurseRouter };
+
 
 
 
