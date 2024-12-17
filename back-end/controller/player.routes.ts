@@ -61,36 +61,4 @@ playerRouter.get('/', async (_req, res) => {
     }
 });
 
-/**
- * @swagger
- * /players:
- *   post:
- *     summary: Create a new player
- *     tags: [Players]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Player'
- *     responses:
- *       200:
- *         description: The player was successfully created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Player'
- *       500:
- *         description: Some server error
- */
-playerRouter.post('/', async (req, res) => {
-    try {
-        const player = req.body as PlayerInput;
-        const newPlayer = await playerService.addPlayer(player);
-        res.json(newPlayer);
-    } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-
 export default playerRouter;

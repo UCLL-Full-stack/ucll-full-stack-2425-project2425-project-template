@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import competitionRouter from './controller/competition.routes';
 import playerRouter from './controller/player.routes';
+import coachRouter from './controller/coach.routes';
 import userRouter from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
 
@@ -37,6 +38,8 @@ app.use('/users', userRouter);
 
 app.use('/players', playerRouter);
 
+app.use('/coaches', coachRouter);
+
 app.get('/status', (req, res) => {
   res.json({ message: 'Back-end is running...' });
 });
@@ -46,6 +49,6 @@ app.listen(port || 3000, () => {
 });
 
 
-app.use(
-  expressjwt({ secret: process.env.JWT_SECRET || 'default_secret', algorithms: ['HS256'] })
-)
+// app.use(
+//   expressjwt({ secret: process.env.JWT_SECRET || 'default_secret', algorithms: ['HS256'] })
+// )

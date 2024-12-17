@@ -19,24 +19,6 @@ const getAllPlayers = async (): Promise<Player[]> => {
     );
 };
 
-const addPlayer = async (playerInput: PlayerInput): Promise<Player> => {
-    const { number, user, team } = playerInput;
-    const playerPrisma = await prisma.player.create({
-        data: {
-            number,
-            user: { connect: { id: user.id } },
-            team: { connect: { id: team.id } },
-        },
-        include: {
-            user: true,
-            team: true,
-        },
-    });
-
-    return Player.from(playerPrisma, new User({ ...playerPrisma.user, role: playerPrisma.user.role as Role }), new Team(playerPrisma.team));
-};
-
 export default {
     getAllPlayers,
-    addPlayer,
 };

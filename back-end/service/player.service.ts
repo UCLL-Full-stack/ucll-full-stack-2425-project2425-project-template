@@ -7,12 +7,6 @@ const getAllPlayers = async () => {
     return players;
 };
 
-const addPlayer = async (player: PlayerInput) => {
-    const newPlayer = await playerDB.addPlayer(player);
-    return newPlayer;
-};
-
 export default {
     getAllPlayers,
-    addPlayer,
 };
