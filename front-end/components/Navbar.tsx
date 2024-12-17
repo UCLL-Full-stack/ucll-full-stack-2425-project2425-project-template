@@ -47,7 +47,10 @@ const Navbar: React.FC = () => {
                         {`${t("nav.welkom")} ${loggedInUser}`}!
                     </div>
                     <button
-                        onClick={handleLogout}
+                        onClick={() => {
+                            handleLogout();
+                            window.location.reload();
+                        }}
                         className={styles.logoutButton}>
                         {t("nav.logout")}
                     </button>
