@@ -1,65 +1,57 @@
-.trips-page {
+.trips-page{
     background-color: white;
-    color: rgb(0, 164, 0);
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    padding: 2rem;
 }
 
-.trips-overview-section {
-    width: 80%;
-    margin: 2rem auto;
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 2rem;
-}
-
-.trips-overview-section h2 {
+.trips-h2{
+    color:rgb(0, 164, 0);
     font-size: 2rem;
-    color: rgb(0, 164, 0);
     text-align: center;
-    margin-bottom: 3rem;
-    margin-top: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
+.trips-overview-section{
+    min-height: 100vh;
+    background-color: white;
+    max-width: 85em;
+    margin: 0 auto;
 }
 
-.table th, .table td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #dddddd;
+.trips-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
-.table th {
-    background-color: lightgray; 
-    width: 22.75%; 
+.trip-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.trip-table tr:nth-child(even) td {
-    background-color: #f2f2f2; 
+.trip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.trip-table tr:hover td {
-    background-color: #e6ffe6; 
+.trip-destination {
+    font-size: 1.5rem;
+    color: rgb(0, 164, 0);
+    margin-bottom: 8px;
 }
 
+.trip-detail {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 4px;
+}
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .trips-overview-section {
-        width: 95%;
-        padding: 1rem;
-    }
-
-    .main-content h1 {
-        font-size: 2rem;
-    }
-
-    .trip-table th, .trip-table td {
-        font-size: 0.9rem;
-        padding: 0.5rem;
-    }
+.trip-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
 }

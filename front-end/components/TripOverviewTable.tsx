@@ -27,31 +27,22 @@ const TripOverviewTable: React.FC<Props> = ({ trips }) => {
     }
 
     return (
-        <div className={styles['trips-table-container']}>
-            {trips && (
-                <table className={`${styles.table} table-hover`}>
-                    <thead>
-                        <tr>
-                            <th scope="col">{t("trips.bestemming")}</th>
-                            <th scope="col">{t("trips.start")}</th>
-                            <th scope="col">{t("trips.eind")}</th>
-                            <th scope="col">{t("trips.prijs")}</th>
-                            <th scope="col">{t("trips.omschrijving")}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {trips.map((trip, index) => (
-                            <tr key={index}>
-                                <td>{trip.destination}</td>
-                                <td>{new Date(trip.startDate).toDateString()}</td>
-                                <td>{new Date(trip.endDate).toDateString()}</td>
-                                <td>{trip.price}</td>
-                                <td>{trip.description}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+        <div className={styles['trips-card-container']}>
+            {trips.map((trip, index) => (
+                <div key={index} className={styles['trip-card']}>
+                    <h3 className={styles['trip-destination']}>{trip.destination}</h3>
+                    <p className={styles['trip-detail']}>
+                        <strong>{t("trips.start")}:</strong> {new Date(trip.startDate).toDateString()}
+                    </p>
+                    <p className={styles['trip-detail']}>
+                        <strong>{t("trips.eind")}:</strong> {new Date(trip.endDate).toDateString()}
+                    </p>
+                    <p className={styles['trip-detail']}>
+                        <strong>{t("trips.prijs")}:</strong> ${trip.price}
+                    </p>
+                    <p className={styles['trip-description']}>{trip.description}</p>
+                </div>
+            ))}
         </div>
     );
 };

@@ -9,10 +9,10 @@ const createTrip = async (input: TripInput): Promise<Trip> => {
         throw new Error("Description is required.");
     }
 
-
     if (!destination || destination.trim().length === 0) {
         throw new Error("Destination is required.");
     }
+    
     if (!startDate) {
         throw new Error("Start date is required.");
     }
