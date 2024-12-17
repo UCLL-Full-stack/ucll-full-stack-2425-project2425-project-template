@@ -1,6 +1,6 @@
-import express, { Router, Request, Response, NextFunction } from "express";
-import workoutexerciseService from "../service/workoutexercise.service";
-import { WorkoutExerciseInput } from "../types";
+import express, { Router, Request, Response, NextFunction } from 'express';
+import workoutexerciseService from '../service/workoutexercise.service';
+import { WorkoutExerciseInput } from '../types';
 
 const workoutExerciseRouter = express.Router();
 
@@ -11,42 +11,35 @@ const workoutExerciseRouter = express.Router();
  *     WorkoutExercise:
  *       type: object
  *       properties:
- *         workout_exercise_id:
- *           type: number
- *           format: int64
- *         workout_id:
- *           type: number
- *           format: int64
- *         exercise_id:
- *           type: number
- *           format: int64
+ *         id:
+ *           type: string
+ *         workoutId:
+ *           type: string
+ *         exerciseId:
+ *           type: string
  *         sets:
  *           type: integer
  *         reps:
  *           type: integer
  *         rpe:
- *           type: string
+ *           type: integer
  *         rest_time:
- *           type: string
- *           description: Rest time in MM:SS format
+ *           type: integer
  *     WorkoutExerciseInput:
  *       type: object
  *       properties:
- *         workout_id:
- *           type: number
- *           format: int64
- *         exercise_id:
- *           type: number
- *           format: int64
+ *         workoutId:
+ *           type: string
+ *         exerciseId:
+ *           type: string
  *         sets:
  *           type: integer
  *         reps:
  *           type: integer
  *         rpe:
- *           type: string
+ *           type: integer
  *         rest_time:
- *           type: string
- *           description: Rest time in MM:SS format
+ *           type: integer
  */
 
 /**
@@ -66,12 +59,12 @@ const workoutExerciseRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/WorkoutExercise'
  */
-workoutExerciseRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+workoutExerciseRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const workoutExercises = workoutexerciseService.getAllWorkoutExercises();
+        const workoutExercises = await workoutexerciseService.getAllWorkoutExercises();
         res.status(200).json(workoutExercises);
     } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
@@ -87,7 +80,7 @@ workoutExerciseRouter.get('/', (req: Request, res: Response, next: NextFunction)
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The workout exercise ID
  *     responses:
@@ -100,13 +93,13 @@ workoutExerciseRouter.get('/', (req: Request, res: Response, next: NextFunction)
  *       404:
  *         description: Workout exercise not found
  */
-workoutExerciseRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+workoutExerciseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const workoutExerciseId = parseInt(req.params.id);
-        const workoutExercise = workoutexerciseService.getWorkoutExerciseById(workoutExerciseId);
+        const workoutExerciseId = req.params.id;
+        const workoutExercise = await workoutexerciseService.getWorkoutExerciseById(workoutExerciseId);
         res.status(200).json(workoutExercise);
     } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
@@ -122,7 +115,7 @@ workoutExerciseRouter.get('/:id', (req: Request, res: Response, next: NextFuncti
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The workout ID
  *     responses:
@@ -137,13 +130,13 @@ workoutExerciseRouter.get('/:id', (req: Request, res: Response, next: NextFuncti
  *       404:
  *         description: No workout exercises found for the specified workout ID
  */
-workoutExerciseRouter.get('/workout/:id', (req: Request, res: Response, next: NextFunction) => {
+workoutExerciseRouter.get('/workout/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const workoutId = parseInt(req.params.id);
-        const workoutExercises = workoutexerciseService.getWorkoutExercisesByWorkoutId(workoutId);
+        const workoutId = req.params.id;
+        const workoutExercises = await workoutexerciseService.getWorkoutExercisesByWorkoutId(workoutId);
         res.status(200).json(workoutExercises);
     } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
@@ -169,15 +162,15 @@ workoutExerciseRouter.get('/workout/:id', (req: Request, res: Response, next: Ne
  *             schema:
  *               $ref: '#/components/schemas/WorkoutExercise'
  */
-workoutExerciseRouter.post('/', (req: Request, res: Response) => {
-    try {
-        const workoutExerciseInput: WorkoutExerciseInput = req.body;
-        const newWorkoutExercise = workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
-        res.status(200).json(newWorkoutExercise);
-    } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
-        res.status(400).json({ status: 'error', errorMessage: errorMessage });
-    }
-});
+// workoutExerciseRouter.post('/', (req: Request, res: Response) => {
+//     try {
+//         const workoutExerciseInput: WorkoutExerciseInput = req.body;
+//         const newWorkoutExercise = workoutexerciseService.createWorkoutExercise(workoutExerciseInput);
+//         res.status(200).json(newWorkoutExercise);
+//     } catch (error: any) {
+//         const errorMessage = error.message || "An unexpected error occurred";
+//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
+//     }
+// });
 
 export default workoutExerciseRouter;

@@ -5,12 +5,10 @@
  *     Workout:
  *       type: object
  *       properties:
- *         workout_id:
- *           type: number
- *           format: int64
- *         user_id:
- *           type: number
- *           format: int64
+ *         id:
+ *           type: string
+ *         userId:
+ *           type: string
  *         name:
  *           type: string
  *         description:
@@ -22,12 +20,11 @@
  *     WorkoutInput:
  *       type: object
  *       properties:
- *         workout_id:
+ *         id:
  *           type: number
  *           format: int64
- *         user_id:
- *           type: number
- *           format: int64
+ *         userId:
+ *           type: string
  *         name:
  *           type: string
  *         description:
@@ -40,30 +37,28 @@
  *       type: object
  *       properties:
  *         id:
- *           type: number
- *           format: int64
+ *           type: string
  *         name:
  *           type: string
  *         description:
  *           type: string
- *         video_link:
+ *         videoLink:
  *           type: string
  *     ExerciseInput:
  *       type: object
  *       properties:
  *         id:
- *           type: number
- *           format: int64
+ *           type: string
  *         name:
  *           type: string
  *         description:
  *           type: string
- *         video_link:
+ *         videoLink:
  *           type: string
  */
 
-import express, { Router, Request, Response, NextFunction } from "express";
-import workoutService from "../service/workout.service";
+import express, { Router, Request, Response, NextFunction } from 'express';
+import workoutService from '../service/workout.service';
 
 const workoutRouter = express.Router();
 
@@ -84,12 +79,12 @@ const workoutRouter = express.Router();
  *               items:
  *                 type: object
  */
-workoutRouter.get('/', (req: Request, res: Response) => {
-    try{
-        const workouts = workoutService.getAllWorkouts()
-        res.status(200).json(workouts)
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+workoutRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const workouts = await workoutService.getAllWorkouts();
+        res.status(200).json(workouts);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
@@ -105,7 +100,7 @@ workoutRouter.get('/', (req: Request, res: Response) => {
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The workout ID
  *     responses:
@@ -116,16 +111,16 @@ workoutRouter.get('/', (req: Request, res: Response) => {
  *             schema:
  *               type: object
  */
-workoutRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const workoutId = parseInt(req.params.id)
-        const workout = workoutService.getWorkoutById(workoutId)
-        res.status(200).json(workout)
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+workoutRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const workoutId = req.params.id;
+        const workout = await workoutService.getWorkoutById(workoutId);
+        res.status(200).json(workout);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
-})
+});
 
 /**
  * @swagger
@@ -138,7 +133,7 @@ workoutRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The user ID
  *     responses:
@@ -151,17 +146,16 @@ workoutRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  *               items:
  *                 type: object
  */
-workoutRouter.get('/user/:id', (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const userId = parseInt(req.params.id)
-        const workouts = workoutService.getWorkoutsByUserId(userId)
-        res.status(200).json(workouts)
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+workoutRouter.get('/user/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.id;
+        const workouts = await workoutService.getWorkoutsByUserId(userId);
+        res.status(200).json(workouts);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
-    }
-)
+});
 
 /**
  * @swagger
@@ -184,18 +178,16 @@ workoutRouter.get('/user/:id', (req: Request, res: Response, next: NextFunction)
  *             schema:
  *               $ref: '#/components/schemas/WorkoutInput'
  */
-workoutRouter.post('/', async (req: Request, res: Response) => {
-    try {
-        const workoutInput = req.body;
-        const newWorkout = await workoutService.createWorkout(workoutInput); 
-        res.status(200).json(newWorkout);
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
-        res.status(400).json({ status: 'error', errorMessage: errorMessage });
-    }
-});
-
-
+// workoutRouter.post('/', async (req: Request, res: Response) => {
+//     try {
+//         const workoutInput = req.body;
+//         const newWorkout = await workoutService.createWorkout(workoutInput);
+//         res.status(200).json(newWorkout);
+//     } catch (error: any) {
+//         const errorMessage = error.message || "An unexpected error occurred";
+//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
+//     }
+// });
 
 /**
  * @swagger
@@ -208,13 +200,13 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
  *       - in: path
  *         name: workoutId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The workout ID
  *       - in: path
  *         name: exerciseId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The exercise ID
  *     responses:
@@ -227,17 +219,17 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
  *       404:
  *         description: Workout or exercise not found
  */
-workoutRouter.post('/:workoutId/exercises/:exerciseId', (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const workoutId = parseInt(req.params.workoutId);
-        const exerciseId = parseInt(req.params.exerciseId);
-        const updatedWorkout = workoutService.addExerciseToWorkout(workoutId, exerciseId);
-        res.status(200).json(updatedWorkout);
-    } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
-        res.status(400).json({ status: 'error', errorMessage: errorMessage });
-    }
-});
+// workoutRouter.post('/:workoutId/exercises/:exerciseId', (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const workoutId = parseInt(req.params.workoutId);
+//         const exerciseId = parseInt(req.params.exerciseId);
+//         const updatedWorkout = workoutService.addExerciseToWorkout(workoutId, exerciseId);
+//         res.status(200).json(updatedWorkout);
+//     } catch (error: any) {
+//         const errorMessage = error.message || "An unexpected error occurred";
+//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
+//     }
+// });
 
 /**
  * @swagger
@@ -250,13 +242,13 @@ workoutRouter.post('/:workoutId/exercises/:exerciseId', (req: Request, res: Resp
  *       - in: path
  *         name: workoutId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The workout ID
  *       - in: path
  *         name: exerciseId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The exercise ID
  *     responses:
@@ -269,17 +261,17 @@ workoutRouter.post('/:workoutId/exercises/:exerciseId', (req: Request, res: Resp
  *       404:
  *         description: Workout or exercise not found
  */
-workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Response) => {
-    try {
-        const workoutId = parseInt(req.params.workoutId);
-        const exerciseId = parseInt(req.params.exerciseId);
-        const updatedWorkout = workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
-        res.status(200).json(updatedWorkout);
-    } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
-        res.status(400).json({ status: 'error', errorMessage: errorMessage });
-    }
-});
+// workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Response) => {
+//     try {
+//         const workoutId = parseInt(req.params.workoutId);
+//         const exerciseId = parseInt(req.params.exerciseId);
+//         const updatedWorkout = workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
+//         res.status(200).json(updatedWorkout);
+//     } catch (error: any) {
+//         const errorMessage = error.message || "An unexpected error occurred";
+//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
+//     }
+// });
 
 /**
  * @swagger
@@ -292,7 +284,7 @@ workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Re
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The workout ID
  *     responses:
@@ -305,16 +297,15 @@ workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Re
  *       404:
  *         description: Workout not found
  */
-workoutRouter.delete('/:id', (req: Request, res: Response) => {
-    try {
-        const workoutId = parseInt(req.params.id);
-        const deletedWorkout = workoutService.removeWorkout(workoutId);
-        res.status(200).json(deletedWorkout);
-    } catch (error: any) {
-        const errorMessage = error.message || "An unexpected error occurred";
-        res.status(400).json({ status: 'error', errorMessage: errorMessage });
-    }
-});
-
+// workoutRouter.delete('/:id', (req: Request, res: Response) => {
+//     try {
+//         const workoutId = parseInt(req.params.id);
+//         const deletedWorkout = workoutService.removeWorkout(workoutId);
+//         res.status(200).json(deletedWorkout);
+//     } catch (error: any) {
+//         const errorMessage = error.message || "An unexpected error occurred";
+//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
+//     }
+// });
 
 export default workoutRouter;

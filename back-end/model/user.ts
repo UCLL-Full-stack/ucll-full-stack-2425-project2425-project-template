@@ -1,20 +1,19 @@
 import { User as UserPrisma } from '@prisma/client';
 
 export class User {
-    readonly id: number;
+    readonly id: string;
     readonly firstName: string;
     readonly lastName: string;
     readonly email: string;
     readonly password: string;
 
     constructor(user: {
-        id: number;
+        id: string;
         firstName: string;
         lastName: string;
         email: string;
         password: string;
     }) {
-        this.validate(user);
         this.id = user.id;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
@@ -22,31 +21,35 @@ export class User {
         this.password = user.password;
     }
     validate(user: {
-        id: number;
+        id: string;
         firstName: string;
         lastName: string;
         email: string;
         password: string;
     }) {
-        if (typeof user.firstName !== 'string' || user.firstName.trim().length === 0) {
-            throw new Error('First name cannot be empty.');
+        if (
+            !user.firstName ||
+            typeof user.firstName !== 'string' ||
+            user.firstName.trim().length === 0
+        ) {
+            throw new Error('First name is required and cannot be empty.');
         }
-
-        if (typeof user.lastName !== 'string' || user.lastName.trim().length === 0) {
-            throw new Error('Last name cannot be empty.');
+        if (
+            !user.lastName ||
+            typeof user.lastName !== 'string' ||
+            user.lastName.trim().length === 0
+        ) {
+            throw new Error('Last name is required and cannot be empty.');
         }
-
-        if (typeof user.email !== 'string' || user.email.trim().length === 0) {
-            throw new Error('Email cannot be empty.');
+        if (!user.email || typeof user.email !== 'string' || user.email.trim().length === 0) {
+            throw new Error('Email is required and cannot be empty.');
         }
-
-        if (typeof user.password !== 'string' || user.password.trim().length === 0) {
-            throw new Error('Password cannot be empty.');
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // AI generated regex for email validation
-        if (!emailRegex.test(user.email)) {
-            throw new Error('Invalid Email: Must be a valid email address');
+        if (
+            !user.password ||
+            typeof user.password !== 'string' ||
+            user.password.trim().length === 0
+        ) {
+            throw new Error('Password is required and cannot be empty.');
         }
     }
 
@@ -57,7 +60,7 @@ export class User {
         email,
         password,
     }: {
-        id: number;
+        id: string;
         firstName: string;
         lastName: string;
         email: string;
@@ -72,13 +75,13 @@ export class User {
         );
     }
 
-    static from({ id, firstName, lastName, email, password }: UserPrisma) {
+    static from(userPrisma: UserPrisma) {
         return new User({
-            id,
-            firstName,
-            lastName,
-            email,
-            password,
+            id: userPrisma.id,
+            firstName: userPrisma.firstName,
+            lastName: userPrisma.lastName,
+            email: userPrisma.email,
+            password: userPrisma.password,
         });
     }
 }

@@ -1,34 +1,74 @@
-import { WorkoutExercise } from "../model/workoutexercise";
+import { WorkoutExercise } from '../model/workoutexercise';
+import database from '../util/database';
 
+// const workoutexercises: WorkoutExercise[] = [
+//     new WorkoutExercise({ workout_exercise_id: 1, workout_id: 1, exercise_id: 1, sets: 3, reps: 10, rpe: '7-8', rest_time: '1:00' }),
+// ];
 
-
-const workoutexercises: WorkoutExercise[] = [
-    new WorkoutExercise({ workout_exercise_id: 1, workout_id: 1, exercise_id: 1, sets: 3, reps: 10, rpe: '7-8', rest_time: '1:00' }),
-];
-
-const getAllWorkoutExercises = (): WorkoutExercise[] => {
-    return workoutexercises;
-}
-
-const getWorkoutExerciseById = (id: number): WorkoutExercise | undefined => {
-    const workoutexercise = workoutexercises.find((workoutexercise) => workoutexercise.workout_exercise_id === id);
-
-    return workoutexercise;
+const getAllWorkoutExercises = async (): Promise<WorkoutExercise[]> => {
+    try {
+        const workoutExercisePrisma = await database.workoutExercise.findMany();
+        return workoutExercisePrisma.map((workoutExercise) =>
+            WorkoutExercise.from(workoutExercise)
+        );
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
-const getWorkoutExercisesByWorkoutId = (id: number): WorkoutExercise[] => {
-    const workoutExercises = workoutexercises.filter(
-        (workoutexercise) => workoutexercise.workout_id === id
-    );
-
-    return workoutExercises || [];
+const getWorkoutExerciseById = async (id: string): Promise<WorkoutExercise | null> => {
+    try {
+        const workoutExercisePrisma = await database.workoutExercise.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        return workoutExercisePrisma ? WorkoutExercise.from(workoutExercisePrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
-const createWorkoutExercise = ({ workout_exercise_id, workout_id, exercise_id, sets, reps, rpe, rest_time }: WorkoutExercise): WorkoutExercise => {
-    const workoutExercise = new WorkoutExercise({ workout_exercise_id, workout_id, exercise_id, sets, reps, rpe, rest_time });
-    workoutexercises.push(workoutExercise);
-    return workoutExercise;
-}
+const getWorkoutExercisesByWorkoutId = async (id: string): Promise<WorkoutExercise[]> => {
+    try {
+        const workoutExercisePrisma = await database.workoutExercise.findMany({
+            where: {
+                workoutId: id,
+            },
+        });
+        return workoutExercisePrisma.map((workoutExercise) =>
+            WorkoutExercise.from(workoutExercise)
+        );
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-export default { getAllWorkoutExercises, getWorkoutExerciseById, getWorkoutExercisesByWorkoutId, createWorkoutExercise, workoutexercises };
+// const createWorkoutExercise = async ({
+//     workoutId,
+//     exerciseId,
+//     sets,
+//     reps,
+//     rpe,
+//     restTime,
+// }: WorkoutExercise): Promise<WorkoutExercise> => {
+//     try {
+//         const workoutExercisePrisma = await database.workoutExercise.create({
+//             data: { workoutId, exerciseId, sets, reps, rpe, restTime },
+//         });
+//         return WorkoutExercise.from(workoutExercisePrisma);
+//     } catch (error) {
+//         console.error(error);
+//         throw new Error('Database error. See server log for details.');
+//     }
+// };
 
+export default {
+    getAllWorkoutExercises,
+    getWorkoutExerciseById,
+    getWorkoutExercisesByWorkoutId,
+    // createWorkoutExercise,
+};

@@ -3,68 +3,73 @@ import { WorkoutExercise as WorkoutExercisePrisma } from '@prisma/client';
 import { WorkoutExercise } from './workoutexercise';
 
 export class Exercise {
-    readonly id: number;
+    readonly id: string;
     readonly name: string;
-    readonly description: string;
-    readonly videoUrl: string;
-    readonly workoutExercise: WorkoutExercise;
+    readonly description: string | null;
+    readonly videoLink: string | null;
 
     constructor(exercise: {
-        id: number;
+        id: string;
         name: string;
-        description: string;
-        videoUrl: string;
-        workoutExercise: WorkoutExercise;
+        description: string | null;
+        videoLink: string | null;
     }) {
-        this.validate(exercise);
         this.id = exercise.id;
         this.name = exercise.name;
         this.description = exercise.description;
-        this.videoUrl = exercise.videoUrl;
-        this.workoutExercise = exercise.workoutExercise;
+        this.videoLink = exercise.videoLink;
     }
-    validate(exercise: { id: number; name: string; description: string; videoUrl: string }) {
-        const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/; // AI generated regex for URL validation
-        if (typeof exercise.videoUrl !== 'string' || !urlRegex.test(exercise.videoUrl)) {
-            throw new Error('Invalid Video Link: Must be a valid URL');
+    validate(exercise: {
+        id: string;
+        name: string;
+        description: string | null;
+        videoLink: string | null;
+    }) {
+        if (
+            !exercise.name ||
+            typeof exercise.name !== 'string' ||
+            exercise.name.trim().length === 0
+        ) {
+            throw new Error('Name is required and cannot be empty.');
+        }
+        if (
+            exercise.description &&
+            (typeof exercise.description !== 'string' || exercise.description.trim().length === 0)
+        ) {
+            throw new Error('Description must be a string and cannot be empty.');
+        }
+        if (
+            exercise.videoLink &&
+            (typeof exercise.videoLink !== 'string' || exercise.videoLink.trim().length === 0)
+        ) {
+            throw new Error('Video link must be a string and cannot be empty.');
         }
     }
-
     equals({
         id,
         name,
         description,
-        videoUrl,
-        workoutExercise,
+        videoLink,
     }: {
-        id: number;
+        id: string;
         name: string;
-        description: string;
-        videoUrl: string;
-        workoutExercise: WorkoutExercise;
+        description: string | null;
+        videoLink: string | null;
     }): boolean {
         return (
             this.id === id &&
             this.name === name &&
             this.description === description &&
-            this.videoUrl === videoUrl &&
-            this.workoutExercise === workoutExercise
+            this.videoLink === videoLink
         );
     }
 
-    static from({
-        id,
-        name,
-        description,
-        videoUrl,
-        workoutExercise,
-    }: ExercisePrisma & { workoutExercise: WorkoutExercisePrisma }) {
+    static from(exercisePrisma: ExercisePrisma) {
         return new Exercise({
-            id,
-            name,
-            description,
-            videoUrl,
-            workoutExercise: WorkoutExercise.from(workoutExercise),
+            id: exercisePrisma.id,
+            name: exercisePrisma.name,
+            description: exercisePrisma.description,
+            videoLink: exercisePrisma.videoLink,
         });
     }
 }

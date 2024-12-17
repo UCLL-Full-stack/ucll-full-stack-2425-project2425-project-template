@@ -1,52 +1,50 @@
 import { WorkoutExercise as WorkoutExercisePrisma } from '@prisma/client';
-export class WorkoutExercise {
-    readonly id: number;
-    readonly workoutId: number;
-    readonly exerciseId: number;
-    readonly sets: number;
-    readonly reps: number;
-    readonly rpe: string;
-    readonly restTime: string;
 
-    constructor(workoutExercise: {
-        id: number;
-        workoutId: number;
-        exerciseId: number;
-        sets?: number;
-        reps?: number;
-        rpe?: string;
-        restTime?: string;
-    }) {
+export class WorkoutExercise {
+    readonly id: string;
+    readonly workoutId: string;
+    readonly exerciseId: string;
+    readonly sets: number | null;
+    readonly reps: number | null;
+    readonly rpe: number | null;
+    readonly restTime: number | null;
+
+    constructor(workoutExercise: WorkoutExercisePrisma) {
         this.id = workoutExercise.id;
         this.workoutId = workoutExercise.workoutId;
         this.exerciseId = workoutExercise.exerciseId;
-        this.sets = workoutExercise.sets ?? 0;
-        this.reps = workoutExercise.reps ?? 0;
-        this.rpe = workoutExercise.rpe ?? '';
-        this.restTime = workoutExercise.restTime ?? '';
-        this.validate(workoutExercise);
+        this.sets = workoutExercise.sets;
+        this.reps = workoutExercise.reps;
+        this.rpe = workoutExercise.rpe;
+        this.restTime = workoutExercise.restTime;
     }
 
     validate(workoutExercise: {
-        id: number;
-        workoutId: number;
-        exerciseId: number;
-        sets?: number;
-        reps?: number;
-        rpe?: string;
-        restTime?: string;
+        id: string;
+        workoutId: string;
+        exerciseId: string;
+        sets: number | null;
+        reps: number | null;
+        rpe: number | null;
+        restTime: number | null;
     }) {
-        if (
-            workoutExercise.sets !== undefined &&
-            (workoutExercise.sets <= 0 || !Number.isInteger(workoutExercise.sets))
-        ) {
-            throw new Error('Invalid Sets: Must be a positive integer');
+        if (!workoutExercise.workoutId || typeof workoutExercise.workoutId !== 'string') {
+            throw new Error('Workout ID is required and must be a string.');
         }
-        if (
-            workoutExercise.reps !== undefined &&
-            (workoutExercise.reps <= 0 || !Number.isInteger(workoutExercise.reps))
-        ) {
-            throw new Error('Invalid Reps: Must be a positive integer');
+        if (!workoutExercise.exerciseId || typeof workoutExercise.exerciseId !== 'string') {
+            throw new Error('Exercise ID is required and must be a string.');
+        }
+        if (workoutExercise.sets && typeof workoutExercise.sets !== 'number') {
+            throw new Error('Sets must be a number.');
+        }
+        if (workoutExercise.reps && typeof workoutExercise.reps !== 'number') {
+            throw new Error('Reps must be a number.');
+        }
+        if (workoutExercise.rpe && typeof workoutExercise.rpe !== 'number') {
+            throw new Error('RPE must be a number.');
+        }
+        if (workoutExercise.restTime && typeof workoutExercise.restTime !== 'number') {
+            throw new Error('Rest time must be a number.');
         }
     }
 
@@ -59,13 +57,13 @@ export class WorkoutExercise {
         rpe,
         restTime,
     }: {
-        id: number;
-        workoutId: number;
-        exerciseId: number;
-        sets: number;
-        reps: number;
-        rpe: string;
-        restTime: string;
+        id: string;
+        workoutId: string;
+        exerciseId: string;
+        sets: number | null;
+        reps: number | null;
+        rpe: number | null;
+        restTime: number | null;
     }): boolean {
         return (
             this.id === id &&
@@ -78,15 +76,15 @@ export class WorkoutExercise {
         );
     }
 
-    static from({ id, workoutId, exerciseId, sets, reps, rpe, restTime }: WorkoutExercisePrisma) {
+    static from(workoutExercisePrisma: WorkoutExercisePrisma) {
         return new WorkoutExercise({
-            id,
-            workoutId,
-            exerciseId,
-            sets: sets ?? undefined,
-            reps: reps ?? undefined,
-            rpe: rpe ?? undefined,
-            restTime: restTime ?? undefined,
+            id: workoutExercisePrisma.id,
+            workoutId: workoutExercisePrisma.workoutId,
+            exerciseId: workoutExercisePrisma.exerciseId,
+            sets: workoutExercisePrisma.sets,
+            reps: workoutExercisePrisma.reps,
+            rpe: workoutExercisePrisma.rpe,
+            restTime: workoutExercisePrisma.restTime,
         });
     }
 }

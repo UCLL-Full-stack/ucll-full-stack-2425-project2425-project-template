@@ -11,8 +11,7 @@ const userRouter = Router();
  *       type: object
  *       properties:
  *         id:
- *           type: number
- *           format: int64
+ *           type: string
  *         firstName:
  *           type: string
  *         lastName:
@@ -53,9 +52,9 @@ const userRouter = Router();
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const users = userService.getAllUsers();
+        const users = await userService.getAllUsers();
         res.status(200).json(users);
     } catch (error: any) { 
         const errorMessage = error.message || "An unexpected error occurred";
@@ -74,7 +73,7 @@ userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The user ID
  *     responses:
@@ -87,10 +86,10 @@ userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *       404:
  *         description: User not found
  */
-userRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userid = parseInt(req.params.id);
-        const user = userService.getUserById(userid);
+        const userId = req.params.id;
+        const user = await userService.getUserById(userId);
         res.status(200).json(user);
     } catch (error: any) { 
         const errorMessage = error.message || "An unexpected error occurred";

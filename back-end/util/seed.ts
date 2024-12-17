@@ -36,7 +36,7 @@ const main = async () => {
         data: {
             name: 'Squat',
             description: 'A basic squat exercise for leg strength.',
-            videoUrl: 'https://example.com/squat-video',
+            videoLink: 'https://example.com/squat-video',
         },
     });
 
@@ -44,7 +44,7 @@ const main = async () => {
         data: {
             name: 'Push-Up',
             description: 'A basic push-up exercise for upper body strength.',
-            videoUrl: 'https://example.com/pushup-video',
+            videoLink: 'https://example.com/pushup-video',
         },
     });
 
@@ -52,7 +52,7 @@ const main = async () => {
         data: {
             name: 'Pull-Up',
             description: 'A pull-up exercise for back and arm strength.',
-            videoUrl: 'https://example.com/pullup-video',
+            videoLink: 'https://example.com/pullup-video',
         },
     });
 
@@ -80,8 +80,8 @@ const main = async () => {
             exerciseId: squat.id,
             sets: 4,
             reps: 10,
-            rpe: '7',
-            restTime: '90s',
+            rpe: 7,
+            restTime: 90,
         },
     });
 
@@ -91,8 +91,8 @@ const main = async () => {
             exerciseId: pushUp.id,
             sets: 3,
             reps: 15,
-            rpe: '8',
-            restTime: '60s',
+            rpe: 8,
+            restTime: 60,
         },
     });
 
@@ -102,8 +102,8 @@ const main = async () => {
             exerciseId: pullUp.id,
             sets: 3,
             reps: 10,
-            rpe: '8',
-            restTime: '90s',
+            rpe: 8,
+            restTime: 90,
         },
     });
 

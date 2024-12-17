@@ -2,16 +2,16 @@
 import { Exercise } from '../model/exercise';
 import exerciseDb from '../repository/exercise.db';
 
-const getAllExercises = (): Exercise[] => {
-    const exercises = exerciseDb.getAllExercises();
+const getAllExercises = async (): Promise<Exercise[]> => {
+    const exercises = await exerciseDb.getAllExercises();
     if (!exercises) {
         throw new Error('No exercises found');
     }
     return exercises;
 };
 
-const getExerciseById = (id: number): Exercise => {
-    const exercise = exerciseDb.getExerciseById(id);
+const getExerciseById = async (id: string): Promise<Exercise | null> => {
+    const exercise = await exerciseDb.getExerciseById(id);
     if (!exercise) {
         throw new Error(`Exercise with ID ${id} not found`);
     }

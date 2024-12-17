@@ -11,8 +11,7 @@ const exerciseRouter = Router();
  *       type: object
  *       properties:
  *         id:
- *           type: number
- *           format: int64
+ *           type: string
  *         name:
  *           type: string
  *         description:
@@ -49,9 +48,9 @@ const exerciseRouter = Router();
  *               items:
  *                 $ref: '#/components/schemas/Exercise'
  */
-exerciseRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+exerciseRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const exercises = exerciseService.getAllExercises();
+        const exercises = await exerciseService.getAllExercises();
         res.status(200).json(exercises);
     } catch (error: any) { 
         const errorMessage = error.message || "An unexpected error occurred";
@@ -70,7 +69,7 @@ exerciseRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The exercise ID
  *     responses:
@@ -83,10 +82,10 @@ exerciseRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *       404:
  *         description: Exercise not found
  */
-exerciseRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+exerciseRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const exerciseId = parseInt(req.params.id);
-        const exercise = exerciseService.getExerciseById(exerciseId);
+        const exerciseId = req.params.id;
+        const exercise = await exerciseService.getExerciseById(exerciseId);
         res.status(200).json(exercise);
     } catch (error: any) { 
         const errorMessage = error.message || "An unexpected error occurred";
