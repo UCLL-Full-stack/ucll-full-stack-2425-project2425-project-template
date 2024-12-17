@@ -55,7 +55,7 @@ const userRouter = express.Router();
  *                  schema:
  *                     $ref: '#/components/schemas/User'
  */
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
         const newUser = await userService.createUser(user);
@@ -227,12 +227,12 @@ userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
  *         description: Internal server error
  */
 userRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    try{
+    try {
         const id = parseInt(req.params.id);
         const user = req.body;
         const updatedUser = await userService.updateUser(id, user);
         res.status(200).json(updatedUser);
-    } catch (error){
+    } catch (error) {
         next(error);
     }
 });

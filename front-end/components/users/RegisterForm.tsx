@@ -13,7 +13,7 @@ const RegisterForm: React.FC = () => {
     const [password, setPassword] = useState("");
     const [passwordRepeat, setPasswordRepeat] = useState("");
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
-    
+
     const clearErrors = () => {
         setStatusMessages([]);
     };
@@ -81,7 +81,7 @@ const RegisterForm: React.FC = () => {
         console.log(result);
 
         if (response.status === 200) {
-            setStatusMessages([{ message: "Registratie succesvol", type: "success" }]);
+            setStatusMessages([{ message: "Registratie succesvol, log in om verder te gaan", type: "success" }]);
             setTimeout(() => {
                 router.push("/login");
             }, 2000);

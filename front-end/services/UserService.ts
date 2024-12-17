@@ -60,7 +60,7 @@ const getAllUsers = () => {
     })
 }
 
-const deleteUser = async (id: number) => { 
+const deleteUser = async (id: number) => {
     const user = sessionStorage.getItem('loggedInUser');
     let token = null;
 
@@ -96,7 +96,7 @@ const updateUser = async (id: number, userData: Partial<User>) => {
 };
 
 const register = async (user: { naam: string; voornaam: string; adres: string; email: string; gebruikersnaam: string; wachtwoord: string }) => {
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

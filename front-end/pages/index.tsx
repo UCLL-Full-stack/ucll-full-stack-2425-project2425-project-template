@@ -17,9 +17,11 @@ const Home: React.FC = () => {
         <link rel="icon" href="assets/logo.png" />
       </Head>
       <Header />
-      <main>
-        <h1 className={styles.title}>{t("page.title")}</h1>
-        <p className={styles.description}>{t("page.description")}</p>
+      <main className='homepage-main'>
+        <section className='homepage-section'>
+          <h1 className={styles.title}>{t("page.title")}</h1>
+          <p className={styles.description}>{t("page.description")}</p>
+        </section>
       </main>
     </>
   );
@@ -29,9 +31,9 @@ export const getServerSideProps = async (context: { locale: any; }) => {
   const { locale } = context;
 
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? "en", ["common"])),
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
   };
 };
 
