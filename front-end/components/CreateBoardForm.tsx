@@ -1,6 +1,5 @@
 import { DiscordPermission, Guild, KanbanPermission, User } from '@/types';
 import React, { useEffect, useState } from 'react';
-import PermissionsEntryForm from './PermissionEntryForm';
 
 interface CreateBoardFormProps {
     isOpen: boolean;
