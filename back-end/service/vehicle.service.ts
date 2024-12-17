@@ -253,8 +253,10 @@ const getAllMotorcycles = async () => {
     }
 };
 
-
-
+// const getVehicleBySeller = async (sellerId: number) => {
+//     const vehicles = await vehicleDB.getVehicleBySeller(sellerId);
+//     return vehicles;
+// }
 
 export default {
     getAllCars,
@@ -264,5 +266,6 @@ export default {
     deleteVehicle,
     editVehicle,
     getFilteredVehicles,
-    getVehicleById
+    getVehicleById,
+    // getVehicleBySeller
 }

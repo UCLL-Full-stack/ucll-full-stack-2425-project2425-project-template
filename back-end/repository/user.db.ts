@@ -1,31 +1,31 @@
 
-// import { User } from "../domain/model/user";
+import { User } from "../domain/model/user";
+import database from "./database";
 
-// // const users: User[] = [
-// //     new Seller({
-// //         id: 1,
-// //         name: 'seller1',
-// //         email: 'seller1@gmail.com',
-// //         phone_number: 123456789
-// //     }),
+const getAllUsers = async (): Promise<User[]> => {
+    try{
+        const usersPrisma = await database.user.findMany({
+            include: {listOfCarsForSelling: true},
+        })
+        return usersPrisma.map((userPrisma) => User.from(userPrisma));
+    }catch(error){
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+    
+};
+const getUserById = async ({ id }: {id: number}): Promise<User | null> => {
+    try{
+        const userPrisma = await database.user.findUnique({
+            where: { id },
+            include: { listOfCarsForSelling: true },
+        })
+        return userPrisma ? User.from(userPrisma) : null;
+    }catch(error){
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
 
-// //     new Buyer({
-// //         id: 2,
-// //         name: 'buyer1',
-// //         email: 'buyer1@example.com'
-// //     })
-// // ]
 
-// const users: User[] = [];
-
-// const createSeller = ({ id, email, name, phoneNumber, password }: Seller): Seller => {
-//     const newSeller = new Seller({ id, email, name, phoneNumber, password});
-//     users.push(newSeller);
-//     return newSeller;
-// }
-
-
-// const getAllUsers = (): User[] => users;
-
-
-// export default { getAllUsers, createSeller }
+export default { getAllUsers, getUserById };

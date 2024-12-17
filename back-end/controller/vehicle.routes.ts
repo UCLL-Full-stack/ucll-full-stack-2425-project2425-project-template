@@ -138,5 +138,15 @@ vehicleRouter.get('/',async( req: Request, res: Response) => {
     }
 })
 
+// vehicleRouter.get('/seller/:sellerId', async (req: Request, res: Response) => {
+//     try{
+//         const sellerId = Number(req.params.ownerId);
+//         const vehicles = await vehicleService.getVehicleBySeller(sellerId);
+//         res.status(200).json(vehicles);
+//     }catch(error){
+//         res.status(400).json({status: 'error'});
+//     }
+// })
+
 
 export default vehicleRouter;

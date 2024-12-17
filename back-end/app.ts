@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import vehicleRourer from './controller/vehicle.routes';
-import userRouter from './controller/user.routes'
+import userRouter from './controller/user.routes';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 
 app.use('/vehicles', vehicleRourer)
 app.use('/users', userRouter)
-
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });

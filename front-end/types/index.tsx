@@ -11,7 +11,14 @@ export type Vehicle = {
     bodyType:string;
     mileage:number;
 }
-
+export type User = {
+    id: number;
+    email: string;
+    name: string;
+    password: string;
+    phoneNumber: number;
+    listOfCarsForSelling: Vehicle[];
+}
 export type UserLogIn = {
     email: string;
     password: string;
