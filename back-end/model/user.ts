@@ -70,8 +70,8 @@ export class User {
         if (!user.name?.trim() || user.name?.trim().length === 0) {
           throw new Error('Name is required');
         }
-        if (!(user.birth_date instanceof Date) || isNaN(user.birth_date.getTime())) {
-          throw new Error('Valid birth date is required');
+        if (!user.birth_date) {
+          throw new Error('Birth date is required');
         }
         if (!user.password?.trim() || user.password?.trim().length < 6) {
           throw new Error('Password must be at least 6 characters long');

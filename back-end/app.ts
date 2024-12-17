@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { productRouter } from './controller/product.routes';
 import { cartRouter } from './controller/cart.routes';
+import { userRouter } from './controller/user.routes';
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 // routes
 app.use('/products', productRouter);
 app.use('/carts', cartRouter);
+app.use('/users', userRouter);
 
 // Generic error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
