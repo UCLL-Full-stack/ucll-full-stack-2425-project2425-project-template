@@ -7,6 +7,7 @@ import { Guild, Board, User, KanbanPermission } from '@/types';
 import BoardService from '@/services/BoardService';
 import BoardCard from '@/components/BoardCard';
 import CreateBoardForm from '@/components/CreateBoardForm';
+import EditGuildSettingsForm from '@/components/EditGuildSettingsForm';
 import dotenv from 'dotenv';
 import { useUser } from '@/context/UserContext';
 
@@ -23,6 +24,7 @@ const Home: FC = () => {
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [permissions, setPermissions] = useState<any[]>([]);
+  const [isEditingGuildSettings, setIsEditingGuildSettings] = useState(false);
 
 
   const handleDiscordLogin = () => {
@@ -125,6 +127,11 @@ const Home: FC = () => {
     }
   };
 
+  const handleGuildEditSettings = (guildId: string) => {
+    setIsEditingGuildSettings(true);
+    setSelectedGuildId(guildId);
+  }
+
   const handleBoardDelete = async (boardId: string) => {
     console.log('Deleting board:', boardId);
     try {
@@ -157,7 +164,7 @@ const Home: FC = () => {
                   ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {displayGuilds.map(guild => (
-                              <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick}/>
+                              <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleCreateClick} onGuildSettingsClick={handleGuildEditSettings}/>
                           ))}
                       </div>
                   )}
@@ -185,6 +192,12 @@ const Home: FC = () => {
                     guilds={guilds}
                     permissions={permissions}
                 />
+                {isEditingGuildSettings && (
+                    <EditGuildSettingsForm 
+                        onClose={() => setIsEditingGuildSettings(false)} 
+                        guildId={selectedGuildId!}
+                    />
+                )}
               </>
             )}
 

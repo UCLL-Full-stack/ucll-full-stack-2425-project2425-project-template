@@ -57,6 +57,7 @@ export enum KanbanPermission {
     EDIT_BOARD = "Edit Board",
     DELETE_BOARD = "Delete Board",
     MANAGE_BOARD_PERMISSIONS = "Manage Board Permissions",
+    MANAGE_GUILD_SETTINGS = "Manage Guild Settings",
     CREATE_COLUMNS = "Create Columns",
     DELETE_COLUMNS = "Delete Columns",
     EDIT_COLUMNS = "Edit Columns",

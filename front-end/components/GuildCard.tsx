@@ -2,16 +2,19 @@ import React, { useEffect } from 'react';
 import { Guild, KanbanPermission, User,DiscordPermission } from '@/types';
 import UserService from '@/services/UserService';
 import { useUser } from '@/context/UserContext';
+import { FaPlus, FaGear } from "react-icons/fa6"
 
 interface GuildCardProps {
     guild: Guild;
     onClick: (guild: Guild & {greyedOut?: boolean; inviteLink?: string}) => void;
     onCreateClick: (guildId: string) => void;
+    onGuildSettingsClick: (guildId: string) => void;
 }
 
-const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick }) => {
+const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, onGuildSettingsClick }) => {
     const { user } = useUser();
     const [canCreateBoard, setCanCreateBoard] = React.useState(false);
+    const [canEditSettings, setCanEditSettings] = React.useState(false);
     // console.log('Guild:', guild);
     useEffect(() => {
         const checkPermissions = async () => {
@@ -22,6 +25,8 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick }) 
                 const hasPermission = userGuildKanbanPermissions.includes(KanbanPermission.CREATE_BOARD) ||
                 userGuildKanbanPermissions.includes(KanbanPermission.ADMINISTRATOR);
                 setCanCreateBoard(hasPermission);
+                const hasEditSettingsPermission = userGuildKanbanPermissions.includes(KanbanPermission.MANAGE_GUILD_SETTINGS) ||userGuildKanbanPermissions.includes(KanbanPermission.ADMINISTRATOR);
+                setCanEditSettings(hasEditSettingsPermission);
                 // console.log('User can create board:', hasPermission);
             } catch (error) {
                 console.error('Error checking permissions:', error);
@@ -30,6 +35,10 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick }) 
 
         checkPermissions();
     }, [user!.userId, guild.guildId]);
+
+    const handleEditSettings = async () => {
+        onGuildSettingsClick(guild.guildId);
+    }
 
     return (
         <div
@@ -46,19 +55,33 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick }) 
             {guild.greyedOut ? (
                 <p className="text-sm">Click to invite bot</p>
             ) : (
-                canCreateBoard && (
-                    <div className="absolute top-2 right-2">
-                    <button
-                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 focus:outline-none w-8 h-8 flex items-center justify-center"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onCreateClick(guild.guildId);
-                            console.log('Create button clicked for:', guild.guildName);
-                        }}
-                    >
-                        +
-                    </button>
-                </div>
+                (canCreateBoard || canEditSettings) && (
+                    <div className="absolute top-2 right-2 flex space-x-2">
+                        {canCreateBoard && (
+                            <button
+                                className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 focus:outline-none w-8 h-8 flex items-center justify-center"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onCreateClick(guild.guildId);
+                                    console.log('Create button clicked for:', guild.guildName);
+                                }}
+                            >
+                                <FaPlus></FaPlus>
+                            </button>
+                        )}
+                        {canEditSettings && (
+                            <button
+                                className="bg-cyan-700 text-white p-2 rounded-full hover:bg-cyan-800 focus:outline-none w-8 h-8 flex items-center justify-center"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditSettings();
+                                    console.log('Edit button clicked for:', guild.guildName);
+                                }}
+                            >
+                                <FaGear></FaGear>
+                            </button>
+                        )}
+                    </div>
                 )
             )}
         </div>

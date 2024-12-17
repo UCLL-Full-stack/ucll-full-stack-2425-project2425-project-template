@@ -52,12 +52,34 @@ const updateGuild = async (guildId: string, guild: any) => {
     return await response.json();
 };
 
+const getGuildMembers = async (guildId: string) => {
+    const response = await fetch(`${API_URL}/api/guilds/${guildId}/members`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
+const getGuildRoles = async (guildId: string) => {
+    const response = await fetch(`${API_URL}/api/guilds/${guildId}/roles`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+}
+
 const GuildService = {
     getGuilds,
     getGuildPermissions,
     getGuild,
     addGuild,
     updateGuild,
+    getGuildMembers,
+    getGuildRoles,
 };
 
 export default GuildService;

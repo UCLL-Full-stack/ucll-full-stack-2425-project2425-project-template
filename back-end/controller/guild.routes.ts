@@ -178,4 +178,32 @@ guildRouter.get('/:guildId', async (req, res) => {
     }
 });
 
+guildRouter.get('/:guildId/members', async (req, res) => {
+    const { guildId } = req.params;
+    try {
+        const members = await guildService.getGuildMembers(guildId);
+        res.status(200).json(members);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
+guildRouter.get('/:guildId/roles', async (req, res) => {    
+    const { guildId } = req.params;
+    try {
+        const roles = await guildService.getGuildRoles(guildId);
+        res.status(200).json(roles);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: 'An unknown error occurred' });
+        }
+    }
+});
+
 export default guildRouter;
