@@ -6,7 +6,7 @@ const registerUser = async (user: User) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(user), 
     });
 
     if (!response.ok) {
@@ -30,6 +30,7 @@ const registerUser = async (user: User) => {
     };
   }
 };
+
 
 const loginUser = async (username: string, password: string, user: User) => {
     try {

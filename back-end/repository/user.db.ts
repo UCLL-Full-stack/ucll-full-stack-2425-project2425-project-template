@@ -9,20 +9,6 @@ const getAllUsers = async (): Promise<User[]> => {
       throw new Error('Database error. See server log for details.')
   }
 }
-const getAllCoaches = async (): Promise<User[]> => {
-  try {
-      const usersPrisma = await database.user.findMany({
-          where: {
-              role: 'coach',
-          },
-          include: {
-          }
-      });
-      return usersPrisma.map((userPrisma) => User.from(userPrisma));
-  } catch (error) {
-      throw new Error('Database error. See server log for details.');
-  }
-};
 const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
   try {
       const userPrisma = await database.user.findUnique({
