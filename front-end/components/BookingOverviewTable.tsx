@@ -18,9 +18,9 @@ const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
             setIsLoggedIn(!!token);
         }, []);
 
-    if (!isLoggedIn) {
-        return <div className={errorStyles.logInMessage}>Please log in to view this page</div>;
-    }
+        if (!isLoggedIn) {
+            return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
+        }
 
     if (!Array.isArray(bookings) || bookings.length === 0) {
         return <div>No bookings available</div>;

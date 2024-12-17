@@ -80,5 +80,11 @@
             "required": "Studentnummer is verplicht",
             "format": "Studentnummer moet beginnen met een letter gevolgd door 8 cijfers"
         }
-    }
+    },
+
+    "error": {
+        "login": "Log je in om deze pagina te kunnen bekijken"
+    },
+
+    "loading": "Aan het laden..."
 }

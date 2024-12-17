@@ -49,18 +49,14 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
             <Head><title>Loading...</title></Head>
             <Navbar/>
             <div className={styles['trip-details-body']}>
-                <div className={errorStyles.logInMessage}>Please log in to view this page</div>
+                <div className={errorStyles.logInMessage}>{t("error.login")}</div>
             </div>
             </>
         )
     }
 
     if (router.isFallback || loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!trip) {
-        return <div>Error loading trip data</div>;
+        return <div>{t("loading")}</div>;
     }
 
     const startDate = new Date(trip.startDate);

@@ -12,7 +12,6 @@ type Props = {
 const TripOverviewTable: React.FC<Props> = ({ trips }) => {
     const { t } = useTranslation("common");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    // const router = useRouter();
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
@@ -25,7 +24,7 @@ const TripOverviewTable: React.FC<Props> = ({ trips }) => {
     };
 
     if (!isLoggedIn) {
-        return <div className={errorStyles.logInMessage}>Please log in to view this page</div>;
+        return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
     }
 
     if (!Array.isArray(trips) || trips.length === 0) {

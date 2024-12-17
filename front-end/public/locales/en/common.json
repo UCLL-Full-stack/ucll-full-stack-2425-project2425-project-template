@@ -80,5 +80,11 @@
             "required": "Student number is required",
             "format": "Student number must start with a letter followed by 8 numbers"
         }
-    }
+    },
+
+    "error": {
+        "login": "Please log in to view this page"
+    },
+
+    "loading": "Loading..."
 }
