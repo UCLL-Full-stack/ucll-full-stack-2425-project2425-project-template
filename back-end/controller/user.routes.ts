@@ -1,27 +1,38 @@
 import userService from "../service/user.service"
 import express,{ Request, Response, Router } from 'express';
 import { ca } from 'date-fns/locale';
+import next from "next";
 
 const userRouter = express.Router();
 
-// userRouter.get('/', async (req: Request, res: Response) => {
-//     try {
-//         const users = await userService.getAllUSers();
-//         res.status(200).json(users);
-//     } catch (error) {
-//         res.status(400).json({ status: 'error', errorMessage: error.message });
-//     }
-// });
 
-userRouter.post("/signup", async (req, res) => {
-  try {
-    const { email, name, password, phoneNumber } = req.body;
-    const token = await userService.signupUser( email, name, password, phoneNumber);
-    res.status(201).json({ message: "Signup successful", token });
-  } catch (error) {
-    res.status(400).json({message: "error" });
+userRouter.get('/', async (req: Request, res: Response) => {
+  try{
+    const users = await userService.getAllUsers();
+    res.status(200).json(users);
+  }catch(error){
+    res.status(400).json({status: 'error'});
   }
-});
+})
+
+userRouter.get('/:id', async (req: Request, res: Response) => {
+  try{
+    const user = await userService.getUserById(Number(req.params.id));
+    res.status(200).json(user);
+  }catch(error){
+    res.status(400).json({status: 'error'});
+  }
+})
+
+// userRouter.post("/signup", async (req, res) => {
+//   try {
+//     const { email, name, password, phoneNumber } = req.body;
+//     const token = await userService.signupUser( email, name, password, phoneNumber);
+//     res.status(201).json({ message: "Signup successful", token });
+//   } catch (error) {
+//     res.status(400).json({message: "error" });
+//   }
+// });
   
   // Login route
   // userRouter.post("/login", async (req, res) => {

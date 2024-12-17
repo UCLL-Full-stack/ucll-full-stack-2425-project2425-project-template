@@ -11,9 +11,9 @@ model User {
   id                Int      @id @default(autoincrement())
   email             String   @unique
   name              String
-  phoneNumber       String
+  phoneNumber       Int
   password          String
-  listOfCarsForSelling Vehicle[]
+  listOfCarsForSelling Vehicle[] @relation("UserVehicles")
 }
 
 model Vehicle {
@@ -31,7 +31,7 @@ model Vehicle {
   createdAt         DateTime
   updatedAt         DateTime
   sellerId          Int?
-  seller            User?   @relation(fields: [sellerId], references: [id])
+  seller            User?   @relation("UserVehicles",fields: [sellerId], references: [id])
 
 
   car               Car?      

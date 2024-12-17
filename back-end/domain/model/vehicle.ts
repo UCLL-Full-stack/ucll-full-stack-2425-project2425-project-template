@@ -1,5 +1,7 @@
-export class Vehicle{
-    
+import { Vehicle as VehiclePrisma } from '@prisma/client'
+
+export class Vehicle {
+
     readonly id?: number | undefined;
     readonly manufacturer: string;
     readonly model_name: string;
@@ -10,23 +12,23 @@ export class Vehicle{
     readonly bodyType: string;
     readonly vehicleType: string;
     readonly mileage: number;
-    readonly engineCapacity : number;
-    readonly createdAt? : Date;
-    readonly updatedAt? : Date
+    readonly engineCapacity: number;
+    readonly createdAt?: Date;
+    readonly updatedAt?: Date;
 
     constructor(vehicle: {
-        id?: number, 
+        id?: number,
         manufacturer: string,
-        model_name: string, 
-        price: number, 
-        fuelType: string, 
+        model_name: string,
+        price: number,
+        fuelType: string,
         bodyType: string,
-        transmissionType: string, 
-        year: number, 
-        vehicleType: string, 
-        mileage: number, 
-        engineCapacity: number, 
-        createdAt? : Date, 
+        transmissionType: string,
+        year: number,
+        vehicleType: string,
+        mileage: number,
+        engineCapacity: number,
+        createdAt?: Date,
         updatedAt?: Date
 
     }) {
@@ -47,39 +49,39 @@ export class Vehicle{
     }
 
 
-    getId() : number | undefined{
+    getId(): number | undefined {
         return this.id
     }
-    
-    getManufacturer() : string{
+
+    getManufacturer(): string {
         return this.manufacturer
     }
 
-    getModelName(): string{
+    getModelName(): string {
         return this.model_name
     }
 
-    getPrice(): number{
+    getPrice(): number {
         return this.price
     }
 
-    getFuelType(): string{
+    getFuelType(): string {
         return this.fuelType
     }
 
-    getMileage(): number{
+    getMileage(): number {
         return this.mileage
     }
 
-    getTransmissionType(): string{
+    getTransmissionType(): string {
         return this.transmissionType
     }
 
-    getYear(): number{
+    getYear(): number {
         return this.year
     }
 
-    getVehicleType(): string{
+    getVehicleType(): string {
         return this.vehicleType
     }
 
@@ -97,5 +99,15 @@ export class Vehicle{
 
     getUpdatedAt(): Date | undefined {
         return this.updatedAt
+    }
+
+    static from({ id, manufacturer, model_name, price, fuelType, bodyType,
+        transmissionType, year, vehicleType, mileage, engineCapacity,
+        createdAt, updatedAt }: VehiclePrisma): Vehicle {
+        return new Vehicle({
+            id, manufacturer, model_name, price, fuelType,
+            bodyType, transmissionType, year, vehicleType, mileage, engineCapacity,
+            createdAt, updatedAt
+        })
     }
 }

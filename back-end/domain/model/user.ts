@@ -1,5 +1,9 @@
-import { Car } from "./car";
 import bcrypt from "bcrypt";
+import { User as UserPrisma } from '@prisma/client';
+import { Vehicle as VehiclePrisma } from '@prisma/client';
+import { Vehicle } from "./vehicle";
+import { VehicleInput } from "../../types";
+
 
 
 export class User {
@@ -7,17 +11,18 @@ export class User {
     readonly email: string;
     readonly name: string;
     private password: string;
-    readonly phoneNumber: string;
-
+    readonly phoneNumber: number;
+    private listOfCarsForSelling: Vehicle[];
+    // private listOfFavoriteCars: Vehicle[]
 
     constructor(user: {
-        id?: number,
-        email: string,
-        name: string,
-        password: string,
-        phoneNumber: string
-        listOfCarsForSelling: Car[];
-        listOfFavoriteCars: Car[];
+        id?: number;
+        email: string;
+        name: string;
+        password: string;
+        phoneNumber: number;
+        listOfCarsForSelling: Vehicle[];
+        // listOfFavoriteCars: Vehicle[];
     }) {
 
         this.id = user.id;
@@ -25,18 +30,18 @@ export class User {
         this.name = user.name;
         this.password = user.password;
         this.phoneNumber = user.phoneNumber;
-        listOfCarsForSelling: Vehicle: [];
-        listOfFavoriteCars: Vehicle: [];
+        this.listOfCarsForSelling = user.listOfCarsForSelling || [];
+        // this.listOfFavoriteCars = user.listOfFavoriteCars || [];
     }
 
     async hashPassword(): Promise<void> {
         this.password = await bcrypt.hash(this.password, 10);
-      }
+    }
 
     async validatePassword(inputPassword: string): Promise<boolean> {
-    return bcrypt.compare(inputPassword, this.password);
+        return bcrypt.compare(inputPassword, this.password);
     }
-    
+
 
     getId(): number | undefined {
         return this.id
@@ -49,6 +54,34 @@ export class User {
     getName(): string {
         return this.name
     }
+    getlistOfCarsForSelling(): Vehicle[] {
+        return this.listOfCarsForSelling;
+    }
+    // getlistOfFavoriteCars(): Vehicle[] {
+    //     return this.listOfFavoriteCars;
+    // }
 
+    addCarForSelling(car: Vehicle): void {
+        this.listOfCarsForSelling.push(car);
+    }
+
+    static from({
+        id, email, name, password, phoneNumber, listOfCarsForSelling,
+    }: UserPrisma & { listOfCarsForSelling: VehiclePrisma[]; }) {
+        return new User({
+            id,
+            email,
+            name,
+            password,
+            phoneNumber,
+            listOfCarsForSelling: listOfCarsForSelling.map((vehiclePrisma: {
+                id: number; manufacturer:
+                string; model_name: string; price: number;
+                fuelType: string; transmissionType: string; year: number;
+                vehicleType: string; bodyType: string; mileage: number;
+                engineCapacity: number; createdAt: Date; updatedAt: Date;
+                sellerId: number | null;
+            }) => Vehicle.from(vehiclePrisma))
+        });
+    }
 }
-

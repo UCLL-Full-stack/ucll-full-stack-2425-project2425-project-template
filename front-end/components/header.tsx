@@ -21,6 +21,7 @@ const Header: React.FC = () => {
             Vehicles
           </Link>
           <Link
+            // href={`/users/${user.id}`}
             href="/users"
             className=" flex items-center px-4 text-xl font-bold text-white hover:text-[#FCBA04] transition duration-300"
           >

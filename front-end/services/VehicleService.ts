@@ -9,6 +9,16 @@ const getAllVehicles = ()=>{
     })
 }
 
+const getVehicleByOwner = async (sellerId: string) => {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/owner/${sellerId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    return await response.json()
+}
+
 const getVehicleById = async (vehicleId: number): Promise<Vehicle> => {
     const  vehicle = await fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/${vehicleId}`,{
         method: 'GET',
