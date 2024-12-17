@@ -20,14 +20,14 @@ model User {
 model Admin {
     id        Int      @id @default(autoincrement())
     userId    Int      @unique
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     name      String
 }
 
 model Caretaker {
     id        Int      @id @default(autoincrement())
     userId    Int      @unique
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     name      String
     animals   Animal[]
 }
@@ -35,7 +35,7 @@ model Caretaker {
 model Manager {
     id        Int      @id @default(autoincrement())
     userId    Int      @unique
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     name      String
 }
 

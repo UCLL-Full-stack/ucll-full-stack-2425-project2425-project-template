@@ -122,4 +122,32 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete an user by ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the user to delete
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+userRouter.delete('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const username = req.params.username;
+        await userService.deleteUser({ username });
+        res.status(200).send({ message: 'User deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default userRouter;

@@ -33,9 +33,29 @@ const loginUser = async (user: User) => {
     });
 };
 
+const deleteUser = async (username: string) => {
+    try {
+        const token = getToken();
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/users/${username}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response;
+    } catch (error) {
+        return null
+    }
+};
+
+
+
 const UserService = {
     getUsers,
     loginUser,
+    deleteUser,
 };
 
 export default UserService;

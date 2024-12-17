@@ -1,28 +1,26 @@
 import SpeciesService from '@services/SpeciesService';
 import { useEffect, useState } from 'react';
-import { Species } from '@types';
+// import { Species } from '@types';
 import Head from 'next/head';
 import Header from '@components/header';
 import SpeciesOverviewTable from '@components/species/SpeciesOverviewTable';
+import useSWR, { mutate } from 'swr';
+import useInterval from 'use-interval';
 
 const Species: React.FC = () => {
-    const [species, setSpecies] = useState<Species[]>();
-    const [selectedSpecies, setSelectedSpecies] = useState<Species | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
     const getSpecies = async () => {
         const response = await SpeciesService.getSpecies();
-        const species = await response.json();
-        setSpecies(species);
+        return await response.json();
     };
 
-    useEffect(() => {
-        getSpecies();
-    }, []);
+    const { data, isLoading, error } = useSWR('species', getSpecies);
 
-    const selectSpecies = (species: Species) => {
-        setSelectedSpecies(species);
-    };
+    useInterval(
+        () => {
+            mutate('species', getSpecies());
+        },
+        isLoading ? 1000 : null
+    );
 
     return (
         <>
@@ -35,17 +33,9 @@ const Species: React.FC = () => {
                 <section>
                     <h2>Species overview</h2>
                     {error && <div className="text-center text-red-800">{error}</div>}
-
-                    {species && (
-                        <SpeciesOverviewTable species={species} selectSpecies={selectSpecies} />
-                    )}
+                    {isLoading && <p className="text-center text-green-800">Loading...</p>}
+                    {data && <SpeciesOverviewTable species={data} />}
                 </section>
-                {/* {selectedSpecies && (
-                    <section>
-                        <h2>Courses taught by {selectedSpecies.user.firstName}</h2>
-                        <CourseOverviewTable species={selectedSpecies} />
-                    </section>
-                )} */}
             </main>
         </>
     );

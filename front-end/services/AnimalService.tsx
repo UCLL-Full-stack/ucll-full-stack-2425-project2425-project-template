@@ -71,6 +71,7 @@ const deleteAnimal = async (id: string) => {
     }
 };
 
+
 const AnimalService = {
     getAnimals,
     getAnimalsByCaretaker,
