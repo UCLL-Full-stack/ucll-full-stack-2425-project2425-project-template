@@ -6,8 +6,9 @@ const getAllBookings = async (): Promise<Booking[]> => {
     const bookingsPrisma = await database.booking.findMany({
         include: {
             trip: true,
-            students: true
-        }
+            students: {
+                include: { user: true }
+            }         }
     });
     return bookingsPrisma.map((bookingPrisma) => Booking.from(bookingPrisma));
 };
@@ -17,8 +18,9 @@ const getBookingById = async (bookingId: number): Promise<Booking | null> => {
         where: { id: bookingId },
         include: {
             trip: true,
-            students: true
-        }
+            students: {
+                include: { user: true }
+            }         }
     });
     return bookingPrisma ? Booking.from(bookingPrisma) : null;
 };
@@ -40,7 +42,9 @@ const createBooking = async (bookingData: {
         },
         include: {
             trip: true,
-            students: true  
+            students: {
+                include: { user: true },
+            },
         }
     });
 

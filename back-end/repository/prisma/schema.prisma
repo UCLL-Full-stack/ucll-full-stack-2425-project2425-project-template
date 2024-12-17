@@ -11,16 +11,25 @@ generator client {
 }
 
 // Student model
-model Student {
+  model Student {
   id            Int           @id @default(autoincrement())
-  username      String        @unique
-  email         String        @unique
-  password      String        @unique
   studentNumber String        @unique
   bookings      Booking[]     
   review        Review[]
-}
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
 
+}
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  firstName String
+  lastName  String
+  email     String    @unique
+  password  String
+  role      String
+  student   Student?
+}
 // Trip model
 model Trip {
   id            Int           @id @default(autoincrement())
@@ -49,7 +58,6 @@ enum PaymentStatus {
   Paid
   Confirmed
 }
-
 // Review model
 model Review {
   id            Int           @id @default(autoincrement())

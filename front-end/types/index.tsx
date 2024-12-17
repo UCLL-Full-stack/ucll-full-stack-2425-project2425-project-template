@@ -1,8 +1,5 @@
 type Student = {
     id?: number;
-    username: string;
-    email: string;
-    password: string;
     studentNumber: string;
 }
 
@@ -23,7 +20,15 @@ type Booking = {
     bookingDate: Date;
     paymentStatus: 'Pending' | 'Confirmed' | 'Cancelled';
 }
-
+type User = {
+    firstName?: string;
+    lastName?: string;
+    fullname?: string;
+    email?: string;
+    username?: string;
+    password?: string;
+    role?: string;
+};
 type Review = {
     id?: number;
     studentId: number; 
@@ -38,6 +43,7 @@ export type {
     Booking,
     Student,
     Review,
+    User,
     Role
 }
 

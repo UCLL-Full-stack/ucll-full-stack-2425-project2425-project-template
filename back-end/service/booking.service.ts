@@ -4,6 +4,8 @@ import tripDb from "../repository/trip.db";
 import { Booking } from "../model/booking";
 import { BookingInput } from "../types";
 import { Student } from "../model/student";
+import { User } from "../model/user";
+import studentDb from "../repository/student.db";
 
 const createBooking = async (input: BookingInput): Promise<Booking> => {
     const { bookingDate, tripId, studentIds, paymentStatus } = input;
@@ -16,14 +18,15 @@ const createBooking = async (input: BookingInput): Promise<Booking> => {
     if (!trip) {
         throw new Error(`Trip with ID ${tripId} does not exist.`);
     }
-
-    const students = studentIds.map(id => new Student({
-        id, 
-        username: "",
-        email: "", 
-        password: "",
-        studentNumber: "",
-    }));
+    const students = await Promise.all(
+        studentIds.map(async (id) => {
+            const student = await studentDb.getStudentById(id);
+            if (!student) {
+                throw new Error(`Student with ID ${id} does not exist.`);
+            }
+            return student;
+        })
+    );
 
     const newBooking = new Booking({ 
         bookingDate, 

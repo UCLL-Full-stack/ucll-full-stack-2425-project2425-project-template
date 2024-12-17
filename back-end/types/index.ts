@@ -2,12 +2,19 @@ import { PaymentStatus } from "@prisma/client";
 
 type StudentInput = {
     id?: number;
-    username: string;
-    email: string;
-    password: string;
+    user: UserInput;
     studentNumber: string;
     bookings?: BookingInput[];
 }
+type UserInput = {
+    id?: number;
+    username: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: Role;
+};
 
 type TripInput = {
     id?: number;
@@ -36,11 +43,14 @@ type ReviewInput = {
     comment: string;
 }
 
-type Role = 'admin' | 'user' | 'guest';
+type Role = 'admin' | 'student' | 'guest';
 
 type AuthenticationResponse = {
     token: string;
     username: string;
+    role: string;
+    fullname: string;
+
 }
 
 export{
@@ -49,5 +59,6 @@ export{
     StudentInput,
     ReviewInput,
     Role,
+    UserInput,
     AuthenticationResponse
 }

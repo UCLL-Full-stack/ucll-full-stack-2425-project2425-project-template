@@ -4,8 +4,8 @@ import { useState } from "react";
 import styles from '../styles/UserLoginForm.module.css';
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import StudentService from "../services/StudentServices";
 import errorStyles from '../styles/errorMessage.module.css';
+import UserService from "@/services/UserService";
 
 const UserLoginForm: React.FC = () => {
   const { t } = useTranslation("common");
@@ -25,83 +25,63 @@ const UserLoginForm: React.FC = () => {
   const validate = (): boolean => {
     let isValid = true;
 
-    // Username validation
     if (!name.trim()) {
       setNameError(t("validation.username.required"));
       isValid = false;
-    } else if (name.length < 3) {
-      setNameError(t("validation.username.min"));
-      isValid = false;
-    } else if (name.length > 20) {
-      setNameError(t("validation.username.max"));
-      isValid = false;
-    } 
-    else {
-      setNameError(null);
     }
 
-    // Password validation
     if (!password.trim()) {
       setPasswordError(t("validation.password.required"));
       isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError(t("validation.password.min"));
-      isValid = false;
-    } else if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      setPasswordError(t("validation.password.format"));
-      isValid = false;
-    } else {
-      setPasswordError(null);
     }
 
     return isValid;
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     clearErrors();
 
     if (!validate()) {
-      setStatusMessages([
-        { message: "Validation failed", type: "error" },
-      ]);
-      return;
+        setStatusMessages([{ message: t("validation.error"), type: "error" }]);
+        return;
     }
 
-    const credentials = { username: name, password };
-    const response = await StudentService.loginStudent(credentials);
+    try {
+        const user = { username: name, password };
+        const response = await UserService.loginUser(name, password, user);
 
-    if (response.status === 200) {
-      setStatusMessages([{ message: t("login.success"), type: "success" }]);
-      
-      const student = await response.json();
-      localStorage.setItem(
-        "loggedInUser", 
-        JSON.stringify({
-          token: student.token,
-          username: student.username,
-          email: student.email,
-          studentNumber: student.studentNumber,
-          role: student.role
-        })
-      );
-      
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+        if (response.success && response.user) {
+          const { token, fullname, username, role } = response.user;
 
-    } else {
-      setStatusMessages([{ message: t("login.error"), type: "error" }]);
+            localStorage.setItem("loggedInUser", JSON.stringify({ token, fullname, username, role }));
+
+            // // Redirect based on user role
+            // if (role === "Admin") {
+            //     localStorage.setItem("adminLoggedIn", "true");
+            //     router.push("/admin-dashboard");
+            // } else {
+            router.push("/");
+            // }
+
+            setStatusMessages([{ message: t("login.success"), type: "success" }]);
+        } else {
+            setStatusMessages([{ message: t("login.error.invalidCredentials"), type: "error" }]);
+        }
+    } catch (error) {
+        setStatusMessages([{ message: t("login.error.server"), type: "error" }]);
     }
-  };
+};
 
   return (
     <div className={styles.userLoginPage}>
       <form onSubmit={handleSubmit} className={styles.userLoginForm}>
         <h3 className={styles.titleForm}>{t("login.login")}</h3>
         
+        {/* Username Field */}
         <label className={styles.formLabels} htmlFor="nameInput">{t("login.gebruikersnaam")}</label>
-        <input className={styles.inputField}
+        <input
+          className={styles.inputField}
           id="nameInput"
           type="text"
           value={name}
@@ -109,8 +89,10 @@ const UserLoginForm: React.FC = () => {
         />
         {nameError && <p className={errorStyles.errorMessage}>{nameError}</p>}
 
+        {/* Password Field */}
         <label className={styles.formLabels} htmlFor="passwordInput">{t("login.wachtwoord")}</label>
-        <input className={styles.inputField}
+        <input
+          className={styles.inputField}
           id="passwordInput"
           type="password"
           value={password}
@@ -118,6 +100,7 @@ const UserLoginForm: React.FC = () => {
         />
         {passwordError && <p className={errorStyles.errorMessage}>{passwordError}</p>}
 
+        {/* Status Messages */}
         {statusMessages.length > 0 && (
           <ul className={errorStyles.userLoginStatusMessages}>
             {statusMessages.map(({ message, type }, index) => (

@@ -32,7 +32,10 @@
         "wachtwoord": "Password",
         "success": "Login successful. Redirecting to homepage...",
         "registreer": "Register",
-        "error": "Invalid username or password. Please try again."
+        "error": {
+            "invalidCredentials": "Invalid username or password",
+            "serverError": "An error occurred while processing the request."
+            }
     },
 
     "nav": {
