@@ -19,7 +19,6 @@ const Users: React.FC = () => {
             UserService.getAllUsers()
         ]);
         const [userResponse] = response;
-        console.log(userResponse.json())
 
         if (userResponse.ok) {
             const users = await userResponse.json();

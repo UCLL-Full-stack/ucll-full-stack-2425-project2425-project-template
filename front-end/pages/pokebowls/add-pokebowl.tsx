@@ -5,9 +5,10 @@ import Head from "next/head";
 import useSWR from "swr";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useState } from "react";
 
 const AddNewPokebowl: React.FC = () => {
-
+    const [error, setError] = useState<String | null>(null);
     const { t } = useTranslation();
 
     const getIngredienten = async () => {
@@ -20,10 +21,12 @@ const AddNewPokebowl: React.FC = () => {
         if (ingredientResponse.ok) {
             const ingredienten = await ingredientResponse.json();
             return { ingredienten }
+        } else {
+            setError("You aren't authorized to view this page");
         }
     }
 
-    const { data, isLoading, error } = useSWR(
+    const { data, isLoading } = useSWR(
         "ingredienten",
         getIngredienten
     );
@@ -51,12 +54,12 @@ const AddNewPokebowl: React.FC = () => {
 
 export const getServerSideProps = async (context: { locale: any; }) => {
     const { locale } = context;
-  
+
     return {
         props: {
             ...(await serverSideTranslations(locale ?? "en", ["common"])),
         },
     };
-  };  
+};
 
 export default AddNewPokebowl;

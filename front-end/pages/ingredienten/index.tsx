@@ -23,7 +23,7 @@ const Ingredienten: React.FC = () => {
 
         if (ingredientResponses.ok) {
             const ingredienten = await ingredientResponses.json();
-            return ingredienten
+            return { ingredienten }
         } else {
             setError("You aren't authorized to view this page");
         }
@@ -35,7 +35,7 @@ const Ingredienten: React.FC = () => {
 
     useInterval(() => {
         mutate("ingredienten", getIngredienten());
-        console.log(error + " Mooie error");
+        console.log(data);
     }, 5000);
 
     return (
