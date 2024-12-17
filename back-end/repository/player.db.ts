@@ -50,10 +50,10 @@ const findByNumber = async (number: number): Promise<Player | undefined> => {
     }
 }
 
-const addPlayer = async ({name, number , position, birthdate}: PlayerInput): Promise<Player> => {
+const addPlayer = async ({name, number , position, birthdate, imageUrl}: PlayerInput): Promise<Player> => {
     try {
         const playerPrisma = await db.player.create({
-            data: {name,number, position, birthdate}
+            data: {name,number, position, birthdate, imageUrl}
        });
        return Player.from(playerPrisma);
     } catch (error) {

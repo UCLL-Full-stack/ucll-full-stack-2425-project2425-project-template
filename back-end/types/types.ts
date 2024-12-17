@@ -41,4 +41,4 @@ export type Role = 'admin' | 'player' | 'coach';
 
 export type Job = 'head coach' | 'assistant coach'
 
-export type Position = 'goalkeeper' | 'defender' | 'midfielder' | 'forward'
+export type Position = 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Forward'
