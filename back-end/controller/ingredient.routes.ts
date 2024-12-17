@@ -59,6 +59,23 @@ ingredientRouter.get('/', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /bestellingen/{id}:
+ *   get:
+ *     summary: Get a bestelling by ID
+ *     responses:
+ *       200:
+ *         description: The bestelling data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Bestelling'
+ *       404:
+ *         description: Bestelling not found
+ *       500:
+ *         description: Internal server error
+ */
 ingredientRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const ingredient = await ingredientService.getIngredientById(parseInt(req.params.id));
