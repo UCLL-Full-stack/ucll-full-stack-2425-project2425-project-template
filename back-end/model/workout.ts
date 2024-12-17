@@ -25,6 +25,15 @@ export class Workout {
         }
     }
 
+    equals({ id, name, description, user }: Workout) {
+        return (
+            this.id === id &&
+            this.name === name &&
+            this.description === description &&
+            this.user === user
+        );
+    }
+
     static from({ id, name, description, user }: WorkoutPrisma & { user: UserPrisma }) {
         return new Workout({
             id,

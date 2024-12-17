@@ -3,6 +3,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { id } from 'date-fns/locale';
+import { connect } from 'http2';
 
 const prisma = new PrismaClient();
 
@@ -85,34 +86,58 @@ const main = async () => {
     // Create WorkoutExercises (linking Workouts with Exercises)
     await prisma.workoutExercise.create({
         data: {
-            workoutId: workout1.id,
-            exerciseId: squat.id,
             sets: 4,
             reps: 10,
             rpe: 7,
             restTime: 90,
+            workout: {
+                connect: {
+                    id: workout1.id,
+                },
+            },
+            exercise: {
+                connect: {
+                    id: squat.id,
+                },
+            },
         },
     });
 
     await prisma.workoutExercise.create({
         data: {
-            workoutId: workout2.id,
-            exerciseId: pushUp.id,
             sets: 3,
             reps: 15,
             rpe: 8,
             restTime: 60,
+            workout: {
+                connect: {
+                    id: workout2.id,
+                },
+            },
+            exercise: {
+                connect: {
+                    id: pushUp.id,
+                },
+            },
         },
     });
 
     await prisma.workoutExercise.create({
         data: {
-            workoutId: workout2.id,
-            exerciseId: pullUp.id,
             sets: 3,
             reps: 10,
             rpe: 8,
             restTime: 90,
+            workout: {
+                connect: {
+                    id: workout2.id,
+                },
+            },
+            exercise: {
+                connect: {
+                    id: pullUp.id,
+                },
+            },
         },
     });
 
