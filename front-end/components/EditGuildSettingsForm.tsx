@@ -108,7 +108,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
             <div className="bg-[#2C2F33] p-6 rounded-lg shadow-lg w-1/2 text-white">
                 <h2 className="text-2xl font-bold mb-4">Edit Settings for {guild?.guildName}</h2>
                 <p className="text-sm text-gray-300 mb-2">New boards are created with the server settings</p>
-                <div className="space-y-4">
+                <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
                     {guildSettings.map(entry => (
                         <div
                             key={entry.identifier}
