@@ -50,9 +50,11 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
     if (!emailError && !passwordError) {
       try {
         const loginData: LoginData = { email, password };
-        await authService.login(loginData);
+        const user = await authService.login(loginData);
+        console.log("User data:", user); // Add this line for debugging
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
         onSuccess();
-        router.push("/"); // Redirect to home on success
+        router.push("/planner"); // Redirect to planner page on success
       } catch (error) {
         setFormError("Invalid email or password. Please try again.");
       }
