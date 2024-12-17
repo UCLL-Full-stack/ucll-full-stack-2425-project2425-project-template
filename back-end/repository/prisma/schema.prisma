@@ -8,48 +8,39 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  username     String        @unique
-  email        String        @unique
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
+  email        String         @unique
   password     String
-  shoppingcart Shoppingcart? // One-to-Many: A user can have multiple shopping carts
-  reviews      Review[] // One-to-Many: A user can write multiple reviews
+  shoppingCart ShoppingCart?  // One-to-One: Each user has one shopping cart
+  reviews      Review[]       // One-to-Many: A user can write multiple reviews
 }
 
 model Product {
-  id          Int        @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   name        String
   price       Float
   description String
   stock       Int
-  reviews     Review[] // One-to-Many: A product can have multiple reviews
-  cartItems   CartItem[] // One-to-Many: A product can appear in multiple cart items
+  reviews     Review[]        // One-to-Many: A product can have multiple reviews
+  shoppingCarts ShoppingCart[]  // Many-to-Many
+}
+
+model ShoppingCart {
+  id           Int           @id @default(autoincrement())
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int           @unique
+  products     Product[]      // Many-to-Many: Shopping cart contains multiple products
+  totalPrice   Float         @default(0)
 }
 
 model Review {
   id        Int      @id @default(autoincrement())
   score     Int
   comment   String
-  date      DateTime
+  date      DateTime @default(now())
   product   Product  @relation(fields: [productId], references: [id])
   productId Int
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int // Many-to-One: Each review belongs to one user
-}
-
-model Shoppingcart {
-  id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [userId], references: [id]) // Many-to-One: Each shopping cart belongs to one user
-  userId     Int        @unique
-  cartItems  CartItem[] // One-to-Many: A shopping cart can contain multiple cart items
-  totalPrice Float      @default(0)
-}
-
-model CartItem {
-  id             Int          @id @default(autoincrement())
-  product        Product      @relation(fields: [productId], references: [id]) // Many-to-One: Each cart item references one product
-  productId      Int
-  shoppingcart   Shoppingcart @relation(fields: [shoppingcartId], references: [id]) // Many-to-One: Each cart item belongs to one shopping cart
-  shoppingcartId Int
-  quantity       Int
+  userId    Int
 }

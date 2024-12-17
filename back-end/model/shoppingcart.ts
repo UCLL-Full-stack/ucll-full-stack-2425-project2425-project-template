@@ -2,44 +2,37 @@ import { CartItem } from './cartItem';
 import { Product } from './product';
 import {
     User as UserPrisma,
-    CartItem as CartItemPrisma,
     Shoppingcart as ShoppingcartPrisma,
+    Product as ProductPrisma,
 } from '@prisma/client';
 
 export class Shoppingcart {
     private id?: number;
-    private cartItems: CartItem[];
+    private products: Product[];
     private totalPrice: number;
 
-    constructor(shoppingcart: { id?: number; cartItems: CartItem[]; totalPrice: number }) {
+    constructor(shoppingcart: { id?: number; products: Product[]; totalPrice?: number }) {
         this.id = shoppingcart.id;
-        this.cartItems = shoppingcart.cartItems;
-        this.totalPrice = this.calculateTotalPrice();
+        this.products = shoppingcart.products;
+        this.totalPrice = shoppingcart.totalPrice || this.calculateTotalPrice();
     }
 
-    public addProductToCart(product: Product, quantity: number): void {
-        const existingCartItem = this.cartItems.find((item) => item.getProduct().equals(product));
-
-        if (existingCartItem) {
-            existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
-        } else {
-            this.cartItems.push(new CartItem({ product, quantity }));
-        }
-
+    public addProductToCart(product: Product): void {
+        this.products.push(product);
         this.totalPrice = this.calculateTotalPrice();
     }
 
     public removeProductFromCart(product: Product): void {
-        this.cartItems = this.cartItems.filter((item) => !item.getProduct().equals(product));
+        this.products = this.products.filter((p) => !p.equals(product));
         this.totalPrice = this.calculateTotalPrice();
     }
 
     public calculateTotalPrice(): number {
-        return this.cartItems.reduce((sum, item) => sum + item.getTotalPrice(), 0);
+        return this.products.reduce((sum, product) => sum + product.getPrice(), 0);
     }
 
-    public getCartItems(): CartItem[] {
-        return this.cartItems;
+    public getProducts(): Product[] {
+        return this.products;
     }
 
     public getTotalPrice(): number {
@@ -53,19 +46,18 @@ export class Shoppingcart {
     equals(shoppingcart: Shoppingcart): boolean {
         return (
             this.id === shoppingcart.getId() &&
-            this.cartItems === shoppingcart.getCartItems() &&
+            JSON.stringify(this.products) === JSON.stringify(shoppingcart.getProducts()) &&
             this.totalPrice === shoppingcart.getTotalPrice()
         );
     }
+
     static from({
         id,
-        cartItems,
-        totalPrice,
-    }: ShoppingcartPrisma & { cartItems: CartItemPrisma[] }) {
+        products,
+    }: ShoppingcartPrisma & { products: ProductPrisma[] }): Shoppingcart {
         return new Shoppingcart({
             id,
-            cartItems: cartItems.map((item) => CartItem.from(item)),
-            totalPrice,
+            products: products.map((product) => Product.from(product)),
         });
     }
 }
