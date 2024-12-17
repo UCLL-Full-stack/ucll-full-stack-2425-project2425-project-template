@@ -23,10 +23,6 @@ const Header: React.FC = () => {
         if (loggedUser?.email) {
             getInvitesByUserEmail(loggedUser.email);
             getTicketsByUserEmail(loggedUser.email);
-            console.log('invites: ');
-            console.log(invites);
-            console.log('tickets: ');
-            console.log(tickets);
         }
     }, [loggedUser]);
 
@@ -75,6 +71,12 @@ const Header: React.FC = () => {
                     {t("header.upcomingEvents")}
                 </Link>
 
+                {loggedUser && (loggedUser.role === 'ADMIN' || loggedUser.role === 'ORGANIZER') && (
+                    <Link href="/create-event" className={`nav-link px-4 fs-5 ${isActive('/create-event') ? 'text-white' : 'text-white-50'}`}>
+                        {t("header.createEvent")}
+                    </Link>
+                )}
+
                 {loggedUser && loggedUser.role !== 'ADMIN' && (
                     <Link href="/my-events" className={`nav-link px-4 fs-5 ${isActive('/my-events') ? 'text-white' : 'text-white-50'}`}>
                         {t("header.myEvents")} {tickets && invites && (
@@ -82,10 +84,6 @@ const Header: React.FC = () => {
                         )}
                     </Link>
                 )}
-
-                <Link href="/create-event" className={`nav-link px-4 fs-5 ${isActive('/create-event') ? 'text-white' : 'text-white-50'}`}>
-                    {t("header.createEvent")}
-                </Link>
 
                 {loggedUser ? (
                     <>
@@ -102,7 +100,7 @@ const Header: React.FC = () => {
                                     href="/invites-overview"
                                     className={`nav-link px-4 fs-5 ${isActive('/invites-overview') ? 'text-white' : 'text-white-50'}`}
                                 >
-                                    {t("header.invitesOverview")} 
+                                    {t("header.invitesOverview")}
                                 </Link>
                             </>
                         )}

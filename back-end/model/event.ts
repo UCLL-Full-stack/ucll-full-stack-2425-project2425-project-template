@@ -9,14 +9,14 @@ import { Ticket } from './ticket';
 
 
 export class Event {
-    private id?: number;
-    private name: string;
-    private description: string;
-    private date: Date;
-    private location: string;
-    private category: string;
-    private backgroundImage?: string;
-    private isTrending: boolean;
+    readonly id?: number;
+    readonly name: string;
+    readonly description: string;
+    readonly date: Date;
+    readonly location: string;
+    readonly category: string;
+    readonly backgroundImage?: string;
+    readonly isTrending: boolean;
 
     constructor(event: {
         id?: number,

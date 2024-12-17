@@ -42,7 +42,6 @@ const createUser = async (user: User): Promise<User> => {
 
         return User.from(userPrisma);
     } catch (error){
-        console.log(error);
         throw new Error('Database error. See server log for details.');
     }
 }

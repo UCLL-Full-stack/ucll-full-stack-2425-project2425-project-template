@@ -118,61 +118,13 @@ eventRouter.get('/details/:id', async (req: Request, res: Response, next: NextFu
     }
 });
 
-/**
- * @swagger
- * /events/{id}/{email}:
- *   put:
- *     summary: Add a participant to an event.
- *     tags:
- *       - Events
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- *       - name: email
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Participant added successfully.
- *       400:
- *         description: Error adding participant.
- */
-
-// eventRouter.put('/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
-//     const eventId = parseInt(req.params.id, 10);
-//     const email = req.params.email;
-
-//     try {
-//         const updatedEvent = await eventService.addParticipantToEvent(email, eventId);
-//         res.status(200).json(updatedEvent);
-//     } catch (error) {
-//         console.log(error);
-//         if (error instanceof Error) {
-//             res.status(400).json({ status: 'error', message: error.message });
-//         } else {
-//             res.status(400).json({ status: 'error', message: 'Unknown error' });
-//         }
-//     }
-// });
-
-
-
-// eventRouter.put('/remove/:id/:email', async (req: Request, res: Response, next: NextFunction) => {
-//     const eventId = parseInt(req.params.id, 10);
-//     const email = req.params.email;
-
-//     try {
-//         await eventService.removeEvent(email, eventId);
-//         res.status(200).json({ message: 'Event removed successfully.' });
-//     } catch (error){
-//         console.log(error);
-//     }
-
-// })
+eventRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const event = await eventService.createEvent(req.body);
+        res.status(201).json(event);
+    } catch (error) {
+        res.status(400).json({ status: 'error', message: 'Could not create event.' });
+    }
+});
 
 export { eventRouter };

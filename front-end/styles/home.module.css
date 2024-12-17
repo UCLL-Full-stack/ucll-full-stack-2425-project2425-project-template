@@ -555,38 +555,108 @@
 
   .addParticipantForm,
   .loginMyEvents,
-  .userSignupForm {
+  .userSignupForm,
+  .createEventForm {
     margin-top: 10rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.userSignupForm {
+.createEventForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.createEventForm button {
+    margin-top: 2rem;
+}
+
+.createEventFormContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.createEventFormContainerEvent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-right: 1px dashed white;
+    padding-right: 2rem;
+}
+
+.createEventFormContainerEvent p {
+    margin-bottom: 0 !important;
+}
+
+.createEventFormContainerEvent div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.createEventFormContainerTicket {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 2rem;
+}
+
+.createEventFormContainerTicket div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.createEventFormContainerTicket p {
+    margin-bottom: 0 !important;
+}
+
+.userSignupForm,
+.createEventForm {
     margin-top: 2rem !important;
     margin-bottom: 5rem !important;
 }
 
 .loginMyEvents,
-.userSignupForm{
+.userSignupForm {
     max-width: 50vw;
+}
+
+.createEventForm {
+    width: 80vw;
+    justify-content: center;
+    align-items: center;
 }
 
 .addParticipantForm label,
 .loginMyEvents label,
-.userSignupForm label {
+.userSignupForm label,
+.createEventForm label,
+.createEventFormContainerTitles {
     font-weight: bold;
 }
 
 .loginMyEvents label,
-.userSignupForm label {
+.userSignupForm label,
+.createEventForm label,
+.createEventFormContainerTitles {
     color: white;
+}
+
+.createEventFormContainerTitles {
+    font-size: 1.3rem;
 }
 
 .addParticipantForm input,
 .loginMyEvents input,
 .userSignupForm input,
-.userSignupForm select {
+.userSignupForm select,
+.createEventForm input,
+.createEventForm textarea,
+.createEventFormContainerTicket select {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -596,7 +666,8 @@
 .addParticipantForm button,
 .loginMyEvents button,
 .userSignupForm button,
-.inviteButton {
+.inviteButton,
+.createEventForm button {
     padding: 10px;
     background-color: black;
     color: white;
@@ -609,12 +680,14 @@
 
 .addParticipantForm button:hover,
 .loginMyEvents button:hover,
-.userSignupForm button:hover {
+.userSignupForm button:hover,
+.createEventForm button:hover {
     scale: 1.05;
 }
 
 .loginMyEvents button:hover,
-.userSignupForm button:hover {
+.userSignupForm button:hover,
+.createEventForm button:hover {
     scale: 1.05;
     background-color: white;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);

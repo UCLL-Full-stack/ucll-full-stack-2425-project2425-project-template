@@ -22,7 +22,6 @@ export type EventInput = {
     location: string,
     category: string,
     backgroundImage?: string,
-    // users: UserInput[],
     isTrending: boolean,
 };
 

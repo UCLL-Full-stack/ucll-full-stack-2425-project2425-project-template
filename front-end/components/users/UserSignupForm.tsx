@@ -77,8 +77,6 @@ const UserSignupForm: React.FC = () => {
                 role,
             });
 
-            console.log(response);
-
             if (response.ok) {
                 setStatusMessage('User created successfully! Redirecting...');
                 setShowStatus(true);

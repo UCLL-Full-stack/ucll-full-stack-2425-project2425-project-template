@@ -29,10 +29,9 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
     return events;
 };
 
-
-// const removeEvent = async (email: string, eventId: number) => {
-//     return await eventDb.removeFromMyEvents(email, eventId);
-// };
+const createEvent = async (eventData: Event): Promise<Event> => {
+    return await eventDb.createEvent(eventData);
+}
 
 
 export default {
@@ -43,5 +42,5 @@ export default {
     // getEventsByParticipantEmail,
     getEventsByUserEmail,
     // removeEvent,
-    
+    createEvent,
 };

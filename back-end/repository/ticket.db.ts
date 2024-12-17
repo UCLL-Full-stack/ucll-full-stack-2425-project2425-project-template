@@ -1,4 +1,5 @@
 import { Ticket } from '../model/ticket';
+import { EventInput } from '../types';
 // import prisma from '../repository/database';
 import database from './database';
 
@@ -85,10 +86,32 @@ const removeUserFromTicket = async (ticketId: string) => {
     return Ticket.from(ticketPrisma);
 }
 
+const createTicket = async (type: string, cost: number, event: EventInput) => {
+    const ticketPrisma = await database.ticket.create({
+        data: {
+            type: type,
+            cost: cost,
+            user: {},
+            event: {
+                connect: {
+                    id: event.id,
+                },
+            },
+        },
+        include: {
+            user: true,
+            event: true,
+        },
+    });
+
+    return Ticket.from(ticketPrisma);
+};
+
 export default {
     getAllTickets,
     getTicketsByEventId,
     userBuyTicket,
     getTicketsByUserEmail,
     removeUserFromTicket,
+    createTicket,
 }

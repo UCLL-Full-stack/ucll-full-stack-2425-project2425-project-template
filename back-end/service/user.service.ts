@@ -75,7 +75,6 @@ const generateJwtToken = (username: string, role: Role) => {
         }
         return jwt.sign({username, role}, process.env.JWT_SECRET, options);
     } catch (error) {
-        console.log('Error generating token', error);
         throw new Error('Error generating JWT token, see server log for details.');
     }
 };
