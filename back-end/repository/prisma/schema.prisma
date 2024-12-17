@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id           Int      @id @default(autoincrement())
+  name         String
+  duration     DateTime
+  playingdates DateTime[] // Represents an array of dates
+  genre        String
+  summary      String
+  tickets      Ticket[]  @relation("MovieTickets")
+}
+
+model Room {
+  id        Int     @id @default(autoincrement())
+  name      String
+  chairs    Int[]   // Represents an array of chair numbers as integers
+  tasks     Task[]  @relation("RoomTasks")
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  time        DateTime
+  description String
+  status      String
+  comment     String
+  roomId      Int
+  room        Room     @relation("RoomTasks", fields: [roomId], references: [id])
+}
+
+model Ticket {
+  id       Int      @id @default(autoincrement())
+  price    Float
+  date     DateTime
+  time     DateTime
+  chair    Int
+  movieId  Int
+  movie    Movie    @relation("MovieTickets", fields: [movieId], references: [id])
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  email    String @unique
+  role     String
+
+}
