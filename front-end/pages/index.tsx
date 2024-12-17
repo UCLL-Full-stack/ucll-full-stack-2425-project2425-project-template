@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Header from '@/components/header';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import styles from '@/styles/Home.module.css';
 
 const Home: React.FC = () => {
 
@@ -17,7 +18,8 @@ const Home: React.FC = () => {
       </Head>
       <Header />
       <main>
-        <h1>{t("page.title")}</h1>
+        <h1 className={styles.title}>{t("page.title")}</h1>
+        <p className={styles.description}>{t("page.description")}</p>
       </main>
     </>
   );

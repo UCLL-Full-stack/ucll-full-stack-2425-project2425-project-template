@@ -62,24 +62,34 @@ td img {
     width: 20%;
 }
 
-
 .addForms {
     padding: 10px;
     background-color: green;
     width: 40%;
     margin: auto;
+    border-radius: 8px;
     padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .addForms form {
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }
 
 .addForms label {
     color: white;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .addForms input[type="text"],
+.addForms input[type="number"],
+.addForms input[type="password"],
+.addForms input[type="email"],
 input[type="number"],
 input[type="password"],
 select {
@@ -87,6 +97,8 @@ select {
     width: 95%;
     margin-bottom: 20px;
     display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .addForms input[type="submit"] {
@@ -96,6 +108,8 @@ select {
     padding: 10px;
     cursor: pointer;
     transition: 0.3s;
+    width: 97%;
+    border-radius: 4px;
 }
 
 .addForms input[type="submit"]:hover {

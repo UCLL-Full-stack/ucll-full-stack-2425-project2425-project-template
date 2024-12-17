@@ -6,16 +6,24 @@ import { AuthenticationResponse, UserInput } from "../types";
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from "../util/jwt";
 
-const createUser = async (user: User): Promise<User> => {
-    const getUsername = await userDb.getUserByUsername({ gebruikersnaam: user.getGebruikersnaam() });
+const createUser = async ({ naam, voornaam, email, wachtwoord, adres, gebruikersnaam, rol }: UserInput): Promise<User> => {
+    const getUsername = await userDb.getUserByUsername({ gebruikersnaam });
 
-    if (getUsername != null) {
-        throw new Error("User already exist");
+    if (getUsername) {
+        throw new Error("User already exists");
     }
 
-    const bcryptPassword = await bcrypt.hash(user.getWachtwoord(), 12);
-    const newUser = new User({ naam: user.getNaam(), voornaam: user.getVoornaam(), email: user.getEmail(), wachtwoord: bcryptPassword, adres: user.getAdres(), gebruikersnaam: user.getGebruikersnaam(), rol: user.getRol() });
-    userDb.createUser(newUser);
+    const bcryptPassword = await bcrypt.hash(wachtwoord, 12);
+    const newUser = new User({
+        naam,
+        voornaam,
+        email,
+        wachtwoord: bcryptPassword,
+        adres,
+        gebruikersnaam,
+        rol: "Klant"
+    });
+    await userDb.createUser(newUser);
     return newUser;
 }
 

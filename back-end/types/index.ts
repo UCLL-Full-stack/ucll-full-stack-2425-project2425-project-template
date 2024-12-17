@@ -19,7 +19,7 @@ type UserInput = {
     adres: string;
     gebruikersnaam: string;
     rol: Rol;
-    bestellingen: BestellingInput[];
+    bestellingen?: BestellingInput[];
 }
 
 type IngredientInput = {

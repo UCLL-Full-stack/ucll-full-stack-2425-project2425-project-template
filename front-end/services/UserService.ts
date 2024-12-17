@@ -1,4 +1,5 @@
 import { User } from "@/types";
+import { use } from "react";
 
 const login = async (user: User) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
@@ -94,13 +95,24 @@ const updateUser = async (id: number, userData: Partial<User>) => {
     });
 };
 
+const register = async (user: { naam: string; voornaam: string; adres: string; email: string; gebruikersnaam: string; wachtwoord: string }) => {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    });
+};
+
 const UserService = {
     login,
     getUserById,
     getUserBestellingen,
     getAllUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    register
 };
 
 export default UserService;

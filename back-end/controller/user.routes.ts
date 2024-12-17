@@ -32,6 +32,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import userService from "../service/user.service";
 import { UserInput } from '../types';
+import { User } from '../model/user';
 
 const userRouter = express.Router();
 
@@ -56,7 +57,7 @@ const userRouter = express.Router();
  */
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = req.body;
+        const user = <UserInput>req.body;
         const newUser = await userService.createUser(user);
         res.status(200).json(newUser);
     } catch (error) {
