@@ -20,7 +20,7 @@ const ExpenseOverviewTable: React.FC<Props> = ({ expenses }: Props) => {
                     {expenses.map((expense) => (
                         <tr key={expense.month}>
                             <td>{expense.month}</td>
-                            <td>{expense.totalCost}</td>
+                            <td>{expense.totalCost} €</td>
                         </tr>
                     ))}
                 </tbody>

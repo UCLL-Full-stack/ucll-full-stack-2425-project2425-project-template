@@ -83,35 +83,32 @@
 
 .table th,
 .table td {
-  padding: 1rem; /* Add padding to table cells */
+  padding: 1rem;
   text-align: left;
-  font-size: 1.1rem; /* Increase font size */
-  border: 1px solid #333; /* Add border to table cells */
+  font-size: 1.1rem;
+  border: 1px solid #333;
 }
 
 .table thead {
-  background-color: #333; /* Darker background for the header */
+  background-color: #333;
 }
 
 .table tbody tr:nth-child(even) {
-  background-color: #2e2e2e; /* Slightly lighter background for even rows */
+  background-color: #2e2e2e;
 }
 
-.table tbody tr:hover {
-  background-color: #4c6149; /* Darker background on hover */
+.table tbody tr[role="button"]:hover {
+  background-color: #3a3a3a;
+  /* background-color: #4c6149; */
 }
 
-.table tbody tr:active {
-  background-color: #4caf50; /* Green background when clicked */
-  color: #fff; /* White text when clicked */
+.table tbody tr[role="button"]:active {
+  background-color: #4caf50;
+  color: #fff;
 }
 
 .table tbody tr td {
   border-bottom: 1px solid #333; /* Add border between rows */
-}
-
-.table tbody tr:last-child td {
-  border-bottom: none; /* Remove border for the last row */
 }
 
 /* Responsieve stijlen */

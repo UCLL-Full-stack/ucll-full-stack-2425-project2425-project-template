@@ -30,7 +30,17 @@ const getAnimalsByCaretaker = async ({ username }: { username: string }) => {
     }
 };
 
+const deleteAnimal = async ({ id }: { id: number}) => {
+    try {
+        return await animalDb.deleteAnimal({ id });
+    } catch (error) {
+        console.error('Error deleting animal:', error);
+        throw new Error('Failed to delete animal.');
+    }
+}
+
 export default {
     getAllAnimals,
     getAnimalsByCaretaker,
+    deleteAnimal,
 };

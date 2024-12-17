@@ -92,6 +92,14 @@ const main = async () => {
         'Bella', 'Max', 'Charlie', 'Molly', 'Buddy', 'Daisy', 'Rocky', 'Luna', 'Jack', 'Lucy',
         'Toby', 'Bailey', 'Coco', 'Oscar', 'Rosie'
     ];
+    const favouriteFoods = [
+        'Carrots', 'Apples', 'Bananas', 'Fish', 'Chicken', 'Beef', 'Lettuce', 'Corn', 'Peas', 'Rice',
+        'Oats', 'Wheat', 'Barley', 'Soybeans', 'Potatoes'
+    ];
+    const favouriteToys = [
+        'Ball', 'Frisbee', 'Rope', 'Squeaky Toy', 'Chew Toy', 'Plush Toy', 'Laser Pointer', 'Feather Wand', 'Tunnel', 'Scratching Post',
+        'Puzzle Toy', 'Treat Dispenser', 'Catnip Toy', 'Mouse Toy', 'Bell Toy'
+    ];
     const animals = await Promise.all(
         animalNames.map(async (name, index) => {
             const caretaker = caretakers[index % caretakers.length].caretaker;
@@ -102,8 +110,8 @@ const main = async () => {
                         name,
                         age: Math.floor(Math.random() * 10) + 1,
                         speciesId: species.id,
-                        favouriteFood: `Food ${index + 1}`,
-                        favouriteToy: `Toy ${index + 1}`,
+                        favouriteFood: favouriteFoods[index],
+                        favouriteToy: favouriteToys[index],
                         caretakerId: caretaker.id, // Correctly reference caretakerId
                         expenses: {
                             create: Array.from({ length: Math.floor(Math.random() * 3) + 1 }).map((_, expenseIndex) => ({

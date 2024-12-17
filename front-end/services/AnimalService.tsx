@@ -45,13 +45,36 @@ const getAnimalsByCaretaker = async (username: string) => {
         return response;
     } catch (error) {
         console.error('Error fetching animals:', error);
-        return []; // Return an empty array in case of an error
+        return [];
+    }
+};
+
+const deleteAnimal = async (id: string) => {
+    try {
+        const token = getToken();
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/animals/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete animal. Status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error('Error deleting animal:', error);
+        return null;
     }
 };
 
 const AnimalService = {
     getAnimals,
     getAnimalsByCaretaker,
+    deleteAnimal,
 };
 
 export default AnimalService;

@@ -40,10 +40,6 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        // setStatusMessages([{message: "Login successful", type: "success"}]);
-
-        // sessionStorage.setItem("loggedInUser", name);
-
         const user = { username: name, password };
         const response = await UserService.loginUser(user);
 

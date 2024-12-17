@@ -12,7 +12,7 @@
     h3 {
         @apply text-center text-green-500 text-xl
     }
-
+/* 
     thead tr {
         @apply px-6 py-3 text-left
     }
@@ -24,7 +24,7 @@
     td,
     th {
         @apply px-6 py-3
-    }
+    } */
 
     table {
         @apply text-sm

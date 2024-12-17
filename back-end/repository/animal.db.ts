@@ -37,4 +37,15 @@ const getAnimalsByCaretaker = async ({ username }: { username: string }): Promis
     }
 };
 
-export default { getAllAnimals, getAnimalsByCaretaker };
+const deleteAnimal = async ({ id }: { id: number }): Promise<void> => {
+    try {
+        await database.animal.delete({
+            where: { id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { getAllAnimals, getAnimalsByCaretaker, deleteAnimal };

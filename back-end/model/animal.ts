@@ -15,7 +15,7 @@ export class Animal {
     private age: number;
     private species: Species;
     private favouriteFood: string;
-    private favouritetToy: string;
+    private favouriteToy: string;
     private expenses: Expense[];
     private caretaker: Caretaker;
 
@@ -36,7 +36,7 @@ export class Animal {
         this.age = animal.age;
         this.species = animal.species;
         this.favouriteFood = animal.favouriteFood;
-        this.favouritetToy = animal.favouriteToy;
+        this.favouriteToy = animal.favouriteToy;
         this.expenses = animal.expenses;
         this.caretaker = animal.caretaker;
     }
@@ -62,7 +62,7 @@ export class Animal {
     }
 
     getFavouriteToy(): string {
-        return this.favouritetToy;
+        return this.favouriteToy;
     }
 
     getExpenses(): Expense[] {
@@ -134,7 +134,7 @@ export class Animal {
             this.age === animal.getAge() &&
             this.species === animal.getSpecies() &&
             this.favouriteFood === animal.getFavouriteFood() &&
-            this.favouritetToy === animal.getFavouriteToy()
+            this.favouriteToy === animal.getFavouriteToy()
         );
     }
 }

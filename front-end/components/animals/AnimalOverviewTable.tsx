@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../../styles/Home.module.css';
 import { Animal } from '@types';
 
 type Props = {
     animals: Array<Animal>;
     selectAnimal: (animal: Animal) => void;
+    DetailTableComponent: React.FC<{ animal: Animal }>;
 };
 
-const AnimalOverviewTable: React.FC<Props> = ({ animals, selectAnimal }: Props) => {
+const AnimalOverviewTable: React.FC<Props> = ({ animals, selectAnimal, DetailTableComponent }: Props) => {
+    const [expandedAnimal, setExpandedAnimal] = useState<Animal | null>(null);
+
+    const toggleExpand = (animal: Animal) => {
+        if (expandedAnimal && expandedAnimal.id === animal.id) {
+            setExpandedAnimal(null);
+        } else {
+            setExpandedAnimal(animal);
+        }
+    };
+
     return (
         <div className={styles.tableContainer}>
             <table className={styles.table}>
@@ -20,11 +31,20 @@ const AnimalOverviewTable: React.FC<Props> = ({ animals, selectAnimal }: Props) 
                 </thead>
                 <tbody>
                     {animals.map((animal) => (
-                        <tr key={animal.name} onClick={() => selectAnimal(animal)} role="button">
-                            <td>{animal.name}</td>
-                            <td>{animal.species.species}</td>
-                            <td>{animal.age}</td>
-                        </tr>
+                        <React.Fragment key={animal.id}>
+                            <tr onClick={() => toggleExpand(animal)} role="button">
+                                <td>{animal.name}</td>
+                                <td>{animal.species.species}</td>
+                                <td>{animal.age}</td>
+                            </tr>
+                            {expandedAnimal && expandedAnimal.id === animal.id && (
+                                <tr>
+                                    <td colSpan={3}>
+                                        <DetailTableComponent animal={animal} />
+                                    </td>
+                                </tr>
+                            )}
+                        </React.Fragment>
                     ))}
                 </tbody>
             </table>

@@ -128,4 +128,32 @@ animalRouter.get('/:caretaker_username', async (req: Request, res: Response, nex
     }
 });
 
+/**
+ * @swagger
+ * /animals/{id}:
+ *   delete:
+ *     summary: Delete an animal by ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the animal to delete
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Animal deleted successfully
+ *       404:
+ *         description: Animal not found
+ */
+animalRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = Number(req.params.id);
+        await animalService.deleteAnimal({ id });
+        res.status(200).send({ message: 'Animal deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default animalRouter;

@@ -4,11 +4,13 @@ import { Animal, User } from '@types';
 import Head from 'next/head';
 import Header from '@components/header';
 import AnimalOverviewTable from '@components/animals/AnimalOverviewTable';
+import AnimalDetailsTable from '@components/animals/AnimalDetailsTable';
 import useSWR, { mutate } from 'swr';
 import useInterval from 'use-interval';
+import AnimalExpenseTable from '@components/animals/AnimalExpenseTable';
+import AnimalAdminTable from '@components/animals/AnimalAdminTable';
 
 const Animals: React.FC = () => {
-    // const [animals, setAnimals] = useState<Animal[]>();
     const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
@@ -71,14 +73,23 @@ const Animals: React.FC = () => {
                     <h2>Animals overview</h2>
                     {error && <div className="text-center text-red-800">{error.message}</div>}
                     {isLoading && <p className="text-center text-green-800">Loading...</p>}
-                    {data && <AnimalOverviewTable animals={data} selectAnimal={selectAnimal} />}
+                    {data && (
+                        <AnimalOverviewTable
+                            animals={data}
+                            selectAnimal={selectAnimal}
+                            DetailTableComponent={
+                                loggedInUser
+                                    ? loggedInUser.role === "caretaker"
+                                        ? AnimalDetailsTable
+                                        : loggedInUser.role === "manager"
+                                        ? AnimalExpenseTable
+                                        : AnimalAdminTable
+                                    : AnimalAdminTable
+                            }
+                            
+                        />
+                    )}
                 </section>
-                {/* {selectedAnimal && (
-                    <section>
-                        <h2>Courses taught by {selectedAnimal.user.firstName}</h2>
-                        <CourseOverviewTable animal={selectedAnimal} />
-                    </section>
-                )} */}
             </main>
         </>
     );

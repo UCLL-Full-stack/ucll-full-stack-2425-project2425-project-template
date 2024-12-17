@@ -17,10 +17,9 @@ export type Animal = {
   age: number;
   species: Species;
   favouriteFood: string;
-  favouritetoy: string;
-  costPerMonth: number;
-  costPerMonthPerSpecies: number;
-  caretakers: Caretaker[];
+  favouriteToy: string;
+  expenses: Expense[]
+  caretakers: Caretaker;
 };
 
 export type Expense = {
