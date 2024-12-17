@@ -50,13 +50,18 @@ cocktailIngredientRouter.get("/:cocktailId/ingredients", async (req, res) => {
         return res.status(400).json({ error: "Invalid cocktail ID" });
     }
 
-    const ingredients = cocktailIngredientService.getIngredientsByCocktailId(cocktailId);
+    try {
+        const ingredients = await cocktailIngredientService.getIngredientsByCocktailId(cocktailId);
 
-    if (!ingredients || (await ingredients).length === 0) {
-        return res.status(404).json({ error: "No ingredients found for this cocktail" });
+        if (!ingredients || ingredients.length === 0) {
+            return res.status(404).json({ error: "No ingredients found for this cocktail" });
+        }
+
+        return res.json(ingredients);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error" });
     }
-
-    return res.json(ingredients);
 });
 
 /**
@@ -106,13 +111,18 @@ cocktailIngredientRouter.get("/:ingredientId/cocktails", async (req, res) => {
         return res.status(400).json({ error: "Invalid ingredient ID" });
     }
 
-    const cocktails = cocktailIngredientService.getCocktailsByIngredientId(ingredientId);
+    try {
+        const cocktails = await cocktailIngredientService.getCocktailsByIngredientId(ingredientId);
 
-    if (!cocktails || (await cocktails).length === 0) {
-        return res.status(404).json({ error: "No cocktails found for this ingredient" });
+        if (!cocktails || cocktails.length === 0) {
+            return res.status(404).json({ error: "No cocktails found for this ingredient" });
+        }
+
+        return res.json(cocktails);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error" });
     }
-
-    return res.json(cocktails);
 });
 
 

@@ -28,9 +28,9 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
                 
                 const names: { [key: number]: string } = {};
                 for (const ingredient of ingredientData) {
-                    if (ingredient._ingredientId) {
-                        const ingredientInfo = await IngredientService.getIngredientById(ingredient._ingredientId);
-                        names[ingredient._ingredientId] = ingredientInfo.name;
+                    if (ingredient.ingredientId) {
+                        const ingredientInfo = await IngredientService.getIngredientById(ingredient.ingredientId);
+                        names[ingredient.ingredientId] = ingredientInfo.name;
                     } else {
                         console.error("Ingredient ID is undefined for ingredient:", ingredient);
                     }

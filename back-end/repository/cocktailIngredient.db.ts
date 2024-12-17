@@ -24,26 +24,28 @@ const getRelationById = async (id: number): Promise<CocktailIngredient | null> =
     }
 };
 
-export const getIngredientsByCocktailId = async (cocktailId: number) => {
-    return await database.cocktailIngredient.findMany({
-        where: {
-            cocktailId,
-        },
-        include: {
-            ingredient: true, // Include ingredient details
-        },
-    });
+const getIngredientsByCocktailId = async (cocktailId: number): Promise<CocktailIngredient[]> => {
+    try {
+        const ingredients = await database.cocktailIngredient.findMany({
+            where: { cocktailId : cocktailId},
+        });
+        return ingredients.map((ingredient) => CocktailIngredient.from(ingredient));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error.');
+    }
 };
 
-export const getCocktailsByIngredientId = async (ingredientId: number) => {
-    return await database.cocktailIngredient.findMany({
-        where: {
-            ingredientId,
-        },
-        include: {
-            cocktail: true, // Include cocktail details
-        },
-    });
+const getCocktailsByIngredientId = async (ingredientId: number): Promise<CocktailIngredient[]> => {
+    try {
+        const cocktails = await database.cocktailIngredient.findMany({
+            where: { ingredientId },
+        });
+        return cocktails.map((cocktail) => CocktailIngredient.from(cocktail));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error.');
+    }
 };
 
 const addCocktailIngredient = async ({
