@@ -28,6 +28,35 @@
     margin-bottom: 1rem;
 }
 
+.homeLanguageHolder {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+    /* margin-top: 1rem; */
+    padding: 0.5rem;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.homeLanguageHolder label {
+    background-color: black;
+    color: white;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.homeLanguageHolder select {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    background-color: black;
+    font-size: 1rem;
+    text-align: center;
+}
+
 .upcomingEventsMain {
     /* height: 100vh; */
     background-color: black;
@@ -85,12 +114,24 @@
     scale: 1.05;
 }
 
+.usersHomeTableHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 15px;
+}
+
 .invitesTable {
     margin-bottom: 2rem;
 }
 
 .usersTable thead,
-.invitesTable thead {
+.invitesTable thead,
+.usersHomeTable thead {
     text-align: center;
 }
 
@@ -100,7 +141,8 @@
 }
 
 .usersTable thead th,
-.invitesTable thead th {
+.invitesTable thead th,
+.usersHomeTable thead th {
     padding: 1rem 5rem;
     background-color: black;
     color: white;
@@ -123,14 +165,16 @@
 }
 
 .usersTable tbody,
-.invitesTable tbody {
+.invitesTable tbody,
+.usersHomeTable tbody {
     width: 100%;
     text-align: center;
     gap: 2rem;
 }
 
 .usersTable tbody tr,
-.invitesTable tbody tr {
+.invitesTable tbody tr,
+.usersHomeTable tbody tr {
     border-bottom: 1px dotted black;
 }
 
@@ -149,7 +193,8 @@
 }
 
 .usersTable tbody tr td
-.invitesTable tbody tr td {
+.invitesTable tbody tr td,
+.usersHomeTable tbody tr td {
     padding: 1rem 0;
 }
 
