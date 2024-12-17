@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { productRouter } from './controller/product.routes';
-// import { cartRouter } from './controller/cart.routes';
+import { cartRouter } from './controller/cart.routes';
 
 const app = express();
 app.use(express.json());
@@ -15,11 +15,9 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-
 // routes
-app.use('/products',productRouter);
-// app.use('/carts',cartRouter);
-
+app.use('/products', productRouter);
+app.use('/carts', cartRouter);
 
 // Generic error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -29,8 +27,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         message: err.message,
     });
 });
-
-
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

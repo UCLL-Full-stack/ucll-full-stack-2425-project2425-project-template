@@ -1,35 +1,81 @@
 import { Cart } from "../model/cart";
-import { Product } from "../model/product"; // Import your Product model
+import database from "./database";
 
-const carts: Cart[] = [    
-    new Cart({
-        id: 1,
-        products: [],
-    }),
-];
-
-const getAllCarts = (): Cart[] => {
-    return carts;
+const getAllCarts = async (): Promise<Cart[]> => {
+    try {
+        const cartsPrisma = await database.cart.findMany({
+            include: {
+                products: true,
+                user: true,
+            },
+        });
+        return cartsPrisma.map(cartPrisma => Cart.from(cartPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
-const putProductToCart = (cartId: number, product: Product): Cart | string => {
-    const cart = carts.find(c => c.getId() === cartId);
-    
-    if (!cart) {
-        return `Cart with ID ${cartId} not found`;
+const getCartById = async (id: number): Promise<Cart | null> => {
+    try {
+        const cartPrisma = await database.cart.findUnique({
+            where: { id },
+            include: {
+                products: true,
+                user: true,
+            },
+        });
+        if (!cartPrisma) {
+            return null;
+        }
+        return Cart.from(cartPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
     }
-    
-    // Add the product to the cart's products array
-    cart.getProducts().push(product);
-    
-    // Optionally, you can recalculate the total price if needed
-    // This assumes you want to maintain the total price in the cart class itself
-    (cart as any).totalPrice = cart.getProducts().reduce((total, prod) => total + prod.getPrice(), 0);
+};
 
-    return cart; // Return the updated cart
+const putProductToCart = async (cartId: number, productId: number): Promise<Cart | string> => {
+    try {
+        const cart = await database.cart.findUnique({
+            where: { id: cartId },
+            include: { products: true, user: true },
+        });
+
+        if (!cart) {
+            return `Cart with ID ${cartId} not found`;
+        }
+
+        const product = await database.product.findUnique({
+            where: { id: productId },
+        });
+
+        if (!product) {
+            return "Product not found in the available products list.";
+        }
+
+        const updatedCart = await database.cart.update({
+            where: { id: cartId },
+            data: {
+                products: {
+                    connect: { id: productId },
+                },
+            },
+            include: {
+                products: true,
+                user: true,
+            },
+        });
+
+        return Cart.from(updatedCart);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
 export default {
     getAllCarts,
     putProductToCart,
+    getCartById
 };

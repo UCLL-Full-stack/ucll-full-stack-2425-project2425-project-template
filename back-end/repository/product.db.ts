@@ -2,20 +2,7 @@ import { Product } from "../model/product";
 import database from "./database";
 
 const products = [
-    new Product({
-    id:1,
-    name: 'speaker',
-    price: 100,
-    description: "well made speaker",
-    rating: 4,
-    }),
-    new Product({
-        id: 2,
-        name: 'mouse',
-        price: 200,
-        description: "well made mouse",
-        rating: 4,
-    }),
+
 ];
 
 const getAllproducts = async (): Promise<Product[]> => {

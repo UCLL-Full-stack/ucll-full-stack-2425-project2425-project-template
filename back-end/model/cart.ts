@@ -1,5 +1,6 @@
 import { Product } from "./product";
 import { User } from "./user";
+import { Cart as CartPrisma, Product as ProductPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Cart {
     private id?: number;
@@ -18,6 +19,18 @@ export class Cart {
         this.products = cart.products;
         this.totalPrice = this.calculateTotalPrice();
         this.user = cart.user;
+    }
+
+    static from({
+        id,
+        products,
+        user,
+    }: CartPrisma & { products: ProductPrisma[]; user: UserPrisma }): Cart {
+        return new Cart({
+            id,
+            products: products.map(product => Product.from(product)),
+            user: User.from(user),
+        });
     }
 
     private calculateTotalPrice(): number {
