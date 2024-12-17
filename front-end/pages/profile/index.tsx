@@ -1,8 +1,8 @@
 import Header from "@/components/header";
 import ListCard from "@/components/lists/listCard";
-import ListModal from "@/components/lists/listModal";
+import ListModal from "@/components/lists/createListModal";
 import ReviewCard from "@/components/reviews/reviewCard";
-import ReviewModal from "@/components/reviews/reviewModal";
+import ReviewModal from "@/components/reviews/createReviewModal";
 import ConfirmModal from "@/components/ui/DeleteModal";
 import IconAdd from "@/components/ui/add";
 import listService from "@/services/listService";
@@ -102,11 +102,11 @@ const Profile: React.FC = () => {
                         </div>
                     ):(user && 
                         <>
-                            <div className="bg-bg1 w-screen grid gap-3">
+                            <div className="bg-bg1 sm:p-4 lg:p-8 w-screen border-b border-bg3 grid gap-3">
                                 <span className="text-center main-font text-text2 text-4xl">
                                     {user.username}
                                 </span>
-                                <span className="text-center main-thin text-text2 text-xl">
+                                <span className="text-center yadig-italic text-text2 text-xl">
                                     digging since {new Date(user.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
@@ -131,7 +131,7 @@ const Profile: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="w-full lg:w-1/2 lg:border-l-[1px] border-bg2 lg:pl-10">
+                                <div className="w-full lg:w-1/2 lg:pl-10">
                                     <div className="relative flex items-center justify-center">
                                         <h1 className="main-font text-text2 text-2xl sm:text-3xl lg:text-4xl">My Album Lists</h1>
                                         <button
@@ -173,7 +173,7 @@ const Profile: React.FC = () => {
                                     id={selectedId} 
                                     handler={handleDeleteList} 
                                     onClose={toggleDeleteList}
-                                    message={`Confirm List Deletion`}
+                                    message={`Deleting List !`}
                                     />
                             )}
                             {isDeleteReviewOpen && user && (
@@ -181,7 +181,7 @@ const Profile: React.FC = () => {
                                     id={selectedId} 
                                     handler={handleDeleteReview} 
                                     onClose={toggleDeleteReview}
-                                    message={`Confirm Review Deletion`}
+                                    message={`Deleting Review !`}
                                     />
                             )}
                         </>

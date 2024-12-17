@@ -9,16 +9,12 @@ const getAllLists= async (): Promise<Response> => {
     });
 }
 
-const getUserLists= async (id: number): Promise<Response> => {
-    const loggedInUser = sessionStorage.getItem("LoggedInUser");
-    const user = JSON.parse(loggedInUser??"");
-    if (!user) return Response.error();
-
+const getListById= async (id: number): Promise<Response> => {
+    console.log(`${process.env.NEXT_PUBLIC_API_URL}/lists/${id}`);
     return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lists/${id}`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user.token}`
         }
     });
 }
@@ -69,7 +65,7 @@ const deleteList = async (id: number): Promise<Response> =>{
 
 export default {
     getAllLists,
-    getUserLists,
+    getListById,
     createList,
     likeList,
     deleteList

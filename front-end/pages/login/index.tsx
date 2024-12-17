@@ -59,7 +59,7 @@ const Login: React.FC = () => {
                     <div>
                         <form 
                             onSubmit={(e) => handleSave(e)} 
-                            className="px-8 sm:px-12 md:px-16 py-8 w-full sm:w-2/3 md:w-[30vw] lg:w-[25vw] bg-bg2 rounded-t-lg">
+                            className="px-8 sm:px-12 md:px-16 py-8 w-full sm:w-2/3 md:w-[30vw] lg:w-[25vw] bg-text1 rounded-t-lg">
                             <h2 className="text-3xl sm:text-4xl text-center text-text2 main-font mb-4 sm:mb-8 md:mb-10">Log In</h2>
                             {error && 
                                 <span className="block text-center main-font text-red-500 mb-4 sm:mb-6">{error}</span>
@@ -75,7 +75,7 @@ const Login: React.FC = () => {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block bg-text1 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
+                                    className="block bg-bg4 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
                                     required
                                 />
                             </label>
@@ -85,7 +85,7 @@ const Login: React.FC = () => {
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block bg-text1 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
+                                    className="block bg-bg4 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
                                     minLength={10}
                                     required
                                 />
@@ -93,13 +93,13 @@ const Login: React.FC = () => {
                             <div className="flex justify-center">
                                 <button 
                                     type="submit"
-                                    className="rounded-lg w-full sm:w-2/4 px-3 py-2 main-font text-sm sm:text-base text-text2 bg-text1 hover:bg-bg1 transition-colors duration-100">
+                                    className="rounded-lg w-full sm:w-2/4 px-3 py-2 main-font text-sm sm:text-base text-text2 bg-bg4 hover:bg-bg3 transition-colors duration-100">
                                     Submit
                                 </button>
                             </div>
                         </form>
-                        <div className="grid justify-center bg-text1 p-4 gap-3 rounded-b-lg">
-                            <span className="text-text2 main-thin">
+                        <div className="grid justify-center bg-bg3 p-4 gap-3 rounded-b-lg">
+                            <span className="text-text1 main-thin">
                                 Don't have Account yet?
                             </span>
                             <Link 

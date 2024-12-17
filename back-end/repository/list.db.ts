@@ -15,6 +15,22 @@ const getAllLists = async (): Promise<List[]> => {
     }
 };
 
+const getListById= async (id:number): Promise<List | null> => {
+    try{
+        const listsPrisma = await database.list.findUnique({
+            where:{id},
+            include: {
+                author: true,
+                likes: true
+            }
+        });
+        if(!listsPrisma)return null;
+        return List.from(listsPrisma);
+    }catch(e){
+        throw new Error('db Error');
+    }
+};
+
 const getById = async (id: number): Promise<List | null> => {
     try{
         const listsPrisma = await database.list.findUnique({
@@ -100,6 +116,7 @@ const deleteList = async (id: number)=>{
 
 export default {
     getAllLists,
+    getListById,
     getById,
     createList,
     getUserLists,

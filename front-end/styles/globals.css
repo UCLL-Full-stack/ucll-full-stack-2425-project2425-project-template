@@ -30,20 +30,16 @@
 
 .slider-container {
   overflow: hidden;
-  background: #111;
+  background: #5797da;
   white-space: nowrap;
-  position: relative;
-  padding: 1.25rem;
+  padding: 1rem;
   border-radius: 10px;
 }
 
 .slider-container:before,
 .slider-container:after {
-  position: absolute;
-  top: 0;
   width: 250px;
   height: 100%;
-  content: "";
   z-index: 2;
 }
 

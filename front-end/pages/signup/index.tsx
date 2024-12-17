@@ -50,71 +50,72 @@ const Signup = () => {
                         yadig?
                 </Link>
             </div>
-            <main className="flex justify-center items-center px-4 sm:px-8 bg-bg1 min-h-screen">
-                <div>
-                    <form 
-                        onSubmit={(e) => handleSave(e)} 
-                        className="px-8 sm:px-12 md:px-16 py-8 w-full bg-bg2 rounded-t-lg">
-                        <h2 className="text-3xl sm:text-4xl text-center text-text2 main-font mb-8 sm:mb-10 md:mb-12">Sign Up</h2>
-                        {error && 
-                            <span className="block text-center text-red-500 mb-4 sm:mb-6">{error}</span>
-                        }
-                        <label className="block text-sm sm:text-base text-text2 main-font mb-4 sm:mb-6">
-                            Username 
-                            <input 
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="block bg-text1 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
-                                required
-                            />
-                        </label>
-                        <label className="block text-sm sm:text-base text-text2 main-font mb-4 sm:mb-6">
-                            Email
-                            <input 
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="block bg-text1 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
-                                required
-                            />
-                        </label>
-                        <label className="block text-sm sm:text-base text-text2 main-font mb-6 sm:mb-8">
-                            Password 
-                            <input 
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="block bg-text1 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
-                                minLength={10}
-                                required
-                            />
-                        </label>
-                        <div className="flex justify-center">
-                            {success ? (
-                                <span className="main-font text-green-500 text-xl sm:text-2xl text-center">Account Created</span>
-                            ):(
-                                <button 
-                                    type="submit"
-                                    className="rounded-lg w-3/4 sm:w-2/4 px-3 py-2 main-font text-sm sm:text-base text-text2 bg-text1 hover:bg-text2 hover:text-text1 transition-colors duration-100">
-                                    Submit
-                                </button>
-                            )}
+            <div className="flex flex-col bg-bg1 min-h-screen">
+                <main className="flex-1 flex justify-center items-center px-4 sm:px-8">
+                    <div> <form 
+                            onSubmit={(e) => handleSave(e)} 
+                            className="px-8 sm:px-12 md:px-16 py-8 w-full sm:w-2/3 md:w-[30vw] lg:w-[25vw] bg-text1 rounded-t-lg">
+                            <h2 className="text-3xl sm:text-4xl text-center text-text2 main-font mb-8 sm:mb-10 md:mb-12">Sign Up</h2>
+                            {error && 
+                                <span className="block text-center text-red-500 mb-4 sm:mb-6">{error}</span>
+                            }
+                            <label className="block text-sm sm:text-base text-text2 main-font mb-4 sm:mb-6">
+                                Username 
+                                <input 
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    className="block bg-bg4 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
+                                    required
+                                />
+                            </label>
+                            <label className="block text-sm sm:text-base text-text2 main-font mb-4 sm:mb-6">
+                                Email
+                                <input 
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="block bg-bg4 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
+                                    required
+                                />
+                            </label>
+                            <label className="block text-sm sm:text-base text-text2 main-font mb-6 sm:mb-8">
+                                Password 
+                                <input 
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="block bg-bg4 text-white w-full mt-1 p-2 rounded focus:outline-none focus:ring-2 focus:ring-bg2"
+                                    minLength={10}
+                                    required
+                                />
+                            </label>
+                            <div className="flex justify-center">
+                                {success ? (
+                                    <span className="main-font text-green-500 text-xl sm:text-2xl text-center">Account Created</span>
+                                ):(
+                                    <button 
+                                        type="submit"
+                                        className="rounded-lg w-full sm:w-2/4 px-3 py-2 main-font text-sm sm:text-base text-text2 bg-bg4  hover:bg-bg3 transition-colors duration-100">
+                                        Submit
+                                    </button>
+                                )}
+                            </div>
+                        </form>
+                        <div className="grid justify-center bg-bg3 p-4 gap-3 rounded-b-lg">
+                            <span className="text-text1 main-thin">
+                                Already have an Account?
+                            </span>
+                            <Link 
+                                href={"/login"}
+                                className="w-full text-center main-font text-text2 hover:text-green-500 duration-100"
+                            >
+                                Log in     
+                            </Link>
                         </div>
-                    </form>
-                    <div className="grid justify-center bg-text1 p-4 gap-3 rounded-b-lg">
-                        <span className="text-text2 main-thin">
-                            Already have an Account?
-                        </span>
-                        <Link 
-                            href={"/login"}
-                            className="w-full text-center main-font text-text2 hover:text-green-500 duration-100"
-                        >
-                            Log in     
-                        </Link>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
         </>
     )
 };

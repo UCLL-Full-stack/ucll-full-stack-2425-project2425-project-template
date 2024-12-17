@@ -27,7 +27,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "pages/listsDetails/[id]"  ],
   "exclude": [
     "node_modules"
   ]

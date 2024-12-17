@@ -21,60 +21,45 @@ const ReviewCard: React.FC<Props> = ({review, onDelete, userId}: Props) => {
     const router = useRouter();
     const formattedDate = new Date(review.createdAt).toLocaleDateString();
     const [isLiked, setIsLiked] = useState<boolean>(false);
-    const [likeCount, setLikeCount] = useState<number>(review.likes.length);
-    const [clicked, setClicked] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
 
     useEffect(()=>{
         const userLiked = review.likes.find(like=> like === userId);
         if(userLiked) setIsLiked(true);
     },[userId]);
 
-    useEffect(()=>{
-        if(!userId || !clicked)return;
-
-        if(isLiked)
-            review.likes.push(userId); 
-        else
-            review.likes = review.likes.filter(like => like !== userId);
-
-        updateLikes();
-        setLikeCount(review.likes.length);
-    },[isLiked]);
-    
-    const updateLikes = async () => {
-        console.log(review);
-        const response = await reviewService.likeReview(review);
-        if(!response.ok){
-            setError(await response.json());
-        }
-    }
-
-    const handleLike = ()=>{
-        setClicked(true);
-        if(!userId) {
+    const handleRedirect = (e)=>{
+        if(!userId){ 
             router.push("/login");
             return;
         }
+        e.stopPropagation(); 
+        router.push(`/reviewDetails/${review.id}`)   
+    }
 
-        setIsLiked(!isLiked);
-    };
+    const handleDelete = (e)=>{
+        if(!onDelete) return;
+        
+        e.stopPropagation(); 
+        onDelete(review.id);
+    }
+
 
     return (
-        <div className="bg-bg2 rounded-lg p-4 shadow-md shadow-text1 w-[20vw]">
+        <div onClick={handleRedirect} 
+            className="bg-text1 lg:max-w-[25vw] md:max-w-full sm:max-w-[25vw] p-4 sm:p-5 rounded-lg shadow-lg shadow-text1 max-w-full transform transition-all duration-100 hover:scale-105">
             <div className="flex justify-between items-center">
                 <h2 className="text-xl sm:text-2xl main-font mb-2 text-text2 truncate">{review.title}</h2>
                 {onDelete &&
                     <IconDelete 
-                        className="text-text1 hover:text-red-500 duration-100"
-                        width={30} height={30}
-                        onClick={() => onDelete(review.id) }
+                    className="text-bg2 hover:text-red-500 duration-100"
+                    width={30} height={30}
+                    onClick={handleDelete}
                     />
                 }
             </div>
-            <p className="text-sm sm:text-md text-left text-text1 mb-3 sm:mb-4 main-font truncate">{review.body}</p>
+            <p className="text-sm sm:text-md text-left text-bg2 mb-3 sm:mb-4 main-font truncate">{review.body}</p>
             <p className="text-sm sm:text-md mb-2 sm:mb-4 text-text2 main-font flex truncate">
-                {review.albumId.split('-')[1]} - {review.albumId.split('-')[0]}
+                {review.albumId.split('_')[1]} - {review.albumId.split('_')[0]}
             </p>
             <Rating value={review.starRating} readOnly size="medium" />
             <div className="text-left text-xs sm:text-sm text-text2 my-2 main-thin">
@@ -85,16 +70,15 @@ const ReviewCard: React.FC<Props> = ({review, onDelete, userId}: Props) => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
                 <div className="flex gap-2">
                     <span className="flex items-center gap-2 text-xs sm:text-sm text-text2 main-font">
-                        <p> {likeCount} </p>
+                        <p> {review.likes.length} </p>
                         <IconLike 
                             width={25} height={25} 
-                            className={isLiked?"text-green-500 hover:text-text2 duration-100":"text-text2 hover:text-green-500 duration-100"}
-                            onClick={handleLike}
+                            className={isLiked?"text-green-500":"text-text2"}
                         /> 
                     </span>
                     <span className="flex items-center gap-2 text-xs sm:text-sm text-text2 main-font">
                         <p>{review.comments.length}</p>
-                        <IconComment width={25} height={25} className="text-text2 hover:text-bg1"/>
+                        <IconComment width={25} height={25} className="text-text2"/>
                     </span>
                 </div>
                 <div className="flex gap-2">
@@ -104,10 +88,6 @@ const ReviewCard: React.FC<Props> = ({review, onDelete, userId}: Props) => {
                         <IconEdit width={25} height={25}/>
                     </button>
                 }
-                    <button 
-                        className="rounded-lg px-2 sm:px-3 py-1 w-full flex justify-center sm:py-1 main-thin text-xs sm:text-sm bg-text1 text-text2 hover:text-bg1 hover:bg-text2 transition-colors duration-100">
-                        <IconDetails width={25} height={25}/>
-                    </button>
                 </div>
             </div>
         </div>

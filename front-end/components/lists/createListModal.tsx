@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { List, Album, ListInput, User } from "@/types/index";
+import { Album, ListInput, User } from "@/types/index";
 import albumService from "@/services/albumService";
+import AlbumListCard from "../album/albumListCard";
+import AlbumSearch from "../album/albumSearch";
 
 type Props = {
     isOpen: boolean;
@@ -28,6 +30,7 @@ const ListModal: React.FC<Props> = ({ isOpen, onClose, onSave, user }) => {
             setAlbums(albums);
         }
         fetchAlbums();
+        console.log(albums);
     },[query]);
 
     const albumIsAdded = (album: Album) => {
@@ -77,70 +80,31 @@ const ListModal: React.FC<Props> = ({ isOpen, onClose, onSave, user }) => {
 
     return (
         <div className={`fixed inset-0 flex px-4 items-center justify-center bg-black bg-opacity-50 transition-opacity duration-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-            <div className={`bg-bg2 p-6 rounded-lg w-full max-w-md shadow-lg transform transition-transform duration-100 ${isOpen ? 'scale-100' : 'scale-0'}`}>
+            <div className={`bg-text1 p-6 rounded-lg w-full max-w-md shadow-lg transform transition-transform duration-100 ${isOpen ? 'scale-100' : 'scale-0'}`}>
                 <h2 className="text-2xl text-text2 main-font mb-4">Create an album list</h2>
-                <label className="block mb-2 text-sm text-text2 main-font">
+                <label className="block mb-2 text-sm text-bg2 main-font">
                     Title
                     <input 
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="block bg-text1 w-full mt-1 p-2 rounded"
+                        className="block bg-bg4 text-text2 w-full mt-1 p-2 rounded"
                     />
                 </label>
 
-                <label className="block mb-4 text-sm text-text2 main-font">
+                <label className="block mb-4 text-sm text-bg2 main-font">
                     Description
                     <textarea 
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="block bg-text1 w-full mt-1 p-2 rounded"
+                        className="block bg-bg4 text-text2 w-full mt-1 p-2 rounded"
                     />
                 </label>
-                <label className="flex items-center gap-5 mb-4 text-sm text-text2 main-font ">
-                    Albums
-                    {<input className="w-full p-2 bg-text1 rounded-md" onChange={(e)=>setQuery(e.target.value)} type="search" value={query} placeholder="search"/>}                  
-                </label>
-                {query && albums.length > 0 && (
-                    <div className="relative">
-                        <div
-                            className="absolute z-10 w-full max-h-60 overflow-y-auto bg-bg2 rounded-md border border-text2 shadow-lg"
-                            style={{ top: "calc(100% + 8px)" }}
-                        >
-                            {albums.slice(0,10).map((album, i) => (
-                                <div
-                                    key={i}
-                                    onClick={() => handleAddAlbum(album.id)}
-                                    className="p-2 flex gap-5 items-center text-text2 cursor-pointer hover:bg-bg1 transition-colors"
-                                >
-                                    <img src={album.image[1]["#text"]} />
-                                    <div className="text-left" > {album.name} - {album.artist} </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-                <div className={listAlbums.length>0?"border rounded-md border-text2":""}>
-                    {listAlbums.map((album: Album, i)=>
-                            <div key={i} className="w-full justify-between flex gap-5 p-2 items-center">
-                                <div className="flex gap-5 items-center">
-                                    <img src={album.image[1]["#text"]} />
-                                    <h2 className="text-white main-font text-left text-sm">
-                                    {album.artist} - {album.name}
-                                    </h2>  
-                                </div>
-                                <button
-                                    className="rounded-lg px-2 text-bg2 bg-text2 border-text2 border hover:text-white hover:bg-bg1 transition-colors duration-100"
-                                    onClick={()=>{handleRemoveAlbum(album)}}
-                                >
-                                   ✖ 
-                                </button>
-                            </div>
-                    )}
-                </div>
+                <AlbumSearch albums={albums} onAdd={handleAddAlbum} setQuery={setQuery} query={query}/>
+                <AlbumListCard albums={listAlbums} onRemove={handleRemoveAlbum}/>
                 {error && 
-                    <div className="w-full text-center border-1 rounded-md bg-bg1 p-2">
-                        <span className="text-[#d00] main-font">{error}</span>
+                    <div className="w-full text-center text-text2 border-1 rounded-md bg-red-500 p-2">
+                        <span className="main-font">{error}</span>
                     </div>
                 }
                 <div className="flex justify-end main-font space-x-3 mt-8">
@@ -152,7 +116,7 @@ const ListModal: React.FC<Props> = ({ isOpen, onClose, onSave, user }) => {
                     </button>
                     <button 
                         onClick={handleSave} 
-                        className="rounded-lg w-2/4 px-3 py-2 main-font text-sm sm:text-base text-text2 bg-text1 hover:bg-bg1 transition-colors duration-100"
+                        className="rounded-lg w-2/4 px-3 py-2 main-font text-sm sm:text-base text-text2 bg-bg4 hover:bg-bg2 transition-colors duration-100"
                     >
                         Save
                     </button>

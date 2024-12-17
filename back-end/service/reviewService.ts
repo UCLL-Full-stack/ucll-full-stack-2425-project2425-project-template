@@ -10,6 +10,16 @@ const getAllReviews = async(): Promise<Review[]> => {
     }
 };
 
+const getReviewById = async(id: number): Promise<Review> => {
+    try{
+        const review = await reviewDb.findById(id);  
+        if (!review) throw new Error("review not found");
+        return review;
+    }catch(e){
+        throw e;
+    }
+};
+
 const getUserReviews = async(id: number): Promise<Review[]> => {
     try{
         return await reviewDb.findUserReviews(id);  
@@ -49,6 +59,7 @@ const deleteReview = async (id: number) =>{
 
 export default{
     getAllReviews,
+    getReviewById,
     getUserReviews,
     createReview,
     deleteReview,

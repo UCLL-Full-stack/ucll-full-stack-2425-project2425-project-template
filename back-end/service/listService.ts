@@ -10,6 +10,16 @@ const getLists = async (): Promise<List[]> => {
     }
 };
 
+const getListById = async (id:number): Promise<List> => {
+    try{
+        const list = await listDb.getListById(id);
+        if (!list) throw new Error("List Not Found");
+        return list;
+    }catch(e){
+        throw e;
+    }
+};
+
 const getUserLists = async (id: number): Promise<List[]> => {
     try{
         return await listDb.getUserLists(id)
@@ -53,6 +63,7 @@ const deleteList = async (id: number) => {
 
 export default {
     getLists, 
+    getListById,
     createList,
     getUserLists,
     likeList,
