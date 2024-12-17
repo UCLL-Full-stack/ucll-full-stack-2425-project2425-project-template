@@ -1,3 +1,11 @@
+type UserRole = "Salesman" | "Manager" | "Admin";
+
+type AuthenticationResponse = {
+    token: string;
+    email: string;
+    role: string;
+};
+
 type CarInput = {
     id?: number;
     model: string;
@@ -13,7 +21,18 @@ type CarPartInput = {
     quantity: number;
 };
 
+
+type UserInput = {
+    id?: number;
+    name: string;
+    password: string;
+    email: string;
+    role: UserRole;
+};
 export {
+    AuthenticationResponse,
     CarInput,
     CarPartInput,
+    UserInput,
+    UserRole
 };

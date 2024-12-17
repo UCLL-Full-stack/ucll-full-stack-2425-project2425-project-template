@@ -1,15 +1,15 @@
 import { Car } from "../model/Car";
 import database from "../util/database";
 
-const addCar = async ({model, brand, year, licensePlate, price}:Car): Promise<Car> => {
+const addCar = async (car : Car): Promise<Car> => {
     try {
         const carPrisma = await database.car.create({
             data: {
-                model,
-                brand,
-                year,
-                licensePlate,
-                price
+                model: car.getModel(),
+                brand: car.getBrand(),
+                year: car.getYear(),
+                licensePlate: car.getLicensePlate(),
+                price: car.getPrice()
             }
         });
         return Car.from(carPrisma);

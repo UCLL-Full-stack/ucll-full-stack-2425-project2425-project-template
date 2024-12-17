@@ -1,30 +1,40 @@
 import { Car } from "@/types";
 
 const getAllCars = async () => {
-  return await fetch(process.env.NEXT_PUBLIC_API_URL + '/cars',
-    {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+  const token = JSON.parse(
+    localStorage.getItem("loggedInUser") as string,
+  )?.token;
+  return await fetch(process.env.NEXT_PUBLIC_API_URL + "/cars", {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 const getCarById = async (id: string) => {
-  return await fetch(process.env.NEXT_PUBLIC_API_URL + '/cars/' + id, 
-    {
-      method: "GET",
-       headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-}
+  const token = JSON.parse(
+    localStorage.getItem("loggedInUser") as string,
+  )?.token;
+  return await fetch(process.env.NEXT_PUBLIC_API_URL + "/cars/" + id, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+};
 
 const addCar = async (carData: Car) => {
+  const token = JSON.parse(
+    localStorage.getItem("loggedInUser") as string,
+  )?.token;
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cars`, {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(carData),
   });
@@ -33,12 +43,17 @@ const addCar = async (carData: Car) => {
 };
 
 const deleteCar = async (carId: number) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cars/${carId}`, {
-    method: "DELETE",
-    headers: {
-      'Content-Type': 'application/json',
+  const token = JSON.parse(localStorage.getItem("loggedInUser")as string)?.token;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/cars/${carId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
     },
-  });
+  );
 };
 
 const carService = {
@@ -46,5 +61,5 @@ const carService = {
   getCarById,
   addCar,
   deleteCar,
-}
+};
 export default carService;

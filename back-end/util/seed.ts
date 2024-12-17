@@ -1,21 +1,24 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const main = async () => {
     await prisma.car.deleteMany();
     await prisma.carPart.deleteMany();
+    await prisma.user.deleteMany();
 
+    // car //
 
-const teslaModelS = await prisma.car.create({
-    data: {
-        model: "Model S",
-        brand: "Tesla",
-        year: 2020,
-        licensePlate: "ABC123",
-        price: 80000,
-    },
-})
+    const teslaModelS = await prisma.car.create({
+        data: {
+            model: 'Model S',
+            brand: 'Tesla',
+            year: 2020,
+            licensePlate: 'ABC123',
+            price: 80000,
+        },
+    });
 
 const FordFocus = await prisma.car.create({
     data: {

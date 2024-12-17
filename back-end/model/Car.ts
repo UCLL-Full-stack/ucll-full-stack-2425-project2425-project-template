@@ -1,11 +1,11 @@
 import { Car as CarPrisma } from '@prisma/client';
 export class Car {
-    readonly id?: number;
-    readonly model: string;
-    readonly brand: string;
-    readonly year: number;
-    readonly licensePlate: string;
-    readonly price: number;
+    private id?: number;
+    private model: string;
+    private brand: string;
+    private year: number;
+    private licensePlate: string;
+    private price: number;
 
     constructor(car: {
         id?: number;
