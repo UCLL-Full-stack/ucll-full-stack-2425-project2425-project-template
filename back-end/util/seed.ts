@@ -2,6 +2,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { id } from 'date-fns/locale';
 
 const prisma = new PrismaClient();
 
@@ -59,17 +60,25 @@ const main = async () => {
     // Create Workouts
     const workout1 = await prisma.workout.create({
         data: {
-            userId: user1.id,
             name: 'Leg Day',
             description: 'A workout focused on leg exercises.',
+            user: {
+                connect: {
+                    id: user1.id,
+                },
+            },
         },
     });
 
     const workout2 = await prisma.workout.create({
         data: {
-            userId: user2.id,
             name: 'Upper Body Strength',
             description: 'A workout focused on upper body exercises.',
+            user: {
+                connect: {
+                    id: user2.id,
+                },
+            },
         },
     });
 

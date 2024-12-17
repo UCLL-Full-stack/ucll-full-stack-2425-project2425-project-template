@@ -147,7 +147,9 @@ import database from '../util/database';
 
 const getAllWorkouts = async (): Promise<Workout[]> => {
     try {
-        const workoutPrisma = await database.workout.findMany();
+        const workoutPrisma = await database.workout.findMany({
+            include: { user: true },
+        });
         return workoutPrisma.map((workout) => Workout.from(workout));
     } catch (error) {
         console.error(error);
@@ -161,6 +163,7 @@ const getWorkoutById = async (id: string): Promise<Workout | null> => {
             where: {
                 id: id,
             },
+            include: { user: true },
         });
         return workoutPrisma ? Workout.from(workoutPrisma) : null;
     } catch (error) {
@@ -175,6 +178,7 @@ const getWorkoutsByUserId = async (userId: string): Promise<Workout[]> => {
             where: {
                 userId: userId,
             },
+            include: { user: true },
         });
         return workoutPrisma.map((workout) => Workout.from(workout));
     } catch (error) {
