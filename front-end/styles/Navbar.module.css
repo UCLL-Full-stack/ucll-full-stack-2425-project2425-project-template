@@ -1,0 +1,84 @@
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 164, 0);
+    color: white;
+    padding-bottom: 1.2em;
+    padding-top: 1.2em;
+    font-family: Arial, sans-serif;
+
+}
+
+.navbar-logo {
+    font-size: 1.5rem;
+}
+
+.navbar-item{
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.navbar-links li {
+    display: inline;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+.logoutButton {
+    color: white;
+    background-color: #dc2626; 
+    padding: 0.75em 1.5em;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.logoutButton:hover {
+    background-color: #b91c1c;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.logoutButton:active {
+    background-color: #991b1b;
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.languageButton {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#language {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+

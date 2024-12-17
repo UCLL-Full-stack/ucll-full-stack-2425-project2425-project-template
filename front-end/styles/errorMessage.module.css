@@ -1,0 +1,30 @@
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    /* margin-top: 5px; */
+    margin-bottom: 1em
+  }
+  
+  .userLoginStatusMessages {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .userLoginStatusMessages .error {
+    color: red;
+  }
+  
+  .userLoginStatusMessages .success {
+    color: green;
+  }
+
+  .logInMessage {
+    color: red;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

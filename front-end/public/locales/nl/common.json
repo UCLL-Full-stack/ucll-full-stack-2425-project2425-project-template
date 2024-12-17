@@ -1,0 +1,84 @@
+{
+    "index": {
+        "welkom": "Welkom bij EuroStudent Travel",
+        "inleidendetekst": "Het EuroStudent Travel webplatform is speciaal ontworpen voor studenten die op zoek zijn naar betaalbare reizen door heel Europa. Het platform biedt een lijst van budgetvriendelijke reizen met essentiële details zoals bestemmingen, places 2B en prijzen op maat van studenten. Gebruikers kunnen de reizen verkennen, bekijken en gemakkelijk hun volgende avontuur boeken, waardoor reizen toegankelijker wordt voor jonge avonturiers!",
+        "plan": "Plan Je Avontuur",
+        "trips": "Ontdek Trips",
+        "bookings": "Mijn Boekingen"
+    },
+
+    "trips": {
+        "titel": "Trips",
+        "all": "Alle Trips",
+        "bestemming": "Bestemming",
+        "start": "Start Datum",
+        "eind": "Eind Datum",
+        "prijs": "Prijs",
+        "omschrijving": "Omschrijving"
+    },
+
+    "booking": {
+        "mijn": "Mijn Boekingen",
+        "booking": "Boeking",
+        "nummer": "Boeking Nummer",
+        "datum": "Boeking Datum",
+        "status": "Betaal Status"
+    },
+
+    "login": {
+        "titel": "Login",
+        "login": "Login",
+        "gebruikersnaam": "Gebruikersnaam",
+        "wachtwoord": "Wachtwoord",
+        "success": "Login succesvol. Doorsturen naar de homepage...",
+        "registreer": "Registreren",
+        "error": "Ongeldige gebruikersnaam of wachtwoord. Probeer opnieuw."
+    },
+
+    "nav": {
+        "thuis": "Thuis",
+        "trips": "Trips",
+        "boekingen": "Boekingen",
+        "welkom": "Welkom, ",
+        "logout": "Logout",
+        "login": "Login"
+    },
+
+    "register": {
+        "titel": "Registreren",
+        "registreer": "Registreren",
+        "gebruikersnaam": "Gebruikersnaam",
+        "email": "Email",
+        "wachtwoord": "Wachtwoord",
+        "bevestigwachtwoord": "Bevestig Wachtwoord"
+    },
+
+    "validation": {
+        "username": {
+            "required": "Gebruikersnaam is verplicht",
+            "min": "Gebruikersnaam moet minimaal 3 tekens bevatten",
+            "max": "Gebruikersnaam mag maximaal 20 tekens bevatten"
+        },
+
+        "email": {
+            "required": "Email is verplicht",
+            "invalid": "Email is ongeldig"
+        },
+
+        "password": {
+            "required": "Wachtwoord is verplicht",
+            "min": "Wachtwoord moet minimaal 6 tekens bevatten",
+            "format": "Wachtwoord moet ten minste één hoofdletter en één cijfer bevatten"
+        },
+
+        "confirmPassword": {
+            "required": "Bevestig je wachtwoord",
+            "match": "Wachtwoorden komen niet overeen"
+        },
+
+        "studentNumber": {
+            "required": "Studentnummer is verplicht",
+            "format": "Studentnummer moet beginnen met een letter gevolgd door 8 cijfers"
+        }
+    }
+}
