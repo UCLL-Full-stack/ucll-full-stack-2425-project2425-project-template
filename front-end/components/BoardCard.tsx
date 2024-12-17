@@ -3,8 +3,10 @@ import { Board } from '../types';
 import UserService from '@/services/UserService';
 import ColumnService from '@/services/ColumnService';
 import { useUser } from '@/context/UserContext';
-import { KanbanPermission } from '@/type';
+import { KanbanPermission } from '@/types';
 import BoardService from '@/services/BoardService';
+import { FaPlus, FaGear } from "react-icons/fa6"
+import { MdEdit } from "react-icons/md"
 
 interface BoardCardProps {
     board: Board;
@@ -16,9 +18,12 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
     const [creator, setCreator] = useState<string>('');
     const [columns, setColumns] = useState<string[]>([]);
     const [canDelete, setCanDelete] = useState<boolean>(false);
+    const [canEdit, setCanEdit] = useState<boolean>(false);
+    const [canEditPermissions, setCanEditPermissions] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
     useEffect(() => {
+        console.log('Board:', board);
         const fetchData = async () => {
             const userData = await UserService.getUser(board.createdByUserId);
             setCreator(userData.globalName);
@@ -32,8 +37,12 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
         const checkPermissions = async () => {
             try {
                 const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
-                const hasPermission = permissions.includes(KanbanPermission.DELETE_BOARD) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                setCanDelete(hasPermission);
+                const hasDeletePermission = permissions.includes(KanbanPermission.DELETE_BOARD) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasEditPermission = permissions.includes(KanbanPermission.EDIT_BOARD) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasEditPermissionsPermission = permissions.includes(KanbanPermission.MANAGE_BOARD_PERMISSIONS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                setCanDelete(hasDeletePermission);
+                setCanEdit(hasEditPermission);
+                setCanEditPermissions(hasEditPermissionsPermission);
             } catch (error) {
                 console.error('Error checking permissions:', error);
             }
@@ -47,6 +56,15 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
         onDelete(board.boardId);
     }
 
+    const handleEdit = async () => {
+        console.log('Edit Board');
+    }
+
+    const handleEditPermissions = async () => {
+        console.log('Edit Permissions');
+    }
+
+
     return (
         <div
             className="relative text-white m-3 p-4 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors"
@@ -55,7 +73,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
         >
             <h3 className="text-lg font-semibold">{board.boardName}</h3>
             <p>Created by: {creator}</p>
-            <p>Columns: {columns.join(', ')}</p>
+            <p className="truncate max-w-[70%]">Columns: {columns.join(', ')}</p>
             {canDelete && isHovered && (
                 <button 
                     onClick={() => setConfirmingDelete(true)}
@@ -84,6 +102,26 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete }) => {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+            {(canEdit || canEditPermissions) && (
+                <div className="absolute bottom-2 right-2 flex gap-2">
+                    {canEdit && (
+                        <button
+                            onClick={handleEdit}
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition-colors"
+                        >
+                            <MdEdit></MdEdit>
+                        </button>
+                    )}
+                    {canEditPermissions && (
+                        <button
+                            onClick={handleEditPermissions}
+                            className="bg-cyan-700 hover:bg-cyan-800 text-white px-3 py-1 rounded-md transition-colors"
+                        >
+                            <FaGear></FaGear>
+                        </button>
+                    )}
                 </div>
             )}
         </div>
