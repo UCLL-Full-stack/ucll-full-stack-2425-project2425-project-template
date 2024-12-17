@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import UserService from "@/services/UserService";
 import { Authentication } from "@/types";
 import styles from '@/styles/Home.module.css';
+import { useTranslation } from "next-i18next";
 
 const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const [credentials, setCredentials] = useState<Authentication>({
     email: "",
     password: "",
@@ -56,18 +58,18 @@ const LoginForm: React.FC = () => {
         autoComplete="email"
         required
       />
-      <label htmlFor="password">Password <sup>*</sup></label>
+      <label htmlFor="password">{t("userDetails.password")}<sup>*</sup></label>
       <input 
         type="password"
         id="password"
         name="password"
         value={credentials.password}
         onChange={(e) => handleInputChange("password", e.target.value)}
-        placeholder="Password"
+        placeholder={t("userDetails.password")}
         autoComplete="current-password"
         required
       />
-      <button type="submit">Login</button>
+      <button type="submit">{t("submit.login")}</button>
     </form>
   );
 };

@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from '@/styles/Home.module.css';
+import Language from "./language/Language";
+import { useTranslation } from "next-i18next";
 
 const Header: React.FC = () => {
+  const { t } = useTranslation();
   const [nationalRegisterNumber, setNationalRegisterNumber] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,28 +17,25 @@ const Header: React.FC = () => {
     localStorage.removeItem("loggedInUser");
     setNationalRegisterNumber(null);
   };
+
   return (
     <header className={styles.header}>
-      <a>
-        Personal Finance Tracker
-      </a>
+      <a>{t("title")}</a>
       <nav>
         {nationalRegisterNumber ? (
           <>
-            <Link href={`/accounts/${nationalRegisterNumber}`}>Accounts</Link>
-            <a href="/" onClick={handleLogout}>Log out</a>
-            </>
-            ) : (
-              <>
-              <Link href="/">Home</Link>
-              <Link href="/users/register">
-                Register
-              </Link>
-              <Link href="/users/login">
-                Log in
-              </Link>
-              </>
-            )}
+            <Link href={`/accounts/${nationalRegisterNumber}`}>{t("nav.accounts")}</Link>
+            <a href="/" onClick={handleLogout}>{t("nav.logout")}</a>
+            <Language />
+          </>
+        ) : (
+          <>
+            <Link href="/">{t("nav.home")}</Link>
+            <Link href="/users/register">{t("nav.register")}</Link>
+            <Link href="/users/login">{t("nav.login")}</Link>
+            <Language />
+          </>
+        )}
       </nav>
     </header>
   );

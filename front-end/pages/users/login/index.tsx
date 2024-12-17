@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import styles from '@/styles/Home.module.css';
 import LoginForm from "@/components/users/LoginForm";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Login: React.FC = () => {
   return (
@@ -24,6 +25,16 @@ const Login: React.FC = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  const { locale } = context;
+
+  return {
+      props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default Login;

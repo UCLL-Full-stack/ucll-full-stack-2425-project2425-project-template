@@ -3,6 +3,7 @@ import { Account, User } from '@/types';
 import styles from '@/styles/Home.module.css';
 import AccountService from '@/services/AccountService';
 import useSWR, { mutate } from 'swr';
+import { useTranslation } from 'next-i18next';
 
 type AccountOverviewProps = {
   // user: User;
@@ -10,25 +11,19 @@ type AccountOverviewProps = {
 };
 
 const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
-  // const getAccountsForUser = async () => {
-  //   const accounts = await AccountService.getAccountsForUser();
-  //   return accounts;
-  // }
-  
-
-  // const { data: accounts, error, isLoading } = useSWR('getAccounts', getAccountsForUser);
+  const { t } = useTranslation();
 
   return (
     <div className={styles.accountOverview}>
       <table>
         <thead>
           <tr>
-            <th>Account Number</th>
-            <th>Balance</th>
+            <th>{t("accountOverview.accountNumber")}</th>
+            <th>{t("accountOverview.balance")}</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th>{t("accountOverview.startDate")}</th>
+            <th>{t("accountOverview.endDate")}</th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +40,7 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={6}>You currently do not have any accounts.</td>
+              <td colSpan={6}>{t("accountOverview.noAccounts")}</td>
             </tr>
           )}
         </tbody>
