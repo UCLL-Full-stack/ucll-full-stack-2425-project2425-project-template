@@ -8,23 +8,38 @@ type Props = {
     bookings: Array<Booking>;
 };
 
-const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
+const BookingOverviewTable: React.FC<Props> = ({ bookings }) => {
     const { t } = useTranslation("common");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    
-        useEffect(() => {
-            const loggedInUser = localStorage.getItem('loggedInUser');
-            const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
-            setIsLoggedIn(!!token);
-        }, []);
+    const [userRole, setUserRole] = useState<string | null>(null);
 
-        if (!isLoggedIn) {
-            return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
-        }
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+        const role = loggedInUser ? JSON.parse(loggedInUser).role : null;
+        setIsLoggedIn(!!token);
+        setUserRole(role);
+    }, []);
 
-    if (!Array.isArray(bookings) || bookings.length === 0) {
-        return <div>No bookings available</div>;
+    if (!isLoggedIn) {
+        return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
     }
+
+    // If the user is a guest, show a permission error
+    if (userRole === 'guest') {
+        return <div className={errorStyles.logInMessage}>{t("error.notAuthorized")}</div>;
+    }
+
+    // Only render for admin or student
+    if (userRole !== 'admin' && userRole !== 'student') {
+        return null;
+    }
+
+    // If no bookings, show a fallback message
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+        return <div>{t("booking.noBookings")}</div>;
+    }
+
     return (
         <div className={styles['bookings-table-container']}>
             <table className={`${styles.table} table-hover`}>
@@ -49,4 +64,4 @@ const bookingOverviewTable: React.FC<Props> = ({ bookings }) => {
     );
 };
 
-export default bookingOverviewTable;
+export default BookingOverviewTable;

@@ -1,82 +1,97 @@
 /**
  * @swagger
- *   components:
- *    securitySchemes:
+ * components:
+ *   securitySchemes:
  *     bearerAuth:
- *      type: http
- *      scheme: bearer
- *      bearerFormat: JWT
- *    schemas:
- *      AuthenticationResponse:
- *          type: object
- *          properties:
- *            message:
- *              type: string
- *              description: Authentication response.
- *            token:
- *              type: string
- *              description: JWT access token.
- *            username:
- *              type: string
- *              description: User name.
- *            fullname:
- *             type: string
- *             description: Full name.
- *      AuthenticationRequest:
- *          type: object
- *          properties:
- *            username:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *      User:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            username:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *            firstName:
- *              type: string
- *              description: First name.
- *            lastName:
- *              type: string
- *              description: Last name.
- *            email:
- *              type: string
- *              description: E-mail.
- *            role:
- *               $ref: '#/components/schemas/Role'
- *      UserInput:
- *          type: object
- *          properties:
- *            username:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *            firstName:
- *              type: string
- *              description: First name.
- *            lastName:
- *              type: string
- *              description: Last name.
- *            email:
- *              type: string
- *              description: E-mail.
- *            role:
- *               $ref: '#/components/schemas/Role'
- *      Role:
- *          type: string
- *          enum: [student, lecturer, admin, guest]
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     AuthenticationResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Authentication response message.
+ *           example: "Authentication successful"
+ *         token:
+ *           type: string
+ *           description: JWT access token.
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         username:
+ *           type: string
+ *           description: User's username.
+ *           example: "john_doe"
+ *         fullname:
+ *           type: string
+ *           description: User's full name.
+ *           example: "John Doe"
+ *     AuthenticationRequest:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: User's username.
+ *           example: "john_doe"
+ *         password:
+ *           type: string
+ *           description: User's password.
+ *           example: "password123"
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *           example: 1
+ *         username:
+ *           type: string
+ *           description: User's username.
+ *           example: "john_doe"
+ *         firstName:
+ *           type: string
+ *           description: User's first name.
+ *           example: "John"
+ *         lastName:
+ *           type: string
+ *           description: User's last name.
+ *           example: "Doe"
+ *         email:
+ *           type: string
+ *           description: User's email.
+ *           example: "john.doe@example.com"
+ *         role:
+ *           $ref: '#/components/schemas/Role'
+ *     UserInput:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: User's username.
+ *           example: "john_doe"
+ *         password:
+ *           type: string
+ *           description: User's password.
+ *           example: "password123"
+ *         firstName:
+ *           type: string
+ *           description: User's first name.
+ *           example: "John"
+ *         lastName:
+ *           type: string
+ *           description: User's last name.
+ *           example: "Doe"
+ *         email:
+ *           type: string
+ *           description: User's email.
+ *           example: "john.doe@example.com"
+ *         role:
+ *           $ref: '#/components/schemas/Role'
+ *     Role:
+ *       type: string
+ *       enum: [student, lecturer, admin, guest]
+ *       description: Role of the user.
+ *       example: "student"
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';

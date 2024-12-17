@@ -7,12 +7,78 @@ const bookingRouter = express.Router();
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
+ *   schemas:
+ *     Booking:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the booking.
+ *         bookingDate:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time of the booking.
+ *         students:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Student'
+ *           description: List of students associated with the booking.
+ *         trip:
+ *           $ref: '#/components/schemas/Trip'
+ *           description: The trip details associated with the booking.
+ *     Student:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the student.
+ *         username:
+ *           type: string
+ *           description: The username of the student.
+ *     Trip:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the trip.
+ *         destination:
+ *           type: string
+ *           description: The destination of the trip.
+ *         startDate:
+ *           type: string
+ *           format: date
+ *           description: The start date of the trip.
+ *         endDate:
+ *           type: string
+ *           format: date
+ *           description: The end date of the trip.
+ *     BookingInput:  # Add a schema for the BookingInput
+ *       type: object
+ *       properties:
+ *         bookingDate:
+ *           type: string
+ *           format: date-time
+ *         tripId:
+ *           type: integer
+ *         studentIds:
+ *           type: array
+ *           items:
+ *             type: integer
+ *         paymentStatus:
+ *           type: string
+ *           enum:
+ *             - PENDING
+ *             - PAID
+ *             - FAILED
+ *       required:
+ *         - bookingDate
+ *         - tripId
+ *         - studentIds
+ *         - paymentStatus
+ */
+
+/**
+ * @swagger
  * /bookings:
  *   get:
  *     summary: Retrieve all bookings
@@ -27,40 +93,7 @@ const bookingRouter = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     description: Unique identifier for the booking
- *                   bookingDate:
- *                     type: string
- *                     format: date-time
- *                     description: The date and time of the booking
- *                   students:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: integer
- *                           description: Unique identifier for the student
- *                         username:
- *                           type: string
- *                           description: The student's username
- *                   trip:
- *                     type: object
- *                     description: The trip details for the booking
- *                     properties:
- *                       id:
- *                         type: integer
- *                       destination:
- *                         type: string
- *                       startDate:
- *                         type: string
- *                         format: date
- *                       endDate:
- *                         type: string
- *                         format: date
+ *                 $ref: '#/components/schemas/Booking'
  *       400:
  *         description: Error occurred
  *         content:
@@ -98,38 +131,14 @@ bookingRouter.get('/', async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               bookingDate:
- *                 type: string
- *                 format: date-time
- *                 description: The date and time of the booking
- *               tripId:
- *                 type: integer
- *                 description: ID of the trip being booked
- *               studentIds:
- *                 type: array
- *                 items:
- *                   type: integer
- *                 description: Array of student IDs making the booking
- *               paymentStatus:
- *                 type: string
- *                 enum:
- *                   - Pending
- *                   - Completed
- *                   - Failed
- *                 description: The status of the payment
+ *             $ref: '#/components/schemas/BookingInput'  # Reference to the BookingInput schema
  *     responses:
  *       201:
  *         description: Booking created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   description: Unique identifier for the newly created booking
+ *               $ref: '#/components/schemas/Booking'
  *       400:
  *         description: Error occurred during booking creation
  *         content:
@@ -175,35 +184,7 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 bookingDate:
- *                   type: string
- *                   format: date-time
- *                 students:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       username:
- *                         type: string
- *                 trip:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                     destination:
- *                       type: string
- *                     startDate:
- *                       type: string
- *                       format: date
- *                     endDate:
- *                       type: string
- *                       format: date
+ *               $ref: '#/components/schemas/Booking'
  *       404:
  *         description: Booking not found
  *         content:
@@ -220,7 +201,14 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
  */
 bookingRouter.get('/:bookingId', async (req: Request, res: Response) => {
   const { bookingId } = req.params;
-  
+
+  if (isNaN(Number(bookingId))) {
+    return res.status(400).json({
+      status: 'error',
+      errorMessage: 'Invalid booking ID provided.'
+    });
+  }
+
   try {
     const booking = await bookingService.getBookingById(Number(bookingId));
     res.status(200).json(booking);

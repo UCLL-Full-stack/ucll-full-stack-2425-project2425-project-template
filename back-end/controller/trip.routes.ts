@@ -29,18 +29,24 @@ const tripRouter = express.Router();
  *                 properties:
  *                   id:
  *                     type: integer
+ *                     example: 1
  *                   description:
  *                     type: string
+ *                     example: "A relaxing beach holiday"
  *                   location:
  *                     type: string
+ *                     example: "Hawaii"
  *                   startDate:
  *                     type: string
  *                     format: date-time
+ *                     example: "2024-05-01T09:00:00Z"
  *                   endDate:
  *                     type: string
  *                     format: date-time
+ *                     example: "2024-05-10T09:00:00Z"
  *                   price:
  *                     type: number
+ *                     example: 1000
  *       400:
  *         description: Error occurred
  *         content:
@@ -53,7 +59,9 @@ const tripRouter = express.Router();
  *                   example: error
  *                 errorMessage:
  *                   type: string
+ *                   example: "An error occurred while retrieving trips."
  */
+
 tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const trips = await tripService.getAllTrips();
@@ -62,7 +70,6 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
-
 /**
  * @swagger
  * /trips:
@@ -81,20 +88,25 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *               description:
  *                 type: string
  *                 description: The description of the trip
+ *                 example: "A relaxing beach holiday"
  *               location:
  *                 type: string
  *                 description: The location of the trip
+ *                 example: "Hawaii"
  *               startDate:
  *                 type: string
  *                 format: date-time
  *                 description: The start date of the trip
+ *                 example: "2024-05-01T09:00:00Z"
  *               endDate:
  *                 type: string
  *                 format: date-time
  *                 description: The end date of the trip
+ *                 example: "2024-05-10T09:00:00Z"
  *               price:
  *                 type: number
  *                 description: The price of the trip
+ *                 example: 1000
  *     responses:
  *       201:
  *         description: Trip created successfully
@@ -105,18 +117,24 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *               properties:
  *                 id:
  *                   type: integer
+ *                   example: 1
  *                 description:
  *                   type: string
+ *                   example: "A relaxing beach holiday"
  *                 location:
  *                   type: string
+ *                   example: "Hawaii"
  *                 startDate:
  *                   type: string
  *                   format: date-time
+ *                   example: "2024-05-01T09:00:00Z"
  *                 endDate:
  *                   type: string
  *                   format: date-time
+ *                   example: "2024-05-10T09:00:00Z"
  *                 price:
  *                   type: number
+ *                   example: 1000
  *       400:
  *         description: Error occurred
  *         content:
@@ -129,8 +147,9 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                   example: error
  *                 errorMessage:
  *                   type: string
- *                   example: An error occurred while creating the trip.
+ *                   example: "An error occurred while creating the trip."
  */
+
 tripRouter.post('/', async (req: Request, res: Response) => {
   try {
     const tripInput = req.body;
@@ -166,24 +185,24 @@ tripRouter.post('/', async (req: Request, res: Response) => {
  *               properties:
  *                 id:
  *                   type: integer
- *                   description: Unique identifier for the trip
+ *                   example: 1
  *                 description:
  *                   type: string
- *                   description: Description of the trip
+ *                   example: "A relaxing beach holiday"
  *                 location:
  *                   type: string
- *                   description: Location of the trip
+ *                   example: "Hawaii"
  *                 startDate:
  *                   type: string
  *                   format: date-time
- *                   description: Start date of the trip
+ *                   example: "2024-05-01T09:00:00Z"
  *                 endDate:
  *                   type: string
  *                   format: date-time
- *                   description: End date of the trip
+ *                   example: "2024-05-10T09:00:00Z"
  *                 price:
  *                   type: number
- *                   description: Price of the trip
+ *                   example: 1000
  *       400:
  *         description: Error occurred
  *         content:
@@ -196,7 +215,7 @@ tripRouter.post('/', async (req: Request, res: Response) => {
  *                   example: error
  *                 errorMessage:
  *                   type: string
- *                   example: Trip with ID {id} does not exist.
+ *                   example: "Trip with ID {id} does not exist."
  */
 tripRouter.get('/:id', async (req: Request, res: Response) => {
   const tripId = parseInt(req.params.id, 10);

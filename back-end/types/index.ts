@@ -2,8 +2,8 @@ import { PaymentStatus } from "@prisma/client";
 
 type StudentInput = {
     id?: number;
-    user: UserInput;
-    studentNumber: string;
+    user?: UserInput;
+    studentNumber?: string;
     bookings?: BookingInput[];
 }
 type UserInput = {
@@ -18,12 +18,12 @@ type UserInput = {
 
 type TripInput = {
     id?: number;
-    destination: string;
-    startDate: Date;
-    endDate: Date;
+    destination?: string;
+    startDate?: Date;
+    endDate?: Date;
     price: number;
-    description: string;
-    images: string;
+    description?: string;
+    images?: string;
 }
 
 type BookingInput = {
@@ -40,7 +40,7 @@ type ReviewInput = {
     studentId: number; 
     tripId: number;     
     rating: number;      
-    comment: string;
+    comment?: string;
 }
 
 type Role = 'admin' | 'student' | 'guest';

@@ -6,12 +6,59 @@ const reviewRouter = express.Router();
 /**
  * @swagger
  * components:
+ *   schemas:
+ *     Review:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the review.
+ *           example: 1
+ *         rating:
+ *           type: integer
+ *           description: Rating given in the review (1-5).
+ *           example: 4
+ *         comment:
+ *           type: string
+ *           description: Text comment of the review.
+ *           example: "Great experience, loved the trip!"
+ *         student:
+ *           $ref: '#/components/schemas/Student'
+ *           description: The student who made the review.
+ *         trip:
+ *           $ref: '#/components/schemas/Trip'
+ *           description: The trip that was reviewed.
+ *     Student:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the student.
+ *           example: 101
+ *         name:
+ *           type: string
+ *           description: The name of the student.
+ *           example: "John Doe"
+ *     Trip:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the trip.
+ *           example: 10
+ *         destination:
+ *           type: string
+ *           description: The destination of the trip.
+ *           example: "Paris"
  *   securitySchemes:
  *     bearerAuth:
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
- *
+ */
+
+/**
+ * @swagger
  * /reviews:
  *   get:
  *     summary: Retrieve all reviews
@@ -26,33 +73,7 @@ const reviewRouter = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     description: Unique identifier for the review
- *                   rating:
- *                     type: integer
- *                     description: Rating given in the review (1-5)
- *                   comment:
- *                     type: string
- *                     description: Text comment of the review
- *                   student:
- *                     type: object
- *                     description: The student who made the review
- *                     properties:
- *                       id:
- *                         type: integer
- *                       name:
- *                         type: string
- *                   trip:
- *                     type: object
- *                     description: The trip that was reviewed
- *                     properties:
- *                       id:
- *                         type: integer
- *                       destination:
- *                         type: string
+ *                 $ref: '#/components/schemas/Review'
  *       400:
  *         description: Error occurred
  *         content:
@@ -94,27 +115,23 @@ reviewRouter.get('/', async (req: Request, res: Response) => {
  *             properties:
  *               rating:
  *                 type: integer
- *                 description: Rating given in the review (1-5)
+ *                 description: Rating given in the review (1-5).
  *               comment:
  *                 type: string
- *                 description: Text comment of the review
+ *                 description: Text comment of the review.
  *               tripId:
  *                 type: integer
- *                 description: ID of the trip being reviewed
+ *                 description: ID of the trip being reviewed.
  *               studentId:
  *                 type: integer
- *                 description: ID of the student making the review
+ *                 description: ID of the student making the review.
  *     responses:
  *       201:
  *         description: Review created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   description: Unique identifier for the review
+ *               $ref: '#/components/schemas/Review'
  *       400:
  *         description: Error occurred
  *         content:
@@ -160,28 +177,7 @@ reviewRouter.post('/', async (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 rating:
- *                   type: integer
- *                 comment:
- *                   type: string
- *                 student:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                     name:
- *                       type: string
- *                 trip:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                     destination:
- *                       type: string
+ *               $ref: '#/components/schemas/Review'
  *       400:
  *         description: Error occurred
  *         content:

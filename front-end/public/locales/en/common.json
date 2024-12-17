@@ -86,6 +86,7 @@
     },
 
     "error": {
+        "notAuthorized": "You are not authorized to view this page.",
         "login": "Please log in to view this page"
     },
 

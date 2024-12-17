@@ -10,10 +10,10 @@ const main = async () => {
   await prisma.trip.deleteMany();
   await prisma.user.deleteMany();
 
-  const hashedPasswordStudent1 = await bcrypt.hash("password123", 12);
-  const hashedPasswordStudent2 = await bcrypt.hash("password456", 12);
+  const hashedPasswordStudent1 = await bcrypt.hash("Password123", 12);
+  const hashedPasswordStudent2 = await bcrypt.hash("Password456", 12);
   const hashedPasswordAdmin = await bcrypt.hash("Adminpassword1", 12);
-  const hashedPasswordGuest = await bcrypt.hash("guestpassword", 12);
+  const hashedPasswordGuest = await bcrypt.hash("Guestpassword", 12);
 
   const user1 = await prisma.user.create({
     data: {

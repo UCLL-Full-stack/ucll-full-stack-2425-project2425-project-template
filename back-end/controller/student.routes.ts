@@ -4,6 +4,30 @@ import { StudentInput } from '../types';
 import { Student } from '@prisma/client';
 
 const studentRouter = express.Router();
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Student:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the student
+ *           example: 1
+ *         username:
+ *           type: string
+ *           description: The username of the student
+ *           example: johndoe
+ *         email:
+ *           type: string
+ *           description: Email address of the student
+ *           example: johndoe@example.com
+ *         studentNumber:
+ *           type: string
+ *           description: The student number of the student
+ *           example: S12345
+ */
 
 /**
  * @swagger
@@ -21,20 +45,7 @@ const studentRouter = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     description: Unique identifier for the student
- *                   username:
- *                     type: string
- *                     description: The username of the student
- *                   email:
- *                     type: string
- *                     description: Email address of the student
- *                   studentNumber:
- *                     type: string
- *                     description: The student number of the student
+ *                 $ref: '#/components/schemas/Student'
  *       400:
  *         description: Error occurred
  *         content:
@@ -49,6 +60,7 @@ const studentRouter = express.Router();
  *                   type: string
  *                   example: An error occurred while retrieving students.
  */
+
 studentRouter.get('/', async (req: Request, res: Response) => {
   try {
     const students = await studentService.getAllStudents();
@@ -80,16 +92,7 @@ studentRouter.get('/', async (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 username:
- *                   type: string
- *                 email:
- *                   type: string
- *                 studentNumber:
- *                   type: string
+ *               $ref: '#/components/schemas/Student'
  *       404:
  *         description: Student not found
  *         content:
@@ -102,7 +105,7 @@ studentRouter.get('/', async (req: Request, res: Response) => {
  *                   example: error
  *                 errorMessage:
  *                   type: string
- *                   example: Student not found.
+ *                   example: Student with ID {id} does not exist.
  *       400:
  *         description: Error occurred
  *         content:
