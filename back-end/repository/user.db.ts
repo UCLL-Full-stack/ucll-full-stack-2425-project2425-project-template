@@ -74,9 +74,35 @@ const getUserByUsername = async ({ gebruikersnaam }: { gebruikersnaam: string })
     }
 };
 
+const deleteUser = async ({ id }: { id: number }) => {
+    try {
+        await database.user.delete({
+            where: { id }
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const updateUser = async (id: number, userData: Partial<User>) => {
+    try {
+        const updatedUser = await database.user.update({
+            where: { id },
+            data: userData
+        });
+        return User.from(updatedUser);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createUser,
     getAllUsers,
     getUserById,
     getUserByUsername,
+    deleteUser,
+    updateUser
 };

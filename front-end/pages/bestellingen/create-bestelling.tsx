@@ -6,6 +6,8 @@ import { Pokebowl, User } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const createNewBestelling: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -38,6 +40,8 @@ const createNewBestelling: React.FC = () => {
         }
     }, []);
 
+    const { t } = useTranslation();
+
     return (
         <>
             <Head>
@@ -60,4 +64,15 @@ const createNewBestelling: React.FC = () => {
         </>
     )
 }
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
+
 export default createNewBestelling;

@@ -6,10 +6,15 @@ import PokebowlService from '@/services/PokebowlService';
 import Header from '@/components/header';
 import PokebowlInfo from '@/components/pokebowls/PokebowlInfo';
 import useSWR from 'swr';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const PokebowlId = () => {
+
+const PokebowlId: React.FC = () => {
     const router = useRouter();
     const { pokebowlId } = router.query;
+    const { t } = useTranslation();
+
 
     const getPokebowlById = async () => {
         const responses = await Promise.all([PokebowlService.getPokebowlById(pokebowlId as string)]);
@@ -46,6 +51,16 @@ const PokebowlId = () => {
             </main>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default PokebowlId;

@@ -19,7 +19,7 @@ const main = async () => {
             wachtwoord: await bcrypt.hash("welkom123", 12),
             adres: "Leuvensestraat 10",
             gebruikersnaam: "AshleyT",
-            rol: "Klant",
+            rol: "Admin",
             bestellingen: {
                 connect: []
             }

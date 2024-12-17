@@ -1,15 +1,18 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { Bestelling, User } from '@/types';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Header from '@/components/header';
 import UserService from '@/services/UserService';
 import UserInfo from '@/components/users/UserInfo';
 import useSWR from 'swr';
+import { useTranslation } from 'react-i18next';
 
-const UserId = () => {
+const UserId: React.FC = () => {
     const router = useRouter();
     const { userId } = router.query;
+    console.log(userId);
+    const { t } = useTranslation();
 
 
     const fetchUserWithBestellingen = async () => {
@@ -28,7 +31,7 @@ const UserId = () => {
     }
 
     const { data, isLoading, error } = useSWR("users", fetchUserWithBestellingen);
-
+    console.log(data?.user);
 
     return (
         <>
@@ -40,14 +43,24 @@ const UserId = () => {
             </Head>
             <Header />
             <main>
-                <h1>{data?.user.gebruikersnaam}'s profiel</h1>
                 <section>
                     {error && <p className="error-field">{error}</p>}
+                    {isLoading && <p>Loading...</p>}
                     {data && <UserInfo user={data.user} bestellingen={data.bestellingen} />}
                 </section>
             </main>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default UserId;

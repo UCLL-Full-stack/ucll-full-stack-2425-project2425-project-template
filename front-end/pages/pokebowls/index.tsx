@@ -7,9 +7,14 @@ import router from "next/router";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 const Pokebowls: React.FC = () => {
     const [selectedPokebowl, setSelectedPokebowl] = useState<Pokebowl>();
+    const { t } = useTranslation();
+
 
     const getPokebowls = async () => {
         const responses = await Promise.all([
@@ -57,5 +62,16 @@ const Pokebowls: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
+
 
 export default Pokebowls

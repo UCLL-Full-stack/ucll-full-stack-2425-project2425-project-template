@@ -2,9 +2,10 @@ import { User } from "../model/user";
 import userDb from "../repository/user.db";
 import bestellingDb from "../repository/bestelling.db";
 import { Bestelling } from "../model/bestelling";
-import { AuthenticationResponse, UserInput } from "../types";
+import { AuthenticationResponse, Rol, UserInput } from "../types";
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from "../util/jwt";
+import { UnauthorizedError } from "express-jwt";
 
 const createUser = async (user: User): Promise<User> => {
     const getUsername = await userDb.getUserByUsername({ gebruikersnaam: user.getGebruikersnaam() });
@@ -19,7 +20,16 @@ const createUser = async (user: User): Promise<User> => {
     return newUser;
 }
 
-const getAllUsers = async (): Promise<User[]> => userDb.getAllUsers();
+const getAllUsers = async ({ rol }: { rol: Rol }): Promise<User[]> => {
+    if (rol === "Admin") {
+        return userDb.getAllUsers();
+    }
+    else {
+        throw new UnauthorizedError("credentials_required", {
+            message: "You aren't authorized to access this page."
+        });
+    }
+}
 
 const getUserById = async (id: number): Promise<User | null> => {
     const user = userDb.getUserById({ id: id });
@@ -72,11 +82,44 @@ const authenticate = async ({ gebruikersnaam, wachtwoord }: UserInput): Promise<
     };
 };
 
+const deleteUser = async ({ rol }: { rol: Rol }, id: number): Promise<void> => {
+
+    if (rol === "Admin") {
+        const user = await userDb.getUserById({ id });
+        if (!user) {
+            throw new Error(`User with id ${id} does not exist.`);
+        }
+        await userDb.deleteUser({ id });
+    } else {
+        throw new UnauthorizedError("credentials_required", {
+            message: "You aren't authorized to access this page."
+        });
+    }
+
+}
+
+const updateUser = async ({ rol }: { rol: Rol }, id: number, userData: Partial<User>): Promise<User> => {
+    if (rol === "Admin") {
+        const user = await userDb.getUserById({ id });
+        if (!user) {
+            throw new Error(`User with id ${id} does not exist.`);
+        }
+        const updatedUser = await userDb.updateUser(id, userData);
+        return updatedUser;
+    } else {
+        throw new UnauthorizedError("credentials_required", {
+            message: "You aren't authorized to access this page."
+        });
+    }
+};
+
 export default {
     createUser,
     getAllUsers,
     getUserById,
     getUserBestellingen,
     getUserByUsername,
-    authenticate
+    authenticate,
+    deleteUser,
+    updateUser
 }

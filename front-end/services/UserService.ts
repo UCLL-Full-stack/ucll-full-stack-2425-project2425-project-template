@@ -43,10 +43,64 @@ const getUserBestellingen = async (id: string) => {
     })
 }
 
+const getAllUsers = () => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/users", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
+const deleteUser = async (id: number) => { 
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
+
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    });
+};
+
+const updateUser = async (id: number, userData: Partial<User>) => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
+
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(userData)
+    });
+};
+
 const UserService = {
     login,
     getUserById,
-    getUserBestellingen
+    getUserBestellingen,
+    getAllUsers,
+    deleteUser,
+    updateUser
 };
 
 export default UserService;

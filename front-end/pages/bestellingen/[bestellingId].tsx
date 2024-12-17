@@ -6,10 +6,13 @@ import Header from '@/components/header';
 import BestellingService from '@/services/BestellingService';
 import BestellingInfo from '@/components/bestellingen/BestellingInfo';
 import useSWR from 'swr';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const BestellingId = () => {
+const BestellingId: React.FC = () => {
     const router = useRouter();
     const { bestellingId } = router.query;
+    const { t } = useTranslation();
 
     const getBestellingById = async () => {
         const responses = await Promise.all([BestellingService.getBestellingentById(bestellingId as string)]);
@@ -43,5 +46,16 @@ const BestellingId = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
+
 
 export default BestellingId;

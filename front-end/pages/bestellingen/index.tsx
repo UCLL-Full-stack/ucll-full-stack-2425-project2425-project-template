@@ -7,10 +7,13 @@ import router from "next/router";
 import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Bestellingen: React.FC = () => {
-
+    const [error, setError] = useState<String | null>(null);
     const [selectedBestelling, setSelectedBestelling] = useState<Bestelling>();
+    const { t } = useTranslation();
 
     const getBestellingen = async () => {
         const responses = await Promise.all([
@@ -22,10 +25,12 @@ const Bestellingen: React.FC = () => {
         if (bestellingResponses.ok) {
             const bestellingen = await bestellingResponses.json();
             return { bestellingen }
+        } else {
+            setError("You aren't authorized to view this page");
         }
     }
 
-    const { data, isLoading, error } = useSWR(
+    const { data, isLoading } = useSWR(
         "bestellingen",
         getBestellingen
     );
@@ -47,16 +52,26 @@ const Bestellingen: React.FC = () => {
                 <h1>Bestellingen</h1>
                 <p>Lijst van alle bestellingen</p>
                 <section>
-                    {error && <p className="error-field">{error.message}</p>}
+                    {error && <p className="error-field">{error}</p>}
                     {!isLoading && <p>Loading...</p>}
                     {data && (
                         <BestellingenOverzicht bestellingen={data.bestellingen} selectBestelling={setSelectedBestelling} />
                     )}
                 </section>
-                <button onClick={() => { router.push(`/bestellingen/create-bestelling`); }}>Create new bestelling</button>
+                {!error && <button onClick={() => { router.push(`/bestellingen/create-bestelling`); }}>Create new bestelling</button>}
             </main>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default Bestellingen
