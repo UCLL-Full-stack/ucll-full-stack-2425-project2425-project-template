@@ -27,3 +27,8 @@ export type User = {
     password?: string;
     role?: string;
 };
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};
