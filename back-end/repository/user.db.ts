@@ -1,4 +1,5 @@
 import { Caretaker } from '../model/caretaker';
+import { Manager } from '../model/manager';
 import { User } from '../model/user';
 import database from './database';
 
@@ -82,10 +83,80 @@ const getAllCaretakers = async (): Promise<Caretaker[]> => {
     }
 };
 
+const createUser = async (user: User): Promise<User> => {
+    try {
+        const UserPrisma = await database.user.create({
+            data: {
+                username: user.getUsername(),
+                password: user.getPassword(),
+                role: user.getRole(),
+            },
+        });
+        return User.from(UserPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+// Create Manager
+const createManager = async (manager: Manager, createdUser: User): Promise<Manager> => {
+    try {
+        const userId = createdUser.getId()  // Get the user ID
+        console.log('User ID when creating manager:', userId); // Log userId to check if it's valid
+
+        if (!userId) {
+            throw new Error('User ID is missing when creating Manager.');
+        }
+
+        // Connect the Manager to the User using the ID
+        const managerPrisma = await database.manager.create({
+            data: {
+                user: { connect: { id: userId } },  // Use the user ID here
+                name: manager.getName(),
+            },
+            include: { user: true },
+        });
+
+        return Manager.from(managerPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+
+// Create Caretaker
+const createCaretaker = async (caretaker: Caretaker, createdUser: User): Promise<Caretaker> => {
+    try {
+        const userId = createdUser.getId(); // Get the user ID
+        if (!userId) {
+            throw new Error('User ID is missing when creating Caretaker.');
+        }
+
+        // Connect the Caretaker to the User using the ID
+        const caretakerPrisma = await database.caretaker.create({
+            data: {
+                user: { connect: { id: userId } }, // Use the user ID here
+                name: caretaker.getName(),
+            },
+            include: { user: true },
+        });
+
+        return Caretaker.from(caretakerPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllUsers,
     getUserByUsername,
     getUserById,
     deleteUser,
     getAllCaretakers,
+    createUser,
+    createCaretaker,
+    createManager,
 };

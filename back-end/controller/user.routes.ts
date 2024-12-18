@@ -159,4 +159,34 @@ userRouter.get('/caretakers', async (req: Request, res: Response, next: NextFunc
     }  
 });
 
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: User signup
+ *     description: Signup a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       '201':
+ *         description: Succesfully creating a user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const user = await userService.createUser(userInput);
+        res.status(200).json(user);
+    } catch (e) {
+        next(e);
+    }
+});
+
 export default userRouter;
