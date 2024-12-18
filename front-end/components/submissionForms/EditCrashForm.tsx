@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Gebruiker, Race, Crash, Submission_form } from '@types';
 import submissionFormService from '@services/submission_formService';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
   races: Race[];
@@ -18,6 +19,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
   const [deaths, setDeaths] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (selectedRaceId && selectedCrashId) {
@@ -37,7 +39,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
     try {
       const userData = localStorage.getItem('loggedInUser');
       if (!userData) {
-        setError('You must be logged in to submit a form.');
+        setError(t('submissionForm.errorMessage'));
         return;
       }
       const user: Gebruiker = JSON.parse(userData);
@@ -45,7 +47,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
       const race = races.find(r => r.id === parseInt(selectedRaceId))!;
       const crash = race.crashes?.find(c => c.id === parseInt(selectedCrashId))!;
       if (!crash) {
-        setError('Crash not found.');
+        setError(t('submissionForm.errorMessage'));
         return;
       }
 
@@ -61,7 +63,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
         const updatedResponse = await submissionFormService.getAllSubmissionForms();
         const updatedSubmissionForms = await updatedResponse.json();
         setSubmissionForms(updatedSubmissionForms);
-        setSuccessMessage('Successfully submitted!');
+        setSuccessMessage(t('submissionForm.successMessage'));
         setError('');
       } else {
         const errorData = await response.json();
@@ -69,7 +71,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
         setSuccessMessage('');
       }
     } catch (error) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(t('submissionForm.errorMessage'));
       setSuccessMessage('');
     }
   };
@@ -77,7 +79,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
   return (
     <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '400px' }}>
       <div className="mb-3">
-        <label htmlFor="title" className="form-label">Request title</label>
+        <label htmlFor="title" className="form-label">{t('submissionForm.requestTitle')}</label>
         <input
           type="text"
           id="title"
@@ -88,7 +90,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="content" className="form-label">What is this request about?</label>
+        <label htmlFor="content" className="form-label">{t('submissionForm.requestDescription')}</label>
         <textarea
           id="content"
           className="form-control"
@@ -98,7 +100,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="selectedRaceId" className="form-label">Select Race</label>
+        <label htmlFor="selectedRaceId" className="form-label">{t('submissionForm.selectRace')}</label>
         <select
           id="selectedRaceId"
           className="form-select"
@@ -106,7 +108,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
           onChange={(e) => setSelectedRaceId(e.target.value)}
           required
         >
-          <option value="">Select a race</option>
+          <option value="">{t('submissionForm.selectRace')}</option>
           {races.map(race => (
             <option key={race.id} value={race.id}>
               {race.name}
@@ -116,7 +118,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
       </div>
       {selectedRaceId && (
         <div className="mb-3">
-          <label htmlFor="selectedCrashId" className="form-label">Select Crash</label>
+          <label htmlFor="selectedCrashId" className="form-label">{t('submissionForm.selectCrash')}</label>
           <select
             id="selectedCrashId"
             className="form-select"
@@ -124,7 +126,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
             onChange={(e) => setSelectedCrashId(e.target.value)}
             required
           >
-            <option value="">Select a crash</option>
+            <option value="">{t('submissionForm.selectCrash')}</option>
             {races.find(race => race.id === parseInt(selectedRaceId))?.crashes?.map(crash => (
               <option key={crash.id} value={crash.id}>
                 {crash.description}
@@ -136,7 +138,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
       {selectedCrashId && (
         <>
           <div className="mb-3">
-            <label htmlFor="crashType" className="form-label">Crash Type</label>
+            <label htmlFor="crashType" className="form-label">{t('submissionForm.crashType')}</label>
             <input
               type="text"
               id="crashType"
@@ -147,7 +149,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="crashDescription" className="form-label">Crash Description</label>
+            <label htmlFor="crashDescription" className="form-label">{t('submissionForm.crashDescription')}</label>
             <input
               type="text"
               id="crashDescription"
@@ -158,7 +160,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="casualties" className="form-label">Casualties</label>
+            <label htmlFor="casualties" className="form-label">{t('submissionForm.casualties')}</label>
             <input
               type="number"
               id="casualties"
@@ -169,7 +171,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="deaths" className="form-label">Deaths</label>
+            <label htmlFor="deaths" className="form-label">{t('submissionForm.deaths')}</label>
             <input
               type="number"
               id="deaths"
@@ -183,7 +185,7 @@ const EditCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
       )}
       {error && <div className="alert alert-danger">{error}</div>}
       {successMessage && <div className="alert alert-success">{successMessage}</div>}
-      <button type="submit" className="btn btn-primary w-100">Submit</button>
+      <button type="submit" className="btn btn-primary w-100">{t('submissionForm.submit')}</button>
     </form>
   );
 };

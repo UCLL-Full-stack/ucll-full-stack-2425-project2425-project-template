@@ -42,17 +42,17 @@ const Home: React.FC = () => {
 
         {loggedInUser && (
           <div className="alert alert-success">
-            Welcome {loggedInUser.username}, you are logged in as {loggedInUser.permission}
+            {t('home.loggedInMessage', { username: loggedInUser.username, permission: loggedInUser.permission })}
           </div>
         )}
 
-        <h2>Users to login:</h2>
+        <h2>{t('home.usersToLogin')}</h2>
         <table className="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Username</th>
-              <th scope="col">Password</th>
-              <th scope="col">Role</th>
+              <th scope="col">{t('home.username')}</th>
+              <th scope="col">{t('home.password')}</th>
+              <th scope="col">{t('home.role')}</th>
             </tr>
           </thead>
           <tbody>
