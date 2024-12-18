@@ -17,7 +17,7 @@ const guildRouter = Router();
  *           type: array
  *           items:
  *             type: string
- *             description: The Kanban permission associated with the identifier
+ *           description: The Kanban permissions associated with the identifier
  * 
  *     Guild:
  *       type: object
@@ -36,7 +36,7 @@ const guildRouter = Router();
  *           type: array
  *           items:
  *             type: string
- *             description: List of role IDs associated with the guild
+ *           description: List of role IDs associated with the guild
  *         members:
  *           type: array
  *           items:
@@ -49,7 +49,7 @@ const guildRouter = Router();
  *                 type: array
  *                 items:
  *                   type: string
- *                   description: Role IDs assigned to the member
+ *                 description: Role IDs assigned to the member
  * 
  *     ErrorResponse:
  *       type: object
@@ -58,6 +58,126 @@ const guildRouter = Router();
  *           type: string
  *           description: Error message
  */
+
+/**
+ * @swagger
+ * /api/guilds:
+ *   get:
+ *     summary: Get all guilds
+ *     responses:
+ *       200:
+ *         description: A list of all guilds
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Guild'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+guildRouter.get('/', async (req, res) => {
+    try {
+        const guilds = await guildService.getAllGuilds();
+        res.status(200).json(guilds);
+    } catch (error) {
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/guilds/{guildId}:
+ *   get:
+ *     summary: Get a specific guild by ID
+ *     parameters:
+ *       - in: path
+ *         name: guildId
+ *         required: true
+ *         description: The ID of the guild
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Guild retrieved successfully
+ *       400:
+ *         description: Bad request
+ */
+guildRouter.get('/:guildId', async (req, res) => {
+    const { guildId } = req.params;
+    try {
+        const guild = await guildService.getGuildById(guildId);
+        res.status(200).json(guild);
+    } catch (error) {
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/guilds:
+ *   post:
+ *     summary: Create a new guild
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Guild'
+ *     responses:
+ *       201:
+ *         description: Guild created successfully
+ *       400:
+ *         description: Bad request
+ */
+guildRouter.post('/', async (req, res) => {
+    const guild = req.body;
+    try {
+        await guildService.addGuild(guild);
+        res.status(201).json({ message: 'Guild created successfully' });
+    } catch (error) {
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/guilds/{guildId}:
+ *   put:
+ *     summary: Update a specific guild
+ *     parameters:
+ *       - in: path
+ *         name: guildId
+ *         required: true
+ *         description: The ID of the guild to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Guild'
+ *     responses:
+ *       200:
+ *         description: Guild updated successfully
+ *       400:
+ *         description: Bad request
+ */
+guildRouter.put('/:guildId', async (req, res) => {
+    const { guildId } = req.params;
+    const guild = req.body;
+    try {
+        await guildService.updateGuild(guildId, guild);
+        res.status(200).json({ message: 'Guild updated successfully' });
+    } catch (error) {
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
+    }
+});
 
 /**
  * @swagger
@@ -81,11 +201,7 @@ const guildRouter = Router();
  *               items:
  *                 $ref: '#/components/schemas/PermissionEntry'
  *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Bad request
  */
 guildRouter.get('/:guildId/permissions', async (req, res) => {
     const { guildId } = req.params;
@@ -93,116 +209,63 @@ guildRouter.get('/:guildId/permissions', async (req, res) => {
         const permissions = await guildService.getGuildPermissions(guildId);
         res.status(200).json(permissions);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }    
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
     }
 });
 
 /**
  * @swagger
- * /api/guilds:
+ * /api/guilds/{guildId}/members:
  *   get:
- *     summary: Get all guilds
+ *     summary: Get all members of a specific guild
+ *     parameters:
+ *       - in: path
+ *         name: guildId
+ *         required: true
+ *         description: The ID of the guild
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: A list of all guilds
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Guild'
+ *         description: A list of members in the guild
  *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Bad request
  */
-guildRouter.get('/', async (req, res) => {
-    try {
-        const guilds = await guildService.getAllGuilds();
-        res.status(200).json(guilds);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }    
-    }
-});
-
-guildRouter.post('/', async (req, res) => {
-    const guild = req.body;
-    try {
-        await guildService.addGuild(guild);
-        res.status(201).json({ message: 'Guild created successfully' });
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
-
-guildRouter.put('/:guildId', async (req, res) => {
-    const { guildId } = req.params;
-    const guild = req.body;
-    try {
-        await guildService.updateGuild(guildId, guild);
-        res.status(200).json({ message: 'Guild updated successfully' });
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
-
-guildRouter.get('/:guildId', async (req, res) => {
-    const { guildId } = req.params;
-    try {
-        const guild = await guildService.getGuildById(guildId);
-        res.status(200).json(guild);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
-
 guildRouter.get('/:guildId/members', async (req, res) => {
     const { guildId } = req.params;
     try {
         const members = await guildService.getGuildMembers(guildId);
         res.status(200).json(members);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
     }
 });
 
-guildRouter.get('/:guildId/roles', async (req, res) => {    
+/**
+ * @swagger
+ * /api/guilds/{guildId}/roles:
+ *   get:
+ *     summary: Get all roles for a specific guild
+ *     parameters:
+ *       - in: path
+ *         name: guildId
+ *         required: true
+ *         description: The ID of the guild
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of roles in the guild
+ *       400:
+ *         description: Bad request
+ */
+guildRouter.get('/:guildId/roles', async (req, res) => {
     const { guildId } = req.params;
     try {
         const roles = await guildService.getGuildRoles(guildId);
         res.status(200).json(roles);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(400).json({ error: 'An unknown error occurred' });
-        }
+        res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
     }
 });
 
