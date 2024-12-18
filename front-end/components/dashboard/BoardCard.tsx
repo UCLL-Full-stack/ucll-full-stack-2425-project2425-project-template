@@ -13,9 +13,10 @@ interface BoardCardProps {
     onDelete: (boardId: string) => void;
     onEdit: (boardId: string) => void;
     onEditPermissions: (boardId: string) => void;
+    onSelect: (board: Board) => void;
 }
 
-const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPermissions }) => {
+const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPermissions, onSelect }) => {
     const { user } = useUser();
     const [creator, setCreator] = useState<string>('');
     const [columns, setColumns] = useState<string[]>([]);
@@ -24,6 +25,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
     const [canEditPermissions, setCanEditPermissions] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
+
     useEffect(() => {
         const fetchData = async () => {
             const userData = await UserService.getUser(board.createdByUserId);
@@ -52,16 +54,19 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
         checkPermissions();
     }, [user!.userId, board.boardId, board.createdByUserId, board.columnIds]);
 
-    const handleDelete = async () => {
+    const handleDelete = async (e: React.MouseEvent) => {
+        e.stopPropagation();
         setConfirmingDelete(false);
         onDelete(board.boardId);
     }
 
-    const handleEdit = async () => {
+    const handleEdit = async (e: React.MouseEvent) => {
+        e.stopPropagation();
         onEdit(board.boardId);
     }
 
-    const handleEditPermissions = async () => {
+    const handleEditPermissions = async (e: React.MouseEvent) => {
+        e.stopPropagation();
         onEditPermissions(board.boardId);
     }
 
@@ -71,13 +76,17 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
             className="relative text-white m-3 p-4 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => onSelect(board)}
         >
             <h3 className="text-lg font-semibold">{board.boardName}</h3>
             <p>Created by: {creator}</p>
             <p className="truncate max-w-[70%]">Columns: {columns.join(', ')}</p>
             {canDelete && isHovered && (
                 <button 
-                    onClick={() => setConfirmingDelete(true)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmingDelete(true);
+                    }}
                     className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-md"
                 >
                     ✕

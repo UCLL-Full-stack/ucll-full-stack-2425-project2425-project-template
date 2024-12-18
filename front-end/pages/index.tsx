@@ -230,6 +230,7 @@ const Home: FC = () => {
                                   onDelete={handleBoardDelete}
                                   onEdit={()=> {setEditingBoardId(board.boardId);}}
                                   onEditPermissions={()=> {setEditingBoardPermissionsId(board.boardId);}}
+                                  onSelect={(board)=> {setSelectedBoard(board);}}
                                 />
                             ))
                         )}
