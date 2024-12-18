@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { NextFunction, Router, Request, Response } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -33,3 +33,30 @@ app.get('/status', (req, res) => {
 app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
+
+
+const swaggerOpts = {
+    definition:{
+        openapi: '3.0.0',
+        info: {
+            title: 'Man Shitty API',
+            version: '1.0.0',
+        },
+    },
+    apis: ['./controller/*.routes.ts'],
+}
+
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError'){
+        res.status(401).json({status: 'Unauthorized', message: err.message});
+    } else if (err.name === 'CoursesError'){
+        res.status(400).json( {status: 'domain error', message: err.message});
+    }
+    else {
+        res.status(400).json({ status: 'application error', message: err.message});
+    }
+});
+
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

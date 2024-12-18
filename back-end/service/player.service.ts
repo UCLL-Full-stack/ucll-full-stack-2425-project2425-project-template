@@ -14,12 +14,12 @@ const getPlayerById = async (id: number): Promise<Player> => {
     return player;
 }
 
-const findPlayerByNumber = async (number: number): Promise<Player | undefined> => {
-    return playerDb.findByNumber(number);
-}
+// const findPlayerByNumber = async (number: number): Promise<Player | undefined> => {
+//     return playerDb.findByNumber(number);
+// }
 
 const addPlayer = async ({name, number ,position, birthdate, imageUrl}: PlayerInput): Promise<Player> => {
-    if (await findPlayerByNumber(number)) {
+    if (await playerDb.findByNumber(number)) {
         throw new Error(`Player with number ${number} already exists`);
     }
 
@@ -27,8 +27,7 @@ const addPlayer = async ({name, number ,position, birthdate, imageUrl}: PlayerIn
 }
 
 const updatePlayer = async (id: number, {name, number, position, birthdate}: PlayerInput): Promise<Player> => {
-    const player = await getPlayerById(id);
-    if (player.number !== number && await findPlayerByNumber(number)) {
+    if (await playerDb.findByNumber(number)) {
         throw new Error(`Player with number ${number} already exists`);
     }
 

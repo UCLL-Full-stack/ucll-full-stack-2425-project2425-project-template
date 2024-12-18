@@ -25,6 +25,8 @@ export class Team {
         homeMatches?: Match[], 
         awayMatches?: Match[] 
     }) {
+
+        this.validate(team);
         this.id = team.id;
         this.name = team.name;
         this.players = team.players;
@@ -69,6 +71,24 @@ export class Team {
 
     getAwayMatches(): Match[] | undefined {
         return this.awayMatches;
+    }
+
+    validate(team: { id: number, name: string, goalsFor: number, goalsAg: number, points: number }) {
+        if (team.name.trim() === '' || !team.name) {
+            throw new Error('Name cannot be empty.');
+        }
+
+        if (team.goalsFor < 0) {
+            throw new Error('Goals for cannot be negative.');
+        }
+
+        if (team.goalsAg < 0) {
+            throw new Error('Goals against cannot be negative.');
+        }
+
+        if (team.points < 0) {
+            throw new Error('Points cannot be negative.');
+        }
     }
 
     /**

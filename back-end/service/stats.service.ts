@@ -2,8 +2,8 @@ import { Stats } from "../model/stats";
 import statsDb from "../repository/stats.db"
 import { StatsInput } from "../types/types";
 
-const addStatsToPlayer = async ({playerId, appearances, goals, assists}: StatsInput): Promise<Stats> => {
-    return statsDb.addStatsToPlayer({playerId, appearances, goals, assists});
+const addStatsToPlayer = async ( id:number , {appearances, goals, assists}: StatsInput): Promise<Stats> => {
+    return statsDb.addStatsToPlayer( id ,{appearances, goals, assists});
 }
 
 const getAllStats = async (): Promise<Stats[]> => {

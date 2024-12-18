@@ -51,7 +51,20 @@ export class Match {
         return this.awayScore;
     }
 
-    
+    validate(match: {id: number, location: string, date: Date, homeTeamName: string, awayTeamName: string, homeScore: number | null, awayScore: number | null, players?: Player[]}) {
+        if (!match.location) {
+            throw new Error('Location is required');
+        }
+        if (!match.date) {
+            throw new Error('Date is required');
+        }
+        if (!match.homeTeamName) {
+            throw new Error('Home team name is required');
+        }
+        if (!match.awayTeamName) {
+            throw new Error('Away team name is required');
+        }
+    }
 
     static from({ id, location, date, homeTeamName, awayTeamName, homeScore, awayScore, players}: MatchPrisma & {players?: PlayerPrisma[]}): Match {
         return new Match({

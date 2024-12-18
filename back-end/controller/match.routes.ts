@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import teamService from '../service/team.service';
 import { MatchInput } from '../types/types';
 import { Match } from '../model/match';
@@ -8,7 +8,7 @@ import matchService from '../service/match.service';
 const matchRouter = express.Router()
 
 
-matchRouter.get('/', async (req: Request, res: Response) => {
+matchRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const matches = await matchService.getAllMatches();
         res.status(200).json(matches);
@@ -18,7 +18,7 @@ matchRouter.get('/', async (req: Request, res: Response) => {
 })
 
 
-matchRouter.post('/add', async (req: Request, res: Response) => {
+matchRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const match = <MatchInput>req.body;
         const result = await matchService.addMatch(match);
@@ -28,7 +28,7 @@ matchRouter.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-matchRouter.put('/update/:id', async (req: Request, res: Response) => {
+matchRouter.put('/update/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const match = <MatchInput>req.body;
@@ -39,7 +39,7 @@ matchRouter.put('/update/:id', async (req: Request, res: Response) => {
     }
 });
 
-matchRouter.delete('/delete/:id', async (req: Request, res: Response) => {
+matchRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const result = await matchService.deleteMatch(id);
@@ -50,7 +50,7 @@ matchRouter.delete('/delete/:id', async (req: Request, res: Response) => {
 })
 
 
-matchRouter.post('/:id/match/:player_id', async (req: Request, res: Response) => {
+matchRouter.post('/:id/player/:player_id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const player_id = parseInt(req.params.player_id);
@@ -60,5 +60,18 @@ matchRouter.post('/:id/match/:player_id', async (req: Request, res: Response) =>
         res.status(400).json({status: 'error' ,message: error});
     }
 })
+
+matchRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id);
+        const match = await matchService.findMatchById(id);
+        res.status(200).json(match);
+    } catch (error) {
+        res.status(400).json({status: 'error' ,message: error});
+    }
+})
+
+
+
 
 export { matchRouter };

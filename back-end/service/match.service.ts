@@ -23,4 +23,8 @@ const addPlayerToMatch = async (id: number, player_id: number): Promise<Match> =
     return matchDb.addPlayerToMatch(id, player_id);
 }
 
-export default {getAllMatches, addMatch, updateMatch, deleteMatch, addPlayerToMatch};
+const findMatchById = async (id: number): Promise<Match> => {
+    return matchDb.findById(id);
+}
+
+export default {getAllMatches, addMatch, updateMatch, deleteMatch, addPlayerToMatch, findMatchById};

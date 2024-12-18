@@ -19,7 +19,7 @@ export type CoachInput = {
      id?: number;
      name: string;
      job: Job;
-     teamId?: number;
+     imageUrl?: string;
 }
 
 export type TeamInput = {
@@ -36,9 +36,17 @@ export type MatchInput = {
      awayScore?: number | null;
 }    
 
-export type Role = 'admin' | 'player' | 'coach';
+export type UserInput = {
+     id?: number;
+     email: string;
+     password: string;
+     role: Role;
+}
 
 
-export type Job = 'head coach' | 'assistant coach'
+export type Role = 'Admin' | 'Player' | 'Coach';
+
+
+export type Job = 'Head coach' | 'Assistant coach'
 
 export type Position = 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Forward'
