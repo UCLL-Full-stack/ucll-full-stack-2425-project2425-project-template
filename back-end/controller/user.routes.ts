@@ -150,4 +150,13 @@ userRouter.delete('/:username', async (req: Request, res: Response, next: NextFu
     }
 });
 
+userRouter.get('/caretakers', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const users = await userService.getAllCaretakers();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }  
+});
+
 export default userRouter;

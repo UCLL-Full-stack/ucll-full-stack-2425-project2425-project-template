@@ -50,12 +50,23 @@ const deleteUser = async (username: string) => {
     }
 };
 
+const getCaretakers = async () => {
+    const token = getToken();
 
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/users/caretakers', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
 
 const UserService = {
     getUsers,
     loginUser,
     deleteUser,
+    getCaretakers,
 };
 
 export default UserService;

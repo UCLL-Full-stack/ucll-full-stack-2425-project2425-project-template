@@ -39,8 +39,18 @@ const deleteAnimal = async ({ id }: { id: number}) => {
     }
 }
 
+const putNewCaretaker = async ({ animalId, caretakerId }: { animalId: number, caretakerId: number }) => {
+    try {
+        return await animalDb.putNewCaretaker({ animalId, caretakerId });
+    } catch (error) {
+        console.error('Error updating caretaker:', error);
+        throw new Error('Failed to update caretaker.');
+    }
+};
+
 export default {
     getAllAnimals,
     getAnimalsByCaretaker,
     deleteAnimal,
+    putNewCaretaker,
 };

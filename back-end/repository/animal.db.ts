@@ -1,3 +1,4 @@
+import { id } from 'date-fns/locale';
 import { Animal } from '../model/animal';
 import { Caretaker } from '../model/caretaker';
 import { User } from '../model/user';
@@ -48,4 +49,22 @@ const deleteAnimal = async ({ id }: { id: number }): Promise<void> => {
     }
 };
 
-export default { getAllAnimals, getAnimalsByCaretaker, deleteAnimal };
+const putNewCaretaker = async ({
+    animalId,
+    caretakerId,
+}: {
+    animalId: number;
+    caretakerId: number;
+}): Promise<void> => {
+    try {
+        await database.animal.update({
+            where: { id: animalId },
+            data: { caretaker: { connect: { id: caretakerId } } }, // Update the relation
+        });
+    } catch (error) {
+        console.error('Error in putNewCaretaker:', error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { getAllAnimals, getAnimalsByCaretaker, deleteAnimal, putNewCaretaker };

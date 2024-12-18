@@ -156,4 +156,39 @@ animalRouter.delete('/:id', async (req: Request, res: Response, next: NextFuncti
     }
 });
 
+/**
+ * @swagger
+ * /animals/{id}/caretaker:
+ *   put:
+ *     summary: Update the caretaker of an animal by ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the animal to update
+ *         schema:
+ *           type: number
+ *       - name: caretakerId
+ *         in: query
+ *         required: true
+ *         description: ID of the new caretaker
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Caretaker updated successfully
+ *       404:
+ *         description: Animal or caretaker not found
+ */
+animalRouter.put('/:id/:caretakerId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const animalId = Number(req.params.id);
+        const caretakerId = Number(req.params.caretakerId);
+        const updatedAnimal = await animalService.putNewCaretaker({ animalId, caretakerId });
+        res.status(200).send({ message: 'Animal updated successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default animalRouter;

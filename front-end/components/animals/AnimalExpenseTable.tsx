@@ -12,7 +12,6 @@ const AnimalOverviewTable: React.FC<Props> = ({ animal }: Props) => {
             <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th>Animal:</th>
                         <th>Expenses:</th>
                         <th>Month:</th>
                     </tr>
@@ -20,7 +19,6 @@ const AnimalOverviewTable: React.FC<Props> = ({ animal }: Props) => {
                 <tbody>
                     {animal.expenses.map((expense) => (
                         <tr>
-                            <td>{animal.name}</td>
                             <td>{expense.totalCost} €</td>
                             <td>{expense.month}</td>
                         </tr>

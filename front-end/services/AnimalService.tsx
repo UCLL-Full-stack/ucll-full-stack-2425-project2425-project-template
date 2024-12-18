@@ -71,11 +71,33 @@ const deleteAnimal = async (id: string) => {
     }
 };
 
+const putNewCaretaker = async (id: string, caretakerId: string) => {
+    try {
+        const token = getToken();
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/animals/${id}/${caretakerId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update caretaker. Status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error('Error updating caretaker:', error);
+        return null;
+    }
+};
 
 const AnimalService = {
     getAnimals,
     getAnimalsByCaretaker,
     deleteAnimal,
+    putNewCaretaker,
 };
 
 export default AnimalService;

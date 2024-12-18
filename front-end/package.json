@@ -19,6 +19,7 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^13.4.1",
     "react-modal": "^3.16.3",
+    "reactjs-popup": "^2.0.6",
     "swr": "^2.2.5",
     "use-interval": "^1.4.0"
   },

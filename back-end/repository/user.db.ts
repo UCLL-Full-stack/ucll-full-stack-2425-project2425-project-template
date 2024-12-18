@@ -1,3 +1,4 @@
+import { Caretaker } from '../model/caretaker';
 import { User } from '../model/user';
 import database from './database';
 
@@ -69,9 +70,22 @@ const deleteUser = async ({ username }: { username: string }) => {
     }
 };
 
+const getAllCaretakers = async (): Promise<Caretaker[]> => {
+    try {
+        const userPrisma = await database.caretaker.findMany({
+            include: { user: true },
+        });
+        return userPrisma.map((userPrisma) => Caretaker.from(userPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllUsers,
     getUserByUsername,
     getUserById,
     deleteUser,
+    getAllCaretakers,
 };
