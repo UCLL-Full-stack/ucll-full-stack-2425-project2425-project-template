@@ -41,6 +41,6 @@ export type MatchInput = {
 export type Role = 'admin' | 'player' | 'coach';
 
 
-export type Job = 'head coach' | 'assistant coach'
+export type Job = 'Head Coach' | 'Assistant Coach' | 'Goalkeeper Coach' | 'Fitness Coach'
 
 export type Position = 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Forward'

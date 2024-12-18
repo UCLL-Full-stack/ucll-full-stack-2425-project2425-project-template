@@ -9,5 +9,12 @@ const addCoach = async ({name, job}: CoachInput) => {
     return coachDb.addCoach({name, job});
 }
 
+const updateCoach = async (id: number, {name, job}: CoachInput) => {
+    return coachDb.updateCoach(id, {name, job});
+}
 
-export default { getAllcoaches, addCoach };
+const removeCoach = async (id: number) => {
+    return coachDb.removeCoach(id);
+}
+
+export default { getAllcoaches, addCoach, updateCoach , removeCoach };

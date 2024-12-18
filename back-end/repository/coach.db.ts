@@ -4,8 +4,8 @@ import db from '../util/database';
 
 const findAll = async () => {
     try {
-        const teamsPrisma = await db.team.findMany();
-        return teamsPrisma;
+        const coaches = await db.coach.findMany();
+        return coaches;
     } catch (error) {
         throw new Error('Database error. See server log for details.');
     }
@@ -32,4 +32,16 @@ const removeCoach = async (id: number):  Promise<void> => {
     }
 }
 
-export default { findAll, addCoach , removeCoach};
+const updateCoach = async (id: number, { name, job }: CoachInput) => {
+    try {
+        const coachPrisma = await db.coach.update({
+            where: { id },
+            data: { name, job }
+        });
+        return coachPrisma;
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+export default { findAll, addCoach , removeCoach, updateCoach };
