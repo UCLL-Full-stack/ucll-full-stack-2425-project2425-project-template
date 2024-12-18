@@ -21,6 +21,7 @@ export type CoachInput = {
      id?: number;
      name: string;
      job: Job;
+     imageUrl?: string;
      teamId?: number;
 }
 
