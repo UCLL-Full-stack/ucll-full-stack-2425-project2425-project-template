@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Player } from "@/types";
 
 interface EditPlayerProps {
@@ -13,42 +13,68 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
     position: player.position,
     number: player.number,
     birthdate: player.birthdate.toISOString().split("T")[0],
+    stat: {
+      id: player.stat?.id || null, // Include the stat.id
+      appearances: player.stat?.appearances,
+      goals: player.stat?.goals ,
+      assists: player.stat?.assists,
+    },
   });
+  
+  
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 10); 
+      return () => clearTimeout(timer);
+    }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
+    setFormData((prev) => ({
+      ...prev,
+      stat: { ...prev.stat, [name]: Number(value) }, // Ensure numbers are parsed
+    }));
+  };
 
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ ...player, ...formData, birthdate: new Date(formData.birthdate) });
+    onSave({
+      ...player,
+      ...formData,
+      birthdate: new Date(formData.birthdate),
+      stat: {
+        id: player.stat?.id || 0, // Ensure stat ID is passed
+        appearances: formData.stat.appearances,
+        goals: formData.stat.goals,
+        assists: formData.stat.assists,
+        playerId: player.id,
+      },
+    });
   };
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose(); 
-    }
-  };
-
+  
+  
+  
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      onClick={handleBackdropClick} 
-    >
-      <div
-        className="bg-zinc-800 rounded-lg shadow-lg p-6 w-96 border border-yellow-500"
-        onClick={(e) => e.stopPropagation()} 
-      >
+    <div className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-all duration-500 ${
+      isVisible ? "opacity-100" : "opacity-0"
+    }`}>
+      <div className={`bg-zinc-800 rounded-lg shadow-lg p-6 w-96 border border-yellow-500 transition-all duration-700 transform ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}>
         <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">Edit Player</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-              
+            <label className="block text-yellow-500">Name:</label>
             <input
               type="text"
               name="name"
@@ -63,14 +89,15 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
             <select
               name="position"
               value={formData.position}
-              onChange={handleChangeSelect}
+              onChange={handleChange}
               className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             >
-                <option value="goalkeeper">Goalkeeper</option>
-                <option value="defender">Defender</option>
-                <option value="midfielder">Midfielder</option>
-                <option value="forward">Forward</option>
+              <option value="" disabled>Select Position</option>
+              <option value="Goalkeeper">Goalkeeper</option>
+              <option value="Defender">Defender</option>
+              <option value="Midfielder">Midfielder</option>
+              <option value="Forward">Forward</option>
             </select>
           </div>
           <div>
@@ -95,6 +122,40 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
               required
             />
           </div>
+          <div>
+            <label className="block text-yellow-500">Appearances:</label>
+            <input
+              type="number"
+              name="appearances"
+              value={formData.stat.appearances}
+              onChange={handleStatChange}
+              className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500">Goals:</label>
+            <input
+              type="number"
+              name="goals"
+              value={formData.stat.goals}
+              onChange={handleStatChange}
+              className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500">Assists:</label>
+            <input
+              type="number"
+              name="assists"
+              value={formData.stat.assists}
+              onChange={handleStatChange}
+              className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
+            />
+          </div>
+
           <div className="flex justify-end gap-2">
             <button
               type="button"

@@ -9,7 +9,10 @@ export interface Player {
 }
 
 export interface Team {
-
+    id?: number;
+    name: string;
+    players?: Player[];
+    coach?: Coach;
 }
 
 export interface Coach {
