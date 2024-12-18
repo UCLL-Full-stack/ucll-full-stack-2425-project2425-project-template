@@ -262,7 +262,7 @@ userRouter.post(
 /**
  * @swagger
  * /users/{nationalRegisterNumber}/settings:
- *   post:
+ *   put:
  *     security:
  *       - bearerAuth: []
  *     summary: Update user credentials
@@ -303,7 +303,7 @@ userRouter.post(
  *                 message:
  *                   type: string
  */
-userRouter.post(
+userRouter.put(
     '/:nationalRegisterNumber/settings',
     async (req: Request, res: Response, next: NextFunction) => {
         try {

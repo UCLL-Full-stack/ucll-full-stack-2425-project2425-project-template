@@ -25,6 +25,7 @@ const Header: React.FC = () => {
         {nationalRegisterNumber ? (
           <>
             <Link href={`/accounts/${nationalRegisterNumber}`}>{t("nav.accounts")}</Link>
+            <Link href={`/users/settings/${nationalRegisterNumber}`}>Settings</Link>
             <a href="/" onClick={handleLogout}>{t("nav.logout")}</a>
             <Language />
           </>
