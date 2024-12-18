@@ -4,7 +4,8 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { carRouter } from './controller/car.routes';
+import {carRouter} from './controller/car.routes'
+import {carPartRouter} from './controller/carPart.routes'
 import { userRouter } from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
@@ -16,6 +17,7 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
+
 //use tokens except following routes:
 app.use(
     expressjwt({
@@ -33,6 +35,7 @@ app.use(
 //routes
 app.use('/cars', carRouter);
 app.use('/users', userRouter);
+app.use('/carPart', carPartRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

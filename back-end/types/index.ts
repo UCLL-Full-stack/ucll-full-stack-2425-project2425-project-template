@@ -14,7 +14,12 @@ type CarInput = {
     licensePlate: string;
     price: number;
 };
-
+type CarPartInput = {
+    id?: number;
+    name: string;
+    price: number;
+    quantity: number;
+};
 type UserInput = {
     id?: number;
     name: string;
@@ -25,6 +30,7 @@ type UserInput = {
 export {
     AuthenticationResponse,
     CarInput,
+    CarPartInput,
     UserInput,
     UserRole
 };

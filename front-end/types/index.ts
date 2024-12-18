@@ -1,21 +1,14 @@
 export type Car = {
     id?: number;
-    model?: string;
-    brand?: string;
-    year?: number;
-    licensePlate?: string;
-    price?: number;
+    model: string;
+    brand: string;
+    year: number;
+    licensePlate: string;
+    price: number;
 };
-
-export type User = {
+export type CarPart = {
     id?: number;
-    username?: string;
-    password?: string;
-    email: string;
-    role?: string;
+    name: string;
+    price: number;
+    quantity: number;
 };
-
-export type StatusMessage = {
-    message: string;
-    type: "error" | "success";
-  };
