@@ -21,8 +21,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column }) => {
     }, [column.taskIds]);
 
     return (
-        <div className="bg-gray-700 p-4 rounded-md">
-            <h2 className="text-xl font-semibold">{column.columnName}</h2>
+        <div className="bg-gray-700 p-4 rounded-md w-64 flex-shrink-0">
+            <h3 className="font-semibold text-gray-300">{column.columnName}</h3>
             <div className="mt-4">
                 {tasks.map((task, index) => (
                     <TaskComponent key={task.taskId} task={task} index={index} />

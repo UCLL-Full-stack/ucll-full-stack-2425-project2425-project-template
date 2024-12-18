@@ -198,10 +198,15 @@ const Home: FC = () => {
               <meta name="description" content="A Kanban board application inspired by Discord." />
               <link rel="icon" href="/images/kanbancord.png" />
           </Head>
-          <Header onCreateClick={handleBoardCreateClick} onLoginClick={handleDiscordLogin}></Header>
+          <Header
+              onCreateClick={handleBoardCreateClick}
+              onLoginClick={handleDiscordLogin}
+              onBackToDashboard={selectedBoard ? () => setSelectedBoard(null) : undefined}
+              boardTitle={selectedBoard?.boardName}
+          />
           <main className="flex-grow">
             {selectedBoard ? (
-                <BoardView board={selectedBoard} onBack={() => setSelectedBoard(null)} />
+                <BoardView board={selectedBoard} />
             ) : (
               <>
                 <div className="p-4">

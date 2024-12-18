@@ -32,9 +32,10 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
             setCreator(userData.globalName);
             const columnData = await Promise.all(board.columnIds.map(async (columnId) => {
                 const column = await ColumnService.getColumnById(columnId);
-                return column.columnName;
+                return column;
             }));
-            setColumns(columnData);
+            const sortedColumns = columnData.sort((a, b) => a.columnIndex - b.columnIndex);
+            setColumns(sortedColumns.map(column => column.columnName));
         }
 
         const checkPermissions = async () => {
