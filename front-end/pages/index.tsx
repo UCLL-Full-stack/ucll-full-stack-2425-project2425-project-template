@@ -1,4 +1,4 @@
-import CocktailList from '@components/cocktail/cocktailList';
+import CocktailList from '@components/cocktail/CocktailList';
 import Head from 'next/head';
 import Header from '@components/header';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";

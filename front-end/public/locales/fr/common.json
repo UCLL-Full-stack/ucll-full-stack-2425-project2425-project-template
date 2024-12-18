@@ -1,0 +1,46 @@
+{
+    "app.title": "Sip Happens Online",
+    "general.error": "Une erreur s'est produite, veuillez réessayer plus tard.",
+    "home": {
+        "title": "Bienvenue sur Sip Happens Online",
+        "description1": "Découvrez un monde de cocktails exquis et améliorez vos compétences en mixologie. Sip Happens Online est votre destination ultime pour tout ce qui concerne les cocktails. Inscrivez-vous et connectez-vous pour ajouter et consulter vos boissons préférées, et explorez une liste centrale de tous les cocktails avec un compteur indiquant combien d'utilisateurs les ont ajoutés à leurs favoris.",
+        "description2": "Notre vaste collection de recettes de cocktails comprend des ingrédients détaillés, et vous pouvez facilement filtrer les cocktails en fonction de vos préférences. Que vous soyez un mixologue expérimenté ou débutant, Sip Happens Online a quelque chose pour tout le monde. Rejoignez notre communauté et commencez à préparer votre boisson parfaite dès aujourd'hui !",
+        "userInformation": {
+            "title": "Informations Utilisateur",
+            "username": "Nom d'Utilisateur",
+            "password": "Mot de Passe",
+            "role": "Rôle"
+        }
+    },
+    "header": {
+        "home": "Accueil",
+        "cocktails": "Cocktails",
+        "addCocktial": "Ajouter un Cocktail",
+        "search": "Rechercher",
+        "login": "Connexion",
+        "logout": "Déconnexion",
+        "register": "S'inscrire"
+    },
+    "addCocktail": {
+        "title": "Ajouter un Cocktail",
+        "id": "ID",
+        "name": "Nom",
+        "description": "Description",
+        "strongness": "Puissance (0-5)",
+        "addIngredient": "Ajouter un Ingrédient",
+        "removeIngredient": "Supprimer un Ingrédient",
+        "save": "Sauvegarder",
+        "cancel": "Annuler"
+    },
+    "login": {
+        "title": "Connexion",
+        "label": {
+            "username": "Nom d'Utilisateur",
+            "password": "Mot de Passe"
+        },
+        "button": "Connexion",
+        "name": "Veuillez entrer un nom d'utilisateur.",
+        "password": "Veuillez entrer un mot de passe.",
+        "success": "Connexion réussie. Redirection en cours..."
+    }
+}
