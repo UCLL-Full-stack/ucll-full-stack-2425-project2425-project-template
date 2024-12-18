@@ -32,10 +32,14 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
       return () => clearTimeout(timer);
     }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+    
+      setFormData((prev) => ({
+        ...prev,
+        [name]: name === "number" ? parseInt(value, 10) || 0 : value, 
+      }));
+    };
 
   const handleStatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
