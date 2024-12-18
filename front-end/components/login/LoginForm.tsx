@@ -9,10 +9,7 @@ const LoginForm: React.FC = () => {
     const [totemError, setTotemError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
-    const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
-
     const router = useRouter();
-
 
     const validate = (): boolean => {
         let valid = true;

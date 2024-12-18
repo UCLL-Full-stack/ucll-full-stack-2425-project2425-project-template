@@ -20,23 +20,30 @@ const getActiviteitenByGroupName = async (groepNaam: string) => {
 };
 
 const addActiviteit = async (
-  naam: string,
-  beschrijving: string,
-  beginDatum: Date,
-  eindDatum: Date
+  name: string,
+  description: string,
+  beginDate: Date,
+  endDate: Date
 ) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/activiteit/${groepNaam}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      naam: naam,
-      beschrijving: beschrijving,
-      begindatum: beginDatum,
-      einddatum: eindDatum,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/activiteiten`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        description,
+        beginDate,
+        endDate,
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Activiteit toevoegen mislukt.");
+  }
+  return response.json();
 };
 
 const ActiviteitenService = {
