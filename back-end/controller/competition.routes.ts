@@ -21,6 +21,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import competitionService from '../service/competition.service';
+import { CompetitionInput } from '../types';
 const competitionRouter = express.Router();
 
 /**
@@ -38,12 +39,22 @@ const competitionRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/Competition'
  */
-competitionRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+competitionRouter.get('/:id', async (req: Request, res: Response) => {
     try {
-        const competitons = competitionService.getAllCompetitions();
-        res.status(200).json(competitons);
+        const competition = await competitionService.getCompetitionById(Number(req.params.id));
+        res.status(200).json(competition);
     } catch (error) {
-        next(error);
+        res.status(400).json({ status: 'error', errorMessage: 'wrong' });
+    }
+});
+
+competitionRouter.post('/', async (req: Request, res: Response) => {
+    try {
+        const competition = <CompetitionInput>req.body;
+        const result = await competitionService.createCompetition(competition);
+        res.status(200).json(competition);
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: 'fout' });
     }
 });
 

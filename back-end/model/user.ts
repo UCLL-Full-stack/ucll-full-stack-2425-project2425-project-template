@@ -1,20 +1,24 @@
-import { User as UserPrisma, Team as TeamPrisma, Competition as CompetitionPrisma } from '@prisma/client';
+import {
+    User as UserPrisma,
+    Team as TeamPrisma,
+    Competition as CompetitionPrisma,
+} from '@prisma/client';
 import { Role } from '../types';
 import { Team } from './team';
 
 export class User {
-    private id?: number;
-    private name: string;
-    private password: string;
-    private role: Role;
-    private team : Team | null;
+    readonly id?: number;
+    readonly name: string;
+    readonly password: string;
+    readonly role: Role;
+    readonly team: Team | null;
 
     constructor(user: {
-        id: number,
-        name: string,
-        password: string,
-        role: Role,
-        team?: Team | null
+        id?: number;
+        name: string;
+        password: string;
+        role: Role;
+        team?: Team | null;
     }) {
         this.id = user.id;
         this.name = user.name;
@@ -53,13 +57,21 @@ export class User {
         );
     }
 
-    static from({ id, name, password, role, team }: UserPrisma & { team : TeamPrisma & { competition : CompetitionPrisma}}) {
+    static from({
+        id,
+        name,
+        password,
+        role,
+        team,
+    }: UserPrisma & { team: (TeamPrisma & { competition: CompetitionPrisma }) | null }) {
         return new User({
             id,
             name,
             password,
             role: role as Role,
-            team: team ? Team.from({ ...team, competition: team.competition as CompetitionPrisma }) : null,
+            team: team
+                ? Team.from({ ...team, competition: team.competition as CompetitionPrisma })
+                : null,
         });
     }
 }

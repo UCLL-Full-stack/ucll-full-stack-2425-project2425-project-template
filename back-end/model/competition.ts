@@ -1,14 +1,13 @@
-
 import { Match } from './match';
 import { Team } from './team';
-import {Competition as CompetitionPrisma, Team as TeamPrisma} from  '@prisma/client';
+import { Competition as CompetitionPrisma, Team as TeamPrisma } from '@prisma/client';
 
 export class Competition {
-    private id?: number;
-    private name: string;
-    private matchesPlayed: number;
+    readonly id?: number;
+    readonly name: string;
+    readonly matchesPlayed: number;
 
-    constructor(competition: { id?: number; name: string; matchesPlayed: number}) {
+    constructor(competition: { id?: number; name: string; matchesPlayed: number }) {
         this.id = competition.id;
         this.name = competition.name;
         this.matchesPlayed = competition.matchesPlayed;
@@ -34,12 +33,11 @@ export class Competition {
         );
     }
 
-    static from ({ id , name, matchesPlayed}: CompetitionPrisma) {
+    static from({ id, name, matchesPlayed }: CompetitionPrisma) {
         return new Competition({
             id,
             name,
-            matchesPlayed
-        })
+            matchesPlayed,
+        });
     }
-
 }

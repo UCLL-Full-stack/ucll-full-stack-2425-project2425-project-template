@@ -6,22 +6,23 @@ datasource db {
     provider = "postgresql"
     url = env("DATABASE_URL")
 }
-
 model User {
   id       Int    @id @default(autoincrement())
   name     String @unique
   password String
   role     String
 
-  team     Team?
+  team     Team?   @relation(fields: [teamId], references: [id]) 
+  teamId   Int?    @unique 
 }
+
 model Team {
   id             Int          @id @default(autoincrement())
   name           String
   points         Int          @default(0)
 
-  userId      Int       @unique
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)      
+  userId         Int        @unique  
+  user           User?        
 
   competitionId  Int
   competition    Competition  @relation(fields: [competitionId], references: [id])
@@ -29,6 +30,7 @@ model Team {
   matchesAsTeam1   Match[]    @relation("Team1Relation")
   matchesAsTeam2   Match[]    @relation("Team2Relation")
 }
+
 
 model Competition {
   id            Int         @id @default(autoincrement())

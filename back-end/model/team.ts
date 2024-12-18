@@ -1,28 +1,26 @@
-import { User } from './user';
 import { Team as TeamPrisma, Competition as CompetitionPrisma } from '@prisma/client';
 import { Competition } from './competition';
-import { CompetitionInput } from '../types';
 
 export class Team {
-    private id: number;
-    private name: string;
-    private points: number;
+    readonly id: number;
+    readonly name: string;
+    readonly points: number;
 
-    private ownerId: number;
+    readonly userId: number | null;
 
-    private competition: Competition;
+    readonly competition: Competition;
 
     constructor(team: {
-        id: number,
-        name: string,
-        points: number,
-        ownerId: number,
-        competition: Competition
+        id: number;
+        name: string;
+        points: number;
+        userId: number | null;
+        competition: Competition;
     }) {
         this.id = team.id;
         this.name = team.name;
         this.points = team.points;
-        this.ownerId = team.ownerId;
+        this.userId = team.userId ?? null;
         this.competition = team.competition;
     }
 
@@ -38,8 +36,8 @@ export class Team {
         return this.points;
     }
 
-    getOwnerId(): number {
-        return this.ownerId;
+    getuserId(): number | null {
+        return this.userId;
     }
 
     equals(team: Team): boolean {
@@ -47,7 +45,7 @@ export class Team {
             this.id === team.getId() &&
             this.name === team.getName() &&
             this.points === team.getPoints() &&
-            this.ownerId === team.getOwnerId()
+            this.userId === team.getuserId()
         );
     }
 
@@ -57,13 +55,13 @@ export class Team {
         points,
         userId,
         competition,
-    }: TeamPrisma & {competition: CompetitionPrisma}) {    
+    }: TeamPrisma & { competition: CompetitionPrisma }) {
         return new Team({
             id,
             name,
             points,
-            ownerId : userId,
+            userId: userId,
             competition: Competition.from(competition),
-        })
+        });
     }
 }

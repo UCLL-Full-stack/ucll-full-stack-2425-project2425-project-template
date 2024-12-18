@@ -1,18 +1,22 @@
 import { Team } from './team';
 import { Competition } from './competition';
-import {Match as  matchPrisma, Competition as CompetitionPrisma, Team as TeamPrisma} from  '@prisma/client';
+import {
+    Match as matchPrisma,
+    Competition as CompetitionPrisma,
+    Team as TeamPrisma,
+} from '@prisma/client';
 
 export class Match {
-    private id?: number;
-    private date: Date;
+    readonly id?: number;
+    readonly date: Date;
 
-    private scoreTeam1: number;
-    private scoreTeam2: number;
+    readonly scoreTeam1: number;
+    readonly scoreTeam2: number;
 
-    private competition: Competition;
+    readonly competition: Competition;
 
-    private team1: Team;
-    private team2: Team;
+    readonly team1: Team;
+    readonly team2: Team;
 
     constructor(match: {
         id?: number;
@@ -27,7 +31,7 @@ export class Match {
         this.date = match.date;
         this.scoreTeam1 = match.scoreTeam1;
         this.scoreTeam2 = match.scoreTeam2;
-        
+
         this.team1 = match.team1;
         this.team2 = match.team2;
 
@@ -54,6 +58,14 @@ export class Match {
         return this.competition;
     }
 
+    getTeam1(): Team {
+        return this.team1;
+    }
+
+    getTeam2(): Team {
+        return this.team2;
+    }
+
     equals(match: Match): boolean {
         return (
             this.id === match.getId() &&
@@ -64,7 +76,19 @@ export class Match {
         );
     }
 
-    static from({ id, date, team1, team2, scoreTeam1, scoreTeam2, competition }: matchPrisma  & {competition: CompetitionPrisma, team1: TeamPrisma & { competition : CompetitionPrisma}, team2: TeamPrisma & { competition : CompetitionPrisma}}): Match {
+    static from({
+        id,
+        date,
+        team1,
+        team2,
+        scoreTeam1,
+        scoreTeam2,
+        competition,
+    }: matchPrisma & {
+        competition: CompetitionPrisma;
+        team1: TeamPrisma & { competition: CompetitionPrisma };
+        team2: TeamPrisma & { competition: CompetitionPrisma };
+    }): Match {
         return new Match({
             id,
             date,
@@ -72,7 +96,7 @@ export class Match {
             team2: Team.from({ ...team2, competition: team2.competition as CompetitionPrisma }),
             scoreTeam1,
             scoreTeam2,
-            competition: Competition.from(competition)
+            competition: Competition.from(competition),
         });
     }
 }

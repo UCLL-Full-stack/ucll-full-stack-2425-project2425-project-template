@@ -5,13 +5,16 @@ type UserInput = {
     name: string;
     password: string;
     role: Role;
+    team?: TeamInput;
+    teamId?: number;
 };
 
 type TeamInput = {
     id?: number;
     name: string;
     points: number;
-    owner: UserInput;
+    userId: number;
+    competition: CompetitionInput;
     competitionId: number;
 };
 
@@ -19,7 +22,6 @@ type CompetitionInput = {
     id?: number;
     name: string;
     matchesPlayed: number;
-    teams: TeamInput[];
 };
 
 type MatchInput = {
