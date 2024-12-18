@@ -13,42 +13,48 @@ import AnimalAdminTable from '@components/animals/AnimalAdminTable';
 const Animals: React.FC = () => {
     const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
         const user = sessionStorage.getItem('loggedInUser');
         if (user) {
             setLoggedInUser(JSON.parse(user));
         }
+        setIsReady(true);
     }, []);
 
     const getAnimals = async () => {
-        if (loggedInUser && loggedInUser.role === 'caretaker') {
-            const response = await AnimalService.getAnimalsByCaretaker(loggedInUser.username);
-
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('You are not authorized to view this page.');
-                } else {
-                    throw new Error(response.statusText);
+        try {
+            if (loggedInUser && loggedInUser.role === 'caretaker') {
+                const response = await AnimalService.getAnimalsByCaretaker(loggedInUser.username);
+    
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('You are not authorized to view this page.');
+                    } else {
+                        throw new Error(response.statusText);
+                    }
                 }
-            }
-            return await response.json();
-        } else {
-            const response = await AnimalService.getAnimals();
-
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('You are not authorized to view this page.');
-                } else {
-                    throw new Error(response.statusText);
+                return await response.json();
+            } else {
+                const response = await AnimalService.getAnimals();
+    
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('You are not authorized to view this page.');
+                    } else {
+                        throw new Error(response.statusText);
+                    }
                 }
+    
+                return await response.json();
             }
-
-            return await response.json();
+        } catch (error) {
+            return Promise.reject(error);
         }
     };
 
-    const { data, isLoading, error } = useSWR(loggedInUser ? 'animals' : null, getAnimals);
+    const { data, isLoading, error } = useSWR( isReady ? 'animals': null, getAnimals);
 
     useInterval(
         () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../../styles/Home.module.css';
 import { Expense } from '@types';
 
@@ -12,15 +12,19 @@ const ExpenseOverviewTable: React.FC<Props> = ({ expenses }: Props) => {
             <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th scope="col">Month</th>
-                        <th scope="col">Total Cost</th>
+                        <th scope="col" style={{ width: '50%' }}>
+                            Month
+                        </th>
+                        <th scope="col" style={{ width: '50%' }}>
+                            Total Cost
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     {expenses.map((expense) => (
                         <tr key={expense.month}>
                             <td>{expense.month}</td>
-                            <td>{expense.totalCost} €</td>
+                            <td>{expense.totalCost}</td>
                         </tr>
                     ))}
                 </tbody>

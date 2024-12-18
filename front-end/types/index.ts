@@ -19,7 +19,7 @@ export type Animal = {
   favouriteFood: string;
   favouriteToy: string;
   expenses: Expense[]
-  caretakers: Caretaker;
+  caretaker: Caretaker;
 };
 
 export type Expense = {

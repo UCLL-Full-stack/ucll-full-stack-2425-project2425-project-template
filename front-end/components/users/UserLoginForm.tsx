@@ -12,7 +12,7 @@ const UserLoginForm: React.FC = () => {
     const [password, setPassword] = useState('');
     const [nameError, setNameError] = useState<string | null>(null);
     const [passwordError, setPasswordError] = useState<string | null>(null);
-    const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]); // zie types
+    const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
     const clearErrors = () => {
         setNameError(null);

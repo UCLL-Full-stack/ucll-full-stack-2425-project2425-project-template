@@ -4,34 +4,35 @@ import { Expense } from '@types';
 import Head from 'next/head';
 import Header from '@components/header';
 import ExpenseOverviewTable from '@components/expenses/ExpenseOverviewTable';
+import useSWR, { mutate } from 'swr';
+import useInterval from 'use-interval';
 
 const Expenses: React.FC = () => {
-    const [expenses, setExpenses] = useState<Expense[]>();
-    const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-
     const getExpenses = async () => {
-        const response = await ExpenseService.getExpenses();
-        if (!response.ok) {
-            if (response.status === 401) {
-                setError('You are not authorized to view this page.');
+        try {
+            const response = await ExpenseService.getExpenses();
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('You are not authorized to view this page.');
+                } else {
+                    throw new Error(response.statusText);
+                }
             } else {
-                setError(response.statusText);
+                return await response.json();
             }
-        } else {
-            const expenses = await response.json();
-            setExpenses(expenses);
+        } catch (error) {
+            return Promise.reject(error);
         }
     };
 
-    useEffect(() => {
-        getExpenses();
-    }, []);
+    const { data, isLoading, error } = useSWR('expenses', getExpenses);
 
-    const selectExpense = (expense: Expense) => {
-        setSelectedExpense(expense);
-    };
+    useInterval(
+        () => {
+            mutate('expenses', getExpenses());
+        },
+        isLoading ? 1000 : null
+    );
 
     return (
         <>
@@ -43,18 +44,10 @@ const Expenses: React.FC = () => {
                 <h1>Expenses</h1>
                 <section>
                     <h2>Expenses overview</h2>
-                    {error && <div className="text-center text-red-800">{error}</div>}
-
-                    {expenses && (
-                        <ExpenseOverviewTable expenses={expenses} selectExpense={selectExpense} />
-                    )}
+                    {error && <div className="text-center text-red-800">{error.message}</div>}
+                    {isLoading && <p className="text-center text-green-800">Loading...</p>}
+                    {data && <ExpenseOverviewTable expenses={data} />}
                 </section>
-                {/* {selectedExpense && (
-                    <section>
-                        <h2>Courses taught by {selectedExpense.user.firstName}</h2>
-                        <CourseOverviewTable expense={selectedExpense} />
-                    </section>
-                )} */}
             </main>
         </>
     );
