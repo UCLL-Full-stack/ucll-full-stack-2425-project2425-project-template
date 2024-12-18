@@ -95,17 +95,11 @@ profileRouter.get('/:userId', async (req: Request, res: Response, next: NextFunc
 profileRouter.put('/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
-        const { username, role } = request.auth;
+        const { role } = request.auth;
         const userId = Number(req.params.userId);
 
-        // check if user is updating their own profile or if they're an admin
-        const userIdFromUsername = await userService.getUserIdFromUsername(username);
-        if (role !== 'admin' && userId !== userIdFromUsername) {
-            return res.status(403).json({ message: 'Unauthorized access' });
-        }
-
         const profileUpdate: ProfileUpdateInput = req.body;
-        const updatedProfile = await profileService.updateProfile(userId, profileUpdate);
+        const updatedProfile = await profileService.updateProfile(userId, profileUpdate, role);
         res.status(200).json(updatedProfile);
     } catch (error) {
         next(error);

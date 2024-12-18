@@ -1,9 +1,6 @@
-// ---- Used in User Story 2 ----
-
 import express, { NextFunction, Request, Response } from 'express';
 import scheduleService from '../service/schedule.service';
 import { Role } from '../types';
-import userService from '../service/user.service';
 
 const scheduleRouter = express.Router();
 
@@ -47,17 +44,6 @@ const scheduleRouter = express.Router();
 scheduleRouter.get('/:userId/:date', async (req: Request, res: Response, next: NextFunction) => {
     const { userId, date } = req.params;
     try {
-        const request = req as Request & { auth: { username: string; role: Role } };
-        const { username, role } = request.auth;
-
-        // Check if the user is accessing their own data or if they're an admin
-        if (
-            role !== 'admin' &&
-            parseInt(userId) !== (await userService.getUserIdFromUsername(username))
-        ) {
-            return res.status(403).json({ message: 'Unauthorized access' });
-        }
-
         const recipeDetails = await scheduleService.getScheduledRecipeDetails(
             parseInt(userId),
             new Date(date)
@@ -121,23 +107,16 @@ scheduleRouter.put(
         const { newDate } = req.body;
         try {
             const request = req as Request & { auth: { username: string; role: Role } };
-            const { username, role } = request.auth;
+            const { role } = request.auth;
 
-            // Check if the user is updating their own data or if they're an admin
-            if (
-                role !== 'admin' &&
-                parseInt(userId) !== (await userService.getUserIdFromUsername(username))
-            ) {
-                return res.status(403).json({ message: 'Unauthorized access' });
-            }
-
-            const updatedSchedule = await scheduleService.updateRecipeDate(
+            const updatedRecipe = await scheduleService.updateRecipeDate(
                 parseInt(userId),
                 parseInt(recipeId),
                 new Date(date),
-                new Date(newDate)
+                new Date(newDate),
+                role
             );
-            res.status(200).json(updatedSchedule.toJSON());
+            res.status(200).json(updatedRecipe.toJSON());
         } catch (error) {
             next(error);
         }
@@ -186,22 +165,15 @@ scheduleRouter.delete(
         const { userId, recipeId, date } = req.params;
         try {
             const request = req as Request & { auth: { username: string; role: Role } };
-            const { username, role } = request.auth;
-
-            // Check if the user is deleting their own data or if they're an admin
-            if (
-                role !== 'admin' &&
-                parseInt(userId) !== (await userService.getUserIdFromUsername(username))
-            ) {
-                return res.status(403).json({ message: 'Unauthorized access' });
-            }
+            const { role } = request.auth;
 
             await scheduleService.deleteScheduledRecipe(
                 parseInt(userId),
                 parseInt(recipeId),
-                new Date(date)
+                new Date(date),
+                role
             );
-            res.status(204).send(); // server processed the request but there's no response body
+            res.status(204).send();
         } catch (error) {
             next(error);
         }

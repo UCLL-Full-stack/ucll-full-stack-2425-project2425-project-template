@@ -32,10 +32,6 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { role } = request.auth;
 
-        if (role !== 'admin') {
-            return res.status(403).json({ message: 'Unauthorized access' });
-        }
-
         const users = await userService.getAllUsers(role);
         res.status(200).json(users.map((user) => user.toJSON()));
     } catch (error) {
@@ -79,7 +75,37 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
         }
 
         const user = await userService.getUserById(userId);
-        res.status(200).json(user);
+        res.status(200).json(user?.toJSON());
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/profile:
+ *   get:
+ *     summary: Get own profile
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A user object
+ *       403:
+ *         description: Unauthorized access
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+userRouter.get('/profile', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+
+        const profile = await userService.getOwnProfile(username, role);
+        res.status(200).json(profile.toJSON());
     } catch (error) {
         next(error);
     }

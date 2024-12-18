@@ -63,6 +63,23 @@ app.get('/status', (req, res) => {
     res.json({ message: 'Plateful API is running...' });
 });
 
+// error-handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack); // logs the error
+
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'ValidationError') {
+        res.status(400).json({ status: 'validation error', message: err.message });
+    } else if (err.name === 'NotFoundError') {
+        res.status(404).json({ status: 'not found', message: err.message });
+    } else if (err instanceof TypeError) {
+        res.status(400).json({ status: 'type error', message: err.message });
+    } else {
+        res.status(500).json({ status: 'internal server error', message: 'Something went wrong!' });
+    }
+});
+
 app.listen(port || 3000, () => {
     console.log(`Plateful API is running on port ${port}.`);
 });

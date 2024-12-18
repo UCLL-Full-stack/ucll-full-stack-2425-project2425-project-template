@@ -1,5 +1,3 @@
-// ---- Used in User Story 2 ----
-
 import express, { NextFunction, Request, Response } from 'express';
 import recipeService from '../service/recipe.service';
 import { Role } from '../types';
@@ -38,9 +36,10 @@ recipeRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username, role } = request.auth;
+        const userId = await userService.getUserIdFromUsername(username);
 
-        const recipes = await recipeService.getAllRecipes();
-        res.status(200).json(recipes);
+        const recipes = await recipeService.getAllRecipes(userId, role);
+        res.status(200).json(recipes.map((recipe) => recipe.toJSON()));
     } catch (error) {
         next(error);
     }
@@ -120,11 +119,12 @@ recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFun
         const updatedRecipe = await recipeService.updateRecipe(
             parseInt(recipeId),
             recipeInputData,
-            userId
+            userId,
+            role
         );
         res.status(200).json(updatedRecipe.toJSON());
     } catch (error) {
-        next(error); // passes the error to the error-handling middleware in app.ts
+        next(error);
     }
 });
 
@@ -155,11 +155,10 @@ recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: Next
     const { recipeId } = req.params;
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
-        const { username, role } = request.auth;
-        const userId = await userService.getUserIdFromUsername(username);
+        const { role } = request.auth;
 
-        await recipeService.deleteRecipe(parseInt(recipeId));
-        res.status(204).send(); // server processed the request but there's no response body
+        await recipeService.deleteRecipe(parseInt(recipeId), role);
+        res.status(204).send();
     } catch (error) {
         next(error);
     }

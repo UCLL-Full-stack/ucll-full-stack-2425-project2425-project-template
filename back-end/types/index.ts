@@ -26,6 +26,7 @@ type ProfileUpdateInput = {
     firstName: string;
     lastName: string;
     email: string;
+    role: Role;
 };
 
 type NewRecipeInput = {
