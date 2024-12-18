@@ -156,6 +156,7 @@ export class User {
             profile: this.profile ? this.profile.toJSON() : undefined,
             recipes: this.recipes ? this.recipes.map((recipe) => recipe.toJSON()) : undefined,
             schedule: this.schedule ? this.schedule.toJSON() : undefined,
+            role: this.role,
         };
     }
 

@@ -7,6 +7,7 @@ import { Role } from '../types';
 const getScheduledRecipeDetails = async (userId: number, date: Date): Promise<Recipe[]> => {
     const schedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date);
     if (!schedule) {
+        console.log(`No schedule found for userId: ${userId} and date: ${date}`);
         return [];
     }
     return schedule.getRecipes() || [];

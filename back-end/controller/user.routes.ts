@@ -159,6 +159,8 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
             message: 'Authentication successful',
             token: result.token,
             username: result.username,
+            fullname: result.fullname,
+            role: result.role,
         });
     } catch (error) {
         next(error);

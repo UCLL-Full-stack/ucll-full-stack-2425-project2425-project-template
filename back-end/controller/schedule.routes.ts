@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import scheduleService from '../service/schedule.service';
 import { Role } from '../types';
 import userService from '../service/user.service';
-import { UnauthorizedError } from 'express-jwt';
 
 const scheduleRouter = express.Router();
 
