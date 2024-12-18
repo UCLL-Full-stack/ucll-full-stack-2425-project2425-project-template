@@ -5,7 +5,7 @@ export class Product {
     readonly price: number;
     readonly description: string;
     readonly rating: number;
-    readonly url: string;
+    readonly url?: string;
 
     constructor(product: {
         id?: number;
@@ -13,7 +13,7 @@ export class Product {
         price: number;
         description: string;
         rating: number;
-        url: string;
+        url?: string;
     }) {
         this.validate(product);
 
@@ -63,7 +63,7 @@ export class Product {
         return this.rating;
     }
 
-    getUrl(): string {
+    getUrl(): string | undefined{
         return this.url;
     }
 
@@ -72,7 +72,6 @@ export class Product {
         price: number;
         description: string;
         rating: number;
-        url: string;
     }) {
         if (!product.name?.trim()) {
             throw new Error('name is required');
@@ -85,9 +84,6 @@ export class Product {
         }
         if (!product.rating) {
             throw new Error('rating is required');
-        }
-        if (!product.url?.trim()) {
-            throw new Error('URL is required');
         }
     }
 

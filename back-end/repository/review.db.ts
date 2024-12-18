@@ -21,7 +21,7 @@ const createReviewForProduct = async ({rating,text,user,product} : Review): Prom
                 product: true // Fetch product relation
             }
         });
-        return Review.from(reviewPrisma);
+        return Review.from(reviewPrisma, user, product);
     } catch (error) {
         console.log(error);
         throw new Error('Database error, See server log for details');

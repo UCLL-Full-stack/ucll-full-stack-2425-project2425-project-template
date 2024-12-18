@@ -9,7 +9,7 @@ const getAllCarts = async (): Promise<Cart[]> => {
                 user: true,
             },
         });
-        return cartsPrisma.map((cartPrisma: Cart) => Cart.from(cartPrisma));
+        return cartsPrisma.map((cartPrisma) => Cart.from(cartPrisma));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

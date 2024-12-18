@@ -42,9 +42,6 @@ const createProduct = async ({name,price,description,rating,url}: productInput, 
     if (!rating) {
         throw new Error("Rating is required")
     }
-    if (!url) {
-        throw new Error("Phone number is required")
-    }    
     const existingProductByName = await getProductByName(name);
     if (existingProductByName) {
         throw new Error(`Product with Product name "${name}" already exists.`);

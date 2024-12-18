@@ -10,7 +10,7 @@ const getAllproducts = async (): Promise<Product[]> => {
         const productsPrisma = await database.product.findMany({
             include: { reviews: true }
         });
-        return productsPrisma ? productsPrisma.map((productPrisma : Product) => Product.from(productPrisma)) : null;
+        return productsPrisma ? productsPrisma.map((productPrisma) => Product.from(productPrisma)) : [];
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -19,7 +19,7 @@ const getAllproducts = async (): Promise<Product[]> => {
 
 const getProductById = async ({ id }: { id: number }): Promise<Product | null> => {
     try {
-        const productPrisma = await database.lecturer.findUnique({
+        const productPrisma = await database.product.findUnique({
             where: { id },
             include: {reviews: true },
         });
@@ -34,7 +34,7 @@ const getProductById = async ({ id }: { id: number }): Promise<Product | null> =
 
 const getProductByName = async (name: string): Promise<Product | null> => {
     try {
-        const productPrisma = await database.user.findFirst({
+        const productPrisma = await database.product.findFirst({
             where: { name }
         });
         return productPrisma ? Product.from(productPrisma) : null;

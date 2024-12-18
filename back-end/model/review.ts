@@ -85,7 +85,7 @@ export class Review {
         );
     }
 
-    static from({ id,rating,text,createdAt,user,product }: ReviewPrisma) {
+    static from({ id, rating, text, createdAt, userId, productId }: ReviewPrisma, user: User, product: Product) {
         return new Review({
             id,
             rating,
