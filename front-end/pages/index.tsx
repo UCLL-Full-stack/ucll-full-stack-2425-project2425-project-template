@@ -2,17 +2,17 @@ import Head from 'next/head';
 import { FC, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import UserService from '@/services/UserService';
-import GuildCard from '@/components/GuildCard';
+import GuildCard from '@/components/dashboard/GuildCard';
 import { Guild, Board, User, KanbanPermission, PermissionEntry } from '@/types';
 import BoardService from '@/services/BoardService';
-import BoardCard from '@/components/BoardCard';
-import CreateBoardForm from '@/components/CreateBoardForm';
-import EditGuildSettingsForm from '@/components/EditGuildSettingsForm';
+import BoardCard from '@/components/dashboard/BoardCard';
+import CreateBoardForm from '@/components/dashboard/CreateBoardForm';
+import EditGuildSettingsForm from '@/components/dashboard/EditGuildSettingsForm';
 import dotenv from 'dotenv';
 import { useUser } from '@/context/UserContext';
 import GuildService from '@/services/GuildService';
-import EditBoard from '@/components/EditBoard';
-import EditBoardSettings from '@/components/EditBoardSettings';
+import EditBoard from '@/components/dashboard/EditBoard';
+import EditBoardSettings from '@/components/dashboard/EditBoardSettings';
 
 dotenv.config();
 
@@ -180,10 +180,6 @@ const Home: FC = () => {
         console.error('Error updating board:', error);
     }
   };
-
-  const handleBoardEditPermissions = (boardId: string) => {
-    setEditingBoardPermissionsId(boardId);
-  }
 
   const handleBoardEditPermissionsSubmit = async (permissions: PermissionEntry[]) => {
     try {

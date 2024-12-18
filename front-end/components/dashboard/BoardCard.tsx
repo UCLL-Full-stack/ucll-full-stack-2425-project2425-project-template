@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react';
-import { Board } from '../types';
+import { Board } from '../../types';
 import UserService from '@/services/UserService';
 import ColumnService from '@/services/ColumnService';
 import { useUser } from '@/context/UserContext';
