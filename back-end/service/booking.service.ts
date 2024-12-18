@@ -2,10 +2,12 @@ import { PaymentStatus } from "@prisma/client";
 import bookingDb from "../repository/booking.db";
 import tripDb from "../repository/trip.db";
 import { Booking } from "../model/booking";
-import { BookingInput } from "../types";
+import { BookingInput, StudentInput } from "../types";
 import { Student } from "../model/student";
 import { User } from "../model/user";
 import studentDb from "../repository/student.db";
+import { UnauthorizedError } from "express-jwt";
+import { bookingRouter } from "../controller/booking.routes";
 
 const createBooking = async (input: BookingInput): Promise<Booking> => {
     const { bookingDate, tripId, studentIds, paymentStatus } = input;
@@ -58,12 +60,13 @@ const createBooking = async (input: BookingInput): Promise<Booking> => {
 };
 
 
-const getAllBookings = async (): Promise<Booking[]> => {
-    try {
+const getAllBookings = async ({ username, role }: { username: string, role: string }): Promise<Booking[]> => {
+    if (role === 'admin') {
         return await bookingDb.getAllBookings();
-    } catch (error) {
-        console.error("Error fetching all bookings:", error);
-        throw new Error("Could not retrieve bookings.");
+    } else if (role === 'student') {
+        return bookingDb.getBookingForStudent({ username }); 
+    } else {
+        throw new UnauthorizedError('You do not have permission to view schedules' as any, { message: 'Unauthorized access' });
     }
 };
 
@@ -78,5 +81,52 @@ const getBookingById = async (bookingId: number): Promise<Booking> => {
     }
     return booking;
 };
+const addStudentsToBooking = async ({
+    booking: bookingInput,
+    students: studentsInput,
+}: {
+    booking: BookingInput;
+    students: StudentInput[];
+}): Promise<Booking | null> => {
+    if (!studentsInput.length) throw new Error('At least one student is required');
 
-export default { createBooking, getAllBookings, getBookingById };
+    const bookingId = bookingInput.id;
+
+    if (bookingId === undefined || typeof bookingId !== 'number' || bookingId <= 0) {
+        throw new Error('Booking ID is required and must be a valid number');
+    }
+
+    const booking = await bookingDb.getBookingById(bookingId);
+    if (!booking) throw new Error('Booking not found');
+
+    const students = await Promise.all(
+        studentsInput.map(async (studentInput) => {
+            const studentId = studentInput.id;
+
+            if (studentId === undefined || typeof studentId !== 'number') {
+                throw new Error(`Invalid student ID for student: ${studentInput}`);
+            }
+
+            const student = await studentDb.getStudentById(studentId);
+            if (!student) throw new Error(`Student with id ${studentId} not found`);
+            return student;
+        })
+    );
+
+    students.forEach((student) => {
+        booking.addStudentToBooking(student);
+    });
+
+    // Update the booking in the database with the new students
+    try {
+        return await bookingDb.updateStudentsOfBooking({
+            booking,
+        });
+    } catch (error) {
+        console.error("Error updating students in booking:", error);
+        throw new Error("Failed to update students for the booking.");
+    }
+};
+
+
+export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking};

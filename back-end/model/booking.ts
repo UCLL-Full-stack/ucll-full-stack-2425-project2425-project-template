@@ -43,6 +43,20 @@ export class Booking {
         }
     }
 
+    addStudentToBooking(student: Student) {
+        if (!this.students.includes(student)) {
+            this.students.push(student);
+        }
+    }
+
+    public getId(): number | undefined {
+        return this.id;
+    }
+
+    public getStudents(): Student[] {
+        return this.students;
+    }
+
     static from({
         id,
         bookingDate,

@@ -21,6 +21,7 @@ type Booking = {
     paymentStatus: 'Pending' | 'Confirmed' | 'Cancelled';
 }
 type User = {
+    id?: number;
     firstName?: string;
     lastName?: string;
     fullname?: string;
