@@ -1,5 +1,15 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+const getTask = async (taskId: string) => {
+    const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+}
+
 const updateTask = async (taskId: string, task: any) => {
     const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: 'PUT',
@@ -22,6 +32,7 @@ const deleteTask = async (taskId: string) => {
 };
 
 const TaskService = {
+    getTask,
     updateTask,
     deleteTask,
 };

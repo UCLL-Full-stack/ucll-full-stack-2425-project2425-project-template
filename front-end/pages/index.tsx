@@ -13,6 +13,7 @@ import { useUser } from '@/context/UserContext';
 import GuildService from '@/services/GuildService';
 import EditBoard from '@/components/dashboard/EditBoard';
 import EditBoardSettings from '@/components/dashboard/EditBoardSettings';
+import BoardView from '@/components/board/BoardView';
 
 dotenv.config();
 
@@ -200,9 +201,7 @@ const Home: FC = () => {
           <Header onCreateClick={handleBoardCreateClick} onLoginClick={handleDiscordLogin}></Header>
           <main className="flex-grow">
             {selectedBoard ? (
-                <div className="p-4">
-                    <h2 className="text-white text-xl font-bold">{selectedBoard.boardName}</h2>
-                </div>
+                <BoardView board={selectedBoard} onBack={() => setSelectedBoard(null)} />
             ) : (
               <>
                 <div className="p-4">

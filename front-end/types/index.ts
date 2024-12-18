@@ -108,7 +108,7 @@ export interface User{
 export interface Column{
     columnId: string;
     columnName: string;
-    tasks: Task[];
+    taskIds: string[];
 }
 
 export interface Task{
