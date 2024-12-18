@@ -135,4 +135,59 @@ studentRouter.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /students:
+ *   post:
+ *     summary: Create a new student
+ *     description: Adds a new student to the system.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentNumber:
+ *                 type: string
+ *                 description: The student number.
+ *                 example: S12345
+ *               userId:
+ *                 type: integer
+ *                 description: The user ID associated with the student.
+ *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Student created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Student'
+ *       400:
+ *         description: Error occurred.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Student number and user ID are required.
+ */
+studentRouter.post('/', async (req: Request, res: Response) => {
+  try {
+    const student = await studentService.createStudent(req.body);
+    res.status(201).json(student);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).json({ status: 'error', errorMessage: err.message });
+  }
+});
+
+
 export { studentRouter };

@@ -8,6 +8,7 @@ import { User } from "../model/user";
 import studentDb from "../repository/student.db";
 import { UnauthorizedError } from "express-jwt";
 import { bookingRouter } from "../controller/booking.routes";
+import database from "../util/database";
 
 const createBooking = async (input: BookingInput): Promise<Booking> => {
     const { bookingDate, tripId, studentIds, paymentStatus } = input;
@@ -81,6 +82,7 @@ const getBookingById = async (bookingId: number): Promise<Booking> => {
     }
     return booking;
 };
+
 const addStudentsToBooking = async ({
     booking: bookingInput,
     students: studentsInput,
@@ -88,12 +90,12 @@ const addStudentsToBooking = async ({
     booking: BookingInput;
     students: StudentInput[];
 }): Promise<Booking | null> => {
-    if (!studentsInput.length) throw new Error('At least one student is required');
+    if (!studentsInput.length) throw new Error('At least one student is required.');
 
     const bookingId = bookingInput.id;
 
     if (bookingId === undefined || typeof bookingId !== 'number' || bookingId <= 0) {
-        throw new Error('Booking ID is required and must be a valid number');
+        throw new Error('Booking ID is required and must be a valid number.');
     }
 
     const booking = await bookingDb.getBookingById(bookingId);
@@ -104,20 +106,17 @@ const addStudentsToBooking = async ({
             const studentId = studentInput.id;
 
             if (studentId === undefined || typeof studentId !== 'number') {
-                throw new Error(`Invalid student ID for student: ${studentInput}`);
+                throw new Error(`Invalid student ID for student: ${JSON.stringify(studentInput)}`);
             }
 
             const student = await studentDb.getStudentById(studentId);
-            if (!student) throw new Error(`Student with id ${studentId} not found`);
+            if (!student) throw new Error(`Student with ID ${studentId} not found`);
             return student;
         })
     );
-
     students.forEach((student) => {
         booking.addStudentToBooking(student);
     });
-
-    // Update the booking in the database with the new students
     try {
         return await bookingDb.updateStudentsOfBooking({
             booking,
@@ -127,6 +126,42 @@ const addStudentsToBooking = async ({
         throw new Error("Failed to update students for the booking.");
     }
 };
+const updateStudentsOfBooking = async ({
+    booking,
+}: {
+    booking: Booking;
+}): Promise<Booking | null> => {
+    const bookingId = booking.getId();  
+    const students = booking.getStudents();  
+
+    if (!bookingId) {
+        throw new Error('Booking ID is required for updating students.');
+    }
+
+    if (students.length === 0) {
+        throw new Error('At least one student is required to update the booking.');
+    }
+
+    try {
+        const updatedBookingPrisma = await database.booking.update({
+            where: { id: bookingId },
+            data: {
+                students: {
+                    connect: students.map((student) => ({ id: student.getId() })),  // Connect students by ID
+                },
+            },
+            include: {
+                trip: true,
+                students: { include: { user: true } },
+            },
+        });
+
+        return updatedBookingPrisma ? Booking.from(updatedBookingPrisma) : null;
+    } catch (error) {
+        console.error('Error updating students for booking:', bookingId, error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 
-export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking};
+export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, updateStudentsOfBooking};

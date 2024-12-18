@@ -50,16 +50,63 @@ const getAllReviews = async (): Promise<Review[]> => {
     }
 };
 
-const getReviewById = async (reviewId: number): Promise<Review> => {
+const getReviewById = async (reviewId: number): Promise<Review | null> => {
     if (typeof reviewId !== 'number' || reviewId <= 0) {
         throw new Error("Invalid Review ID");
     }
 
-    const review = await reviewDb.getReviewById(reviewId);
-    if (!review) {
-        throw new Error(`Review with ID ${reviewId} does not exist.`);
+    try {
+        const review = await reviewDb.getReviewById(reviewId);
+        if (!review) {
+            throw new Error(`Review with ID ${reviewId} does not exist.`);
+        }
+        return review;
+    } catch (error) {
+        console.error("Error fetching review by ID:", error);
+        throw new Error("Failed to retrieve review. See server log for details.");
     }
-    return review;
 };
 
-export default { createReview, getAllReviews, getReviewById };
+const getReviewForStudent = async ({ username }: { username: string }): Promise<Review[]> => {
+    try {
+        const reviews = await reviewDb.getReviewForStudent({ username });
+        return reviews;
+    } catch (error) {
+        console.error('Error fetching reviews for student:', username, error);
+        throw new Error(`Unable to retrieve reviews for student with username: ${username}. Please try again later.`);
+    }
+};
+
+const updateReviewForStudent = async ({
+    review,
+}: {
+    review: Review;
+}): Promise<Review | null> => {
+    const reviewId = review.getId();
+    const comment = review.getComment();
+    const rating = review.getRating();
+    const trip = review.getTrip();
+
+    if (!reviewId) {
+        throw new Error('Review ID is required for updating the review.');
+    }
+
+    if (!comment || comment.trim().length === 0) {
+        throw new Error('Review comment is required.');
+    }
+
+    if (rating < 1 || rating > 5) {
+        throw new Error('Rating must be between 1 and 5.');
+    }
+
+    try {
+        const updatedReview = await reviewDb.updateReviewForStudent({
+            review,
+        });
+        return updatedReview;
+    } catch (error) {
+        console.error('Error updating review for student:', reviewId, error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+export default { createReview, getAllReviews, getReviewById, getReviewForStudent, updateReviewForStudent };

@@ -5,7 +5,6 @@ import bcrypt from 'bcrypt';
 
 const getStudentById = async (studentId: number): Promise<Student | null> => {
   try {
-    // Ensure studentId is a valid number
     if (typeof studentId !== 'number' || studentId <= 0) {
       throw new Error("Invalid student ID provided");
     }
@@ -59,7 +58,6 @@ const createStudent = async ({
   userId: number;
 }): Promise<Student> => {
   try {
-    // Ensure that the userId exists in the user table
     const userExists = await database.user.findUnique({
       where: { id: userId },
     });
