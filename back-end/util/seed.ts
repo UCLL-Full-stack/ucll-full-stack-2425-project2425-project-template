@@ -13,6 +13,7 @@ const main = async () => {
             username: 'user1',
             email: 'user1@gmail.com',
             password: 'user1',
+            role: 'user',
         },
     });
 
@@ -49,6 +50,7 @@ const main = async () => {
             username: 'milan',
             email: 'milan@mail.com',
             password: 'milanspassword',
+            role: 'user',
         },
     });
 
