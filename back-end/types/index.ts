@@ -26,6 +26,7 @@ type ProfileUpdateInput = {
     firstName: string;
     lastName: string;
     email: string;
+    role: Role;
 };
 
 type NewRecipeInput = {
@@ -54,6 +55,7 @@ type RecipeUpdateInput = {
     isFavorite?: boolean;
     notes?: string;
     source?: string;
+    scheduledDate?: Date;
 };
 
 type RecipeCategory = 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'other';

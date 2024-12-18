@@ -24,12 +24,20 @@ const Greeting: React.FC<GreetingProps> = ({ user }) => {
     }
   }, []);
 
+  const capitalizeFirstLetter = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
   return (
     <article className="flex items-center py-2 px-0 w-full">
       <div className="flex items-center text-gray-600">
         {greetingIcon}
         <p className="ml-2 text-lg font-semibold m-0">
-          {greeting}, {user ? user.name : "Guest"}!
+          {greeting},{" "}
+          <span className="font-bold">
+            {user ? capitalizeFirstLetter(user.name) : ""}
+          </span>
+          !
         </p>
       </div>
     </article>

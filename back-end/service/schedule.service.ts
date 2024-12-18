@@ -1,10 +1,13 @@
+import { UnauthorizedError } from 'express-jwt';
 import { Recipe } from '../model/recipe';
 import recipeDb from '../repository/recipe.db';
 import scheduleDb from '../repository/schedule.db';
+import { Role } from '../types';
 
 const getScheduledRecipeDetails = async (userId: number, date: Date): Promise<Recipe[]> => {
     const schedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date);
     if (!schedule) {
+        console.log(`No schedule found for userId: ${userId} and date: ${date}`);
         return [];
     }
     return schedule.getRecipes() || [];
@@ -14,8 +17,15 @@ const updateRecipeDate = async (
     userId: number,
     recipeId: number,
     oldDate: Date,
-    newDate: Date
+    newDate: Date,
+    role: Role
 ): Promise<Recipe> => {
+    if (role === 'guest') {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'Only users can update their own schedules.',
+        });
+    }
+
     const oldSchedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, oldDate);
     if (!oldSchedule) throw new Error('Schedule not found');
 
@@ -40,8 +50,15 @@ const updateRecipeDate = async (
 const deleteScheduledRecipe = async (
     userId: number,
     recipeId: number,
-    date: Date
+    date: Date,
+    role: Role
 ): Promise<void> => {
+    if (role === 'guest') {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'Only users can delete recipes from their own schedules.',
+        });
+    }
+
     const schedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date);
     if (!schedule) throw new Error('Schedule not found');
 

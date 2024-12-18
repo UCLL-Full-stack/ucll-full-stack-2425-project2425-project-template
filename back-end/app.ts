@@ -8,6 +8,7 @@ import { recipeRouter } from './controller/recipe.routes';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { expressjwt } from 'express-jwt';
+import { profileRouter } from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
@@ -27,6 +28,74 @@ const swaggerOptions = {
                     type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
+                },
+            },
+            schemas: {
+                Recipe: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'integer',
+                            example: 1,
+                        },
+                        title: {
+                            type: 'string',
+                            example: 'Spaghetti Bolognese',
+                        },
+                        instructions: {
+                            type: 'string',
+                            example: 'Cook pasta, prepare sauce, mix together',
+                        },
+                        cookingTime: {
+                            type: 'integer',
+                            example: 30,
+                        },
+                        category: {
+                            type: 'string',
+                            example: 'DINNER',
+                        },
+                        ingredients: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    ingredientId: {
+                                        type: 'integer',
+                                        example: 1,
+                                    },
+                                    unit: {
+                                        type: 'string',
+                                        example: 'g',
+                                    },
+                                    quantity: {
+                                        type: 'number',
+                                        example: 200,
+                                    },
+                                },
+                            },
+                        },
+                        imageUrl: {
+                            type: 'string',
+                            example: 'https://example.com/image.jpg',
+                        },
+                        isFavorite: {
+                            type: 'boolean',
+                            example: true,
+                        },
+                        notes: {
+                            type: 'string',
+                            example: 'Delicious with garlic bread',
+                        },
+                        source: {
+                            type: 'string',
+                            example: 'Family recipe',
+                        },
+                        scheduledDate: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2024-12-03T00:00:00.000Z',
+                        },
+                    },
                 },
             },
         },
@@ -58,9 +127,27 @@ app.use(
 app.use('/schedules', scheduleRouter);
 app.use('/users', userRouter);
 app.use('/recipes', recipeRouter);
+app.use('/profiles', profileRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Plateful API is running...' });
+});
+
+// error-handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack); // logs the error
+
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'ValidationError') {
+        res.status(400).json({ status: 'validation error', message: err.message });
+    } else if (err.name === 'NotFoundError') {
+        res.status(404).json({ status: 'not found', message: err.message });
+    } else if (err instanceof TypeError) {
+        res.status(400).json({ status: 'type error', message: err.message });
+    } else {
+        res.status(500).json({ status: 'internal server error', message: 'Something went wrong!' });
+    }
 });
 
 app.listen(port || 3000, () => {

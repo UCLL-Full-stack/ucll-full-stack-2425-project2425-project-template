@@ -2,13 +2,18 @@ import { Recipe } from "@/types/recipes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const fetchRecipeById = async (recipeId: number, token: string) => {
+const fetchRecipeById = async (recipeId: number) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found");
+  }
+
   try {
     const response = await fetch(`${apiUrl}/recipes/${recipeId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -23,13 +28,17 @@ const fetchRecipeById = async (recipeId: number, token: string) => {
   }
 };
 
-const updateRecipe = async (recipeId: number, updateData: Partial<Recipe>, token: string) => {
+const updateRecipe = async (
+  recipeId: number,
+  updateData: Partial<Recipe>,
+  token: string
+) => {
   try {
     const response = await fetch(`${apiUrl}/recipes/${recipeId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updateData),
     });
@@ -51,7 +60,7 @@ const deleteRecipe = async (recipeId: number, token: string) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
 

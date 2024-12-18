@@ -32,10 +32,6 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { role } = request.auth;
 
-        if (role !== 'admin') {
-            return res.status(403).json({ message: 'Unauthorized access' });
-        }
-
         const users = await userService.getAllUsers(role);
         res.status(200).json(users.map((user) => user.toJSON()));
     } catch (error) {
@@ -79,7 +75,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
         }
 
         const user = await userService.getUserById(userId);
-        res.status(200).json(user);
+        res.status(200).json(user?.toJSON());
     } catch (error) {
         next(error);
     }
@@ -163,6 +159,8 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
             message: 'Authentication successful',
             token: result.token,
             username: result.username,
+            fullname: result.fullname,
+            role: result.role,
         });
     } catch (error) {
         next(error);
