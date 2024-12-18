@@ -1,0 +1,126 @@
+/* Home.module.css */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #121212; /* Donkere achtergrondkleur */
+  color: #ffffff; /* Witte tekstkleur */
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1200px; /* Maximale breedte voor inhoud */
+  padding: 2rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #121212; /* Donkere achtergrondkleur */
+  margin-bottom: 1em;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  background-color: #121212;
+  border-radius: 5px;
+  margin: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+/* Grid layout voor overzichtskaarten */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Flexibele kolommen */
+  gap: 1.5rem; /* Ruimte tussen de kaarten */
+  margin-top: 2rem;
+}
+
+/* Titel en beschrijving */
+.description h1 {
+  font-size: 2.5rem; /* Grootte van de hoofdtitel */
+  color: #4caf50; /* Groene kleur voor hoofdtitel */
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.description p {
+  font-size: 1rem; /* Grootte van de beschrijvingstekst */
+  color: #b3b3b3; /* Lichtgrijze kleur voor beschrijving */
+  text-align: center;
+  max-width: 600px; /* Maximale breedte voor beschrijving */
+  margin-top: 0.5rem;
+}
+
+/* Table styles */
+.tableContainer {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.table {
+  width: 100%;
+  max-width: 800px; /* Set a maximum width for the table */
+  border-collapse: collapse;
+  background-color: #1e1e1e; /* Dark background color */
+  color: #b3b3b3; /* Light text color */
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  text-align: left;
+  font-size: 1.1rem;
+  border: 1px solid #333;
+}
+
+.table thead {
+  background-color: #333;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #2e2e2e;
+}
+
+.table tbody tr[role="button"]:hover {
+  background-color: #3a3a3a;
+  /* background-color: #4c6149; */
+}
+
+.table tbody tr[role="button"]:active {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.table tbody tr td {
+  border-bottom: 1px solid #333; /* Add border between rows */
+}
+
+/* Responsieve stijlen */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr; /* Eén kolom op kleine schermen */
+    gap: 1rem; /* Ruimte tussen kaarten */
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* Twee kolommen op medium schermen */
+  }
+}
