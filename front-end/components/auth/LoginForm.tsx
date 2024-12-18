@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import authService from "@/services/authService";
-import { LoginData } from "@/types/auth";
+import { LoginData, StatusMessage } from "@/types/auth";
 import { AlertCircle } from "lucide-react";
+import AuthService from "@/services/AuthService";
 
 type Props = {
   onSuccess: () => void;
@@ -15,48 +15,91 @@ type Props = {
 const LoginForm: React.FC<Props> = ({ onSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [formError, setFormError] = useState("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
   const router = useRouter();
 
-  const validateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setUsername(value);
-    if (!value) {
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+  }, []);
+
+  const clearErrors = () => {
+    setUsernameError(null);
+    setPasswordError(null);
+    setFormError(null);
+    setStatusMessages([]);
+  };
+
+  const validate = (): boolean => {
+    let result = true;
+
+    if (!username || username.trim() === "") {
       setUsernameError("Username is required.");
+      result = false;
     } else {
       setUsernameError("");
     }
-  };
 
-  const validatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (value.length < 6) {
+    if (!password || password.trim() === "") {
+      setPasswordError("Password is required.");
+      result = false;
+    } else if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters.");
+      result = false;
     } else {
       setPasswordError("");
     }
+
+    return result;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!username) setUsernameError("Username is required");
-    if (!password) setPasswordError("Password is required");
+    clearErrors();
 
-    if (!usernameError && !passwordError) {
-      try {
-        const loginData: LoginData = { username, password };
-        const user = await authService.login(loginData);
-        localStorage.setItem("loggedInUser", JSON.stringify(user));
-        onSuccess();
-        router.push("/planner"); // Redirect to planner page on success
-      } catch (error) {
+    if (!validate()) {
+      return;
+    }
+
+    const loginData: LoginData = { username, password };
+
+    try {
+      const response = await AuthService.login(loginData);
+
+      if (response.ok) {
+        const userData = await response.json();
+
+        setStatusMessages([
+          {
+            message: "Login successful",
+            type: "success",
+          },
+        ]);
+
+        localStorage.setItem("token", userData.token);
+        localStorage.setItem("role", userData.role);
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({
+            token: userData.token,
+            fullname: userData.fullname,
+            username: userData.username,
+            role: userData.role,
+          })
+        );
+
+        setTimeout(() => {
+          router.push("/planner");
+        }, 2000);
+      } else {
         setFormError("Invalid username or password. Please try again.");
       }
+    } catch (error) {
+      setFormError("Invalid username or password. Please try again.");
     }
   };
 
@@ -68,7 +111,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
           id="username"
           name="username"
           value={username}
-          onChange={validateUsername}
+          onChange={(event) => setUsername(event.target.value)}
           required
         />
         {usernameError && (
@@ -85,7 +128,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
           name="password"
           type="password"
           value={password}
-          onChange={validatePassword}
+          onChange={(event) => setPassword(event.target.value)}
           required
         />
         {passwordError && (

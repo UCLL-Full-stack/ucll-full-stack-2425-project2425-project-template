@@ -1,4 +1,4 @@
-import { Recipe } from '../types/recipes';
+import { Recipe } from "../types/recipes";
 
 export type RegisterData = {
   firstName: string;
@@ -9,14 +9,20 @@ export type RegisterData = {
 };
 
 export type LoginData = {
-  email: string;
+  username: string;
   password: string;
-}
+};
 
 export type UserTable = {
   id: number;
   username: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
-}
+  role: string;
+};
+
+export type StatusMessage = {
+  message: string;
+  type: "error" | "success";
+};
