@@ -47,15 +47,17 @@ const getTaskById = async (taskId: string): Promise<Task> => {
 const addTask = async (taskData: {
     title: string;
     description: string;
+    taskIndex: number;
     dueDate: Date;
     assigneeIds?: string[];
     columnId: string;
 }): Promise<Task> => {
-    const { title, description, dueDate, assigneeIds = [], columnId } = taskData;
+    const { title, description, taskIndex, dueDate, assigneeIds = [], columnId } = taskData;
     const taskPrisma = await database.task.create({
         data: {
             title: title,
             description: description,
+            taskIndex: taskIndex,
             dueDate: dueDate,
             assignees: {
                 connect: assigneeIds.map(userId => ({ userId })),
@@ -78,18 +80,22 @@ const addTask = async (taskData: {
 const updateTask = async (taskId: string, taskData: {
     title?: string;
     description?: string;
+    taskIndex?: number;
     dueDate?: Date;
     assigneeIds?: string[];
     columnId?: string;
 }): Promise<Task> => {
     try {
-        const { title, description, dueDate, assigneeIds, columnId } = taskData;
+        const { title, description, taskIndex, dueDate, assigneeIds, columnId } = taskData;
         const data: any = {};
         if (title !== undefined) {
             data.title = title;
         }
         if (description !== undefined) {
             data.description = description;
+        }
+        if (taskIndex !== undefined) {
+            data.taskIndex = taskIndex;
         }
         if (dueDate !== undefined) {
             data.dueDate = dueDate;

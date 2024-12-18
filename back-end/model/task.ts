@@ -6,23 +6,25 @@ export class Task {
     private taskId: string;
     private title: string;
     private description: string;
+    private taskIndex: number;
     private dueDate: Date;
     private assigneeIds: string[];
     private columnId: string;
   
-    constructor(taskId: string, title: string, description: string, dueDate: Date, assigneeIds: string[], column: string) {
+    constructor(taskId: string, title: string, description: string, taskIndex: number, dueDate: Date, assigneeIds: string[], column: string) {
         this.validate(title, column);
         this.taskId = taskId;
         this.title = title;
         this.description = description;
+        this.taskIndex = taskIndex;
         this.dueDate = dueDate;
         this.assigneeIds = assigneeIds;
         this.columnId = column;
     }
 
-    static from({ taskId, title, description, dueDate, assignees, columnId }: TaskPrisma & {assignees: {userId: string}[]}): Task {
+    static from({ taskId, title, description, taskIndex ,dueDate, assignees, columnId }: TaskPrisma & {assignees: {userId: string}[]}): Task {
         const assigneeIds = assignees.map(assignee => assignee.userId);
-        return new Task(taskId, title, description, dueDate, assigneeIds, columnId);
+        return new Task(taskId, title, description, taskIndex, dueDate, assigneeIds, columnId);
     }
 
     validate(title: string, columnId: string): void {
@@ -76,6 +78,14 @@ export class Task {
   
     getColumnId(): string {
       return this.columnId;
+    }
+
+    getTaskIndex(): number {
+        return this.taskIndex;
+    }
+
+    setTaskIndex(taskIndex: number): void {
+        this.taskIndex = taskIndex;
     }
   }
   

@@ -62,6 +62,7 @@ model Task {
     taskId      String   @id @default(cuid())
     title       String
     description String
+    taskIndex   Int
     dueDate     DateTime
     assignees   User[]
     column      Column   @relation(fields: [columnId], references: [columnId])

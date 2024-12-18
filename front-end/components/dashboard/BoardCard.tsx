@@ -100,7 +100,10 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
                         <p className="text-sm text-gray-300">This action cannot be undone and will remove all related columns and tasks.</p>
                         <div className="flex justify-around mt-4">
                             <button
-                                onClick={() => setConfirmingDelete(false)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setConfirmingDelete(false)
+                                }}
                                 className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
                             >
                                 Cancel

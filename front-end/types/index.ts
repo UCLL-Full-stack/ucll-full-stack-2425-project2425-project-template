@@ -113,10 +113,12 @@ export interface Column{
 
 export interface Task{
     taskId: string;
-    taskName: string;
-    taskDescription: string;
+    title: string;
+    description: string;
+    taskIndex: number;
     dueDate: Date;
-    assignees: string[];
+    assigneeIds: string[];
+    columnId: string;
 }
 
 export interface Board{

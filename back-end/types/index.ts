@@ -132,3 +132,46 @@ export interface UpdateRoleInput {
     roleName?: string;
     permissions?: DiscordPermission[];
 }
+
+export interface CreateBoardInput {
+    boardName: string;
+    guildId: string;
+    columnIds?: string[];
+    settings?: PermissionEntry[];
+}
+
+export interface UpdateBoardInput {
+    boardName?: string;
+    columnIds?: string[];
+    settings?: PermissionEntry[];
+}
+
+export interface CreateColumnInput {
+    columnName: string;
+    columnIndex: number;
+    boardId: string;
+    taskIds?: string[];
+}
+
+export interface UpdateColumnInput {
+    columnName?: string;
+    taskIds?: string[];
+}
+
+export interface CreateTaskInput {
+    title: string;
+    description: string;
+    taskIndex: number;
+    dueDate: Date;
+    assigneeIds: string[];
+    columnId: string;
+}
+
+export interface UpdateTaskInput {
+    title?: string;
+    description?: string;
+    taskIndex?: number;
+    dueDate?: Date;
+    assigneeIds?: string[];
+    columnId?: string;
+}
