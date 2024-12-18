@@ -1,6 +1,7 @@
 import ingredientDb from "../../repository/ingredient.db";
 import ingredientService from "../../service/ingredient.service";
 import { Ingredient } from "../../model/ingredient";
+import { Rol } from "../../types";
 
 let addIngredientMock: jest.Mock;
 let mockGetAllIngredients: jest.Mock;
@@ -9,6 +10,7 @@ const naam = "Mango";
 const type = "Topping";
 const aantal = 190;
 const prijs = 1.78;
+const rol = "Admin" as Rol;
 
 const ingredienten = [
     new Ingredient({
@@ -61,7 +63,7 @@ test('given all ingredients, when all ingredients are being requested, then show
 
     //when
     ingredientService.getAllIngredienten = mockGetAllIngredients;
-    const allIngredienten = ingredientService.getAllIngredienten();
+    const allIngredienten = ingredientService.getAllIngredienten({ rol });
 
     //then
     expect(mockGetAllIngredients).toHaveBeenCalledTimes(1);
