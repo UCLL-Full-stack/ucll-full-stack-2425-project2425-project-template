@@ -1,6 +1,7 @@
 import { Auth } from '@types';
 
 const getAllUsers = async () => {
+    console.log(sessionStorage.getItem('token'));
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
         method: 'GET',
         headers: {
