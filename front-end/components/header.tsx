@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'next-i18next';
+import Language from "@components/language/Language";
+import i18next from 'i18next';
 
 const Header: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<{ username: string; role: string } | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Retrieve logged-in user's info
@@ -13,7 +17,7 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    //confirmation popup
+    // Confirmation popup
     const confirmed = window.confirm('Are you sure you want to logout?');
     if (confirmed) {
       // Remove logged-in user's info
@@ -23,10 +27,14 @@ const Header: React.FC = () => {
     }
   };
 
+  const changeLanguage = (lng: string) => {
+    i18next.changeLanguage(lng);
+  };
+
   return (
     <header className="p-3 mb-3 border-bottom bg-dark bg-gradient">
       <a className="fs-2 d-flex justify-content-center mb-2 mb-lg-0 text-white-50 text-decoration-none">
-        Racing App
+        {t('general.title')}
       </a>
       <nav className="nav justify-content-center">
         <Link href="/" className="nav-link px-4 fs-5 text-white">
@@ -48,6 +56,7 @@ const Header: React.FC = () => {
           </Link>
         )}
       </nav>
+      <Language />
     </header>
   );
 };

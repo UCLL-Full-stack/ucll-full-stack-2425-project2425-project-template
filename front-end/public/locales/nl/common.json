@@ -4,6 +4,10 @@
         "error": "Een probleem is opgetreden. Probeer opnieuw later."
     },
     "login": {
+        "title": "Inloggen",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "submit": "Inloggen",
         "validate": {
             "username": "gebruikersnaam is verplicht",
             "password": "Wachtwoord is verplicht",

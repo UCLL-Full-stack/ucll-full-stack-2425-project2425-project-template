@@ -1,4 +1,4 @@
-import AuthService from '@services/AuthService';
+import AuthService from '@services/authService';
 import { StatusMessage } from "@types";
 import classNames from "classnames";
 import { useTranslation } from "next-i18next";
@@ -29,7 +29,7 @@ const UserLoginForm: React.FC = () => {
         }
 
         if (!password || password.trim() === "") {
-            setPasswordError    (t("login.validate.password"));
+            setPasswordError(t("login.validate.password"));
             result = false;
         }
 
@@ -51,7 +51,7 @@ const UserLoginForm: React.FC = () => {
         if (response.status === 200) {
             setStatusMessages([
                 { 
-                    message: t("login.success"),
+                    message: t("login.validate.success"),
                     type: "success",
                 }
             ]);
@@ -90,7 +90,7 @@ const UserLoginForm: React.FC = () => {
             <h1 className="text-center my-4">{t("login.title")}</h1>
             <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '400px' }}>
                 <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
+                    <label htmlFor="username" className="form-label">{t("login.username")}</label>
                     <input
                         id="nameInput"
                         type="text"
@@ -102,7 +102,7 @@ const UserLoginForm: React.FC = () => {
                 </div>
                 <br />
                 <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
+                    <label htmlFor="password" className="form-label">{t("login.password")}</label>
                     <input
                         id="passwordInput"
                         type="password"
@@ -130,7 +130,7 @@ const UserLoginForm: React.FC = () => {
                         </ul>
                     </div>
                 )}
-                <button className="btn btn-primary w-100" type="submit" style={{ marginTop: '30px' }}>Login</button>
+                <button className="btn btn-primary w-100" type="submit" style={{ marginTop: '30px' }}>{t("login.submit")}</button>
             </form>
         </>
     );
