@@ -22,6 +22,7 @@ export type CoachInput = {
      name: string;
      job: Job;
      imageUrl?: string;
+     teamId?: number;
 }
 
 export type TeamInput = {

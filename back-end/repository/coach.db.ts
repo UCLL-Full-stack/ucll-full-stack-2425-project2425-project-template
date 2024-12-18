@@ -45,4 +45,4 @@ const removeCoach = async (id: number):  Promise<void> => {
     }
 }
 
-export default { findAll, addCoach , removeCoach};
+export default { findAll, addCoach , removeCoach, updateCoach };

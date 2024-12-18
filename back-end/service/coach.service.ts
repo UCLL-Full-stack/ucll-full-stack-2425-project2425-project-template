@@ -19,4 +19,4 @@ const removeCoach = async (id: number) => {
     return coachDb.removeCoach(id);
 }
 
-export default { getAllcoaches, addCoach };
+export default { getAllcoaches, addCoach, updateCoach, removeCoach };
