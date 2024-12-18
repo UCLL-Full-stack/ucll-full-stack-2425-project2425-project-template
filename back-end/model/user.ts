@@ -15,7 +15,7 @@ export class User {
     readonly team: Team | null;
 
     constructor(user: {
-        id: number;
+        id?: number;
         name: string;
         password: string;
         role: Role;
@@ -26,6 +26,17 @@ export class User {
         this.password = user.password;
         this.role = user.role;
         this.team = user.team;
+    }
+    validate(user: { name: string; password: string; role: Role; team: Team | null }): void {
+        if (!user.name?.trim()) {
+            throw new Error('Name is required');
+        }
+        if (!user.password?.trim()) {
+            throw new Error('Password is required');
+        }
+        if (!user.role?.trim()) {
+            throw new Error('Role is required');
+        }
     }
 
     getId(): number | undefined {

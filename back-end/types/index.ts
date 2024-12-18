@@ -1,3 +1,5 @@
+import { Team } from "../model/team";
+
 type Role = 'admin' | 'owner' | 'player';
 
 type UserInput = {
@@ -5,7 +7,7 @@ type UserInput = {
     name: string;
     password: string;
     role: Role;
-    team?: TeamInput;
+    team?: Team;
     teamId?: number;
 };
 
@@ -35,4 +37,9 @@ type MatchInput = {
     competition: CompetitionInput;
 };
 
-export { Role, UserInput, TeamInput, CompetitionInput, MatchInput };
+type AuthenticationResponse = {
+    token: string;
+    name: string;
+};
+
+export { Role, UserInput, TeamInput, CompetitionInput, MatchInput, AuthenticationResponse };

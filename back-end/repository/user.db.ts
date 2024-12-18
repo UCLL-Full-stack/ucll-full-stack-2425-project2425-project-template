@@ -60,14 +60,13 @@ const getUserByName = async ({ name }: { name: string }): Promise<User | null> =
     }
 };
 
-const createUser = async ({ name, password, role, teamId }: UserInput) => {
+const createUser = async ({ name, password, role, team }: User) => {
     try {
         const userPrisma = await database.user.create({
             data: {
                 name,
                 password,
                 role,
-                team: teamId ? { connect: { id: teamId } } : undefined,
             },
             include: {
                 team: {
