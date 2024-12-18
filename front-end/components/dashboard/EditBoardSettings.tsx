@@ -6,12 +6,12 @@ import React, { useEffect, useState } from 'react';
 interface EditBoardSettingsProps {
     boardId: string;
     onClose: () => void;
-    onSubmit: (updatedPermissions: PermissionEntry[]) => void;
+    onSubmit: (updatedSettings: PermissionEntry[]) => void;
 }
 
 const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose, onSubmit }) => {
     const [board, setBoard] = useState<Board | null>(null);
-    const [permissions, setPermissions] = useState<PermissionEntry[]>([]);
+    const [boardSettings, setBoardSettings] = useState<PermissionEntry[]>([]);
     const [allRoles, setAllRoles] = useState<Role[]>([]);
     const [allUsers, setAllUsers] = useState<User[]>([]);
     const [selectedIdentifier, setSelectedIdentifier] = useState<string | null>(null);
@@ -22,15 +22,24 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
 
     useEffect(() => {
         const fetchData = async () => {
-            const board: Board = await BoardService.getBoard(boardId);
-            const users: User[] = await GuildService.getGuildMembers(board.guildId);
-            const roles: Role[] = await GuildService.getGuildRoles(board.guildId);
-            setBoard(board);
-            setAllUsers(users);
-            setAllRoles(roles);
-            setPermissions(board.permissions);
-            roles.forEach(role => roleMap.set(role.roleId, role.roleName));
-            users.forEach(user => userMap.set(user.userId, user.globalName));
+            try {
+                const board: Board = await BoardService.getBoard(boardId);
+                const users: User[] = await GuildService.getGuildMembers(board.guildId);
+                const roles: Role[] = await GuildService.getGuildRoles(board.guildId);
+                setBoard(board);
+                setBoardSettings(board.permissions);
+                setAllUsers(users);
+                setAllRoles(roles);
+
+                const newRoleMap = new Map<string, string>();
+                const newUserMap = new Map<string, string>();
+                roles.forEach(role => newRoleMap.set(role.roleId, role.roleName));
+                users.forEach(user => newUserMap.set(user.userId, user.globalName));
+                setRoleMap(newRoleMap);
+                setUserMap(newUserMap);
+            } catch (error) {
+                console.error('Error fetching board settings:', error);
+            }
         };
 
         fetchData();
@@ -47,7 +56,7 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     };
 
     const handleRemovePermission = (identifier: string, permission: KanbanPermission) => {
-        setPermissions(prev =>
+        setBoardSettings(prev =>
             prev.map(entry =>
                 entry.identifier === identifier
                     ? { ...entry, kanbanPermission: entry.kanbanPermission.filter(p => p !== permission) }
@@ -57,7 +66,7 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     };
 
     const handleAddPermission = (identifier: string, permission: KanbanPermission) => {
-        setPermissions(prev =>
+        setBoardSettings(prev =>
             prev.map(entry =>
                 entry.identifier === identifier
                     ? { ...entry, kanbanPermission: [...entry.kanbanPermission, permission] }
@@ -67,7 +76,7 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     };
 
     const handleAddIdentifier = (identifier: string) => {
-        setPermissions((prev) => [
+        setBoardSettings((prev) => [
             ...prev,
             { identifier, kanbanPermission: [] },
         ]);
@@ -75,7 +84,7 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     };
 
     const filteredOptions = () => {
-        const selectedIdentifiers = new Set(permissions.map(entry => entry.identifier));
+        const selectedIdentifiers = new Set(boardSettings.map(entry => entry.identifier));
         const query = searchQuery.toLowerCase();
         const roles = allRoles
             .filter(role => role.roleName.toLowerCase().includes(query) && !selectedIdentifiers.has(role.roleId))
@@ -97,128 +106,136 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     };
 
     const handleRemoveIdentifier = (identifier: string) => {
-        setPermissions(prev => prev.filter(entry => entry.identifier !== identifier));
+        setBoardSettings(prev => prev.filter(entry => entry.identifier !== identifier));
     };
 
     const handleSubmit = async () => {
-        const validSettings = permissions.every(entry => entry.kanbanPermission.length > 0);
+        const validSettings = boardSettings.every(entry => entry.kanbanPermission.length > 0);
         if (!validSettings) {
             alert("Each identifier must have at least one permission");
             return;
         }
-        onSubmit(permissions);
+        onSubmit(boardSettings);
     };
 
     return (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div className="bg-[#2C2F33] p-6 rounded-lg shadow-lg w-1/2 text-white">
-                    <h2 className="text-2xl font-bold mb-4">Edit Permissions for {board?.boardName}</h2>
-                    <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-                        {permissions.map(entry => (
-                            <div
-                                key={entry.identifier}
-                                className={`p-4 bg-gray-800 rounded-lg ${
-                                    entry.identifier === DiscordPermission.ADMINISTRATOR ? "opacity-50" : ""
-                                }`}
-                            >
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="font-bold">{resolveIdentifierName(entry.identifier)}</span>
-                                    {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
-                                        <button
-                                            className="px-2 py-1 rounded hover:text-red-600"
-                                            onClick={() => handleRemoveIdentifier(entry.identifier)}
-                                        >
-                                            ✕
-                                        </button>
-                                    )}
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {entry.kanbanPermission.map(permission => (
-                                        <div
-                                            key={permission}
-                                            className="bg-gray-700 px-3 py-1 rounded flex items-center"
-                                        >
-                                            <span>{permission}</span>
-                                            {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
-                                                <button
-                                                    className="ml-2 text-grey-500 hover:text-red-600"
-                                                    onClick={() => handleRemovePermission(entry.identifier, permission)}
-                                                >
-                                                    ✕
-                                                </button>
-                                            )}
-                                        </div>
-                                    ))}
-                                    {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
-                                        <button
-                                            className="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700"
-                                            onClick={() => setSelectedIdentifier(entry.identifier)}
-                                        >
-                                            +
-                                        </button>
-                                    )}
-                                </div>
-                                {selectedIdentifier === entry.identifier && (
-                                    <select
-                                        className="mt-2 bg-gray-700 text-white p-2 rounded"
-                                        onChange={e => {
-                                            handleAddPermission(entry.identifier, e.target.value as KanbanPermission);
-                                            setSelectedIdentifier(null);
-                                        }}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-[#2C2F33] p-6 rounded-lg shadow-lg w-1/2 text-white">
+                <h2 className="text-2xl font-bold mb-4">Edit Permissions for {board?.boardName}</h2>
+                <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+                    {boardSettings.map(entry => (
+                        <div
+                            key={entry.identifier}
+                            className={`p-4 bg-gray-800 rounded-lg ${
+                                entry.identifier === DiscordPermission.ADMINISTRATOR ? "opacity-50" : ""
+                            }`}
+                        >
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="font-bold">{resolveIdentifierName(entry.identifier)}</span>
+                                {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
+                                    <button
+                                        className="px-2 py-1 rounded hover:text-red-600"
+                                        onClick={() => handleRemoveIdentifier(entry.identifier)}
                                     >
-                                        <option value="">Select Permission</option>
-                                        {availableKanbanPermissions
-                                            .filter(p => !entry.kanbanPermission.includes(p))
-                                            .map(p => (
-                                                <option key={p} value={p}>
-                                                    {p}
-                                                </option>
-                                            ))}
-                                    </select>
+                                        ✕
+                                    </button>
                                 )}
                             </div>
-                        ))}
-                    </div>
-    
-                    {showAddIdentifierDropdown ? (
-                        <div className="mt-4 bg-gray-800 p-4 rounded">
-                            <input
-                                type="text"
-                                placeholder="Search users, roles, or permissions"
-                                value={searchQuery}
-                                onChange={e => setSearchQuery(e.target.value)}
-                                className="w-full p-2 bg-gray-700 rounded text-white"
-                            />
-                            <ul className="mt-2 max-h-40 overflow-y-auto">
-                                {filteredOptions().map(option => (
-                                    <li
-                                        key={option.value}
-                                        className="p-2 hover:bg-gray-700 cursor-pointer rounded"
-                                        onClick={() => handleAddIdentifier(option.value)}
+                            <div className="flex flex-wrap gap-2">
+                                {entry.kanbanPermission.map(permission => (
+                                    <div
+                                        key={permission}
+                                        className="bg-gray-700 px-3 py-1 rounded flex items-center"
                                     >
-                                        {option.label}
-                                    </li>
+                                        <span>{permission}</span>
+                                        {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
+                                            <button
+                                                className="ml-2 text-grey-500 hover:text-red-600"
+                                                onClick={() => handleRemovePermission(entry.identifier, permission)}
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
                                 ))}
-                            </ul>
+                                {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
+                                    <button
+                                        className="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700"
+                                        onClick={() => setSelectedIdentifier(entry.identifier)}
+                                    >
+                                        +
+                                    </button>
+                                )}
+                            </div>
+                            {selectedIdentifier === entry.identifier && (
+                                <select
+                                    className="mt-2 bg-gray-700 text-white p-2 rounded"
+                                    onChange={e => {
+                                        handleAddPermission(entry.identifier, e.target.value as KanbanPermission);
+                                        setSelectedIdentifier(null);
+                                    }}
+                                >
+                                    <option value="">Select Permission</option>
+                                    {availableKanbanPermissions
+                                        .filter(p => !entry.kanbanPermission.includes(p))
+                                        .map(p => (
+                                            <option key={p} value={p}>
+                                                {p}
+                                            </option>
+                                        ))}
+                                </select>
+                            )}
                         </div>
-                    ) : (
-                        <button
-                            className="mt-4 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
-                            onClick={() => setShowAddIdentifierDropdown(true)}
-                        >
-                            Add Identifier
-                        </button>
-                    )}
-    
-                    <div className="flex justify-end mt-6">
-                        <button className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 mr-2" onClick={onClose}>
-                            Cancel
-                        </button>
-                        <button className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" onClick={handleSubmit}>Save Changes</button>
+                    ))}
+                </div>
+
+                {showAddIdentifierDropdown ? (
+                    <div className="mt-4 bg-gray-800 p-4 rounded">
+                        <input
+                            type="text"
+                            placeholder="Search users, roles, or permissions"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            className="w-full p-2 bg-gray-700 rounded text-white"
+                        />
+                        <ul className="mt-2 max-h-40 overflow-y-auto">
+                            {filteredOptions().map(option => (
+                                <li
+                                    key={option.value}
+                                    className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                    onClick={() => handleAddIdentifier(option.value)}
+                                >
+                                    {option.label}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
+                ) : (
+                    <button
+                        className="mt-4 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+                        onClick={() => setShowAddIdentifierDropdown(true)}
+                    >
+                        Add Identifier
+                    </button>
+                )}
+
+                <div className="flex justify-end mt-6">
+                    <button 
+                        className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 mr-2" 
+                        onClick={onClose}
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" 
+                        onClick={handleSubmit}
+                    >
+                        Save Changes
+                    </button>
                 </div>
             </div>
-        );
+        </div>
+    );
 }
 
 export default EditBoardSettings;
