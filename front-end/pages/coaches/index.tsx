@@ -10,6 +10,7 @@ import AddCoach from "@/components/coaches/AddCoach";
 import EditCoach from "@/components/coaches/EditCoach";
 import DeleteCoach from "@/components/coaches/DeleteCoach";
 import CoachService from "@/services/CoachService";
+import router from "next/router";
 
 const Coaches: React.FC = () => {
   const [selectedCoach, setSelectedCoach] = useState<Coach | null>(null);
@@ -120,6 +121,8 @@ const Coaches: React.FC = () => {
               height={100}
               priority
               draggable={false}
+              className="mr-4 cursor-pointer"
+              onClick={() => router.push("/")}
             />
             <h1 className="text-6xl font-bold text-yellow-500 font-bebas">The Coaches</h1>
           </div>
@@ -148,17 +151,18 @@ const Coaches: React.FC = () => {
                       <FaTrash size={20} />
                     </button>
                   </div>
+                  <div className="bg-gray-300 flex justify-center items-center p-2 rounded-lg">
+                    <img
+                      src={coach.imageUrl || "/images/shittylogo.png"}
+                      alt={coach.name}
+                      className="w-full h-auto mt-2 rounded"
+                    />
+                 </div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">{coach.name}</h2>
                   <p className="text-gray-800">
                     <strong>Job:</strong> {coach.job}
                   </p>
-                  {coach.imageUrl && (
-                    <img
-                      src={coach.imageUrl}
-                      alt={coach.name}
-                      className="w-full h-auto mt-2 rounded"
-                    />
-                  )}
+                  
                 </div>
               </div>
             ))}

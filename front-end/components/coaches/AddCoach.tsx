@@ -13,7 +13,7 @@ const AddCoach: React.FC<AddCoachProps> = ({ onSave, onClose }) => {
     imageUrl: string;
   }>({
     name: "",
-    job: "coach" as Job, 
+    job: "Head Coach" as Job, 
     imageUrl: "",
   });
 
