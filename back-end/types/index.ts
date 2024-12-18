@@ -1,5 +1,5 @@
 // --- Role Definition ---
-type Role = "admin" | "trainer" | "nurse" | "guest";
+type Role = "admin" | "trainer" | "nurse" ;
 
 
 // --- PokemonStats Type ---
@@ -13,7 +13,7 @@ type PokemonStats = {
 };
 
 // --- User Type ---
-type User = {
+type Userinput = {
   id?: number;
   firstName: string;
   lastName: string;
@@ -51,7 +51,7 @@ type PokemonInput = {
 // --- Trainer Type ---
 type Trainer = {
   id?: number;
-  user: User;
+  user: Userinput;
   pokemon: PokemonInput[];
   badges: Badge[];
   gymBattles: GymBattle[];
@@ -71,7 +71,7 @@ type AuthenticationResponse = {
 export {
   Role,
   PokemonStats,
-  User,
+  Userinput,
   Badge,
   GymBattle,
   PokemonInput,

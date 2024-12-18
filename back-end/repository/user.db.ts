@@ -47,4 +47,58 @@
     }
   };
 
-  export default { getAllUsers, getUserByEmail };
+const createUser = async ({
+  firstName,
+  lastName,
+  email,
+  password,
+  role,
+}: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: "trainer" | "nurse" | "admin";  // Including "admin" here
+}): Promise<User> => {
+  try {
+    // Step 1: Create the base user
+    const userPrisma = await database.user.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+      },
+    });
+
+    // Step 2: Based on the role, create the specific entity (trainer or nurse)
+    if (role === "trainer") {
+      // Create a Trainer linked to the User
+      await database.trainer.create({
+        data: {
+          userId: userPrisma.id,
+          // Add any default values or associations (like empty Pokémon list)
+        },
+      });
+    } else if (role === "nurse") {
+      // Create a Nurse linked to the User
+      await database.nurse.create({
+        data: {
+          userId: userPrisma.id,
+          // Add any default values or associations (like empty Pokémon management list)
+        },
+      });
+    }
+    // No separate logic is needed for 'admin' as it's handled by the `role` field in the User model
+
+    // Step 3: Return the newly created user, transformed into a User domain model
+    return User.from(userPrisma);  // Assuming you have a method to map Prisma user to your User model
+  } catch (error) {
+    console.error(error);
+    throw new Error("Database error. See server log for details.");
+  }
+};
+
+  
+ export default { getAllUsers, getUserByEmail,createUser };

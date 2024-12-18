@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
-import { AuthenticationResponse, User } from "../types";
+import { AuthenticationResponse, Userinput } from "../types";
 import { generateJwtToken } from '../util/jwt';
 import userDB from '../repository/user.db';
 import database from '../util/database';
+import { User } from '../model/user';
 
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
@@ -49,4 +50,39 @@ const getUserByEmail = async ({ email }: { email: string }): Promise<User> => {
     };
 };
 
-export default { authenticate,getAllUsers };
+const createUser = async ({
+  firstName,
+  lastName,
+  email,
+  password,
+  role,
+}: Userinput): Promise<User> => {
+  // Step 1: Check if the email already exists
+  const existing = await userDB.getUserByEmail({ email });
+  if (existing) {
+    throw new Error(`User with email ${email} already exists`);
+  }
+
+  // Step 2: Validate the role
+  if (!["trainer", "nurse", "admin"].includes(role)) {
+    throw new Error(`Invalid role: ${role}. Role must be either 'trainer', 'nurse', or 'admin'.`);
+  }
+
+  // Step 3: Hash the password
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  // Step 4: Create the user object
+  const user = new User({
+    firstName,
+    lastName,
+    email,
+    password: hashPassword,
+    role: role as "trainer" | "nurse" | "admin", // Type assertion here
+  });
+
+  // Step 5: Persist the user to the database
+  return await userDB.createUser(user);
+};
+
+
+export default { authenticate,getAllUsers, createUser,getUserByEmail };

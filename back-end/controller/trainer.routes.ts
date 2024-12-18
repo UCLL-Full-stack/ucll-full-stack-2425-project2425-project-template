@@ -72,7 +72,7 @@
  */
 import express, { NextFunction, Request, response, Response } from 'express';
 import trainerService from '../service/trainer.service';
-import { PokemonInput, Trainer } from '../types';
+import { PokemonInput, Trainer, Userinput } from '../types';
 
 const trainerRouter = express.Router();
 
@@ -642,16 +642,84 @@ nurseRouter.delete('/:nurseId/pokemon/:pokemonId', async (req: Request, res: Res
 });
 
 
-
-
-
-
-
-
 export { nurseRouter };
 
 
 
-
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: Sign up a new user
+ *     description: Create a new user account in the system.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: First name of the user
+ *               lastName:
+ *                 type: string
+ *                 description: Last name of the user
+ *               email:
+ *                 type: string
+ *                 description: Email of the user
+ *               password:
+ *                 type: string
+ *                 description: Password for the user account
+ *               role:
+ *                 type: string
+ *                 enum: [admin, trainer, nurse, guest]
+ *                 description: Role of the user
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - password
+ *               - role
+ *     responses:
+ *       200:
+ *         description: User account created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: Unique ID of the user
+ *                 firstName:
+ *                   type: string
+ *                 lastName:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *                   description: Role of the user
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Date and time when the user was created
+ *       400:
+ *         description: Bad request. Missing or invalid input data.
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.post('/signup', async(req: Request, res: Response, next: NextFunction)=>{
+    try{
+        const UserInput = <Userinput>req.body;
+        const user = await userService.createUser(UserInput);
+        res.status(200).json(user);
+    } catch(error){
+        next(error);
+    }
+  
+  
+  });
 
 export {trainerRouter};
