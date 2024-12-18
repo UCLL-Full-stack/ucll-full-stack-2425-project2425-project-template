@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from '@components/header';
 import styles from '@styles/home.module.css';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
 
 const Home: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<{ username: string; permission: string } | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Retrieve logged-in user's info
@@ -22,21 +26,17 @@ const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>{t('general.title')}</title>
       </Head>
       <Header />
       <main className={styles.main}>
         <span>
-          <h1>Welcome to the Home Page</h1>
+          <h1>{t('home.welcome')}</h1>
         </span>
 
         <div className={styles.description}>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. <br></br>
-            Labore cupiditate iste sunt atque distinctio mollitia assumenda
-            numquam corrupti laboriosam magni nobis at impedit et quibusdam,
-            sapiente autem. <br></br>
-            Laudantium, asperiores debitis.
+            {t('home.description')} <br></br>
           </p>
         </div>
 
@@ -68,6 +68,16 @@ const Home: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+  };
 };
 
 export default Home;

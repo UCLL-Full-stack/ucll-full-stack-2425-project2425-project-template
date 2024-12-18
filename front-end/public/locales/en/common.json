@@ -8,11 +8,42 @@
         "username": "Username",
         "password": "Password",
         "submit": "Login",
+        "register": "Register",
         "validate": {
             "username": "Username is required",
             "password": "Password is required",
             "error": "Wrong password or username",
             "success": "Login Successful"
         }
+    },
+    "header": {
+        "home": "Home",
+        "informationOverview": "Information Overview",
+        "submissionForm": "Submission Form",
+        "login": "Login",
+        "logout": "Logout",
+        "logoutConfirm": "Are you sure you want to logout?"
+    },
+    "home": {
+        "welcome": "Welcome to the Home Page",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+    },
+    "submissionForm": {
+        "title": "Submission Forms",
+        "addCrash": "Add a Crash",
+        "removeCrash": "Remove a Crash",
+        "editCrash": "Edit a Crash",
+        "requestTitle": "Request title",
+        "requestDescription": "What is this request about?",
+        "selectAction": "Select Action",
+        "selectRace": "Select Race",
+        "selectCrash": "Select Crash",
+        "crashType": "Crash Type",
+        "crashDescription": "Crash Description",
+        "casualties": "Casualties",
+        "deaths": "Deaths",
+        "submit": "Submit",
+        "successMessage": "Successfully submitted!",
+        "errorMessage": "An unexpected error occurred. Please try again."
     }
 }

@@ -8,6 +8,9 @@ import CrashOverviewTable from '@components/crashes/CrashOverviewTable';
 import { useRouter } from 'next/router';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement } from 'chart.js';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement);
 
@@ -17,6 +20,8 @@ const InformationOverview: React.FC = () => {
   const [selectedRace, setSelectedRace] = useState<Race | null>(null);
   const [selectedCrash, setSelectedCrash] = useState<Crash | null>(null);
   const router = useRouter();
+  const { t } = useTranslation();
+  
 
   const getRaces = async () => {
     setError('');
@@ -136,6 +141,16 @@ const InformationOverview: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+      },
+  };
 };
 
 export default InformationOverview;

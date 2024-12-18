@@ -18,17 +18,13 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     // Confirmation popup
-    const confirmed = window.confirm('Are you sure you want to logout?');
+    const confirmed = window.confirm(t('header.logoutConfirm'));
     if (confirmed) {
       // Remove logged-in user's info
       localStorage.removeItem('loggedInUser');
       setLoggedInUser(null);
       window.location.href = '/';
     }
-  };
-
-  const changeLanguage = (lng: string) => {
-    i18next.changeLanguage(lng);
   };
 
   return (
@@ -38,21 +34,21 @@ const Header: React.FC = () => {
       </a>
       <nav className="nav justify-content-center">
         <Link href="/" className="nav-link px-4 fs-5 text-white">
-          Home
+          {t('header.home')}
         </Link>
         <Link href="/races" className="nav-link px-4 fs-5 text-white">
-          Information Overview
+          {t('header.informationOverview')}
         </Link>
         <Link href="/submission_form" className="nav-link px-4 fs-5 text-white">
-          Submission Form
+          {t('header.submissionForm')}
         </Link>
         {loggedInUser ? (
           <button onClick={handleLogout} className="nav-link px-4 fs-5 text-white btn btn-link">
-            Logout
+            {t('header.logout')}
           </button>
         ) : (
           <Link href="/login" className="nav-link px-4 fs-5 text-white">
-            Login
+            {t('header.login')}
           </Link>
         )}
       </nav>

@@ -7,11 +7,15 @@ import { Submission_form, Race } from '@types';
 import AddCrashForm from '@components/submissionForms/AddCrashForm';
 import RemoveCrashForm from '@components/submissionForms/RemoveCrashForm';
 import EditCrashForm from '@components/submissionForms/EditCrashForm';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
 
 const SubmissionForms: React.FC = () => {
   const [races, setRaces] = useState<Race[]>([]);
   const [submissionForms, setSubmissionForms] = useState<Submission_form[]>([]);
   const [submissionAction, setSubmissionAction] = useState('add');
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchRaces = async () => {
@@ -41,13 +45,13 @@ const SubmissionForms: React.FC = () => {
   const getTitle = () => {
     switch (submissionAction) {
       case 'add':
-        return 'Request to Add A New Crash to the Database';
+        return t('submissionForm.addCrash');
       case 'remove':
-        return 'Request to Remove A Crash from the Database';
+        return t('submissionForm.removeCrash');
       case 'edit':
-        return 'Request to Edit A Crash in the Database';
+        return t('submissionForm.editCrash');
       default:
-        return 'Submission Forms';
+        return t('submissionForm.title');
     }
   };
 
@@ -60,7 +64,7 @@ const SubmissionForms: React.FC = () => {
       <main className="d-flex flex-column justify-content-center align-items-center">
         <h1>{getTitle()}</h1>
         <div className="mb-3">
-          <label htmlFor="submissionAction" className="form-label">Select Action</label>
+          <label htmlFor="submissionAction" className="form-label">{t('submissionForm.selectAction')}</label>
           <select
             id="submissionAction"
             className="form-select"
@@ -68,9 +72,9 @@ const SubmissionForms: React.FC = () => {
             onChange={(e) => setSubmissionAction(e.target.value)}
             required
           >
-            <option value="add">Add a Crash</option>
-            <option value="remove">Remove a Crash</option>
-            <option value="edit">Edit a Crash</option>
+            <option value="add">{t('submissionForm.addCrash')}</option>
+            <option value="remove">{t('submissionForm.removeCrash')}</option>
+            <option value="edit">{t('submissionForm.editCrash')}</option>
           </select>
         </div>
 
@@ -88,6 +92,16 @@ const SubmissionForms: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+  };
 };
 
 export default SubmissionForms;
