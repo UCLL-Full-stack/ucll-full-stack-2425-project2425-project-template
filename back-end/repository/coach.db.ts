@@ -15,7 +15,7 @@ const findAll = async (): Promise<Coach[]> => {
 const addCoach = async ({ name, job, imageUrl }: CoachInput): Promise<Coach> => {
     try {
         const coachPrisma = await db.coach.create({
-            data: { name, job , imageUrl}
+            data: { name, job, teamId: 1 , imageUrl}
         });
         return Coach.from(coachPrisma);
     } catch (error) {
@@ -45,4 +45,4 @@ const removeCoach = async (id: number):  Promise<void> => {
     }
 }
 
-export default { findAll, addCoach , removeCoach , updateCoach };
+export default { findAll, addCoach , removeCoach};

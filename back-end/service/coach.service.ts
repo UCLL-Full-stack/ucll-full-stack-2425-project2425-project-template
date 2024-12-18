@@ -7,16 +7,16 @@ const getAllcoaches = async () => {
 }
 
 const addCoach = async ({name, job, imageUrl}: CoachInput) => {
-    return coachDb.addCoach({name, job, imageUrl});
+    return coachDb.addCoach({name, job, imageUrl ,teamId: 1});
 }
+
+const updateCoach = async (id: number, {name, job, imageUrl}: CoachInput) => {
+    return coachDb.updateCoach(id, {name, job, imageUrl});
+}
+
 
 const removeCoach = async (id: number) => {
     return coachDb.removeCoach(id);
 }
 
-const updateCoach = async ( id: number ,{name, job, imageUrl}: CoachInput): Promise<Coach> => {
-    return coachDb.updateCoach(id, {name, job, imageUrl});
-}
-
-
-export default { getAllcoaches, addCoach, removeCoach, updateCoach };
+export default { getAllcoaches, addCoach };

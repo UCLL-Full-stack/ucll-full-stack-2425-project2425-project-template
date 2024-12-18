@@ -4,7 +4,9 @@ export type PlayerInput = {
     position: string,
     birthdate: Date,
     number: number,
-    imageUrl?: string
+    imageUrl?: string,
+    stat?: StatsInput,
+    teamId?: number
 }
 
 export type StatsInput = { 
