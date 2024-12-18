@@ -33,7 +33,7 @@ model Stats {
   appearances Int
   goals       Int
   assists     Int
-  player      Player @relation("PlayerToStats", fields: [playerId], references: [id])
+  player      Player @relation("PlayerToStats", fields: [playerId], references: [id], onDelete: Cascade) //Cascade zorgt ervoor dat wanneer ge een speler delete, de stats mee sterven
 }
 
 model Coach {
