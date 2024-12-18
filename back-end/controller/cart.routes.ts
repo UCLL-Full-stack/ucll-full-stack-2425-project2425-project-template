@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cartService from '../service/cart.service';
 import { Product } from '../model/product';
 import { Cart } from '../model/cart';
+import { isAdmin, isAuthenticated } from '../util/jwt';
 import { Role } from '../types';
 
 const cartRouter = express.Router();
@@ -23,12 +24,12 @@ const cartRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Cart'
  */
-    // GET /carts/
-cartRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+// GET /carts/
+cartRouter.get('/', isAdmin, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const request = req as Request & { auth: {email: string; role : Role}};
-        const { email,role } = request.auth;
-        const carts = await cartService.getAllCarts({email,role});
+        const request = req as Request & { auth: { email: string; role: Role } };
+        const { email, role } = request.auth;
+        const carts = await cartService.getAllCarts({ email, role });
         res.status(200).json(carts);
     } catch (error) {
         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
@@ -105,25 +106,18 @@ cartRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *       404:
  *         description: Cart or Product not found.
  */
-// PUT /carts/:id
-// cartRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     const { id } = req.params;
-//     const { productId } = req.body;
+// PUT /carts/
+cartRouter.put('/', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+    const { productId } = req.body;
+    const request = req as Request & { auth: { email: string; role: Role } };
+    const { email } = request.auth;
 
-//     try {
-//         const updatedCart = await cartService.putProductInCart({
-//             id: parseInt(id),
-//             productId: parseInt(productId),
-//         });
-
-//         if (typeof updatedCart === "string") {
-//             res.status(404).json({ error: updatedCart });
-//         } else {
-//             res.status(200).json(updatedCart);
-//         }
-//     } catch (error) {
-//         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
-//     }
-// });
+    try {
+        const updatedCart = await cartService.addProductToCart(email, parseInt(productId));
+        res.status(200).json(updatedCart);
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
+    }
+});
 
 export { cartRouter };

@@ -35,7 +35,20 @@ const getCartById = async (id: number): Promise<Cart | null> => {
     }
 };
 
-const putProductToCart = async (cartId: number, productId: number): Promise<Cart | string> => {
+const getCartByUserId = async (userId: number): Promise<Cart | null> => {
+    try {
+        const cartPrisma = await database.cart.findUnique({
+            where: { userId },
+            include: { products: true, user: true },
+        });
+        return cartPrisma ? Cart.from(cartPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const putProductToCart = async (cartId: number, productId: number): Promise<Cart> => {
     try {
         const cart = await database.cart.findUnique({
             where: { id: cartId },
@@ -43,7 +56,7 @@ const putProductToCart = async (cartId: number, productId: number): Promise<Cart
         });
 
         if (!cart) {
-            return `Cart with ID ${cartId} not found`;
+            throw new Error(`Cart with ID ${cartId} not found`);
         }
 
         const product = await database.product.findUnique({
@@ -51,7 +64,7 @@ const putProductToCart = async (cartId: number, productId: number): Promise<Cart
         });
 
         if (!product) {
-            return "Product not found in the available products list.";
+            throw new Error("Product not found in the available products list.");
         }
 
         const updatedCart = await database.cart.update({
@@ -74,7 +87,7 @@ const putProductToCart = async (cartId: number, productId: number): Promise<Cart
     }
 };
 
-const createCart = async ({products, user, totalPrice}: Cart): Promise<Cart> => {
+const createCart = async ({ products, user, totalPrice }: Cart): Promise<Cart> => {
     try {
         const userId = user.getId();
 
@@ -88,7 +101,7 @@ const createCart = async ({products, user, totalPrice}: Cart): Promise<Cart> => 
                 products: {
                     connect: products.map(product => ({ id: product.getId() })),
                 },
-                totalPrice : 0,
+                totalPrice: 0,
             },
             include: {
                 products: true,
@@ -106,5 +119,6 @@ export default {
     getAllCarts,
     putProductToCart,
     getCartById,
-    createCart
+    createCart,
+    getCartByUserId
 };

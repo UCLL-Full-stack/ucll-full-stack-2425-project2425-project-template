@@ -3,13 +3,14 @@ import { Cart } from "../model/cart";
 import { Product } from "../model/product";
 import cartDb from "../repository/cart.db";
 import productDb from "../repository/product.db";
+import userDb from "../repository/user.db";
 import { Role } from "../types";
 
-const getAllCarts = async ({role,email}: {role: Role; email: string}): Promise<Cart[]> => {
-    if(role === 'admin'){
+const getAllCarts = async ({ role, email }: { role: Role; email: string }): Promise<Cart[]> => {
+    if (role === 'admin') {
         return await cartDb.getAllCarts();
-    }else{
-        throw new UnauthorizedError('credentials_required',{
+    } else {
+        throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized',
         });
     }
@@ -19,27 +20,40 @@ const getCartById = async (id: number): Promise<Cart | null> => {
     return await cartDb.getCartById(id);
 };
 
-// const putProductInCart = async ({ id, productId }: { id: number; productId: number }): Promise<Cart | string> => {
+const addProductToCart = async (email: string, productId: number): Promise<Cart> => {
+    const user = await userDb.getUserByEmail(email);
+    if (!user) {
+        throw new Error('User not found');
+    }
 
-//     const allProducts = await productDb.getAllproducts();
-//     const allCarts = await getAllCarts();
-//     const existingProduct = allProducts.find(p => p.getId() === productId);
-//     const cart = allCarts.find(c => c.getId() === id);
-    
-//         if (!cart) {
-//             return `Cart with ID ${id} not found`;
-//         }
+    const userId = user.getId();
+    if (userId === undefined) {
+        throw new Error('User ID is undefined');
+    }
 
-//     if (!existingProduct) {
-//         return "Product not found in the available products list.";
-//     }
+    let cart = await cartDb.getCartByUserId(userId);
+    if (!cart) {
+        cart = new Cart({
+            products: [],
+            user: user,
+        });
+        cart = await cartDb.createCart(cart);
+    }
 
-//     // Proceed to add the product to the cart if it exist
-//     return await cartDb.putProductToCart(id, productId);
-// };
+    const product = await productDb.getProductById({ id: productId });
+    if (!product) {
+        throw new Error('Product not found');
+    }
+
+    try {
+        return await cartDb.putProductToCart(cart.getId()!, productId);
+    } catch (error) {
+        throw new Error('Failed to add product to cart');
+    }
+};
 
 const createCart = async (cart: Cart): Promise<Cart> => {
     return await cartDb.createCart(cart);
 };
 
-export default { getAllCarts, getCartById, createCart };
+export default { getAllCarts, getCartById, createCart, addProductToCart };
