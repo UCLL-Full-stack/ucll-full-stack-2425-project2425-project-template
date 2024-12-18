@@ -45,7 +45,7 @@ const PokebowlId: React.FC = () => {
                 <h1>Pokebowl</h1>
                 <section>
                     {error && <p className="error-field">{error}</p>}
-                    {!isLoading && <p>Loading pokebowl info...</p>}
+                    {isLoading && <p>Loading pokebowl info...</p>}
                     {data && <PokebowlInfo pokebowl={data.pokebowl} />}
                 </section>
             </main>

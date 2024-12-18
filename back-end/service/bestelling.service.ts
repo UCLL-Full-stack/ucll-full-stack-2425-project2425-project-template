@@ -3,7 +3,8 @@ import { Ingredient } from "../model/ingredient";
 import { Pokebowl } from "../model/pokebowl";
 import { User } from "../model/user";
 import bestellingDb from "../repository/bestelling.db";
-import { BestellingInput, PokebowlInput } from "../types";
+import { BestellingInput, PokebowlInput, Rol } from "../types";
+import userService from "./user.service";
 
 
 const createBestelling = async ({ user, pokebowls }: BestellingInput): Promise<Bestelling> => {
@@ -39,7 +40,13 @@ const createBestelling = async ({ user, pokebowls }: BestellingInput): Promise<B
     return bestelling;
 }
 
-const getAllBestellingen = async (): Promise<Bestelling[]> => bestellingDb.getAllBestellingen();
+const getAllBestellingen = async ({ rol }: { rol: Rol }, { id }: { id: number }): Promise<Bestelling[]> => {
+    if (rol === "Admin" || rol === "Manager") {
+        return bestellingDb.getAllBestellingen();
+    } else {
+        return userService.getUserBestellingen(id);
+    }
+}
 
 const getBestellingById = async (id: number): Promise<Bestelling | null> => {
     const bestelling = bestellingDb.getBestellingById({ id: id });

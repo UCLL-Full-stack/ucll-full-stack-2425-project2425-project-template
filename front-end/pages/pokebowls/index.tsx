@@ -12,6 +12,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 
 const Pokebowls: React.FC = () => {
+    const [error, setError] = useState<String | null>(null);
     const [selectedPokebowl, setSelectedPokebowl] = useState<Pokebowl>();
     const { t } = useTranslation();
 
@@ -26,10 +27,12 @@ const Pokebowls: React.FC = () => {
         if (pokebowlResponse.ok) {
             const pokebowls = await pokebowlResponse.json();
             return { pokebowls }
+        } else {
+            setError("You aren't authorized to view this page");
         }
 
     }
-    const { data, isLoading, error } = useSWR(
+    const { data, isLoading } = useSWR(
         "pokebowls",
         getPokebowls
     );
@@ -57,7 +60,7 @@ const Pokebowls: React.FC = () => {
                         <PokebowlOverzicht pokebowls={data.pokebowls} selectPokebowl={setSelectedPokebowl} />
                     )}
                 </section>
-                <button onClick={() => { router.push(`/pokebowls/add-pokebowl`); }}>Create new pokebowl</button>
+                {!error && <button onClick={() => { router.push(`/pokebowls/add-pokebowl`); }}>Create new pokebowl</button>}
             </main>
         </>
     );

@@ -40,7 +40,7 @@ const IngredientId: React.FC = () => {
                 <h1>Ingredient</h1>
                 <section>
                     {error && <p className="error-field">{error}</p>}
-                    {!isLoading && <p>Loading ingredient info...</p>}
+                    {isLoading && <p>Loading ingredient info...</p>}
                     {data && <IngredientInfo ingredient={data.ingredient} />}
                 </section>
             </main>

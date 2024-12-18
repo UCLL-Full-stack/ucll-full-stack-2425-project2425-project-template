@@ -39,7 +39,7 @@ const BestellingId: React.FC = () => {
                 <h1>Bestelling</h1>
                 <section>
                     {error && <p className="error-field">{error}</p>}
-                    {!isLoading && <p>Loading bestelling info...</p>}
+                    {isLoading && <p>Loading bestelling info...</p>}
                     {bestellingId && <BestellingInfo bestelling={data?.bestelling} />}
                 </section>
             </main>

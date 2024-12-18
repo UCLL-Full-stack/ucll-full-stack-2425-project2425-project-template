@@ -36,20 +36,11 @@ const Header: React.FC = () => {
                         </Link>
                     </li>
                     {loggedInUser && (
-                        (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
-                            <li>
-                                <Link href="/bestellingen">
-                                    {t("header.nav.orders")}
-                                </Link>
-                            </li>))
-                    }
-                    {loggedInUser && (
-                        (loggedInUser.rol == "Klant") && (
-                            <li>
-                                <Link href="/bestellingen/create-bestelling">
-                                    {t("header.nav.order")}
-                                </Link>
-                            </li>))
+                        <li>
+                            <Link href="/bestellingen">
+                                {t("header.nav.orders")}
+                            </Link>
+                        </li>)
                     }
                     {loggedInUser && (
                         (loggedInUser.rol == "Admin" || loggedInUser.rol == "Manager") && (
@@ -67,11 +58,13 @@ const Header: React.FC = () => {
                                 </Link>
                             </li>))
                     }
-                    <li>
-                        <Link href="/pokebowls">
-                            {t("header.nav.pokebowls")}
-                        </Link>
-                    </li>
+                    {loggedInUser && (
+                        <li>
+                            <Link href="/pokebowls">
+                                {t("header.nav.pokebowls")}
+                            </Link>
+                        </li>
+                    )}
                     <li>{!loggedInUser && (
                         <Link href="/login">
                             {t("header.nav.login")}
@@ -88,7 +81,7 @@ const Header: React.FC = () => {
                             </li>
                         )
                     }
-                    <li>                    
+                    <li>
                         <Language />
                     </li>
                 </ul>

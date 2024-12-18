@@ -53,7 +53,7 @@ const Bestellingen: React.FC = () => {
                 <p>Lijst van alle bestellingen</p>
                 <section>
                     {error && <p className="error-field">{error}</p>}
-                    {!isLoading && <p>Loading...</p>}
+                    {isLoading && <p>Loading...</p>}
                     {data && (
                         <BestellingenOverzicht bestellingen={data.bestellingen} selectBestelling={setSelectedBestelling} />
                     )}
