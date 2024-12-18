@@ -3,10 +3,9 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.shoppingcart.deleteMany();
+    await prisma.shoppingCart.deleteMany();
     await prisma.review.deleteMany();
     await prisma.product.deleteMany();
-    await prisma.cartItem.deleteMany();  
 
     const user1 = await prisma.user.create({
         data: {
@@ -19,29 +18,19 @@ const main = async () => {
 
     const toyTrain = await prisma.product.create({
         data: {
-<<<<<<< HEAD
             id: 1,
             name: 'Toy Train',
             price: 35.1,
             description:
                 'A toy train from the ABD company suitable for children aged 5-12 years old.',
-=======
-            name: "Toy Train",
-            price: 35.10,
-            description: "A toy train from the ABD company suitable for children aged 5-12 years old.",
->>>>>>> 5c426bd0656a038b84ff4ee15206994c86497fce
             stock: 10,
         },
     });
 
     const smartwatch = await prisma.product.create({
         data: {
-<<<<<<< HEAD
             id: 2,
             name: 'Smartwatch',
-=======
-            name: "Smartwatch",
->>>>>>> 5c426bd0656a038b84ff4ee15206994c86497fce
             price: 199.99,
             description: 'A sleek smartwatch with heart-rate monitoring and GPS tracking',
             stock: 15,
@@ -50,12 +39,8 @@ const main = async () => {
 
     const backpack = await prisma.product.create({
         data: {
-<<<<<<< HEAD
             id: 3,
             name: 'Backpack',
-=======
-            name: "Backpack",
->>>>>>> 5c426bd0656a038b84ff4ee15206994c86497fce
             price: 49.99,
             description: 'A durable backpack with multiple compartments and waterproof material',
             stock: 25,
@@ -81,11 +66,7 @@ const main = async () => {
                 connect: { id: toyTrain.id },
             },
             user: {
-<<<<<<< HEAD
                 connect: { id: user1.id },
-=======
-                connect: { id: user.id },
->>>>>>> 5c426bd0656a038b84ff4ee15206994c86497fce
             },
         },
     });
@@ -132,44 +113,17 @@ const main = async () => {
         },
     });
 
-    const shoppingCart = await prisma.shoppingcart.create({
+    const shoppingCart = await prisma.shoppingCart.create({
         data: {
-<<<<<<< HEAD
             id: 1,
+            userId: user.id,
             products: {
                 connect: [{ id: toyTrain.id }, { id: smartwatch.id }],
-=======
-            user: {
-                connect: { id: user.id }, 
->>>>>>> 5c426bd0656a038b84ff4ee15206994c86497fce
             },
         },
     });
 
-    await prisma.cartItem.create({
-        data: {
-            product: {
-                connect: { id: toyTrain.id },
-            },
-            cart: {
-                connect: { id: shoppingCart.id },
-            },
-            quantity: 1,
-        },
-    });
 
-    await prisma.cartItem.create({
-        data: {
-            product: {
-                connect: { id: smartwatch.id },
-            },
-            cart: {
-                connect: { id: shoppingCart.id },
-            },
-            quantity: 1,
-        },
-    });
-};
 
 (async () => {
     try {
@@ -181,3 +135,4 @@ const main = async () => {
         process.exit(1);
     }
 })();
+}

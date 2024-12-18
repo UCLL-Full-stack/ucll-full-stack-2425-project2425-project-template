@@ -1,4 +1,3 @@
-import { CartItem } from './cartItem';
 import { Product } from './product';
 import {
     User as UserPrisma,
