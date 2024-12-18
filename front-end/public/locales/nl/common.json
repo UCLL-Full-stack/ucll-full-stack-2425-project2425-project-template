@@ -1,0 +1,18 @@
+{
+    "app.title": "BowlBuddies",
+    "page.title": "BowlBuddies Pokebowls",
+    "page.description": "Bij BowlBuddies draait alles om heerlijke bowls, gezelligheid en gezond genieten. Van kleurrijke poke bowls tot voedzame smoothie bowls, we hebben iets voor iedereen!\n\nLaat je inspireren door onze verse ingrediënten, ontdek onze zorgvuldig samengestelde favorieten. Of je nu snel iets lekkers wilt bestellen of rustig wilt genieten in ons gezellige restaurant, wij zijn er om jouw eetervaring onvergetelijk te maken.\n\nJouw bowl, jouw keuze, jouw moment!\n\nKijk rond, laat je inspireren, en word ook een echte BowlBuddy!",
+    "header": {
+        "nav": {
+          "home": "Thuis",
+          "orders": "Bestellingen",
+          "order": "Bestelling",
+          "ingredients": "Ingrediënten",
+          "pokebowls": "Pokebowls",
+          "login": "Aanmelden",
+          "logout": "Afmelden",
+          "profile": "Profiel",
+          "language": "Taal"
+        }
+    }
+}
