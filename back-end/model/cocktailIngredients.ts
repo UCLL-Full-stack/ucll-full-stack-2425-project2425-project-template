@@ -26,6 +26,22 @@ export class CocktailIngredient {
         return this.amount;
     }
 
+    public setId(id: number): void {
+        this.id = id;
+    }
+
+    public setCocktailId(cocktailId: number): void {
+        this.cocktailId = cocktailId;
+    }
+
+    public setIngredientId(ingredientId: number): void {
+        this.ingredientId = ingredientId;
+    }
+
+    public setAmount(amount: string): void {
+        this.amount = amount;
+    }
+
     static from({ id, cocktailId, ingredientId, amount }: CocktailIngredientPrisma) {
         return new CocktailIngredient(id, cocktailId, ingredientId, amount);
     }

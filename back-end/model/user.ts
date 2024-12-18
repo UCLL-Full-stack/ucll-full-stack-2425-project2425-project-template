@@ -31,6 +31,18 @@ export class User {
         return this.password;
     }
 
+    setName(name: string): void {
+        this.name = name;
+    }
+
+    setEmail(email: string): void {
+        this.email = email;
+    }
+
+    setPassword(password: string): void {
+        this.password = password;
+    }
+
     equals(otherUser: User): boolean {
         return (
             this.id === otherUser.id &&

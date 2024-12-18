@@ -4,7 +4,13 @@ import { Cocktail } from "../../model/cocktail";
 let cocktail: Cocktail;
 
 beforeEach(() => {
-    cocktail = new Cocktail(1, 'Mojito', 'A refreshing cocktail', 5, 'mojito.jpg');
+    cocktail = new Cocktail({
+        id: 1,
+        name: 'Mojito',
+        description: 'A refreshing cocktail',
+        strongness: 5,
+        image: 'mojito.jpg'
+    });
 });
 
 test('givenValidValues_whenCocktailIsCreated_thenCocktailHasThoseValues', () => {
@@ -42,7 +48,13 @@ test('givenNewStrongness_whenSetStrongnessIsCalled_thenStrongnessIsUpdated', () 
 
 test('givenTwoIdenticalCocktails_whenEqualsIsCalled_thenItReturnsTrue', () => {
     // given
-    const identicalCocktail = new Cocktail(1, 'Mojito', 'A refreshing cocktail', 5, 'mojito.jpg');
+    const identicalCocktail = new Cocktail({
+        id: 1,
+        name: 'Mojito',
+        description: 'A refreshing cocktail',
+        strongness: 5,
+        image: 'mojito.jpg'
+    });
 
     // then
     expect(cocktail.equals(identicalCocktail)).toBe(true);
@@ -50,8 +62,13 @@ test('givenTwoIdenticalCocktails_whenEqualsIsCalled_thenItReturnsTrue', () => {
 
 test('givenTwoDifferentCocktails_whenEqualsIsCalled_thenItReturnsFalse', () => {
     // given
-    const differentCocktail = new Cocktail(2, 'Old Fashioned', 'A classic cocktail', 7, 'old-fashioned.jpg');
-
+    const differentCocktail = new Cocktail({
+        id: 2,
+        name: 'Old Fashioned',
+        description: 'A classic cocktail',
+        strongness: 7,
+        image: 'old-fashioned.jpg'
+    }); 
     // then
     expect(cocktail.equals(differentCocktail)).toBe(false);
 });

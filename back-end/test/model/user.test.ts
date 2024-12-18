@@ -1,6 +1,5 @@
 import { User } from "../../model/user";
 
-
 let user: User;
 
 beforeEach(() => {
@@ -18,38 +17,37 @@ afterEach(() => {
 
 test('givenValidUserData_whenUserIsCreated_thenUserHasThoseValues', () => {
     // then
-    expect(user.id).toBe(1);
-    expect(user.name).toBe('Alice');
-    expect(user.email).toBe('alice@example.com');
-    expect(user.password).toBe('securepassword');
+    expect(user.getId()).toBe(1);
+    expect(user.getName()).toBe('Alice');
+    expect(user.getEmail()).toBe('alice@example.com');
+    expect(user.getPassword()).toBe('securepassword');
 });
 
 test('givenNewName_whenNameIsUpdated_thenNameIsChanged', () => {
     // when
-    user.name = 'Bob';
+    user.setName('Bob');
 
     // then
-    expect(user.name).toBe('Bob');
+    expect(user.getName()).toBe('Bob');
 });
 
 test('givenNewEmail_whenEmailIsUpdated_thenEmailIsChanged', () => {
     // when
-    user.email = 'bob@example.com';
+    user.setEmail('bob@example.com');
 
     // then
-    expect(user.email).toBe('bob@example.com');
+    expect(user.getEmail()).toBe('bob@example.com');
 });
 
 test('givenNewPassword_whenPasswordIsUpdated_thenPasswordIsChanged', () => {
     // when
-    user.password = 'newsecurepassword';
+    user.setPassword('newsecurepassword');
 
     // then
-    expect(user.password).toBe('newsecurepassword');
+    expect(user.getPassword()).toBe('newsecurepassword');
 });
 
 test('givenTwoIdenticalUsers_whenEqualsIsCalled_thenItReturnsTrue', () => {
-    // given
     const identicalUser = new User({
         id: 1,
         name: 'Alice',
@@ -62,7 +60,6 @@ test('givenTwoIdenticalUsers_whenEqualsIsCalled_thenItReturnsTrue', () => {
 });
 
 test('givenTwoDifferentUsers_whenEqualsIsCalled_thenItReturnsFalse', () => {
-    // given
     const differentUser = new User({
         id: 2,
         name: 'Bob',
