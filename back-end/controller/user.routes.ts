@@ -2,7 +2,7 @@
 
 import express, {NextFunction, Request, Response} from 'express';
 import playerService from '../service/player.service';
-import { UserInput } from '../types/types';
+import { LogInput, UserInput } from '../types/types';
 import userService from '../service/user.service';
 
 
@@ -27,6 +27,18 @@ userRouter.post('/signup', async (req: Request, res: Response , next: NextFuncti
         next(error);
     }
 });
+
+
+userRouter.post('/login', async (req: Request , res: Response, next: NextFunction) => {
+    try {
+        const user = <LogInput>req.body;
+        const response = await userService.authenticate(user);
+        res.status(200).json({ message: 'User authenticated', ...response});
+    } catch (error) {
+        next(error);
+    }
+})
+
 
 
 export { userRouter };

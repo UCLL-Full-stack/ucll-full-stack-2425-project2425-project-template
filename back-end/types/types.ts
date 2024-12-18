@@ -9,7 +9,7 @@ export type PlayerInput = {
 
 export type StatsInput = { 
      id?: number;
-     playerId?: number;
+     // playerId?: number;
      appearances: number;
      goals: number;
      assists: number
@@ -42,6 +42,23 @@ export type UserInput = {
      password: string;
      role: Role;
 }
+
+export type LogInput = {
+     email: string;
+     password: string;
+}
+
+export type JWTload = {
+     email: string;
+     role: Role;
+}
+
+
+export type AuthenticationResponse = {
+     token: string;
+     email: string;
+     role: string;
+ }
 
 
 export type Role = 'Admin' | 'Player' | 'Coach';
