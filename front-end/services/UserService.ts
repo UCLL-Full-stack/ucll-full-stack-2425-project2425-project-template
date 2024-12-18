@@ -3,34 +3,24 @@ const registerUser = async (user: User) => {
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/users/signup", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user), 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to register. Please check your data and try again.');
-    }
 
     const data = await response.json();
 
-    if (data.success) {
-      return {
-        success: true,
-        message: 'Registration successful!',
-      };
-    } else {
-      throw new Error('An error occurred during registration.');
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to register. Please check your data.');
     }
-  } catch (error) {
+
+    return { success: true, message: 'Registration successful!', data };
+  } catch (error: any) {
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'An error occurred during the registration process.',
+      message: error.message || 'An error occurred during the registration process.',
     };
   }
 };
-
 
 const loginUser = async (username: string, password: string, user: User) => {
     try {
