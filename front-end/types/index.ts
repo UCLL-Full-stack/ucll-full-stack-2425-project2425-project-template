@@ -31,7 +31,8 @@ type Transaction = {
   amount: number;
   currency: string;
   type: string;
-  account: Account;
+  destinationAccount: Account;
+  sourceAccount: Account;
 };
 
 type Budgetgoal = {

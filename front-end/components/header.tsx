@@ -1,19 +1,25 @@
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import styles from '@/styles/Home.module.css';
 
 const Header: React.FC = () => {
   const [nationalRegisterNumber, setNationalRegisterNumber] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
-    setNationalRegisterNumber(loggedInUser.nationalRegisterNumber);
+    if (loggedInUser.nationalRegisterNumber) {
+      setNationalRegisterNumber(loggedInUser.nationalRegisterNumber);
+      setUserId(loggedInUser.id);
+    }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("loggedInUser");
     setNationalRegisterNumber(null);
+    setUserId(null);
   };
+
   return (
     <header className={styles.header}>
       <a>
@@ -22,20 +28,17 @@ const Header: React.FC = () => {
       <nav>
         {nationalRegisterNumber ? (
           <>
+            <Link href={`/transactions/overview/user/${userId}`}>Transaction overview</Link>
             <Link href={`/accounts/${nationalRegisterNumber}`}>Accounts</Link>
             <a href="/" onClick={handleLogout}>Log out</a>
-            </>
-            ) : (
-              <>
-              <Link href="/">Home</Link>
-              <Link href="/users/register">
-                Register
-              </Link>
-              <Link href="/users/login">
-                Log in
-              </Link>
-              </>
-            )}
+          </>
+        ) : (
+          <>
+            <Link href="/">Home</Link>
+            <Link href="/users/register">Register</Link>
+            <Link href="/users/login">Login</Link>
+          </>
+        )}
       </nav>
     </header>
   );

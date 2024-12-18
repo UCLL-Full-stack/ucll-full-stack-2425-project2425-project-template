@@ -48,7 +48,7 @@ const transactionRouter = express.Router();
 
 /**
  * @swagger
- * /transaction/expenses/{accountNumber}:
+ * /transaction/{accountNumber}:
  *   post:
  *     security:
  *       - bearerAuth: []
@@ -101,5 +101,93 @@ transactionRouter.post(
         }
     }
 );
+
+/**
+ * @swagger
+ * /transaction/account/{id}:
+ *   get:
+ *     summary: Get transactions by account id.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: The account id
+ *     responses:
+ *       200:
+ *         description: The transactions were successfully retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+transactionRouter.get('/account/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const result = await transactionService.getTransactionsAccountId(Number(id));
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /transaction/user/{id}:
+ *   get:
+ *     summary: Get transactions by user id.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: The user id
+ *     responses:
+ *       200:
+ *         description: The transactions were successfully retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+transactionRouter.get('/user/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const result = await transactionService.getTransactionsByUserId(Number(id));
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { transactionRouter };

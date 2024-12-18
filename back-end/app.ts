@@ -27,7 +27,7 @@ app.use(
 
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
-app.use('/transaction/expenses', transactionRouter);
+app.use('/transaction', transactionRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

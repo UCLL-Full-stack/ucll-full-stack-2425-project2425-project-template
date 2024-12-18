@@ -21,13 +21,16 @@ const getAccountById = async ({ id }: { id: number }): Promise<Account> => {
     return account;
 };
 
-const getAccountByAccountNumber = async (accountNumber: string): Promise<Account> => {
+const getAccountByAccountNumber = async (accountNumber: string): Promise<Account | null> => {
+    console.log(`Service: Fetching account with account number: ${accountNumber}`);
     const account = await accountDb.getAccountByAccountNumber(accountNumber);
 
     if (account == null) {
-        throw new Error(`Account with account number: ${accountNumber} was not found.`);
+        console.error(`Service: Account with account number ${accountNumber} was not found.`);
+        return null;
     }
 
+    console.log(`Service: Fetched account: ${JSON.stringify(account)}`);
     return account;
 };
 

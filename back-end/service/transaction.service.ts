@@ -2,6 +2,7 @@ import accountDb from '../repository/account.db';
 import transactionDb from '../repository/transaction.db';
 import { TransactionInput } from '../types';
 import { Transaction } from '../model/transaction';
+import userDb from '../repository/user.db';
 
 const createExpense = async (ExpenseInput: TransactionInput): Promise<Transaction> => {
     const { amount, currency, sourceAccountNumber, destinationAccountNumber, type } = ExpenseInput;
@@ -47,6 +48,38 @@ const createExpense = async (ExpenseInput: TransactionInput): Promise<Transactio
     return createdExpense;
 };
 
+const getTransactionsAccountId = async (id: number): Promise<Transaction[]> => {
+    const account = await accountDb.getAccountById({ id });
+
+    if (!account) {
+        throw new Error(`Account with account number ${id} not found.`);
+    }
+
+    const transactions = await transactionDb.getTransactionsByAccount(account);
+
+    return transactions;
+};
+
+const getTransactionsByUserId = async (id: number): Promise<Transaction[]> => {
+    const user = await userDb.getUserById(id);
+
+    if (!user) {
+        throw new Error(`User with id ${id} not found.`);
+    }
+
+    const accounts = user.getAccounts();
+
+    const transactions = await Promise.all(
+        accounts.map(async (account) => {
+            return await transactionDb.getTransactionsByAccount(account);
+        })
+    );
+
+    return transactions.flat();
+};
+
 export default {
     createExpense,
+    getTransactionsAccountId,
+    getTransactionsByUserId,
 };

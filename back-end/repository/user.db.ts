@@ -152,6 +152,25 @@ const addAccount = async (nationalRegisterNumber: string, accountNumber: string)
     }
 };
 
+const getUserById = async (id: number): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: {
+                id: id,
+            },
+            include: { accounts: { include: { expense: true, income: true } } },
+        });
+
+        if (userPrisma) {
+            return User.from(userPrisma);
+        } else {
+            return null;
+        }
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createUser,
     getUserByNationalRegisterNumber,
@@ -160,4 +179,5 @@ export default {
     updateUser,
     deleteUser,
     addAccount,
+    getUserById,
 };

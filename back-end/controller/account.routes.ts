@@ -98,7 +98,6 @@ accountRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
  *           type: integer
  *           format: int64
  *           required: true
- *           description: The lecturer id.
  *     responses:
  *       200:
  *         description: JSON consisting of an account object
@@ -116,4 +115,39 @@ accountRouter.get('/:id', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /account/accountNumber/{accountNumber}:
+ *   get:
+ *     summary: Get account by account number.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: accountNumber
+ *         schema:
+ *           type: string
+ *           required: true
+ *     responses:
+ *       200:
+ *         description: JSON consisting of an account object
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/Account'
+ */
+accountRouter.get(
+    '/accountNumber/:accountNumber',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const accountNumber = req.params.accountNumber;
+            const account = await accountService.getAccountByAccountNumber(accountNumber);
+            res.status(200).json(account);
+        } catch (error: any) {
+            next(error);
+        }
+    }
+);
+
 export { accountRouter };

@@ -85,7 +85,7 @@ export class Transaction {
     }
 
     generateReferenceNumber(type: string): string {
-        const lastThreeNumbers = this.sourceAccount.getAccountNumber().split('').join(' ');
+        const lastThreeNumbers = this.sourceAccount.getAccountNumber().slice(-3);
         const firstThreeLettType = type.slice(0, 3).toUpperCase();
         const year = this.date.getUTCFullYear().toString();
         const uniqueNumber =

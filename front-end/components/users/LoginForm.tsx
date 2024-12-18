@@ -20,6 +20,7 @@ const LoginForm: React.FC = () => {
       const user = await UserService.loginUser(credentials);
       localStorage.setItem("loggedInUser", JSON.stringify({
         token: user.token,
+        id: user.id,
         username: user.username,
         nationalRegisterNumber: user.nationalRegisterNumber
       }));
