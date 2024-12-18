@@ -19,6 +19,7 @@ export interface Coach {
     id?: number;
     name: string;
     job: Job;
+    imageUrl?: string;
 }
 
 
@@ -41,6 +42,8 @@ export interface Stats {
 }
 
 export enum Job {
-    COACH = 'coach',
-    ASSISTANT_COACH = 'assistant coach'
+    COACH = 'Head Coach',
+    ASSISTANT_COACH = 'Assistant Coach',
+    GOALKEEPER_COACH = 'Goalkeeper Coach',
+    FITNESS_COACH = 'Fitness Coach'
 }

@@ -1,55 +1,88 @@
-import { useEffect, useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import router from "next/router";
+import React, { useEffect, useState } from "react";
+import { FaEdit, FaPlus, FaSortAlphaDown, FaSortAlphaUp, FaTrash } from "react-icons/fa";
 import NavbarSheet from "@/components/NavbarSheet";
+import useSWR from "swr";
 
-export interface Coach {
-  id: number;
-  name: string;
-  job: "Coach" | "Assistant Coach";
-  pictureUrl?: string;
-}
-
-const coaches: Coach[] = [
-  {
-    id: 1,
-    name: "Phil Jackson",
-    job: "Coach",
-    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
-  },
-  {
-    id: 2,
-    name: "Steve Kerr",
-    job: "Coach",
-    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
-  },
-  {
-    id: 3,
-    name: "Michael Scott",
-    job: "Assistant Coach",
-    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
-  },
-  {
-    id: 4,
-    name: "Dwight Schrute",
-    job: "Assistant Coach",
-    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
-  },
-  {
-    id: 5,
-    name: "Tony Robbins",
-    job: "Coach",
-    pictureUrl: "https://i.imgur.com/1O6t7Hh.jpeg",
-  },
-];
+import { Coach } from "@/types";
+import Image from "next/image";
+import Head from "next/head";
+import AddCoach from "@/components/coaches/AddCoach";
+import EditCoach from "@/components/coaches/EditCoach";
+import DeleteCoach from "@/components/coaches/DeleteCoach";
+import CoachService from "@/services/CoachService";
 
 const Coaches: React.FC = () => {
+  const [selectedCoach, setSelectedCoach] = useState<Coach | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [sortAscending, setSortAscending] = useState(true);
+  const [sortedCoaches, setSortedCoaches] = useState<Coach[]>([]);
   const [isVisible, setIsVisible] = useState(false);
 
+  const { data: coachList, error, mutate } = useSWR("/coaches", CoachService.getAllCoaches);
+
   useEffect(() => {
-    setIsVisible(true);
-  }, []);
+    if (coachList) {
+      setSortedCoaches([...coachList]);
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [coachList]);
+
+  const handleAddCoach = async (newCoach: Omit<Coach, "id">) => {
+    await CoachService.addCoach({ ...newCoach, teamId: 1 });
+    mutate();
+    setIsAdding(false);
+  };
+
+  const handleEditCoach = (coach: Coach) => {
+    setSelectedCoach(coach);
+    setIsEditing(true);
+  };
+
+  const handleDeleteCoach = (coach: Coach) => {
+    setSelectedCoach(coach);
+    setIsDeleting(true);
+  };
+
+  const saveCoach = async (updatedCoach: Coach) => {
+    await CoachService.updateCoach(updatedCoach.id, updatedCoach);
+    mutate();
+    setIsEditing(false);
+    setSelectedCoach(null);
+  };
+
+  const confirmDelete = async () => {
+    if (selectedCoach) {
+      await CoachService.deleteCoach(selectedCoach.id);
+      mutate();
+      setIsDeleting(false);
+      setSelectedCoach(null);
+    }
+  };
+
+  const handleSortCoaches = () => {
+    const sorted = [...sortedCoaches].sort((a, b) =>
+      sortAscending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+    );
+    setSortedCoaches(sorted);
+    setSortAscending(!sortAscending);
+  };
+
+  if (error)
+    return (
+      <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">
+        Failed to load coaches!
+      </div>
+    );
+
+  if (!coachList)
+    return (
+      <div className="text-3xl absolute inset-0 flex items-center justify-center text-yellow-500 font-bebas bg-zinc-900">
+        Loading coaches...
+      </div>
+    );
 
   return (
     <>
@@ -63,6 +96,21 @@ const Coaches: React.FC = () => {
         <div className="absolute top-12 right-24">
           <NavbarSheet />
         </div>
+        <div className="absolute top-12 left-24 flex gap-4">
+          <button
+            onClick={() => setIsAdding(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-green-600 hover:text-white transition"
+          >
+            <FaPlus /> Coach
+          </button>
+          <button
+            onClick={handleSortCoaches}
+            className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-blue-600 hover:text-white transition"
+          >
+            {sortAscending ? <FaSortAlphaDown /> : <FaSortAlphaUp />} Sort by Name
+          </button>
+        </div>
+
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center mb-8">
             <Image
@@ -72,39 +120,67 @@ const Coaches: React.FC = () => {
               height={100}
               priority
               draggable={false}
-              className="mr-4 cursor-pointer"
-              onClick={() => router.push("/")}
             />
-            <h1 className="text-6xl font-bold text-yellow-600 font-bebas">
-              Our Coaching Staff
-            </h1>
+            <h1 className="text-6xl font-bold text-yellow-500 font-bebas">The Coaches</h1>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {coaches.map((coach, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
+            {sortedCoaches.map((coach: Coach, index: number) => (
               <div
                 key={coach.id}
-                className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-700 transform ${
+                className={`relative bg-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all duration-700 transform ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
                 }`}
                 style={{ transitionDelay: `${index * 150}ms` }}
               >
-                <img
-                  src={coach.pictureUrl || "/default-coach-image.png"}
-                  alt={coach.name}
-                  className="w-3/6 ml-28 h-56 object-cover"
-                />
-                <div className="p-4">
+                <div className="p-4 bg-gray-300 rounded-lg">
+                  <div className="absolute right-4 top-2 flex gap-2">
+                    <button
+                      onClick={() => handleEditCoach(coach)}
+                      className="text-black hover:text-yellow-500 transition"
+                    >
+                      <FaEdit size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCoach(coach)}
+                      className="text-black hover:text-red-600 transition"
+                    >
+                      <FaTrash size={20} />
+                    </button>
+                  </div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">{coach.name}</h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-800">
                     <strong>Job:</strong> {coach.job}
                   </p>
+                  {coach.imageUrl && (
+                    <img
+                      src={coach.imageUrl}
+                      alt={coach.name}
+                      className="w-full h-auto mt-2 rounded"
+                    />
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {isAdding && <AddCoach onSave={handleAddCoach} onClose={() => setIsAdding(false)} />}
+      {isEditing && selectedCoach && (
+        <EditCoach
+          coach={selectedCoach}
+          onSave={saveCoach}
+          onClose={() => setIsEditing(false)}
+        />
+      )}
+      {isDeleting && selectedCoach && (
+        <DeleteCoach
+          coachName={selectedCoach.name}
+          onDelete={confirmDelete}
+          onCancel={() => setIsDeleting(false)}
+        />
+      )}
     </>
   );
 };
