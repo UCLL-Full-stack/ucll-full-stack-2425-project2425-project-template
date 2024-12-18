@@ -1,7 +1,6 @@
 import { Task } from "@/types";
-import { useEffect, useState } from "react";
-import ExpandedTask from "./ExpandedTask";
-import UserService from "@/services/UserService";
+import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 interface TaskProps {
     task: Task;
@@ -10,6 +9,7 @@ interface TaskProps {
 
 const TaskComponent: React.FC<TaskProps> = ({ task, index }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const { t } = useTranslation(['common']);
 
     return (
         <div
@@ -18,9 +18,14 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index }) => {
             }`}
             onClick={() => setIsExpanded((prev) => !prev)}
         >
-            <h3 className="font-medium">{task.taskName}</h3>
-            <p>{task.taskDescription}</p>
-            {isExpanded && <ExpandedTask task={task} />}
+            <h3 className="font-medium">{task?.name || t('task.untitled')}</h3>
+            <p className="text-sm text-gray-300">{task?.description || t('task.noDescription')}</p>
+            {isExpanded && (
+                <div className="mt-2 pt-2 border-t border-gray-500">
+                    <p><strong>{t('task.status')}:</strong> {task?.status}</p>
+                    <p><strong>{t('task.assignedTo')}:</strong> {task?.assignedTo || t('task.unassigned')}</p>
+                </div>
+            )}
         </div>
     );
 };

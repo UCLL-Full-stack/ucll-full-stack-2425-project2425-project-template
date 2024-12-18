@@ -16,6 +16,7 @@ import EditBoardSettings from '@/components/dashboard/EditBoardSettings';
 import BoardView from '@/components/board/BoardView';
 import ColumnService from '@/services/ColumnService';
 
+
 dotenv.config();
 
 const Home: FC = () => {

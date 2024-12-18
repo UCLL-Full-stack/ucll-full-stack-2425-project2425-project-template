@@ -1,0 +1,85 @@
+{
+    "actions": {
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "create": "Crear",
+        "back": "Volver al Panel",
+        "confirm": "Confirmar",
+        "refresh": "Actualizar Discord",
+        "add": "Añadir"
+    },
+    "loading": "Cargando...",
+    "errors": {
+        "required": "Este campo es obligatorio",
+        "invalidInput": "Entrada inválida",
+        "serverError": "Ocurrió un error del servidor"
+    },
+    "header": {
+        "login": "Iniciar Sesión",
+        "logout": "Cerrar Sesión"
+    },
+    "board": {
+        "createdBy": "Creado por: {{creator}}",
+        "columns": "Columnas",
+        "settings": "Configuración del Tablero",
+        "delete": {
+            "confirmation": "¿Estás seguro de que deseas eliminar este tablero?",
+            "warning": "Esta acción no se puede deshacer y eliminará todas las columnas y tareas."
+        },
+        "create": {
+            "title": "Crear Nuevo Tablero",
+            "nameLabel": "Título del Tablero",
+            "namePlaceholder": "Ingrese nombre del tablero",
+            "columnsLabel": "Columnas (separadas por comas)",
+            "columnPlaceholder": "Por Hacer, En Progreso, Terminado"
+        },
+        "edit": {
+            "title": "Editar Tablero",
+            "nameLabel": "Nombre del Tablero"
+        },
+        "permissions": {
+            "title": "Editar Permisos para {{name}}",
+            "addIdentifier": "Añadir Identificador",
+            "searchPlaceholder": "Buscar usuarios, roles o permisos",
+            "role": "Rol: {{name}}",
+            "user": "Usuario: {{name}}",
+            "discord": "Permiso: {{permission}}"
+        }
+    },
+    "column": {
+        "add": "Añadir Columna",
+        "addTask": "Añadir Tarea",
+        "delete": "Eliminar Columna",
+        "edit": "Editar Columna",
+        "deleteConfirm": "¿Estás seguro de que deseas eliminar esta columna?"
+    },
+    "task": {
+        "edit": "Editar Tarea",
+        "delete": "Eliminar Tarea",
+        "dueDate": "Fecha de Vencimiento",
+        "assignees": "Asignados",
+        "description": "Descripción"
+    },
+
+    "permissions": {
+        "role": "Rol: {{name}}",
+        "user": "Usuario: {{name}}",
+        "discord": "Permiso: {{permission}}",
+        "addIdentifier": "Añadir Identificador",
+        "searchPlaceholder": "Buscar usuarios, roles o permisos",
+        "errors": {
+            "noPermissions": "Cada identificador debe tener al menos un permiso"
+        }
+    },
+    "guild": {
+        "settings": {
+            "title": "Editar Configuración de {{name}}",
+            "newBoardsInfo": "Esta configuración se aplicará a los nuevos tableros"
+        },
+        "inviteBot": "Invitar Bot al Servidor"
+    }
+
+
+}

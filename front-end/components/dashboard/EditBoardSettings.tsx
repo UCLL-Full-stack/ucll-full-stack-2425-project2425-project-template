@@ -1,7 +1,8 @@
 import BoardService from '@/services/BoardService';
 import GuildService from '@/services/GuildService';
-import { Board, DiscordPermission, Guild, KanbanPermission, PermissionEntry, Role, User } from '@/types';
+import { Board, DiscordPermission, KanbanPermission, PermissionEntry, Role, User } from '@/types';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface EditBoardSettingsProps {
     boardId: string;
@@ -10,6 +11,7 @@ interface EditBoardSettingsProps {
 }
 
 const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose, onSubmit }) => {
+    const { t } = useTranslation(['common', 'board']);
     const [board, setBoard] = useState<Board | null>(null);
     const [boardSettings, setBoardSettings] = useState<PermissionEntry[]>([]);
     const [allRoles, setAllRoles] = useState<Role[]>([]);
@@ -41,17 +43,16 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
                 console.error('Error fetching board settings:', error);
             }
         };
-
         fetchData();
     }, [boardId]);
 
     const availableKanbanPermissions = Object.values(KanbanPermission);
 
     const resolveIdentifierName = (identifier: string): string => {
-        if (roleMap.has(identifier)) return `Role: ${roleMap.get(identifier)}`;
-        if (userMap.has(identifier)) return `User: ${userMap.get(identifier)}`;
+        if (roleMap.has(identifier)) return t('permissions.role', { name: roleMap.get(identifier) });
+        if (userMap.has(identifier)) return t('permissions.user', { name: userMap.get(identifier) });
         if (Object.values(DiscordPermission).includes(identifier as DiscordPermission))
-            return `Permission: ${identifier}`;
+            return t('permissions.discord', { permission: identifier });
         return identifier;
     };
 
@@ -76,31 +77,25 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     };
 
     const handleAddIdentifier = (identifier: string) => {
-        setBoardSettings((prev) => [
-            ...prev,
-            { identifier, kanbanPermission: [] },
-        ]);
+        setBoardSettings(prev => [...prev, { identifier, kanbanPermission: [] }]);
         setShowAddIdentifierDropdown(false);
     };
 
     const filteredOptions = () => {
         const selectedIdentifiers = new Set(boardSettings.map(entry => entry.identifier));
         const query = searchQuery.toLowerCase();
+        
         const roles = allRoles
             .filter(role => role.roleName.toLowerCase().includes(query) && !selectedIdentifiers.has(role.roleId))
-            .map(role => ({ label: `Role: ${role.roleName}`, value: role.roleId }));
+            .map(role => ({ label: t('permissions.roleLabel', { name: role.roleName }), value: role.roleId }));
 
         const users = allUsers
             .filter(user => user.username.toLowerCase().includes(query) && !selectedIdentifiers.has(user.userId))
-            .map(user => ({ label: `User: ${user.globalName}`, value: user.userId }));
+            .map(user => ({ label: t('permissions.userLabel', { name: user.globalName }), value: user.userId }));
 
         const discordPermissions = Object.values(DiscordPermission)
-            .filter(
-                p =>
-                    p.toLowerCase().includes(query) &&
-                    !selectedIdentifiers.has(p)
-            )
-            .map(p => ({ label: `Permission: ${p}`, value: p }));
+            .filter(p => p.toLowerCase().includes(query) && !selectedIdentifiers.has(p))
+            .map(p => ({ label: t('permissions.discordLabel', { permission: p }), value: p }));
 
         return [...roles, ...users, ...discordPermissions];
     };
@@ -112,7 +107,7 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     const handleSubmit = async () => {
         const validSettings = boardSettings.every(entry => entry.kanbanPermission.length > 0);
         if (!validSettings) {
-            alert("Each identifier must have at least one permission");
+            alert(t('permissions.errors.noPermissions'));
             return;
         }
         onSubmit(boardSettings);
@@ -121,121 +116,98 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-[#2C2F33] p-6 rounded-lg shadow-lg w-1/2 text-white">
-                <h2 className="text-2xl font-bold mb-4">Edit Permissions for {board?.boardName}</h2>
+                <h2 className="text-2xl font-bold mb-4">
+                    {t('board.permissions.title', { name: board?.boardName })}
+                </h2>
+                
                 <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
                     {boardSettings.map(entry => (
                         <div
                             key={entry.identifier}
-                            className={`p-4 bg-gray-800 rounded-lg ${
-                                entry.identifier === DiscordPermission.ADMINISTRATOR ? "opacity-50" : ""
-                            }`}
+                            className="p-4 bg-gray-800 rounded-lg"
                         >
                             <div className="flex justify-between items-center mb-2">
                                 <span className="font-bold">{resolveIdentifierName(entry.identifier)}</span>
                                 {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
                                     <button
-                                        className="px-2 py-1 rounded hover:text-red-600"
                                         onClick={() => handleRemoveIdentifier(entry.identifier)}
+                                        className="text-red-500 hover:text-red-400"
                                     >
-                                        ✕
+                                        {t('actions.delete')}
                                     </button>
                                 )}
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {entry.kanbanPermission.map(permission => (
-                                    <div
+                                {availableKanbanPermissions.map(permission => (
+                                    <label
                                         key={permission}
-                                        className="bg-gray-700 px-3 py-1 rounded flex items-center"
+                                        className="flex items-center space-x-2 bg-gray-700 p-2 rounded"
                                     >
+                                        <input
+                                            type="checkbox"
+                                            checked={entry.kanbanPermission.includes(permission)}
+                                            onChange={(e) =>
+                                                e.target.checked
+                                                    ? handleAddPermission(entry.identifier, permission)
+                                                    : handleRemovePermission(entry.identifier, permission)
+                                            }
+                                            className="form-checkbox"
+                                        />
                                         <span>{permission}</span>
-                                        {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
-                                            <button
-                                                className="ml-2 text-grey-500 hover:text-red-600"
-                                                onClick={() => handleRemovePermission(entry.identifier, permission)}
-                                            >
-                                                ✕
-                                            </button>
-                                        )}
-                                    </div>
+                                    </label>
                                 ))}
-                                {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
-                                    <button
-                                        className="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700"
-                                        onClick={() => setSelectedIdentifier(entry.identifier)}
-                                    >
-                                        +
-                                    </button>
-                                )}
                             </div>
-                            {selectedIdentifier === entry.identifier && (
-                                <select
-                                    className="mt-2 bg-gray-700 text-white p-2 rounded"
-                                    onChange={e => {
-                                        handleAddPermission(entry.identifier, e.target.value as KanbanPermission);
-                                        setSelectedIdentifier(null);
-                                    }}
-                                >
-                                    <option value="">Select Permission</option>
-                                    {availableKanbanPermissions
-                                        .filter(p => !entry.kanbanPermission.includes(p))
-                                        .map(p => (
-                                            <option key={p} value={p}>
-                                                {p}
-                                            </option>
-                                        ))}
-                                </select>
-                            )}
                         </div>
                     ))}
                 </div>
 
-                {showAddIdentifierDropdown ? (
-                    <div className="mt-4 bg-gray-800 p-4 rounded">
+                <button
+                    className="mt-4 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+                    onClick={() => setShowAddIdentifierDropdown(true)}
+                >
+                    {t('permissions.addIdentifier')}
+                </button>
+
+                {showAddIdentifierDropdown && (
+                    <div className="mt-2 bg-gray-800 rounded-lg p-4">
                         <input
                             type="text"
-                            placeholder="Search users, roles, or permissions"
                             value={searchQuery}
-                            onChange={e => setSearchQuery(e.target.value)}
-                            className="w-full p-2 bg-gray-700 rounded text-white"
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder={t('permissions.searchPlaceholder')}
+                            className="w-full p-2 bg-gray-700 rounded mb-2"
                         />
-                        <ul className="mt-2 max-h-40 overflow-y-auto">
+                        <div className="max-h-40 overflow-y-auto">
                             {filteredOptions().map(option => (
-                                <li
+                                <div
                                     key={option.value}
-                                    className="p-2 hover:bg-gray-700 cursor-pointer rounded"
                                     onClick={() => handleAddIdentifier(option.value)}
+                                    className="p-2 hover:bg-gray-700 cursor-pointer rounded"
                                 >
                                     {option.label}
-                                </li>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     </div>
-                ) : (
-                    <button
-                        className="mt-4 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
-                        onClick={() => setShowAddIdentifierDropdown(true)}
-                    >
-                        Add Identifier
-                    </button>
                 )}
 
-                <div className="flex justify-end mt-6">
+                <div className="flex justify-end mt-6 gap-2">
                     <button 
-                        className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 mr-2" 
+                        className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700"
                         onClick={onClose}
                     >
-                        Cancel
+                        {t('actions.cancel')}
                     </button>
                     <button 
-                        className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" 
+                        className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700"
                         onClick={handleSubmit}
                     >
-                        Save Changes
+                        {t('actions.save')}
                     </button>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default EditBoardSettings;

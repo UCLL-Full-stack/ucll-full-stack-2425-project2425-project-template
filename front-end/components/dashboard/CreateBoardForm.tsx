@@ -1,5 +1,6 @@
 import { DiscordPermission, Guild, KanbanPermission, User } from '@/types';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CreateBoardFormProps {
     isOpen: boolean;
@@ -20,6 +21,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     guilds,
     permissions,
 }) => {
+    const { t } = useTranslation(['common']);
     const [boardName, setBoardName] = useState('');
     const [columns, setColumns] = useState('');
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
@@ -52,12 +54,12 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                 }
             }
         }
-    }, [selectedGuildId]);
+    }, [selectedGuildId, guilds, permissions]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if(!selectedGuild) {
-            setError('Please select a guild');
+            setError(t('errors.selectGuild'));
             return;
         }
         setError(null);
@@ -78,28 +80,33 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h2 className="text-white text-xl mb-4">Create a New Board</h2>
+                <h2 className="text-white text-xl mb-4">{t('board.create.title')}</h2>
                 {error && <p className="text-red-500">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-white mb-2">Board Title</label>
+                        <label className="block text-white mb-2">
+                            {t('board.create.nameLabel')}
+                        </label>
                         <input
                             type="text"
                             value={boardName}
                             onChange={(e) => setBoardName(e.target.value)}
                             required
                             className="w-full p-2 border border-gray-600 rounded"
+                            placeholder={t('board.create.namePlaceholder')}
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-white mb-2">Select Guild</label>
+                        <label className="block text-white mb-2">
+                            {t('board.create.guildLabel')}
+                        </label>
                         <select
                             onChange={(e) =>{setSelectedGuild(e.target.value)}}
                             className="w-full p-2 border border-gray-600 rounded"
                             value={selectedGuild || ''}
                         >
                             <option value="" disabled>
-                                Select a guild
+                                {t('board.create.selectGuild')}
                             </option>
                             {filteredGuilds.map((guild) => (
                                 <option key={guild.guildId} value={guild.guildId}>
@@ -110,13 +117,14 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                     </div>
                     <div className="mb-4">
                         <label className="block text-white mb-2">
-                            Columns (separated by commas)
+                            {t('board.create.columnsLabel')}
                         </label>
                         <input
                             type="text"
                             value={columns}
                             onChange={(e) => setColumns(e.target.value)}
                             className="w-full p-2 border border-gray-600 rounded"
+                            placeholder={t('board.create.columnPlaceholder')}
                         />
                     </div>
                     <div className="flex justify-end">
@@ -125,10 +133,13 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                             onClick={onClose}
                             className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded mr-2"
                         >
-                            Cancel
+                            {t('actions.cancel')}
                         </button>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            Create Board
+                        <button 
+                            type="submit" 
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        >
+                            {t('actions.create')}
                         </button>
                     </div>
                 </form>

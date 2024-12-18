@@ -1,12 +1,10 @@
-import React, { use, useEffect, useState } from 'react';
-import { Board } from '../../types';
-import UserService from '@/services/UserService';
-import ColumnService from '@/services/ColumnService';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Board, KanbanPermission } from '@/types';
+import { MdEdit } from "react-icons/md";
+import { FaGear } from "react-icons/fa6";
 import { useUser } from '@/context/UserContext';
-import { KanbanPermission } from '@/types';
-import BoardService from '@/services/BoardService';
-import { FaPlus, FaGear } from "react-icons/fa6"
-import { MdEdit } from "react-icons/md"
+import UserService from '@/services/UserService';
 
 interface BoardCardProps {
     board: Board;
@@ -16,61 +14,44 @@ interface BoardCardProps {
     onSelect: (board: Board) => void;
 }
 
-const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPermissions, onSelect }) => {
+const BoardCard: React.FC<BoardCardProps> = ({ 
+    board, 
+    onDelete, 
+    onEdit, 
+    onEditPermissions, 
+    onSelect 
+}) => {
+    const { t } = useTranslation(['common', 'board']);
     const { user } = useUser();
-    const [creator, setCreator] = useState<string>('');
-    const [columns, setColumns] = useState<string[]>([]);
-    const [canDelete, setCanDelete] = useState<boolean>(false);
-    const [canEdit, setCanEdit] = useState<boolean>(false);
-    const [canEditPermissions, setCanEditPermissions] = useState<boolean>(false);
-    const [isHovered, setIsHovered] = useState<boolean>(false);
     const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
+    const [isHovered, setIsHovered] = useState<boolean>(false);
+    const [permissions, setPermissions] = useState<KanbanPermission[]>([]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const userData = await UserService.getUser(board.createdByUserId);
-            setCreator(userData.globalName);
-            const columnData = await Promise.all(board.columnIds.map(async (columnId) => {
-                const column = await ColumnService.getColumnById(columnId);
-                return column;
-            }));
-            const sortedColumns = columnData.sort((a, b) => a.columnIndex - b.columnIndex);
-            setColumns(sortedColumns.map(column => column.columnName));
-        }
-
-        const checkPermissions = async () => {
+        const fetchPermissions = async () => {
+            if (!user?.userId || !board.boardId) return;
             try {
-                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
-                const hasDeletePermission = permissions.includes(KanbanPermission.DELETE_BOARD) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasEditPermission = permissions.includes(KanbanPermission.EDIT_BOARD) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasEditPermissionsPermission = permissions.includes(KanbanPermission.MANAGE_BOARD_PERMISSIONS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                setCanDelete(hasDeletePermission);
-                setCanEdit(hasEditPermission);
-                setCanEditPermissions(hasEditPermissionsPermission);
+                const userPermissions = await UserService.getUserBoardPermissions(user.userId, board.boardId);
+                setPermissions(userPermissions);
             } catch (error) {
-                console.error('Error checking permissions:', error);
+                console.error('Error fetching permissions:', error);
             }
         };
-        fetchData();
-        checkPermissions();
-    }, [user!.userId, board.boardId, board.createdByUserId, board.columnIds]);
+        fetchPermissions();
+    }, [user?.userId, board.boardId]);
+
+    const canDelete = permissions.includes(KanbanPermission.DELETE_BOARD) || 
+                     permissions.includes(KanbanPermission.ADMINISTRATOR);
+    const canEdit = permissions.includes(KanbanPermission.EDIT_BOARD) || 
+                   permissions.includes(KanbanPermission.ADMINISTRATOR);
+    const canEditPermissions = permissions.includes(KanbanPermission.MANAGE_BOARD_PERMISSIONS) || 
+                             permissions.includes(KanbanPermission.ADMINISTRATOR);
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
         setConfirmingDelete(false);
         onDelete(board.boardId);
-    }
-
-    const handleEdit = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onEdit(board.boardId);
-    }
-
-    const handleEditPermissions = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onEditPermissions(board.boardId);
-    }
-
+    };
 
     return (
         <div
@@ -80,8 +61,11 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
             onClick={() => onSelect(board)}
         >
             <h3 className="text-lg font-semibold">{board.boardName}</h3>
-            <p>Created by: {creator}</p>
-            <p className="truncate max-w-[70%]">Columns: {columns.join(', ')}</p>
+            <p>{t('board.createdBy', { creator: board.creator })}</p>
+            <p className="truncate max-w-[70%]">
+                {t('board.columns')}: {board.columnIds.join(', ')}
+            </p>
+
             {canDelete && isHovered && (
                 <button 
                     onClick={(e) => {
@@ -93,47 +77,61 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
                     ✕
                 </button>
             )}
+            
             {confirmingDelete && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-gray-800 text-white rounded-lg p-6 shadow-lg w-80 text-center">
-                        <p className="text-lg font-semibold mb-4">Are you sure you want to delete this board?</p>
-                        <p className="text-sm text-gray-300">This action cannot be undone and will remove all related columns and tasks.</p>
+                        <p className="text-lg font-semibold mb-4">
+                            {t('board.delete.confirmation')}
+                        </p>
+                        <p className="text-sm text-gray-300 mb-4">
+                            {t('board.delete.warning')}
+                        </p>
                         <div className="flex justify-around mt-4">
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setConfirmingDelete(false)
+                                    setConfirmingDelete(false);
                                 }}
                                 className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
                             >
-                                Cancel
+                                {t('common:actions.cancel')}
                             </button>
                             <button
                                 onClick={handleDelete}
                                 className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors"
                             >
-                                Delete
+                                {t('common:actions.delete')}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
             {(canEdit || canEditPermissions) && (
                 <div className="absolute bottom-2 right-2 flex gap-2">
                     {canEdit && (
                         <button
-                            onClick={handleEdit}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onEdit(board.boardId);
+                            }}
                             className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition-colors"
+                            title={t('common:actions.edit')}
                         >
-                            <MdEdit></MdEdit>
+                            <MdEdit />
                         </button>
                     )}
                     {canEditPermissions && (
                         <button
-                            onClick={handleEditPermissions}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onEditPermissions(board.boardId);
+                            }}
                             className="bg-cyan-700 hover:bg-cyan-800 text-white px-3 py-1 rounded-md transition-colors"
+                            title={t('board.settings')}
                         >
-                            <FaGear></FaGear>
+                            <FaGear />
                         </button>
                     )}
                 </div>

@@ -128,4 +128,15 @@ export interface Board{
     guildId: string;
     columnIds: string[];
     permissions: PermissionEntry[];
+    creator: string;
 }
+
+export interface Task {
+    taskId: string;
+    name: string;
+    description: string;
+    status: string;
+    columnId: string;
+    assignedTo: string[];
+}
+

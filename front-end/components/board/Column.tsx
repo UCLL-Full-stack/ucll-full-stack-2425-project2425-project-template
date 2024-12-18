@@ -3,6 +3,7 @@ import TaskComponent from "./Task";
 import { useEffect, useState } from "react";
 import TaskService from "@/services/TaskService";
 import ColumnService from "@/services/ColumnService";
+import { useTranslation } from 'react-i18next';
 
 interface ColumnProps {
     column: Column;
@@ -10,6 +11,7 @@ interface ColumnProps {
 }
 
 const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
+    const { t } = useTranslation(['common']);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [columnName, setColumnName] = useState(column.columnName);
@@ -33,12 +35,17 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             try {
                 await ColumnService.updateColumn(column.columnId, { columnName });
                 setInitialColumnName(columnName);
-                console.log("Column name updated successfully");
+                console.log(t('column.updateSuccess'));
             } catch (error) {
-                console.error("Error updating column name:", error);
+                console.error(t('column.updateError'), error);
                 setColumnName(initialColumnName);
             }
         }
+    };
+
+    const handleDelete = () => {
+        setConfirmingDelete(false);
+        onDelete(column.columnId);
     };
 
     return (
@@ -64,41 +71,44 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
                     {columnName}
                 </h3>
             )}
-            <div className="mt-4">
+            
+            <div className="mt-4 space-y-2">
                 {tasks.map((task, index) => (
                     <TaskComponent key={task.taskId} task={task} index={index} />
                 ))}
             </div>
+
             {isHovered && (
                 <button
-                    className="absolute top-2 right-2 text-grey-500 hover:text-red-600"
+                    className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
                     onClick={() => setConfirmingDelete(true)}
+                    title={t('column.deleteTooltip')}
                 >
                     ✕
                 </button>
             )}
+
             {confirmingDelete && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-gray-800 text-white rounded-lg p-6 shadow-lg w-80 text-center">
-                        <p className="text-lg font-semibold mb-4">Delete Column</p>
+                        <p className="text-lg font-semibold mb-4">
+                            {t('column.deleteTitle')}
+                        </p>
                         <p className="text-sm text-gray-300 mb-4">
-                            Are you sure you want to delete this column? All associated tasks will be deleted.
+                            {t('column.deleteConfirm')}
                         </p>
                         <div className="flex justify-around mt-4">
                             <button
                                 onClick={() => setConfirmingDelete(false)}
                                 className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
                             >
-                                Cancel
+                                {t('actions.cancel')}
                             </button>
                             <button
-                                onClick={() => {
-                                    setConfirmingDelete(false);
-                                    onDelete(column.columnId);
-                                }}
+                                onClick={handleDelete}
                                 className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors"
                             >
-                                Delete
+                                {t('actions.delete')}
                             </button>
                         </div>
                     </div>
