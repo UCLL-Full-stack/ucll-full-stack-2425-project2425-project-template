@@ -12,9 +12,10 @@ interface BoardCardProps {
     board: Board;
     onDelete: (boardId: string) => void;
     onEdit: (boardId: string) => void;
+    onEditPermissions: (boardId: string) => void;
 }
 
-const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit }) => {
+const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPermissions }) => {
     const { user } = useUser();
     const [creator, setCreator] = useState<string>('');
     const [columns, setColumns] = useState<string[]>([]);
@@ -61,7 +62,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit }) => {
     }
 
     const handleEditPermissions = async () => {
-        console.log('Edit Permissions');
+        onEditPermissions(board.boardId);
     }
 
 

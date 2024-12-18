@@ -12,6 +12,7 @@ import dotenv from 'dotenv';
 import { useUser } from '@/context/UserContext';
 import GuildService from '@/services/GuildService';
 import EditBoard from '@/components/EditBoard';
+import EditBoardSettings from '@/components/EditBoardSettings';
 
 dotenv.config();
 
@@ -28,7 +29,6 @@ const Home: FC = () => {
   const [permissions, setPermissions] = useState<any[]>([]);
   const [isEditingGuildSettings, setIsEditingGuildSettings] = useState(false);
   const [editingBoardId, setEditingBoardId] = useState<string | null>(null);
-  const [isEditingBoardPermissions, setIsEditingBoardPermissions] = useState(false);
   const [editingBoardPermissionsId, setEditingBoardPermissionsId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -182,11 +182,16 @@ const Home: FC = () => {
   };
 
   const handleBoardEditPermissions = (boardId: string) => {
-    setIsEditingBoardPermissions(true);
     setEditingBoardPermissionsId(boardId);
   }
 
-  const handleBoardEditPermissionsSubmit = async (boardId: string, permissions: PermissionEntry[]) => {
+  const handleBoardEditPermissionsSubmit = async (permissions: PermissionEntry[]) => {
+    try {
+      await BoardService.updateBoard(editingBoardPermissionsId!, { permissions });
+      setEditingBoardPermissionsId(null);
+    } catch (error) {
+      console.error('Error updating permissions:', error);
+    }
   };
 
   return (
@@ -228,6 +233,7 @@ const Home: FC = () => {
                                   board={board}
                                   onDelete={handleBoardDelete}
                                   onEdit={()=> {setEditingBoardId(board.boardId);}}
+                                  onEditPermissions={()=> {setEditingBoardPermissionsId(board.boardId);}}
                                 />
                             ))
                         )}
@@ -255,6 +261,13 @@ const Home: FC = () => {
                     boardId={editingBoardId}
                     onClose={() => setEditingBoardId(null)}
                     onSubmit={handleBoardEditSubmit}
+                  />
+                )}
+                {editingBoardPermissionsId && (
+                  <EditBoardSettings
+                    boardId={editingBoardPermissionsId}
+                    onClose={() => setEditingBoardPermissionsId(null)}
+                    onSubmit={handleBoardEditPermissionsSubmit}
                   />
                 )}
               </>
