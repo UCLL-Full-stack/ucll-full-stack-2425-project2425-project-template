@@ -1,4 +1,4 @@
-import { Auth } from '@types';
+import { Auth, User } from '@types';
 
 const getAllUsers = async () => {
     console.log(sessionStorage.getItem('token'));
@@ -19,6 +19,21 @@ const getUserByEmail = async (email: string) => {
     });
 };
 
+const userSignup = async (user: {
+    name: string;
+    email: string;
+    password: string;
+    birthday: Date;
+}) => {
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/signup', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+        },
+        body: JSON.stringify(user),
+    });
+};
+
 const authenticateUser = async (auth: Auth) => {
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/login', {
         method: 'POST',
@@ -32,6 +47,7 @@ const authenticateUser = async (auth: Auth) => {
 const userSerivce = {
     getAllUsers,
     getUserByEmail,
+    userSignup,
     authenticateUser,
 };
 
