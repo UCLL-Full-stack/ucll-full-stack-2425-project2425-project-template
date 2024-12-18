@@ -5,6 +5,8 @@ import styles from '../../styles/login/login.module.css';
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serversideTranslations";
 import TrainerService from "../../services/trainer.service"; // Import the updated service function
+import UserService from "@services/user.service";
+import { error } from "console";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -25,23 +27,23 @@ const LoginPage: React.FC = () => {
     }
   
     try {
-      const trainer = await TrainerService.getTrainerByEmail(email); // Fetch trainer data by email
-  
-      if (!trainer) {
-        setErrorMessage("Trainer not found.");
-        return;
+      const response = await UserService.logIn(email,password); // Fetch trainer data by email
+      if (response.status === 200) {  
+        const decriptedResponse = await response.json();
+        const user = decriptedResponse.response  
+        localStorage.setItem("loggedInUser", JSON.stringify({
+          token: user.token,
+          role: user.role,
+          fullName: user.firstName + " " + user.lastName,
+          email: user.email,
+        }));
+
+      } else {
+        throw new Error("whoops")
       }
-  
-      // Validate role and password
-      const { user } = trainer; // Ensure you access the `user` object within `trainer`
-      if (user.role !== role || user.password !== password) {
-        setErrorMessage("Invalid email, password, or role.");
-        return;
-      }
-  
-  
-      // Save trainer info to localStorage
-      localStorage.setItem('userEmail', trainer.user.email);  // Save the email as 'userEmail'
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
   
       console.log("Login successful, redirecting to home...");
       router.push("/"); // Redirect to home page
