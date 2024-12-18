@@ -25,7 +25,7 @@ const getLeidingById = async ({id}: {id: number}): Promise<Leiding> => {
         return Leiding.from({ ...userPrisma, nieuwsberichten: [] });
     } catch (e) {
         console.error(e);
-        throw new Error("Something went wrong with getting leiding by id");
+        throw e;
     }
 }
 
@@ -42,12 +42,20 @@ const getLeidingByTotem = async ({totem}: {totem: string}): Promise<Leiding> => 
         return Leiding.from({ ...userPrisma, nieuwsberichten: [] });
     } catch (e) {
         console.error(e);
-        throw new Error("Something went wrong with getting leiding by email");
+        throw e;
     }
 }
 
 const createLeiding = async (leiding: Leiding): Promise<Leiding> => {
     try {
+        const groepPrisma = await database.groep.findFirst({
+            where: {
+                naam: "Losse leden"
+            }
+        });
+        if (!groepPrisma) {
+            throw new Error("Groep not found");
+        }
         const leidingPrisma = await database.leiding.create({
             data: {
                 naam: leiding.getNaam(),
@@ -58,18 +66,18 @@ const createLeiding = async (leiding: Leiding): Promise<Leiding> => {
                 totem: leiding.getTotem(),
                 wachtwoord: leiding.getWachtwoord(),
                 groep: {
-                    connect: { id: 1 }
+                    connect: { id: groepPrisma.id }
                 },
             }
         });
         return Leiding.from({ ...leidingPrisma, nieuwsberichten: [] });
     } catch (e) {
         console.error(e);
-        throw new Error("Something went wrong with creating leiding");
+        throw e;
     }
 }
 
-const updateLeiding = async (leiding: Leiding, groep?: Groep): Promise<Leiding> => {
+const updateLeiding = async (leiding: Leiding): Promise<Leiding> => {
     try {
         const leidingPrisma = await database.leiding.update({
             where: {
@@ -82,10 +90,29 @@ const updateLeiding = async (leiding: Leiding, groep?: Groep): Promise<Leiding> 
                 telefoon: leiding.getTelefoon(),
                 rol: leiding.getRol(),
                 totem: leiding.getTotem(),
-                wachtwoord: leiding.getWachtwoord(),
-                groep: {
-                    connect: { id: groep?.id }
-                }
+                wachtwoord: leiding.getWachtwoord()
+            }
+        });
+        return Leiding.from({ ...leidingPrisma, nieuwsberichten: [] });
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+}
+
+const updateLeidingNoPass = async (leiding: Leiding): Promise<Leiding> => {
+    try {
+        const leidingPrisma = await database.leiding.update({
+            where: {
+                id: leiding.getId()
+            },
+            data: {
+                naam: leiding.getNaam(),
+                voornaam: leiding.getVoornaam(),
+                email: leiding.getEmail(),
+                telefoon: leiding.getTelefoon(),
+                rol: leiding.getRol(),
+                totem: leiding.getTotem()
             }
         });
         return Leiding.from({ ...leidingPrisma, nieuwsberichten: [] });
@@ -109,11 +136,32 @@ const deleteLeiding = async ({id}: {id: number}): Promise<Leiding> => {
     }
 }
 
+const veranderGroep = async (leiding: Leiding, id: number): Promise<Leiding> => {
+    try {
+        const leidingPrisma = await database.leiding.update({
+            where: {
+                id: leiding.getId()
+            },
+            data: {
+                groep: {
+                    connect: { id: id }
+                }
+            }
+        });
+        return Leiding.from({ ...leidingPrisma, nieuwsberichten: [] });
+    } catch (e) {
+        console.error(e);
+        throw new Error("Something went wrong with updating leiding");
+    }
+}
+
 export default {
     getAllLeiding,
     getLeidingById,
     createLeiding,
     updateLeiding,
     deleteLeiding,
-    getLeidingByTotem
+    getLeidingByTotem,
+    updateLeidingNoPass,
+    veranderGroep
 }
