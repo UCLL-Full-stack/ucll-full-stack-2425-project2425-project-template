@@ -51,7 +51,7 @@ const Header: React.FC = () => {
               before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
               before:transition before:ease-in-out before:duration-300"
                     >
-                        leaderboard
+                        Leaderboard
                     </Link>
 
                     {!loggedInUser && (
@@ -62,7 +62,7 @@ const Header: React.FC = () => {
               before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
               before:transition before:ease-in-out before:duration-300"
                         >
-                            login
+                            Login
                         </Link>
                     )}
 
@@ -87,7 +87,7 @@ const Header: React.FC = () => {
                                   before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
                                   before:transition before:ease-in-out before:duration-300"
                         >
-                            log out
+                            Log out
                         </Link>
                     )}
                 </nav>

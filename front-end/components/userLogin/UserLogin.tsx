@@ -1,11 +1,11 @@
 import userService from '@services/userService';
-import userSerivce from '@services/userService';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const UserLogin: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const [emailNameError, setEmailNameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -75,47 +75,70 @@ const UserLogin: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             {statusMessages.message && (
                 <div
                     className={`${
                         statusMessages.type === 'error' ? 'bg-red-500' : 'bg-green-500'
-                    } text-white p-2 text-center`}
+                    } text-white p-2 text-center mb-4 rounded w-3/4`}
                 >
                     {statusMessages.message}
                 </div>
             )}
 
-            <h1 className="mt-10">User Login</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center mt-10">
-                <div className="flex flex-col items-start">
-                    <label htmlFor="emailInput" className="">
-                        e-mail:
+            <h1 className="text-2xl font-bold mb-6">User Login</h1>
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col items-center bg-white p-6 rounded shadow-md w-full max-w-sm"
+            >
+                <div className="w-full mb-4">
+                    <label htmlFor="emailInput" className="block text-sm font-medium text-gray-700">
+                        E-mail:
                     </label>
-                    {emailNameError && <div className="text-red-500 mb-1">{emailNameError}</div>}
+                    {emailNameError && (
+                        <div className="text-red-500 text-sm mt-1">{emailNameError}</div>
+                    )}
                     <input
                         id="emailInput"
                         type="text"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
-                        className="border-2 mt-2 rounded-[0.2rem]"
+                        className="border border-gray-300 rounded px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
-                <div className="flex flex-col items-start mt-4">
-                    <label htmlFor="passwordInput" className="">
-                        password:
+                <div className="w-full mb-4">
+                    <label
+                        htmlFor="passwordInput"
+                        className="block text-sm font-medium text-gray-700"
+                    >
+                        Password:
                     </label>
-                    {passwordError && <div className="text-red-500 mb-1">{passwordError}</div>}
-                    <input
-                        id="passwordInput"
-                        type="text"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        className="border-2 mt-2 rounded-[0.2rem]"
-                    />
+                    {passwordError && (
+                        <div className="text-red-500 text-sm mt-1">{passwordError}</div>
+                    )}
+                    <div className="flex items-center mt-1">
+                        <input
+                            id="passwordInput"
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="ml-2 px-3 py-2 bg-gray-200 text-gray-600 text-sm font-medium rounded hover:bg-gray-300"
+                        >
+                            {showPassword ? 'Hide' : 'Show'}
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+
+                <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white font-medium py-2 rounded mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
                     Login
                 </button>
             </form>
