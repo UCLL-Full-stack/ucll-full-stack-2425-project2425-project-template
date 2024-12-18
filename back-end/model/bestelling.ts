@@ -35,11 +35,22 @@ export class Bestelling {
         datum: Date;
         pokebowls: Pokebowl[];
     }) {
+        this.validate(bestelling);
         this.id = bestelling.id;
         this.user = bestelling.user;
         this.datum = bestelling.datum;
         this.pokebowls = bestelling.pokebowls;
         this.calculateTotaalPrijs();
+    }
+
+    validate(bestelling: { user: User, datum: Date }) {
+        if (!bestelling.user) {
+            throw new Error("User cannot be empty");
+        }
+        if (!bestelling.datum) {
+            throw new Error("Datum cannot be empty");
+        }
+
     }
 
     getId(): number | undefined {

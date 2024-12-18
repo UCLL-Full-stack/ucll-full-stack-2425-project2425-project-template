@@ -3,8 +3,8 @@ import styles from '@/styles/Users.module.css';
 
 const TestDataOverzicht: React.FC = () => {
     const testData = [
-        { username: "JohndD", password: "password", role: "Admin" },
-        { username: "JaneT", password: "hihihi3", role: "Manager" },
+        { username: "JohnD", password: "passworddd", role: "Admin" },
+        { username: "JaneT", password: "hihihi321", role: "Manager" },
         { username: "NinadW", password: "helloworld!", role: "Klant" }
     ];
 

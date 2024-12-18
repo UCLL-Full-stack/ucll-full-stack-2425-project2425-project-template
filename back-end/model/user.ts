@@ -1,7 +1,6 @@
 import { Rol } from "../types";
 import { Bestelling } from "./bestelling";
 import { User as UserPrisma } from '@prisma/client';
-import { Bestelling as BestellingPrisma } from '@prisma/client';
 export class User {
 
     static from({
@@ -48,6 +47,7 @@ export class User {
         rol: Rol;
         bestellingen?: Array<Bestelling>;
     }) {
+        this.validate(user);
         this.id = user.id;
         this.naam = user.naam;
         this.voornaam = user.voornaam;
@@ -57,6 +57,34 @@ export class User {
         this.gebruikersnaam = user.gebruikersnaam;
         this.rol = user.rol;
         this.bestellingen = user.bestellingen ?? [];
+    }
+
+    validate(user: { naam: string, voornaam: string, email: string, wachtwoord: string, adres: string, gebruikersnaam: string, rol: Rol }) {
+        if (!user.naam) {
+            throw new Error("Naam cannot be empty");
+        }
+        if (!user.voornaam) {
+            throw new Error("Voornaam cannot be empty");
+        }
+        if (!user.email) {
+            throw new Error("Email cannot be empty");
+        }
+        if (!user.wachtwoord) {
+            throw new Error("Wachtwoord cannot be empty");
+        }
+        if (user.wachtwoord.length < 8) {
+            throw new Error("Wachtwoord moet op zijn minst 8 karakters lang zijn");
+        }
+        if (!user.adres) {
+            throw new Error("Adres cannot be empty");
+        }
+        if (!user.gebruikersnaam) {
+            throw new Error("Gebruikersnaam cannot be empty");
+        }
+        if (!user.rol) {
+            throw new Error("Rol cannot be empty");
+        }
+
     }
 
     getId(): number | undefined {
@@ -106,16 +134,6 @@ export class User {
     login(): boolean {
         console.log("User logged in succesfully")
         return true;
-        //ook dit moet wss nog aangepast worden
     }
-
-    // deleteUser(user: User): void {
-    //     console.log("User deleted")
-    // }
-
-    // updateUser(user: User) {
-    //     Object.assign(this, user);
-    //     console.log("User updated")
-    // }
 
 }

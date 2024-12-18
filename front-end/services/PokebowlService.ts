@@ -1,10 +1,18 @@
 import { Pokebowl } from "@/types";
 
 const getAllPokebowls = async () => {
+    const user = sessionStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+        token = JSON.parse(user).token;
+    }
+
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/pokebowls", {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
 
