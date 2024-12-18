@@ -46,7 +46,11 @@ const addProductToCart = async (email: string, productId: number): Promise<Cart>
     }
 
     try {
-        return await cartDb.putProductToCart(cart.getId()!, productId);
+        const updatedCart = await cartDb.putProductToCart(cart.getId()!, productId);
+        const newTotalPrice = updatedCart.getProducts().reduce((total, product) => total + product.getPrice(), 0);
+
+        const finalCart = await cartDb.updateCartTotalPrice(updatedCart.getId()!, newTotalPrice);
+        return finalCart;
     } catch (error) {
         throw new Error('Failed to add product to cart');
     }
