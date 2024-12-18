@@ -92,6 +92,16 @@ const authenticate = async ({
     };
 };
 
+const getOwnProfile = async (username: string, role: Role): Promise<User> => {
+    if (role === 'user' || role === 'admin') {
+        return await getUserByUsername(username);
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
 export default {
     getAllUsers,
     getUserById,
@@ -99,4 +109,5 @@ export default {
     createUser,
     authenticate,
     getUserIdFromUsername,
+    getOwnProfile,
 };

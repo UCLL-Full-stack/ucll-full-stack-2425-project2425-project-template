@@ -6,7 +6,30 @@ const getAllRecipes = async (): Promise<Recipe[]> => {
     try {
         const recipesPrisma = await database.recipe.findMany({
             include: {
-                ingredients: true,
+                ingredients: {
+                    include: {
+                        ingredient: true,
+                    },
+                },
+            },
+        });
+        return recipesPrisma.map((recipePrisma) => Recipe.from(recipePrisma));
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
+const getRecipesByUserId = async (userId: number): Promise<Recipe[]> => {
+    try {
+        const recipesPrisma = await database.recipe.findMany({
+            where: { userId: userId },
+            include: {
+                ingredients: {
+                    include: {
+                        ingredient: true,
+                    },
+                },
             },
         });
         return recipesPrisma.map((recipePrisma) => Recipe.from(recipePrisma));
@@ -28,8 +51,7 @@ const getRecipeById = async ({ id }: { id: number }): Promise<Recipe | null> => 
                 },
             },
         });
-        if (!recipePrisma) return null;
-        return Recipe.from(recipePrisma);
+        return recipePrisma ? Recipe.from(recipePrisma) : null;
     } catch (error) {
         console.log(error);
         throw new Error('Database error. See server log for details');
@@ -137,4 +159,11 @@ const deleteRecipe = async ({ id }: { id: number }): Promise<void> => {
     }
 };
 
-export default { getAllRecipes, addRecipe, saveRecipe, deleteRecipe, getRecipeById };
+export default {
+    getAllRecipes,
+    addRecipe,
+    saveRecipe,
+    deleteRecipe,
+    getRecipeById,
+    getRecipesByUserId,
+};
