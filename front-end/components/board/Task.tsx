@@ -18,9 +18,9 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index }) => {
             }`}
             onClick={() => setIsExpanded((prev) => !prev)}
         >
-            <h3 className="font-medium">{task.taskName}</h3>
-            <p>{task.taskDescription}</p>
-            {isExpanded && <ExpandedTask task={task} />}
+            <h3 className="font-medium">{task.title}</h3>
+            <p>{task.description}</p>
+            {isExpanded && <ExpandedTask task={task} onClose={()=> setIsExpanded(false)}/>}
         </div>
     );
 };

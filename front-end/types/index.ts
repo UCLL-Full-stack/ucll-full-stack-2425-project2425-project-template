@@ -116,7 +116,7 @@ export interface Task{
     title: string;
     description: string;
     taskIndex: number;
-    dueDate: Date;
+    dueDate: string;
     assigneeIds: string[];
     columnId: string;
 }

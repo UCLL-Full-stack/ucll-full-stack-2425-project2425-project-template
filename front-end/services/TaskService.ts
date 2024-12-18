@@ -31,10 +31,22 @@ const deleteTask = async (taskId: string) => {
     return await response.json();
 };
 
+const addTask = async (task: any) => {
+    const response = await fetch(`${API_URL}/api/tasks`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+    });
+    return await response.json();
+};
+
 const TaskService = {
     getTask,
     updateTask,
     deleteTask,
+    addTask,
 };
 
 export default TaskService;

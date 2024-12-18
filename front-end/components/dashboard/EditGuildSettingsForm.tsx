@@ -142,7 +142,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                                         <span>{permission}</span>
                                         {entry.identifier !== DiscordPermission.ADMINISTRATOR && (
                                             <button
-                                                className="ml-2 text-grey-500 hover:text-red-600"
+                                                className="ml-2 text-gray-500 hover:text-red-600"
                                                 onClick={() => handleRemovePermission(entry.identifier, permission)}
                                             >
                                                 ✕
