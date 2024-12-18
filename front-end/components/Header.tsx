@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../styles/header.module.css';
 
 const Header: React.FC = () => {
+
+    
+
     return (
         <header className={styles.header}>
             <Link href="/" className={styles.titleLink}>
@@ -18,6 +21,11 @@ const Header: React.FC = () => {
                     <h1 className={styles.title}>Spilled Popcorn</h1>
                 </div>
             </Link>
+      
+            <Link href="/movie">
+                <button className={styles.registerButton}>Movie</button>
+            </Link>
+
             <Link href="/register">
                 <button className={styles.registerButton}>Register</button>
             </Link>
