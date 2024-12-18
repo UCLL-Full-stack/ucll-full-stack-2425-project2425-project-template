@@ -63,9 +63,24 @@ const authenticate = async ({ email, password }: UserInput): Promise<Authenticat
     };
 };
 
+const updateUser = async (userInput: UserInput): Promise<User> => {
+    const existingUser = await getUserByEmail(userInput.email);
+    const updatedUser = new User({
+        ...existingUser,
+        ...userInput,
+        role: existingUser.getRole(),
+    });
+    const result = await userDB.updateUser(updatedUser);
+    if (!result) {
+        throw new Error('User not updated.');
+    }
+    return result;
+};
+
 export default {
     getAllUsers,
     createUser,
     getUserByEmail,
     authenticate,
+    updateUser,
 };
