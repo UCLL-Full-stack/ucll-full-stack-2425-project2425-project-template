@@ -1,13 +1,12 @@
 import Head from 'next/head';
 import ActiviteitenOverviewTable from '@/components/activiteiten/ActiviteitenOverviewTable';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
-import { useRouter } from 'next/router';
 import Header from '@/components/header';
 
 const Activiteiten: React.FC = () => {
-    const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>([]);
+    const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>();
     const [showModal, setShowModal] = useState<boolean>(false);
     const [newActiviteit, setNewActiviteit] = useState({
         name: '',
@@ -16,40 +15,18 @@ const Activiteiten: React.FC = () => {
         endDate: new Date().toLocaleDateString()
     });
 
-    const router = useRouter();
-    const { groepNaam } = router.query;
-    const formatGroupName = (name: string) => {
-        return name
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-    };
-
-    const formattedGroupName = groepNaam ? formatGroupName(groepNaam as string) : '';
-
-    const getActiviteitenByGroupName = async () => {
-        const [activiteitenResponse] = await Promise.all([ActiviteitService.getActiviteitenByGroupName(groepNaam as string)]);
-        const activiteiten = await activiteitenResponse.json();
-
-        if (Array.isArray(activiteiten)) {
-            activiteiten.sort((a: Activiteit, b: Activiteit) => {
-                return new Date(a.begindatum).getTime() - new Date(b.begindatum).getTime();
-            });
-            setActiviteiten(activiteiten);
-        } else {
-            setActiviteiten([]);
-        }
-    };
+    const getActiviteiten = async () => {
+        const response = await ActiviteitService.getAllActiviteiten();
+        const activiteiten = await response.json();
+        setActiviteiten(activiteiten);
+    }
 
     useEffect(() => {
-        if (groepNaam) {
-            getActiviteitenByGroupName();
-        }
-    }, [groepNaam]);
+        getActiviteiten()
+    }, []);
 
     const addActiviteit = async () => {
         await ActiviteitService.addActiviteit(
-            groepNaam as string,
             newActiviteit.name,
             newActiviteit.description,
             new Date(newActiviteit.beginDate),
@@ -57,7 +34,7 @@ const Activiteiten: React.FC = () => {
         );
         setShowModal(false);
         setNewActiviteit({ name: '', description: '', beginDate: '', endDate: '' });
-        getActiviteitenByGroupName();
+        getActiviteiten();
     };
 
     return (
@@ -67,7 +44,7 @@ const Activiteiten: React.FC = () => {
             </Head>
             <Header />
             <main>
-                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Activiteiten {formattedGroupName}</h1>
+                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Alle Activiteiten</h1>
 
                 <div className="flex justify-end mr-4">
                     <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-800"
