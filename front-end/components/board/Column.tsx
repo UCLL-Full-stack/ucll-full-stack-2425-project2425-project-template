@@ -3,7 +3,7 @@ import TaskComponent from "./Task";
 import { useEffect, useState } from "react";
 import TaskService from "@/services/TaskService";
 import ColumnService from "@/services/ColumnService";
-import { error } from "console";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 
 interface ColumnProps {
     column: Column;
@@ -29,7 +29,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             const tasks = await Promise.all(
                 column.taskIds.map((id) => TaskService.getTask(id))
             );
-            setTasks(tasks);
+            const sortedTasks = tasks.sort((a, b) => a.taskIndex - b.taskIndex);
+            setTasks(sortedTasks);
         };
         fetchData();
     }, [column.taskIds]);
@@ -75,7 +76,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             setNewTaskDueDate("");
             setNewTaskAssigneeIds("");
             setError("");
-            console.log(newTask);
+            console.log("Task created successfully");
         } catch (error) {
             console.error("Error creating task:", error);
         }
@@ -104,11 +105,30 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
                     {columnName}
                 </h3>
             )}
-            <div className="mt-2 flex flex-col gap-2">
-                {tasks.map((task, index) => (
-                    <TaskComponent key={task.taskId} task={task} index={index} />
-                ))}
-            </div>
+            <Droppable droppableId={column.columnId} type="TASK">
+                {(provided) => (
+                    <div
+                        className="mt-2 flex flex-col gap-2"
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
+                        {tasks.map((task, index) => (
+                            <Draggable draggableId={task.taskId} index={index} key={task.taskId}>
+                                {(provided) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                    >
+                                        <TaskComponent task={task} index={index} />
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
             {isHovered && (
                 <button
                     className="absolute top-2 right-2 text-grey-500 hover:text-red-600"
