@@ -10,6 +10,15 @@ type UserInput = {
     birth_date?: Date;
 };
 
+type productInput = {
+    id?: number;
+    name?: string;
+    price?: number;
+    description?: string;
+    rating?: number;
+    url?: string;
+};
+
 type AuthenticationResponse = {
     token: string;
     email: string;
@@ -19,5 +28,6 @@ type AuthenticationResponse = {
 export{
     Role,
     UserInput,
-    AuthenticationResponse
+    AuthenticationResponse,
+    productInput
 };

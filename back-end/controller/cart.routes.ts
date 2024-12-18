@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from 'express';
 import cartService from '../service/cart.service';
 import { Product } from '../model/product';
 import { Cart } from '../model/cart';
-import { isAdmin } from '../util/jwt';
 import { Role } from '../types';
 
 const cartRouter = express.Router();
@@ -25,7 +24,7 @@ const cartRouter = express.Router();
  *                 $ref: '#/components/schemas/Cart'
  */
     // GET /carts/
-cartRouter.get('/', isAdmin, async (req: Request, res: Response, next: NextFunction) => {
+cartRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: {email: string; role : Role}};
         const { email,role } = request.auth;

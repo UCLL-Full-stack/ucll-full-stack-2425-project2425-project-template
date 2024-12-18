@@ -16,34 +16,34 @@ const generateJWTtoken = ({ email, role }: { email: string, role: string }): str
     }
 };
 
-const verifyJWTtoken = (token: string) => {
-    if (!process.env.JWT_SECRET) {
-        throw new Error("JWT_SECRET is not defined.");
-    }
-    return jwt.verify(token, process.env.JWT_SECRET);
-};
+// const verifyJWTtoken = (token: string) => {
+//     if (!process.env.JWT_SECRET) {
+//         throw new Error("JWT_SECRET is not defined.");
+//     }
+//     return jwt.verify(token, process.env.JWT_SECRET);
+// };
 
-const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
+// const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
+//     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(403).json({ message: 'Access denied' });
-    }
+//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+//         return res.status(403).json({ message: 'Access denied' });
+//     }
 
-    const token = authHeader.split(' ')[1];
+//     const token = authHeader.split(' ')[1];
 
-    try {
-        const decoded = verifyJWTtoken(token) as { email: string };
-        const user = await userDb.getUserByEmail(decoded.email);
+//     try {
+//         const decoded = verifyJWTtoken(token) as { email: string };
+//         const user = await userDb.getUserByEmail(decoded.email);
 
-        if (!user || user.getRole() !== 'admin') {
-            return res.status(403).json({ message: 'Access denied' });
-        }
+//         if (!user || user.getRole() !== 'admin') {
+//             return res.status(403).json({ message: 'Access denied' });
+//         }
 
-        next();
-    } catch (error) {
-        return res.status(403).json({ message: 'Access denied' });
-    }
-};
+//         next();
+//     } catch (error) {
+//         return res.status(403).json({ message: 'Access denied' });
+//     }
+// };
 
-export { generateJWTtoken, isAdmin };
+export { generateJWTtoken };

@@ -34,6 +34,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import productService from '../service/product.service';
+import { Role, productInput } from '../types';
 const productRouter = express.Router();
 
 /**
@@ -86,18 +87,32 @@ productRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *       404:
  *         description: Product not found.
  */
-// productRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const { id } = req.params;
-//         const product = await productService.getProductById({ id: parseInt(id) });
-//         if (product) {
-//             res.status(200).json(product);
-//         } else {
-//             res.status(404).json({ status: 'error', errorMessage: 'Product not found' });
-//         }
-//     } catch (error) {
-//         res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
-//     }
-// });
+productRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const product = await productService.getProductById({ id: parseInt(id) });
+        if (product) {
+            res.status(200).json(product);
+        } else {
+            res.status(404).json({ status: 'error', errorMessage: 'Product not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
+    }
+});
+
+
+
+productRouter.post('/add',async (req:Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: {email: string; role : Role}};
+        const { email,role } = request.auth;
+        const productInput = <productInput>req.body;
+        const product = await productService.createProduct(productInput,role);
+        res.status(200).json(product);
+    } catch (error) {
+        next(error);
+    }
+})
 
 export { productRouter };
