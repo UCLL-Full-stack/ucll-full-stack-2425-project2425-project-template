@@ -83,8 +83,9 @@ const columnRouter = Router();
 columnRouter.post('/', async (req, res) => {
     const column = req.body;
     try {
-        await columnService.addColumn(column);
-        res.status(201).json({ message: 'Column created successfully' });
+        const createdColumn = await columnService.addColumn(column);
+        res.status(201).json(createdColumn);
+
     } catch (error) {
         res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
     }
@@ -174,8 +175,8 @@ columnRouter.put('/:columnId', async (req, res) => {
     const { columnId } = req.params;
     const updatedColumn = req.body;
     try {
-        await columnService.updateColumn(columnId, updatedColumn);
-        res.status(200).json({ message: 'Column updated successfully' });
+        const newColumn = await columnService.updateColumn(columnId, updatedColumn);
+        res.status(200).json(newColumn);
     } catch (error) {
         res.status(400).json({ error: error instanceof Error ? error.message : 'An unknown error occurred' });
     }

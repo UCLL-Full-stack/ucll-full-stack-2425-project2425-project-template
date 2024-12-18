@@ -148,8 +148,8 @@ taskRouter.delete('/:taskId', async (req, res) => {
 taskRouter.post('/', async (req, res) => {
     const task = req.body;
     try {
-        await taskService.addTask(task);
-        res.status(201).json({ message: 'Task created successfully' });
+        const createdTask = await taskService.addTask(task);
+        res.status(201).json(createdTask);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });

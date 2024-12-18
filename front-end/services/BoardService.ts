@@ -6,7 +6,7 @@ interface CreateBoardParams {
     boardName: string;
     createdByUserId: string;
     guildId: string;
-    columnIds: string[];
+    columns: string[];
     permissions: any[];
 }
 

@@ -14,6 +14,7 @@ import GuildService from '@/services/GuildService';
 import EditBoard from '@/components/dashboard/EditBoard';
 import EditBoardSettings from '@/components/dashboard/EditBoardSettings';
 import BoardView from '@/components/board/BoardView';
+import ColumnService from '@/services/ColumnService';
 
 dotenv.config();
 
@@ -191,6 +192,56 @@ const Home: FC = () => {
     }
   };
 
+  const handleAddColumn = async (columnName: string) => {
+    if (!selectedBoard) return;
+
+    try {
+      const newColumn = await ColumnService.addColumn({
+        columnName,
+        columnIndex: selectedBoard.columnIds.length,
+        boardId: selectedBoard.boardId,
+        taskIds: [],
+      });
+
+      await BoardService.updateBoard(selectedBoard.boardId, {
+        columnIds: [...selectedBoard.columnIds, newColumn.columnId],
+      });
+
+      const updatedBoard = await BoardService.getBoard(selectedBoard.boardId);
+
+      setBoards((prev) =>
+        prev.map((board) => (board.boardId === updatedBoard.boardId ? updatedBoard : board))
+      );
+      setSelectedBoard(updatedBoard);
+    } catch (error) {
+      console.error("Error adding column:", error);
+    }
+  };
+
+  const handleDeleteColumn = async (columnId: string) => {
+    if (!selectedBoard) return;
+    try {
+        await ColumnService.deleteColumn(columnId);
+        const updatedColumnIds = selectedBoard.columnIds.filter((id) => id !== columnId);
+        await BoardService.updateBoard(selectedBoard.boardId, {
+            columnIds: updatedColumnIds,
+        });
+        const updatedBoard = {
+            ...selectedBoard,
+            columnIds: updatedColumnIds,
+        };
+        setBoards((prev) =>
+            prev.map((board) =>
+                board.boardId === updatedBoard.boardId ? updatedBoard : board
+            )
+        );
+        setSelectedBoard(updatedBoard);
+        console.log("Column deleted successfully");
+    } catch (error) {
+        console.error("Error deleting column:", error);
+    }
+  };
+
   return (
       <div className="bg-[#2C2F33] min-h-screen flex flex-col">
           <Head>
@@ -206,7 +257,11 @@ const Home: FC = () => {
           />
           <main className="flex-grow">
             {selectedBoard ? (
-                <BoardView board={selectedBoard} />
+                <BoardView
+                  board={selectedBoard}
+                  onAddColumn={handleAddColumn}
+                  onDeleteColumn={handleDeleteColumn}
+                />
             ) : (
               <>
                 <div className="p-4">

@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDa
                 {onBackToDashboard && (
                     <button
                         onClick={onBackToDashboard}
-                        className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-4"
+                        className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                     >
                         Back to Dashboard
                     </button>
@@ -51,12 +51,14 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDa
                 {user ? (
                     <div className='relative'>
                         <div className='flex items-center'>
-                            <button
-                                onClick={onCreateClick}
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                                Create
-                            </button>
+                            {!boardTitle && (
+                                <button
+                                    onClick={onCreateClick}
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    Create
+                                </button>
+                            )}
                             <img
                                 src={user.userAvatar}
                                 alt={`${user.username}'s avatar`}

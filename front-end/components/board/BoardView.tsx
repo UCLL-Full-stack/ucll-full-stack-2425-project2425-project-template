@@ -7,10 +7,14 @@ import BoardService from "@/services/BoardService";
 
 interface BoardViewProps {
     board: Board;
+    onAddColumn: (columnName: string) => void;
+    onDeleteColumn: (columnId: string) => void;
 }
 
-const BoardView: React.FC<BoardViewProps> = ({ board }) => {
+const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColumn }) => {
     const [columns, setColumns] = useState<Column[]>([]);
+    const [addingColumn, setAddingColumn] = useState(false);
+    const [newColumnName, setNewColumnName] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,6 +56,22 @@ const BoardView: React.FC<BoardViewProps> = ({ board }) => {
             console.error("Error updating column order:", error);
         }
     };
+
+    const handleAddColumn = async () => {
+        if (newColumnName.trim() !== "") {
+            onAddColumn(newColumnName.trim());
+          }
+          setAddingColumn(false);
+          setNewColumnName("");
+    };
+
+    const handleInputBlur = () => {
+        if (newColumnName.trim() !== "") {
+            handleAddColumn();
+        } else {
+            setAddingColumn(false);
+        }
+    };
     
     return (
         <div className="p-6 bg-gray-800 text-white min-h-screen">
@@ -77,12 +97,37 @@ const BoardView: React.FC<BoardViewProps> = ({ board }) => {
                                                 {...provided.dragHandleProps}
                                                 className="w-64 flex-shrink-0"
                                             >
-                                                <ColumnComponent column={column} />
+                                                <ColumnComponent column={column} onDelete={(columnId:string) => onDeleteColumn(columnId)}/>
                                             </div>
                                         )}
                                     </Draggable>
                                 ))}
                                 {provided.placeholder}
+                                {addingColumn ? (
+                                    <div className="w-64 flex-shrink-0 border-2 border-dashed border-blue-500 rounded-md p-4">
+                                        <input
+                                            type="text"
+                                            value={newColumnName}
+                                            onChange={(e) => setNewColumnName(e.target.value)}
+                                            onBlur={handleInputBlur}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    handleAddColumn();
+                                                }
+                                            }}
+                                            autoFocus
+                                            className="w-full bg-transparent text-white placeholder-gray-400 outline-none"
+                                            placeholder="Enter column name"
+                                        />
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={() => setAddingColumn(true)}
+                                        className="w-64 flex-shrink-0 border-2 border-dashed border-gray-500 text-gray-500 rounded-md flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition-colors"
+                                    >
+                                        + Add Column
+                                    </button>
+                                )}
                             </div>
                         )}
                     </Droppable>

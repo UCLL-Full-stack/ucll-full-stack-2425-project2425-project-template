@@ -1,6 +1,6 @@
 import { Board } from '../model/board';
 import boardDb from '../repository/board.db';
-import { PermissionEntry } from '../types';
+import { CreateBoardInput, PermissionEntry } from '../types';
 import columnService from './column.service';
 import guildService from './guild.service';
 
@@ -12,7 +12,7 @@ const getBoardById = async (boardId: string): Promise<Board> => {
     return await boardDb.getBoardById(boardId);
 }
 
-const addBoard = async (boardData: { boardName: string; createdByUserId: string; guildId: string; columns?: string[]; permissions?: PermissionEntry[] }): Promise<Board> => {
+const addBoard = async (boardData: CreateBoardInput): Promise<Board> => {
     const { boardName, createdByUserId, guildId, columns = [], permissions = [] } = boardData;
     let updatedPermissions = permissions;
     if(permissions.length === 0) {

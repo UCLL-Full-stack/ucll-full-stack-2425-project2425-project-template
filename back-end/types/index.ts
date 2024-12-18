@@ -135,9 +135,10 @@ export interface UpdateRoleInput {
 
 export interface CreateBoardInput {
     boardName: string;
+    createdByUserId: string;
     guildId: string;
-    columnIds?: string[];
-    settings?: PermissionEntry[];
+    columns?: string[];
+    permissions?: PermissionEntry[];
 }
 
 export interface UpdateBoardInput {

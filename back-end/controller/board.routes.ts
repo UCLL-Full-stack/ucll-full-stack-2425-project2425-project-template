@@ -120,8 +120,8 @@ boardRouter.get('/:boardId', async (req, res) => {
 boardRouter.post('/', async (req, res) => {
     const board = req.body;
     try {
-        await boardService.addBoard(board);
-        res.status(201).json({ message: 'Board created successfully' });
+        const createdBoard = await boardService.addBoard(board);
+        res.status(201).json(createdBoard);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });
@@ -201,8 +201,8 @@ boardRouter.put('/:boardId', async (req, res) => {
     const { boardId } = req.params;
     const board = req.body;
     try {
-        await boardService.updateBoard(boardId, board);
-        res.status(200).json({ message: 'Board updated successfully' });
+        const updatedBoard = await boardService.updateBoard(boardId, board);
+        res.status(200).json(updatedBoard);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });

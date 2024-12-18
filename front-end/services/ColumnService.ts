@@ -28,8 +28,12 @@ const deleteColumn = async (columnId: string) => {
             'Content-Type': 'application/json',
         },
     });
-    return await response.json();
-};
+    if (!response.ok) {
+        throw new Error(`Failed to delete column: ${response.statusText}`);
+    }
+    if (response.status !== 204) {
+        await response.json();
+    }};
 
 const addTaskToColumn = async (columnId: string, task: any) => {
     const response = await fetch(`${API_URL}/api/columns/${columnId}/tasks`, {
@@ -42,11 +46,23 @@ const addTaskToColumn = async (columnId: string, task: any) => {
     return await response.json();
 }
 
+const addColumn = async (column: any) => {
+    const response = await fetch(`${API_URL}/api/columns`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(column),
+    });
+    return await response.json();
+};
+
 const ColumnService = {
     getColumnById,
     updateColumn,
     deleteColumn,
     addTaskToColumn,
+    addColumn,
 };
 
 export default ColumnService;
