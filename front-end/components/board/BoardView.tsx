@@ -61,20 +61,20 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
             const destinationColumn = columns.find(
                 (col) => col.columnId === destination.droppableId
             );
-
+            console.log("Source:", sourceColumn);
+            console.log("Destination:", destinationColumn);
             if (!sourceColumn || !destinationColumn) return;
 
-            const sourceTasks = Array.from(sourceColumn.taskIds);
-            const destinationTasks = Array.from(destinationColumn.taskIds);
-
-            const [movedTask] = sourceTasks.splice(source.index, 1);
-
-            if (sourceColumn === destinationColumn) {
-                destinationTasks.splice(destination.index, 0, movedTask);
+            const sourceTasks = [...sourceColumn.taskIds];
+            let destinationTasks = [...destinationColumn.taskIds];
+            if (sourceColumn.columnId === destinationColumn.columnId) {
+                const [movedTask] = sourceTasks.splice(source.index, 1);
+                sourceTasks.splice(destination.index, 0, movedTask);
+                destinationTasks = sourceTasks;
             } else {
+                const [movedTask] = sourceTasks.splice(source.index, 1);
                 destinationTasks.splice(destination.index, 0, movedTask);
             }
-
             const updatedColumns = columns.map((col) => {
                 if (col.columnId === sourceColumn.columnId) {
                     return { ...col, taskIds: sourceTasks };
@@ -84,9 +84,9 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                 }
                 return col;
             });
-
+        
             setColumns(updatedColumns);
-
+        
             try {
                 const updateTasksPromises: Promise<any>[] = [];
                 destinationTasks.forEach((taskId, index) => {
@@ -97,22 +97,24 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                         })
                     );
                 });
-
                 if (sourceColumn !== destinationColumn) {
                     sourceTasks.forEach((taskId, index) => {
                         updateTasksPromises.push(
-                            TaskService.updateTask(taskId, { taskIndex: index })
+                            TaskService.updateTask(taskId, {
+                                taskIndex: index,
+                                columnId: sourceColumn.columnId,
+                            })
                         );
                     });
                 }
-
+        
                 await Promise.all(updateTasksPromises);
-
                 console.log("Task order updated successfully");
             } catch (error) {
                 console.error("Error updating task order:", error);
             }
         }
+        
     };
 
     const handleAddColumn = async () => {
