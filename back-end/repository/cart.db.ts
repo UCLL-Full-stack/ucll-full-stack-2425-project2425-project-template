@@ -74,8 +74,37 @@ const putProductToCart = async (cartId: number, productId: number): Promise<Cart
     }
 };
 
+const createCart = async ({products, user, totalPrice}: Cart): Promise<Cart> => {
+    try {
+        const userId = user.getId();
+
+        if (userId === undefined || products.some(product => product.getId() === undefined)) {
+            throw new Error('Invalid userId or productId');
+        }
+
+        const newCart = await database.cart.create({
+            data: {
+                userId,
+                products: {
+                    connect: products.map(product => ({ id: product.getId() })),
+                },
+                totalPrice : 0,
+            },
+            include: {
+                products: true,
+                user: true,
+            },
+        });
+        return Cart.from(newCart);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllCarts,
     putProductToCart,
-    getCartById
+    getCartById,
+    createCart
 };

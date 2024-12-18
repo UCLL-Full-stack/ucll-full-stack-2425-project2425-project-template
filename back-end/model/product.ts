@@ -1,10 +1,11 @@
 import { Product as ProductPrisma } from '@prisma/client';
 export class Product {
-    private id?: number;
-    private name: string;
-    private price: number;
-    private description: string;
-    private rating: number;
+    readonly id?: number;
+    readonly name: string;
+    readonly price: number;
+    readonly description: string;
+    readonly rating: number;
+    readonly url: string;
 
     constructor(product: {
         id?: number;
@@ -12,6 +13,7 @@ export class Product {
         price: number;
         description: string;
         rating: number;
+        url: string;
     }) {
         this.validate(product);
 
@@ -20,6 +22,7 @@ export class Product {
         this.price = product.price;
         this.description = product.description;
         this.rating = product.rating;
+        this.url = product.url;
     }
 
     static from({
@@ -28,6 +31,7 @@ export class Product {
         price,
         description,
         rating,
+        url,
     }: ProductPrisma) {
         return new Product({
             id,
@@ -35,6 +39,7 @@ export class Product {
             price,
             description,
             rating,
+            url,
         });
     }
 
@@ -58,12 +63,16 @@ export class Product {
         return this.rating;
     }
 
+    getUrl(): string {
+        return this.url;
+    }
 
     validate(product: {
         name: string;
         price: number;
         description: string;
         rating: number;
+        url: string;
     }) {
         if (!product.name?.trim()) {
             throw new Error('name is required');
@@ -77,6 +86,9 @@ export class Product {
         if (!product.rating) {
             throw new Error('rating is required');
         }
+        if (!product.url?.trim()) {
+            throw new Error('URL is required');
+        }
     }
 
     equals(product: Product): boolean {
@@ -84,7 +96,8 @@ export class Product {
             this.name === product.getName() &&
             this.price === product.getPrice() &&
             this.description === product.getDescription() &&
-            this.rating === product.getRating()
+            this.rating === product.getRating() &&
+            this.url === product.getUrl()
         );
     }
 }

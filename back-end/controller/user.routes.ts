@@ -10,6 +10,20 @@ import { UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
+
+userRouter.post('/login',async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
+        const userInput = <UserInput>req.body;
+        const respone = await userService.authenticate(userInput);
+        res.status(200).json({message: "Authentication succesful", ...respone});
+    } catch (error) {
+        next(error);
+    }
+
+
+})
+
 userRouter.post('/signup',async (req:Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;

@@ -28,6 +28,9 @@
  *              type: number
  *              format: float
  *              description: Product rating.
+ *            url:
+ *              type: string
+ *              description: Product image URL.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import productService from '../service/product.service';

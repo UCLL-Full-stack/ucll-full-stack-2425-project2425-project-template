@@ -1,4 +1,4 @@
-type Role = 'admin' | 'user';
+type Role = 'admin' | 'user' | 'owner';
 
 type UserInput = {
     id?: number;
@@ -10,7 +10,14 @@ type UserInput = {
     birth_date?: Date;
 };
 
+type AuthenticationResponse = {
+    token: string;
+    email: string;
+    fullname: string;
+};
+
 export{
     Role,
-    UserInput
+    UserInput,
+    AuthenticationResponse
 };

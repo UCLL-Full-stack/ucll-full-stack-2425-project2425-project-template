@@ -37,6 +37,7 @@ model Product {
   price       Float
   description String
   rating      Int
+  url         String  @default("https://placehold.co/600x400")
   carts       Cart[]
   reviews     Review[]
 }

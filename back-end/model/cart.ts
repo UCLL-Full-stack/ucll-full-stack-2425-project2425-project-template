@@ -3,10 +3,10 @@ import { User } from "./user";
 import { Cart as CartPrisma, Product as ProductPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Cart {
-    private id?: number;
-    private totalPrice: number;
-    private products: Product[];
-    private user: User;
+    readonly id?: number;
+    readonly totalPrice: number;
+    readonly products: Product[];
+    readonly user: User;
 
     constructor(cart: {
         id?: number;
@@ -57,7 +57,6 @@ export class Cart {
         products: Product[];
         user: User;
     }) {
-        this.products = cart.products || [];
         if (!cart.user) {
             throw new Error('User is required');
         }

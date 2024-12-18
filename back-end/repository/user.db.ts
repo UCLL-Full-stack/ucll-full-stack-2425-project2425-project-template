@@ -20,6 +20,32 @@ const createUser = async ({name,email,password,role,birth_date,phone_number} : U
     }
 }
 
+const getUserByEmail = async (email: string): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { email }
+        });
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, See server log for details');
+    }
+}
+
+const getUserByPhoneNumber = async (phone_number: string): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { phone_number }
+        });
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, See server log for details');
+    }
+}
+
 export default{
     createUser,
+    getUserByEmail,
+    getUserByPhoneNumber,
 }
