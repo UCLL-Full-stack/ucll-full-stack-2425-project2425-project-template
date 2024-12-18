@@ -77,7 +77,7 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
             console.log(bookingData)
             const booking = await bookingService.createBooking(bookingData, token);
             console.log(booking)
-            // router.push("/bookings")
+            router.push("/bookings")
         }
     };
 
