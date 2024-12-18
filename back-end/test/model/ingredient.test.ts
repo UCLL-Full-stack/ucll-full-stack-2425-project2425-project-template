@@ -33,38 +33,20 @@ test('given: empty naam, when: ingredient is created, then: an error is thrown',
     expect(ingredient).toThrow('Naam cannot be empty');
 });
 
+test('given: empty aantal, when: ingredient is created, then: an error is thrown', () => {
+    // given
+    const naam = "Corn";
+    const type = "Topping";
+    const emptyAantal = NaN;
+    const prijs = 0.98;
 
-// test('given: empty topping, when: ingredient is created, then: an error is thrown', () => {
-//     // given
-//     const naam = "Corn";
-//     const emptyType = "";
-//     const aantal = 18;
-//     const prijs = 0.98;
+    // when
+    const ingredient = () =>
+        new Ingredient({ naam: naam, type, aantal: emptyAantal, prijs });
 
-//     // when
-//     const ingredient = () =>
-//         new Ingredient({ naam, type: null, aantal, prijs });
-
-//     // then
-//     expect(ingredient).toThrow('Type cannot be empty');
-// });
-
-
-
-// test('given: empty aantal, when: ingredient is created, then: an error is thrown', () => {
-//     // given
-//     const naam = "Corn";
-//     const type = "Topping";
-//     const emptyAantal = NaN;
-//     const prijs = 0.98;
-
-//     // when
-//     const ingredient = () =>
-//         new Ingredient({ naam: naam, type, aantal: emptyAantal, prijs });
-
-//     // then
-//     expect(ingredient).toThrow('Aantal cannot be empty');
-// });
+    // then
+    expect(ingredient).toThrow('Aantal cannot be empty');
+});
 
 test('given: negative aantal, when: ingredient is created, then: an error is thrown', () => {
     // given

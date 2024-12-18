@@ -6,6 +6,7 @@ import pokebowlService from "../../service/pokebowl.service";
 
 let createPokebowlMock: jest.Mock;
 let mockGetAllPokebowls: jest.Mock;
+let mockGetPokebowlById: jest.Mock;
 
 const naam = "Salmon pokebowl";
 const type = "Salmon";
@@ -72,6 +73,7 @@ const ingredienten = [
 beforeEach(() => {
     createPokebowlMock = jest.fn();
     mockGetAllPokebowls = jest.fn();
+    mockGetPokebowlById = jest.fn();
 });
 
 afterEach(() => {
@@ -101,4 +103,17 @@ test('given all ingredients, when all ingredients are being requested, then show
     //then
     expect(mockGetAllPokebowls).toHaveBeenCalledTimes(1);
     expect(allPokebowls).toEqual(pokebowls);
+});
+
+test('given one pokebowl, when one pokebowl is being requested, then show that pokebowl', () => {
+    //given
+    mockGetPokebowlById.mockReturnValue(pokebowls[0]);
+
+    //when
+    ingredientService.getIngredientById = mockGetPokebowlById;
+    const salmon = ingredientService.getIngredientById(1);
+
+    //then
+    expect(mockGetPokebowlById).toHaveBeenCalledTimes(1);
+    expect(salmon).toEqual(pokebowls[0]);
 });

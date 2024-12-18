@@ -76,6 +76,8 @@ const getBestellingenByUser = async ({ id }: { id: number }): Promise<Bestelling
             }, include: {
                 user: true,
                 pokebowls: true
+            }, orderBy: {
+                datum: 'desc'
             },
         });
         return bestellingenPrisma.map((bestellingPrisma) => Bestelling.from(bestellingPrisma));
