@@ -2,8 +2,7 @@ import { CartItem } from './cartItem';
 import { Product } from './product';
 import {
     User as UserPrisma,
-    Shoppingcart as ShoppingcartPrisma,
-    
+    ShoppingCart as ShoppingcartPrisma,
     Product as ProductPrisma,
 } from '@prisma/client';
 
@@ -59,7 +58,10 @@ export class Shoppingcart {
         return new Shoppingcart({
             id,
             products: products.map(Product.from),
-            totalPrice: products.reduce((sum: number, product: ProductPrisma) => sum + product.price, 0),
+            totalPrice: products.reduce(
+                (sum: number, product: ProductPrisma) => sum + product.price,
+                0
+            ),
         });
     }
 }
