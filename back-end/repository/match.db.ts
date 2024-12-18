@@ -1,4 +1,5 @@
 import { Match } from '../model/match';
+import { MatchInput } from '../types';
 import database from '../util/database';
 
 const createMatch = async ({

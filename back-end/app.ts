@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import competitionRouter from './controller/competition.routes';
 import teamRouter from './controller/team.routes';
 import userRouter from './controller/user.routes';
+import matchRouter from './controller/match.routes';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,7 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
+app.use('/match', matchRouter);
 app.use('/user', userRouter);
 app.use('/teams', teamRouter);
 app.use('/competitions', competitionRouter);
