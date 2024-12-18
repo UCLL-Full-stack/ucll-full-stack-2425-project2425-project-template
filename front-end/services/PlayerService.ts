@@ -7,8 +7,14 @@ const getAllPlayers = async () => {
       "Content-Type": "application/json",
     },
   });
-  return await response.json();
+  const players = await response.json();
+
+  return players.map((player: any) => ({
+    ...player,
+    birthdate: new Date(player.birthdate),
+  }));
 };
+
 
 const getPlayerById = async (id: number) => {
   const token = JSON.parse(sessionStorage.getItem("token") || "")?.token;
@@ -26,7 +32,7 @@ const addPlayer = async (playerData: {
   name: string;
   number: number;
   position: string;
-  birthdate: string;
+  birthdate: Date;
 }) => {
   const token = JSON.parse(sessionStorage.getItem("token") || "")?.token;
   const response = await fetch(`${API}/players`, {
@@ -46,15 +52,15 @@ const updatePlayer = async (
     name: string;
     number: number;
     position: string;
-    birthdate: string;
+    birthdate: Date;
   }
 ) => {
-  const token = JSON.parse(sessionStorage.getItem("token") || "")?.token;
+  //const token = JSON.parse(sessionStorage.getItem("token") || "")?.token;
   const response = await fetch(`${API}/players/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      //Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(playerData),
   });

@@ -5,50 +5,28 @@ import Image from "next/image";
 import router from "next/router";
 import NavbarSheet from "@/components/NavbarSheet";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import EditPlayer from "@/components/EditPlayer";
-import DeletePlayer from "@/components/DeletePlayer";
-
-// Mock player data
-const players: Player[] = [
-  {
-    id: 1,
-    name: "Dylan Vangoidtsenhoven",
-    position: "Forward",
-    number: 24,
-    birthdate: new Date("2002-08-29"),
-    stat: { playerId: 1, appearances: 8, goals: 17, assists: 7 },
-    pictureUrl: "https://i.imgur.com/Dsj69P6.png",
-  },
-  {
-    id: 2,
-    name: "Arvin Hadji Aligol",
-    position: "Goalkeeper",
-    number: 1,
-    birthdate: new Date("2001-09-12"),
-    stat: { playerId: 2, appearances: 8, goals: 0, assists: 0 },
-    pictureUrl: "https://i.imgur.com/hcFQP5K.png",
-  },
-  {
-    id: 3,
-    name: "Yasir Hozan",
-    position: "Defender",
-    number: 69,
-    birthdate: new Date("2000-01-27"),
-    stat: { playerId: 3, appearances: 8, goals: 0, assists: 1 },
-    pictureUrl: "https://i.imgur.com/p4KGy6O.png",
-  },
-];
+import EditPlayer from "@/components/player/EditPlayer";
+import DeletePlayer from "@/components/player/DeletePlayer";
+import PlayerService from "@/services/PlayerService";
+import useSWR from "swr";
 
 const Players: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [playerList, setPlayerList] = useState(players);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Fetch players 
+  const { data: playerList, error, mutate } = useSWR("/players", PlayerService.getAllPlayers);
 
   useEffect(() => {
-    setIsVisible(true);
-  }, []);
+    if (playerList) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100); 
+      return () => clearTimeout(timer);
+    }
+  }, [playerList]);
 
   const handleEdit = (player: Player) => {
     setSelectedPlayer(player);
@@ -60,21 +38,41 @@ const Players: React.FC = () => {
     setIsDeleting(true);
   };
 
-  const savePlayer = (updatedPlayer: Player) => {
-    setPlayerList((prev) =>
-      prev.map((p) => (p.id === updatedPlayer.id ? updatedPlayer : p))
-    );
+  const savePlayer = async (updatedPlayer: Player) => {
+    await PlayerService.updatePlayer(updatedPlayer.id, {
+      ...updatedPlayer,
+      birthdate: new Date(updatedPlayer.birthdate),
+    });
+    mutate(); 
     setIsEditing(false);
     setSelectedPlayer(null);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (selectedPlayer) {
-      setPlayerList((prev) => prev.filter((p) => p.id !== selectedPlayer.id));
+      await PlayerService.deletePlayer(selectedPlayer.id);
+      mutate(); 
+      setIsDeleting(false);
+      setSelectedPlayer(null);
     }
-    setIsDeleting(false);
-    setSelectedPlayer(null);
   };
+
+  if (error) return(
+  <> 
+    <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">Failed to load players!</div>
+    <div className="absolute top-12 right-8">
+        <NavbarSheet />
+    </div>
+  </>
+  );
+  if (!playerList) return (
+  <>
+    <div className="text-3xl absolute inset-0 flex items-center justify-center text-yellow-500 font-bebas bg-zinc-900">Loading players...</div>
+    <div className="absolute top-12 right-8">
+            <NavbarSheet />
+        </div>
+  </>
+  );
 
   return (
     <>
@@ -83,10 +81,12 @@ const Players: React.FC = () => {
         <meta name="description" content="Meet the players of Manchester Shitty" />
         <link rel="icon" href="/images/shittylogo.png" />
       </Head>
+
       <div className="min-h-screen bg-zinc-900 py-8">
         <div className="absolute top-12 right-8">
           <NavbarSheet />
         </div>
+
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center mb-8">
             <Image
@@ -103,7 +103,7 @@ const Players: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
-            {playerList.map((player, index) => (
+            {playerList.map((player: Player, index: number) => (
               <div
                 key={player.id}
                 className={`relative bg-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all duration-700 transform ${
@@ -111,16 +111,15 @@ const Players: React.FC = () => {
                 }`}
                 style={{ transitionDelay: `${index * 150}ms` }}
               >
-                {/* Image Container */}
+
                 <div className="bg-gray-300 flex justify-center items-center p-2 rounded-lg">
                   <img
-                    src={player.pictureUrl || "/default-player-image.png"}
+                    src={player.imageUrl || "/images/shittylogo.png"}
                     alt={player.name}
                     className="w-4/6 object-contain"
                   />
                 </div>
 
-                {/* Information Container */}
                 <div className="p-4 bg-gray-300 rounded-lg">
                   <div className="absolute right-4 top-2 flex gap-2">
                     <button
@@ -146,7 +145,7 @@ const Players: React.FC = () => {
                   </p>
                   <p className="text-gray-800">
                     <strong>Birthdate:</strong>{" "}
-                    {new Intl.DateTimeFormat("en-GB").format(player.birthdate)}
+                    {new Intl.DateTimeFormat("en-GB").format(new Date(player.birthdate))}
                   </p>
                   {player.stat && (
                     <div className="mt-4">
@@ -168,7 +167,6 @@ const Players: React.FC = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
       {isEditing && selectedPlayer && (
         <EditPlayer
           player={selectedPlayer}

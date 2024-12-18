@@ -20,6 +20,11 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({ ...player, ...formData, birthdate: new Date(formData.birthdate) });
@@ -43,7 +48,7 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
         <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">Edit Player</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-yellow-500">Name:</label>
+              
             <input
               type="text"
               name="name"
@@ -55,14 +60,18 @@ const EditPlayer: React.FC<EditPlayerProps> = ({ player, onSave, onClose }) => {
           </div>
           <div>
             <label className="block text-yellow-500">Position:</label>
-            <input
-              type="text"
+            <select
               name="position"
               value={formData.position}
-              onChange={handleChange}
+              onChange={handleChangeSelect}
               className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
-            />
+            >
+                <option value="goalkeeper">Goalkeeper</option>
+                <option value="defender">Defender</option>
+                <option value="midfielder">Midfielder</option>
+                <option value="forward">Forward</option>
+            </select>
           </div>
           <div>
             <label className="block text-yellow-500">Number:</label>
