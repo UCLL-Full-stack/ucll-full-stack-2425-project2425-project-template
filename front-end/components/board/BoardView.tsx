@@ -61,8 +61,6 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
             const destinationColumn = columns.find(
                 (col) => col.columnId === destination.droppableId
             );
-            console.log("Source:", sourceColumn);
-            console.log("Destination:", destinationColumn);
             if (!sourceColumn || !destinationColumn) return;
 
             const sourceTasks = [...sourceColumn.taskIds];

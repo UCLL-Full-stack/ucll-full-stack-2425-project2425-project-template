@@ -106,6 +106,7 @@ export interface User{
 }
 
 export interface Column{
+    boardId: string;
     columnId: string;
     columnName: string;
     taskIds: string[];

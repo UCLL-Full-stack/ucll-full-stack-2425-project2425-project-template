@@ -1,9 +1,11 @@
-import { Column, Task } from "@/types";
+import { Column, Task, User } from "@/types";
 import TaskComponent from "./Task";
 import { useEffect, useState } from "react";
 import TaskService from "@/services/TaskService";
 import ColumnService from "@/services/ColumnService";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import GuildService from "@/services/GuildService";
+import BoardService from "@/services/BoardService";
 
 interface ColumnProps {
     column: Column;
@@ -21,8 +23,9 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
     const [newTaskTitle, setNewTaskTitle] = useState("");
     const [newTaskDescription, setNewTaskDescription] = useState("");
     const [newTaskDueDate, setNewTaskDueDate] = useState("");
-    const [newTaskAssigneeIds, setNewTaskAssigneeIds] = useState("");
-    const [error, setError] = useState("");
+    const [selectedAssignees, setSelectedAssignees] = useState<User[]>([]);
+    const [availableUsers, setAvailableUsers] = useState<User[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");    const [error, setError] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +34,15 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             );
             const sortedTasks = tasks.sort((a, b) => a.taskIndex - b.taskIndex);
             setTasks(sortedTasks);
+
+            try {
+                const board = await BoardService.getBoard(column.boardId);
+                const users = await GuildService.getGuildMembers(board.guildId);
+                setAvailableUsers(users);
+            } catch (error) {
+                console.error("Error fetching guild members:", error);
+            }
+
         };
         fetchData();
     }, [column.taskIds]);
@@ -59,10 +71,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             title: newTaskTitle.trim(),
             description: newTaskDescription.trim(),
             dueDate: new Date(newTaskDueDate),
-            assigneeIds: newTaskAssigneeIds
-                .split(",")
-                .map((id) => id.trim())
-                .filter((id) => id),
+            assigneeIds: selectedAssignees.map((user) => user.userId),
             columnId: column.columnId,
             taskIndex: tasks.length,
         };
@@ -74,13 +83,30 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             setNewTaskTitle("");
             setNewTaskDescription("");
             setNewTaskDueDate("");
-            setNewTaskAssigneeIds("");
+            setSelectedAssignees([]);
             setError("");
             console.log("Task created successfully");
         } catch (error) {
             console.error("Error creating task:", error);
         }
     };
+
+    const handleAddAssignee = (user: User) => {
+        if (!selectedAssignees.some((assignee) => assignee.userId === user.userId)) {
+            setSelectedAssignees((prev) => [...prev, user]);
+        }
+        setSearchQuery("");
+    };
+
+    const handleRemoveAssignee = (userId: string) => {
+        setSelectedAssignees((prev) => prev.filter((user) => user.userId !== userId));
+    };
+
+    const filteredUsers = availableUsers.filter(
+        (user) =>
+            user.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !selectedAssignees.some((assignee) => assignee.userId === user.userId)
+    );
 
     return (
         <div
@@ -183,19 +209,52 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
                                 onChange={(e) => setNewTaskDescription(e.target.value)}
                                 className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
                             ></textarea>
+                            <label className="block text-sm mb-2">Due Date:</label>
                             <input
                                 type="date"
                                 value={newTaskDueDate}
                                 onChange={(e) => setNewTaskDueDate(e.target.value)}
                                 className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
                             />
-                            <input
-                                type="text"
-                                placeholder="Assignee IDs (comma-separated)"
-                                value={newTaskAssigneeIds}
-                                onChange={(e) => setNewTaskAssigneeIds(e.target.value)}
-                                className="w-full p-2 mb-4 rounded-md outline-none bg-gray-600 text-white"
-                            />
+                            <p>Assignees:</p>
+                            {selectedAssignees.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mb-2 bg-gray-600 p-2 rounded-md">
+                                    {selectedAssignees.map((assignee) => (
+                                        <div
+                                            key={assignee.userId}
+                                            className="bg-gray-700 px-3 py-1 rounded flex items-center"
+                                        >
+                                            <span>{assignee.globalName}</span>
+                                            <button
+                                                className="ml-2 text-gray-500 hover:text-red-600"
+                                                onClick={() => handleRemoveAssignee(assignee.userId)}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            <div className="mb-2">
+                                <input
+                                    type="text"
+                                    placeholder="Search users"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full p-2 rounded-md outline-none bg-gray-600 text-white"
+                                />
+                                <ul className="mt-2 bg-gray-800 rounded-md max-h-32 overflow-y-auto">
+                                    {filteredUsers.map((user) => (
+                                        <li
+                                            key={user.userId}
+                                            className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                            onClick={() => handleAddAssignee(user)}
+                                        >
+                                            {user.globalName}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                             <div className="flex justify-between">
                                 <button
                                     onClick={() => setCreatingTask(false)}

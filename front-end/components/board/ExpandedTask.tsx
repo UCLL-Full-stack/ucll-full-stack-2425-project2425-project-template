@@ -16,7 +16,7 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose }) => {
             const userData = await Promise.all(
                 task.assigneeIds.map((assignee) => UserService.getUser(assignee))
             );
-            setAssigneeNames(userData.map((user) => user.username));
+            setAssigneeNames(userData.map((user) => user.globalName));
         };
         fetchAssigneeNames();
     }, [task.assigneeIds]);
