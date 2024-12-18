@@ -7,15 +7,14 @@ export class Dealer extends User {
         email: string,
         name: string,
         password: string,
+        dealer: boolean,
         phoneNumber: number,
         listOfCarsForSelling: Car[],
         listOfFavoriteCars: Car[]
     }) {
         super(dealer);
-        this.listOfCarsForSelling = dealer.listOfCarsForSelling;
         this.listOfFavoriteCars = dealer.listOfFavoriteCars;
     }
 
-    listOfCarsForSelling: Car[];
     listOfFavoriteCars: Car[];
 }

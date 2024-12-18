@@ -11,9 +11,12 @@ model User {
   id                Int      @id @default(autoincrement())
   email             String   @unique
   name              String
+  dealer            Boolean
   phoneNumber       Int
   password          String
   listOfCarsForSelling Vehicle[] @relation("UserVehicles")
+  
+  favouriteCars     FavouriteCars[] 
 }
 
 model Vehicle {
@@ -31,8 +34,9 @@ model Vehicle {
   createdAt         DateTime
   updatedAt         DateTime
   sellerId          Int?
-  seller            User?   @relation("UserVehicles",fields: [sellerId], references: [id])
+  seller            User?   @relation("UserVehicles", fields: [sellerId], references: [id])
 
+  likedByUsers  FavouriteCars[] 
 
   car               Car?      
   motorcycle        Motorcycle?   
@@ -76,4 +80,12 @@ model Motorcycle {
   updatedAt         DateTime
 }
 
+model FavouriteCars {
+  userId    Int
+  vehicleId Int
 
+  user      User    @relation(fields: [userId], references: [id])
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+
+  @@id([userId, vehicleId])
+}

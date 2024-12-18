@@ -130,9 +130,6 @@ const deleteVehicle = async (vehicleId: number) => {
 };
 
 
-
-
-
 const editVehicle =  async (vehicleId: number, input: VehicleInput): Promise<Vehicle> => {
 
     if (
@@ -213,7 +210,6 @@ const editVehicle =  async (vehicleId: number, input: VehicleInput): Promise<Veh
 
     return new Vehicle(updatedDataVehicle); 
 }
-
 
 
 

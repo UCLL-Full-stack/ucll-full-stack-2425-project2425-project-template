@@ -8,6 +8,7 @@ const main = async () => {
   await prisma.vehicle.deleteMany();
   await prisma.user.deleteMany();
 
+
   const vehicle1 = await prisma.vehicle.create({
     data: {
       manufacturer: 'Toyota',
