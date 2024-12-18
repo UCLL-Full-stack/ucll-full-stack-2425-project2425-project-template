@@ -6,7 +6,7 @@ const getAllcoaches = async () => {
 }
 
 const addCoach = async ({name, job}: CoachInput) => {
-    return coachDb.addCoach({name, job});
+    return coachDb.addCoach({name, job, teamId: 1});
 }
 
 const updateCoach = async (id: number, {name, job}: CoachInput) => {

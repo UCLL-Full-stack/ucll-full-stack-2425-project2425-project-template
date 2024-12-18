@@ -14,7 +14,7 @@ const findAll = async () => {
 const addCoach = async ({ name, job }: CoachInput) => {
     try {
         const coachPrisma = await db.coach.create({
-            data: { name, job }
+            data: { name, job, teamId: 1 }
         });
         return coachPrisma;
     } catch (error) {
