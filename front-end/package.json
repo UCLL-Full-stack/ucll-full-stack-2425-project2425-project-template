@@ -29,7 +29,7 @@
     "use-interval": "^1.4.0"
   },
   "devDependencies": {
-    "@types/node": "18.15.0",
+    "@types/node": "^18.15.0",
     "@types/react-datepicker": "^4.15.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

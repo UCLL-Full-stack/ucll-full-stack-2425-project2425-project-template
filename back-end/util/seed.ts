@@ -42,16 +42,23 @@ const BMWX5 = await prisma.car.create({
 
 const teslaModelSFrontBumper = await prisma.carPart.create({
     data: {
-        name: "Front Bumper",
+        name: "Tesla front Bumper",
         price: 1000,
         quantity: 5,
     },
 })
 const teslaModelSRearBumper = await prisma.carPart.create({
     data: {
-        name: "Rear Bumper",
+        name: "Tesla rear Bumper",
         price: 500,
         quantity: 3,
+    },
+})
+const teslaEngine = await prisma.carPart.create({
+    data: {
+        name: "Tesla Engine",
+        price: 20000,
+        quantity: 0,
     },
 })
 };

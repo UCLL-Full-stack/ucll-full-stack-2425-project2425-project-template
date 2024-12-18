@@ -20,8 +20,6 @@ type CarPartInput = {
     price: number;
     quantity: number;
 };
-
-
 type UserInput = {
     id?: number;
     name: string;
