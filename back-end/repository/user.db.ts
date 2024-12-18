@@ -46,8 +46,29 @@ const createUser = async (user: User): Promise<User> => {
     }
 };
 
+const updateUser = async (user: User): Promise<User> => {
+    try {
+        const result = await database.user.update({
+            where: {
+                email: user.getEmail(),
+            },
+            data: {
+                name: user.getName(),
+                role: user.getRole(),
+                password: user.getPassword(),
+                birthday: user.getBirthday(),
+            },
+        });
+        return User.from(result);
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Database error: see logs`);
+    }
+};
+
 export default {
     getAllUsers,
     createUser,
     getUserByEmail,
+    updateUser,
 };
