@@ -26,5 +26,10 @@ const addTeam = async (teamData: Omit<Team, "id">) => {
 }
 
 
+const TeamService = {
+    getAllTeams,
+    addTeam,
+}
 
-export { getAllTeams, addTeam };
+
+export default TeamService;

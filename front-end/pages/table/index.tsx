@@ -3,32 +3,24 @@ import Image from "next/image";
 import Head from "next/head";
 import router from "next/router";
 import NavbarSheet from "@/components/NavbarSheet";
+import useSWR from "swr";
+import TeamService from "@/services/TeamService";
+import { Team } from "@/types";
 
-interface Team {
-  id: number;
-  teamName: string;
-  points: number;
-}
+
 
 const Table: React.FC = () => {
   const [teams, setTeams] = useState<Array<Team>>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const { data: teamList, error, mutate } = useSWR("/teams", TeamService.getAllTeams);
   useEffect(() => {
-    const fetchTeams = async () => {
-      const mockTeams: Team[] = [
-        { id: 1, teamName: "Manchester Shitty", points: 32 },
-        { id: 2, teamName: "Fortnite United", points: 28 },
-        { id: 3, teamName: "P. Diddy FC", points: 25 },
-        { id: 4, teamName: "Lebron Strikers", points: 21 },
-      ];
-      setTeams(mockTeams);
-    };
-
-    fetchTeams();
-
-    setTimeout(() => setIsLoaded(true), 100);
-  }, []);
+    if (teamList) {
+      setTeams([...teamList]);
+      const timer = setTimeout(() => setIsLoaded(true), 100);
+      return () => clearTimeout(timer);
+    } 
+    
+  }, [teamList]);
 
   return (
     <>
@@ -86,7 +78,7 @@ const Table: React.FC = () => {
                       }`}
                     >
                       <td className="text-center py-3">{index + 1}</td>
-                      <td className={`py-3 pl-4 ${team.teamName === "Manchester Shitty" ? "font-bold" : ""}`}>{team.teamName}</td>
+                      <td className={`py-3 pl-4 ${team.name === "Manchester Shitty" ? "font-bold" : ""}`}>{team.name}</td>
                       <td className="text-center py-3 font-bold">
                         {team.points}
                       </td>
