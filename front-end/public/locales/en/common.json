@@ -1,0 +1,100 @@
+{
+    "index": {
+        "welkom": "Welcome to EuroStudent Travel",
+        "inleidendetekst": "The EuroStudent Travel web platform is designed specifically for students seeking affordable travel trips across Europe. The platform offers a curated list of budget-friendly trips with essential details such as destinations, places 2B, and pricing tailored for students. Users can explore the trips, view and easily book their next adventure, making travel more accessible for young adventurers!",
+        "plan": "Plan Your Adventure",
+        "trips": "Browse Trips",
+        "bookings": "My Bookings",
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "firstname": "Firstname",
+        "lastname": "Lastname",
+        "usersTableTitle": "Users Table"
+    },
+
+    "trips": {
+        "titel": "Trips",
+        "all": "All Trips",
+        "bestemming": "Destination",
+        "start": "Start Date",
+        "eind": "End Date",
+        "prijs": "Price",
+        "omschrijving": "Description"
+    },
+
+    "booking": {
+        "mijn": "My Bookings",
+        "booking": "Booking",
+        "nummer": "Booking Number",
+        "datum": "Booking Date",
+        "status": "Payment Status"
+    },
+
+    "login": {
+        "titel": "Login",
+        "login": "Login",
+        "gebruikersnaam": "Username",
+        "wachtwoord": "Password",
+        "success": "Login successful. Redirecting to homepage...",
+        "registreer": "Register",
+        "error": {
+            "invalidCredentials": "Invalid username or password",
+            "serverError": "An error occurred while processing the request."
+            }
+    },
+
+    "nav": {
+        "thuis": "Home",
+        "trips": "Trips",
+        "boekingen": "Bookings",
+        "welkom": "Welcome, ",
+        "logout": "Logout",
+        "login": "Login"
+    },
+
+    "register": {
+        "titel": "Register",
+        "register": "Register",
+        "gebruikersnaam": "Username",
+        "email": "Email",
+        "wachtwoord": "Password",
+        "bevestigwachtwoord": "Confirm Password"
+    },
+
+    "validation": {
+        "username": {
+            "required": "Username is required",
+            "min": "Username must be at least 3 characters",
+            "max": "Username must be at most 20 characters"
+        },
+
+        "email": {
+            "required": "Email is required",
+            "invalid": "Email is invalid"
+        },
+
+        "password": {
+            "required": "Password is required",
+            "min": "Password must be at least 6 characters",
+            "format": "Password must contain at least one uppercase letter and one number"
+        },
+
+        "confirmPassword": {
+            "required": "Please confirm your password",
+            "match": "Passwords do not match"
+        },
+
+        "studentNumber": {
+            "required": "Student number is required",
+            "format": "Student number must start with a letter followed by 8 numbers"
+        }
+    },
+
+    "error": {
+        "notAuthorized": "You are not authorized to view this page.",
+        "login": "Please log in to view this page"
+    },
+
+    "loading": "Loading..."
+}
