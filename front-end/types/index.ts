@@ -32,3 +32,13 @@ export type Nieuwsbericht = {
     datum: Date;
     auteur: Leiding;
 };
+
+export type UserLogin = {
+    totem: string;
+    password: string;
+};
+
+export type StatusMessage = {
+    message: String;
+    type: "error" | "success";
+};

@@ -34,7 +34,8 @@ const Header: React.FC = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/activiteiten/admin" : "/activiteiten"}>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded"
+                                  href={isAdmin ? "/activiteiten/admin" : "/activiteiten"}>
                                 Alle activiteiten
                             </Link>
                         </li>
@@ -46,19 +47,26 @@ const Header: React.FC = () => {
                                 Takken
                             </button>
                             {dropdownOpen && (
-                                <ul ref={dropdownRef} className="absolute bg-green-600 text-white mt-2 rounded shadow-lg z-50">
+                                <ul ref={dropdownRef}
+                                    className="absolute bg-green-600 text-white mt-2 rounded shadow-lg z-50">
                                     <li>
-                                        <Link className="block px-4 py-2 hover:bg-green-500 rounded" href={isAdmin ? "/activiteiten/losse leden/admin" : "/activiteiten/losse leden"} onClick={() => setDropdownOpen(false)}>
+                                        <Link className="block px-4 py-2 hover:bg-green-500 rounded"
+                                              href={isAdmin ? "/activiteiten/losse leden/admin" : "/activiteiten/losse leden"}
+                                              onClick={() => setDropdownOpen(false)}>
                                             Losse leden
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="block px-4 py-2 hover:bg-green-500 rounded" href={isAdmin ? "/activiteiten/kapoenen/admin" : "/activiteiten/kapoenen"} onClick={() => setDropdownOpen(false)}>
+                                        <Link className="block px-4 py-2 hover:bg-green-500 rounded"
+                                              href={isAdmin ? "/activiteiten/kapoenen/admin" : "/activiteiten/kapoenen"}
+                                              onClick={() => setDropdownOpen(false)}>
                                             Kapoenen
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="block px-4 py-2 hover:bg-green-500 rounded" href={isAdmin ? "/activiteiten/welpen/admin" : "/activiteiten/welpen"} onClick={() => setDropdownOpen(false)}>
+                                        <Link className="block px-4 py-2 hover:bg-green-500 rounded"
+                                              href={isAdmin ? "/activiteiten/welpen/admin" : "/activiteiten/welpen"}
+                                              onClick={() => setDropdownOpen(false)}>
                                             Welpen
                                         </Link>
                                     </li>
@@ -83,6 +91,11 @@ const Header: React.FC = () => {
                         <li>
                             <Link className="hover:bg-green-600 px-3 py-2 rounded" href={"/gegevens"}>
                                 Gegevens
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href={"/login"}>
+                                Login
                             </Link>
                         </li>
                     </ul>
