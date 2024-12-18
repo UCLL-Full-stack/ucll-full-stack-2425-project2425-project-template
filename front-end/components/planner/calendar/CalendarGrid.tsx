@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import PlannerService from "@/services/PlannerService";
 import CalendarHeader from "./CalendarHeader";
@@ -30,57 +30,59 @@ const CalendarGrid: React.FC = () => {
     return toUTCDate(date).toISOString().split("T")[0];
   };
 
-  useEffect(() => {
-    const fetchMonthRecipes = async () => {
-      const userToken = localStorage.getItem("loggedInUser");
-      if (userToken) {
-        try {
-          const user = JSON.parse(userToken);
-          console.log("Parsed user data:", user); // Add this line for debugging
-          if (user && user.id && user.token) {
-            const startDate = new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              1
-            );
-            const endDate = new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth() + 1,
-              0
+  const fetchMonthRecipes = useCallback(async () => {
+    const userToken = localStorage.getItem("token");
+    if (userToken) {
+      try {
+        const startDate = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          1
+        );
+        const endDate = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
+          0
+        );
+
+        // Iterate over each day in the month
+        for (
+          let date = new Date(startDate);
+          date <= endDate;
+          date.setDate(date.getDate() + 1)
+        ) {
+          const dateString = formatDateUTC(date);
+          try {
+            const recipes = await PlannerService.fetchMealDetails(
+              dateString,
+              userToken
             );
 
-            const recipesByDateTemp: Record<string, Recipe[]> = {};
-
-            for (
-              let i = new Date(startDate);
-              i <= endDate;
-              i.setDate(i.getDate() + 1)
-            ) {
-              const dateString = formatDateUTC(i);
-              try {
-                const recipes = await PlannerService.fetchMealDetails(user.id, dateString, user.token);
-                if (recipes.length > 0) {
-                  recipesByDateTemp[dateString] = recipes;
-                }
-              } catch (error) {
-                console.error("Error fetching recipes for", dateString, error);
-              }
+            if (recipes.length > 0) {
+              setRecipesByDate((prev) => ({
+                ...prev,
+                [dateString]: recipes,
+              }));
             }
-
-            setRecipesByDate(recipesByDateTemp);
-          } else {
-            console.error("Invalid user data");
+          } catch (error) {
+            console.error(
+              "Error fetching recipes for date:",
+              dateString,
+              error
+            );
           }
-        } catch (e) {
-          console.error("Failed to parse LoggedInUser:", e);
         }
-      } else {
-        console.error("No user token found");
+      } catch (error) {
+        console.error("Error fetching month recipes:", error);
       }
-    };
+    } else {
+      console.error("No token found in local storage");
+    }
+  }, [currentDate]);
 
+  useEffect(() => {
     fetchMonthRecipes();
-  }, [currentDate]); // re-run whenever currentDate changes
+  }, [fetchMonthRecipes]);
 
   // calculate days that should be displayed in the calendar for 1 full grid
   const getDaysInGrid = (date: Date) => {

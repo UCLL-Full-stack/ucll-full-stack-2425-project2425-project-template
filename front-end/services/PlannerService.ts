@@ -1,6 +1,7 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const fetchMealDetails = async (date: string, token: string) => {
+  console.log(`Fetching meal details for date: ${date} with token: ${token}`);
   const response = await fetch(`${apiUrl}/schedules?date=${date}`, {
     method: "GET",
     headers: {
@@ -9,11 +10,14 @@ const fetchMealDetails = async (date: string, token: string) => {
     },
   });
 
+  console.log(`Response status: ${response.status}`);
   if (!response.ok) {
+    console.error("Failed to fetch meal details", await response.text());
     throw new Error("Failed to fetch meal details");
   }
 
   const data = await response.json();
+  console.log("Fetched meal details:", data);
   return data;
 };
 

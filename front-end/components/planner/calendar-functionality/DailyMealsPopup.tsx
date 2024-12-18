@@ -35,15 +35,13 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
   const fetchMeals = useCallback(async () => {
     try {
       const dateString = formatDateUTC(date);
-      const meals = await PlannerService.fetchMealDetails(
-        userId.toString(),
-        dateString
-      );
+      const token = localStorage.getItem("token") || "";
+      const meals = await PlannerService.fetchMealDetails(dateString, token);
       setMeals(meals);
     } catch (error) {
       setError("Error fetching meals");
     }
-  }, [userId, date]);
+  }, [date]);
 
   useEffect(() => {
     fetchMeals();
@@ -51,11 +49,8 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
 
   const handleDelete = async (mealId: number) => {
     try {
-      await PlannerService.deleteMeal(
-        userId,
-        mealId.toString(),
-        formatDateUTC(date)
-      );
+      const token = localStorage.getItem("token") || "";
+      await PlannerService.deleteMeal(mealId, formatDateUTC(date), token);
       await fetchMeals(); // fetch again after deleting
     } catch (error) {
       setError("Error deleting meal");
@@ -64,12 +59,13 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
 
   const handleToggleFavorite = async (mealId: number, isFavorite: boolean) => {
     try {
+      const token = localStorage.getItem("token") || "";
       await RecipeService.updateRecipe(
         mealId,
         {
           isFavorite: !isFavorite,
         },
-        localStorage.getItem("token") || ""
+        token
       );
       await fetchMeals(); // fetch again after updating
     } catch (error) {

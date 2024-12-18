@@ -28,6 +28,7 @@ type Recipe = {
   isFavorite: boolean;
   notes?: string;
   source?: string;
+  scheduledDate: Date;
 };
 
 type RecipeCategory = "breakfast" | "lunch" | "dinner" | "snack" | "other";

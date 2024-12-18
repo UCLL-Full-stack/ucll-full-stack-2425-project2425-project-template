@@ -2,7 +2,12 @@ import { Recipe } from "@/types/recipes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const fetchRecipeById = async (recipeId: number, token: string) => {
+const fetchRecipeById = async (recipeId: number) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found");
+  }
+
   try {
     const response = await fetch(`${apiUrl}/recipes/${recipeId}`, {
       method: "GET",
