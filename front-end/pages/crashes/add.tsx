@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Header from '@components/header';
 import raceService from '@services/RaceService';
-import { Crash } from '@types';
+import { Crash, Gebruiker } from '@types';
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const AddCrash: React.FC = () => {
   const [type, setType] = useState('');
@@ -22,8 +24,16 @@ const AddCrash: React.FC = () => {
   const [carHp, setCarHp] = useState(0);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [loggedInUser, setLoggedInUser] = useState<Gebruiker | null>(null);
   const router = useRouter();
   const { raceId } = router.query;
+
+  useEffect(() => {
+    const userData = localStorage.getItem('loggedInUser');
+    if (userData) {
+      setLoggedInUser(JSON.parse(userData));
+    }
+  }, []);
 
   const handleAddCrash = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -70,6 +80,21 @@ const AddCrash: React.FC = () => {
       setSuccessMessage('');
     }
   };
+
+  if (loggedInUser?.permission !== 'ADMIN') {
+    return (
+      <>
+        <Head>
+          <title>Add Crash</title>
+        </Head>
+        <Header />
+        <main className="container">
+          <h1 className="text-center my-4">Add Crash</h1>
+          <div className="alert alert-danger">You are not authorized to access this page.</div>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
@@ -241,6 +266,16 @@ const AddCrash: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+  };
 };
 
 export default AddCrash;

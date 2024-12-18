@@ -4,7 +4,9 @@ import { useRouter } from 'next/router';
 import Header from '@components/header';
 import raceService from '@services/RaceService';
 import crashService from '@services/CrashService';
-import { Crash } from '@types';
+import { Crash, Gebruiker } from '@types';
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const EditCrash: React.FC = () => {
   const [type, setType] = useState('');
@@ -23,16 +25,28 @@ const EditCrash: React.FC = () => {
   const [carHp, setCarHp] = useState(0);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [loggedInUser, setLoggedInUser] = useState<Gebruiker | null>(null);
   const router = useRouter();
   const { crashId } = router.query;
 
   useEffect(() => {
+    const userData = localStorage.getItem('loggedInUser');
+    if (userData) {
+      setLoggedInUser(JSON.parse(userData));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loggedInUser?.permission !== 'ADMIN') {
+      setError('You are not authorized to access this page.');
+      return;
+    }
+
     const fetchCrash = async () => {
       try {
         const response = await crashService.getCrashById(Number(crashId));
         if (response.ok) {
           const crash: Crash = await response.json();
-          console.log('Fetched crash:', crash);
           setType(crash.type);
           setDescription(crash.description);
           setCasualties(crash.casualties);
@@ -40,7 +54,7 @@ const EditCrash: React.FC = () => {
           if (crash.participants && crash.participants.length > 0) {
             setDriverName(crash.participants[0].driver.name);
             setDriverSurname(crash.participants[0].driver.surname);
-            setDriverBirthdate(new Date(crash.participants[0].driver.birthdate).toISOString().split('T')[0]);
+            setDriverBirthdate(crash.participants[0].driver.birthdate.toString().split('T')[0]);
             setDriverTeam(crash.participants[0].driver.team);
             setDriverCountry(crash.participants[0].driver.country);
             setDriverDescription(crash.participants[0].driver.description);
@@ -50,9 +64,7 @@ const EditCrash: React.FC = () => {
             setCarHp(crash.participants[0].racecar.hp);
           }
         } else {
-          const errorData = await response.json();
-          console.error('Failed to fetch crash details:', errorData);
-          setError('Failed to fetch crash details');
+          setError('Failed to fetch crash details.');
         }
       } catch (error) {
         console.error('An unexpected error occurred:', error);
@@ -60,10 +72,8 @@ const EditCrash: React.FC = () => {
       }
     };
 
-    if (crashId) {
-      fetchCrash();
-    }
-  }, [crashId]);
+    fetchCrash();
+  }, [crashId, loggedInUser]);
 
   const handleEditCrash = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -113,6 +123,21 @@ const EditCrash: React.FC = () => {
       setSuccessMessage('');
     }
   };
+
+  if (loggedInUser?.permission !== 'ADMIN') {
+    return (
+      <>
+        <Head>
+          <title>Edit Crash</title>
+        </Head>
+        <Header />
+        <main className="container">
+          <h1 className="text-center my-4">Edit Crash</h1>
+          <div className="alert alert-danger">You are not authorized to access this page.</div>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
@@ -284,6 +309,16 @@ const EditCrash: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+  };
 };
 
 export default EditCrash;

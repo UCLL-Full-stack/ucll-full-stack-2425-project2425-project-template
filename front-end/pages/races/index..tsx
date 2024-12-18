@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Header from '@components/header';
 import { useState, useEffect } from 'react';
 import raceService from '@services/RaceService';
-import { Race, Crash } from '@types';
+import { Race, Crash, Gebruiker } from '@types';
 import RaceOverviewTable from '@components/races/RaceOverviewTable';
 import CrashOverviewTable from '@components/crashes/CrashOverviewTable';
 import { useRouter } from 'next/router';
@@ -19,9 +19,16 @@ const InformationOverview: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [selectedRace, setSelectedRace] = useState<Race | null>(null);
   const [selectedCrash, setSelectedCrash] = useState<Crash | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<Gebruiker | null>(null);
   const router = useRouter();
   const { t } = useTranslation();
-  
+
+  useEffect(() => {
+    const userData = localStorage.getItem('loggedInUser');
+    if (userData) {
+      setLoggedInUser(JSON.parse(userData));
+    }
+  }, []);
 
   const getRaces = async () => {
     setError('');
@@ -87,9 +94,8 @@ const InformationOverview: React.FC = () => {
       {
         label: 'Number of Crashes',
         data: races.map(race => race.crashes?.length || 0),
-        backgroundColor: 'rgba(153, 102, 255, 0.2)',
         borderColor: 'rgba(153, 102, 255, 1)',
-        borderWidth: 1,
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
       },
     ],
   };
@@ -117,7 +123,9 @@ const InformationOverview: React.FC = () => {
         {selectedRace && (
           <section>
             <h2>Crashes within "{selectedRace.name}"</h2>
-            <button onClick={handleAddCrash} className="btn btn-primary mb-3">Add Crash</button>
+            {loggedInUser?.permission === 'ADMIN' && (
+              <button onClick={handleAddCrash} className="btn btn-primary mb-3">Add Crash</button>
+            )}
             <p>Click on a crash to see its drivers with their racecars</p>
             {selectedRace.crashes && (
               <CrashOverviewTable
@@ -126,6 +134,7 @@ const InformationOverview: React.FC = () => {
                 selectedRace={selectedRace}
                 handleEditCrash={handleEditCrash}
                 handleDeleteCrash={handleDeleteCrash}
+                loggedInUser={loggedInUser}
               />
             )}
           </section>
@@ -147,9 +156,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
 
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? 'en', ['common'])),
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
   };
 };
 

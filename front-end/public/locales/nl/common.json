@@ -49,6 +49,10 @@
         "deaths": "Doden",
         "submit": "Verzenden",
         "successMessage": "Succesvol ingediend!",
-        "errorMessage": "Er is een onverwachte fout opgetreden. Probeer het opnieuw."
+        "errorMessage": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
+        "pendingSubmissions": "In afwachting van inzendingen",
+        "actions": "Acties",
+        "accept": "Accepteren",
+        "deny": "Weigeren"
     }
 }
