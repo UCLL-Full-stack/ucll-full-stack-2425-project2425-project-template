@@ -19,7 +19,7 @@ const updateRecipeDate = async (
     newDate: Date,
     role: Role
 ): Promise<Recipe> => {
-    if (role !== 'user' && role !== 'admin') {
+    if (role === 'guest') {
         throw new UnauthorizedError('credentials_required', {
             message: 'Only users can update their own schedules.',
         });
@@ -52,7 +52,7 @@ const deleteScheduledRecipe = async (
     date: Date,
     role: Role
 ): Promise<void> => {
-    if (role !== 'user' && role !== 'admin') {
+    if (role === 'guest') {
         throw new UnauthorizedError('credentials_required', {
             message: 'Only users can delete recipes from their own schedules.',
         });

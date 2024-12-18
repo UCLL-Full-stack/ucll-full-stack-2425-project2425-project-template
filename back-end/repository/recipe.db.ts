@@ -148,14 +148,18 @@ const saveRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
 
 const deleteRecipe = async ({ id }: { id: number }): Promise<void> => {
     try {
+        // delete relationship first
+        await database.recipeIngredient.deleteMany({
+            where: { recipeId: id },
+        });
+
+        // delete recipe
         await database.recipe.delete({
-            where: {
-                id,
-            },
+            where: { id },
         });
     } catch (error) {
-        console.log(error);
-        throw new Error(`Recipe with id ${id} does not exist.`);
+        console.error(`Error deleting recipe with id ${id}:`, error);
+        throw error;
     }
 };
 

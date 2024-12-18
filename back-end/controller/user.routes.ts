@@ -83,36 +83,6 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 
 /**
  * @swagger
- * /users/profile:
- *   get:
- *     summary: Get own profile
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: A user object
- *       403:
- *         description: Unauthorized access
- *       404:
- *         description: User not found
- *       500:
- *         description: Internal server error
- */
-userRouter.get('/profile', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const request = req as Request & { auth: { username: string; role: Role } };
-        const { username, role } = request.auth;
-
-        const profile = await userService.getOwnProfile(username, role);
-        res.status(200).json(profile.toJSON());
-    } catch (error) {
-        next(error);
-    }
-});
-
-/**
- * @swagger
  * /users/signup:
  *   post:
  *     summary: Create a new user

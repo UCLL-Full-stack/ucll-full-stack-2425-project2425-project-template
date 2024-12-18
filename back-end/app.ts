@@ -8,6 +8,7 @@ import { recipeRouter } from './controller/recipe.routes';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { expressjwt } from 'express-jwt';
+import { profileRouter } from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
@@ -27,6 +28,74 @@ const swaggerOptions = {
                     type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
+                },
+            },
+            schemas: {
+                Recipe: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'integer',
+                            example: 1,
+                        },
+                        title: {
+                            type: 'string',
+                            example: 'Spaghetti Bolognese',
+                        },
+                        instructions: {
+                            type: 'string',
+                            example: 'Cook pasta, prepare sauce, mix together',
+                        },
+                        cookingTime: {
+                            type: 'integer',
+                            example: 30,
+                        },
+                        category: {
+                            type: 'string',
+                            example: 'DINNER',
+                        },
+                        ingredients: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    ingredientId: {
+                                        type: 'integer',
+                                        example: 1,
+                                    },
+                                    unit: {
+                                        type: 'string',
+                                        example: 'g',
+                                    },
+                                    quantity: {
+                                        type: 'number',
+                                        example: 200,
+                                    },
+                                },
+                            },
+                        },
+                        imageUrl: {
+                            type: 'string',
+                            example: 'https://example.com/image.jpg',
+                        },
+                        isFavorite: {
+                            type: 'boolean',
+                            example: true,
+                        },
+                        notes: {
+                            type: 'string',
+                            example: 'Delicious with garlic bread',
+                        },
+                        source: {
+                            type: 'string',
+                            example: 'Family recipe',
+                        },
+                        scheduledDate: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2024-12-03T00:00:00.000Z',
+                        },
+                    },
                 },
             },
         },
@@ -58,6 +127,7 @@ app.use(
 app.use('/schedules', scheduleRouter);
 app.use('/users', userRouter);
 app.use('/recipes', recipeRouter);
+app.use('/profiles', profileRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Plateful API is running...' });

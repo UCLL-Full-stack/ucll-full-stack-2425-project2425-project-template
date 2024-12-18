@@ -101,6 +101,10 @@ export class User {
         }
     }
 
+    hasRecipe(recipeId: number): boolean {
+        return this.recipes?.some((recipe) => recipe.getId() === recipeId) ?? false;
+    }
+
     getId(): number | undefined {
         return this.id;
     }

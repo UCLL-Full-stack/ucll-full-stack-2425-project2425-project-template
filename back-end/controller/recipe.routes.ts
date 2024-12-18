@@ -16,7 +16,7 @@ const recipeRouter = express.Router();
  * @swagger
  * /recipes:
  *   get:
- *     summary: Retrieve a list of recipes
+ *     summary: Retrieve a list of recipes for the logged-in user
  *     tags: [Recipes]
  *     security:
  *       - bearerAuth: []
@@ -35,10 +35,10 @@ const recipeRouter = express.Router();
 recipeRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
-        const { username, role } = request.auth;
+        const { username } = request.auth;
         const userId = await userService.getUserIdFromUsername(username);
 
-        const recipes = await recipeService.getAllRecipes(userId, role);
+        const recipes = await recipeService.getRecipesByUserId(userId);
         res.status(200).json(recipes.map((recipe) => recipe.toJSON()));
     } catch (error) {
         next(error);
@@ -155,12 +155,13 @@ recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: Next
     const { recipeId } = req.params;
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
-        const { role } = request.auth;
+        const { username, role } = request.auth;
+        const userId = await userService.getUserIdFromUsername(username);
 
-        await recipeService.deleteRecipe(parseInt(recipeId), role);
+        await recipeService.deleteRecipe(parseInt(recipeId), userId, role);
         res.status(204).send();
     } catch (error) {
-        next(error);
+        res.status(500).json({ status: 'internal server error', message: 'Something went wrong!' });
     }
 });
 
