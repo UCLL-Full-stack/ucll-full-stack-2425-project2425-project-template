@@ -8,6 +8,7 @@ import competitionRouter from './controller/competition.routes';
 import teamRouter from './controller/team.routes';
 import userRouter from './controller/user.routes';
 import matchRouter from './controller/match.routes';
+import { expressjwt } from 'express-jwt';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,13 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
+
+app.use(expressjwt({
+    secret: process.env.JWT_SECRET || 'default_secret' ,
+    algorithms: ['HS256'],
+    }).unless({ path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'] })
+
+);
 
 app.use('/match', matchRouter);
 app.use('/user', userRouter);
@@ -45,6 +53,17 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         message: err.message,
     });
 });
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'CoursesError') {
+        res.status(400).json({ status: 'domain error', message: err.message });
+    } else {
+        res.status(400).json({ status: 'application error', message: err.message });
+    }
+});
+
 
 app.listen(port || 3000, () => {
     console.log(`Courses API is running on port ${port}.`);

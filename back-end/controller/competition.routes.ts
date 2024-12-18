@@ -27,6 +27,11 @@ const competitionRouter = express.Router();
 /**
  * @swagger
  * /competitions:
+ *   securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
  *   get:
  *     summary: Get a list of all Competitions.
  *     responses:

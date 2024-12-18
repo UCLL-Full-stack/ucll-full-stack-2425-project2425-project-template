@@ -32,4 +32,20 @@ teamRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
+// teamRouter.post('/linkTeamToUser/:userId/:teamId', async (req: Request, res: Response) => {
+//     try {
+//         const userId = Number(req.params.userId)
+//         const teamId = Number(req.params.teamId)
+
+//         const result = await teamService.linkTeamToUser(userId, teamId);
+//         res.status(200).json(result);
+//     } catch (error) {
+//         console.error('Error creating team:', error);
+//         res.status(400).json({
+//             status: 'error',
+//             errorMessage: 'An unknown error occurred',
+//         });
+//     }
+// });
+
 export default teamRouter;
