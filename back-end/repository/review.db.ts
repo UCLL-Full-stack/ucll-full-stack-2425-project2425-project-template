@@ -15,6 +15,10 @@ const createReviewForProduct = async ({rating,text,user,product} : Review): Prom
                 product: {
                     connect: { id: product.getId() } // Assuming `getId()` method exists
                 }
+            },
+            include: {
+                user: true, // Fetch user relation
+                product: true // Fetch product relation
             }
         });
         return Review.from(reviewPrisma);
