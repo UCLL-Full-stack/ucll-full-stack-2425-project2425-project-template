@@ -3,7 +3,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import recipeService from '../service/recipe.service';
 import { Role } from '../types';
-import userService from '../service/user.service.ts';
+import userService from '../service/user.service';
 
 const recipeRouter = express.Router();
 
@@ -76,7 +76,7 @@ recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFun
         const recipe = await recipeService.getRecipeById(parseInt(recipeId));
         res.status(200).json(recipe.toJSON());
     } catch (error) {
-        next(error);
+        next(error); // passes the error to the error-handling middleware in app.ts
     }
 });
 
@@ -124,7 +124,7 @@ recipeRouter.put('/:recipeId', async (req: Request, res: Response, next: NextFun
         );
         res.status(200).json(updatedRecipe.toJSON());
     } catch (error) {
-        next(error);
+        next(error); // passes the error to the error-handling middleware in app.ts
     }
 });
 
@@ -159,7 +159,7 @@ recipeRouter.delete('/:recipeId', async (req: Request, res: Response, next: Next
         const userId = await userService.getUserIdFromUsername(username);
 
         await recipeService.deleteRecipe(parseInt(recipeId));
-        res.status(204).send();
+        res.status(204).send(); // server processed the request but there's no response body
     } catch (error) {
         next(error);
     }
