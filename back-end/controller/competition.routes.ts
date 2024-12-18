@@ -58,6 +58,24 @@ competitionRouter.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
+competitionRouter.get('/name/:name', async (req: Request, res: Response) => {
+    try {
+        const competition = await competitionService.getCompetitionByName({
+            name: req.params.name,
+        });
+        if (!competition) {
+            return res.status(404).json({ status: 'error', errorMessage: 'Competition not found' });
+        }
+        res.status(200).json(competition);
+    } catch (error) {
+        console.error('Error fetching competition by name:', error);
+        res.status(500).json({
+            status: 'error',
+            errorMessage: 'Unable to fetch competition by name',
+        });
+    }
+});
+
 competitionRouter.post('/', async (req: Request, res: Response) => {
     try {
         const competition = <CompetitionInput>req.body;

@@ -21,4 +21,12 @@ const getCompetitionById = async (id: number): Promise<Competition> => {
     return competition;
 };
 
-export default { createCompetition, getCompetitionById, getAllCompetitions };
+const getCompetitionByName = async ({ name }: { name: string }): Promise<Competition> => {
+    const user = await competitionDb.getCompetitionByName({ name });
+    if (!user) {
+        throw new Error(`User with username: ${name} does not exist.`);
+    }
+    return user;
+};
+
+export default { createCompetition, getCompetitionById, getAllCompetitions, getCompetitionByName };

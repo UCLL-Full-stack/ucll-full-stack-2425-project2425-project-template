@@ -41,4 +41,25 @@ teamRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
+teamRouter.get('/competition/:competitionId', async (req: Request, res: Response) => {
+    try {
+        const competitionId = Number(req.params.competitionId);
+
+        if (isNaN(competitionId)) {
+            return res
+                .status(400)
+                .json({ status: 'error', errorMessage: 'Invalid competition ID' });
+        }
+
+        const teams = await teamService.getTeamsByCompetition({ competitionId });
+        res.status(200).json(teams);
+    } catch (error) {
+        console.error('Error fetching teams by competition:', error);
+        res.status(500).json({
+            status: 'error',
+            errorMessage: 'Unable to fetch teams for competition',
+        });
+    }
+});
+
 export default teamRouter;

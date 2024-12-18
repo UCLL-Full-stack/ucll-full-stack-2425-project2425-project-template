@@ -51,6 +51,29 @@ const createTeam = async ({
     }
 };
 
+const getTeamsByCompetition = async ({
+    competitionId,
+}: {
+    competitionId: number;
+}): Promise<Team[]> => {
+    try {
+        const teamsPrisma = await database.team.findMany({
+            where: {
+                competitionId,
+            },
+            include: {
+                competition: true,
+                user: true,
+            },
+        });
+
+        return teamsPrisma.map((teamPrisma) => Team.from(teamPrisma));
+    } catch (error) {
+        console.error(`Error fetching teams for competition ${competitionId}:`, error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 const getTeamById = async ({ id }: { id: number | undefined }): Promise<Team | null> => {
     try {
         const teamPrisma = await database.team.findUnique({
@@ -69,6 +92,7 @@ const getTeamById = async ({ id }: { id: number | undefined }): Promise<Team | n
 
 export default {
     createTeam,
+    getTeamsByCompetition,
     getTeamById,
     getAllTeams,
 };

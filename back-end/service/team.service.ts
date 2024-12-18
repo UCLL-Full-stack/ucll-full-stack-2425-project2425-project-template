@@ -62,8 +62,23 @@ const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
     }
 };
 
+const getTeamsByCompetition = async ({
+    competitionId,
+}: {
+    competitionId: number;
+}): Promise<Team[]> => {
+    try {
+        const teams = await teamDb.getTeamsByCompetition({ competitionId });
+        return teams;
+    } catch (error) {
+        console.error(`Error fetching teams for competition ${competitionId}:`, error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
     getTeamById,
     getAllTeams,
+    getTeamsByCompetition,
 };

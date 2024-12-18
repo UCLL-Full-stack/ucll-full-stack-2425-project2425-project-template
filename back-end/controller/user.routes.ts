@@ -70,4 +70,17 @@ userRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
+userRouter.get('/name/:name', async (req: Request, res: Response) => {
+    try {
+        const user = await userService.getUserByName({ name: req.params.name });
+        if (!user) {
+            return res.status(404).json({ status: 'error', errorMessage: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Error fetching user by name:', error);
+        res.status(500).json({ status: 'error', errorMessage: 'Unable to fetch user by name' });
+    }
+});
+
 export default userRouter;

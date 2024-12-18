@@ -49,4 +49,5 @@ const getUserByName = async ({ name }: { name: string }): Promise<User> => {
     }
     return user;
 };
+
 export default { getAllUsers, createUser, getUserByName, getUserById };
