@@ -37,7 +37,7 @@ const OverviewPage: React.FC = () => {
       </section>
 
       <section className={styles['users-table-section']}>
-        <h2>{t("index.usersTableTitle")}</h2>
+        <h2 className={styles['table-title']}>{t("index.usersTableTitle")}</h2>
         <div className={styles['table-container']}>
           <table className={styles['users-table']}>
             <thead>
@@ -45,8 +45,8 @@ const OverviewPage: React.FC = () => {
                 <th>{t("index.username")}</th>
                 <th>{t("index.email")}</th>
                 <th>{t("index.role")}</th>
-                <th>{t("index.firstName")}</th>
-                <th>{t("index.lastName")}</th>
+                <th>{t("index.firstname")}</th>
+                <th>{t("index.lastname")}</th>
               </tr>
             </thead>
             <tbody>
