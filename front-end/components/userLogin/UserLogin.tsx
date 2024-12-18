@@ -98,7 +98,7 @@ const UserLogin: React.FC = () => {
                         type="text"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
-                        className="border-2 mt-2"
+                        className="border-2 mt-2 rounded-[0.2rem]"
                     />
                 </div>
 
@@ -112,7 +112,7 @@ const UserLogin: React.FC = () => {
                         type="text"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        className="border-2 mt-2 "
+                        className="border-2 mt-2 rounded-[0.2rem]"
                     />
                 </div>
                 <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
