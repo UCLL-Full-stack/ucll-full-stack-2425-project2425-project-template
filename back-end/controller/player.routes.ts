@@ -31,4 +31,20 @@ playerRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
+/*
+swagger documentation to be added.
+*/
+
+playerRouter.get('/user/:email', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const players = await playerService.getPlayersByUser(req.params.email);
+        res.status(200).json(players);
+    } catch (error) {
+        res.status(400).json({
+            status: '400',
+            errorMessage: `User with id ${req.params.id} does not exist.`,
+        });
+    }
+});
+
 export { playerRouter };

@@ -3,7 +3,7 @@ import playerService from '@services/playerService';
 import { useState, useEffect } from 'react';
 import { Player, User } from '@types';
 
-const CharacterSelection: React.FC = () => {
+const WorldSelection: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<User>();
     const [characters, setCharacters] = useState<Player[]>();
     const [selectedCharacter, setSelectedCharacter] = useState<Player>();
@@ -99,4 +99,4 @@ const CharacterSelection: React.FC = () => {
     );
 };
 
-export default CharacterSelection;
+export default WorldSelection;

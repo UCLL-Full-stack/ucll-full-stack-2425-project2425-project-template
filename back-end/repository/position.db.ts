@@ -1,5 +1,5 @@
 import { Position } from '../model/position';
-import { PositionUpdate } from '../types';
+import { PositionInput, PositionUpdate } from '../types';
 import database from './database';
 
 
@@ -36,7 +36,27 @@ const changePosition = async (toUpdate: PositionUpdate): Promise<Position> => {
     }
 }
 
+const addPosition = async (position: PositionInput): Promise<Position> => {
+    try {
+        const positionPrisma = await database.position.create({
+            data: {
+                x: position.x,
+                y: position.y,
+                type: position.type,
+                active: position.active,
+                floor: { connect: { id: position.floorID } },
+                player: { connect: { id: position.playerID } },
+            },
+        });
+        return Position.from(positionPrisma);
+    } catch(error){
+        console.error(error);
+        throw new Error("Position update failed");
+    }
+}
+
 export default {
     getPositionById,
     changePosition,
+    addPosition,
 };

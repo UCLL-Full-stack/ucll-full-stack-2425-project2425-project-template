@@ -1,9 +1,10 @@
 export type PositionInput = {
-    id: number;
+    playerID: number;
     x: number;
     y: number;
     type: string;
     active: boolean;
+    floorID: number;
 }
 
 export type PositionUpdate = {

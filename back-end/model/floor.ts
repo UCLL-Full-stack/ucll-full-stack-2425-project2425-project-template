@@ -113,6 +113,7 @@ export class Floor {
                 positions = new Array<Position>();
                 needDown = true;
                 needUp = true;
+                if (floorNumber === 1) needUp = false;
                 input.map((line, y) => {
                     line.getTiles().map((tile, x) => {
                         if (tile === "floor"){

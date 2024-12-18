@@ -17,7 +17,18 @@ const getPlayerById = async (id: string) => {
     return await res.json();
 };
 
+const getPlayersFromUser = async (email: string) => {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/players/user/' + email, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+        },
+    });
+    return await res.json();
+}
+
 export default {
     getAllPlayers,
     getPlayerById,
+    getPlayersFromUser,
 };
