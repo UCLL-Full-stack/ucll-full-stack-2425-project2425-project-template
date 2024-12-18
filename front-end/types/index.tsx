@@ -20,6 +20,7 @@ type Booking = {
     bookingDate: Date;
     paymentStatus: 'Pending' | 'Confirmed' | 'Cancelled';
 }
+
 type User = {
     firstName?: string;
     lastName?: string;

@@ -46,6 +46,7 @@ const BookingOverviewTable: React.FC<Props> = ({ bookings }) => {
                 <thead>
                     <tr>
                         <th scope="col">{t("booking.nummer")}</th>
+                        <th scope="col">{t("booking.destination")}</th>
                         <th scope="col">{t("booking.datum")}</th>
                         <th scope="col">{t("booking.status")}</th>
                     </tr>
@@ -53,7 +54,8 @@ const BookingOverviewTable: React.FC<Props> = ({ bookings }) => {
                 <tbody>
                     {bookings.map((booking, index) => (
                         <tr key={index}>
-                            <td>{booking.tripId}</td>
+                            <td>{booking.trip.id}</td>
+                            <td>{booking.trip.destination}</td>
                             <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
                             <td>{booking.paymentStatus}</td>
                         </tr>

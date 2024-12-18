@@ -20,7 +20,8 @@
         "start": "Start Datum",
         "eind": "Eind Datum",
         "prijs": "Prijs",
-        "omschrijving": "Omschrijving"
+        "omschrijving": "Omschrijving",
+        "book": "Boek Nu"
     },
 
     "booking": {

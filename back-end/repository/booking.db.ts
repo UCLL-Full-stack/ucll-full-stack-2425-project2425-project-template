@@ -25,16 +25,11 @@ const getBookingById = async (bookingId: number): Promise<Booking | null> => {
     return bookingPrisma ? Booking.from(bookingPrisma) : null;
 };
 
-const createBooking = async (bookingData: {
-    bookingDate: Date;
-    tripId: number;
-    studentIds: number[];  
-    paymentStatus: PaymentStatus;  
-}): Promise<Booking> => {
+const createBooking = async (bookingData: {bookingDate: Date, tripId: number, studentIds: number[], paymentStatus: PaymentStatus;}): Promise<Booking> => {
     const bookingPrisma = await database.booking.create({
         data: {
             bookingDate: bookingData.bookingDate,
-            paymentStatus: bookingData.paymentStatus as unknown as PaymentStatus,  // Type assertion here
+            paymentStatus: bookingData.paymentStatus as unknown as PaymentStatus,
             trip: { connect: { id: bookingData.tripId } },
             students: {
                 connect: bookingData.studentIds.map((id) => ({ id }))  
