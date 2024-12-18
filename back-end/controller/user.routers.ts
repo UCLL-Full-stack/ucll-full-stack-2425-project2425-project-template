@@ -82,6 +82,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *         description: Internal server error
  */
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  console.log("yeah login baby")
   try {
     // Get email and password from the request body
     const { email, password } = req.body;

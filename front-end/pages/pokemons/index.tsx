@@ -15,13 +15,20 @@ const Pokemons: React.FC = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loggedInEmail, setLoggedInEmail] = useState<string>('');
+  const [role, setRole] = useState<String>("guest")
 
   const { t } = useTranslation();
 
   // Check if the code is running in the browser and then access localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const email = localStorage.getItem('userEmail') || '';  // Get the email from localStorage
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      let email = ''
+      if (loggedInUser) {
+        const parsedUser = JSON.parse(loggedInUser)
+        email = parsedUser.email
+        setRole(parsedUser.role)
+      } 
       setLoggedInEmail(email);
     }
   }, []);  // Empty dependency array ensures this runs only once when the component mounts
@@ -44,10 +51,25 @@ const Pokemons: React.FC = () => {
     }
   };
 
+  const getTrainerByEmail = async(email:string) =>{
+    try {
+      const trainer = await TrainerService.getTrainerByEmail(email);
+      console.log(trainer)
+
+      setTrainers([trainer]);
+      setSelectedTrainer(trainer)
+      }
+     catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     // Only run the getTrainers function when loggedInEmail is available
     if (loggedInEmail) {
-      getTrainers();
+      if (role== "trainer") {
+        getTrainerByEmail(loggedInEmail)
+      }
     }
   }, [loggedInEmail]);
 

@@ -16,7 +16,18 @@ const TrainerService = {
 
 
   getTrainerByEmail: async (email: string): Promise<Trainer> => {
-    const response = await fetch(`${API_URL}/trainers/email?email=${encodeURIComponent(email)}`);
+    const user = localStorage.getItem('loggedInUser');
+    let token = null
+    if (user) {
+      token =JSON.parse(user).token;
+    }
+    const response = await fetch(`${API_URL}/trainers/email?email=${encodeURIComponent(email)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+    },
+    });
     
     if (!response.ok) {
       const errorText = await response.text();  // Read response as text if error
@@ -29,9 +40,16 @@ const TrainerService = {
   },
 
   addPokemonToTrainerById: async(id:number,pokemon:Pokemon): Promise<Trainer> => {
+    const user = localStorage.getItem('loggedInUser');
+    let token = null
+    if (user) {
+      token =JSON.parse(user).token;
+    }
     const response = await fetch(`${API_URL}/trainers/${id}`,{
       method: "POST",
-      headers: {"content-type" : 'application/json'},
+      headers: {"content-type" : 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(pokemon)
     });
     if (!response.ok) {
