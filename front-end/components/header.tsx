@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Language from './language/Language';
 
 const Header: React.FC = () => {
 
@@ -66,6 +67,7 @@ const Header: React.FC = () => {
                         </div>
                         </>
                     )}
+                    <Language />
                 </nav>
             </div>
 

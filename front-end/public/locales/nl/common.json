@@ -1,0 +1,15 @@
+{
+    "app.title": "Voetbal App",
+
+    "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+    "login": {
+        "title": "Inloggen",
+        "button": "Inloggen",
+        "success": "Inloggen gelukt. Omleiden naar de startpagina...",
+        "validate": {
+            "name": "Naam is verplicht",
+            "password": "Wachtwoord is verplicht"
+        },
+        "label": { "name": "Naam", "password": "Wachtwoord" }
+    }
+}
