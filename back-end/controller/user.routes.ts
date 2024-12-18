@@ -48,6 +48,18 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+userRouter.get('/:id', async (req: Request, res: Response) => {
+    try {
+        const user = await userService.getUserById({ id: Number(req.params.id) });
+        if (!user) {
+            return res.status(404).json({ status: 'error', errorMessage: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: 'Invalid request' });
+    }
+});
+
 userRouter.post('/', async (req: Request, res: Response) => {
     try {
         const user = <UserInput>req.body;

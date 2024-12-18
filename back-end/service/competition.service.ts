@@ -2,6 +2,11 @@ import { Competition } from '../model/competition';
 import competitionDb from '../repository/competition.db';
 import { CompetitionInput } from '../types';
 
+const getAllCompetitions = async (): Promise<Competition[]> => {
+    const competitions = await competitionDb.getAllCompetitions();
+    return competitions;
+};
+
 const createCompetition = async ({
     name,
     matchesPlayed,
@@ -16,4 +21,4 @@ const getCompetitionById = async (id: number): Promise<Competition> => {
     return competition;
 };
 
-export default { createCompetition, getCompetitionById };
+export default { createCompetition, getCompetitionById, getAllCompetitions };

@@ -12,6 +12,15 @@ teamRouter.get('/', async (req: Request, res: Response) => {
     }
 });
 
+teamRouter.get('/:id', async (req: Request, res: Response) => {
+    try {
+        const team = await teamService.getTeamById({ id: Number(req.params.id) });
+        res.status(200).json(team);
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: 'wrong' });
+    }
+});
+
 teamRouter.post('/', async (req: Request, res: Response) => {
     try {
         const team = <TeamInput>req.body;

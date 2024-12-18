@@ -46,7 +46,24 @@ const createTeam = async ({
     return team;
 };
 
+const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.findUnique({
+            where: { id },
+            include: {
+                competition: true,
+            },
+        });
+
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
+    getTeamById,
     getAllTeams,
 };

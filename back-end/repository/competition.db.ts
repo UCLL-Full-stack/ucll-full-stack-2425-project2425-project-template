@@ -1,6 +1,16 @@
 import database from '../util/database';
 import { Competition } from '../model/competition';
 
+const getAllCompetitions = async (): Promise<Competition[]> => {
+    try {
+        const competitionPrisma = await database.competition.findMany({});
+        return competitionPrisma.map((competitionPrisma) => Competition.from(competitionPrisma));
+    } catch (error) {
+        console.error('Error fetching competitions:', error);
+        throw new Error('no teams');
+    }
+};
+
 const createCompetition = async ({ name, matchesPlayed }: Competition): Promise<Competition> => {
     try {
         const competitionPrisma = await database.competition.create({
@@ -29,6 +39,7 @@ const getCompetitionById = async ({ id }: { id: number }): Promise<Competition |
 };
 
 export default {
+    getAllCompetitions,
     createCompetition,
     getCompetitionById,
 };

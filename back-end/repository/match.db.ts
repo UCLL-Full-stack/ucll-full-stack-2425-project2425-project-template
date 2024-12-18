@@ -1,6 +1,66 @@
 import { Match } from '../model/match';
-import { MatchInput } from '../types';
 import database from '../util/database';
+
+const getAllMatches = async (): Promise<Match[]> => {
+    try {
+        const matchesPrisma = await database.match.findMany({
+            include: {
+                competition: true,
+                team1: {
+                    include: { competition: true },
+                },
+                team2: {
+                    include: { competition: true },
+                },
+            },
+        });
+
+        const matches: Match[] = [];
+        for (const match of matchesPrisma) {
+            matches.push(
+                Match.from({
+                    ...match,
+                    competition: match.competition,
+                    team1: {
+                        ...match.team1,
+                        competition: match.team1.competition,
+                    },
+                    team2: {
+                        ...match.team2,
+                        competition: match.team2.competition,
+                    },
+                })
+            );
+        }
+
+        return matches;
+    } catch (error) {
+        console.error('Error fetching matches:', error);
+        throw new Error('No matches found');
+    }
+};
+
+const getMatchById = async ({ id }: { id: number | undefined }): Promise<Match | null> => {
+    try {
+        const matchPrisma = await database.match.findUnique({
+            where: { id },
+            include: {
+                competition: true,
+                team1: {
+                    include: { competition: true },
+                },
+                team2: {
+                    include: { competition: true },
+                },
+            },
+        });
+
+        return matchPrisma ? Match.from(matchPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('error');
+    }
+};
 
 const createMatch = async ({
     date,
@@ -57,4 +117,6 @@ const createMatch = async ({
 
 export default {
     createMatch,
+    getAllMatches,
+    getMatchById,
 };

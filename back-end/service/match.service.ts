@@ -1,6 +1,17 @@
 import { Match } from '../model/match';
 import matchDb from '../repository/match.db';
 
+const getAllMatches = async (): Promise<Match[]> => {
+    const matches = await matchDb.getAllMatches();
+    return matches;
+};
+
+const getMatchById = async (id: number): Promise<Match> => {
+    const match = await matchDb.getMatchById({ id });
+    if (!match) throw new Error(`Competition with id ${id} does not exist.`);
+    return match;
+};
+
 const createMatch = async ({
     date,
     scoreTeam1,
@@ -32,4 +43,4 @@ const createMatch = async ({
     return await matchDb.createMatch(match);
 };
 
-export default { createMatch };
+export default { createMatch, getAllMatches, getMatchById };

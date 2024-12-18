@@ -17,7 +17,6 @@ const getAllUsers = async (): Promise<User[]> => {
 
 const createUser = async ({ name, password, role, team }: UserInput) => {
     try {
-        // Check if 'team' is provided, if not, don't include 'team' in the data
         const data: any = {
             name,
             password,
@@ -25,17 +24,22 @@ const createUser = async ({ name, password, role, team }: UserInput) => {
         };
 
         if (team) {
-            // Only include 'team' if it exists in the input
             data.team = { connect: { id: team.id } };
         }
-
-        // Call the database function to create a user with the prepared data
-        const newUser = await userDb.createUser(data); // Pass the data
+        const newUser = await userDb.createUser(data);
         return newUser;
     } catch (error) {
         console.error('Error creating user:', error);
         throw new Error('Error in creating user. See logs for details');
     }
+};
+
+const getUserById = async ({ id }: { id: number }): Promise<User> => {
+    const user = await userDB.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id: ${id} does not exist.`);
+    }
+    return user;
 };
 
 const getUserByName = async ({ name }: { name: string }): Promise<User> => {
@@ -45,4 +49,4 @@ const getUserByName = async ({ name }: { name: string }): Promise<User> => {
     }
     return user;
 };
-export default { getAllUsers, createUser, getUserByName };
+export default { getAllUsers, createUser, getUserByName, getUserById };

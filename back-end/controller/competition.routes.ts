@@ -39,6 +39,16 @@ const competitionRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/Competition'
  */
+
+competitionRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const competitions = await competitionService.getAllCompetitions();
+        res.status(200).json(competitions);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 competitionRouter.get('/:id', async (req: Request, res: Response) => {
     try {
         const competition = await competitionService.getCompetitionById(Number(req.params.id));
