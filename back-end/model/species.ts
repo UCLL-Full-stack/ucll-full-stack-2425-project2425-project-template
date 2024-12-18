@@ -40,6 +40,7 @@ export class Species {
 
     equals(species: Species): boolean {
         return (
+            this.id === species.getId() &&
             this.species === species.getSpecies()
         );
     }

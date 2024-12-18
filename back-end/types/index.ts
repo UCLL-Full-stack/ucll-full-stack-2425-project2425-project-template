@@ -1,3 +1,7 @@
+import { Caretaker } from "../model/caretaker";
+import { Expense } from "../model/expense";
+import { Species } from "../model/species";
+
 type Role = 'admin' | 'caretaker' | 'manager';
 
 interface UserInput {
@@ -11,12 +15,11 @@ interface AnimalInput {
     id?: number;
     name: string;
     age: number;
-    species: string;
+    speciesId: number;
     favouriteFood: string;
-    favouritetoy: string;
-    costPerMonth: number;
-    costPerMonthPerSpecies: number;
-    caretakers: number[]; // Array of caretaker IDs
+    favouriteToy: string;
+    firstExpense: number;
+    caretakerId: number;
 }
 
 interface CaretakerInput {

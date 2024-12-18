@@ -68,6 +68,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import animalService from '../service/animal.service';
+import { AnimalInput } from '../types';
 
 
 const animalRouter = express.Router();
@@ -186,6 +187,33 @@ animalRouter.put('/:id/:caretakerId', async (req: Request, res: Response, next: 
         const caretakerId = Number(req.params.caretakerId);
         const updatedAnimal = await animalService.putNewCaretaker({ animalId, caretakerId });
         res.status(200).send({ message: 'Animal updated successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /animals:
+ *   post:
+ *     summary: Create a new animal.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Animal'
+ *     responses:
+ *       201:
+ *         description: Animal created successfully
+ *       400:
+ *         description: Invalid input
+ */
+animalRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newAnimal = <AnimalInput>req.body;
+        const createdAnimal = await animalService.createAnimal(newAnimal);
+        res.status(200).json(createdAnimal);
     } catch (error) {
         next(error);
     }

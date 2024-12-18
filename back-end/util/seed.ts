@@ -12,7 +12,7 @@ const main = async () => {
     await prisma.expense.deleteMany();
     await prisma.species.deleteMany();
 
-    const hashedPassword = await bcrypt.hash('password', 10);
+    const hashedPassword = await bcrypt.hash('password', 12);
 
     // Create Admin
     const admin = await prisma.user.create({

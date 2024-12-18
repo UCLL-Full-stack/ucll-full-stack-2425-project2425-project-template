@@ -3,6 +3,8 @@ import { Animal } from '../model/animal';
 import { Caretaker } from '../model/caretaker';
 import { User } from '../model/user';
 import database from './database';
+import { Species } from '../model/species';
+import { Expense } from '../model/expense';
 
 const getAllAnimals = async (): Promise<Animal[]> => {
     try {
@@ -67,4 +69,42 @@ const putNewCaretaker = async ({
     }
 };
 
-export default { getAllAnimals, getAnimalsByCaretaker, deleteAnimal, putNewCaretaker };
+const createAnimal = async (
+    name: string,
+    age: number,
+    speciesId: number,
+    favouriteFood: string,
+    favouriteToy: string,
+    caretakerId: number,
+    expense: Expense,
+): Promise<Animal> => {
+    try {
+        console.log({ name, age, speciesId, favouriteFood, favouriteToy, caretakerId });
+        const animalPrisma = await database.animal.create({
+            data: {
+                name,
+                age,
+                species: { connect: { id: speciesId } },
+                favouriteFood,
+                favouriteToy,
+                expenses: {
+                    create: [{ totalCost: expense.getTotalCost(), month: expense.getMonth() }],
+                },
+                caretaker: { connect: { id: caretakerId } },
+            },
+            include: { caretaker: { include: { user: true } }, species: true, expenses: true },
+        });
+        return Animal.from(animalPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default {
+    getAllAnimals,
+    getAnimalsByCaretaker,
+    deleteAnimal,
+    putNewCaretaker,
+    createAnimal,
+};

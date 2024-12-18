@@ -62,11 +62,25 @@ const getCaretakers = async () => {
     });
 };
 
+const createUser = async (user: { username: string; password: string; role: string }) => {
+    const token = getToken();
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/users/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(user),
+    });
+};
+
 const UserService = {
     getUsers,
     loginUser,
     deleteUser,
     getCaretakers,
+    createUser,
 };
 
 export default UserService;

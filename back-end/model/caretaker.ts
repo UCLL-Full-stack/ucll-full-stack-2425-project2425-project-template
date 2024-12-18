@@ -8,12 +8,7 @@ export class Caretaker {
     private name: string;
 
     constructor(caretaker: { id?: number; user: User; name: string }) {
-        if (!caretaker.user) {
-            throw new Error("User is required.");
-        }
-        if (!caretaker.name || caretaker.name.trim() === "") {
-            throw new Error("Name is required and cannot be empty.");
-        }
+        this.validate(caretaker);
 
         this.id = caretaker.id;
         this.name = caretaker.name;

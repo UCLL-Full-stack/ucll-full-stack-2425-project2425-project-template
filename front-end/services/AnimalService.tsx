@@ -93,11 +93,26 @@ const putNewCaretaker = async (id: string, caretakerId: string) => {
     }
 };
 
+const createAnimal = async (animal: { name: string; age: number; speciesId: number, favouriteFood: string, favouriteToy: string, firstExpense: number, caretakerId: number }) => {
+    const token = getToken();
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/animals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(animal),
+    });
+};
+
+
 const AnimalService = {
     getAnimals,
     getAnimalsByCaretaker,
     deleteAnimal,
     putNewCaretaker,
+    createAnimal,
 };
 
 export default AnimalService;
