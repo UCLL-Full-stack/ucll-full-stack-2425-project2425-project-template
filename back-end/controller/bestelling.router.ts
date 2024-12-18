@@ -27,38 +27,9 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import bestellingService from '../service/bestelling.service';
-import { BestellingInput } from '../types';
+import { BestellingInput, Rol } from '../types';
 
 const orderRouter = express.Router();
-
-/**
- * @swagger
- * /bestellingen:
- *  post:
- *      summary: Create a new bestelling
- *      requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                     $ref: '#/components/schemas/BestellingInput'
- *      responses:
- *        200:
- *           description: 'Bestelling succesfully created'
- *           content:
- *              application/json:
- *                  schema:
- *                     $ref: '#/components/schemas/Bestelling'
- */
-// orderRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const bestellingInput = req.body;
-//         const newBestelling = await bestellingService.createBestelling(bestellingInput);
-//         res.status(201).json(newBestelling);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
 
 /**
  * @swagger
@@ -78,7 +49,10 @@ const orderRouter = express.Router();
  */
 orderRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const bestellingen = await bestellingService.getAllBestellingen();
+        const request = req as Request & { auth: { rol: Rol, id: number } };
+        const { rol, id } = request.auth;
+        console.log(id);
+        const bestellingen = await bestellingService.getAllBestellingen({ rol }, { id });
         res.status(200).json(bestellingen);
     } catch (error) {
         next(error);

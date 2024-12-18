@@ -55,7 +55,7 @@ const createNewBestelling: React.FC = () => {
                 <h1>Bestelling</h1>
                 <section>
                     {error && <p className="error-field">{error.message}</p>}
-                    {!isLoading && <p>Loading...</p>}
+                    {isLoading && <p>Loading...</p>}
                     {data?.user && data.pokebowl &&
                         <BestellingAanmaken user={data.user} pokebowls={data.pokebowl} />
                     }
@@ -67,7 +67,7 @@ const createNewBestelling: React.FC = () => {
 
 export const getServerSideProps = async (context: { locale: any; }) => {
     const { locale } = context;
-  
+
     return {
         props: {
             ...(await serverSideTranslations(locale ?? "en", ["common"])),

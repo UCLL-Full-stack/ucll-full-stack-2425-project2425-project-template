@@ -43,7 +43,6 @@ export class Ingredient {
         this.type = ingredient.type;
         this.aantal = ingredient.aantal;
         this.prijs = ingredient.prijs;
-        //this.basicIngredientLimit();
         this.ingredientLimit = ingredient.ingredientLimit ?? 5;
     }
     validate(ingredient: { naam: string, type: Type, aantal: number, prijs: number, ingredientLimit?: number }) {
@@ -105,15 +104,4 @@ export class Ingredient {
         this.ingredientLimit = limit;
     }
 
-
-
-    // basicIngredientLimit() {
-    //     if (this.type === "Protein") {
-    //         this.setIngredientLimit(2);
-    //     } else if (this.type === "Sauce") {
-    //         this.setIngredientLimit(1);
-    //     } else {
-    //         this.setIngredientLimit(5);
-    //     }
-    // }
 }
