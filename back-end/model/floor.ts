@@ -1,21 +1,40 @@
-import { Floor as FloorPrisma, Line as LinePrisma } from '@prisma/client';
+import { 
+    Floor as FloorPrisma,
+    Line as LinePrisma,
+    Position as PositionPrisma,
+    Player as PlayerPrisma,
+    User as UserPrisma,
+} from "@prisma/client"; 
 
-import { Line } from './line';
+import { Line } from "./line";
+import { Position } from "./position";
 
 export class Floor {
     private id?: number;
     private floornumber: number;
     private tiles?: Line[];
+    private positions?: Position[];
 
-    constructor(floor: { id?: number; tiles?: Line[]; floornumber: number }) {
-        if (floor.tiles == undefined || floor.tiles.length === 0) {
+    constructor(floor: {
+        id?: number;
+        tiles?: Line[];
+        positions?: Position[];
+        floornumber: number;
+    }) {
+        if (floor.tiles == undefined || floor.tiles.length === 0){
             floor.tiles = this.generateTiles();
+            if (floor.positions == undefined || floor.positions.length === 0){
+                floor.positions = this.generatePositions(floor.tiles, floor.floornumber);
+            }
         }
         this.validate(floor);
+
+
 
         this.id = floor.id;
         this.floornumber = floor.floornumber;
         this.tiles = floor.tiles;
+        this.positions = floor.positions;
     }
 
     getId(): number | undefined {
@@ -30,7 +49,30 @@ export class Floor {
         return this.tiles;
     }
 
-    validate(floor: { floornumber: number; tiles?: Line[] }) {
+    getPositions(): Position[] | undefined {
+        return this.positions;
+    }
+
+    canMoveToPosition(x: number, y: number): boolean {
+        const line = this.tiles?.at(y);
+        let res = false;
+        if (line?.getTiles().at(x) === "floor"){
+            res = true;
+            if (this.positions){
+                this.positions.forEach(pos => {
+                    if (pos.getX() === x && pos.getY() === y && pos.getActive()){
+                        res = false;
+                    }
+                });
+            }
+        }
+        return res;
+    }
+
+    validate(floor: {
+        floornumber: number;
+        tiles?: Line[];
+    }) {
         if (floor.floornumber <= 0) {
             throw new Error('Needs to be above 0.');
         }
@@ -61,18 +103,55 @@ export class Floor {
         return tiles;
     }
 
+    generatePositions(input: Line[], floorNumber: number): Position[]{
+        let positions = new Array<Position>();
+        let needDown = true;
+        let needUp = true;
+        if (floorNumber === 1) needUp = false;
+        if (input !== undefined){
+            while (true){
+                positions = new Array<Position>();
+                needDown = true;
+                needUp = true;
+                input.map((line, y) => {
+                    line.getTiles().map((tile, x) => {
+                        if (tile === "floor"){
+                            const rando = getRandomInt(0, 20);
+                            if (rando === 1){
+                                positions.push(new Position({x: x, y: y, type: "enemy", active: true}));
+                            }
+                            else if (rando === 2 && needDown){
+                                positions.push(new Position({x: x, y: y, type: "stairdown", active: true}));
+                                needDown = false;
+                            }
+                            else if (rando === 3 && needUp){
+                                positions.push(new Position({x: x, y: y, type: "stairup", active: true}));
+                                needUp = false;
+                            }
+                        }
+                    });
+                });
+                if (!needDown && !needUp) break;
+            }
+        }
+        return positions;
+    }
+
     static from({
         id,
         floornumber,
         tiles,
+        positions,
     }: FloorPrisma & {
         tiles: LinePrisma[];
+        positions: PositionPrisma[];
     }) {
         return new Floor({
             id,
             floornumber,
             tiles: tiles.map((tile) => Line.from(tile)),
-        });
+            positions: positions.map((pos) =>Position.from(pos))
+        })
     }
 }
 

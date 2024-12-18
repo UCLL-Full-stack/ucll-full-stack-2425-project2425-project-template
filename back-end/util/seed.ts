@@ -4,6 +4,7 @@ import { User } from '../model/user';
 import { Player } from '../model/player';
 import { World } from '../model/world';
 import { Floor } from '../model/floor';
+import { Position } from '../model/position';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 
@@ -12,6 +13,15 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 async function main() {
+
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "User_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Player_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "World_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Floor_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Line_id_seq" RESTART WITH 1');
+    await prisma.$executeRawUnsafe('ALTER SEQUENCE "Position_id_seq" RESTART WITH 1');
+
+    await prisma.position.deleteMany();
     await prisma.line.deleteMany();
     await prisma.floor.deleteMany();
     await prisma.world.deleteMany();
@@ -37,6 +47,7 @@ async function main() {
             accountBirthday: new Date(2024, 9, 12),
         }),
     ];
+
 
     const players = [
         new Player({
@@ -90,7 +101,9 @@ async function main() {
             floors: floors,
         }),
     ];
-    // Create Users
+
+    const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
+
     let createdUsers = [];
 
     for (const user of users) {
@@ -153,10 +166,35 @@ async function main() {
                     },
                 });
             }
+
+
+            const positions = floor.getPositions();
+            if (!positions) break;
+            // Create Positions
+            for (const pos of positions) {
+                await prisma.position.create({
+                    data: {
+                        x: pos.getX(),
+                        y: pos.getY(),
+                        type: pos.getType(),
+                        active: pos.getActive(),
+                        floor: { connect: { id: createdFloor.id } },
+                        player: undefined,
+                    },
+                });
+            }
+            await prisma.position.create({
+                data: {
+                    x: playerpos.getX(),
+                    y: playerpos.getY(),
+                    type: playerpos.getType(),
+                    active: playerpos.getActive(),
+                    floor: { connect: { id: createdFloor.id } },
+                    player: { connect: { id: 1 } },
+                },
+            });
         }
     }
-
-    // Create Floors
 }
 
 main()
