@@ -72,15 +72,6 @@ export class Schedule {
         this.recipes?.push(recipe);
     }
 
-    removeRecipe(recipe: Recipe) {
-        // returns -1 if index not found
-        const index = this.recipes?.findIndex((r) => r.getId() === recipe.getId());
-        if (index !== undefined && index !== -1) {
-            this.recipes?.splice(index, 1);
-            recipe.setScheduledDate(null);
-        }
-    }
-
     hasRecipe(recipe: Recipe): boolean | undefined {
         return this.recipes?.some((r) => r.getId() === recipe.getId());
     }

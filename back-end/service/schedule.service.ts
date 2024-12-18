@@ -10,7 +10,6 @@ const getScheduledRecipeDetails = async (userId: number, date: Date): Promise<Re
     return schedule.getRecipes() || [];
 };
 
-// Not fully implemented yet
 const updateRecipeDate = async (
     userId: number,
     recipeId: number,
@@ -23,7 +22,10 @@ const updateRecipeDate = async (
     const recipe = oldSchedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
     if (!recipe) throw new Error('Recipe not found');
 
-    oldSchedule.removeRecipe(recipe);
+    const oldScheduleId = oldSchedule.getId();
+    if (oldScheduleId === undefined) throw new Error('Old schedule ID is undefined');
+
+    await scheduleDb.removeScheduledRecipe(oldScheduleId, recipeId);
     const newSchedule =
         (await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, newDate)) ||
         (await scheduleDb.createSchedule(userId, newDate));
@@ -46,8 +48,10 @@ const deleteScheduledRecipe = async (
     const recipe = schedule.getRecipes()?.find((recipe) => recipe.getId() === recipeId);
     if (!recipe) throw new Error('Recipe not found in schedule');
 
-    schedule.removeRecipe(recipe);
-    await scheduleDb.saveSchedule(schedule);
+    const scheduleId = schedule.getId();
+    if (scheduleId === undefined) throw new Error('Schedule ID is undefined');
+
+    await scheduleDb.removeScheduledRecipe(scheduleId, recipeId);
 
     // Update the recipe's scheduledDate to null
     recipe.setScheduledDate(null);

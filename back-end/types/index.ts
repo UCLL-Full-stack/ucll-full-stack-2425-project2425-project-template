@@ -1,5 +1,7 @@
 import { Ingredient } from '../model/ingredient';
 
+type Role = 'admin' | 'user' | 'guest';
+
 type UserSignupInput = {
     firstName: string;
     lastName: string;
@@ -11,6 +13,13 @@ type UserSignupInput = {
 type UserLoginInput = {
     username: string;
     password: string;
+};
+
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    role: string;
 };
 
 type ProfileUpdateInput = {
@@ -67,4 +76,6 @@ export {
     NewRecipeInput,
     RecipeUpdateInput,
     RecipeCategory,
+    AuthenticationResponse,
+    Role,
 };

@@ -1,9 +1,3 @@
-/**
- * CalendarGrid component displays a grid of days for the current month (or week --> to implement)
- * It manages the state for the current date, view mode, selected dates, and other interactions.
- */
-
-// QUESTION: Is this component correct? Or the fetch logic should be in the planner index.tsx page?
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import PlannerService from "@/services/PlannerService";
@@ -38,36 +32,51 @@ const CalendarGrid: React.FC = () => {
 
   useEffect(() => {
     const fetchMonthRecipes = async () => {
-      const startDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1
-      );
-      const endDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        0
-      );
-
-      const recipesByDateTemp: Record<string, Recipe[]> = {};
-
-      for (
-        let i = new Date(startDate);
-        i <= endDate;
-        i.setDate(i.getDate() + 1)
-      ) {
-        const dateString = formatDateUTC(i);
+      const userToken = localStorage.getItem("loggedInUser");
+      if (userToken) {
         try {
-          const recipes = await PlannerService.fetchMealDetails(1, dateString); // userId is 1 for testing -- temporary
-          if (recipes.length > 0) {
-            recipesByDateTemp[dateString] = recipes;
-          }
-        } catch (error) {
-          console.error("Error fetching recipes for", dateString, error);
-        }
-      }
+          const user = JSON.parse(userToken);
+          console.log("Parsed user data:", user); // Add this line for debugging
+          if (user && user.id && user.token) {
+            const startDate = new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              1
+            );
+            const endDate = new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth() + 1,
+              0
+            );
 
-      setRecipesByDate(recipesByDateTemp);
+            const recipesByDateTemp: Record<string, Recipe[]> = {};
+
+            for (
+              let i = new Date(startDate);
+              i <= endDate;
+              i.setDate(i.getDate() + 1)
+            ) {
+              const dateString = formatDateUTC(i);
+              try {
+                const recipes = await PlannerService.fetchMealDetails(user.id, dateString, user.token);
+                if (recipes.length > 0) {
+                  recipesByDateTemp[dateString] = recipes;
+                }
+              } catch (error) {
+                console.error("Error fetching recipes for", dateString, error);
+              }
+            }
+
+            setRecipesByDate(recipesByDateTemp);
+          } else {
+            console.error("Invalid user data");
+          }
+        } catch (e) {
+          console.error("Failed to parse LoggedInUser:", e);
+        }
+      } else {
+        console.error("No user token found");
+      }
     };
 
     fetchMonthRecipes();

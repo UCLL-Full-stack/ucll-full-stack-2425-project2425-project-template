@@ -2,6 +2,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   User,
+  Users,
   Calendar,
   ShoppingCart,
   UtensilsCrossed,
@@ -9,9 +10,18 @@ import {
   LogOut,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      setIsAdmin(true);
+    }
+  }, []);
 
   return (
     <aside className="sidebar">
@@ -36,6 +46,11 @@ const Sidebar = () => {
       <Link href="/recipes" className={pathname === "/recipes" ? "active" : ""}>
         <UtensilsCrossed size={24} />
       </Link>
+      {isAdmin && (
+        <Link href="/users" className={pathname === "/users" ? "active" : ""}>
+          <Users size={24} />
+        </Link>
+      )}
       <div style={{ flexGrow: 1 }}></div> {/* Move to global */}
       <Link href="/profile" className={pathname === "/profile" ? "active" : ""}>
         <Settings size={24} />

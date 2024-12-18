@@ -1,10 +1,11 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const fetchMealDetails = async (userId: number, date: string) => {
+const fetchMealDetails = async (userId: number, date: string, token: string) => {
   const response = await fetch(`${apiUrl}/schedules/${userId}/${date}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
   });
 
@@ -20,7 +21,8 @@ const updateMealDate = async (
   userId: number,
   recipeId: number,
   oldDate: string,
-  newDate: string
+  newDate: string,
+  token: string
 ) => {
   try {
     const response = await fetch(
@@ -29,6 +31,7 @@ const updateMealDate = async (
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ newDate }),
       }
@@ -45,7 +48,7 @@ const updateMealDate = async (
   }
 };
 
-const deleteMeal = async (userId: number, recipeId: number, date: string) => {
+const deleteMeal = async (userId: number, recipeId: number, date: string, token: string) => {
   try {
     const response = await fetch(
       `${apiUrl}/schedules/${userId}/${recipeId}/${date}`,
@@ -53,6 +56,7 @@ const deleteMeal = async (userId: number, recipeId: number, date: string) => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
       }
     );

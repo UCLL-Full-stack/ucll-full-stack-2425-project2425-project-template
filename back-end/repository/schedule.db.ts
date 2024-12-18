@@ -1,3 +1,4 @@
+import { Recipe } from '@prisma/client';
 import { Schedule } from '../model/schedule';
 import database from './database';
 
@@ -99,9 +100,37 @@ const saveSchedule = async (schedule: Schedule): Promise<Schedule> => {
     }
 };
 
+const removeScheduledRecipe = async (scheduleId: number, recipeId: number): Promise<Schedule> => {
+    try {
+        const updatedSchedulePrisma = await database.schedule.update({
+            where: {
+                id: scheduleId,
+            },
+            data: {
+                recipes: {
+                    disconnect: { id: recipeId },
+                },
+            },
+            include: {
+                recipes: {
+                    include: {
+                        ingredients: true,
+                    },
+                },
+            },
+        });
+
+        return Schedule.from(updatedSchedulePrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
 export default {
     getAllSchedules,
     getScheduledRecipesByUserIdAndDate,
     createSchedule,
     saveSchedule,
+    removeScheduledRecipe,
 };
