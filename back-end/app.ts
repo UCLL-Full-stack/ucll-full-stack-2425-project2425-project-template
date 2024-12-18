@@ -29,7 +29,8 @@ app.use(
             '/users/signup',
             '/status',
             '/products',
-            // '/reviews',
+            /^\/products\/.*/,
+            // '/reviews'
         ],
     })
 );
