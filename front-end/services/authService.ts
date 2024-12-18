@@ -38,9 +38,8 @@ const login = async (data: LoginData) => {
     }
 
     const result = await response.json();
-    localStorage.setItem('token', result.token); 
-    // localStorage.setItem('role', result.role); 
-
+    localStorage.setItem("token", result.token);
+    return result;
   } catch (error) {
     console.error("Error logging in:", error);
     throw error;
@@ -49,7 +48,7 @@ const login = async (data: LoginData) => {
 
 const getAllUsers = async (token: string) => {
   try {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("No token found");
     }
@@ -58,7 +57,7 @@ const getAllUsers = async (token: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -75,7 +74,7 @@ const getAllUsers = async (token: string) => {
 
 const getUserById = async (userId: number) => {
   try {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("No token found");
     }
@@ -84,7 +83,7 @@ const getUserById = async (userId: number) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
 

@@ -13,21 +13,21 @@ type Props = {
 };
 
 const LoginForm: React.FC<Props> = ({ onSuccess }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [formError, setFormError] = useState("");
 
   const router = useRouter();
 
-  const validateEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const validateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setEmail(value);
-    if (!value.includes("@")) {
-      setEmailError("Invalid email address.");
+    setUsername(value);
+    if (!value) {
+      setUsernameError("Username is required.");
     } else {
-      setEmailError("");
+      setUsernameError("");
     }
   };
 
@@ -44,19 +44,18 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!email) setEmailError("Email is required");
+    if (!username) setUsernameError("Username is required");
     if (!password) setPasswordError("Password is required");
 
-    if (!emailError && !passwordError) {
+    if (!usernameError && !passwordError) {
       try {
-        const loginData: LoginData = { email, password };
+        const loginData: LoginData = { username, password };
         const user = await authService.login(loginData);
-        console.log("User data:", user); // Add this line for debugging
         localStorage.setItem("loggedInUser", JSON.stringify(user));
         onSuccess();
         router.push("/planner"); // Redirect to planner page on success
       } catch (error) {
-        setFormError("Invalid email or password. Please try again.");
+        setFormError("Invalid username or password. Please try again.");
       }
     }
   };
@@ -64,19 +63,18 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="username">Username</Label>
         <Input
-          id="email"
-          name="email"
-          type="email"
-          value={email}
-          onChange={validateEmail}
+          id="username"
+          name="username"
+          value={username}
+          onChange={validateUsername}
           required
         />
-        {emailError && (
+        {usernameError && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{emailError}</AlertDescription>
+            <AlertDescription>{usernameError}</AlertDescription>
           </Alert>
         )}
       </div>
@@ -103,9 +101,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
           <AlertDescription>{formError}</AlertDescription>
         </Alert>
       )}
-      <Button type="submit" className="w-full">
-        Login
-      </Button>
+      <Button type="submit">Login</Button>
     </form>
   );
 };
