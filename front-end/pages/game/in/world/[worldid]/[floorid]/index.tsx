@@ -59,8 +59,11 @@ const GameMap: React.FC = () => {
     }
 
     const getPlayer = async() => {
-        const res = await playerService.getPlayerById("1");
-        setPlayer(res);
+        const id = localStorage.getItem("playerID");
+        if (id){
+            const res = await playerService.getPlayerById(id);
+            setPlayer(res);
+        }
     }
 
     useInterval(() => {
@@ -121,6 +124,11 @@ const GameMap: React.FC = () => {
     if (!floor) {
         return <div className="text-center">Loading Floor...</div>;
     }
+
+    if (!player) {
+        return <div className="text-center"><p>Loading Player...</p><p>If loading takes too long, try logging in or selecting character.</p></div>;
+    }
+
 
     if (!playerPosition) {
         return <div className="text-center">Spawning Player...</div>;
