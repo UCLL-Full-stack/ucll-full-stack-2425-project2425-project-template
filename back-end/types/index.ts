@@ -1,3 +1,19 @@
-type Rol = 'admin' | 'hoofdleiding' | 'leiding';
+type Rol = 'ADMIN' | 'HOOFDLEIDING' | 'LEIDING';
 
-export default Rol;
+type AuthenticationResponse = {
+    token: string;
+    totem: string;
+    rol: Rol;
+};
+
+type Activiteit = {
+    naam: string;
+    beschrijving: string;
+    begindatim: Date;
+    einddatum: Date;
+}
+
+export {
+    Rol,
+    AuthenticationResponse
+};

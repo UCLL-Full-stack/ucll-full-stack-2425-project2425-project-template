@@ -74,10 +74,11 @@
  *        groep:
  *         $ref: "#/components/schemas/Groep"
  */
-import express, {NextFunction, Request, Response} from "express";
-import e from "express";
+import express, { Request, Response, NextFunction } from "express";
 import activiteitService from "../service/activiteit.service";
 import { Activiteit } from "../model/activiteit";
+import { Rol } from "../types";
+import jwt from "jsonwebtoken";
 
 const activiteitRouter = express.Router();
 
@@ -88,6 +89,8 @@ const activiteitRouter = express.Router();
  *   summary: Voeg een activiteit toe aan een groep
  *   tags:
  *    - activiteit
+ *   security:
+ *     - bearerAuth: []
  *   parameters:
  *         - in: path
  *           name: groepNaam
@@ -113,8 +116,16 @@ const activiteitRouter = express.Router();
  *     404:
  *      description: Groep niet gevonden/Activiteit niet correct
  */
-activiteitRouter.post("/:groepNaam", async (req: Request, res: Response, next: NextFunction) => {
+activiteitRouter.post("/:groepNaam", async (req: Request , res: Response, next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+        if (!token) {
+            return res.status(401).json({ message: 'No token provided' });
+        }
+
+        const secret = process.env.JWT_SECRET || 'default_secret';
+        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+
         const activiteit = new Activiteit ({
             id: req.body.id,
             naam: req.body.naam,
@@ -122,7 +133,7 @@ activiteitRouter.post("/:groepNaam", async (req: Request, res: Response, next: N
             begindatum: new Date(req.body.begindatum),
             einddatum: new Date(req.body.einddatum)
         });
-        const result = await activiteitService.addActiviteit(activiteit, String(req.params.groepNaam));
+        const result = await activiteitService.addActiviteit(activiteit, String(req.params.groepNaam), decoded.rol, decoded.totem);
         res.status(200).json(result);
     } catch (e) {
         next(e);
@@ -133,6 +144,8 @@ activiteitRouter.post("/:groepNaam", async (req: Request, res: Response, next: N
  * @swagger
  * /activiteit/{groepNaam}:
  *  put:
+ *   security:
+ *    - bearerAuth: []
  *   summary: Verander een activiteit
  *   tags:
  *    - activiteit
@@ -155,14 +168,21 @@ activiteitRouter.post("/:groepNaam", async (req: Request, res: Response, next: N
  *      content:
  *       application/json:
  *        schema:
- *         $ref: "#/components/schemas/Activiteit"
  *     400:
  *      description: Fout in de request
  *     404:
  *      description: Groep niet gevonden/Activiteit niet gevonden
  */
-activiteitRouter.put("/:groepNaam", async (req: Request, res: Response, next: NextFunction) => {
+activiteitRouter.put("/:groepNaam", async (req: Request , res: Response, next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+        if (!token) {
+            return res.status(401).json({ message: 'No token provided' });
+        }
+
+        const secret = process.env.JWT_SECRET || 'default_secret';
+        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+
         const activiteit = new Activiteit ({
             id: req.body.id,
             naam: req.body.naam,
@@ -170,7 +190,7 @@ activiteitRouter.put("/:groepNaam", async (req: Request, res: Response, next: Ne
             begindatum: new Date(req.body.begindatum),
             einddatum: new Date(req.body.einddatum)
         });
-        const result = await activiteitService.updateActiviteit(activiteit, String(req.params.groepNaam));
+        const result = await activiteitService.updateActiviteit(activiteit, String(req.params.groepNaam), decoded.rol, decoded.totem);
         res.status(200).json(result);
     } catch (e) {
         next(e);
@@ -180,7 +200,9 @@ activiteitRouter.put("/:groepNaam", async (req: Request, res: Response, next: Ne
 /**
  * @swagger
  * /activiteit/{groepNaam}/{activiteitId}:
- *  delete:
+ *  delete: 
+ *      security:
+ *          - bearerAuth: []
  *      summary: Verwijder een activiteit
  *      tags:
  *        - activiteit
@@ -212,11 +234,19 @@ activiteitRouter.put("/:groepNaam", async (req: Request, res: Response, next: Ne
  */
 activiteitRouter.delete("/:groepNaam/:activiteitId", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = await activiteitService.deleteActiviteit(req.params.groepNaam, Number(req.params.activiteitId));
+        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+        if (!token) {
+            return res.status(401).json({ message: 'No token provided' });
+        }
+
+        const secret = process.env.JWT_SECRET || 'default_secret';
+        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+
+        const result = await activiteitService.deleteActiviteit(req.params.groepNaam, Number(req.params.activiteitId), decoded.rol, decoded.totem);
         res.status(200).json(result);
     } catch (e) {
         next(e);
     }
 });
 
-export {activiteitRouter};
+export default activiteitRouter;

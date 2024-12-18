@@ -29,6 +29,23 @@ const getLeidingById = async ({id}: {id: number}): Promise<Leiding> => {
     }
 }
 
+const getLeidingByTotem = async ({totem}: {totem: string}): Promise<Leiding> => {
+    try {
+        const userPrisma = await database.leiding.findUnique({
+            where: {
+                totem: totem
+            }
+        });
+        if (!userPrisma) {
+            throw new Error("Leiding not found");
+        }
+        return Leiding.from({ ...userPrisma, nieuwsberichten: [] });
+    } catch (e) {
+        console.error(e);
+        throw new Error("Something went wrong with getting leiding by email");
+    }
+}
+
 const createLeiding = async (leiding: Leiding): Promise<Leiding> => {
     try {
         const leidingPrisma = await database.leiding.create({
@@ -97,5 +114,6 @@ export default {
     getLeidingById,
     createLeiding,
     updateLeiding,
-    deleteLeiding
+    deleteLeiding,
+    getLeidingByTotem
 }

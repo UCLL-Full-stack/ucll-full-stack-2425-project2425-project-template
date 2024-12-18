@@ -1,4 +1,4 @@
-import Rol from "../types";
+import {Rol} from "../types";
 import { Groep } from "./groep";
 import { 
     Leiding as LeidingPrisma,
@@ -213,6 +213,38 @@ export class PublicLeiding{
         this.totem = leiding.totem;
         this.rol = leiding.rol;
         this.groepId = leiding.groepId;
+    }
+
+    public getId(): number {
+        return this.id;
+    }
+
+    public getNaam(): string {
+        return this.naam;
+    }
+
+    public getVoornaam(): string {
+        return this.voornaam;
+    }
+
+    public getEmail(): string {
+        return this.email;
+    }
+
+    public getTelefoon(): string {
+        return this.telefoon;
+    }
+
+    public getTotem(): string {
+        return this.totem;
+    }
+
+    public getRol(): Rol {
+        return this.rol;
+    }
+
+    public getGroepId(): number {
+        return this.groepId;
     }
 
     static from({
