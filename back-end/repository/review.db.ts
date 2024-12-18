@@ -1,0 +1,30 @@
+import { Review } from "../model/review";
+import database from "./database";
+
+
+
+const createReviewForProduct = async ({rating,text,user,product} : Review): Promise<Review> => {
+    try {
+        const reviewPrisma = await database.review.create({
+            data: {
+                rating,
+                text,
+                user: {
+                    connect: { id: user.getId() } // Assuming `getId()` method exists
+                },
+                product: {
+                    connect: { id: product.getId() } // Assuming `getId()` method exists
+                }
+            }
+        });
+        return Review.from(reviewPrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error, See server log for details');
+    }
+}
+
+
+export default{
+    createReviewForProduct,
+}

@@ -8,6 +8,7 @@ import { productRouter } from './controller/product.routes';
 import { cartRouter } from './controller/cart.routes';
 import { userRouter } from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
+import { reviewRouter } from './controller/review.routes';
 
 const app = express();
 app.use(express.json());
@@ -28,7 +29,8 @@ app.use(
         '/users/login', 
         '/users/signup', 
         '/status',
-        '/products'
+        '/products',
+        '/products/:id',
     ]
 })
 )
@@ -37,6 +39,7 @@ app.use(
 app.use('/products', productRouter);
 app.use('/carts', cartRouter);
 app.use('/users', userRouter);
+app.use('/review', reviewRouter);
 
 // Generic error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

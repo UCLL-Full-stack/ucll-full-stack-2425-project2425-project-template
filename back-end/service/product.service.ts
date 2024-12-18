@@ -23,7 +23,7 @@ const getProductByName= async (name : string) : Promise<Product | null> => {
 }
     
 
-const createProduct = async ({name,price,description,rating,url}: productInput, {role} : {role : Role}): Promise<Product> => {
+const createProduct = async ({name,price,description,rating,url}: productInput, role: Role): Promise<Product> => {
 
     if(role !== "owner"){
         throw new UnauthorizedError('credentials_required',{

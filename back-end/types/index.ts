@@ -19,6 +19,11 @@ type productInput = {
     url?: string;
 };
 
+type reviewInput = {
+    rating: number;
+    text: string;
+};
+
 type AuthenticationResponse = {
     token: string;
     email: string;
@@ -29,5 +34,6 @@ export{
     Role,
     UserInput,
     AuthenticationResponse,
-    productInput
+    productInput,
+    reviewInput
 };
