@@ -22,7 +22,7 @@ model Leiding {
   wachtwoord String
   telefoon  String
   rol       String
-  totem     String
+  totem     String   @unique
   nieuwsberichten Nieuwsbericht[] 
   groepId   Int  
   groep     Groep @relation(fields: [groepId], references: [id])
