@@ -5,9 +5,10 @@ const validNaam = "leiding";
 const validVoornaam = "voornaam";
 const validEmail = "l@l.be";
 const validTelefoon = "0123456789";
-const validHoofdleiding = true;
+const validHoofdleiding = "HOOFDLEIDING";
 const validTotem = "totem";
 const validGroep = new Groep({
+    id: 1,
     naam: "groep",
     beschrijving: "Dit is een groep",
     leiding: undefined,
@@ -16,32 +17,38 @@ const validGroep = new Groep({
 
 test("given valid parameters, when new Leiding, then Leiding is created", () => {
     const leiding = new Leiding({
+        id: 1,
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
+        rol: validHoofdleiding,
         totem: validTotem,
-        groep: validGroep
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
     });
     expect(leiding.getVoornaam()).toBe(validVoornaam);
     expect(leiding.getNaam()).toBe(validNaam);
     expect(leiding.getEmail()).toBe(validEmail);
     expect(leiding.getTelefoon()).toBe(validTelefoon);
-    expect(leiding.getHoofdleiding()).toBe(validHoofdleiding);
+    expect(leiding.getRol()).toBe(validHoofdleiding);
     expect(leiding.getTotem()).toBe(validTotem);
-    expect(leiding.getGroep()).toBe(validGroep);
+    expect(leiding.getGroepId()).toBe(validGroep.getId());
 });
 
 test("given valid parameters, when setVoornaam, then voornaam is set", () => {
     const leiding = new Leiding({
+        id: 1,
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
+        rol: validHoofdleiding,
         totem: validTotem,
-        groep: validGroep
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
     });
     const newVoornaam = "Voornaam 2";
     leiding.setVoornaam(newVoornaam);
@@ -50,13 +57,16 @@ test("given valid parameters, when setVoornaam, then voornaam is set", () => {
 
 test("given valid parameters, when setNaam, then naam is set", () => {
     const leiding = new Leiding({
+        id: 1,
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
+        rol: validHoofdleiding,
         totem: validTotem,
-        groep: validGroep
     });
     const newNaam = "Naam 2";
     leiding.setNaam(newNaam);
@@ -65,13 +75,16 @@ test("given valid parameters, when setNaam, then naam is set", () => {
 
 test("given valid parameters, when setEmail, then email is set", () => {
     const leiding = new Leiding({
+        id: 1,
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
-        totem: validTotem,
-        groep: validGroep
+        rol: validHoofdleiding,
+        totem: validTotem
     });
     const newEmail = "ll@ll.com";
     leiding.setEmail(newEmail);
@@ -80,13 +93,16 @@ test("given valid parameters, when setEmail, then email is set", () => {
 
 test("given valid parameters, when setTelefoon, then telefoon is set", () => {
     const leiding = new Leiding({
+        id: 1,
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
-        totem: validTotem,
-        groep: validGroep
+        rol: validHoofdleiding,
+        totem: validTotem
     });
     const newTelefoon = "9876543210";
     leiding.setTelefoon(newTelefoon);
@@ -95,28 +111,34 @@ test("given valid parameters, when setTelefoon, then telefoon is set", () => {
 
 test("given valid parameters, when setHoofdleiding, then hoofdleiding is set", () => {
     const leiding = new Leiding({
+        id: 1,
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
-        totem: validTotem,
-        groep: validGroep
+        rol: validHoofdleiding,
+        totem: validTotem
     });
-    const newHoofdleiding = false;
-    leiding.setHoofdleiding(newHoofdleiding);
-    expect(leiding.getHoofdleiding()).toBe(newHoofdleiding);
+    const newHoofdleiding = "LEIDING";
+    leiding.setRol(newHoofdleiding);
+    expect(leiding.getRol()).toBe(newHoofdleiding);
 });
 
 test("given valid parameters, when setTotem, then totem is set", () => {
     const leiding = new Leiding({
+        id: 1,
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
-        totem: validTotem,
-        groep: validGroep
+        rol: validHoofdleiding,
+        totem: validTotem
     });
     const newTotem = "Totem 2";
     leiding.setTotem(newTotem);
@@ -125,20 +147,24 @@ test("given valid parameters, when setTotem, then totem is set", () => {
 
 test("given valid parameters, when setGroep, then groep is set", () => {
     const leiding = new Leiding({
+        id: 1,
+        groepId: validGroep.getId(),
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord",
         voornaam: validVoornaam,
         naam: validNaam,
         email: validEmail,
         telefoon: validTelefoon,
-        hoofdleiding: validHoofdleiding,
-        totem: validTotem,
-        groep: validGroep
+        rol: validHoofdleiding,
+        totem: validTotem
     });
     const newGroep = new Groep({
+        id: 2,
         naam: "groep 2",
         beschrijving: "Dit is een andere groep",
         leiding: undefined,
         activiteiten: undefined
     });
-    leiding.setGroep(newGroep);
-    expect(leiding.getGroep()).toBe(newGroep);
+    leiding.setGroepId(newGroep.getId());
+    expect(leiding.getGroepId()).toBe(newGroep.getId());
 });

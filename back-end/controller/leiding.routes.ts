@@ -191,13 +191,10 @@ leidingRouter.post('/login', async (req: Request, res: Response, next: NextFunct
  */
 leidingRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1];
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         const leiding = await leidingService.getAllLeiding(decoded.rol);
         res.json(leiding);
     } catch (e) {
@@ -236,13 +233,10 @@ leidingRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  */
 leidingRouter.put('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1]; 
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         const leiding = new Leiding({
             id: req.body.id,
             naam: req.body.naam,
@@ -291,13 +285,10 @@ leidingRouter.put('/', async (req: Request, res: Response, next: NextFunction) =
  */ 
 leidingRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1]; 
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         const leiding = new Leiding({
             id: req.body.id,
             naam: req.body.naam,
@@ -350,13 +341,10 @@ leidingRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
  */
 leidingRouter.delete('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1]; 
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         const result = await leidingService.deleteLeiding(Number(req.body.id), decoded.rol);
         res.json(result);
     } catch (e) {
@@ -405,13 +393,10 @@ leidingRouter.delete('/', async (req: Request, res: Response, next: NextFunction
  */
 leidingRouter.put('/:id/:rol', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1]; 
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         const result = await leidingService.updateRol(Number(req.params.id), req.params.rol, decoded.rol);
         res.json(result);
     } catch (e) {
@@ -460,13 +445,10 @@ leidingRouter.put('/:id/:rol', async (req: Request, res: Response, next: NextFun
  */
 leidingRouter.put('/groep/:id/:groepNaam', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1]; 
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         const result = await leidingService.updateGroep(Number(req.params.id), req.params.groepNaam, decoded.rol);
         res.json(result);
     } catch (e) {

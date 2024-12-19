@@ -118,13 +118,10 @@ const activiteitRouter = express.Router();
  */
 activiteitRouter.post("/:groepNaam", async (req: Request , res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1];
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
 
         const activiteit = new Activiteit ({
             id: req.body.id,
@@ -175,13 +172,10 @@ activiteitRouter.post("/:groepNaam", async (req: Request , res: Response, next: 
  */
 activiteitRouter.put("/:groepNaam", async (req: Request , res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
+        const token = req.headers.authorization?.split(' ')[1];
 
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
 
         const activiteit = new Activiteit ({
             id: req.body.id,
@@ -234,13 +228,10 @@ activiteitRouter.put("/:groepNaam", async (req: Request , res: Response, next: N
  */
 activiteitRouter.delete("/:groepNaam/:activiteitId", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
-
+        const token = req.headers.authorization?.split(' ')[1]; 
+        
         const secret = process.env.JWT_SECRET || 'default_secret';
-        const decoded = jwt.verify(token, secret) as { totem: string, rol: Rol};
+        const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
 
         const result = await activiteitService.deleteActiviteit(req.params.groepNaam, Number(req.params.activiteitId), decoded.rol, decoded.totem);
         res.status(200).json(result);
