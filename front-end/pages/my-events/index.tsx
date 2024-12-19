@@ -27,14 +27,14 @@ const MyEvents: React.FC = () => {
 
     useEffect(() => {
         if (loggedUser?.email) {
-            getEventsByUserEmail(loggedUser.email);
+            getTicketsByUserEmail(loggedUser.email);
             getInvitesByUserEmail(loggedUser.email);
             getFavoriteEventsByUserEmail(loggedUser.email);
         }
     }, [loggedUser]);
 
-    const getEventsByUserEmail = async (email: string) => {
-        const response = await EventService.getEventsByUserEmail(email);
+    const getTicketsByUserEmail = async (email: string) => {
+        const response = await TicketService.getTicketsByUserEmail(email);
         const ticketsData = await response.json();
         setTickets(ticketsData);
     }
@@ -105,6 +105,7 @@ const MyEvents: React.FC = () => {
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserService from "@services/UserService";
+import TicketService from "@services/TicketService";
 export const getServerSideProps = async (context) => {
     const { locale } = context;
 

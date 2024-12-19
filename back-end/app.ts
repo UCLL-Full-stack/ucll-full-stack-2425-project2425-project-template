@@ -62,7 +62,7 @@ const swaggerOptions = {
 
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
-app.use('/project-swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 app.get('/status', (req: Request, res: Response) => {

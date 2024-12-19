@@ -30,8 +30,30 @@
  *            category:
  *              type: string
  *              description: Event category
+ *      EventInput:
+ *          type: object
+ *          properties:
+ *            name:
+ *              type: string
+ *              description: Event name
+ *            description:
+ *              type: string
+ *              description: Event description
+ *            date:
+ *              type: string
+ *              format: date
+ *              description: Date of the event
+ *            location:
+ *              type: string
+ *              description: Event location
+ *            category:
+ *              type: string
+ *              description: Event category
+ *          required:
+ *            - name
+ *            - date
+ *            - location
  */
-
 import express, { NextFunction, Request, Response } from 'express';
 import eventService from '../service/event.service';
 import ticketService from '../service/ticket.service';
@@ -68,41 +90,33 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
-eventRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
-
-    try {
-        const userEmail = req.params.email;
-        const tickets = await ticketService.getTicketsByUserEmail(userEmail);        
-        res.status(200).json(tickets);
-    } catch (error) {
-        res.status(400).json({ status: 'error' });
-    }
-});
-
 /**
  * @swagger
- * /events/{id}:
+ * /events/details/{id}:
  *   get:
- *     summary: Get event by ID.
- *     description: Returns an event.
+ *     summary: Get event details by ID.
+ *     description: Returns a single event by its ID.
  *     tags:
  *       - Events
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: Numeric ID of the event to retrieve.
+ *         description: ID of the event to retrieve.
  *         schema:
  *           type: integer
+ *           format: int64
  *     responses:
  *       200:
- *         description: An event object.
+ *         description: Event details.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Event not found.
  *       400:
- *         description: Error occurred while fetching the event.
+ *         description: Error occurred while fetching the event details.
  */
 eventRouter.get('/details/:id', async (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id, 10);
@@ -118,6 +132,32 @@ eventRouter.get('/details/:id', async (req: Request, res: Response, next: NextFu
     }
 });
 
+/**
+ * @swagger
+ * /events/create:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Create a new event.
+ *     description: Create a new event.
+ *     tags:
+ *       - Events
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EventInput'
+ *     responses:
+ *       201:
+ *         description: Event created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Error occurred while creating event.
+ */
 eventRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const event = await eventService.createEvent(req.body);
