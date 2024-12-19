@@ -22,7 +22,7 @@ const main = async () => {
                 create: {
                     type: 'premium',
                     startDate: new Date(),
-                    duration: 356
+                    duration: 'unlimited'
                 }
             }
         }
@@ -38,6 +38,14 @@ const main = async () => {
             role: "user",
             firstName: "Nikolai",
             lastName: "Lastname",
+            subscription: {
+                create: {
+                    type: 'basic',
+                    startDate: new Date(),
+                    duration: '356'
+                }
+            }
+
         }
     });
 

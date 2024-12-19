@@ -5,13 +5,13 @@ export class Subscription {
     private id?: number;
     private type: SubscriptionType;
     private startDate: Date;
-    private duration: number;
+    private duration: string;
 
     constructor(subscription: {
         id?: number;
         type: SubscriptionType;
         startDate: Date;
-        duration: number;
+        duration: string;
     }) {
         this.validate(subscription);
 
@@ -33,14 +33,14 @@ export class Subscription {
         return this.startDate;
     }
 
-    getDuration(): number {
-        return this.duration;
+    getDuration(): string {
+        return this.duration.toString();
     }
 
     validate(subscription: {
         type: SubscriptionType;
         startDate: Date;
-        duration: number;
+        duration: string;
     }) {
         if (!subscription.type?.trim()) {
             throw new Error('type is required');

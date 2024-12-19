@@ -4,7 +4,9 @@ import database from '../util/database';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
-        const usersPrisma = await database.user.findMany();
+        const usersPrisma = await database.user.findMany({
+            include: { subscription: true }, 
+        });
         return usersPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
         console.error(error);
@@ -16,7 +18,7 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
             where: { id },
-            include: { subscription: true },
+            include: { subscription: true },  
         });
 
         return userPrisma ? User.from(userPrisma) : null;
@@ -30,8 +32,7 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     try {
         const userPrisma = await database.user.findFirst({
             where: { username },
-            include: { subscription: true },
-            
+            include: { subscription: true }, 
         });
 
         return userPrisma ? User.from(userPrisma) : null;
@@ -41,24 +42,34 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     }
 };
 
+
 const createUser = async (items: User): Promise<User> => {
     try {
-        const userPrisma = await database.user.create ({
+        const userPrisma = await database.user.create({
             data: {
                 username: items.getUsername(),
                 firstName: items.getFirstName(),
                 lastName: items.getLastName(),
                 email: items.getEmail(),
                 role: items.getRole(),
-                password: items.getPassword()
-            }
-        }) 
-        return User.from(userPrisma)
+                password: items.getPassword(),
+                subscription: {
+                    create: {
+                        type: 'basic', 
+                        startDate: new Date(),
+                        duration: 'unlimited', 
+                    },
+                },
+            },
+        });
+
+        return User.from(userPrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
-}
+};
+
 
 const changeSubscriptionOfUser = async (subscription: Subscription, userId: number): Promise<User> => {
     try {

@@ -42,7 +42,7 @@ type SubscriptionInput = {
     id?: number;
     type?: SubscriptionType;
     start_date?: Date;
-    duration?: number;
+    duration?: string;
 };
 
 

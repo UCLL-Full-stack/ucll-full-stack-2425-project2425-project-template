@@ -1,6 +1,6 @@
 import { User } from '../model/user';
 import userDB from '../repository/user.db';
-import { AuthenticationResponse, UserInput } from '../types';
+import { AuthenticationResponse, SubscriptionInput, UserInput } from '../types';
 import bcrypt from 'bcrypt'
 import { generateJwtToken } from '../util/jwt';
 import { Subscription } from '../model/subscription';
@@ -55,13 +55,35 @@ const createUser = async ({username, firstName, lastName, email, role, password}
     return await userDB.createUser(user)
 }
 
-const changeSubscriptionOfUser = async (subscription: Subscription, id: number): Promise<User> => {
-    const user = await userDB.changeSubscriptionOfUser(subscription, id);
+const changeSubscriptionOfUser = async (
+    subscriptionData: SubscriptionInput,
+    userId: number
+): Promise<User> => {
+    const { id, type, start_date, duration } = subscriptionData;
+    if (!type) {
+        throw new Error("Subscription type is required.");
+    }
+    if (duration === undefined) {
+        throw new Error("Subscription duration is required.");
+    }
+    if (!start_date) {
+        throw new Error("Subscription start date is required.");
+    }
+
+    const subscription = new Subscription({
+        id,
+        type,
+        startDate: new Date(start_date),
+        duration,
+    });
+    const user = await userDB.changeSubscriptionOfUser(subscription, userId);
+
     if (!user) {
-        throw new Error(`User with username: ${id} does not exist.`);
+        throw new Error(`User with ID: ${userId} does not exist.`);
     }
     return user;
 };
+
 
 const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
     if (!username) {

@@ -82,7 +82,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types/index';
+import { SubscriptionInput, SubscriptionType, UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
@@ -173,5 +173,51 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: changes subscription of use.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AuthenticationRequest'
+ *     responses:
+ *       200:
+ *         description: Authentication successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthenticationResponse'
+ */
+userRouter.post('/subscription', async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Received body:", req.body);  
+
+    const { subscription, userId } = req.body;
+    const { type, startDate, duration } = subscription;
+
+    try {
+        if (!type || !startDate || !duration || !userId) {
+            return res.status(400).json({ message: 'Missing required fields.' }); 
+        }
+        const subscriptionInput: SubscriptionInput = {
+            type,
+            start_date: startDate,
+            duration,
+        };
+        const updatedUser = await userService.changeSubscriptionOfUser(subscriptionInput, userId);
+
+        res.status(200).json({ message: 'Subscription updated successfully.', user: updatedUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error in database.' });
+    }
+});
+
+
 
 export { userRouter };
+   
+
