@@ -1,10 +1,9 @@
 import { Exercise } from '../model/exercise';
 import { Workout } from '../model/workout';
-import { WorkoutExercise } from '../model/workoutexercise';
 import { WorkoutInput } from '../types';
 import database from '../util/database';
 
-const createWorkout = async ({ name, description, user }: Workout): Promise<Workout> => {
+const createWorkout = async ({ name, description, user, exercises }: Workout): Promise<Workout> => {
     try {
         const workoutPrisma = await database.workout.create({
             data: {
@@ -15,9 +14,13 @@ const createWorkout = async ({ name, description, user }: Workout): Promise<Work
                         email: user.email,
                     },
                 },
+                exercises: {
+                    connect: exercises.map((exercise) => ({ id: exercise.id })),
+                },
             },
             include: {
                 user: true,
+                exercises: true,
             },
         });
         return Workout.from(workoutPrisma);
@@ -40,7 +43,7 @@ const createWorkout = async ({ name, description, user }: Workout): Promise<Work
 const getAllWorkouts = async (): Promise<Workout[]> => {
     try {
         const workoutPrisma = await database.workout.findMany({
-            include: { user: true },
+            include: { user: true, exercises: true },
         });
         return workoutPrisma.map((workout) => Workout.from(workout));
     } catch (error) {
@@ -53,7 +56,7 @@ const getWorkoutById = async ({ id }: { id: string }): Promise<Workout | null> =
     try {
         const workoutPrisma = await database.workout.findUnique({
             where: { id },
-            include: { user: true },
+            include: { user: true, exercises: true },
         });
         return workoutPrisma ? Workout.from(workoutPrisma) : null;
     } catch (error) {
@@ -66,7 +69,7 @@ const getWorkoutsByUserId = async ({ userId }: { userId: string }): Promise<Work
     try {
         const workoutPrisma = await database.workout.findMany({
             where: { userId },
-            include: { user: true },
+            include: { user: true, exercises: true },
         });
         return workoutPrisma.map((workout) => Workout.from(workout));
     } catch (error) {
@@ -79,7 +82,7 @@ const removeWorkout = async ({ id }: { id: string }): Promise<Workout | null> =>
     try {
         const workoutPrisma = await database.workout.delete({
             where: { id },
-            include: { user: true },
+            include: { user: true, exercises: true },
         });
         return workoutPrisma ? Workout.from(workoutPrisma) : null;
     } catch (error) {

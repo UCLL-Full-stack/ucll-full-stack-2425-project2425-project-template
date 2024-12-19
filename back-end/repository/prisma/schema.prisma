@@ -26,7 +26,7 @@ model Workout {
   userId      String
   name        String   
   description String 
-  workoutExercises WorkoutExercise[]
+  exercises Exercise[]
   user        User     @relation(fields: [userId], references: [id])
 }
 
@@ -37,21 +37,6 @@ model Exercise {
   description String  
   videoLink   String 
   isFavorite  Boolean 
-  workoutExercises WorkoutExercise[]
-}
-
-
-model WorkoutExercise {
-  id          String   @id @default(cuid())
-  workoutId   String
-  exerciseId  String
-  sets        Int
-  reps        Int
-  rpe         String
-  restTime    String
-
-  workout     Workout  @relation(fields: [workoutId], references: [id])
-  exercise    Exercise @relation(fields: [exerciseId], references: [id])
-
-  @@unique([workoutId, exerciseId]) 
+  workouts    Workout[]
+  
 }

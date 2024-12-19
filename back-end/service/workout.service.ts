@@ -1,7 +1,6 @@
 import { Workout } from '../model/workout';
 import userDb from '../repository/user.db';
 import workoutDb from '../repository/workout.db';
-import workoutexerciseDb from '../repository/workoutexercise.db';
 import { WorkoutInput } from '../types';
 import exerciseService from './exercise.service';
 
@@ -80,8 +79,13 @@ const removeWorkout = async (id: string): Promise<Workout> => {
     return workout;
 };
 
-const createWorkout = async ({ name, description, user }: WorkoutInput): Promise<Workout> => {
-    const workout = new Workout({ name, description, user });
+const createWorkout = async ({
+    name,
+    description,
+    user,
+    exercises,
+}: WorkoutInput): Promise<Workout> => {
+    const workout = new Workout({ name, description, user, exercises });
     return workoutDb.createWorkout(workout);
 };
 

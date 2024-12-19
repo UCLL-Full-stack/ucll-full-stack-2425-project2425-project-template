@@ -1,5 +1,4 @@
 import { Exercise } from '../model/exercise';
-import { WorkoutExercise } from '../model/workoutexercise';
 import database from '../util/database';
 
 const getAllExercises = async (): Promise<Exercise[]> => {

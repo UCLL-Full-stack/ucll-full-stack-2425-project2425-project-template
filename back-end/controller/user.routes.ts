@@ -71,6 +71,8 @@ const userRouter = Router();
  * @swagger
  * /users:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all users
  *     tags: [Users]
  *     description: Retrieve a list of all users.
@@ -98,6 +100,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /users/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a user by ID
  *     tags: [Users]
  *     description: Retrieve a single user by their ID.

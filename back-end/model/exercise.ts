@@ -1,8 +1,4 @@
-import { WorkoutExercise } from './workoutexercise';
-import {
-    Exercise as ExercisePrisma,
-    WorkoutExercise as WorkoutExercisePrisma,
-} from '@prisma/client';
+import { Exercise as ExercisePrisma } from '@prisma/client';
 
 export class Exercise {
     readonly id?: string;

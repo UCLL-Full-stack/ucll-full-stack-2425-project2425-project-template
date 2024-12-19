@@ -18,6 +18,10 @@
  *           type: string
  *         user:
  *           $ref: '#/components/schemas/User'
+ *         exercises:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Exercise'
  *     WorkoutInput:
  *       type: object
  *       properties:
@@ -27,6 +31,32 @@
  *           type: string
  *         user:
  *           $ref: '#/components/schemas/UserInput'
+ *         exercises:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/ExerciseInput'
+ *     Exercise:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         videoLink:
+ *           type: string
+ *           format: uri
+ *     ExerciseInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         videoLink:
+ *           type: string
+ *           format: uri
  *     User:
  *       type: object
  *       properties:
@@ -100,6 +130,8 @@ workoutRouter.get('/', async (req: Request, res: Response) => {
  * @swagger
  * /workouts/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a workout by ID
  *     tags: [Workouts]
  *     description: Retrieve a single workout by its ID.
@@ -133,6 +165,8 @@ workoutRouter.get('/:id', async (req: Request, res: Response, next: NextFunction
  * @swagger
  * /workouts/user/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get workouts by user ID
  *     tags: [Workouts]
  *     description: Retrieve workouts associated with a specific user.
@@ -203,6 +237,8 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
  * @swagger
  * /workouts/{workoutId}/exercises/{exerciseId}:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Add an exercise to a workout
  *     tags: [Workouts]
  *     description: Add an exercise to a specific workout by their IDs.
@@ -245,6 +281,8 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
  * @swagger
  * /workouts/{workoutId}/exercises/{exerciseId}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove an exercise from a workout
  *     tags: [Workouts]
  *     description: Remove an exercise from a specific workout by their IDs.

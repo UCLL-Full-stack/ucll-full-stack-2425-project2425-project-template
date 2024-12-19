@@ -26,6 +26,7 @@ type WorkoutInput = {
     name: string;
     description: string;
     user: User;
+    exercises: Exercise[];
 };
 
 type WorkoutExerciseInput = {

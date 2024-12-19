@@ -7,7 +7,6 @@ import swaggerUi from 'swagger-ui-express';
 import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
 import exerciseRouter from './controller/exercise.routes';
-import workoutExerciseRouter from './controller/workoutExercise.routes';
 import { expressjwt } from 'express-jwt';
 
 const app = express();
@@ -29,7 +28,6 @@ app.use(
 app.use('/exercises', exerciseRouter);
 app.use('/users', userRouter);
 app.use('/workouts', workoutRouter);
-app.use('/workoutExercises', workoutExerciseRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

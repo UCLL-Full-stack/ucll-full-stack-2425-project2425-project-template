@@ -79,31 +79,6 @@ const main = async () => {
         },
     });
 
-    // Create Workouts
-    const workout1 = await prisma.workout.create({
-        data: {
-            name: 'Leg Day',
-            description: 'A workout focused on leg exercises.',
-            user: {
-                connect: {
-                    id: user1.id,
-                },
-            },
-        },
-    });
-
-    const workout2 = await prisma.workout.create({
-        data: {
-            name: 'Upper Body Strength',
-            description: 'A workout focused on upper body exercises.',
-            user: {
-                connect: {
-                    id: user2.id,
-                },
-            },
-        },
-    });
-
     await prisma.workout.create({
         data: {
             name: 'Arm Day',
@@ -112,6 +87,9 @@ const main = async () => {
                 connect: {
                     id: user2.id,
                 },
+            },
+            exercises: {
+                connect: [{ id: pushUp.id }, { id: pullUp.id }, { id: squat.id }],
             },
         },
     });
@@ -125,63 +103,8 @@ const main = async () => {
                     id: user1.id,
                 },
             },
-        },
-    });
-
-    // Create WorkoutExercises (linking Workouts with Exercises)
-    await prisma.workoutExercise.create({
-        data: {
-            sets: 4,
-            reps: 10,
-            rpe: '7-8',
-            restTime: '90s',
-            workout: {
-                connect: {
-                    id: workout1.id,
-                },
-            },
-            exercise: {
-                connect: {
-                    id: squat.id,
-                },
-            },
-        },
-    });
-
-    await prisma.workoutExercise.create({
-        data: {
-            sets: 3,
-            reps: 15,
-            rpe: '7-8',
-            restTime: '60s',
-            workout: {
-                connect: {
-                    id: workout2.id,
-                },
-            },
-            exercise: {
-                connect: {
-                    id: pushUp.id,
-                },
-            },
-        },
-    });
-
-    await prisma.workoutExercise.create({
-        data: {
-            sets: 3,
-            reps: 10,
-            rpe: '8-9',
-            restTime: '90s',
-            workout: {
-                connect: {
-                    id: workout2.id,
-                },
-            },
-            exercise: {
-                connect: {
-                    id: pullUp.id,
-                },
+            exercises: {
+                connect: [{ id: squat.id }, { id: pushUp.id }, { id: pullUp.id }],
             },
         },
     });
