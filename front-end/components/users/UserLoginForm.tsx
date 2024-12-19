@@ -52,11 +52,15 @@ const UserLoginForm: React.FC = () => {
   
       if (response.status === 200) {
         const userPayload = await response.json();
+        const userthing = userPayload.response;
   
         setStatusMessages([{ message: t('login.success'), type: "success" }]);
   
         console.log("User logged in:", userPayload);
-        localStorage.setItem("loggedInUser", JSON.stringify({userPayload}));
+        localStorage.setItem("loggedInUser", JSON.stringify({
+          token: userthing.token,
+          role: userthing.role,
+        }));
   
         setTimeout(() => {
           router.push("/");
