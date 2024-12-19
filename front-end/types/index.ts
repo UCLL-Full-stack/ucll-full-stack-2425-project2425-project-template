@@ -13,6 +13,12 @@ export interface Team {
     name: string;
     players?: Player[];
     coach?: Coach;
+    points?: number;
+    goalsFor?: number;
+    goalsAg?: number;
+    homeMatches?: Match[];
+    awayMatches?: Match[];
+
 }
 
 export interface Coach {
@@ -27,8 +33,8 @@ export interface Match {
     id?: number;
     location: string;
     date: Date;
-    homeTeam: string;
-    awayTeam: string;
+    homeTeamName: string;
+    awayTeamName: string;
     homeScore: number;
     awayScore: number;
 }

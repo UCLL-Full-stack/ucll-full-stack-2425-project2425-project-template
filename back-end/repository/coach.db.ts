@@ -35,6 +35,7 @@ const updateCoach = async (id: number, { name, job, imageUrl }: CoachInput): Pro
     }
 }
 
+
 const removeCoach = async (id: number):  Promise<void> => {
     try {
         await db.coach.delete({

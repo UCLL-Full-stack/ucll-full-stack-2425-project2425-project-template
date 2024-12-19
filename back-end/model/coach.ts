@@ -6,6 +6,7 @@ export class Coach {
     readonly name: string;
     readonly job: Job;
     readonly imageUrl?: string;
+    readonly teamId: number = 1;
 
     constructor(coach: { id: number, name: string, job: Job, imageUrl?: string }) {
 

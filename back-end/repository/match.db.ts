@@ -84,5 +84,23 @@ const addPlayerToMatch = async (id: number, player_id: number): Promise<Match> =
     }
 }
 
+const getMatchById = async (id: number): Promise<Match> => {
+    try {
+        const matchPrisma = await db.match.findUnique({
+            where: {
+                id
+            },
+            include: {
+                players: true
+            }
+        });
+        if (!matchPrisma) {
+            throw new Error('Match not found');
+        }
+        return Match.from(matchPrisma);
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
+}
 
-export default {findAll, addMatch, updateMatch, deleteMatch, addPlayerToMatch, findById};
+export default {findAll, addMatch, updateMatch, deleteMatch, addPlayerToMatch , getMatchById};

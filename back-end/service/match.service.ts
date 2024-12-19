@@ -19,12 +19,17 @@ const deleteMatch = async (id: number): Promise<void> => {
     return matchDb.deleteMatch(id);
 }
 
-const addPlayerToMatch = async (id: number, player_id: number): Promise<Match> => {
-    return matchDb.addPlayerToMatch(id, player_id);
+const addPlayerToMatch = async (matchId: number, player_ids: number[]): Promise<Match[]> => {
+    const addedPlayers = await Promise.all(
+        player_ids.map((playerId) => matchDb.addPlayerToMatch(matchId, playerId)) // Pass individual playerId
+    );
+    return addedPlayers;
+};
+
+const getMatchById = async (id: number): Promise<Match> => {
+    return matchDb.getMatchById(id);
 }
 
-const findMatchById = async (id: number): Promise<Match> => {
-    return matchDb.findById(id);
-}
 
-export default {getAllMatches, addMatch, updateMatch, deleteMatch, addPlayerToMatch, findMatchById};
+
+export default {getAllMatches, addMatch, updateMatch, deleteMatch, addPlayerToMatch, getMatchById};
