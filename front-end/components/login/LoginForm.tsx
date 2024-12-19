@@ -31,18 +31,24 @@ const LoginForm: React.FC = () => {
         event.preventDefault();
         if (!validate()) return;
 
-        try {
-            const userLogin = { totem: totem, password: password };
-            const response = await userService.login(userLogin);
-            const data = await response.json();
+        const userLogin = { totem: totem, wachtwoord: password };
+        const response = await userService.login(userLogin);
 
-            if (response.ok) {
-                return;
-            } else {
-                return;
+        if (response.status === 200) {
+            try {
+                setStatusMessages([{message : ('Login gelukt!'), type : "success"}]);
+                const data = await response.json();
+                sessionStorage.setItem("loggedIn", JSON.stringify({
+                    'token': data.token,
+                    'totem': data.totem,
+                    'role': data.role
+                }));
+                router.push('/'); 
+            } catch (error) {
+                setStatusMessages([{ message: "Server Error; no connection possible", type: "error" }]);
             }
-        } catch (error) {
-            setStatusMessages([{ message: "Server Error; no connection possible", type: "error" }]);
+        } else {
+            setStatusMessages([{ message: "Login failed", type: "error" }]);
         }
     };
 
@@ -72,7 +78,7 @@ const LoginForm: React.FC = () => {
                     {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
                 </div>
                 <button type="submit" className="w-full bg-green-600 text-white py-2 rounded">
-                    inloggen
+                    Inloggen
                 </button>
             </form>
             {statusMessages && (

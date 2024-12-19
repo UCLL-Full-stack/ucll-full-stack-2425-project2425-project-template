@@ -35,7 +35,7 @@ export type Nieuwsbericht = {
 
 export type UserLogin = {
     totem: string;
-    password: string;
+    wachtwoord: string;
 };
 
 export type StatusMessage = {

@@ -1,7 +1,7 @@
 import { UserLogin } from '@/types';
 
 const login = (userlogin: UserLogin) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/authenticate", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/leiding/login", {
         method: "POST",
         headers: {
             Accept: "application/json",
