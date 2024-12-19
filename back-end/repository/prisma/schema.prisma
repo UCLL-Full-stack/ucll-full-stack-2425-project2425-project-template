@@ -13,6 +13,7 @@ model Player {
   statistics    String
   class     String
   currency  Int
+  image     String
   userId    Int
   user      User       @relation(fields: [userId], references: [id])
   Positions Position[]

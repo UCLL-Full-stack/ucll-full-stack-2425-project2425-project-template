@@ -35,3 +35,12 @@ export type WorldInput = {
     email: string,
     name: string,
 }
+
+export type PlayerInput = {
+    name: string;
+    currency: number;
+    statistics: string;
+    class: string;
+    image: string;
+    userEmail: string;
+};

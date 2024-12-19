@@ -44,7 +44,7 @@ worldRouter.post('/add', async (req: Request, res: Response, next: NextFunction)
     } catch (error) {
         res.status(400).json({
             status: '400',
-            errorMessage: `Something went wrong with updating the position.`,
+            errorMessage: `Something went wrong with generating world.`,
         });
     }
 })
