@@ -3,6 +3,10 @@ import { Player } from "../model/player";
 import { PlayerInput } from "../types/types";
 
 const getAllPlayers = async (): Promise<Player[]> => {
+    // if (!email) {
+    //     throw new Error('Cooked token not found');
+    // }
+
     return playerDb.findAll();
 }
 

@@ -5,12 +5,24 @@ import playerService from '../service/player.service';
 import exp from 'constants';
 import { PlayerInput } from '../types/types';
 import statsService from '../service/stats.service';
+import { decodeJwtToken } from '../util/jwt';
  
 
 const playerRouter = express.Router();
 
-playerRouter.get('/', async (req: Request, res: Response , next: NextFunction) => {
+playerRouter.get('/', async (req: Request , res: Response , next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.slice(7);
+
+    
+        console.log(token);
+
+
+        if (!token) {
+            throw new Error('Authorization token is missing');
+        }
+        const decode = decodeJwtToken(token);
+        console.log(decode);        
         const players = await playerService.getAllPlayers();
         res.status(200).json(players);
     } catch (error) {
@@ -18,7 +30,7 @@ playerRouter.get('/', async (req: Request, res: Response , next: NextFunction) =
     }
 })
 
-playerRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+playerRouter.get('/:id', async (req: Request , res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const player = await playerService.getPlayerById(id);

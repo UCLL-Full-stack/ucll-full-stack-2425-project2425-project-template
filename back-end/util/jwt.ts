@@ -15,4 +15,13 @@ const generateJwtToken = ({ email, role }: JWTload): string => {
  }
 
 
- export { generateJwtToken }
+const decodeJwtToken = (token: string): JWTload  => {
+    try {
+        return jwt.verify(token, `${process.env.JWT_SECRET}`) as JWTload;
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error decoding token');
+    }
+}
+
+ export { generateJwtToken, decodeJwtToken };
