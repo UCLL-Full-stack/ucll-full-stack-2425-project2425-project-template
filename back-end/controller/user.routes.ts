@@ -1,10 +1,10 @@
-import express, { NextFunction, Request, response, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
@@ -13,14 +13,17 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = await userService.getUserByEmail(req.params.email);
-        res.status(200).json(user);
-    } catch (error) {
-        next(error);
+userRouter.get(
+    '/:email',
+    async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
+        try {
+            const user = await userService.getUserByEmail(req.params.email);
+            res.status(200).json(user);
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
