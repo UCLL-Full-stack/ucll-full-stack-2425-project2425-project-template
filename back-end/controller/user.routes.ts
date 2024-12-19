@@ -42,7 +42,7 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
-userRouter.post('update/:email', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.put('update/:email', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
         const updatedUser = await userService.updateUser(user);
