@@ -33,8 +33,8 @@ export interface Match {
     id?: number;
     location: string;
     date: Date;
-    homeTeam: string;
-    awayTeam: string;
+    homeTeamName: string;
+    awayTeamName: string;
     homeScore: number;
     awayScore: number;
 }
