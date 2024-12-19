@@ -70,7 +70,8 @@ const Home: FC = () => {
       }
     };
     fetchData();
-  }, [setUser]);
+    console.log("Fetching data");
+  }, [permissions, setUser]);
 
   const handleDiscordLogin = () => {
     const redirectUri = `http://localhost:8080/api/auth/discord`;
@@ -141,8 +142,21 @@ const Home: FC = () => {
       console.log('Created board with data:', boardPayload);
       if (selectedGuildId) {
         const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId);
-        console.log('Fetched boards:', fetchedBoards);
-        setBoards(fetchedBoards || []);
+        const filteredBoards = await Promise.all(
+          fetchedBoards.map(async (board) => {
+            try {
+                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+                const canViewBoard =
+                    permissions.includes(KanbanPermission.VIEW_BOARD) || 
+                    permissions.includes(KanbanPermission.ADMINISTRATOR);
+                return canViewBoard ? board : null;
+            } catch (error) {
+                console.error(`Error checking permissions for board ${board.boardId}:`, error);
+                return null;
+            }
+        })
+        )
+        setBoards(filteredBoards.filter((board)=> board !== null) || []);
     }
     } catch (error) {
       console.error('Error creating board', error);
@@ -159,15 +173,14 @@ const Home: FC = () => {
     try {
       await GuildService.updateGuild(selectedGuildId!, {settings: updatedSettings});
       const updatedGuild: Guild = await GuildService.getGuild(selectedGuildId!);
-      setPermissions(prev => {
-        const updatedPermissions = prev.map(p => {
-            if (p.guildId === selectedGuildId) {
-                return { guildId: selectedGuildId, permissions: [...updatedGuild.settings] };
-            }
-            return p;
-        });
-        return [...updatedPermissions];
-    });
+      const updatedPermissions = await UserService.getUserGuildKanbanPermissions(user!.userId, updatedGuild.guildId);
+      setPermissions((prev) => {
+        return prev.map((perm) => 
+            perm.guildId === selectedGuildId
+                ? { guildId: selectedGuildId, permissions: updatedPermissions }
+                : perm
+        );
+      });
       setIsEditingGuildSettings(false);
       console.log("Guild settings updated successfully");
     } catch (error) {
@@ -180,7 +193,21 @@ const Home: FC = () => {
     try {
         await BoardService.deleteBoard(boardId);
         const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId!);
-        setBoards(fetchedBoards || []);
+        const filteredBoards = await Promise.all(
+          fetchedBoards.map(async (board) => {
+            try {
+                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+                const canViewBoard =
+                    permissions.includes(KanbanPermission.VIEW_BOARD) || 
+                    permissions.includes(KanbanPermission.ADMINISTRATOR);
+                return canViewBoard ? board : null;
+            } catch (error) {
+                console.error(`Error checking permissions for board ${board.boardId}:`, error);
+                return null;
+            }
+        })
+        )
+        setBoards(filteredBoards.filter((board)=> board !== null) || []);
     } catch (error) {
         console.error('Error deleting board:', error);
     }
@@ -190,7 +217,20 @@ const Home: FC = () => {
     try {
         await BoardService.updateBoard(editingBoardId!, { boardName: boardData.boardName });
         const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId!);
-        setBoards(fetchedBoards || []);
+        const filteredBoards = await Promise.all(
+          fetchedBoards.map(async (board) => {
+            try {
+                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+                const canViewBoard =
+                    permissions.includes(KanbanPermission.VIEW_BOARD) || 
+                    permissions.includes(KanbanPermission.ADMINISTRATOR);
+                return canViewBoard ? board : null;
+            } catch (error) {
+                console.error(`Error checking permissions for board ${board.boardId}:`, error);
+                return null;
+            }
+        }))
+        setBoards(filteredBoards.filter((board)=> board !== null) || []);
         setEditingBoardId(null);
     } catch (error) {
         console.error('Error updating board:', error);
@@ -200,6 +240,21 @@ const Home: FC = () => {
   const handleBoardEditPermissionsSubmit = async (permissions: PermissionEntry[]) => {
     try {
       await BoardService.updateBoard(editingBoardPermissionsId!, { permissions });
+      const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId!);
+      const filteredBoards = await Promise.all(
+        fetchedBoards.map(async (board) => {
+          try {
+              const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+              const canViewBoard =
+                  permissions.includes(KanbanPermission.VIEW_BOARD) || 
+                  permissions.includes(KanbanPermission.ADMINISTRATOR);
+              return canViewBoard ? board : null;
+          } catch (error) {
+              console.error(`Error checking permissions for board ${board.boardId}:`, error);
+              return null;
+          }
+      }))
+      setBoards(filteredBoards.filter((board)=> board !== null) || []);
       setEditingBoardPermissionsId(null);
     } catch (error) {
       console.error('Error updating permissions:', error);
@@ -284,7 +339,7 @@ const Home: FC = () => {
                   ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {displayGuilds.map(guild => (
-                              <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleBoardCreateClick} onGuildSettingsClick={handleGuildEditSettings}/>
+                              <GuildCard key={guild.guildId} guild={guild} onClick={handleGuildClick} onCreateClick={handleBoardCreateClick} onGuildSettingsClick={handleGuildEditSettings} permissions={permissions}/>
                           ))}
                       </div>
                   )}

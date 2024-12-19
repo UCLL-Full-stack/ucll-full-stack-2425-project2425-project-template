@@ -79,6 +79,7 @@ export interface PermissionEntry{
 export interface Guild{
     guildId: string;
     guildName: string;
+    guildOwnerId: string | null;
     settings: PermissionEntry[];
     roles: Role[];
     members: Member[];

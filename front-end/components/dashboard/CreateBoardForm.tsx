@@ -27,6 +27,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     const [filteredGuilds, setFilteredGuilds] = useState<Guild[]>(guilds);
 
     useEffect(() => {
+        console.log("For some reason we need this console log for it to display guilds in the create board");
         setSelectedGuild(null);
         setError(null);
         setBoardName('');

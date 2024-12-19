@@ -64,6 +64,10 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
     const handleBlur = async () => {
         setIsEditing(false);
         if (columnName !== initialColumnName) {
+            if (!columnName.trim()) {
+                setColumnName(initialColumnName);
+                return;
+            }
             try {
                 await ColumnService.updateColumn(column.columnId, { columnName });
                 setInitialColumnName(columnName);

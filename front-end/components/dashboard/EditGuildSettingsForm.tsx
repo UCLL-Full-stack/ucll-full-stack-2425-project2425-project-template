@@ -1,3 +1,4 @@
+import { useUser } from "@/context/UserContext";
 import GuildService from "@/services/GuildService";
 import { DiscordPermission, Guild, KanbanPermission, PermissionEntry, Role, User } from "@/types";
 import React, { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ interface EditGuildSettingsFormProps {
 }
 
 const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, onClose, onSubmit }) => {
+    const { user } = useUser();
     const [guild, setGuild] = useState<Guild | null>(null);
     const [guildSettings, setGuildSettings] = useState<PermissionEntry[]>([]);
     const [allRoles, setAllRoles] = useState<Role[]>([]);
@@ -28,7 +30,6 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
             setGuildSettings(guild.settings);
             setAllUsers(users);
             setAllRoles(roles);
-
             roles.forEach(role => roleMap.set(role.roleId, role.roleName));
             users.forEach(user => userMap.set(user.userId, user.globalName));
         }
@@ -36,7 +37,12 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
         fetchData();
     }, [guildId]);
 
-    const availableKanbanPermissions = Object.values(KanbanPermission);
+    const availableKanbanPermissions = Object.values(KanbanPermission).filter(permission => {
+        if (permission === KanbanPermission.ADMINISTRATOR && guild?.guildOwnerId !== user?.userId) {
+            return false;
+        }
+        return true;
+    });
 
     const resolveIdentifierName = (identifier: string): string => {
         if (roleMap.has(identifier)) return `Role: ${roleMap.get(identifier)}`;
