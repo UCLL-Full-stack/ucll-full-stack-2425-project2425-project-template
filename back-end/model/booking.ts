@@ -24,6 +24,7 @@ export class Booking {
         students: Student[]; 
         trip: Trip;
     }) {
+        // this.validate(booking);
         this.id = booking.id;
         this.bookingDate = booking.bookingDate;
         this.paymentStatus = booking.paymentStatus;
@@ -31,7 +32,13 @@ export class Booking {
         this.trip = booking.trip;
     }
 
-    validate() {
+    validate(booking: {
+        id?: number;
+        bookingDate: Date;
+        paymentStatus: PaymentStatus;
+        students: Student[]; 
+        trip: Trip;
+    }) {
         if (!this.bookingDate) {
             throw new Error('Booking date is required.');
         }

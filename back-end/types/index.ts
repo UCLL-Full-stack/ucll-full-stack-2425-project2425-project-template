@@ -29,9 +29,9 @@ type TripInput = {
 type BookingInput = {
     id?: number;
     studentIds: number[];  
-    tripId: number;    
+    tripId : number;
     bookingDate?: Date;
-    students?: StudentInput[];
+    studentsId: number[];
     paymentStatus: PaymentStatus;
 }
 

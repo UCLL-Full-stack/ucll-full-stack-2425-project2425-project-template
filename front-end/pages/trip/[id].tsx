@@ -9,6 +9,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import styles from '../../styles/TripDetails.module.css';
 import { useEffect, useState } from 'react';
 import errorStyles from '../../styles/errorMessage.module.css';
+import bookingService from '@/services/bookingService';
+import UserService from '@/services/UserService';
 
 type Props = {
     initialTrip: Trip | null;
@@ -43,6 +45,42 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
         }
     }, [initialTrip, router.query.id]);
 
+    const handleBooking = async () => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+        const parsedUser = loggedInUser ? JSON.parse(loggedInUser) :  null;
+        const username = parsedUser ? parsedUser.username : null;
+
+        console.log("loggedInUser", loggedInUser)
+        console.log("token", token)
+        console.log("parsedUser", parsedUser)
+        console.log("username", username)
+        
+        if (!token || !trip || !trip.id) {
+            console.error("Missing required data for booking.");
+            return;
+        }
+
+        console.log("trip", trip)
+        if (token && trip) {
+
+            const studentResponse = await UserService.getStudentByUsername(username);
+            const student = studentResponse.success ? studentResponse.student : null;
+
+            const bookingData = {
+                tripId: trip.id.toString(),
+                studentIds: student ? [student.id] : [],
+                bookingDate: new Date(),
+                paymentStatus: 'Pending'
+
+            };
+            console.log(bookingData)
+            const booking = await bookingService.createBooking(bookingData, token);
+            console.log(booking)
+            router.push("/bookings")
+        }
+    };
+
     if (!isLoggedIn) {
         return (
             <>
@@ -57,6 +95,10 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
 
     if (router.isFallback || loading) {
         return <div>{t("loading")}</div>;
+    }
+
+    if (!trip) {
+        return <div>{t("error.tripNotFound")}</div>;
     }
 
     const startDate = new Date(trip.startDate);
@@ -77,6 +119,9 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
                         <p><strong>{t('trips.eind')}:</strong> {endDate.toDateString()}</p>
                         <p className={styles['trip-price']}><strong>{t('trips.prijs')}:</strong> ${trip.price.toFixed(2)}</p>
                     </div>
+                    <button className={styles['book-button']} onClick={handleBooking}>
+                        {t('trips.book')}
+                    </button>
                 </main>
             </div>
         </>

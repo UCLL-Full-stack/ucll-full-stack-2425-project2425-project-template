@@ -19,10 +19,23 @@ const getAllBookings = async () => {
       },
     });
   }
+
+  const createBooking = async (bookingData: { tripId: string; studentIds: number[]; bookingDate: Date; paymentStatus: string }, token: string) => {
+    console.log(bookingData)
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/bookings", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(bookingData),
+    });
+};
   
   const BookingService = {
     getAllBookings,
-    getBookingById
+    getBookingById,
+    createBooking
   };
   
   export default BookingService;

@@ -1,6 +1,8 @@
 import studentDb from "../repository/student.db";
 import { Student } from "../model/student";
 import database from "../util/database";
+import userDb from "../repository/user.db";
+import userService from "./user.service";
 
 const createStudent = async ({
     studentNumber,
@@ -48,6 +50,17 @@ const getStudentById = async (studentId: number): Promise<Student | null> => {
     return student;
 };
 
+const getStudentByUsername = async (username: string): Promise<Student | null> => {
+
+  const user = await userService.getUserByUsername({username});
+
+  const student = null
+  if (!student) {
+      throw new Error(`Student with username ${username} does not exist.`);
+  }
+  return student;
+};
+
 const getAllStudents = async (): Promise<Student[]> => {
     try {
         return await studentDb.getAllStudents();
@@ -57,4 +70,4 @@ const getAllStudents = async (): Promise<Student[]> => {
     }
 };
 
-export default { createStudent, getStudentById, getAllStudents};
+export default { createStudent, getStudentById, getAllStudents, getStudentByUsername};

@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Booking } from '../model/booking';
+import { BookingInput } from '../types/index';
+
 import bookingService from '../service/booking.service';
 
 interface AuthRequest extends Request {
@@ -163,14 +165,15 @@ bookingRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *                   type: string
  *                   example: Booking creation failed due to a database error.
  */
-bookingRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const booking = await bookingService.createBooking(req.body);
+bookingRouter.post('/', async (req: Request, res: Response) => {
+  // try {
+    const booking = await bookingService.createBooking(req.body as BookingInput);
+    console.log("booking", booking)
     res.status(201).json(booking);
-  } catch (error) {
-    const err = error as Error;
-    res.status(400).json({ status: 'error', errorMessage: err.message });
-  }
+  // } catch (error) {
+  //   const err = error as Error;
+  //   res.status(400).json({ status: 'error', errorMessage: err.message });
+  // }
 });
 
 /**

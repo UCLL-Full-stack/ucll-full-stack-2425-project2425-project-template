@@ -10,14 +10,15 @@ import { UnauthorizedError } from "express-jwt";
 import { bookingRouter } from "../controller/booking.routes";
 import database from "../util/database";
 
-const createBooking = async (input: BookingInput): Promise<Booking> => {
-    const { bookingDate, tripId, studentIds, paymentStatus } = input;
+const createBooking = async ({ bookingDate, tripId, studentIds, paymentStatus }: BookingInput): Promise<Booking> => {
 
     if (!bookingDate) {
         throw new Error("Booking date is required.");
     }
 
-    const trip = await tripDb.getTripById(tripId);
+    const tripIdAsNumber = parseInt(tripId as unknown as string, 10);
+
+    const trip = await tripDb.getTripById(tripIdAsNumber as number);
     if (!trip) {
         throw new Error(`Trip with ID ${tripId} does not exist.`);
     }
@@ -31,33 +32,14 @@ const createBooking = async (input: BookingInput): Promise<Booking> => {
         })
     );
 
-    const newBooking = new Booking({ 
-        bookingDate, 
-        paymentStatus, 
-        trip,
-        students: students
-    });
+    const newBookingDb = await bookingDb.createBooking({ bookingDate, paymentStatus, tripId : tripIdAsNumber, studentIds});
 
-    newBooking.validate();
-
-    const bookingData = {
-        bookingDate,
-        tripId,
-        studentIds, 
-        paymentStatus 
-    };
-
-    try {
-        return await bookingDb.createBooking({
-            bookingDate,
-            paymentStatus,
-            tripId,
-            studentIds
-        }); 
-    } catch (error) {
-        console.error("Error creating booking:", error);
-        throw new Error("Booking creation failed due to a database error.");
+    
+    if (!newBookingDb) {
+        throw new Error(`Booking not created`);
     }
+
+    return newBookingDb;
 };
 
 
