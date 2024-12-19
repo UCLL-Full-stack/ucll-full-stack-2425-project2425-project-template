@@ -13,27 +13,26 @@ const playerRouter = express.Router();
 playerRouter.get('/', async (req: Request , res: Response , next: NextFunction) => {
     try {
         const token = req.headers.authorization?.slice(7);
-
-    
-        console.log(token);
-
-
         if (!token) {
             throw new Error('Authorization token is missing');
         }
-        const decode = decodeJwtToken(token);
-        console.log(decode);        
-        const players = await playerService.getAllPlayers();
+        const {email} = decodeJwtToken(token);
+        const players = await playerService.getAllPlayers({email});
         res.status(200).json(players);
     } catch (error) {
         next(error);
     }
 })
 
-playerRouter.get('/:id', async (req: Request , res: Response, next: NextFunction) => {
+playerRouter.get('/:id', async (req: Request & {}, res: Response, next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.slice(7);
+        if (!token) {
+            throw new Error('Authorization token is missing');
+        }
+        const {email} = decodeJwtToken(token);
         const id = parseInt(req.params.id);
-        const player = await playerService.getPlayerById(id);
+        const player = await playerService.getPlayerById(id, {email});
         res.status(200).json(player);
     } catch (error) {
         next(error);
@@ -42,8 +41,13 @@ playerRouter.get('/:id', async (req: Request , res: Response, next: NextFunction
 
 playerRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.slice(7);
+        if (!token) {
+            throw new Error('Authorization token is missing');
+        }
+        const {email, role} = decodeJwtToken(token);
         const player = <PlayerInput>req.body;
-        const result = await playerService.addPlayer(player);
+        const result = await playerService.addPlayer(player, {email, role});
         res.status(201).json(result);
     } catch (error) {
         next(error);
@@ -53,8 +57,13 @@ playerRouter.post('/add', async (req: Request, res: Response, next: NextFunction
 
 playerRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.slice(7);
+        if (!token) {
+            throw new Error('Authorization token is missing');
+        }
+        const {email, role} = decodeJwtToken(token);
         const id = parseInt(req.params.id);
-        const result = await playerService.RemovePlayer(id);
+        const result = await playerService.RemovePlayer(id, {email, role});
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -64,6 +73,11 @@ playerRouter.delete('/delete/:id', async (req: Request, res: Response, next: Nex
 
 playerRouter.put('/update/:id', async (req: Request, res: Response, next: NextFunction) => {   
     try {
+        const token = req.headers.authorization?.slice(7);
+        if (!token) {
+            throw new Error('Authorization token is missing');
+        }
+        const {email, role} = decodeJwtToken(token);
       const id = parseInt(req.params.id);
       const { name, number, position, birthdate, stat } = req.body;
   
@@ -72,14 +86,14 @@ playerRouter.put('/update/:id', async (req: Request, res: Response, next: NextFu
         number,
         position,
         birthdate,
-      });
+      }, { email, role });
   
       if (stat && stat.id) {
         await statsService.updateStats(stat.id, {
           appearances: stat.appearances,
           goals: stat.goals,
           assists: stat.assists,
-        });
+        }, { email, role });
       }
   
       res.status(200).json(updatedPlayer);
