@@ -8,6 +8,8 @@ const CreateExpense: React.FC = () => {
   const [amount, setAmount] = useState<number>(0);
   const [currency, setCurrency] = useState<string>('EUR');
   const [destinationAccountNumber, setDestinationAccountNumber] = useState<string>('');
+  const [redirect, setRedirect] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { accountNumber } = router.query;
 
@@ -27,8 +29,9 @@ const CreateExpense: React.FC = () => {
         console.log(`Expense created successfully with body: ${JSON.stringify(expenseData)}`);
         alert('Expense created successfully!');
         router.push(`/transactions/overview/account/${sourceAccount.id}`);
-      } catch (error) {
+      } catch (error: any) {
         console.error('An error occurred while creating the expense:', error);
+        setError(`Account is blocked or closed, no transactions can be made or received.`);
       }
     } else {
       console.error('Invalid account number');
@@ -50,6 +53,7 @@ const CreateExpense: React.FC = () => {
         Destination Account Number:
         <input type="text" value={destinationAccountNumber} onChange={(e) => setDestinationAccountNumber(e.target.value)} />
       </label>
+      {error && <div className={styles.error}>{error}</div>}
       <button type="submit">Create Expense</button>
     </form>
   );

@@ -14,7 +14,8 @@ type AccountOverviewProps = {
 const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
   const router = useRouter();
 
-  const handleTransactionClick = (accountNumber: string) => {
+  const handleTransactionClick = (accountNumber: string, event: React.MouseEvent) => {
+    event.stopPropagation();
     router.push(`/transactions/${accountNumber}`);
   };
 
@@ -47,7 +48,7 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
                 <td>{account.status}</td>
                 <td>{account.startDate ? new Date(account.startDate).toLocaleDateString() : 'N/A'}</td>
                 <td>{account.endDate ? new Date(account.endDate).toLocaleDateString() : 'N/A'}</td>
-                <td><button onClick={() => account.accountNumber && handleTransactionClick(account.accountNumber)}>Make transaction</button></td>
+                <td><button onClick={(e) => account.accountNumber && handleTransactionClick(account.accountNumber, e)}>Make transaction</button></td>
               </tr>
             ))
           ) : (
