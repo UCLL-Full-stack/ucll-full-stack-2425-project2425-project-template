@@ -92,7 +92,6 @@ const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
                 ? recipe.getScheduledDate()?.toISOString()
                 : null;
 
-        // Process ingredients
         const ingredients = await Promise.all(
             recipe.getIngredients()?.map(async (ingredient) => {
                 const ingredientData = ingredient.getIngredient();
@@ -101,15 +100,8 @@ const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
                     (ingredientData?.getCategory()?.toUpperCase() as IngredientCategory) || 'Other';
 
                 let ingredientId = ingredientData?.getId();
-                console.log(
-                    `Processing ingredient: ${ingredientName}, category: ${ingredientCategory}, initial ID: ${ingredientId}`
-                );
-
                 if (!ingredientId) {
                     ingredientId = (await getIngredientIdByName(ingredientName)) ?? undefined;
-                    console.log(
-                        `Found ingredient ID: ${ingredientId} for ingredient: ${ingredientName}`
-                    );
 
                     if (!ingredientId) {
                         const newIngredient = await addIngredient(
@@ -117,9 +109,6 @@ const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
                             ingredientCategory
                         );
                         ingredientId = newIngredient.getId();
-                        console.log(
-                            `Created new ingredient ID: ${ingredientId} for ingredient: ${ingredientName}`
-                        );
                     }
                 }
 
@@ -135,9 +124,6 @@ const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
             }) ?? []
         );
 
-        console.log('Ingredients processed:', ingredients);
-
-        // Save the recipe first
         const newRecipePrisma = await database.recipe.create({
             data: {
                 title: recipe.getTitle(),
@@ -162,8 +148,6 @@ const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
                 ingredients: true,
             },
         });
-
-        console.log('Recipe created with ID:', newRecipePrisma.id);
 
         return Recipe.from(newRecipePrisma);
     } catch (error) {
