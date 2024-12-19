@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import playerService from '../service/player.service';
+import { PlayerInput } from '../types';
 
 const playerRouter = express.Router();
 
@@ -35,6 +36,22 @@ playerRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
 swagger documentation to be added.
 */
 
+playerRouter.get('/image/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const player = await playerService.getPlayerImage(Number(req.params.id));
+        res.status(200).json(player);
+    } catch (error) {
+        res.status(400).json({
+            status: '400',
+            errorMessage: `Player with id ${req.params.id} does not exist.`,
+        });
+    }
+});
+
+/*
+swagger documentation to be added.
+*/
+
 playerRouter.get('/user/:email', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const players = await playerService.getPlayersByUser(req.params.email);
@@ -46,5 +63,22 @@ playerRouter.get('/user/:email', async (req: Request, res: Response, next: NextF
         });
     }
 });
+
+/*
+swagger documentation to be added.
+*/
+
+playerRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const player = <PlayerInput>req.body;
+        const result = await playerService.addPlayer(player)
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({
+            status: '400',
+            errorMessage: `Something went wrong with creating player.`,
+        });
+    }
+})
 
 export { playerRouter };

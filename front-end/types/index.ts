@@ -14,7 +14,17 @@ export type Player = {
     currency: number;
     statistics: string; // still needs to be expended upon
     class: string; // will later be a Class type
+    image: string;
     user: User;
+};
+
+export type PlayerInput = {
+    name: string;
+    currency: number;
+    statistics: string;
+    class: string;
+    image: string;
+    userEmail: string;
 };
 
 export type World = {
@@ -44,6 +54,7 @@ export type Position = {
     type: string;
     active: boolean;
     playerID?: number | null;
+    image?: string;
 };
 
 export type PositionUpdate = {

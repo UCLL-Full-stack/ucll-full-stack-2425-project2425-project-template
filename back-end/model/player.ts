@@ -10,6 +10,7 @@ export class Player {
     private statistics: string; // still needs to be expended upon
     private class: string; // will later be a Class type
     private currency: number;
+    private image: string;
     private user: User;
 
     constructor(player: {
@@ -18,6 +19,7 @@ export class Player {
         statistics: string;
         class: string;
         currency: number;
+        image: string;
         user: User;
     }) {
         this.validate(player);
@@ -27,6 +29,7 @@ export class Player {
         this.statistics = player.statistics;
         this.class = player.class;
         this.currency = player.currency;
+        this.image = player.image;
         this.user = player.user;
     }
 
@@ -52,6 +55,10 @@ export class Player {
 
     getUser(): User {
         return this.user;
+    }
+    
+    getImage(): string {
+        return this.image;
     }
 
     validate(player: {
@@ -84,6 +91,7 @@ export class Player {
         statistics,
         class: String,
         currency,
+        image,
         user,
     }: PlayerPrisma & {
         user: UserPrisma;
@@ -94,6 +102,7 @@ export class Player {
             statistics,
             class: String,
             currency,
+            image,
             user: User.from(user),
         })
     }
