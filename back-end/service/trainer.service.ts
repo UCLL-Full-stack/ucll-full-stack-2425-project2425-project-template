@@ -1,4 +1,4 @@
-import { AuthenticationResponse, PokemonInput } from "../types";
+import { AuthenticationResponse, BadgeInput, PokemonInput } from "../types";
 import { Trainer } from "../model/trainer";
 import trainerDb from "../repository/trainer.db";
 import { Pokemon } from "../model/pokemon";
@@ -6,6 +6,7 @@ import { User } from "../model/user";
 import bcrypt from 'bcrypt';
 import { Nurse } from "@prisma/client";
 import { id } from "date-fns/locale";
+import { Badge } from "../model/badge";
 
 
 const getAllTrainers = async (): Promise<Trainer[]> => trainerDb.getAllTrainers();
@@ -45,6 +46,21 @@ const addPokemonToTrainerById = async (id:number,{
     return trainer;
 }
 
+const addBadgeToTrainerById = async (id:number, {
+    name,
+    difficulty,
+    location
+}: BadgeInput) : Promise<Trainer | null> => {
+    if (name.trim() === "") throw new Error("badge name is required");
+    if (difficulty<=0 || difficulty>5) throw new Error("difficulty must be between 1 and 5");
+    if (location.trim()==="") throw new Error("location is required");
+
+    const badge = new Badge({name,location,difficulty})
+    const trainer = trainerDb.addBadgeToTrainerById({id,badge});
+    if (!trainer) throw new Error(`Trainer with id ${id} does not exist.`)
+    return trainer
+}
+
 const removePokemonAndAddToNurse = async (idPokemon:number,idNurse:number): Promise<Trainer> => {
     const trainer = await trainerDb.removePokemonAndAddToNurse({idPokemon,idNurse});
     return trainer
@@ -55,5 +71,6 @@ export default {
     getAllTrainers,
     getTrainerByEmail,
     addPokemonToTrainerById,
+    addBadgeToTrainerById,
     removePokemonAndAddToNurse,
 };

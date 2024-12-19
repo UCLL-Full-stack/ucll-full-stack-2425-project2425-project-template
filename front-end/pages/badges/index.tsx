@@ -62,6 +62,25 @@ const badges: React.FC = () => {
     }
   };
 
+  const handleAddBadge = async (newBadge: Badge) => {
+    try {
+      if (selectedTrainer && selectedTrainer.id) {
+        const updatedTrainer = await TrainerService.addBadgeToTrainerById(
+          selectedTrainer.id,
+          newBadge
+        );
+        setSelectedTrainer(updatedTrainer);
+        setTrainers((prevTrainers) =>
+          prevTrainers.map((trainer) =>
+            trainer.id === updatedTrainer.id ? updatedTrainer : trainer
+          )
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
     useEffect(() => {
       // Only run the getTrainers function when loggedInEmail is available
       if (loggedInEmail) {
@@ -83,7 +102,10 @@ const badges: React.FC = () => {
             {selectedTrainer && (
               <>
                 <h2>{selectedTrainer.user.firstName}'s badges:</h2>
-                <BadgeDetails badges={selectedTrainer.badges} />
+                <BadgeDetails 
+                badges={selectedTrainer.badges}
+                addBadge={handleAddBadge}
+                 />
               </>
             )}
           </>

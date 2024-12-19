@@ -222,6 +222,55 @@ const addPokemonToTrainerById = async ({ id, pokemon }: { id: number, pokemon: P
     return Trainer.from(trainerData); // Pass correctly shaped data to `Trainer.from()`
 };
 
+const addBadgeToTrainerById = async({id, badge}: {id:number, badge:Badge}): Promise<Trainer | null> => {
+    const trainerPrisma = await database.trainer.findUnique({
+        where: { id },
+        include: {
+            badges: true,
+        },
+    });
+
+    if (!trainerPrisma) {
+        throw new Error(`Trainer with id ${id} does not exist.`);
+    }
+
+    const newBadge = await database.badge.create({
+        data: {
+            name: badge.getName(),
+            difficulty: badge.getDifficulty(),
+            location: badge.getLocation(),
+            trainer: {
+                connect: { id },
+            },
+        },
+    });
+
+    const updatedTrainer = await database.trainer.findUnique({
+        where: { id },
+        include: {
+            user: true,
+            pokemon: { include: { stats: true } },
+            gymBattles: true,
+            badges: true,
+        },
+    });
+
+    if (!updatedTrainer) {
+        return null;
+    }
+
+    const trainerData = {
+        id: updatedTrainer.id,
+        userId: updatedTrainer.userId,
+        user: updatedTrainer.user,
+        pokemon: updatedTrainer.pokemon,
+        badge: updatedTrainer.badges,
+        gymBattle: updatedTrainer.gymBattles,
+    };
+
+    return Trainer.from(trainerData);
+}
+
 
 const removePokemonAndAddToNurse = async ({ idPokemon, idNurse }: { idPokemon: number, idNurse: number }): Promise<Trainer> => {
     // Step 1: Verify if the Pokémon exists
@@ -299,6 +348,7 @@ const removePokemonAndAddToNurse = async ({ idPokemon, idNurse }: { idPokemon: n
 export default {
     getAllTrainers,
     addPokemonToTrainerById,
+    addBadgeToTrainerById,
     getTrainerByEmail,
     removePokemonAndAddToNurse,
 };

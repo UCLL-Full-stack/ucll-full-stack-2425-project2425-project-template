@@ -42,7 +42,7 @@ export type Trainer = {
 }
 
 export type Badge = {
-    id: number;
+    id?: number;
     name: string;
     location: string;
     difficulty: number;

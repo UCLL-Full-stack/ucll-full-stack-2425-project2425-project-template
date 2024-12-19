@@ -48,6 +48,13 @@ type PokemonInput = {
   canEvolve: boolean;
 };
 
+type BadgeInput = {
+  id?: number;
+  name: string;
+  location: string;
+  difficulty: number;
+};
+
 // --- Trainer Type ---
 type Trainer = {
   id?: number;
@@ -75,6 +82,7 @@ export {
   Badge,
   GymBattle,
   PokemonInput,
+  BadgeInput,
   Trainer,
   AuthenticationResponse,
 };

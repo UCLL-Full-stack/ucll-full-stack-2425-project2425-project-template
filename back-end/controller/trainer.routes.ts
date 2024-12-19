@@ -72,7 +72,7 @@
  */
 import express, { NextFunction, Request, response, Response } from 'express';
 import trainerService from '../service/trainer.service';
-import { PokemonInput, Trainer, Userinput } from '../types';
+import { BadgeInput, PokemonInput, Trainer, Userinput } from '../types';
 
 const trainerRouter = express.Router();
 
@@ -196,6 +196,20 @@ trainerRouter.post('/:id', async (req: Request, res: Response, next: NextFunctio
     try {
         const pokemon = <PokemonInput>req.body;
         const result = await trainerService.addPokemonToTrainerById(Number(req.params.id),pokemon)
+        res.status(200).json(result);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({message:error.message})
+        } else {
+            next(error)         
+        }
+    }
+})
+
+trainerRouter.post('/:id/badge', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const badge = <BadgeInput>req.body;
+        const result = await trainerService.addBadgeToTrainerById(Number(req.params.id),badge)
         res.status(200).json(result);
     } catch (error) {
         if (error instanceof Error) {
