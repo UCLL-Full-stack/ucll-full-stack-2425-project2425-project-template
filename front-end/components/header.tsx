@@ -85,11 +85,12 @@ const Header: React.FC = () => {
                                 Leiding
                             </Link>
                         )}
-                        <Link 
+                        {loggedInUser && (<Link 
                             className="hover:bg-green-600 px-3 py-2 rounded" 
                             href="/gegevens">
                             Gegevens
                         </Link>
+                        )}
                         {!loggedInUser  && <Link 
                             className="hover:bg-green-600 px-3 py-2 rounded" 
                             href="/login">

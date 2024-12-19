@@ -22,7 +22,7 @@ export type Leiding = {
     telefoon: string;
     hoofdleiding: boolean;
     totem: string;
-    groep: Groep;
+    groep: string;
 };
 
 export type Nieuwsbericht = {

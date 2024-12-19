@@ -15,10 +15,10 @@ const Leiders: React.FC = () => {
             const response = await LeidingService.getLeiding();
             setLeiders(response);
         } catch (error) {
-            if (error.message === "Failed to get leiding.") {
+            if ((error as any).message === "Failed to get leiding.") {
                 setError("You are not authorized to view this page. Please login first.");
             } else {
-                setError(error.message);
+                setError((error as Error).message);
             }
         }
     }

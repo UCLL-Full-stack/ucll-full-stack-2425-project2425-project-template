@@ -23,7 +23,7 @@ const LeidingOverviewTable: React.FC<Props> = ({ leiding }: Props) => {
                             <td className="p-2 border-r border-amber-900">{lid.naam + " " + lid.voornaam}</td>
                             <td className="p-2 border-r border-amber-900">{lid.totem}</td>
                             <td className="p-2 border-r border-amber-900">{lid.telefoon}</td>
-                            <td className="p-2 border-r border-amber-900">{lid.groep ? lid.groep.naam : 'Geen groep'}</td>
+                            <td className="p-2 border-r border-amber-900">{lid.groep}</td>
                         </tr>
                     ))}
                 </tbody>
