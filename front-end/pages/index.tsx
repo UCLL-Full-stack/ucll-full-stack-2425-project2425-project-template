@@ -4,31 +4,27 @@ import Header from '@components/header';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-
-
 const Home: React.FC = () => {
-  
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
-  
   return (
     <>
       <Head>
-        <title>SipHappensOnline</title>
-        <meta name="description" content="SipHappensOnline" />
+        <title>Sip Happens Online</title>
+        <meta name="description" content="Sip Happens Online" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/placeholder.png" />
       </Head>
       <main>
-        <Header></Header>
-        <section>
-          <h1>{t("home.title")}</h1>
-          <p>{t("home.description1")}</p>
-          <p>{t("home.description2")}</p>
+        <Header />
+        <section className="home-section">
+          <h1 className="home-title">{t("home.title")}</h1>
+          <p className="home-description">{t("home.description1")}</p>
+          <p className="home-description">{t("home.description2")}</p>
         </section>
-        <section>
-          <h2>{t("home.userInformation.title")}</h2>
-          <table>
+        <section className="home-section">
+          <h2 className="home-subtitle">{t("home.userInformation.title")}</h2>
+          <table className="user-info-table">
             <thead>
               <tr>
                 <th>{t("home.userInformation.username")}</th>
@@ -52,11 +48,6 @@ const Home: React.FC = () => {
                 <td>moderator1</td>
                 <td>Moderator</td>
               </tr>
-              {/* <tr>
-                <td>user4</td>
-                <td>user4</td>
-                <td>rol in de context van je project (bv. admin)</td>
-              </tr> */}
             </tbody>
           </table>
         </section>
@@ -65,16 +56,14 @@ const Home: React.FC = () => {
   );
 };
 
-export const getServerSideProps = async (context: { locale: any; }) => {
+export const getServerSideProps = async (context: { locale: any }) => {
   const { locale } = context;
 
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? "en", ["common"])),
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
   };
-}; 
-
-
+};
 
 export default Home;
