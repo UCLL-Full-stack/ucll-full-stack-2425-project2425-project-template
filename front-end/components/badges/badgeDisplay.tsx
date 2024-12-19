@@ -5,10 +5,9 @@ import BadgeImage from './badgeImage';
 
 interface BadgeDisplayProps {
   badges: Badge[];
-  addBadge: (badge:Badge)=> void;
 }
 
-const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badges, addBadge }) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badges}) => {
     const router = useRouter();
     const [unownedBadges, setUnownedBadges] = useState<Badge[]>([])
     const allBadges = [

@@ -30,6 +30,19 @@
         "type": "type",
         "add": "Add Pokémon",
         "users-pokemon": "'s Pokémon",
-        "pokemon" : "Pokémon"
+        "pokemon" : "Pokémon",
+        "details" : "details for",
+        "health" : "Health:",
+        "stats": "stats:",
+        "hp": "HP:",
+        "attack": "Attack:",
+        "defence": "Defence:",
+        "special-attack": "Special Attack:",
+        "special-defence": "Special Defence:",
+        "speed" : "Speed:",
+        "evolve" : "can evolve:",
+        "cancel" : "cancel",
+        "send-to-hospital" : "send to hospital",
+        "has-been-send-to-hospital" : "has been send to the hospital"
     }
 }

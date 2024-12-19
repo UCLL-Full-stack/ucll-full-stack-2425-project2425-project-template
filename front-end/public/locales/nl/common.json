@@ -8,7 +8,7 @@
         "pokemon" : "pokemon",
         "calender" : "kalender",
         "badges" : "badges",
-        "logout" : "logout",
+        "logout" : "log uit",
         "language" : "taal"
     },
     "login" : {
@@ -30,6 +30,19 @@
         "type": "type",
         "add": "Voeg pokemon toe",
         "users-pokemon": "'s Pokémon",
-        "pokemon" : "Pokémon"
+        "pokemon" : "Pokémon",
+        "details" : "details voor",
+        "stats": "statistieken:",
+        "health" : "Levenspunten:",
+        "hp": "HP:",
+        "attack": "Aanval:",
+        "defence": "Verdediging:",
+        "special-attack": "Speciale Aanval:",
+        "special-defence": "Speciale Verdediging:",
+        "speed" : "Snelheid:",
+        "evolve" : "kan evolueren:",
+        "cancel" : "annuleren",
+        "send-to-hospital" : "stuur naar het ziekenhuis",
+        "has-been-send-to-hospital" : "is naar het ziekenhuis gestuurd"
     }
 }
