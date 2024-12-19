@@ -1,5 +1,5 @@
 import { Cocktail } from '../model/cocktail';
-import database from './database';
+import database from '../util/database';
 
 const getAllCocktails = async (): Promise<Cocktail[]> => {
   try {

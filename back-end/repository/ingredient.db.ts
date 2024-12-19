@@ -1,5 +1,5 @@
 import { Ingredient } from '../model/ingredient';
-import database from './database';
+import database from '../util/database';
 
 const getAllIngredients = async (): Promise<Ingredient[]> => {
     try {
