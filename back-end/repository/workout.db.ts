@@ -91,7 +91,10 @@ const removeWorkout = async ({ id }: { id: string }): Promise<Workout | null> =>
     }
 };
 
-const addExerciseToWorkout = async (workoutId: string, exerciseId: string): Promise<Workout | null> => {
+const addExerciseToWorkout = async (
+    workoutId: string,
+    exerciseId: string
+): Promise<Workout | null> => {
     try {
         const workoutPrisma = await database.workout.update({
             where: { id: workoutId },
@@ -109,13 +112,41 @@ const addExerciseToWorkout = async (workoutId: string, exerciseId: string): Prom
     }
 };
 
-const removeExerciseFromWorkout = async (workoutId: string, exerciseId: string): Promise<Workout | null> => {
+const removeExerciseFromWorkout = async (
+    workoutId: string,
+    exerciseId: string
+): Promise<Workout | null> => {
     try {
         const workoutPrisma = await database.workout.update({
             where: { id: workoutId },
             data: {
                 exercises: {
                     disconnect: { id: exerciseId },
+                },
+            },
+            include: { user: true, exercises: true },
+        });
+        return workoutPrisma ? Workout.from(workoutPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const updateWorkout = async (workout: Workout): Promise<Workout | null> => {
+    try {
+        const workoutPrisma = await database.workout.update({
+            where: { id: workout.id },
+            data: {
+                name: workout.name,
+                description: workout.description,
+                user: {
+                    connect: {
+                        email: workout.user.email,
+                    },
+                },
+                exercises: {
+                    connect: workout.exercises.map((exercise) => ({ id: exercise.id })),
                 },
             },
             include: { user: true, exercises: true },
@@ -135,4 +166,5 @@ export default {
     addExerciseToWorkout,
     removeExerciseFromWorkout,
     removeWorkout,
+    updateWorkout,
 };

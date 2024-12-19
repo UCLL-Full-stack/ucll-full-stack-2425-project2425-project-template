@@ -86,6 +86,14 @@ const createWorkout = async ({
     return workoutDb.createWorkout(workout);
 };
 
+const updateWorkout = async (workout: Workout): Promise<Workout> => {
+    const updatedWorkout = await workoutDb.updateWorkout(workout);
+    if (!updatedWorkout) {
+        throw new Error('Failed to update workout');
+    }
+    return updatedWorkout;
+};
+
 export default {
     getAllWorkouts,
     getWorkoutById,
@@ -94,4 +102,5 @@ export default {
     addExerciseToWorkout,
     removeExerciseFromWorkout,
     removeWorkout,
+    updateWorkout,
 };

@@ -361,4 +361,39 @@ workoutRouter.delete('/:id', (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /workouts:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Update a workout
+ *     tags: [Workouts]
+ *     description: Update a workout by its ID and return the updated workout.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Workout'
+ *     responses:
+ *       200:
+ *         description: The updated workout object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Workout'
+ *       404:
+ *         description: Workout not found
+ */
+workoutRouter.put('/', (req: Request, res: Response) => {
+    try {
+        const updatedWorkout = workoutService.updateWorkout(req.body);
+        res.status(200).json(updatedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
 export default workoutRouter;
