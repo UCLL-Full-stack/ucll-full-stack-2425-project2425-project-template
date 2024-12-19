@@ -3,6 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LoginButton from "@/components/LoginButton";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,6 +17,8 @@ export default function Home() {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+
+  const { t } = useTranslation();
 
   return (
     <>
@@ -43,7 +47,7 @@ export default function Home() {
             draggable={false}
           />
           <h1 className="text-7xl font-extrabold text-center font-bebas">
-            Welcome to Manchester Shitty
+            {t('home.title')}
           </h1>
           <nav className="flex gap-8">
             <Link
@@ -51,10 +55,10 @@ export default function Home() {
               className="relative block w-56 h-20 bg-yellow-500 text-black rounded-lg overflow-hidden group transition-transform transform hover:scale-105"
             >
               <span className="absolute inset-0 flex items-center justify-center font-bold text-xl transition-transform duration-300 group-hover:-translate-y-4">
-                Squad
+                {t('home.squad')}
               </span>
               <span className="absolute inset-0 flex items-center justify-center font-medium text-sm opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-2">
-                Meet The Squad
+              {t('home.squad_description')}
               </span>
             </Link>
             <Link
@@ -62,10 +66,10 @@ export default function Home() {
               className="relative block w-56 h-20 bg-yellow-500 text-black rounded-lg overflow-hidden group transition-transform transform hover:scale-105"
             >
               <span className="absolute inset-0 flex items-center justify-center font-bold text-xl transition-transform duration-300 group-hover:-translate-y-4">
-                Coaches
+              {t('home.coach')}
               </span>
               <span className="absolute inset-0 flex items-center justify-center font-medium text-sm opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-2">
-                Meet Our Coaches
+              {t('home.coach_description')}
               </span>
             </Link>
             <Link
@@ -73,19 +77,29 @@ export default function Home() {
               className="relative block w-56 h-20 bg-yellow-500 text-black rounded-lg overflow-hidden group transition-transform transform hover:scale-105"
             >
               <span className="absolute inset-0 flex items-center justify-center font-bold text-xl transition-transform duration-300 group-hover:-translate-y-4">
-                Table
+              {t('home.table')}
               </span>
               <span className="absolute inset-0 flex items-center justify-center font-medium text-sm opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-2">
-                Check Our Current Standings
+              {t('home.table_description')}
               </span>
             </Link>
           </nav>
         </div>
 
         <footer className="absolute bottom-4 text-sm text-gray-500">
-          © {new Date().getFullYear()} Manchester Shitty. All Rights Reserved.
+        {t('home.footer', {year: new Date().getFullYear()})}
         </footer>
       </main>
     </>
   );
-}
+};
+
+export const getServerSideProps = async (context) => {
+  const {locale} = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    }
+  }
+};

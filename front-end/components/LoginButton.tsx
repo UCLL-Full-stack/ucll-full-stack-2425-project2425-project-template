@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Login from "./Login";
+import { useTranslation } from "next-i18next";
 
 interface LoginButtonProps {
   isLoggedIn: boolean;
@@ -7,7 +8,8 @@ interface LoginButtonProps {
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({ isLoggedIn, onLogout }) => {
-  const [showLogin, setShowLogin] = useState(false); 
+  const [showLogin, setShowLogin] = useState(false);
+  const { t } = useTranslation(); 
 
   const toggleLogin = () => {
     setShowLogin((prev) => !prev);
@@ -27,7 +29,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ isLoggedIn, onLogout }) => {
             : "bg-yellow-500 text-black hover:bg-green-500"
         }`}
       >
-        {isLoggedIn ? "Logout" : "Login"}
+        {isLoggedIn ? t('login.out') : t('login.in')}
       </button>
 
       {showLogin && <Login onClose={toggleLogin} />}

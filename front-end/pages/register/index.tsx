@@ -3,6 +3,8 @@ import Head from "next/head";
 import Image from "next/image";
 import NavbarSheet from "@/components/NavbarSheet";
 import router from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ const Register: React.FC = () => {
   const [errors, setErrors] = useState<{ confirmPassword?: string }>({});
   const [submitted, setSubmitted] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false); // Animation trigger
+  const { t } = useTranslation();
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100); // Delay for smooth animation
@@ -30,7 +33,7 @@ const Register: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setErrors({ confirmPassword: "Passwords do not match" });
+      setErrors({ confirmPassword: t('register.fail') });
       return;
     }
     setSubmitted(true);
@@ -70,7 +73,7 @@ const Register: React.FC = () => {
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             }`}
           >
-            Create an Account
+            {t('register.title')}
           </h1>
 
           {submitted ? (
@@ -79,7 +82,7 @@ const Register: React.FC = () => {
                 isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
             >
-              Account successfully created!
+              {t('register.success')}
             </p>
           ) : (
             <form
@@ -90,7 +93,7 @@ const Register: React.FC = () => {
             >
               <div>
                 <label htmlFor="username" className="block font-medium mb-1">
-                  Username:
+                {t('register.username')}
                 </label>
                 <input
                   type="text"
@@ -105,7 +108,7 @@ const Register: React.FC = () => {
 
               <div>
                 <label htmlFor="email" className="block font-medium mb-1">
-                  Email:
+                {t('register.email')}
                 </label>
                 <input
                   type="email"
@@ -120,7 +123,7 @@ const Register: React.FC = () => {
 
               <div>
                 <label htmlFor="role" className="block font-medium mb-1">
-                  Role:
+                {t('register.role')}
                 </label>
                 <select
                   id="role"
@@ -129,15 +132,16 @@ const Register: React.FC = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2 bg-zinc-700 text-yellow-500 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 >
-                  <option value="player">Player</option>
-                  <option value="coach">Coach</option>
-                  <option value="admin">Admin</option>
+                  <option value="" disabled>{t('register.select')}</option>
+                  <option value={t('register.player')}>{t('register.player')}</option>
+                  <option value={t('register.coach')}>{t('register.coach')}</option>
+                  <option value={t('register.admin')}>{t('register.admin')}</option>
                 </select>
               </div>
 
               <div>
                 <label htmlFor="password" className="block font-medium mb-1">
-                  Password:
+                {t('register.password')}
                 </label>
                 <input
                   type="password"
@@ -152,7 +156,7 @@ const Register: React.FC = () => {
 
               <div>
                 <label htmlFor="confirmPassword" className="block font-medium mb-1">
-                  Confirm Password:
+                {t('register.confirm')}
                 </label>
                 <input
                   type="password"
@@ -172,7 +176,7 @@ const Register: React.FC = () => {
                 type="submit"
                 className="w-full py-2 bg-yellow-500 text-black font-bold rounded-lg hover:bg-yellow-400 transition"
               >
-                Register
+                {t('register.register')}
               </button>
             </form>
           )}
@@ -180,6 +184,17 @@ const Register: React.FC = () => {
       </div>
     </>
   );
+};
+
+
+export const getServerSideProps = async (context) => {
+  const {locale} = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    }
+  }
 };
 
 export default Register;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Player } from "@/types";
 import MatchService from "@/services/MatchService";
+import { useTranslation } from "next-i18next";
 
 interface MatchPlayersProps {
   matchId: number;
@@ -11,7 +12,7 @@ const MatchPlayers: React.FC<MatchPlayersProps> = ({ matchId, onClose }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
@@ -33,10 +34,10 @@ const MatchPlayers: React.FC<MatchPlayersProps> = ({ matchId, onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-zinc-800 rounded-lg shadow-lg p-6 w-96 border border-yellow-500">
         <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">
-          Match Players
+        {t('table.match.player')}
         </h2>
         {isLoading ? (
-          <p className="text-yellow-500">Loading players...</p>
+          <p className="text-yellow-500">{t('table.messages.loading_players')}</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : sortedPlayers.length > 0 ? (
@@ -46,13 +47,12 @@ const MatchPlayers: React.FC<MatchPlayersProps> = ({ matchId, onClose }) => {
                 key={player.id}
                 className="px-4 py-2 bg-gray-700 rounded text-yellow-500"
               >
-                <strong>#{player.number}</strong> - {player.name} (
-                {player.position})
+                <strong>#{player.number}</strong> - {player.name}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-yellow-500">No players assigned to this match.</p>
+          <p className="text-yellow-500">{t('table.messages.no_players')}</p>
         )}
         <div className="flex justify-end mt-4">
           <button

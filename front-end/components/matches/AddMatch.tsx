@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Match, Team } from "@/types";
 import TeamService from "@/services/TeamService";
+import { useTranslation } from "next-i18next";
 
 interface AddMatchProps {
   onSave: (newMatch: Omit<Match, "id">) => void; // Excludes id
@@ -20,6 +21,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
 
   const [teams, setTeams] = useState<Team[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -69,10 +71,10 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">Add New Match</h2>
+        <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">{t('table.match.add.title')}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-yellow-500">Location:</label>
+            <label className="block text-yellow-500">{t('table.match.location')}</label>
             <select
               name="location"
               value={formData.location}
@@ -80,7 +82,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
               className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             >
-              <option value="" disabled>Select location</option>
+              <option value="" disabled>{t('table.match.add.select_location')}</option>
               <option value="Heilig Hart Heverlee">Heilig Hart Heverlee</option>
               <option value="Sportschuur Wilsele">Sportschuur Wilsele</option>
               <option value="Sportcomplex Kessel-Lo">Sportcomplex Kessel-Lo</option>
@@ -92,7 +94,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
             </select>
           </div>
           <div>
-            <label className="block text-yellow-500">Date:</label>
+            <label className="block text-yellow-500">{t('table.match.date')}</label>
             <input
               type="datetime-local"
               name="date"
@@ -103,7 +105,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Home Team:</label>
+            <label className="block text-yellow-500">{t('table.match.home')}</label>
             <select
               name="homeTeamName"
               value={formData.homeTeamName}
@@ -111,7 +113,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
               className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             >
-              <option value="" >Select home team</option>
+              <option value="" >{t('table.match.add.select_home')}</option>
               {teams
                 .filter((team) => team.name !== formData.awayTeamName) // Exclude the away team
                 .map((team) => (
@@ -122,7 +124,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
             </select>
           </div>
           <div>
-            <label className="block text-yellow-500">Away Team:</label>
+            <label className="block text-yellow-500">{t('table.match.away')}</label>
             <select
               name="awayTeamName"
               value={formData.awayTeamName}
@@ -130,7 +132,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
               className="w-full px-3 py-2 border rounded text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             >
-              <option value="" >Select away team</option>
+              <option value="" >{t('table.match.add.select_away')}</option>
               {teams
                 .filter((team) => team.name !== formData.homeTeamName) // Exclude the home team
                 .map((team) => (
@@ -141,7 +143,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
             </select>
           </div>
           <div>
-            <label className="block text-yellow-500">Home Score (optional):</label>
+            <label className="block text-yellow-500">{t('table.match.add.home_score')}</label>
             <input
               type="number"
               name="homeScore"
@@ -151,7 +153,7 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Away Score (optional):</label>
+            <label className="block text-yellow-500">{t('table.match.add.away_score')}</label>
             <input
               type="number"
               name="awayScore"
@@ -166,13 +168,13 @@ const AddMatch: React.FC<AddMatchProps> = ({ onSave, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 bg-gray-700 font-bold text-white rounded hover:bg-gray-600"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-yellow-500 text-black font-bold rounded hover:bg-yellow-600"
             >
-              Add Match
+              {t('table.buttons.plan')}
             </button>
           </div>
         </form>
