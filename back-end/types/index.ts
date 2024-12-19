@@ -5,16 +5,16 @@ export type PositionInput = {
     type: string;
     active: boolean;
     floorID: number;
-}
+};
 
 export type PositionUpdate = {
-  posID: number;
-  floorID: number;
-  playerID: number;
-  x: number;
-  y: number;
-  active: boolean;
-}
+    posID: number;
+    floorID: number;
+    playerID: number;
+    x: number;
+    y: number;
+    active: boolean;
+};
 
 export type UserInput = {
     name: string;

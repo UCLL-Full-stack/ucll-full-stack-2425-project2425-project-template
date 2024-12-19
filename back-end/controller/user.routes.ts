@@ -24,7 +24,8 @@ userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction
 
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await userService.createUser(req.body);
+        const userInput = <UserInput>req.body;
+        const user = await userService.createUser(userInput);
         res.status(200).json(user);
     } catch (error) {
         next(error);

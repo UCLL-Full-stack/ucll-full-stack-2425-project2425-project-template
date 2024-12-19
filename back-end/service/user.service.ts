@@ -20,14 +20,19 @@ const createUser = async ({ name, email, password, birthday }: UserInput): Promi
     if (!name) {
         throw new Error('Name is required.');
     }
-    if (!name) {
+    if (!email) {
         throw new Error('Email is required.');
     }
     if (!password) {
         throw new Error('Password is required.');
     }
     if (!birthday) {
-        throw new Error('Birthday is required.  ');
+        throw new Error('Birthday is required.');
+    }
+
+    const existingUser = await userDB.getUserByEmail(email);
+    if (existingUser) {
+        throw new Error('User already exists.');
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
