@@ -1,3 +1,4 @@
+import { Subscription } from '../model/subscription';
 import { User } from '../model/user';
 import database from '../util/database';
 
@@ -15,6 +16,7 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
             where: { id },
+            include: { subscription: true },
         });
 
         return userPrisma ? User.from(userPrisma) : null;
@@ -28,6 +30,8 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     try {
         const userPrisma = await database.user.findFirst({
             where: { username },
+            include: { subscription: true },
+            
         });
 
         return userPrisma ? User.from(userPrisma) : null;
@@ -56,9 +60,47 @@ const createUser = async (items: User): Promise<User> => {
     }
 }
 
+const changeSubscriptionOfUser = async (subscription: Subscription, userId: number): Promise<User> => {
+    try {
+       
+        const subscriptionPrisma = await database.subscription.upsert({
+            where: { userId },
+            update: {
+                type: subscription.getType(),
+                startDate: subscription.getStartDate(),
+                duration: subscription.getDuration(),
+            },
+            create: {
+                type: subscription.getType(),
+                startDate: subscription.getStartDate(),
+                duration: subscription.getDuration(),
+                userId: userId, 
+            },
+        });
+
+        const userPrisma = await database.user.findUnique({
+            where: { id: userId },
+            include: { subscription: true },
+        });
+
+        if (!userPrisma) {
+            throw new Error(`User with ID ${userId} not found.`);
+        }
+
+        return User.from(userPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+
+
+
 export default {
     getAllUsers,
     getUserById,
     getUserByUsername,
-    createUser
+    createUser,
+    changeSubscriptionOfUser
 };

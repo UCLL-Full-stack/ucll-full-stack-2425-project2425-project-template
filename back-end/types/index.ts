@@ -1,4 +1,5 @@
 type Role = 'admin' | 'user';
+type SubscriptionType = 'basic' | 'premium'
 
 type UserInput = {
     id?: number;
@@ -8,6 +9,7 @@ type UserInput = {
     email?: string;
     role?: Role;
     password?: string,
+    subscription?: SubscriptionInput;
 };
 
 type PlaylistInput = {
@@ -36,6 +38,13 @@ type AddSongInput = {
     songs: SongInput[];
 };
 
+type SubscriptionInput = {
+    id?: number;
+    type?: SubscriptionType;
+    start_date?: Date;
+    duration?: number;
+};
+
 
 export {
     Role,
@@ -43,5 +52,7 @@ export {
     PlaylistInput,
     SongInput,
     AuthenticationResponse,
-    AddSongInput
+    AddSongInput,
+    SubscriptionInput,
+    SubscriptionType
 }
