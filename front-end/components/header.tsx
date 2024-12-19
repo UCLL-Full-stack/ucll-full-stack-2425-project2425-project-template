@@ -1,8 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Language from './language/Language';
+import { useTranslation } from "next-i18next";
 
 const Header: React.FC = () => {
+
+      const {t} = useTranslation()
+
+      const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  
+      useEffect(() => {
+        const user = localStorage.getItem("loggedInUser");
+        if (user) {
+          const parsedUser = JSON.parse(user);
+          setLoggedInUser(parsedUser.fullname);
+        }
+        // setLoggedInUser(localStorage.getItem("loggedInUser"));
+        
+      }, []);
+
+
   const banners = [
     "/banners/neonbanner.png",
     "/banners/firebanner.gif",
@@ -23,6 +40,11 @@ const Header: React.FC = () => {
     setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
   };
 
+  const handleClick = () => {
+    localStorage.removeItem("loggedInUser");
+    setLoggedInUser(null);
+  };
+
   return (
     <header style={{ textAlign: 'center', padding: '16px' }}>
       <img
@@ -36,29 +58,46 @@ const Header: React.FC = () => {
       <nav style={{ display: 'flex', justifyContent: 'center',paddingTop: '5px'}}>
         <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
-            Home
+            {t('header.home')}
           </button>
         </Link>
         <Link href="http://localhost:8080/cocktails/">
           <button className="navbarbutton-stylah">
-            Cocktails
+          {t('header.cocktails')}
           </button>
         </Link>
         <Link href="http://localhost:8080/addcocktail/">
           <button className="navbarbutton-stylah">
-            Add Cocktail
+            {t('header.addCocktail')}
           </button>
         </Link>
         <Link href="http://localhost:8080/">
           <button className="navbarbutton-stylah">
-            Search
+            {t('header.search')}
           </button>
         </Link>
+        {!loggedInUser && (
         <Link href="http://localhost:8080/login/">
           <button className="navbarbutton-stylah">
-            Login
+            {t('header.login')}
           </button>
         </Link>
+      )}
+       {loggedInUser && (
+          <a
+            href="/login"
+            onClick={handleClick}
+            className="navbarbutton-stylah"
+          >
+            {t("header.nav.logout")}
+          </a>
+        )}
+        {loggedInUser && (
+          <div className="navbarbutton-stylah">
+            {t("header.welcome")}, {loggedInUser}!
+          </div>
+
+        )}
         <Language />
       </nav>
     </header>

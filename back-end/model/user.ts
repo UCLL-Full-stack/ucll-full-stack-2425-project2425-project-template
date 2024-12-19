@@ -33,6 +33,17 @@ export class User {
 
     getRole(): string {
         return this.role;
+      
+    setName(name: string): void {
+        this.name = name;
+    }
+
+    setEmail(email: string): void {
+        this.email = email;
+    }
+
+    setPassword(password: string): void {
+        this.password = password;
     }
 
     equals(otherUser: User): boolean {

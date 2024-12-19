@@ -5,7 +5,9 @@ describe('Ingredient Class', () => {
 
     beforeEach(() => {
         // Initialize a new ingredient before each test
-        ingredient = new Ingredient(1, 'Sugar');
+        ingredient = new Ingredient({
+            id: 1, 
+            name: 'Sugar'});
     });
 
     afterEach(() => {
@@ -36,7 +38,9 @@ describe('Ingredient Class', () => {
 
     test('givenTwoEqualIngredients_whenEqualsIsCalled_thenItReturnsTrue', () => {
         // given
-        const otherIngredient = new Ingredient(1, 'Sugar');
+        const otherIngredient = new Ingredient({
+            id: 1, 
+            name: 'Sugar'});
 
         // when
         const result = ingredient.equals(otherIngredient);
@@ -47,7 +51,9 @@ describe('Ingredient Class', () => {
 
     test('givenTwoDifferentIngredients_whenEqualsIsCalled_thenItReturnsFalse', () => {
         // given
-        const otherIngredient = new Ingredient(2, 'Salt');
+        const otherIngredient = new Ingredient({
+            id: 2, 
+            name: 'Salt'});
 
         // when
         const result = ingredient.equals(otherIngredient);

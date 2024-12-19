@@ -5,8 +5,13 @@ import Head from "next/head";
 import CocktailService from "@services/CocktailService";
 import { Cocktail } from "@types";
 import CocktailDetails from '@components/cocktail/cocktailDetails';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const CocktailDetailsPage: React.FC = () => {
+      const {t} = useTranslation()
+    
+
     const router = useRouter();
     const [cocktail, setCocktail] = useState<Cocktail | null>(null);
     const { cocktailId } = router.query;
@@ -38,6 +43,17 @@ const CocktailDetailsPage: React.FC = () => {
         </>
 );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+  }; 
+  
 
 export default CocktailDetailsPage;
 

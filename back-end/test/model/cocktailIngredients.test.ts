@@ -14,10 +14,10 @@ describe('CocktailIngredient Class', () => {
 
     test('givenACocktailIngredient_whenCreated_thenItHasCorrectProperties', () => {
         // when
-        const id = cocktailIngredient.id;
-        const cocktailId = cocktailIngredient.cocktailId;
-        const ingredientId = cocktailIngredient.ingredientId;
-        const amount = cocktailIngredient.amount;
+        const id = cocktailIngredient.getId();
+        const cocktailId = cocktailIngredient.getCocktailId();
+        const ingredientId = cocktailIngredient.getIngredientId();
+        const amount = cocktailIngredient.getAmount();
 
         // then
         expect(id).toBe(1);
@@ -31,10 +31,10 @@ describe('CocktailIngredient Class', () => {
         const newId = 2;
 
         // when
-        cocktailIngredient.id = newId;
+        cocktailIngredient.setId(newId);
 
         // then
-        expect(cocktailIngredient.id).toBe(newId);
+        expect(cocktailIngredient.getId()).toBe(newId);
     });
 
     test('givenANewCocktailId_whenSetCocktailIdIsCalled_thenTheCocktailIdIsUpdated', () => {
@@ -42,10 +42,10 @@ describe('CocktailIngredient Class', () => {
         const newCocktailId = 102;
 
         // when
-        cocktailIngredient.cocktailId = newCocktailId;
+        cocktailIngredient.setCocktailId(newCocktailId);
 
         // then
-        expect(cocktailIngredient.cocktailId).toBe(newCocktailId);
+        expect(cocktailIngredient.getCocktailId()).toBe(newCocktailId);
     });
 
     test('givenANewIngredientId_whenSetIngredientIdIsCalled_thenTheIngredientIdIsUpdated', () => {
@@ -53,10 +53,10 @@ describe('CocktailIngredient Class', () => {
         const newIngredientId = 203;
 
         // when
-        cocktailIngredient.ingredientId = newIngredientId;
+        cocktailIngredient.setIngredientId(newIngredientId);
 
         // then
-        expect(cocktailIngredient.ingredientId).toBe(newIngredientId);
+        expect(cocktailIngredient.getIngredientId()).toBe(newIngredientId);
     });
 
     test('givenANewAmount_whenSetAmountIsCalled_thenTheAmountIsUpdated', () => {
@@ -64,9 +64,9 @@ describe('CocktailIngredient Class', () => {
         const newAmount = '100ml';
 
         // when
-        cocktailIngredient.amount = newAmount;
+        cocktailIngredient.setAmount(newAmount);
 
         // then
-        expect(cocktailIngredient.amount).toBe(newAmount);
+        expect(cocktailIngredient.getAmount()).toBe(newAmount);
     });
 });

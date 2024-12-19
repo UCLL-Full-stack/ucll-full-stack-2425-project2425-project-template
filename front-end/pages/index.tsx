@@ -1,4 +1,4 @@
-import CocktailList from '@components/cocktail/cocktailList';
+import CocktailList from '@components/cocktail/CocktailList';
 import Head from 'next/head';
 import Header from '@components/header';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -65,14 +65,15 @@ const Home: React.FC = () => {
   );
 };
 
-// export const getServerSideProps = async (context) => {
-//   const { locale } = context;
-//   return {
-//       props: {
-//           ...(await serverSideTranslations(locale ?? "en", ["common"])),
-//       },
-//   };
-// }
+export const getServerSideProps = async (context: { locale: any; }) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+}; 
 
 
 

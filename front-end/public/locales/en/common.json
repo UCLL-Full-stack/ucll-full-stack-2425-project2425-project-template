@@ -15,7 +15,7 @@
     "header": {
         "home": "Home",
         "cocktails": "Cocktails",
-        "addCocktial": "Add Cocktail",
+        "addCocktail": "Add Cocktail",
         "search": "Search",
         "login": "Login",
         "logout": "Logout",
@@ -31,6 +31,17 @@
         "removeIngredient": "Remove Ingredient",
         "save": "Save",
         "cancel": "Cancel"
-    }
+    },
+    "login": {
+        "title": "Login",
+        "label": {
+            "username": "Username",
+            "password": "Password"
+        },
+        "button": "Login",
+        "name": "Please enter a username.",
+        "password": "Please enter a password.",
+        "success": "Login successful. You are being redirected..."
+        }
 
 }

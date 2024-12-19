@@ -1,0 +1,46 @@
+{
+    "app.title": "Sip Happens Online",
+    "general.error": "Si è verificato un errore, riprova più tardi.",
+    "home": {
+        "title": "Benvenuto su Sip Happens Online",
+        "description1": "Scopri un mondo di cocktail raffinati e migliora le tue abilità di mixologia. Sip Happens Online è la tua destinazione definitiva per tutto ciò che riguarda i cocktail. Registrati ed effettua il login per aggiungere e visualizzare i tuoi drink preferiti ed esplorare un elenco centrale di tutti i cocktail con un contatore che mostra quanti utenti li hanno aggiunti ai preferiti.",
+        "description2": "La nostra vasta raccolta di ricette di cocktail include ingredienti dettagliati e puoi facilmente filtrare i cocktail in base alle tue preferenze. Che tu sia un mixologo esperto o un principiante, Sip Happens Online ha qualcosa per tutti. Unisciti alla nostra comunità e inizia a mescolare il tuo drink perfetto oggi stesso!",
+        "userInformation": {
+            "title": "Informazioni Utente",
+            "username": "Nome Utente",
+            "password": "Password",
+            "role": "Ruolo"
+        }
+    },
+    "header": {
+        "home": "Home",
+        "cocktails": "Cocktail",
+        "addCocktail": "Aggiungi Cocktail",
+        "search": "Cerca",
+        "login": "Accedi",
+        "logout": "Esci",
+        "register": "Registrati"
+    },
+    "addCocktail": {
+        "title": "Aggiungi Cocktail",
+        "id": "ID",
+        "name": "Nome",
+        "description": "Descrizione",
+        "strongness": "Intensità (0-5)",
+        "addIngredient": "Aggiungi Ingrediente",
+        "removeIngredient": "Rimuovi Ingrediente",
+        "save": "Salva",
+        "cancel": "Annulla"
+    },
+    "login": {
+        "title": "Accedi",
+        "label": {
+            "username": "Nome Utente",
+            "password": "Password"
+        },
+        "button": "Accedi",
+        "name": "Per favore, inserisci un nome utente.",
+        "password": "Per favore, inserisci una password.",
+        "success": "Accesso riuscito. Reindirizzamento in corso..."
+    }
+}

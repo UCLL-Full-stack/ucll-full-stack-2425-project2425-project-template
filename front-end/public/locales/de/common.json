@@ -1,0 +1,46 @@
+{
+    "app.title": "Sip Happens Online",
+    "general.error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.",
+    "home": {
+        "title": "Willkommen bei Sip Happens Online",
+        "description1": "Entdecken Sie eine Welt exquisiter Cocktails und verbessern Sie Ihre Mixologie-Fähigkeiten. Sip Happens Online ist Ihr ultimatives Ziel für alles rund um Cocktails. Melden Sie sich an und loggen Sie sich ein, um Ihre Lieblingsdrinks hinzuzufügen und anzuzeigen, und erkunden Sie eine zentrale Liste aller Cocktails mit einem Zähler, der zeigt, wie viele Benutzer jeden Drink favorisiert haben.",
+        "description2": "Unsere umfangreiche Sammlung von Cocktailrezepten enthält detaillierte Zutaten, und Sie können Cocktails ganz einfach nach Ihren Vorlieben filtern. Egal, ob Sie ein erfahrener Mixologe sind oder gerade erst anfangen, Sip Happens Online hat für jeden etwas zu bieten. Treten Sie unserer Community bei und beginnen Sie noch heute, Ihren perfekten Drink zu mixen!",
+        "userInformation": {
+            "title": "Benutzerinformationen",
+            "username": "Benutzername",
+            "password": "Passwort",
+            "role": "Rolle"
+        }
+    },
+    "header": {
+        "home": "Startseite",
+        "cocktails": "Cocktails",
+        "addCocktail": "Cocktail Hinzufügen",
+        "search": "Suchen",
+        "login": "Anmelden",
+        "logout": "Abmelden",
+        "register": "Registrieren"
+    },
+    "addCocktail": {
+        "title": "Cocktail Hinzufügen",
+        "id": "ID",
+        "name": "Name",
+        "description": "Beschreibung",
+        "strongness": "Stärke (0-5)",
+        "addIngredient": "Zutat Hinzufügen",
+        "removeIngredient": "Zutat Entfernen",
+        "save": "Speichern",
+        "cancel": "Abbrechen"
+    },
+    "login": {
+        "title": "Anmelden",
+        "label": {
+            "username": "Benutzername",
+            "password": "Passwort"
+        },
+        "button": "Anmelden",
+        "name": "Bitte geben Sie einen Benutzernamen ein.",
+        "password": "Bitte geben Sie ein Passwort ein.",
+        "success": "Anmeldung erfolgreich. Weiterleitung..."
+    }
+}
