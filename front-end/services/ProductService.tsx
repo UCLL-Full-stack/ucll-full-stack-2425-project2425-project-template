@@ -1,10 +1,14 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/carts/1';
+const API_URL = process.env.NEXT_PUBLIC_API_URL + '/carts';
 
 class ProductService {
     async addProductToCart(productId: string) {
-        const response = await axios.put(API_URL, {productId});
+        const response = await axios.put(API_URL, { productId }, {
+            headers: {
+                "Authorization": `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        });
         return response.data;
     }
 }

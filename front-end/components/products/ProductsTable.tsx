@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { FC } from "react";
 
 interface Product {
@@ -16,7 +15,11 @@ interface ProductsTableProps {
 
 const ProductsTable: FC<ProductsTableProps> = ({ products }) => {
   const addToCart = (product: Product) => {
-      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/carts/1`, { productId: product.id })
+      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/carts`, { productId: product.id }, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+        }
+      })
         .then(response => alert(`${product.name} added to cart`))
         .catch(error => console.error("Error adding product to cart:", error));
     };

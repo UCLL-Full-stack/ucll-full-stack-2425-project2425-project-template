@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import CartService from '@/services/CartService';
 import Cart from '@/components/cart';
 
 interface Product {
@@ -10,12 +10,6 @@ interface Product {
     rating: number;
 }
 
-interface Cart {
-    id: number;
-    products: Product[];
-    totalPrice: number;
-}
-
 const CartPage = () => {
     const [items, setItems] = useState<Product[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -23,13 +17,11 @@ const CartPage = () => {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const response = await axios.get<Cart[]>(`${process.env.NEXT_PUBLIC_API_URL}/carts`);
-                console.log('Fetched cart items:', response.data);
-                const cart = response.data[0]; 
-                const products = cart.products || []; 
+                const cart = await CartService.getCart();
+                console.log('Fetched cart items:', cart);
+                const products = cart.products || [];
                 setItems(products);
-                const total = response.data[0]; 
-                setTotalPrice(total.totalPrice); 
+                setTotalPrice(cart.totalPrice);
             } catch (error) {
                 console.error('Error fetching cart items:', error);
             }

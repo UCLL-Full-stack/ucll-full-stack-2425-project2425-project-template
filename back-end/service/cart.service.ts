@@ -60,4 +60,33 @@ const createCart = async (cart: Cart): Promise<Cart> => {
     return await cartDb.createCart(cart);
 };
 
-export default { getAllCarts, getCartById, createCart, addProductToCart };
+const getCartForUser = async (email: string): Promise<Cart> => {
+    const user = await userDb.getUserByEmail(email);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const userId = user.getId();
+    if (userId === undefined) {
+        throw new Error('User ID is undefined');
+    }
+
+    let cart = await cartDb.getCartByUserId(userId);
+    if (!cart) {
+        cart = new Cart({
+            products: [],
+            user: user,
+        });
+        cart = await cartDb.createCart(cart);
+    }
+
+    return cart;
+};
+
+export default { 
+    getAllCarts, 
+    getCartById, 
+    createCart, 
+    addProductToCart, 
+    getCartForUser 
+};

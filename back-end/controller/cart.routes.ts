@@ -120,4 +120,34 @@ cartRouter.put('/', isAuthenticated, async (req: Request, res: Response, next: N
     }
 });
 
+/**
+ * @swagger
+ * /carts/me:
+ *   get:
+ *     summary: Retrieve the cart of the authenticated user.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: The cart of the authenticated user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Cart'
+ *       400:
+ *         description: Error retrieving the cart.
+ */
+// GET /carts/me
+cartRouter.get('/me', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+    const request = req as Request & { auth: { email: string; role: Role } };
+    const { email } = request.auth;
+
+    try {
+        const cart = await cartService.getCartForUser(email);
+        res.status(200).json(cart);
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
+    }
+});
+
 export { cartRouter };
