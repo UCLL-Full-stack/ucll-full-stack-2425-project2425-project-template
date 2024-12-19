@@ -19,6 +19,7 @@ const Navbar: React.FC = () => {
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');
         setLoggedInUser(null);
+        window.location.reload();
     };
 
     return (
