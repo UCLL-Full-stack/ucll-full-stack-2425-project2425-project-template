@@ -9,14 +9,23 @@ import {
   UtensilsCrossed,
   Settings,
   LogOut,
+  Globe,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 
 const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const router = useRouter();
+  
+  const { locale, pathname: currentPath, asPath, query } = router;
+
+  const handleLanguageChange = () => {
+    const newLocale = locale === "en" ? "zh" : "en";
+    router.push({ pathname: currentPath, query }, asPath, { locale: newLocale });
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -54,6 +63,15 @@ const Sidebar = () => {
       >
         <Calendar size={24} />
       </Link>
+      <div className="flex-grow"></div>
+      <button
+        onClick={handleLanguageChange}
+        className="flex justify-center items-center w-12 h-12 mb-4 rounded-full text-primary hover:bg-avatar-hover-bg"
+        aria-label="Change Language"
+      >
+        <Globe size={24} />
+      </button>
+
       {/* <Link
         href="/shopping-list"
         className={router.pathname === "/shopping-list" ? "active" : ""}

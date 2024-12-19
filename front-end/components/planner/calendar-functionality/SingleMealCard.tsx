@@ -1,14 +1,9 @@
-/*
- * We decided to have 2 separate components for when there are more than one meal per day vs when there's only one meal.
- * SingleMealView component displays detailed information about a single meal.
- * It shows the meal's category, image, and provides options to toggle it as a favorite or delete it.
- */
-
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Clock, Heart, Trash2 } from "lucide-react";
 import { Recipe } from "@/types/recipes";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   meal: Recipe & { notes?: string };
@@ -21,11 +16,13 @@ const SingleMealView: React.FC<Props> = ({
   onToggleFavorite,
   onDelete,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <section className="max-w-2xl mx-auto">
       <article className="space-y-4">
         <h3 className="text-lg font-semibold capitalize mb-2">
-          {meal.category}
+          {t(meal.category)}
         </h3>
         <Link href={`/recipes/${meal.id}`} className="block">
           {meal.imageUrl && (
@@ -43,11 +40,11 @@ const SingleMealView: React.FC<Props> = ({
 
         <article className="flex items-center space-x-2 text-sm text-gray-500">
           <Clock className="h-4 w-4" />
-          <span>{meal.cookingTime} minutes</span>
+          <span>{meal.cookingTime} {t('minutes')}</span>
         </article>
         {meal.notes && (
           <section>
-            <h5 className="font-semibold">Notes</h5>
+            <h5 className="font-semibold">{t('notes')}</h5>
             <p className="text-gray-600">{meal.notes}</p>
           </section>
         )}
@@ -67,7 +64,7 @@ const SingleMealView: React.FC<Props> = ({
                 }`}
               />
               <span className="text-gray-700">
-                {meal.isFavorite ? "Favorited" : "Favorite"}
+                {meal.isFavorite ? t('favorited') : t('favorite')}
               </span>
             </span>
           </Button>
@@ -78,7 +75,7 @@ const SingleMealView: React.FC<Props> = ({
           >
             <span className="flex items-center justify-center gap-2">
               <Trash2 className="h-5 w-4" />
-              Delete
+              {t('delete')}
             </span>
           </Button>
         </section>

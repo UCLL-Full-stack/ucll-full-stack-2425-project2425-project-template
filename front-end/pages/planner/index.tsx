@@ -2,9 +2,17 @@ import CalendarGrid from "@/components/planner/calendar/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
 import ShoppingList from "@/components/planner/ShoppingListSidebar";
 import { useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
+
+interface User {
+  name: string;
+}
 
 const MealPlanner: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const userToken = localStorage.getItem("loggedInUser");
@@ -26,8 +34,8 @@ const MealPlanner: React.FC = () => {
       <main className="flex h-screen overflow-hidden">
         <section className="flex-1 overflow-auto">
           <section className="p-6">
-            <Greeting user={user} />
-            <h1 className="text-2xl font-bold mb-3">Meal Planner</h1>
+            <Greeting user={null} />
+            <h1 className="text-2xl font-bold mb-3">{t("mealPlanner")}</h1>
             <CalendarGrid />
           </section>
         </section>
@@ -39,6 +47,15 @@ const MealPlanner: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  const localeString = locale || "en"; // Provide a default value for locale
+  return {
+    props: {
+      ...(await serverSideTranslations(localeString, ["common"])),
+    },
+  };
 };
 
 export default MealPlanner;

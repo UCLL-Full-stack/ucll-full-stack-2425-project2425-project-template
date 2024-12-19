@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RegisterData } from "@/types/auth";
 import authService from "@/services/authService";
+import { useTranslation } from "next-i18next";
 
 interface SignupFormProps {
   onSuccess: () => void;
@@ -27,12 +28,13 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
   const [formError, setFormError] = useState("");
 
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   const validateFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFirstName(value);
     if (!value) {
-      setFirstNameError("First name is required.");
+      setFirstNameError(t("firstNameRequired"));
     } else {
       setFirstNameError("");
     }
@@ -42,7 +44,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     const value = e.target.value;
     setLastName(value);
     if (!value) {
-      setLastNameError("Last name is required.");
+      setLastNameError(t("lastNameRequired"));
     } else {
       setLastNameError("");
     }
@@ -52,7 +54,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     const value = e.target.value;
     setUsername(value);
     if (!value) {
-      setUsernameError("Username is required.");
+      setUsernameError(t("usernameRequired"));
     } else {
       setUsernameError("");
     }
@@ -62,7 +64,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     const value = e.target.value;
     setEmail(value);
     if (!value.includes("@")) {
-      setEmailError("Invalid email address.");
+      setEmailError(t("invalidEmail"));
     } else {
       setEmailError("");
     }
@@ -73,9 +75,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     setPassword(value);
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     if (!regex.test(value)) {
-      setPasswordError(
-        "Password must be at least 8 characters long, contain one uppercase letter, one number, and one special character."
-      );
+      setPasswordError(t("passwordRequirements"));
     } else {
       setPasswordError("");
     }
@@ -85,7 +85,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     const value = e.target.value;
     setRepeatPassword(value);
     if (value !== password) {
-      setRepeatPasswordError("Passwords do not match.");
+      setRepeatPasswordError(t("passwordsDoNotMatch"));
     } else {
       setRepeatPasswordError("");
     }
@@ -94,13 +94,13 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!firstName) setFirstNameError("First name is required");
-    if (!lastName) setLastNameError("Last name is required");
-    if (!username) setUsernameError("Username is required");
-    if (!email) setEmailError("Email is required");
-    if (!password) setPasswordError("Password is required");
+    if (!firstName) setFirstNameError(t("firstNameRequired"));
+    if (!lastName) setLastNameError(t("lastNameRequired"));
+    if (!username) setUsernameError(t("usernameRequired"));
+    if (!email) setEmailError(t("emailRequired"));
+    if (!password) setPasswordError(t("passwordRequired"));
     if (password !== repeatPassword)
-      setRepeatPasswordError("Passwords do not match");
+      setRepeatPasswordError(t("passwordsDoNotMatch"));
 
     if (
       !firstNameError &&
@@ -121,7 +121,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         await authService.register(registerData);
         onSuccess(); // Call onSuccess to handle redirection
       } catch (error) {
-        setFormError("Registration failed. Please try again.");
+        setFormError(t("registrationFailed"));
       }
     }
   };
@@ -130,7 +130,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
+          <Label htmlFor="firstName">{t("firstName")}</Label>
           <Input
             id="firstName"
             name="firstName"
@@ -145,7 +145,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
+          <Label htmlFor="lastName">{t("lastName")}</Label>
           <Input
             id="lastName"
             name="lastName"
@@ -161,7 +161,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">{t("username")}</Label>
         <Input
           id="username"
           name="username"
@@ -176,7 +176,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input
           id="email"
           name="email"
@@ -192,7 +192,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input
           id="password"
           name="password"
@@ -208,7 +208,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="repeatPassword">Repeat Password</Label>
+        <Label htmlFor="repeatPassword">{t("repeatPassword")}</Label>
         <Input
           id="repeatPassword"
           name="repeatPassword"
@@ -229,7 +229,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         </Alert>
       )}
       <Button type="submit" className="w-full">
-        Sign Up
+        {t("signUp")}
       </Button>
     </form>
   );
