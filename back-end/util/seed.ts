@@ -44,6 +44,7 @@ const main = async () => {
     const hashedPasswordRed = await bcrypt.hash('GonnaBeTheBest151', 10);  // Hash Red's password
     const hashedPasswordBlue = await bcrypt.hash('Sm3llY4L4ter', 10);  // Hash Blue's password
     const hashedPasswordNurse = await bcrypt.hash('easyNurse', 10); // Hash Nurse password
+    const hashedPasswordOak = await bcrypt.hash("GoAsh!Go4", 10);
 
     // Create Users with hashed passwords
     const userRed = await prisma.user.create({
@@ -65,6 +66,16 @@ const main = async () => {
             role: 'trainer',
         },
     });
+
+    const userOak = await prisma.user.create({
+        data: {
+            firstName: 'Proffesor',
+            lastName: 'Oak',
+            email: "oak@gmail.com",
+            password: hashedPasswordOak,
+            role: 'admin'
+        }
+    })
 
         // Create a Nurse with no Pokémon
         const userJoy = await prisma.user.create({

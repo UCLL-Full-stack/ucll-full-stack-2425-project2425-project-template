@@ -45,9 +45,6 @@ const Header: React.FC = () => {
             <Link href="/pokemons" className="nav-link px-4 fs-5 text-white">
               {t('header.pokemon')}
             </Link>
-            <Link href="/calendar" className="nav-link px-4 fs-5 text-white">
-              {t('header.calender')}
-            </Link>
             <Link href="/badges" className="nav-link px-4 fs-5 text-white">
               {t('header.badges')}
             </Link>
@@ -62,6 +59,20 @@ const Header: React.FC = () => {
           <>
             <Link href="/pokemons" className="nav-link px-4 fs-5 text-white">
               {t('header.pokemon')}
+            </Link>
+            <button onClick={logOut} type='submit'>
+              {t("headers.logout")}
+            </button>
+          </>
+        )}
+
+        {role === 'admin' && (
+          <>
+            <Link href="/pokemons" className="nav-link px-4 fs-5 text-white">
+              {t('header.pokemon')}
+            </Link>
+            <Link href="/badges" className="nav-link px-4 fs-5 text-white">
+              {t('header.badges')}
             </Link>
             <button onClick={logOut} type='submit'>
               {t("headers.logout")}
