@@ -1,6 +1,19 @@
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Language from './language/Language';
 
 const Header: React.FC = () => {
+
+    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoggedInUser((sessionStorage.getItem("loggedInUser")));
+  }, []);
+
+  const handleClick = () => {
+    sessionStorage.removeItem("loggedInUser");
+  };
+
     return (
         <header
             className="p-3 mb-4 border-bottom"
@@ -40,6 +53,28 @@ const Header: React.FC = () => {
                     >
                         Teams
                     </Link>
+
+                    <Link
+                        href="/login"
+                        className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+                        >
+                        Login
+                        </Link>
+                        {loggedInUser && (
+                        <>
+                        <a
+                            href="/login"
+                            className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+                            onClick={handleClick}
+                        >
+                            Logout
+                        </a>
+                        <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
+                            Welcome, {loggedInUser}
+                        </div>
+                        </>
+                    )}
+                    <Language />
                 </nav>
             </div>
 

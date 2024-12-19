@@ -37,3 +37,13 @@ export type Match = {
     team2Id: number;
     team2: Team;
 };
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};
+
+export type authUser = {
+    name: string;
+    password: string;
+};
