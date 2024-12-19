@@ -21,7 +21,7 @@ const createAccount = async (account: Account): Promise<Account> => {
             },
         });
 
-        return Account.from({ ...accountPrisma });
+        return Account.from(accountPrisma);
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
@@ -45,17 +45,21 @@ const getAccountById = async ({ id }: { id: number }): Promise<Account | null> =
 };
 
 const getAccountByAccountNumber = async (accountNumber: string): Promise<Account | null> => {
-    // return accounts.find((account) => account.getAccountNumber() === accountNumber);
-
     try {
+        console.log(`Fetching account with account number: ${accountNumber}`);
         const accountPrisma = await database.account.findUnique({
             where: {
                 accountNumber: accountNumber,
             },
         });
-
-        return accountPrisma ? Account.from({ ...accountPrisma }) : null;
+        console.log(`Fetched account: ${JSON.stringify(accountPrisma)}`);
+        if (accountPrisma) {
+            return Account.from(accountPrisma);
+        } else {
+            return null;
+        }
     } catch (error: any) {
+        console.error('Database error:', error);
         throw new Error('Database error. See server log for details.');
     }
 };
@@ -76,9 +80,11 @@ const updateAccount = async (account: Account): Promise<Account> => {
             },
         });
 
-        return Account.from({ ...accountPrisma });
+        return Account.from(accountPrisma);
     } catch (error: any) {
-        throw new Error('Database error. See server log for details.');
+        // throw new Error('Database error. See server log for details.');
+        
+        throw new Error(`Database error: ${error.message}`);
     }
 };
 

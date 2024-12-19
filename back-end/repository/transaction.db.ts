@@ -26,4 +26,25 @@ const createTransaction = async (transaction: Transaction): Promise<Transaction>
     }
 };
 
-export default { createTransaction };
+const getTransactionsByAccount = async (account: Account): Promise<Transaction[]> => {
+    try {
+        const transactionsPrisma = await database.transaction.findMany({
+            where: {
+                OR: [
+                    { sourceAccountId: account.getId() },
+                    { destinationAccountId: account.getId() },
+                ],
+            },
+            include: {
+                sourceAccount: true,
+                destinationAccount: true,
+            },
+        });
+
+        return transactionsPrisma.map((transactionPrisma) => Transaction.from(transactionPrisma));
+    } catch (error: any) {
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { createTransaction, getTransactionsByAccount };

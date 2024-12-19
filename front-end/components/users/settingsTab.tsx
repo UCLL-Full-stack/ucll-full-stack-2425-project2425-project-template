@@ -1,44 +1,78 @@
-import { User } from "@/types";
+import { Account, User } from "@/types";
 import { useTranslation } from 'next-i18next';
 import { useState, useEffect } from 'react';
 import styles from '@/styles/Home.module.css';
 import UserService from "@/services/UserService";
+import AccountService from "@/services/AccountService";
 
-type Props = { user: User };
+type Props = { 
+  user: User 
+  accounts: Account[]
+};
 
-const Settings: React.FC<Props> = ({ user }: Props) => {
+const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
   const { t } = useTranslation();
 //   const [originalUser, setOriginalUser] = useState(user); 
   const [updatedUser, setUpdatedUser] = useState<User>(user);
-
-  const handleInputChange = (field: keyof User, value: any) => {
+  const [updatedAccountStatus, setUpdatedAccountStatus] = useState<Account | null>(null);
+  const [updatedAccounts, setUpdatedAccounts] = useState<Account[]>(accounts);
+  
+  const handleUserInputChange = (field: keyof User, value: any) => {
     setUpdatedUser((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
 
+  const handleAccountSelection = (account: Account) => {
+    setUpdatedAccountStatus(account);
+  };
+
+  const handleAccountInputChange = (field: keyof Account, value: any) => {
+    if (updatedAccountStatus) {
+      const updatedStatus = { ...updatedAccountStatus, [field]: value };
+
+      setUpdatedAccountStatus(updatedStatus);
+
+      const updatedAccountsList = updatedAccounts.map((account) =>
+        account.id === updatedStatus.id ? { ...account, status: value } : account
+      );
+      setUpdatedAccounts(updatedAccountsList);
+    }
+  };
+
+
   const updateUser = async () => {
     await UserService.updateUser(user.nationalRegisterNumber, updatedUser);
   } 
 
+  const updateAccount = async () => {
+    console.log(user);
+    await AccountService.updateAccount(updatedAccountStatus!);
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    updateUser();
+    if (updatedAccountStatus) {
+      await updateAccount();
+    }
+    await updateUser();
     console.log('Updated User:', updatedUser);
   };
 
   useEffect(() => {
+    setUpdatedAccounts(accounts)
     setUpdatedUser(user);
-  }, [user]);
+  }, [user, accounts]);
 
   return (
     <>
       {updatedUser  && (
+      <form onSubmit={handleSubmit}>
         <div>
           <h1>Profile Details</h1>
-          <section className={styles.userDetails}>
-            <form onSubmit={handleSubmit}>
+          <h2>User Details</h2>
+            <section className={styles.userDetails}>
               <table>
                 <tbody>
                   <tr>
@@ -49,9 +83,9 @@ const Settings: React.FC<Props> = ({ user }: Props) => {
                         id="name"
                         name="name"
                         value={updatedUser.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
-                        onClick={() => handleInputChange("name", '')}
-                        onBlur={() => {if (updatedUser.name === '') handleInputChange("name", user.name)}} 
+                        onChange={(e) => handleUserInputChange("name", e.target.value)}
+                        onClick={() => handleUserInputChange("name", '')}
+                        onBlur={() => {if (updatedUser.name === '') handleUserInputChange("name", user.name)}} 
                       />
                     </td>
                   </tr>
@@ -63,9 +97,9 @@ const Settings: React.FC<Props> = ({ user }: Props) => {
                         id="phoneNumber"
                         name="phoneNumber"
                         value={updatedUser.phoneNumber}
-                        onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-                        onClick={() => handleInputChange("phoneNumber", '')}
-                        onBlur={() => {if (updatedUser.phoneNumber === '') handleInputChange("phoneNumber", user.phoneNumber)}}
+                        onChange={(e) => handleUserInputChange("phoneNumber", e.target.value)}
+                        onClick={() => handleUserInputChange("phoneNumber", '')}
+                        onBlur={() => {if (updatedUser.phoneNumber === '') handleUserInputChange("phoneNumber", user.phoneNumber)}}
                       />
                     </td>
                   </tr>
@@ -77,9 +111,9 @@ const Settings: React.FC<Props> = ({ user }: Props) => {
                         id="email"
                         name="email"
                         value={updatedUser.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                        onClick={() => handleInputChange("email", '')}
-                        onBlur={() => {if (updatedUser.email === '') handleInputChange("email", user.email)}}
+                        onChange={(e) => handleUserInputChange("email", e.target.value)}
+                        onClick={() => handleUserInputChange("email", '')}
+                        onBlur={() => {if (updatedUser.email === '') handleUserInputChange("email", user.email)}}
                       />
                     </td>
                   </tr>
@@ -95,16 +129,57 @@ const Settings: React.FC<Props> = ({ user }: Props) => {
                         id="birthDate"
                         name="birthDate"
                         value={updatedUser.birthDate ? new Date(updatedUser.birthDate).toISOString().split('T')[0] : ''}
-                        onChange={(e) => handleInputChange("birthDate", e.target.value)}
+                        onChange={(e) => handleUserInputChange("birthDate", e.target.value)}
                       />
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button type="submit" onSubmit={handleSubmit}>Save Changes</button>
-            </form>
           </section>
+          <section className={styles.accountOverview}>
+          <h2>Account details</h2>
+          <table>
+          <thead>
+          <tr>
+            <th>{t("accountOverview.accountNumber")}</th>
+            <th>{t("accountOverview.balance")}</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+              <tbody>
+                {updatedAccounts && updatedAccounts.length > 0 ? (
+                  updatedAccounts.map((account) => (
+                    <tr key={account.id} onClick={() => {handleAccountSelection(account)
+                      console.log(updatedAccountStatus)}}>
+                      <td>{account.accountNumber}</td>
+                      <td>{account.balance}</td>
+                      <td> 
+                        <label htmlFor="status">Change current status ({account.status}): </label>
+
+                        <select
+                          name="status"
+                          id="status"
+                          value={updatedAccountStatus?.status}
+                          onChange={(e) => handleAccountInputChange("status", e.target.value)}
+                          >
+                          <option value="Active">Active</option>
+                          <option value="Blocked">Blocked</option>
+                          <option value="Inactive">Inactive</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6}>{t("accountOverview.noAccounts")}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </section>
+          <button type="submit" onSubmit={handleSubmit}>Save Changes</button>
         </div>
+      </form>
       )}
     </>
   );

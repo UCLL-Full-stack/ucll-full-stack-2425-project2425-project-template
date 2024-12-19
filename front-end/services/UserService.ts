@@ -118,6 +118,9 @@ const updateUser = async (nationalRegisterNumber: string, user: User): Promise<U
       }
     ); 
 
+    // const updatedUserr = await response.text();
+    // console.log(updatedUserr);
+
     if (!response.ok) {
       throw new Error("User not updated");
     }

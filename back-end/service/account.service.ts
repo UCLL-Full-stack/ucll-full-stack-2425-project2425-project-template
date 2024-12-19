@@ -22,23 +22,26 @@ const getAccountById = async ({ id }: { id: number }): Promise<Account> => {
     return account;
 };
 
-const getAccountByAccountNumber = async (accountNumber: string): Promise<Account> => {
+const getAccountByAccountNumber = async (accountNumber: string): Promise<Account | null> => {
+    console.log(`Service: Fetching account with account number: ${accountNumber}`);
     const account = await accountDb.getAccountByAccountNumber(accountNumber);
 
     if (account == null) {
-        throw new Error(`Account with account number: ${accountNumber} was not found.`);
+        console.error(`Service: Account with account number ${accountNumber} was not found.`);
+        return null;
     }
 
+    console.log(`Service: Fetched account: ${JSON.stringify(account)}`);
     return account;
 };
 
 const getAccountsOfUser = async (email: string): Promise<Account[]> => {
     const user = await userDb.getUserByEmail(email);
-    const accountsOfUser = user.getAccounts();
     
     if (user == null) {
         throw new Error('No user was found.')
     }
+    const accountsOfUser = user.getAccounts();
 
     if (user.getIsAdministrator() === true) {
         return accountsOfUser;    
@@ -47,4 +50,25 @@ const getAccountsOfUser = async (email: string): Promise<Account[]> => {
     }
 };
 
-export default { createAccount, getAccountById, getAccountByAccountNumber, getAccountsOfUser };
+const updateAccount = async (email: string, accountInput: AccountInput): Promise<Account> => {
+    const user = await userDb.getUserByEmail(email);
+
+    if (user == null) {
+        throw new Error('No user was found.')
+    }
+    const accountsOfUser = user.getAccounts();
+
+    const account = accountsOfUser.filter((account) => account.getId() === accountInput.id)[0];
+ 
+    // if (!user.getIsAdministrator()) {
+    //     throw new Error("You do not have permissions!");
+    // }
+
+    account.update({
+        status: accountInput.status
+    });
+    return await accountDb.updateAccount(account);    
+    
+};
+
+export default { createAccount, getAccountById, getAccountByAccountNumber, getAccountsOfUser, updateAccount };

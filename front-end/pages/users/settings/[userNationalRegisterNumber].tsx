@@ -1,17 +1,19 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Settings from "@/components/users/settingsTab";
+import AccountService from "@/services/AccountService";
 import UserService from "@/services/UserService";
 import { User } from "@/types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useSWR, { mutate } from "swr";
 
 const settings: React.FC = () => {
     const [user, setUser] = useState<User | null>(null)
-    const router = useRouter();
-    const { userNationalRegisterNumber } = router.query;
+    // const router = useRouter();
+    // const { userNationalRegisterNumber } = router.query;
     
     const fetchUser = async () => {
         try {
@@ -33,11 +35,24 @@ const settings: React.FC = () => {
      };
 
     useEffect(() => {
-        if (userNationalRegisterNumber) fetchUser();
+        fetchUser();
         // } else {
         //   console.log("No userNationalRegisterNumber provided");
         // }
-    }, [userNationalRegisterNumber]);
+    }, []);
+
+    const getAccountsForUser = async () => {
+      const accounts = await AccountService.getAccountsForUser();
+      // console.log(accounts)
+      return accounts;
+    }
+    
+    const { data: accounts, error, isLoading } = useSWR('getAccounts', getAccountsForUser);
+    
+    setInterval(() => {
+        mutate("getAccounts", getAccountsForUser());
+    }, 480000);
+  
 
     return (
         <>
@@ -49,7 +64,7 @@ const settings: React.FC = () => {
         </Head>
         <Header />
         <main>
-            <Settings user={user!}/>
+            <Settings user={user!} accounts={accounts!}/>
         </main>
         <Footer />
         </>

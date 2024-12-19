@@ -1,7 +1,7 @@
 import { Account as AccountPrisma } from '@prisma/client';
 import { User } from './user';
 import { Transaction } from './transaction';
-import { TransactionType } from '../types';
+import { AccountInput, TransactionType } from '../types';
 
 export class Account {
     private id?: number;
@@ -111,6 +111,15 @@ export class Account {
         } else {
             throw new Error('Transaction type must be either "income" or "expense".');
         }
+    }
+
+    update(accountInput: Partial<AccountInput>) {
+        if (accountInput.status) this.status = accountInput.status;
+        if (accountInput.status) this.balance = accountInput.balance;
+        if (accountInput.status) this.isShared = accountInput.isShared;
+        if (accountInput.status) this.startDate = accountInput.startDate;
+        if (accountInput.status) this.endDate = accountInput.endDate;
+        if (accountInput.status) this.type = accountInput.type;
     }
 
     validate(account: {

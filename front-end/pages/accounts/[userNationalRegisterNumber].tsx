@@ -64,7 +64,6 @@ const ReadUserByNationalRegisterNumber: React.FC = () => {
       mutate("getAccounts", getAccountsForUser());
   }, 480000);
 
-
   if (loading) {
     return <div>{t("loading")}</div>;
   }

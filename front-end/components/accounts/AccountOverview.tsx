@@ -1,6 +1,7 @@
 import React from 'react';
 import { Account, User } from '@/types';
 import styles from '@/styles/Home.module.css';
+import { useRouter } from 'next/router';
 import AccountService from '@/services/AccountService';
 import useSWR, { mutate } from 'swr';
 import { useTranslation } from 'next-i18next';
@@ -11,6 +12,15 @@ type AccountOverviewProps = {
 };
 
 const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
+  const router = useRouter();
+
+  const handleTransactionClick = (accountNumber: string) => {
+    router.push(`/transactions/${accountNumber}`);
+  };
+
+  const handleRowClick = (id: number) => {
+    router.push(`/transactions/overview/account/${id}`);
+  };
   const { t } = useTranslation();
 
   return (
@@ -24,18 +34,20 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
             <th>Status</th>
             <th>{t("accountOverview.startDate")}</th>
             <th>{t("accountOverview.endDate")}</th>
+            <th>Transaction</th>
           </tr>
         </thead>
         <tbody>
           {accounts && accounts.length > 0 ? (
             accounts.map((account) => (
-              <tr key={account.id}>
+              <tr key={account.id} onClick={() => account.accountNumber && account.id !== undefined && handleRowClick(account.id)} style={{ cursor: 'pointer' }}>
                 <td>{account.accountNumber}</td>
                 <td>{account.balance}</td>
                 <td>{account.type}</td>
                 <td>{account.status}</td>
                 <td>{account.startDate ? new Date(account.startDate).toLocaleDateString() : 'N/A'}</td>
                 <td>{account.endDate ? new Date(account.endDate).toLocaleDateString() : 'N/A'}</td>
+                <td><button onClick={() => account.accountNumber && handleTransactionClick(account.accountNumber)}>Make transaction</button></td>
               </tr>
             ))
           ) : (

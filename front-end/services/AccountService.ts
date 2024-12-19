@@ -7,7 +7,6 @@ const getAccountsForUser = async (): Promise<Account[]> => {
         const response = await fetch( process.env.NEXT_PUBLIC_API_URL + "/account", {
             method: "GET",
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             }
         });
@@ -22,9 +21,83 @@ const getAccountsForUser = async (): Promise<Account[]> => {
         throw error;
     }
 };
+const getAccountById = async (
+    id: number
+    ): Promise<Account> => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.token;
+    
+    const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/account/" + id,
+        {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        }
+    );
+    
+    if (!response.ok) {
+        throw new Error("Failed to fetch account");
+    }
+    
+    return response.json();
+};
+
+const getAccountByAccountNumber = async (accountNumber: string): Promise<Account> => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.token;
+    
+    const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/account/accountNumber/" + accountNumber,
+        {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        }
+    );
+    
+    if (!response.ok) {
+        throw new Error("Failed to fetch account");
+    }
+    
+    return response.json();
+}
+
+const updateAccount = async (account: Account): Promise<Account> => {
+    try {
+        const token = JSON.parse(
+          localStorage.getItem("loggedInUser") || "{}"
+        )?.token;
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_API_URL + `/account`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(account),
+          }
+        ); 
+    
+        // const updatedAccountt = await response.json();
+        // console.log(updatedAccountt);
+
+        if (!response.ok) {
+          throw new Error("Account not updated!");
+        }
+    
+        const updatedAccount = await response.json();
+        return updatedAccount;
+    
+      } catch (error: any) {
+        throw new Error(error);
+      }
+}
 
 const AccountService = {
     getAccountsForUser,
+    getAccountById, 
+    getAccountByAccountNumber,
+    updateAccount
 };
 
 export default AccountService;
