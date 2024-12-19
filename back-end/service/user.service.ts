@@ -19,6 +19,7 @@ const createUser = async ({name,email,password,role,birth_date,phone_number}: Us
     if (!role) {
         throw new Error("Role is required")
     }
+    
     if (!birth_date) {
         throw new Error("Birth date is required")
     }
