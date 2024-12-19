@@ -16,10 +16,11 @@
         "home": "Startseite",
         "cocktails": "Cocktails",
         "addCocktail": "Cocktail Hinzufügen",
-        "search": "Suchen",
+        "favorites": "Favoriten",
         "login": "Anmelden",
         "logout": "Abmelden",
-        "register": "Registrieren"
+        "register": "Registrieren",
+        "welcome": "Willkommen"
     },
     "addCocktail": {
         "title": "Cocktail Hinzufügen",
@@ -39,7 +40,7 @@
             "password": "Passwort"
         },
         "button": "Anmelden",
-        "email": "Bitte geben Sie einen E-Mail ein.",
+        "name": "Bitte geben Sie eine E-Mail ein.",
         "password": "Bitte geben Sie ein Passwort ein.",
         "success": "Anmeldung erfolgreich. Weiterleitung..."
     },

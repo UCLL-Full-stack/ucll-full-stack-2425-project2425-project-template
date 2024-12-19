@@ -1,6 +1,5 @@
 {
     "app.title": "Sip Happens Online",
-    "app.language": "Nederlands",
     "general.error": "Er is een fout opgetreden, probeer het later opnieuw.",
     "home": {
         "title": "Welkom bij Sip Happens Online",
@@ -14,13 +13,14 @@
         }
     },
     "header": {
-        "home": "thuis",
+        "home": "Home",
         "cocktails": "Cocktails",
         "addCocktail": "Cocktail Toevoegen",
-        "search": "Zoeken",
+        "favorites": "Favorieten",
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "register": "Registreren"
+        "register": "Registreren",
+        "welcome": "Welkom"
     },
     "addCocktail": {
         "title": "Cocktail Toevoegen",
@@ -40,7 +40,7 @@
             "password": "Wachtwoord"
         },
         "button": "Inloggen",
-        "email": "Vul een E-Mail in.",
+        "name": "Vul een E-Mail in.",
         "password": "Vul een wachtwoord in.",
         "success": "Inloggen succesvol. U wordt doorgestuurd..."
     },

@@ -1,6 +1,5 @@
 {
     "app.title": "Sip Happens Online",
-    "app.language": "Español",
     "general.error": "Ocurrió un error, por favor inténtalo de nuevo más tarde.",
     "home": {
         "title": "Bienvenido a Sip Happens Online",
@@ -17,10 +16,11 @@
         "home": "Inicio",
         "cocktails": "Cócteles",
         "addCocktail": "Agregar Cóctel",
-        "search": "Buscar",
+        "favorites": "Favoritos",
         "login": "Iniciar Sesión",
         "logout": "Cerrar Sesión",
-        "register": "Registrarse"
+        "register": "Registrarse",
+        "welcome": "Bienvenido"
     },
     "addCocktail": {
         "title": "Agregar Cóctel",
@@ -40,7 +40,7 @@
             "password": "Contraseña"
         },
         "button": "Iniciar Sesión",
-        "email": "Por favor, ingresa un E-Mail.",
+        "name": "Por favor, ingresa un E-Mail.",
         "password": "Por favor, ingresa una contraseña.",
         "success": "Inicio de sesión exitoso. Redirigiendo..."
     },

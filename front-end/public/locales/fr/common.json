@@ -16,10 +16,11 @@
         "home": "Accueil",
         "cocktails": "Cocktails",
         "addCocktail": "Ajouter un Cocktail",
-        "search": "Rechercher",
+        "favorites": "Favoris",
         "login": "Connexion",
         "logout": "Déconnexion",
-        "register": "S'inscrire"
+        "register": "S'inscrire",
+        "welcome": "Bienvenue"
     },
     "addCocktail": {
         "title": "Ajouter un Cocktail",
@@ -39,7 +40,7 @@
             "password": "Mot de Passe"
         },
         "button": "Connexion",
-        "email": "Veuillez entrer un E-Mail.",
+        "name": "Veuillez entrer un E-Mail.",
         "password": "Veuillez entrer un mot de passe.",
         "success": "Connexion réussie. Redirection en cours..."
     },

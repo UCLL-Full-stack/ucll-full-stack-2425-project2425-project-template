@@ -101,6 +101,25 @@ body {
   width: 110px;
   height: 65px;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.navbarbutton-stylah-lang {
+  color: #fff;
+  background-color: #2e24b3;
+  font-size: 16px;
+  width: 210px;
+  height: 65px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
 }
 
 .navbarbutton-stylah:hover {
@@ -240,4 +259,29 @@ ul li {
 
 .form-section {
   flex: 1;
+}
+
+/* Styles for dropdown menu */
+.language-dropdown {
+  position: relative;
+}
+
+.navbar-dropdown {
+  background-color: #fff; /* White background */
+  color: #000; /* Black text */
+  border: none;
+  padding: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: auto; /* Adjust width to fit content */
+}
+
+.navbar-dropdown option {
+  background-color: #fff; /* White background */
+  color: #000; /* Black text */
+}
+
+.navbar-dropdown option:checked {
+  background-color: #d3d3d3; /* Light gray background */
+  color: #000; /* Black text */
 }
