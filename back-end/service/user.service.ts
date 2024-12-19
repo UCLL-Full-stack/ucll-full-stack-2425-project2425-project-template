@@ -3,6 +3,7 @@ import userDB from '../repository/user.db';
 import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt'
 import { generateJwtToken } from '../util/jwt';
+import { Subscription } from '../model/subscription';
 
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
@@ -54,6 +55,14 @@ const createUser = async ({username, firstName, lastName, email, role, password}
     return await userDB.createUser(user)
 }
 
+const changeSubscriptionOfUser = async (subscription: Subscription, id: number): Promise<User> => {
+    const user = await userDB.changeSubscriptionOfUser(subscription, id);
+    if (!user) {
+        throw new Error(`User with username: ${id} does not exist.`);
+    }
+    return user;
+};
+
 const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
     if (!username) {
         throw new Error('Username is required');
@@ -79,4 +88,4 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
     };
 };
 
-export default { getUserByUsername, getAllUsers, createUser, authenticate };
+export default { getUserByUsername, getAllUsers, createUser, authenticate, changeSubscriptionOfUser };
