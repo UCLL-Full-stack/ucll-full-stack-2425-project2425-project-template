@@ -6,6 +6,7 @@ import ColumnService from "@/services/ColumnService";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import GuildService from "@/services/GuildService";
 import BoardService from "@/services/BoardService";
+import ConfirmationModal from "../ConfirmationModal";
 
 interface ColumnProps {
     column: Column;
@@ -113,6 +114,10 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
         setSelectedAssignees((prev) => prev.filter((user) => user.userId !== userId));
     };
 
+    const handleTaskDelete = (taskId: string) => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.taskId !== taskId));
+    };    
+
     const filteredUsers = availableUsers.filter(
         (user) =>
             user.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -160,7 +165,12 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                                             onMouseEnter={() => setIsHovered(false)}
                                             onMouseLeave={() => setIsHovered(true)}
                                         >
-                                            <TaskComponent task={task} index={index} onTaskUpdate={handleTaskUpdate}/>
+                                            <TaskComponent
+                                                task={task}
+                                                index={index}
+                                                onTaskUpdate={handleTaskUpdate}
+                                                onTaskDelete={handleTaskDelete}
+                                            />
                                         </div>
                                     )}
                                 </Draggable>
@@ -172,39 +182,23 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
             </Droppable>
             {isHovered && (
                 <button
-                    className="absolute top-2 right-2 text-grey-500 hover:text-red-600"
+                    className="absolute top-2 right-2 text-gray-500 hover:text-red-600"
                     onClick={() => setConfirmingDelete(true)}
                 >
                     ✕
                 </button>
             )}
-            {confirmingDelete && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-gray-800 text-white rounded-lg p-6 shadow-lg w-80 text-center">
-                        <p className="text-lg font-semibold mb-4">Delete Column</p>
-                        <p className="text-sm text-gray-300 mb-4">
-                            Are you sure you want to delete this column? All associated tasks will be deleted.
-                        </p>
-                        <div className="flex justify-around mt-4">
-                            <button
-                                onClick={() => setConfirmingDelete(false)}
-                                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setConfirmingDelete(false);
-                                    onDelete(column.columnId);
-                                }}
-                                className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <ConfirmationModal
+                isOpen={confirmingDelete}
+                title="Delete Column"
+                message="Are you sure you want to delete this column? All associated tasks will be deleted."
+                warning="This action is irreversible."
+                onConfirm={() => {
+                    setConfirmingDelete(false);
+                    onDelete(column.columnId);
+                }}
+                onCancel={() => {setConfirmingDelete(false); setIsHovered(false);}}
+            />
             <div>
                 {creatingTask ? (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

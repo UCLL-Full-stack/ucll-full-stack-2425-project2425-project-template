@@ -28,7 +28,12 @@ const deleteTask = async (taskId: string) => {
             'Content-Type': 'application/json',
         },
     });
-    return await response.json();
+    if (!response.ok) {
+        throw new Error(`Failed to delete column: ${response.statusText}`);
+    }
+    if (response.status !== 204) {
+        await response.json();
+    }
 };
 
 const addTask = async (task: any) => {

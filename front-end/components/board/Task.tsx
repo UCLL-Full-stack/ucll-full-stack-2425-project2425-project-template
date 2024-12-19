@@ -1,21 +1,39 @@
 import { Task } from "@/types";
 import { useEffect, useState } from "react";
 import ExpandedTask from "./ExpandedTask";
+import ConfirmationModal from "../ConfirmationModal";
 import UserService from "@/services/UserService";
+import TaskService from "@/services/TaskService";
 
 interface TaskProps {
     task: Task;
     index: number;
     onTaskUpdate: (task: Task) => void;
+    onTaskDelete: (taskId: string) => void;
 }
 
-const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate }) => {
+const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskDelete }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
     const handleToggleExpanded = (e: React.MouseEvent) => {
-        if (!isExpanded) {
+        if (!isExpanded && !isConfirmingDelete) {
             e.stopPropagation();
             setIsExpanded(true);
+            setIsHovered(false);
+        }
+    };
+
+    const handleDeleteTask = async () => {
+        try {
+            await TaskService.deleteTask(task.taskId);
+            console.log("Task deleted successfully");
+            onTaskDelete(task.taskId);
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        } finally {
+            setIsConfirmingDelete(false);
         }
     };
 
@@ -25,9 +43,23 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate }) => {
                 isExpanded ? "border-l-4 border-blue-500" : ""
             }`}
             onClick={handleToggleExpanded}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            <h3 className="font-medium">{task.title}</h3>
-            <p>{task.description}</p>
+            <div className="flex justify-between items-center">
+                <h3 className="font-medium">{task.title}</h3>
+                {isHovered && (
+                    <button
+                        className="text-gray-500 hover:text-red-600"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsConfirmingDelete(true);
+                        }}
+                    >
+                        ✕
+                    </button>
+                )}
+            </div>            <p>{task.description}</p>
             {isExpanded && (
                 <ExpandedTask
                     task={task}
@@ -35,8 +67,19 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate }) => {
                         setIsExpanded(false);
                     }}
                     onTaskUpdate={onTaskUpdate}
+                    onTaskDelete={(taskId) => {
+                        onTaskDelete(taskId);
+                        setIsExpanded(false);
+                    }}
                 />
             )}
+            <ConfirmationModal
+                isOpen={isConfirmingDelete}
+                title="Delete Task"
+                message="Are you sure you want to delete this task?"
+                onConfirm={handleDeleteTask}
+                onCancel={() => {setIsConfirmingDelete(false); setIsHovered(false)} }
+            />
         </div>
     );
 };

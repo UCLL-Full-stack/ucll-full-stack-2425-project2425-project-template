@@ -7,6 +7,7 @@ import { KanbanPermission } from '@/types';
 import BoardService from '@/services/BoardService';
 import { FaPlus, FaGear } from "react-icons/fa6"
 import { MdEdit } from "react-icons/md"
+import ConfirmationModal from "../ConfirmationModal";
 
 interface BoardCardProps {
     board: Board;
@@ -55,8 +56,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
         checkPermissions();
     }, [user!.userId, board.boardId, board.createdByUserId, board.columnIds]);
 
-    const handleDelete = async (e: React.MouseEvent) => {
-        e.stopPropagation();
+    const handleDelete = async () => {
         setConfirmingDelete(false);
         onDelete(board.boardId);
     }
@@ -93,31 +93,18 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
                     ✕
                 </button>
             )}
-            {confirmingDelete && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-gray-800 text-white rounded-lg p-6 shadow-lg w-80 text-center">
-                        <p className="text-lg font-semibold mb-4">Are you sure you want to delete this board?</p>
-                        <p className="text-sm text-gray-300">This action cannot be undone and will remove all related columns and tasks.</p>
-                        <div className="flex justify-around mt-4">
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setConfirmingDelete(false)
-                                }}
-                                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleDelete}
-                                className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <div
+                onClick={(e) => {e.stopPropagation()}}
+            >
+                <ConfirmationModal
+                    isOpen={confirmingDelete}
+                    title="Delete Board"
+                    message="Are you sure you want to delete this board? This action cannot be undone."
+                    warning="This will remove all related columns and tasks."
+                    onConfirm={handleDelete}
+                    onCancel={() => {setConfirmingDelete(false); setIsHovered(false)}}
+                />
+            </div>
             {(canEdit || canEditPermissions) && (
                 <div className="absolute bottom-2 right-2 flex gap-2">
                     {canEdit && (

@@ -6,14 +6,16 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import ColumnService from "@/services/ColumnService";
 import BoardService from "@/services/BoardService";
+import ConfirmationModal from "../ConfirmationModal";
 
 interface ExpandedTaskProps {
     task: Task;
     onClose: () => void;
     onTaskUpdate: (task: Task) => void;
+    onTaskDelete: (taskId: string) => void;
 }
 
-const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate }) => {
+const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate, onTaskDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [assigneeNames, setAssigneeNames] = useState<string[]>([]);
     const [title, setTitle] = useState(task.title);
@@ -23,6 +25,7 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
     const [availableUsers, setAvailableUsers] = useState<User[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [error, setError] = useState("");
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
     useEffect(() => {
         const fetchAssigneesAndUsers = async () => {
@@ -59,6 +62,18 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
             setIsEditing(false);
         } catch (err) {
             console.error("Error updating task:", err);
+        }
+    };
+
+    const handleDeleteTask = async () => {
+        try {
+            await TaskService.deleteTask(task.taskId);
+            console.log("Task deleted successfully");
+            onTaskDelete(task.taskId);
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        } finally {
+            setIsConfirmingDelete(false);
         }
     };
 
@@ -111,12 +126,20 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                                 {assigneeNames.length > 0 ? assigneeNames.join(", ") : "None"}
                             </p>
                         </div>
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="mt-4 bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
-                        >
-                            Edit Task
-                        </button>
+                        <div className="flex justify-between mt-4">
+                            <button
+                                onClick={() => setIsConfirmingDelete(true)}
+                                className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
+                            >
+                                Delete Task
+                            </button>
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
+                            >
+                                Edit Task
+                            </button>
+                        </div>
                     </>
                 ) : (
                     <>
@@ -197,6 +220,13 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                         </div>
                     </>
                 )}
+                <ConfirmationModal
+                    isOpen={isConfirmingDelete}
+                    title="Delete Task"
+                    message="Are you sure you want to delete this task?"
+                    onConfirm={handleDeleteTask}
+                    onCancel={() => setIsConfirmingDelete(false)}
+                />
             </div>
         </div>
     );
