@@ -33,6 +33,7 @@ export class User {
 
     getRole(): string {
         return this.role;
+    }
       
     setName(name: string): void {
         this.name = name;
