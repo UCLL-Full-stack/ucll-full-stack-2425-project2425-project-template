@@ -11,9 +11,11 @@ const validLeider = new Leiding({
     naam: "Leider",
     email: "l@l.be",
     telefoon: "0123456789",
-    hoofdleiding: true,
+    wachtwoord: "wachtwoord",
+    rol: "HOOFDLEIDING",
     totem: "Leider",
-    groep: undefined
+    groepId: 1,
+    nieuwsberichten: []
 });
 const validLeiding = [validLeider];
 const validActiviteit = new Activiteit({
@@ -27,6 +29,7 @@ const validActiviteiten = [validActiviteit];
 
 test("given valid parameters, when new Groep, then Groep is created", () => {
     const groep = new Groep({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         leiding: validLeiding,
@@ -40,6 +43,7 @@ test("given valid parameters, when new Groep, then Groep is created", () => {
 
 test("given valid parameters, when setNaam, then naam is set", () => {
     const groep = new Groep({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         leiding: validLeiding,
@@ -52,6 +56,7 @@ test("given valid parameters, when setNaam, then naam is set", () => {
 
 test("given valid parameters, when addActiviteit, then activiteit is added", () => {
     const groep = new Groep({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         leiding: validLeiding,
@@ -71,6 +76,7 @@ test("given valid parameters, when addActiviteit, then activiteit is added", () 
 
 test("given valid parameters, when addLeiding, then leiding is returned", () => {
     const groep = new Groep({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         leiding: validLeiding,
@@ -82,9 +88,11 @@ test("given valid parameters, when addLeiding, then leiding is returned", () => 
         naam: "Leiding",
         email: "ll@l.be",
         telefoon: "0123456789",
-        hoofdleiding: false,
+        rol: "LEIDING",
         totem: "Leiding",
-        groep: undefined
+        groepId: 1,
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord"
     });
     groep.addLeiding(newLeiding);
     expect(groep.getLeiding()).toContain(newLeiding);
@@ -93,6 +101,7 @@ test("given valid parameters, when addLeiding, then leiding is returned", () => 
 
 test("given valid parameters, when removeLeiding, then leiding is removed", () => {
     const groep = new Groep({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         leiding: [validLeider],
@@ -105,6 +114,7 @@ test("given valid parameters, when removeLeiding, then leiding is removed", () =
 
 test("given valid parameters, when removeActiviteit, then activiteit is removed", () => {
     const groep = new Groep({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         leiding: validLeiding,

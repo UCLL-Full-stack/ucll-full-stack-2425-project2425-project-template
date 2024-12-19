@@ -12,6 +12,9 @@ const getAllGroepen = async (): Promise<Groep[] | undefined> => {
 const getActiviteitenForGroep = async (naam: string): Promise<Activiteit[] | undefined> => {
     const standard = capitalizeFirstLetter(naam);
     const groep = await groepDB.getGroepByNaam({naam: standard});
+    if (!groep) {
+        throw new Error('Groep not found');
+    }
     return await groepDB.getActiviteitenByGroep(groep);
 }
 
@@ -26,7 +29,11 @@ const addActiviteitToGroep = async (naam: string, activiteit: Activiteit): Promi
 
 const getGroepByNaam = async (naam: string): Promise<Groep> => {
     const standard = capitalizeFirstLetter(naam);
-    return await groepDB.getGroepByNaam({naam: standard});
+    const groep = await groepDB.getGroepByNaam({naam: standard});
+    if (!groep) {
+        throw new Error('Groep not found');
+    }
+    return groep;
 }
 
 const getLeidingForGroep = async (naam: string): Promise<PublicLeiding[]> => {
@@ -35,7 +42,15 @@ const getLeidingForGroep = async (naam: string): Promise<PublicLeiding[]> => {
     if (!groep || groep === undefined) {
         throw new Error('Groep not found');
     }
-    return (await groepDB.getLeidingByGroep(groep)).map(leiding => {return PublicLeiding.from({leiding})});
+    return (await groepDB.getLeidingByGroep(groep)).map(leiding => {return PublicLeiding.from({leiding, groep: groep.getNaam()})});
+}
+
+const getGroepById = async (id: number): Promise<Groep> => {
+    const groep = await groepDB.getGroepById({id});
+    if (!groep) {
+        throw new Error('Groep not found');
+    }
+    return groep;
 }
 
 export default {
@@ -43,5 +58,6 @@ export default {
     getActiviteitenForGroep, 
     addActiviteitToGroep, 
     getGroepByNaam,
-    getLeidingForGroep
+    getLeidingForGroep,
+    getGroepById
 };

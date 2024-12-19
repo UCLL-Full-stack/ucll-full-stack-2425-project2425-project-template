@@ -267,7 +267,7 @@ nieuwsberichtRouter.post("/", async (req: Request, res: Response, next: NextFunc
  */
 nieuwsberichtRouter.put("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+        const token = req.headers.authorization?.split(' ')[1]; 
 
     
         const secret = process.env.JWT_SECRET || 'default_secret';
@@ -314,9 +314,8 @@ nieuwsberichtRouter.put("/", async (req: Request, res: Response, next: NextFunct
  */
 nieuwsberichtRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+        const token = req.headers.authorization?.split(' ')[1];
 
-    
         const secret = process.env.JWT_SECRET || 'default_secret';
         const decoded = jwt.verify(token? token: "", secret) as { totem: string, rol: Rol};
         await nieuwsberichtService.deleteNieuwsbericht(Number(req.params.id), decoded.totem, decoded.rol);

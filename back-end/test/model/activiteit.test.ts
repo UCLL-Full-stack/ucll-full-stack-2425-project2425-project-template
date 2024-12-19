@@ -8,6 +8,7 @@ const validEinddatum = new Date();
 
 test("given valid parameters, when new Activiteit, then Activiteit is created", () => {
     const activiteit = new Activiteit({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         begindatum: validBegindatum,
@@ -21,6 +22,7 @@ test("given valid parameters, when new Activiteit, then Activiteit is created", 
 
 test("given valid parameters, when setNaam, then naam is set", () => {
     const activiteit = new Activiteit({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         begindatum: validBegindatum,
@@ -33,6 +35,7 @@ test("given valid parameters, when setNaam, then naam is set", () => {
 
 test("given valid parameters, when setBeschrijving, then beschrijving is set", () => {
     const activiteit = new Activiteit({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         begindatum: validBegindatum,
@@ -45,6 +48,7 @@ test("given valid parameters, when setBeschrijving, then beschrijving is set", (
 
 test("given valid parameters, when setBegindatum, then begindatum is set", () => {
     const activiteit = new Activiteit({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         begindatum: validBegindatum,
@@ -57,6 +61,7 @@ test("given valid parameters, when setBegindatum, then begindatum is set", () =>
 
 test("given valid parameters, when setEinddatum, then einddatum is set", () => {
     const activiteit = new Activiteit({
+        id: 1,
         naam: validNaam,
         beschrijving: validBeschrijving,
         begindatum: validBegindatum,
