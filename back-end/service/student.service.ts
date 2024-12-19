@@ -1,73 +1,86 @@
 import studentDb from "../repository/student.db";
 import { Student } from "../model/student";
-import database from "../util/database";
-import userDb from "../repository/user.db";
 import userService from "./user.service";
 
-const createStudent = async ({
-    studentNumber,
-    userId,
-  }: {
-    studentNumber: string;
-    userId: number;
-  }): Promise<Student> => {
-    try {
-      if (!studentNumber || !userId) {
-        throw new Error("Student number and user ID are required.");
-    }
-      const studentPrisma = await database.student.create({
-        data: {
-          studentNumber,
-          user: { connect: { id: userId } },        
-        },
-        include: {
-          bookings: {
-            include: {
-              trip: true,
-            },
-          },
-          review: true,
-          user: true
-        },
-      });
-      return Student.from(studentPrisma);
-    } catch (error) {
-      console.error(error);
-      throw new Error('Database error. See server log for details.');
-    }
-  };
-  
-
 const getStudentById = async (studentId: number): Promise<Student | null> => {
+  try {
     if (typeof studentId !== 'number' || studentId <= 0) {
-        throw new Error("Invalid Student ID");
+      throw new Error("Invalid Student ID");
     }
 
     const student = await studentDb.getStudentById(studentId);
     if (!student) {
-        throw new Error(`Student with ID ${studentId} does not exist.`);
+      throw new Error(`Student with ID ${studentId} does not exist.`);
     }
     return student;
+  } catch (error) {
+    console.error('Error fetching student by ID:', error);
+    throw new Error("Database error. See server log for details.");
+  }
 };
 
 const getStudentByUsername = async (username: string): Promise<Student | null> => {
+  try {
+    const user = await userService.getUserByUsername({ username });
 
-  const user = await userService.getUserByUsername({username});
+    if (!user) {
+      throw new Error(`User with username ${username} does not exist.`);
+    }
 
-  const student = null
-  if (!student) {
+    const userId = user.getId();
+    if (userId === undefined) {
+      throw new Error(`User with username ${username} has no valid ID.`); 
+    }
+
+    const student = await studentDb.getStudentById(userId);
+    if (!student) {
       throw new Error(`Student with username ${username} does not exist.`);
+    }
+
+    return student;
+  } catch (error) {
+    console.error('Error fetching student by username:', error);
+    throw error; 
   }
-  return student;
 };
+
+
+
+
 
 const getAllStudents = async (): Promise<Student[]> => {
-    try {
-        return await studentDb.getAllStudents();
-    } catch (error) {
-        console.error("Error fetching all students:", error);
-        throw new Error("Could not retrieve students.");
-    }
+  try {
+    return await studentDb.getAllStudents();
+  } catch (error) {
+    console.error("Error fetching all students:", error);
+    throw new Error("Could not retrieve students.");
+  }
 };
 
-export default { createStudent, getStudentById, getAllStudents, getStudentByUsername};
+const createStudent = async ({
+  studentNumber,
+  userId,
+}: {
+  studentNumber: string;
+  userId: number | undefined; 
+}): Promise<Student> => {
+  try {
+    if (typeof userId !== 'number' || userId <= 0) {
+      throw new Error("Invalid user ID");
+    }
+
+    const userExists = await userService.getUserById(userId);  
+    if (!userExists) {
+      throw new Error(`User with ID ${userId} does not exist.`);
+    }
+
+    const student = await studentDb.createStudent({ studentNumber, userId });
+    return student;
+  } catch (error) {
+    console.error('Error creating student:', error);
+    throw new Error("Database error. See server log for details.");
+  }
+};
+
+
+export default { createStudent, getStudentById, getAllStudents, getStudentByUsername };

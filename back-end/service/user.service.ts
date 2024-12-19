@@ -4,6 +4,7 @@ import { generateJwtToken } from '../util/jwt';
 import { AuthenticationResponse, UserInput } from '../types';
 import { User } from '../model/user';
 import studentService from './student.service';
+import userDb from '../repository/user.db';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
@@ -94,13 +95,22 @@ const createUser = async ({
         return await userDB.createUser(userData); 
     } catch (error) {
         console.error('Error creating user:', error);
-        throw new Error('Failed to create user. See server logs for details.');
+        throw error; 
     }
 };
-
+const getUserById = async (userId: number): Promise<User | null> => {
+    try {
+      const user = await userDb.getUserById( {id: userId});  
+      return user ? user : null;
+    } catch (error) {
+      console.error("Error fetching user by ID:", error);
+      throw new Error('Failed to fetch user. See server logs for details.');
+    }
+  };
 export default {
     getUserByUsername,
     authenticate,
     createUser,
     getAllUsers,
+    getUserById
 };

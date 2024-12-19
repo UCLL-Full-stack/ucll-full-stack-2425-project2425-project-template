@@ -30,16 +30,31 @@ test('should return all bookings', async () => {
             bookingDate: new Date(), 
             paymentStatus: PaymentStatus.Paid, 
             students: [], 
-            trip: new Trip({ id: 1, description: 'Trip to Paris', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 }) 
+            trip: new Trip({ 
+                id: 1, 
+                description: 'Trip to Paris', 
+                destination: 'France', 
+                startDate: new Date('2024-01-01'), 
+                endDate: new Date('2024-01-10'), 
+                price: 100 
+            }) 
         }),
         new Booking({ 
             id: 2, 
             bookingDate: new Date(), 
             paymentStatus: PaymentStatus.Pending, 
             students: [],
-            trip: new Trip({ id: 2, description: 'Trip to London', destination: 'UK', startDate: new Date(), endDate: new Date(), price: 200 }) 
+            trip: new Trip({ 
+                id: 2, 
+                description: 'Trip to London', 
+                destination: 'UK', 
+                startDate: new Date('2024-02-01'), 
+                endDate: new Date('2024-02-15'), 
+                price: 200 
+            }) 
         }),
     ];
+    
 
     mockBookingDbGetAllBookings.mockResolvedValue(mockBookings);
 
@@ -54,7 +69,14 @@ test('should return all bookings', async () => {
 test('should return a booking by ID', async () => {
     // Given
     const bookingId = 1;
-    const mockTrip = new Trip({ id: 1, description: 'Trip to Paris', destination: 'France', startDate: new Date(), endDate: new Date(), price: 100 });
+    const mockTrip = new Trip({ 
+        id: 1, 
+        description: 'Trip to Paris', 
+        destination: 'France', 
+        startDate: new Date('2024-01-01'), 
+        endDate: new Date('2024-01-10'), 
+        price: 100 
+    });
     const mockBooking: Booking = new Booking({ 
         id: bookingId, 
         bookingDate: new Date(), 
@@ -62,6 +84,7 @@ test('should return a booking by ID', async () => {
         students: [],
         trip: mockTrip 
     });
+    
 
     mockBookingDbGetBookingById.mockResolvedValue(mockBooking);
 
@@ -101,11 +124,12 @@ test('should add students to a booking', async () => {
             id: 1, 
             description: 'Trip to Paris', 
             destination: 'France', 
-            startDate: new Date(), 
-            endDate: new Date(), 
+            startDate: new Date('2024-01-01'), 
+            endDate: new Date('2024-01-10'), 
             price: 100 
         })
     });
+    
     const mockStudent1 = new Student({
         id: 1,
         user: new User({
@@ -158,7 +182,8 @@ test('should add students to a booking', async () => {
             id: mockBooking.getId(),
             studentIds: [],
             tripId: 0,
-            paymentStatus: 'Pending'
+            paymentStatus: 'Pending',
+            studentsId: []
         }, 
         students: studentsInput
     });
@@ -185,8 +210,8 @@ test('should throw error if invalid student ID is provided', async () => {
             id: 1, 
             description: 'Trip to Paris', 
             destination: 'France', 
-            startDate: new Date(), 
-            endDate: new Date(), 
+            startDate: new Date('2024-01-01'), 
+            endDate: new Date('2024-01-10'),  
             price: 100 
         })
     });
@@ -197,10 +222,13 @@ test('should throw error if invalid student ID is provided', async () => {
     // When & Then
     await expect(bookingService.addStudentsToBooking({
         booking: {
-            id: bookingId, 
-            tripId: 1, 
-            studentIds: [invalidStudentId], 
-            paymentStatus: PaymentStatus.Paid
-        },        students: studentsInput
+            id: bookingId,
+            tripId: 1,
+            studentIds: [invalidStudentId],
+            paymentStatus: PaymentStatus.Paid,
+            studentsId: []
+        },
+        students: studentsInput
     })).rejects.toThrow('Student with ID -1 not found');
 });
+
