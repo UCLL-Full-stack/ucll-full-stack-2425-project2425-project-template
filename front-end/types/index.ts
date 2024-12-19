@@ -28,6 +28,7 @@ export type Floor = {
     id: number;
     floornumber: number;
     tiles: Line[];
+    positions: Position[];
 };
 
 export type Line = {

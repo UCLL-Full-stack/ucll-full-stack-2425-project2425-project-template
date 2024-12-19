@@ -37,7 +37,7 @@ const WorldSelection: React.FC = () => {
     }
 
     const joinworld = async (id: number) => {
-        router.push("/game/in/world/" + id + "/1");
+        router.push("/game/in/world/" + id);
     }
 
     useEffect(() => {

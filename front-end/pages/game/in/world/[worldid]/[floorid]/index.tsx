@@ -53,13 +53,11 @@ const GameMap: React.FC = () => {
                         floorService.updatePosition(res);
                         setPlayerPosition({x: pos.x, y: pos.y, posID: pos.id});
                         gotPos = true;
-                        console.log("ik ben gestuurd: " + res);
                         setSpawnedIn(true);
                     }
                 }
             });
             if (!gotPos){
-                console.log("ik ben hier");
                 const newPos : PositionInput = {playerID: player.id, floorID: floor.id, x: 10, y: 10, type: "player", active: true};
                 floorService.addPosition(newPos);
                 setSpawnedIn(true);
@@ -115,15 +113,42 @@ const GameMap: React.FC = () => {
 
     const leaveGame = async() => {
         if (floor && player){
-            console.log("I hav")
             const prev = playerPosition;
-            console.log(prev)
             if (!prev){
                 return;
             }
             const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
             await floorService.updatePosition(res);
             router.push("/game");
+        }
+    }
+
+    const checkEvent = (position: coordinate) => {
+        positions.forEach(pos => {
+            if (pos.x === position.x && pos.y === position.y && pos.active){
+                if (pos.type === "stairdown"){
+                    changeFloor(1)
+                    return true;
+                }
+                if (pos.type === "stairup"){
+                    changeFloor(-1)
+                    return true;
+                }
+            }
+        })
+        return false;
+    }
+
+    const changeFloor = async (difference: number) => {
+        if (floorid && floor && player){
+            const prev = playerPosition;
+            if (!prev){
+                return;
+            }
+            const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
+            await floorService.updatePosition(res);
+            const toFloor = +floorid + difference;
+            router.replace("/game/in/world/" + worldid + "/" + toFloor).then(() => router.reload());
         }
     }
 
@@ -171,8 +196,10 @@ const GameMap: React.FC = () => {
                     return prev;
             }
             if (floor && player){
-                const res: PositionUpdate = {posID: newPosition.posID, floorID: floor.id, playerID: player.id, x: newPosition.x, y: newPosition.y, active: true};
-                floorService.updatePosition(res);
+                if (!checkEvent(newPosition)){
+                    const res: PositionUpdate = {posID: newPosition.posID, floorID: floor.id, playerID: player.id, x: newPosition.x, y: newPosition.y, active: true};
+                    floorService.updatePosition(res);
+                }
             }
         };
 

@@ -91,6 +91,12 @@ async function main() {
         new Floor({
             floornumber: 1,
         }),
+        new Floor({
+            floornumber: 2,
+        }),
+        new Floor({
+            floornumber: 3,
+        }),
     ];
 
     const worlds = [
