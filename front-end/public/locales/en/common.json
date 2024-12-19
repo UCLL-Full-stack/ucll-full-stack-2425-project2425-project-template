@@ -1,0 +1,36 @@
+{
+  "signup": {
+    "title": "Sign Up",
+    "label": {
+      "firstname": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password"
+    },
+    "button": "Sign Up",
+    "validate": {
+      "firstName": "First name is required.",
+      "lastName": "Last name is required.",
+      "username": "Username is required.",
+      "email": "Email is required.",
+      "password": "Password is required."
+    },
+    "success": "Your registration was successful!",
+    "error": "An error occurred during registration. Please try again."
+  },
+  "general": {
+    "error": "An unexpected error occurred. Please try again later."
+  },
+
+  "header" : {
+    "home": "Home",
+    "songs": "Songs",
+    "playlist": "Playlists",
+    "login": "Login",
+    "signup": "Signup",
+    "logout": "Logout",
+    "welcome": "Welcome"
+  }
+}
+  

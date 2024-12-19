@@ -1,16 +1,28 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { User } from "types";
+import Language from "./language/Language";
+import { useTranslation } from "react-i18next";
 
 const Header: React.FC = () => {
+
+    const { t } = useTranslation();
+
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const [hydrated, setHydrated] = useState(false);
+
 
     useEffect(() => {
+        setHydrated(true);
         const user = localStorage.getItem("loggedInUser");
         if (user) {
             setLoggedInUser(JSON.parse(user));
         }
       }, [])
+
+      if (!hydrated) {
+        return null;
+      }
 
     const handleClick = () => {
         localStorage.removeItem("loggedInUser")
@@ -25,31 +37,37 @@ const Header: React.FC = () => {
                 </div>
                 <nav className="flex items-center space-x-6">
                     <Link href="/" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
-                        Home
+                        {t('header.home')}
                     </Link>
                     <Link href="/songs" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
-                        Songs
+                        {t('header.songs')}
                     </Link>
                     <Link 
                         href="/playlists" 
                         className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200"
                         >
-                        Playlists
+                        {t('header.playlist')}
                     </Link>
                     {!loggedInUser && (
-                    <   Link href="/login" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
-                            Login
+                        <Link href="/login" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
+                            {t('header.login')}
                         </Link>
+                    )}
+                    {!loggedInUser && (
+                        <Link href="/signup" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
+                            {t('header.signup')}
+                        </Link> 
                     )}
                     {loggedInUser && (
                         <>
                             <Link href="/" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200"
                                 onClick={handleClick}>
-                                Logout
+                                {t('header.logout')}
                             </Link>
-                            <p className="text-gray-300">Welcome {loggedInUser.fullname}</p>
+                            <p className="text-gray-300">{t('header.welcome')} {loggedInUser.fullname}</p>
                         </>
                     )}
+                    <Language />
                 </nav>
             </div>
         </header>

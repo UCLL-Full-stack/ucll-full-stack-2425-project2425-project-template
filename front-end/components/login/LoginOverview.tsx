@@ -148,7 +148,7 @@ const LoginOverview: React.FC = () => {
           
           <p className="mt-4 text-sm text-center text-gray-600">
             No Account?
-            <a href="#" className="text-blue-600 hover:underline"> SignUp</a>
+            <a href="/signup" className="text-blue-600 hover:underline"> SignUp</a>
           </p>
         </div>
       );

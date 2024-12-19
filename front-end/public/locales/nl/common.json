@@ -1,0 +1,35 @@
+{
+  "signup": {
+    "title": "Registreren",
+    "label": {
+      "firstname": "Voornaam",
+      "lastName": "Achternaam",
+      "username": "Gebruikersnaam",
+      "email": "E-mail",
+      "password": "Wachtwoord"
+    },
+    "button": "Registreren",
+    "validate": {
+      "firstName": "Voornaam is verplicht.",
+      "lastName": "Achternaam is verplicht.",
+      "username": "Gebruikersnaam is verplicht.",
+      "email": "E-mailadres is verplicht.",
+      "password": "Wachtwoord is verplicht."
+    },
+    "success": "Je registratie is succesvol!",
+    "error": "Er is een fout opgetreden tijdens het registreren. Probeer het opnieuw."
+  },
+  "general": {
+    "error": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw."
+  },
+
+  "header" : {
+    "home": "Home",
+    "songs": "Nummers",
+    "playlist": "Playlists",
+    "login": "Inloggen",
+    "signup": "Registeren",
+    "logout": "Uitloggen",
+    "welcome": "Welkom"
+  }
+}

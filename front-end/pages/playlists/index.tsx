@@ -5,8 +5,14 @@ import SongService from "@services/SongService";
 import PlaylistService from "@services/PlaylistService";
 import Header from "@components/header";
 import PlaylistOverview from "@components/playlists/PlaylistOverview";
+import { useTranslation } from "react-i18next";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSidePropsContext } from "next";
 
 const Songs: React.FC = () => {
+
+    const { t } = useTranslation();
     
     const getPlaylistsAndSongs = async () => {
         const responses = await Promise.all([
@@ -55,5 +61,15 @@ const Songs: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+    const { locale } = context;
+  
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+    };
+  };
 
 export default Songs;

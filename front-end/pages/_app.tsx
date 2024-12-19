@@ -1,14 +1,11 @@
+import '@styles/globals.css'
+import { appWithTranslation } from 'next-i18next'
+import type { AppProps } from 'next/app'
 
-import type { AppProps } from "next/app";
-import React from "react";
-import "../styles/globals.css";  // Import global styles here
-
-const MyApp = ({ Component, pageProps }: AppProps) => {
-    return (
-        <React.Fragment>
-            <Component {...pageProps} />
-        </React.Fragment>
-    );
+const App = ({ Component, pageProps }: AppProps)  => {
+  return <Component {...pageProps} />
 };
 
-export default MyApp;
+export default appWithTranslation(App)
+
+
