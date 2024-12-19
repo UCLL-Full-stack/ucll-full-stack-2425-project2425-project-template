@@ -9,6 +9,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   children: React.ReactNode;
@@ -25,13 +26,15 @@ const RightClickMenu: React.FC<Props> = ({
   onDeleteMeals,
   date,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-48">
         <ContextMenuItem onClick={onAddNewMeal}>
           <Plus className="mr-2 h-4 w-4" />
-          Add New Meal
+          {t("addNewMeal")}
         </ContextMenuItem>
         <ContextMenuItem onClick={onAddExistingMeal}>
           <Heart className="mr-2 h-4 w-4" />

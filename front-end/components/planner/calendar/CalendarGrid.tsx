@@ -5,8 +5,7 @@ import CalendarHeader from "./CalendarHeader";
 import CalendarDay from "./CalendarDay";
 import DailyMealsPopup from "../calendar-functionality/DailyMealsPopup";
 import { Recipe } from "@/types/recipes";
-
-const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]; // make a type?
+import { useTranslation } from "next-i18next";
 
 const CalendarGrid: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -19,6 +18,9 @@ const CalendarGrid: React.FC = () => {
   const [recipesByDate, setRecipesByDate] = useState<Record<string, Recipe[]>>(
     {}
   );
+  const { t } = useTranslation("common");
+
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   // To fix issues with dates
   const toUTCDate = (date: Date) => {
@@ -63,7 +65,7 @@ const CalendarGrid: React.FC = () => {
             }
           } catch (error) {
             console.error(
-              "Error fetching recipes for date:",
+              t("errorFetchingMeals"),
               dateString,
               error
             );
@@ -72,12 +74,12 @@ const CalendarGrid: React.FC = () => {
 
         setRecipesByDate(newRecipesByDate);
       } catch (error) {
-        console.error("Error fetching month recipes:", error);
+        console.error(t("errorFetchingMonthRecipes"), error);
       }
     } else {
-      console.error("No token found in local storage");
+      console.error(t("noTokenFound"));
     }
-  }, [currentDate]);
+  }, [currentDate, t]);
 
   useEffect(() => {
     fetchMonthRecipes();
@@ -204,7 +206,7 @@ const CalendarGrid: React.FC = () => {
         <section className="grid grid-cols-7 gap-2">
           {daysOfWeek.map((day) => (
             <div key={day} className="text-center font-semibold p-2">
-              {day}
+              {t(day)}
             </div>
           ))}
 

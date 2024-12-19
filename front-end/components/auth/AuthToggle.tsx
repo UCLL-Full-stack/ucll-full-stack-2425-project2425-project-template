@@ -12,12 +12,16 @@ import {
 } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
+import { useTranslation } from "next-i18next";
+import { Globe } from "lucide-react";
 
 const AuthToggle = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
+  const { t } = useTranslation("common");
+  const { locale, pathname, asPath, query } = router;
 
   const handleSuccess = () => {
     router.push("/planner"); // redirects to planner page after successful login/signup
@@ -28,13 +32,24 @@ const AuthToggle = () => {
       setIsLogin(value === "login");
     });
   };
+  const handleLanguageChange = () => {
+    const newLocale = locale === "en" ? "zh" : "en";
+    router.push({ pathname, query }, asPath, { locale: newLocale });
+  };
 
   return (
-    <Card className="w-[350px]">
+    <Card className="relative w-[350px]">
+      <button
+        onClick={handleLanguageChange}
+        className="absolute top-4 right-4 flex justify-center items-center w-8 h-8 rounded-full text-primary hover:bg-avatar-hover-bg"
+        aria-label="Change Language"
+      >
+        <Globe size={24} />
+      </button>
       <CardHeader>
         <CardTitle>Plateful</CardTitle>
         <CardDescription>
-          {isLogin ? "Welcome back!" : "Create a new account"}
+          {isLogin ? t("welcomeBack") : t("createNewAccount")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -44,8 +59,8 @@ const AuthToggle = () => {
           onValueChange={handleTabChange}
         >
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsTrigger value="login">{t("login")}</TabsTrigger>
+            <TabsTrigger value="register">{t("register")}</TabsTrigger>
           </TabsList>
           <div
             className={`mt-4 transition-opacity duration-300 ${
@@ -64,12 +79,13 @@ const AuthToggle = () => {
       <CardFooter className="flex justify-center">
         {isLogin && (
           <Button variant="link" className="p-0">
-            Forgot password?
+            {t("forgotPassword")}
           </Button>
         )}
       </CardFooter>
     </Card>
   );
 };
+
 
 export default AuthToggle;

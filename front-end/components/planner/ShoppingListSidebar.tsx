@@ -1,9 +1,3 @@
-/*
- * NOT IMPLEMENTED, THE CODE HERE IS FOR REFERENCE
- * This component displays a shopping list sidebar where users can view, add, edit, and remove ingredients
- * Ingredients can be grouped by category or viewed all together in alphabetical order
- */
-
 import {
   Select,
   SelectContent,
@@ -18,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AddIngredientDialog } from "./shopping-list-functionality/AddIngredientPopup";
+import { useTranslation } from 'next-i18next';
 
 // This comes from the backend
 type Ingredient = {
@@ -32,6 +27,7 @@ type Ingredient = {
 type GroupBy = "all" | "category";
 
 const ShoppingList = () => {
+  const { t } = useTranslation('common');
   const [groupBy, setGroupBy] = useState<GroupBy>("category");
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [editingIngredientId, setEditingIngredientId] = useState<String | null>(
@@ -124,7 +120,7 @@ const ShoppingList = () => {
         ingredient.id === id
           ? {
               ...ingredient,
-              quantity: Math.max(0, ingredient.quantity + change), // to make sure it doesn't go bellow 0
+              quantity: Math.max(0, ingredient.quantity + change), // to make sure it doesn't go below 0
             }
           : ingredient
       )
@@ -242,7 +238,7 @@ const ShoppingList = () => {
     <aside className="h-screen border-l bg-white">
       <div className="flex flex-col h-full">
         <section className="p-4 border-b">
-          <h2 className="text-xl font-semibold mb-4">Shopping List</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("shoppingList")}</h2>
           <section className="flex items-center gap-2">
             <AddIngredientDialog />
             <Select
@@ -250,11 +246,11 @@ const ShoppingList = () => {
               onValueChange={(value: GroupBy) => setGroupBy(value)}
             >
               <SelectTrigger className="w-[130px]">
-                <SelectValue placeholder="Group by" />
+                <SelectValue placeholder={t("groupBy")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Show All</SelectItem>
-                <SelectItem value="category">Category</SelectItem>
+                <SelectItem value="all">{t("showAll")}</SelectItem>
+                <SelectItem value="category">{t("category")}</SelectItem>
               </SelectContent>
             </Select>
           </section>

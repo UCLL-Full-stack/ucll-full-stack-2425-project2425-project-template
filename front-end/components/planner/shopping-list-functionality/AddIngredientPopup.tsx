@@ -1,9 +1,3 @@
-/*
- * STILL TO IMPLEMENT FUNCTIONALITY --> Future user story, but the form can be opened
- * AddIngredientPopup is a component that provides a popup form for adding a new ingredient.
- * It includes fields for selecting the ingredient's name, category, quantity, unit, and store.
- */
-
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Ingredient, IngredientCategory } from "@/types/recipes";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const units = [
   "g",
@@ -28,9 +23,9 @@ const units = [
   "tbsp",
   "can",
   "package",
-] as const; // make type?
+] as const;
 
-const mockStores = ["Albert Heijn", "Colruyt", "Carrefour", "Aldi", "Lidl"]; // users will be able to add their own stores
+const mockStores = ["Albert Heijn", "Colruyt", "Carrefour", "Aldi", "Lidl"];
 
 const defaultIngredient: Ingredient = {
   name: "",
@@ -40,9 +35,10 @@ const defaultIngredient: Ingredient = {
 };
 
 export function AddIngredientDialog() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [ingredient, setIngredient] = useState<Ingredient>(defaultIngredient);
-  const overlayRef = useRef<HTMLDivElement>(null); // this will change
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -69,7 +65,6 @@ export function AddIngredientDialog() {
     setIsOpen(false);
   };
 
-  // -- I will change the way this is handled --
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === overlayRef.current) {
       setIsOpen(false);
@@ -85,7 +80,7 @@ export function AddIngredientDialog() {
         onClick={() => setIsOpen(true)}
       >
         <Plus className="h-4 w-4 mr-1" />
-        Add ingredient
+        {t('addIngredient')}
       </Button>
 
       {isOpen && (
@@ -95,23 +90,21 @@ export function AddIngredientDialog() {
           role="dialog"
           aria-modal="true"
         >
-          {/* Overlay */}
           <div
             ref={overlayRef}
             onClick={handleOverlayClick}
             className="absolute inset-0 bg-black/50 transition-opacity duration-200 ease-in-out"
           />
 
-          {/* Modal */}
           <div className="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 animate-in fade-in duration-200">
             <div className="p-6">
               <h2 id="modal-title" className="text-lg font-semibold mb-4">
-                Add Ingredient
+                {t('addIngredient')}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">{t('name')}</Label>
                     <Input
                       id="name"
                       className="mt-1.5"
@@ -119,12 +112,12 @@ export function AddIngredientDialog() {
                       onChange={(e) =>
                         setIngredient({ ...ingredient, name: e.target.value })
                       }
-                      placeholder="Enter ingredient name"
+                      placeholder={t('enterIngredientName')}
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="category">Category</Label>
+                    <Label htmlFor="category">{t('category')}</Label>
                     <Select
                       value={ingredient.category}
                       onValueChange={(value: IngredientCategory) =>
@@ -132,7 +125,7 @@ export function AddIngredientDialog() {
                       }
                     >
                       <SelectTrigger className="mt-1.5">
-                        <SelectValue placeholder="Select category" />
+                        <SelectValue placeholder={t('selectCategory')} />
                       </SelectTrigger>
                       <SelectContent>
                         {Object.values(IngredientCategory).map((category) => (
@@ -140,7 +133,7 @@ export function AddIngredientDialog() {
                             key={category as string}
                             value={category as string}
                           >
-                            {category as string}
+                            {t(category as string)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -149,7 +142,7 @@ export function AddIngredientDialog() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="quantity">Quantity</Label>
+                      <Label htmlFor="quantity">{t('quantity')}</Label>
                       <Input
                         id="quantity"
                         type="number"
@@ -166,7 +159,7 @@ export function AddIngredientDialog() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="unit">Unit</Label>
+                      <Label htmlFor="unit">{t('unit')}</Label>
                       <Select
                         value={ingredient.unit}
                         onValueChange={(value) =>
@@ -174,7 +167,7 @@ export function AddIngredientDialog() {
                         }
                       >
                         <SelectTrigger className="mt-1.5">
-                          <SelectValue placeholder="Select unit" />
+                          <SelectValue placeholder={t('selectUnit')} />
                         </SelectTrigger>
                         <SelectContent>
                           {units.map((unit) => (
@@ -188,7 +181,7 @@ export function AddIngredientDialog() {
                   </div>
 
                   <div>
-                    <Label htmlFor="store">Store (Optional)</Label>
+                    <Label htmlFor="store">{t('store')} ({t('optional')})</Label>
                     <Select
                       value={ingredient.store || "no-store"}
                       onValueChange={(value) =>
@@ -199,11 +192,11 @@ export function AddIngredientDialog() {
                       }
                     >
                       <SelectTrigger className="mt-1.5">
-                        <SelectValue placeholder="No store selected" />
+                        <SelectValue placeholder={t('noStoreSelected')} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="no-store">
-                          No store selected
+                          {t('noStoreSelected')}
                         </SelectItem>
                         {mockStores.map((store) => (
                           <SelectItem key={store} value={store}>
@@ -221,9 +214,9 @@ export function AddIngredientDialog() {
                     variant="outline"
                     onClick={() => setIsOpen(false)}
                   >
-                    Cancel
+                    {t('cancel')}
                   </Button>
-                  <Button type="submit">Add Ingredient</Button>
+                  <Button type="submit">{t('addIngredient')}</Button>
                 </div>
               </form>
             </div>

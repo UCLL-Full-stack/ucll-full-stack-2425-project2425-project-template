@@ -1,6 +1,3 @@
-/* CalendarHeader component with controls for navigating and interacting with the calendar.
-It includes buttons for changing the month, toggling select, and adding items to the shopping list. */
-
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import {
@@ -10,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "next-i18next";
 
 type Props = {
   currentDate: Date;
@@ -51,6 +49,8 @@ const CalendarHeader: React.FC<Props> = ({
   // onAddToShoppingList,
   onToday,
 }) => {
+  const { t } = useTranslation("common");
+
   return (
     <section className="flex justify-between items-center mb-4">
       <div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ const CalendarHeader: React.FC<Props> = ({
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <p className="m-0 text-lg font-semibold">
-          {months[currentDate.getMonth()]} {currentDate.getFullYear()}
+          {t(months[currentDate.getMonth()])} {currentDate.getFullYear()}
         </p>
         <Button variant="ghost" size="icon" onClick={() => onChangeMonth(1)}>
           <ChevronRight className="h-4 w-4" />
@@ -70,7 +70,7 @@ const CalendarHeader: React.FC<Props> = ({
             onToday();
           }}
         >
-          Today
+          {t("today")}
         </Button>
       </div>
 
@@ -79,14 +79,14 @@ const CalendarHeader: React.FC<Props> = ({
           variant={selectionModeActive ? "default" : "outline"}
           onClick={onToggleSelectionMode}
         >
-          {selectionModeActive ? "Cancel Selection" : "Select"}
+          {selectionModeActive ? t("cancelSelection") : t("select")}
         </Button>
         <Button
           variant="outline"
           disabled={selectedDatesCount === 0}
           onClick={onDeleteMeals}
         >
-          Delete Meals
+          {t("deleteMeals")}
         </Button>
         {/* <Button
           variant="outline"
@@ -94,7 +94,7 @@ const CalendarHeader: React.FC<Props> = ({
           onClick={onAddToShoppingList}
         >
           <ShoppingCart className="h-4 w-4 mr-1" />
-          Add to Shopping List
+          {t("addToShoppingList")}
         </Button> */}
         <Select
           onValueChange={(value) => onChangeViewMode(value as "Month" | "Week")}
@@ -103,8 +103,8 @@ const CalendarHeader: React.FC<Props> = ({
             <SelectValue placeholder={viewMode} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Month">Month</SelectItem>
-            {/* <SelectItem value="Week">Week</SelectItem> */}
+            <SelectItem value="Month">{t("month")}</SelectItem>
+            <SelectItem value="Week">{t("week")}</SelectItem>
           </SelectContent>
         </Select>
       </div>

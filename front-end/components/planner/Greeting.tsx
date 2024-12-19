@@ -1,11 +1,13 @@
 import { Coffee, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 
 type GreetingProps = {
   user: { name: string } | null;
 };
 
 const Greeting: React.FC<GreetingProps> = ({ user }) => {
+  const { t } = useTranslation('common');
   const [greeting, setGreeting] = useState("");
   const [greetingIcon, setGreetingIcon] = useState(<Sun />);
 
@@ -13,16 +15,16 @@ const Greeting: React.FC<GreetingProps> = ({ user }) => {
     const hour = new Date().getHours();
 
     if (hour >= 5 && hour < 12) {
-      setGreeting(`Good morning`);
+      setGreeting(t("goodMorning"));
       setGreetingIcon(<Coffee className="h-6 w-6" />);
     } else if (hour >= 12 && hour < 18) {
-      setGreeting("Good afternoon");
+      setGreeting(t("goodAfternoon"));
       setGreetingIcon(<Sun className="h-6 w-6" />);
     } else {
-      setGreeting("Good evening");
+      setGreeting(t("goodEvening"));
       setGreetingIcon(<Moon className="h-6 w-6" />);
     }
-  }, []);
+  }, [t]);
 
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();

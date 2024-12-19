@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LoginData, StatusMessage } from "@/types/auth";
 import { AlertCircle } from "lucide-react";
-import AuthService from "@/services/AuthService";
+import AuthService from "../../services/authService";
+import { useTranslation } from "next-i18next";
 
 type Props = {
   onSuccess: () => void;
@@ -21,6 +22,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const role = localStorage.getItem("role");
@@ -37,17 +39,17 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
     let result = true;
 
     if (!username || username.trim() === "") {
-      setUsernameError("Username is required.");
+      setUsernameError(t("usernameRequired"));
       result = false;
     } else {
       setUsernameError("");
     }
 
     if (!password || password.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t("passwordRequired"));
       result = false;
     } else if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters.");
+      setPasswordError(t("passwordTooShort"));
       result = false;
     } else {
       setPasswordError("");
@@ -75,7 +77,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
 
         setStatusMessages([
           {
-            message: "Login successful",
+            message: t("loginSuccessful"),
             type: "success",
           },
         ]);
@@ -96,17 +98,17 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
           router.push("/planner");
         }, 2000);
       } else {
-        setFormError("Invalid username or password. Please try again.");
+        setFormError(t("invalidCredentials"));
       }
     } catch (error) {
-      setFormError("Invalid username or password. Please try again.");
+      setFormError(t("invalidCredentials"));
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">{t("username")}</Label>
         <Input
           id="username"
           name="username"
@@ -122,7 +124,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input
           id="password"
           name="password"
@@ -144,7 +146,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
           <AlertDescription>{formError}</AlertDescription>
         </Alert>
       )}
-      <Button type="submit">Login</Button>
+      <Button type="submit">{t("login")}</Button>
     </form>
   );
 };

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import Sidebar from "@/components/Sidebar";
 import "@/styles/globals.css";
+import { appWithTranslation } from "next-i18next";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -50,4 +51,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default App;
+export default appWithTranslation(App);
