@@ -1,4 +1,4 @@
-import AuthService from '@services/AuthService';
+import AuthService from '@services/authService';
 import { StatusMessage } from "@types";
 import classNames from "classnames";
 import { useTranslation } from "next-i18next";
@@ -58,6 +58,7 @@ const UserLoginForm: React.FC = () => {
             const user = await response.json();
             localStorage.setItem("loggedInUser", 
                 JSON.stringify({
+                    id: user.id,
                     token: user.token,
                     fullName: user.fullName,
                     username: user.username,

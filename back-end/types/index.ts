@@ -62,6 +62,7 @@ export type RacecarInput = {
 };
 
 export type AuthenticationResponse = {
+    id: number;
     token: string;
     username: string;
     fullName: string;
