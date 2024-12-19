@@ -5,10 +5,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 
-
-
 const UserLoginForm: React.FC = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -23,17 +21,15 @@ const UserLoginForm: React.FC = () => {
     setStatusMessages([]);
   };
 
-  // const { t } = useTranslation('common');
-
   const validate = (): boolean => {
     let result = true;
 
-    if (!name && name.trim() === "") {
+    if (!name || name.trim() === "") {
       setNameError(t('login.name'));
       result = false;
     }
 
-    if (!password && password.trim() === "") {
+    if (!password || password.trim() === "") {
       setPasswordError(t('login.password'));
       result = false;
     }
@@ -50,34 +46,31 @@ const UserLoginForm: React.FC = () => {
       return;
     }
 
-    const user = {username: name, password};
-    const response = await UserService.loginUser(user);
+    try {
+      const user = { username: name, password };
+      const response = await UserService.loginUser(user);
 
-    if (response.status === 200) {
-      setStatusMessages([{message: t('login.success'), type: "success"}]);
+      if (response.status === 200) {
+        setStatusMessages([{ message: t('login.success'), type: "success" }]);
 
-      const user = await response.json();
+        const user = await response.json();
 
-      localStorage.setItem("loggedInUser", JSON.stringify({
-        token: user.token,
-        fullname: user.fullname,
-        username: user.username,
-        role: user.role
-      }));
-    } 
+        localStorage.setItem("loggedInUser", JSON.stringify({
+          token: user.token,
+          fullname: user.fullname,
+          username: user.username,
+          role: user.role
+        }));
 
-    // setStatusMessages([
-    //   {
-    //     message: `Login succesful. Redirecting to homepage...`,
-    //     type: "success",
-    //   },
-    // ]);
-
-    // localStorage.setItem("loggedInUser", name);
-
-    setTimeout(() => {
-      router.push("/");
-    }, 2000);
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+      } else {
+        setStatusMessages([{ message: t('login.error'), type: "error" }]);
+      }
+    } catch (error) {
+      setStatusMessages([{ message: t('login.error'), type: "error" }]);
+    }
   };
 
   return (
