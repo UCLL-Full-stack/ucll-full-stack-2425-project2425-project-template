@@ -312,17 +312,17 @@ workoutRouter.post(
  *       404:
  *         description: Workout or exercise not found
  */
-// workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Response) => {
-//     try {
-//         const workoutId = parseInt(req.params.workoutId);
-//         const exerciseId = parseInt(req.params.exerciseId);
-//         const updatedWorkout = workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
-//         res.status(200).json(updatedWorkout);
-//     } catch (error: any) {
-//         const errorMessage = error.message || "An unexpected error occurred";
-//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
-//     }
-// });
+workoutRouter.delete('/:workoutId/exercises/:exerciseId', (req: Request, res: Response) => {
+    try {
+        const workoutId = req.params.workoutId;
+        const exerciseId = req.params.exerciseId;
+        const updatedWorkout = workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
+        res.status(200).json(updatedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
 
 /**
  * @swagger

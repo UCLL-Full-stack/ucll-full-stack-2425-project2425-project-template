@@ -48,20 +48,23 @@ const addExerciseToWorkout = async (workoutId: string, exerciseId: string): Prom
     return workout;
 };
 
-// const removeExerciseFromWorkout = (workoutId: number, exerciseId: number): Workout => {
-//     const workout = workoutDb.getWorkoutById(workoutId);
-//     if (!workout) {
-//         throw new Error(`Workout with ID ${workoutId} not found`);
-//     }
+const removeExerciseFromWorkout = async (
+    workoutId: string,
+    exerciseId: string
+): Promise<Workout> => {
+    const workout = await workoutDb.getWorkoutById({ id: workoutId });
+    if (!workout) {
+        throw new Error(`Workout with ID ${workoutId} not found`);
+    }
 
-//     const exerciseIndex = workout.exercises.findIndex((ex) => ex.id === exerciseId);
-//     if (exerciseIndex === -1) {
-//         throw new Error(`Exercise with ID ${exerciseId} not found in the workout`);
-//     }
+    const exercise = await exerciseDb.getExerciseById({ id: exerciseId });
+    if (!exercise) {
+        throw new Error(`Exercise with ID ${exerciseId} not found`);
+    }
 
-//     workoutDb.removeExerciseFromWorkout(workoutId, exerciseId);
-//     return workout;
-// };
+    workoutDb.removeExerciseFromWorkout(workoutId, exerciseId);
+    return workout;
+};
 
 const removeWorkout = async (id: string): Promise<Workout> => {
     const workout = await workoutDb.getWorkoutById({ id });
@@ -89,6 +92,6 @@ export default {
     getWorkoutsByUserId,
     createWorkout,
     addExerciseToWorkout,
-    // removeExerciseFromWorkout,
+    removeExerciseFromWorkout,
     removeWorkout,
 };
