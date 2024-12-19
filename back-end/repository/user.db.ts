@@ -11,7 +11,7 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-const getUserByEmail = async (email: string): Promise<User> => {
+const getUserByEmail = async (email: string): Promise<User | null> => {
     try {
         const result = await database.user.findUnique({
             where: {
@@ -19,7 +19,7 @@ const getUserByEmail = async (email: string): Promise<User> => {
             },
         });
         if (!result) {
-            throw new Error('User not found.');
+            return null;
         }
         return User.from(result);
     } catch (error) {

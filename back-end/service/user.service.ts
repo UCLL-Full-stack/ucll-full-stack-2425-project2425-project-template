@@ -8,12 +8,13 @@ const getAllUsers = async (): Promise<User[]> => {
     return await userDB.getAllUsers();
 };
 
-const getUserByEmail = async (email: string): Promise<User> => {
-    const user = await userDB.getUserByEmail(email);
-    if (!user) {
-        throw new Error('User not found.');
+const getUserByEmail = async (email: string): Promise<User | null> => {
+    try {
+        const user = await userDB.getUserByEmail(email);
+        return user;
+    } catch (error) {
+        return null;
     }
-    return user;
 };
 
 const createUser = async ({ name, email, password, birthday }: UserInput): Promise<User> => {
@@ -30,8 +31,7 @@ const createUser = async ({ name, email, password, birthday }: UserInput): Promi
         throw new Error('Birthday is required.');
     }
 
-    const existingUser = await userDB.getUserByEmail(email);
-    if (existingUser) {
+    if (await userDB.getUserByEmail(email)) {
         throw new Error('User already exists.');
     }
 
@@ -57,6 +57,9 @@ const createUser = async ({ name, email, password, birthday }: UserInput): Promi
 
 const authenticate = async ({ email, password }: UserInput): Promise<AuthenticationResponse> => {
     const user = await getUserByEmail(email);
+    if (!user) {
+        throw new Error('User not found.');
+    }
     const isPasswordValid = await bcrypt.compare(password, user.getPassword());
     if (!isPasswordValid) {
         throw new Error('Invalid password.');
@@ -70,6 +73,9 @@ const authenticate = async ({ email, password }: UserInput): Promise<Authenticat
 
 const updateUser = async (userInput: UserInput): Promise<User> => {
     const existingUser = await getUserByEmail(userInput.email);
+    if (!existingUser) {
+        throw new Error('User not found.');
+    }
     const updatedUser = new User({
         ...existingUser,
         ...userInput,

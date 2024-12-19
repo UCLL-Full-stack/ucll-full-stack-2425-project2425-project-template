@@ -141,6 +141,9 @@ const UserLogin: React.FC = () => {
                 >
                     Login
                 </button>
+                <a href="/signup" className="mt-3">
+                    No account, register here
+                </a>
             </form>
         </div>
     );

@@ -1,5 +1,5 @@
 import Header from '@components/header';
-import SettingsForm from '@components/settings/SettingsForm';
+import SettingsForm from '@components/Statistics/Statistics';
 import Head from 'next/head';
 
 const Settings = () => {

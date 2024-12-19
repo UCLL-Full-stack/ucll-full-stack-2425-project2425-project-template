@@ -68,13 +68,13 @@ const Header: React.FC = () => {
 
                     {loggedInUser && (
                         <Link
-                            href="/settings"
+                            href="/Statistics"
                             className="md:p-3 md:m-2 md:mr-5 text-sm md:text-xl text-white relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
                                   before:bottom-0 before:left-0 before:bg-[#5c00b2]
                               d   before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
                                   before:transition before:ease-in-out before:duration-300"
                         >
-                            Settings
+                            Statistics
                         </Link>
                     )}
 
