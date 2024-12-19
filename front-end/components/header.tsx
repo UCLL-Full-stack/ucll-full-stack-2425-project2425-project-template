@@ -63,6 +63,9 @@ const Header: React.FC = () => {
             {t('header.login')}
           </Link>
         )}
+        <Link href="/user" className="nav-link px-4 fs-5 text-white">
+          {t('header.user')}
+        </Link>
       </nav>
       <Language />
     </header>

@@ -1,4 +1,4 @@
-import { Submission } from '../model/Submission';
+import { Submission } from '../model/submission';
 import database from '../util/database';
 
 const createSubmission = async ({ submission }: { submission: Submission }): Promise<Submission> => {
@@ -91,9 +91,27 @@ const deleteSubmissionById = async ({ submissionId }: { submissionId: number }):
     }
 };
 
+const getSubmissionsByCreatedBy = async (createdBy: number): Promise<Submission[] | null> => {
+    try {
+        const submissionPrisma = await database.submission.findMany({
+            where: {
+                userId: createdBy,
+            },
+            include: {
+                user: true,
+            },
+        });
+        return submissionPrisma.map((submissionPrisma) => Submission.from(submissionPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
+};
+
 export default {
     getAllSubmissions,
     createSubmission,
     getSubmissionById,
-    deleteSubmissionById
+    deleteSubmissionById,
+    getSubmissionsByCreatedBy
 };

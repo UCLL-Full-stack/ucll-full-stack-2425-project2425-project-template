@@ -194,4 +194,47 @@ submissionFormRouter.delete('/:id', async (req: Request, res: Response, next: Ne
     }
 });
 
+/**
+ * @swagger
+ * /submission_forms/createdBy/{userId}:
+ *   get:
+ *     summary: Retrieve all submission forms created by a specific user
+ *     tags: [Submission_form]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the user who created the submission forms
+ *     responses:
+ *       200:
+ *         description: A list of submission forms created by the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/SubmissionForm'
+ *       404:
+ *         description: Submission forms not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
+submissionFormRouter.get('/createdBy/:userId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const submissions = await submissionFormService.getSubmissionsByCreatedBy(userId);
+        if (submissions) {
+            res.status(200).json(submissions);
+        } else {
+            res.status(404).json({ message: 'Submission forms not found' });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 export { submissionFormRouter };

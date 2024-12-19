@@ -22,6 +22,7 @@
         "submissionForm": "Submission Form",
         "login": "Login",
         "logout": "Logout",
+        "user": "user",
         "logoutConfirm": "Are you sure you want to logout?"
     },
     "home": {
