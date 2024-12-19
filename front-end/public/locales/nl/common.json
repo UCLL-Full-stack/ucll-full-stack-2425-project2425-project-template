@@ -36,12 +36,26 @@
     "login": {
         "title": "Inloggen",
         "label": {
-            "username": "Gebruikersnaam",
+            "email": "E-Mail",
             "password": "Wachtwoord"
         },
         "button": "Inloggen",
-        "name": "Vul een gebruikersnaam in.",
+        "email": "Vul een E-Mail in.",
         "password": "Vul een wachtwoord in.",
         "success": "Inloggen succesvol. U wordt doorgestuurd..."
+    },
+    "register": {
+        "title": "Registreren",
+        "label": {
+            "name": "Naam",
+            "email": "E-Mail",
+            "password": "Wachtwoord"
+        },
+        "nameRequired": "Naam is verplicht",
+        "emailRequired": "E-Mail is verplicht",
+        "passwordRequired": "Wachtwoord is verplicht",
+        "success": "Registratie succesvol! Doorsturen naar inloggen...",
+        "error": "Registratie mislukt. Probeer het opnieuw.",
+        "button": "Registreren"
     }
 }

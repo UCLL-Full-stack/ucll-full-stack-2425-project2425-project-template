@@ -35,13 +35,26 @@
     "login": {
         "title": "Login",
         "label": {
-            "username": "Username",
+            "email": "E-Mail",
             "password": "Password"
         },
         "button": "Login",
-        "name": "Please enter a username.",
+        "name": "Please enter a E-Mail.",
         "password": "Please enter a password.",
         "success": "Login successful. You are being redirected..."
-        }
-
+    },
+    "register": {
+        "title": "Register",
+        "label": {
+            "name": "Name",
+            "email": "Email",
+            "password": "Password"
+        },
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "passwordRequired": "Password is required",
+        "success": "Registration successful! Redirecting to login...",
+        "error": "Registration failed. Please try again.",
+        "button": "Register"
+    }
 }

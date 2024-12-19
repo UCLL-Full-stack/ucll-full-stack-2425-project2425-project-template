@@ -35,12 +35,26 @@
     "login": {
         "title": "Accedi",
         "label": {
-            "username": "Nome Utente",
+            "email": "E-Mail",
             "password": "Password"
         },
         "button": "Accedi",
-        "name": "Per favore, inserisci un nome utente.",
+        "email": "Per favore, inserisci un E-Mail.",
         "password": "Per favore, inserisci una password.",
         "success": "Accesso riuscito. Reindirizzamento in corso..."
+    },
+    "register": {
+        "title": "Registrati",
+        "label": {
+            "name": "Nome",
+            "email": "E-Mail",
+            "password": "Password"
+        },
+        "nameRequired": "Il nome è obbligatorio",
+        "emailRequired": "L'E-Mail è obbligatoria",
+        "passwordRequired": "La password è obbligatoria",
+        "success": "Registrazione riuscita! Reindirizzamento al login...",
+        "error": "Registrazione fallita. Per favore, riprova.",
+        "button": "Registrati"
     }
 }

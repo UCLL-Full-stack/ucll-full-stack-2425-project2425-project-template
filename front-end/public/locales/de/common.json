@@ -35,12 +35,26 @@
     "login": {
         "title": "Anmelden",
         "label": {
-            "username": "Benutzername",
+            "email": "E-Mail",
             "password": "Passwort"
         },
         "button": "Anmelden",
-        "name": "Bitte geben Sie einen Benutzernamen ein.",
+        "email": "Bitte geben Sie einen E-Mail ein.",
         "password": "Bitte geben Sie ein Passwort ein.",
         "success": "Anmeldung erfolgreich. Weiterleitung..."
+    },
+    "register": {
+        "title": "Registrieren",
+        "label": {
+            "name": "Name",
+            "email": "E-Mail",
+            "password": "Passwort"
+        },
+        "nameRequired": "Name ist erforderlich",
+        "emailRequired": "E-Mail ist erforderlich",
+        "passwordRequired": "Passwort ist erforderlich",
+        "success": "Registrierung erfolgreich! Weiterleitung zur Anmeldung...",
+        "error": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+        "button": "Registrieren"
     }
 }

@@ -35,12 +35,26 @@
     "login": {
         "title": "Connexion",
         "label": {
-            "username": "Nom d'Utilisateur",
+            "email": "E-Mail",
             "password": "Mot de Passe"
         },
         "button": "Connexion",
-        "name": "Veuillez entrer un nom d'utilisateur.",
+        "email": "Veuillez entrer un E-Mail.",
         "password": "Veuillez entrer un mot de passe.",
         "success": "Connexion réussie. Redirection en cours..."
+    },
+    "register": {
+        "title": "S'inscrire",
+        "label": {
+            "name": "Nom",
+            "email": "E-Mail",
+            "password": "Mot de Passe"
+        },
+        "nameRequired": "Le nom est requis",
+        "emailRequired": "L'E-Mail est requis",
+        "passwordRequired": "Le mot de passe est requis",
+        "success": "Inscription réussie! Redirection vers la connexion...",
+        "error": "L'inscription a échoué. Veuillez réessayer.",
+        "button": "S'inscrire"
     }
 }

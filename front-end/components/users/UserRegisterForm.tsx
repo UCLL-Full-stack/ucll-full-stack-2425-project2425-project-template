@@ -5,18 +5,21 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 
-const UserLoginForm: React.FC = () => {
+const UserRegisterForm: React.FC = () => {
   const { t } = useTranslation();
 
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const router = useRouter();
 
   const clearErrors = () => {
     setNameError(null);
+    setEmailError(null);
     setPasswordError(null);
     setStatusMessages([]);
   };
@@ -25,12 +28,17 @@ const UserLoginForm: React.FC = () => {
     let result = true;
 
     if (!name || name.trim() === "") {
-      setNameError(t('login.name'));
+      setNameError(t('register.nameRequired'));
+      result = false;
+    }
+
+    if (!email || email.trim() === "") {
+      setEmailError(t('register.emailRequired'));
       result = false;
     }
 
     if (!password || password.trim() === "") {
-      setPasswordError(t('login.password'));
+      setPasswordError(t('register.passwordRequired'));
       result = false;
     }
 
@@ -47,35 +55,26 @@ const UserLoginForm: React.FC = () => {
     }
 
     try {
-      const user = { username: name, password };
-      const response = await UserService.loginUser(user);
+      const user = { name, email, password };
+      const response = await UserService.createUser(user);
 
       if (response.status === 200) {
-        setStatusMessages([{ message: t('login.success'), type: "success" }]);
-
-        const user = await response.json();
-
-        localStorage.setItem("loggedInUser", JSON.stringify({
-          token: user.token,
-          fullname: user.fullname,
-          username: user.username,
-          role: user.role
-        }));
+        setStatusMessages([{ message: t('register.success'), type: "success" }]);
 
         setTimeout(() => {
-          router.push("/");
+          router.push("/login");
         }, 2000);
       } else {
-        setStatusMessages([{ message: t('login.error'), type: "error" }]);
+        setStatusMessages([{ message: t('register.error'), type: "error" }]);
       }
     } catch (error) {
-      setStatusMessages([{ message: t('login.error'), type: "error" }]);
+      setStatusMessages([{ message: t('register.error'), type: "error" }]);
     }
   };
 
   return (
     <>
-      <h3 className="px-0">{t('login.title')}</h3>
+      <h3 className="px-0">{t('register.title')}</h3>
       {statusMessages && (
         <div className="row">
           <ul className="list-none mb-3 mx-auto ">
@@ -95,7 +94,7 @@ const UserLoginForm: React.FC = () => {
       )}
       <form onSubmit={handleSubmit}>
         <label htmlFor="nameInput" className="mb-4">
-          {t('login.label.email')}
+          {t('register.label.name')}
         </label>
         <div className="block mb-2 text-sm font-medium">
           <input
@@ -107,13 +106,26 @@ const UserLoginForm: React.FC = () => {
           />
           {nameError && <div className="error-text">{nameError}</div>}
         </div>
+        <label htmlFor="emailInput" className="mb-4">
+          {t('register.label.email')}
+        </label>
+        <div className="block mb-2 text-sm font-medium">
+          <input
+            id="emailInput"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="form-input"
+          />
+          {emailError && <div className="error-text">{emailError}</div>}
+        </div>
         <div className="mb-4">
           <div>
             <label
               htmlFor="passwordInput"
               className="block mb-2 text-sm font-medium"
             >
-              {t('login.label.password')}
+              {t('register.label.password')}
             </label>
           </div>
           <div className="block mb-2 text-sm font-medium">
@@ -133,11 +145,11 @@ const UserLoginForm: React.FC = () => {
           className="btn-primary"
           type="submit"
         >
-          {t('login.button')}
+          {t('register.button')}
         </button>
       </form>
     </>
   );
 };
 
-export default UserLoginForm;
+export default UserRegisterForm;
