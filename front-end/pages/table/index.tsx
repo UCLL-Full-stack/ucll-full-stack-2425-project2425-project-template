@@ -5,12 +5,15 @@ import router from "next/router";
 import NavbarSheet from "@/components/NavbarSheet";
 import useSWR from "swr";
 import TeamService from "@/services/TeamService";
-import { Match, Team } from "@/types";
+import { Match, Team, Player } from "@/types";
 import MatchService from "@/services/MatchService";
+import PlayerService from "@/services/PlayerService";
 import AddMatch from "@/components/matches/AddMatch";
 import DeleteMatch from "@/components/matches/DeleteMatch";
 import EditMatch from "@/components/matches/EditMatch";
+import AddPlayerToMatch from "@/components/matches/AddPlayerToMatch";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import MatchPlayers from "@/components/matches/MatchPlayers";
 
 const Table: React.FC = () => {
   const [teams, setTeams] = useState<Array<Team>>([]);
@@ -19,8 +22,21 @@ const Table: React.FC = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isAddingPlayers, setIsAddingPlayers] = useState(false); // State for adding players
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [showAllGames, setShowAllGames] = useState(false); // State to toggle between Our Games and All Games
+  const [isViewingPlayers, setIsViewingPlayers] = useState(false); // New state
+  const [matchPlayers, setMatchPlayers] = useState<Player[]>([]); // Players of the selected match
+
+const handleViewPlayers = async (match: Match) => {
+  setSelectedMatch(match);
+  setIsViewingPlayers(true);
+
+  // Fetch players for the selected match
+  //const players = await MatchService.getMatchPlayers(match.id); // Adjust service method as needed
+  //setMatchPlayers(players);
+};
+
 
   const { data: teamList, error, mutate } = useSWR("/teams", TeamService.getAllTeams);
   const { data: matchList, error: matchError, mutate: mutateMatches } = useSWR("/matches", MatchService.getAllMatches);
@@ -71,6 +87,15 @@ const Table: React.FC = () => {
     });
     mutateMatches();
     setIsEditing(false);
+  };
+
+  const handleAddPlayers = async (selectedPlayers: Player[]) => {
+    if (selectedMatch) {
+      const playerIds = selectedPlayers.map(player => player.id);
+      await MatchService.addPlayerToMatch(selectedMatch.id, playerIds);
+      mutateMatches();
+      setIsAddingPlayers(false);
+    }
   };
 
   return (
@@ -151,22 +176,20 @@ const Table: React.FC = () => {
             <h1 className="text-6xl font-extrabold text-yellow-500 ml-4 font-bebas">
               {showAllGames ? "All Games" : "Our Games"}
             </h1>
-            
           </div>
           <div className="flex mt-4 gap-2">
-          <button
+            <button
               onClick={() => setShowAllGames((prev) => !prev)}
-              className=" px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-blue-600 hover:text-white transition "
+              className="px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-blue-600 hover:text-white transition"
             >
               {showAllGames ? "Our Games" : "All Games"}
-          </button>
-          <button
-            onClick={() => setIsAdding(true)}
-            className="flex items-center px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-green-600 hover:text-white transition "
-          >
-            <FaPlus />  Match
-          </button>
-          
+            </button>
+            <button
+              onClick={() => setIsAdding(true)}
+              className="flex items-center px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-green-600 hover:text-white transition"
+            >
+              <FaPlus /> Match
+            </button>
           </div>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {matches
@@ -179,56 +202,75 @@ const Table: React.FC = () => {
               .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
               .map((match) => (
                 <div
-                  key={match.id}
-                  className={`bg-white rounded-lg shadow-md p-4 text-gray-800 transform transition-all duration-700 hover:shadow-xl ${
-                    isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                  }`}
-                >
-                  <h2 className={`text-xl font-bold mb-2 text-center ${match.homeTeamName} ===`}>
-                    {match.homeTeamName} vs {match.awayTeamName}
-                  </h2>
-                  <div className="absolute right-4 top-2 flex gap-2">
-                    <button
-                      onClick={() => handleEdit(match)}
-                      className="text-black hover:text-yellow-500 transition"
+                    key={match.id}
+                    className={`bg-white rounded-lg shadow-md p-4 text-gray-800 transform transition-all duration-700 hover:shadow-xl ${
+                      isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                    }`}
+                  >
+                    <h2
+                      className="text-xl font-bold mb-2 text-center cursor-pointer hover:text-yellow-500"
+                      onClick={() => {
+                        setSelectedMatch(match);
+                        setIsViewingPlayers(true);
+                      }}
                     >
-                      <FaEdit size={20} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteMatch(match)}
-                      className="text-black hover:text-red-600 transition"
-                    >
-                      <FaTrash size={20} />
-                    </button>
-                  </div>
-
-                  <p className="text-center text-sm text-gray-500">
-                    {new Date(match.date).toLocaleDateString("en-GB", {
-                      weekday: "short",
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <p className="text-center mt-2">
-                    <span className="font-bold text-gray-800">Location:</span> {match.location}
-                  </p>
-                  <p className="text-center mt-2">
-                    <span className="font-bold text-gray-800">Score:</span>{" "}
-                    {match.homeScore !== null && match.awayScore !== null
-                      ? `${match.homeScore} - ${match.awayScore}`
-                      : "TBD"}
-                  </p>
+                      {match.homeTeamName} vs {match.awayTeamName}
+                    </h2>
+                    <div className="absolute right-4 top-2 flex gap-2">
+                      {/* Only show the "+" button if Manchester Shitty is part of the match */}
+                      {(match.homeTeamName === "Manchester Shitty" || match.awayTeamName === "Manchester Shitty") && (
+                        <button
+                          onClick={() => {
+                            setSelectedMatch(match);
+                            setIsAddingPlayers(true);
+                          }}
+                          className="text-black hover:text-green-500 transition"
+                        >
+                          <FaPlus size={20} />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleEdit(match)}
+                        className="text-black hover:text-yellow-500 transition"
+                      >
+                        <FaEdit size={20} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteMatch(match)}
+                        className="text-black hover:text-red-600 transition"
+                      >
+                        <FaTrash size={20} />
+                      </button>
+                    </div>
+                    <p className="text-center text-sm text-gray-500">
+                      {new Date(match.date).toLocaleDateString("en-GB", {
+                        weekday: "short",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
+                    <p className="text-center mt-2">
+                      <span className="font-bold text-gray-800">Location:</span> {match.location}
+                    </p>
+                    <p className="text-center mt-2">
+                      <span className="font-bold text-gray-800">Score:</span>{" "}
+                      {match.homeScore !== null && match.awayScore !== null
+                        ? `${match.homeScore} - ${match.awayScore}`
+                        : "TBD"}
+                    </p>
                 </div>
+
               ))}
           </div>
         </div>
       </div>
 
       {isAdding && (
-        <AddMatch onSave={handleAddMatch} 
-        onClose={() => setIsAdding(false)}
-        onCancel={() => setIsAdding(false)} 
+        <AddMatch
+          onSave={handleAddMatch}
+          onClose={() => setIsAdding(false)}
+          onCancel={() => setIsAdding(false)}
         />
       )}
 
@@ -248,6 +290,22 @@ const Table: React.FC = () => {
           onCancel={() => setIsDeleting(false)}
         />
       )}
+
+      {isAddingPlayers && (
+        <AddPlayerToMatch
+          matchId={selectedMatch?.id!}
+          onAddPlayers={handleAddPlayers}
+          onClose={() => setIsAddingPlayers(false)}
+        />
+      )}  
+
+      {isViewingPlayers && selectedMatch && (
+        <MatchPlayers
+          matchId={selectedMatch.id!}
+          onClose={() => setIsViewingPlayers(false)}
+          />
+      )}
+
     </>
   );
 };

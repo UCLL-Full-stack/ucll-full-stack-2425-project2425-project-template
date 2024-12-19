@@ -52,11 +52,41 @@ const deleteMatch = async (id: number) => {
     return data;
 }
 
+const addPlayerToMatch = async (matchId: number, player_ids: number[]) => {
+    const response = await fetch(`${API}/matches/${matchId}/players`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ player_ids }), 
+    });
+
+    if (!response.ok) throw new Error("Failed to add players to match.");
+    return await response.json();
+};
+
+const getMatchPlayers = async (matchId: number) => {
+    const response = await fetch(`${API}/matches/${matchId}/players`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  
+    if (!response.ok) throw new Error("Failed to fetch match players.");
+    return await response.json();
+  };
+  
+
+
+
 const MatchService = {
     getAllMatches,
     addMatch,
     updateMatch,
-    deleteMatch
+    deleteMatch,
+    addPlayerToMatch,
+    getMatchPlayers
 }
 
 export default MatchService
