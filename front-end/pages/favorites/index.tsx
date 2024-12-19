@@ -14,8 +14,8 @@ const Favorites: React.FC = () => {
       <Header />
       <main>
         <section className="home-section">
-          <h1 className="home-title">{t('header.favorites')}</h1>
-          <p className="home-description">Your favorite cocktails will be displayed here.</p>
+          <h1 className="home-title">{t('favorites.title')}</h1>
+          <p className="home-description">{t('favorites.description')}</p>
         </section>
       </main>
     </>

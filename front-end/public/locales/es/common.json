@@ -2,60 +2,64 @@
     "app.title": "Sip Happens Online",
     "general.error": "Ocurrió un error, por favor inténtalo de nuevo más tarde.",
     "home": {
-        "title": "Bienvenido a Sip Happens Online",
-        "description1": "Descubre un mundo de cócteles exquisitos y mejora tus habilidades de mixología. Sip Happens Online es tu destino definitivo para todo lo relacionado con los cócteles. Regístrate e inicia sesión para agregar y ver tus bebidas favoritas, y explora una lista central de todos los cócteles con un contador que muestra cuántos usuarios los han marcado como favoritos.",
-        "description2": "Nuestra amplia colección de recetas de cócteles incluye ingredientes detallados, y puedes filtrar fácilmente los cócteles según tus preferencias. Ya seas un mixólogo experimentado o estés empezando, Sip Happens Online tiene algo para todos. ¡Únete a nuestra comunidad y comienza a mezclar tu bebida perfecta hoy mismo!",
-        "userInformation": {
-            "title": "Información del Usuario",
-            "username": "Nombre de Usuario",
-            "password": "Contraseña",
-            "role": "Rol"
-        }
+      "title": "Bienvenido a Sip Happens Online",
+      "description1": "Descubre un mundo de cócteles exquisitos y mejora tus habilidades de mixología. Sip Happens Online es tu destino definitivo para todo lo relacionado con los cócteles. Regístrate e inicia sesión para agregar y ver tus bebidas favoritas, y explora una lista central de todos los cócteles con un contador que muestra cuántos usuarios los han marcado como favoritos.",
+      "description2": "Nuestra amplia colección de recetas de cócteles incluye ingredientes detallados, y puedes filtrar fácilmente los cócteles según tus preferencias. Ya seas un mixólogo experimentado o estés empezando, Sip Happens Online tiene algo para todos. ¡Únete a nuestra comunidad y comienza a mezclar tu bebida perfecta hoy mismo!",
+      "userInformation": {
+        "title": "Información del Usuario",
+        "email": "E-Mail",
+        "password": "Contraseña",
+        "role": "Rol"
+      }
     },
     "header": {
-        "home": "Inicio",
-        "cocktails": "Cócteles",
-        "addCocktail": "Agregar Cóctel",
-        "favorites": "Favoritos",
-        "login": "Iniciar Sesión",
-        "logout": "Cerrar Sesión",
-        "register": "Registrarse",
-        "welcome": "Bienvenido"
+      "home": "Inicio",
+      "cocktails": "Cócteles",
+      "addCocktail": "Agregar Cóctel",
+      "favorites": "Favoritos",
+      "login": "Iniciar Sesión",
+      "logout": "Cerrar Sesión",
+      "register": "Registrarse",
+      "welcome": "Bienvenido"
     },
     "addCocktail": {
-        "title": "Agregar Cóctel",
-        "id": "ID",
-        "name": "Nombre",
-        "description": "Descripción",
-        "strongness": "Fuerza (0-5)",
-        "addIngredient": "Agregar Ingrediente",
-        "removeIngredient": "Eliminar Ingrediente",
-        "save": "Guardar",
-        "cancel": "Cancelar"
+      "title": "Agregar Cóctel",
+      "id": "ID",
+      "name": "Nombre",
+      "description": "Descripción",
+      "strongness": "Fuerza (0-5)",
+      "addIngredient": "Agregar Ingrediente",
+      "removeIngredient": "Eliminar Ingrediente",
+      "save": "Guardar",
+      "cancel": "Cancelar"
     },
     "login": {
-        "title": "Iniciar Sesión",
-        "label": {
-            "email": "E-Mail",
-            "password": "Contraseña"
-        },
-        "button": "Iniciar Sesión",
-        "name": "Por favor, ingresa un E-Mail.",
-        "password": "Por favor, ingresa una contraseña.",
-        "success": "Inicio de sesión exitoso. Redirigiendo..."
+      "title": "Iniciar Sesión",
+      "label": {
+        "email": "E-Mail",
+        "password": "Contraseña"
+      },
+      "button": "Iniciar Sesión",
+      "name": "Por favor, ingresa un E-Mail.",
+      "password": "Por favor, ingresa una contraseña.",
+      "success": "Inicio de sesión exitoso. Redirigiendo..."
     },
     "register": {
-        "title": "Registrarse",
-        "label": {
-            "name": "Nombre",
-            "email": "E-Mail",
-            "password": "Contraseña"
-        },
-        "nameRequired": "El nombre es obligatorio",
-        "emailRequired": "El E-Mail es obligatorio",
-        "passwordRequired": "La contraseña es obligatoria",
-        "success": "¡Registro exitoso! Redirigiendo a iniciar sesión...",
-        "error": "El registro falló. Por favor, inténtalo de nuevo.",
-        "button": "Registrarse"
+      "title": "Registrarse",
+      "label": {
+        "name": "Nombre",
+        "email": "E-Mail",
+        "password": "Contraseña"
+      },
+      "nameRequired": "El nombre es obligatorio",
+      "emailRequired": "El E-Mail es obligatorio",
+      "passwordRequired": "La contraseña es obligatoria",
+      "success": "¡Registro exitoso! Redirigiendo a iniciar sesión...",
+      "error": "El registro falló. Por favor, inténtalo de nuevo.",
+      "button": "Registrarse"
+    },
+    "favorites": {
+      "title": "Favoritos",
+      "description": "Aquí puedes encontrar todos tus cócteles favoritos. Haz clic en un cóctel para ver sus detalles."
     }
-}
+  }

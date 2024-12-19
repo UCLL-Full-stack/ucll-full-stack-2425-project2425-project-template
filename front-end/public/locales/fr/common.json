@@ -2,60 +2,64 @@
     "app.title": "Sip Happens Online",
     "general.error": "Une erreur s'est produite, veuillez réessayer plus tard.",
     "home": {
-        "title": "Bienvenue sur Sip Happens Online",
-        "description1": "Découvrez un monde de cocktails exquis et améliorez vos compétences en mixologie. Sip Happens Online est votre destination ultime pour tout ce qui concerne les cocktails. Inscrivez-vous et connectez-vous pour ajouter et consulter vos boissons préférées, et explorez une liste centrale de tous les cocktails avec un compteur indiquant combien d'utilisateurs les ont ajoutés à leurs favoris.",
-        "description2": "Notre vaste collection de recettes de cocktails comprend des ingrédients détaillés, et vous pouvez facilement filtrer les cocktails en fonction de vos préférences. Que vous soyez un mixologue expérimenté ou débutant, Sip Happens Online a quelque chose pour tout le monde. Rejoignez notre communauté et commencez à préparer votre boisson parfaite dès aujourd'hui !",
-        "userInformation": {
-            "title": "Informations Utilisateur",
-            "username": "Nom d'Utilisateur",
-            "password": "Mot de Passe",
-            "role": "Rôle"
-        }
+      "title": "Bienvenue sur Sip Happens Online",
+      "description1": "Découvrez un monde de cocktails exquis et améliorez vos compétences en mixologie. Sip Happens Online est votre destination ultime pour tout ce qui concerne les cocktails. Inscrivez-vous et connectez-vous pour ajouter et consulter vos boissons préférées, et explorez une liste centrale de tous les cocktails avec un compteur indiquant combien d'utilisateurs les ont ajoutés à leurs favoris.",
+      "description2": "Notre vaste collection de recettes de cocktails comprend des ingrédients détaillés, et vous pouvez facilement filtrer les cocktails en fonction de vos préférences. Que vous soyez un mixologue expérimenté ou débutant, Sip Happens Online a quelque chose pour tout le monde. Rejoignez notre communauté et commencez à préparer votre boisson parfaite dès aujourd'hui !",
+      "userInformation": {
+        "title": "Informations Utilisateur",
+        "email": "E-Mail",
+        "password": "Mot de Passe",
+        "role": "Rôle"
+      }
     },
     "header": {
-        "home": "Accueil",
-        "cocktails": "Cocktails",
-        "addCocktail": "Ajouter un Cocktail",
-        "favorites": "Favoris",
-        "login": "Connexion",
-        "logout": "Déconnexion",
-        "register": "S'inscrire",
-        "welcome": "Bienvenue"
+      "home": "Accueil",
+      "cocktails": "Cocktails",
+      "addCocktail": "Ajouter un Cocktail",
+      "favorites": "Favoris",
+      "login": "Connexion",
+      "logout": "Déconnexion",
+      "register": "S'inscrire",
+      "welcome": "Bienvenue"
     },
     "addCocktail": {
-        "title": "Ajouter un Cocktail",
-        "id": "ID",
-        "name": "Nom",
-        "description": "Description",
-        "strongness": "Puissance (0-5)",
-        "addIngredient": "Ajouter un Ingrédient",
-        "removeIngredient": "Supprimer un Ingrédient",
-        "save": "Sauvegarder",
-        "cancel": "Annuler"
+      "title": "Ajouter un Cocktail",
+      "id": "ID",
+      "name": "Nom",
+      "description": "Description",
+      "strongness": "Puissance (0-5)",
+      "addIngredient": "Ajouter un Ingrédient",
+      "removeIngredient": "Supprimer un Ingrédient",
+      "save": "Sauvegarder",
+      "cancel": "Annuler"
     },
     "login": {
-        "title": "Connexion",
-        "label": {
-            "email": "E-Mail",
-            "password": "Mot de Passe"
-        },
-        "button": "Connexion",
-        "name": "Veuillez entrer un E-Mail.",
-        "password": "Veuillez entrer un mot de passe.",
-        "success": "Connexion réussie. Redirection en cours..."
+      "title": "Connexion",
+      "label": {
+        "email": "E-Mail",
+        "password": "Mot de Passe"
+      },
+      "button": "Connexion",
+      "name": "Veuillez entrer un E-Mail.",
+      "password": "Veuillez entrer un mot de passe.",
+      "success": "Connexion réussie. Redirection en cours..."
     },
     "register": {
-        "title": "S'inscrire",
-        "label": {
-            "name": "Nom",
-            "email": "E-Mail",
-            "password": "Mot de Passe"
-        },
-        "nameRequired": "Le nom est requis",
-        "emailRequired": "L'E-Mail est requis",
-        "passwordRequired": "Le mot de passe est requis",
-        "success": "Inscription réussie! Redirection vers la connexion...",
-        "error": "L'inscription a échoué. Veuillez réessayer.",
-        "button": "S'inscrire"
+      "title": "S'inscrire",
+      "label": {
+        "name": "Nom",
+        "email": "E-Mail",
+        "password": "Mot de Passe"
+      },
+      "nameRequired": "Le nom est requis",
+      "emailRequired": "L'E-Mail est requis",
+      "passwordRequired": "Le mot de passe est requis",
+      "success": "Inscription réussie! Redirection vers la connexion...",
+      "error": "L'inscription a échoué. Veuillez réessayer.",
+      "button": "S'inscrire"
+    },
+    "favorites": {
+      "title": "Favoris",
+      "description": "Ici, vous pouvez trouver tous vos cocktails préférés. Cliquez sur un cocktail pour voir ses détails."
     }
-}
+  }
