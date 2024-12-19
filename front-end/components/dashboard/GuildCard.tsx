@@ -44,10 +44,6 @@ const GuildCard: React.FC<GuildCardProps> = ({
         checkPermissions();
     }, [user?.userId, guild.guildId]);
 
-    const handleEditSettings = async () => {
-        onGuildSettingsClick(guild.guildId);
-    };
-
     return (
         <div
             className={`relative p-4 rounded-lg ${
@@ -70,7 +66,7 @@ const GuildCard: React.FC<GuildCardProps> = ({
                                     e.stopPropagation();
                                     onCreateClick(guild.guildId);
                                 }}
-                                title={t('board.create.title')}
+                                title={t('actions.create')}
                             >
                                 <FaPlus />
                             </button>

@@ -133,7 +133,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                                     onClick={() => handleRemoveIdentifier(entry.identifier)}
                                     className="text-red-500 hover:text-red-400"
                                 >
-                                    {t('actions.delete')}
+                                    {t('delete')}
                                 </button>
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -193,13 +193,13 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                         className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 mr-2" 
                         onClick={onClose}
                     >
-                        {t('actions.cancel')}
+                        {t('cancel')}
                     </button>
                     <button 
                         className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" 
                         onClick={handleSubmit}
                     >
-                        {t('actions.save')}
+                        {t('save')}
                     </button>
                 </div>
             </div>

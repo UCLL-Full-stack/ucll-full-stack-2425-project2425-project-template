@@ -133,7 +133,7 @@ const EditBoardSettings: React.FC<EditBoardSettingsProps> = ({ boardId, onClose,
                                         onClick={() => handleRemoveIdentifier(entry.identifier)}
                                         className="text-red-500 hover:text-red-400"
                                     >
-                                        {t('actions.delete')}
+                                        {t('delete')}
                                     </button>
                                 )}
                             </div>

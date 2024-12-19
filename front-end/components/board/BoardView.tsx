@@ -3,7 +3,7 @@ import { Board, Column } from "@/types";
 import { useEffect, useState } from "react";
 import ColumnComponent from "./Column";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import BoardService from "@/services/BoardService";
+import { useTranslation } from 'react-i18next';
 
 interface BoardViewProps {
     board: Board;
@@ -12,21 +12,41 @@ interface BoardViewProps {
 }
 
 const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColumn }) => {
+    const { t } = useTranslation(['common']);
     const [columns, setColumns] = useState<Column[]>([]);
     const [addingColumn, setAddingColumn] = useState(false);
     const [newColumnName, setNewColumnName] = useState("");
 
-    useEffect(() => {
+        useEffect(() => {
         const fetchData = async () => {
-            const fetchedColumns = await Promise.all(
-                board.columnIds.map((id) => ColumnService.getColumnById(id))
-            );
-            const sortedColumns = fetchedColumns.sort((a, b) => a.columnIndex - b.columnIndex);
-
-            setColumns(sortedColumns);
+            if (!board?.columnIds?.length) {
+                setColumns([]);
+                return;
+            }
+    
+            try {
+                const fetchedColumns = await Promise.all(
+                    board.columnIds.map(async (id) => {
+                        try {
+                            return await ColumnService.getColumnById(id);
+                        } catch (error) {
+                            console.error(`Error fetching column ${id}:`, error);
+                            return null;
+                        }
+                    })
+                );
+    
+                const validColumns = fetchedColumns.filter(column => column !== null);
+                const sortedColumns = validColumns.sort((a, b) => a.columnIndex - b.columnIndex);
+                setColumns(sortedColumns);
+            } catch (error) {
+                console.error('Error in fetchData:', error);
+                setColumns([]);
+            }
         };
+    
         fetchData();
-    }, [board.columnIds]);
+    }, [board?.columnIds]);
 
     const handleDragEnd = async (result: any) => {
         const { source, destination } = result;
@@ -60,9 +80,9 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
     const handleAddColumn = async () => {
         if (newColumnName.trim() !== "") {
             onAddColumn(newColumnName.trim());
-          }
-          setAddingColumn(false);
-          setNewColumnName("");
+        }
+        setAddingColumn(false);
+        setNewColumnName("");
     };
 
     const handleInputBlur = () => {

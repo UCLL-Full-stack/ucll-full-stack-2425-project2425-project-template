@@ -10,8 +10,8 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['en', 'es'],
-    debug: process.env.NODE_ENV === 'development',
-    ns: ['common', 'board', 'guild'],
+    debug: false,
+    ns: ['common'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,
@@ -20,8 +20,11 @@ i18n
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage']
+      order: ['cookie', 'localStorage', 'navigator'],
+      caches: ['cookie'],
+    },
+    react: {
+      useSuspense: false
     }
   });
 

@@ -93,7 +93,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                             onChange={(e) => setBoardName(e.target.value)}
                             required
                             className="w-full p-2 border border-gray-600 rounded"
-                            placeholder={t('board.create.namePlaceholder')}
+                            placeholder={t('board.create.nameLabel')}
                         />
                     </div>
                     <div className="mb-4">
@@ -124,7 +124,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                             value={columns}
                             onChange={(e) => setColumns(e.target.value)}
                             className="w-full p-2 border border-gray-600 rounded"
-                            placeholder={t('board.create.columnPlaceholder')}
+                            placeholder={t('board.create.columnsLabel')}
                         />
                     </div>
                     <div className="flex justify-end">

@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 const getUsers = async () => {
     const response = await fetch(`${API_URL}/api/users`, {
@@ -14,7 +14,7 @@ const getUser = async (userId: string) => {
     const response = await fetch(`${API_URL}/api/users/${userId}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
     });
     return await response.json();
@@ -81,7 +81,6 @@ const getUserBoardPermissions = async (userId: string, boardId: string) => {
     });
     return await response.json();
 };
-
 
 const UserService = {
     getUsers,

@@ -60,7 +60,12 @@
         "delete": "Eliminar Tarea",
         "dueDate": "Fecha de Vencimiento",
         "assignees": "Asignados",
-        "description": "Descripción"
+        "description": "Descripción",
+        "untitled": "Sin Título",
+        "noDescription": "Sin Descripción",
+        "status": "Estado",
+        "assignedTo": "Asignado a",
+        "unassigned": "Sin asignar"
     },
 
     "permissions": {

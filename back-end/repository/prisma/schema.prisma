@@ -1,70 +1,70 @@
-datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    userId     String  @id
-    username   String
-    globalName String
-    userAvatar String
-    guilds     Guild[] @relation("UserGuilds")
-    boards     Board[]
-    tasks      Task[]
-    guildOwner Guild[]
+  userId     String  @id
+  username   String
+  globalName String
+  userAvatar String
+  boards     Board[]
+  guildOwner Guild[]
+  tasks      Task[]  @relation("TaskToUser")
+  guilds     Guild[] @relation("UserGuilds")
 }
 
 model Guild {
-    guildId      String  @id
-    guildName    String
-    guildOwner   User?   @relation(fields: [guildOwnerId], references: [userId])
-    guildOwnerId String?
-    settings     Json
-    roles        Role[]
-    members      Json
-    users        User[]  @relation("UserGuilds")
-    boards       Board[]
+  guildId      String  @id
+  guildName    String
+  members      Json
+  settings     Json
+  guildOwnerId String?
+  boards       Board[]
+  guildOwner   User?   @relation(fields: [guildOwnerId], references: [userId])
+  roles        Role[]
+  users        User[]  @relation("UserGuilds")
 }
 
 model Role {
-    roleId      String @id
-    roleName    String
-    permissions Json
-    guild       Guild  @relation(fields: [guildId], references: [guildId])
-    guildId     String
+  roleId      String @id
+  roleName    String
+  guildId     String
+  permissions Json
+  guild       Guild  @relation(fields: [guildId], references: [guildId])
 }
 
 model Board {
-    boardId         String   @id @default(cuid())
-    boardName       String
-    createdByUser   User     @relation(fields: [createdByUserId], references: [userId])
-    createdByUserId String
-    guild           Guild    @relation(fields: [guildId], references: [guildId])
-    guildId         String
-    columns         Column[]
-    permissions     Json
+  boardId         String   @id @default(cuid())
+  boardName       String
+  guildId         String
+  createdByUserId String
+  permissions     Json
+  createdByUser   User     @relation(fields: [createdByUserId], references: [userId])
+  guild           Guild    @relation(fields: [guildId], references: [guildId])
+  columns         Column[]
 }
 
 model Column {
-    columnId    String @id @default(cuid())
-    columnName  String
-    columnIndex Int
-    tasks       Task[]
-    board       Board  @relation(fields: [boardId], references: [boardId])
-    boardId     String
+  columnId    String @id @default(cuid())
+  columnName  String
+  boardId     String
+  columnIndex Int
+  board       Board  @relation(fields: [boardId], references: [boardId])
+  tasks       Task[]
 }
 
 model Task {
-    taskId      String   @id @default(cuid())
-    title       String
-    description String
-    taskIndex   Int
-    dueDate     DateTime
-    assignees   User[]
-    column      Column   @relation(fields: [columnId], references: [columnId])
-    columnId    String
+  taskId      String   @id @default(cuid())
+  dueDate     DateTime
+  columnId    String
+  description String
+  title       String
+  taskIndex   Int
+  column      Column   @relation(fields: [columnId], references: [columnId])
+  assignees   User[]   @relation("TaskToUser")
 }

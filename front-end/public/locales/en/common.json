@@ -60,7 +60,12 @@
         "delete": "Delete Task",
         "dueDate": "Due Date",
         "assignees": "Assignees",
-        "description": "Description"
+        "description": "Description",
+        "untitled": "task.untitled",
+        "noDescription": "task.noDescription",
+        "status": "Status",
+        "assignedTo": "Assigned To",
+        "unassigned": "Unassigned"
     },
 
     "permissions": {
@@ -78,4 +83,5 @@
         "title": "Edit Settings for {{name}}"
         }
     }
+
 }

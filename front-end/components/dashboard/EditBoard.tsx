@@ -42,7 +42,7 @@ const EditBoard: React.FC<EditBoardProps> = ({ boardId, onClose, onSubmit }) => 
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-[#2C2F33] p-6 rounded-lg shadow-lg w-1/2 text-white">
                 <h2 className="text-2xl font-bold mb-4">
-                    {t('board.edit.title')}: {board?.boardName}
+                    {t('edit')}: {board?.boardName}
                 </h2>
 
                 {loading ? (
@@ -64,13 +64,13 @@ const EditBoard: React.FC<EditBoardProps> = ({ boardId, onClose, onSubmit }) => 
                                 onClick={onClose}
                                 className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded mr-2"
                             >
-                                {t('actions.cancel')}
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSave}
                                 className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
                             >
-                                {t('actions.save')}
+                                {t('save')}
                             </button>
                         </div>
                     </>

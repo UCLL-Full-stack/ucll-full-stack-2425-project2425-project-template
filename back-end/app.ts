@@ -1,4 +1,3 @@
-// src/app.ts
 import * as dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -18,11 +17,10 @@ const port = process.env.APP_PORT || 3000;
 
 // Updated CORS configuration
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://localhost:3000'],
+  origin: ['http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  exposedHeaders: ['Authorization']
+  allowedHeaders: ['Content-Type'],
+  credentials: true
 }));
 
 app.use(bodyParser.json());
