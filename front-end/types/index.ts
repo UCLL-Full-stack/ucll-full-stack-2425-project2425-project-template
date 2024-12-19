@@ -13,6 +13,12 @@ export interface Team {
     name: string;
     players?: Player[];
     coach?: Coach;
+    points?: number;
+    goalsFor?: number;
+    goalsAg?: number;
+    homeMatches?: Match[];
+    awayMatches?: Match[];
+
 }
 
 export interface Coach {
