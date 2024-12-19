@@ -27,7 +27,7 @@
     "home": {
         "welcome": "Welcome to the Racing Website",
         "description": "Discover the latest race information and stay updated on all crashes and events.",
-        "loggedInMessage": "Welcome {username}, you are logged in as {permission}",
+        "loggedInMessage": "Welcome {{username}}, you are logged in as {{permission}}",
         "usersToLogin": "Users to login",
         "username": "Username",
         "password": "Password",
