@@ -4,6 +4,9 @@ import nurseDb from '../repository/nurse.db';
 import { Trainer } from '../model/trainer';
 
 
+const getAllNurse = async (): Promise<Nurse[]> => nurseDb.getAllNurse();
+
+
 // Function to get nurse by id
 const getNurseByEmail = async (email: string): Promise<Nurse | null> => {
     // Call the database method to get nurse by id
@@ -32,6 +35,7 @@ const removePokemonFromNurse = async (idPokemon: number): Promise<Pokemon>=>{
 
 
 export default {
+    getAllNurse,
     getNurseByEmail,
     healPokemon,
     addPokemonToTrainer,

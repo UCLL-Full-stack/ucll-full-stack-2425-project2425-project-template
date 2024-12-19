@@ -386,6 +386,36 @@ import nurseService from '../service/nurse.service';  // Assuming the service fi
 
 const nurseRouter = express.Router();
 
+
+/**
+ * @swagger
+ * /nurses:
+ *   get:
+ *     summary: Retrieve a list of all nurses
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of nurses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/nurses'
+ *       500:
+ *         description: Server error
+ */
+nurseRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const trainers = await nurseService.getAllNurse();
+        res.status(200).json(trainers);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 /**
  * @swagger
  * /nurses/{email}:

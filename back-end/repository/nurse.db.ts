@@ -2,6 +2,21 @@ import database from "../util/database"; // Prisma instance for querying
 import { Nurse } from "../model/nurse"; // Assuming Nurse model is defined
 
 
+const getAllNurse = async (): Promise<Nurse[]> => {
+    const nursePrisma = await database.nurse.findMany({
+        include:{
+            user: true,
+            pokemon: {include: {stats:true}},
+        },
+    });
+
+    return nursePrisma.map((nursePrisma) => {
+        return Nurse.from({
+            ...nursePrisma,
+        });
+    });
+};
+
 const getNurseByEmail = async (email: string): Promise<Nurse | null> => {
     // First, find the user by email
     const user = await database.user.findFirst({
@@ -196,4 +211,4 @@ const addPokemonToTrainer = async ({
 
 
 
-export default { getNurseByEmail,healPokemon,removePokemonFromNurse,addPokemonToTrainer };
+export default { getAllNurse, getNurseByEmail,healPokemon,removePokemonFromNurse,addPokemonToTrainer };

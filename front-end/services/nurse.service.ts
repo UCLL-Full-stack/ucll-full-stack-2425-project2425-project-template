@@ -3,6 +3,25 @@
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const nurseService = {
+
+    getAllNurses: async (): Promise<Nurse[]> =>{
+    const user = localStorage.getItem('loggedInUser');
+    let token = null
+    if (user){
+      token = JSON.parse(user).token;
+    }
+    // Make the GET request to fetch trainers
+    const response = await fetch(`${API_URL}/nurses`, {
+      method: "GET", 
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    return data as Nurse[]; 
+    },
+
     getNurseByEmail: async (email: string): Promise<Nurse> => {
       const user = localStorage.getItem('loggedInUser');
       let token = null;

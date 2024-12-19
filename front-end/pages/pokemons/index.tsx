@@ -12,7 +12,7 @@ import PokemonDetailsNurse from '@components/pokemon/pokemonDetailsNurse';
 
 const Pokemons: React.FC = () => {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
-  const [nurses, setNurses] = useState<Nurse[]>([]);  // Store the list of nurses
+  const [nurses, setNurses] = useState<Nurse[]>([]);
   const [selectedTrainer, setSelectedTrainer] = useState<Trainer | null>(null);
   const [selectedNurse, setSelectedNurse] = useState<Nurse | null>(null);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
@@ -24,8 +24,8 @@ const Pokemons: React.FC = () => {
   const { t } = useTranslation();
 
   const clearSelected = (pokemon: Pokemon | null) => {
-    setSelectedPokemon(pokemon)
-  }
+    setSelectedPokemon(pokemon);
+  };
 
   // Check if the code is running in the browser and then access localStorage
   useEffect(() => {
@@ -39,7 +39,17 @@ const Pokemons: React.FC = () => {
       }
       setLoggedInEmail(email);
     }
-  }, []); // Empty dependency array ensures this runs only once when the component mounts
+  }, []);
+
+  const getAllTrainers = async () => {
+    const trainer = await TrainerService.getAllTrainers();
+    setTrainers(trainer);
+  };
+
+  const getAllNurses = async () => {
+    const nurse = await nurseService.getAllNurses();
+    setNurses(nurse);
+  };
 
   const getTrainerByEmail = async (email: string) => {
     try {
@@ -54,7 +64,7 @@ const Pokemons: React.FC = () => {
   const getNurseByEmail = async (email: string) => {
     try {
       const nurse = await nurseService.getNurseByEmail(email);
-      setNurses([nurse]); // Store the nurse's data
+      setNurses([nurse]);
       setSelectedNurse(nurse);
     } catch (error) {
       console.error(error);
@@ -67,9 +77,12 @@ const Pokemons: React.FC = () => {
         getTrainerByEmail(loggedInEmail);
       } else if (role === 'nurse') {
         getNurseByEmail(loggedInEmail);
+      } else if (role === 'admin') {
+        getAllNurses();
+        getAllTrainers();
       }
     }
-  }, [loggedInEmail, role, update]); // Make sure to re-run the effect when these values change
+  }, [loggedInEmail, role, update]);
 
   const handleSelectPokemon = (pokemon: Pokemon) => {
     setSelectedPokemon(pokemon);
@@ -99,67 +112,111 @@ const Pokemons: React.FC = () => {
       <Header />
       <main>
         <h1>{t('pokemon.pokemon')}</h1>
-        {/* If logged in as a trainer, display their Pokémon */}
+
+        {/* Trainer-specific view */}
         {role === 'trainer' && trainers.length === 0 ? (
           <p>No trainers found for the logged-in email.</p>
         ) : (
-          <>
-            {role === 'trainer' && selectedTrainer && (
-              <>
-                <h2>
-                  {selectedTrainer.user.firstName}
-                  {t('pokemon.users-pokemon')}
-                </h2>
-                <button onClick={() => setIsModalOpen(true)}>{t('pokemon.add')}</button>
-                <PokemonOverviewTable
-                  pokemon={selectedTrainer.pokemon}
-                  selectPokemon={handleSelectPokemon}
+          role === 'trainer' &&
+          selectedTrainer && (
+            <>
+              <h2>
+                {selectedTrainer.user.firstName}
+                {t('pokemon.users-pokemon')}
+              </h2>
+              <button onClick={() => setIsModalOpen(true)}>
+                {t('pokemon.add')}
+              </button>
+              <PokemonOverviewTable
+                pokemon={selectedTrainer.pokemon}
+                selectPokemon={handleSelectPokemon}
+              />
+              {selectedPokemon && (
+                <PokemonDetails
+                  pokemon={selectedPokemon}
+                  nurseId={1}
+                  reload={setUpdate}
+                  update={update}
+                  clearSelected={clearSelected}
                 />
-                {selectedPokemon && (
-                  <PokemonDetails
-                    pokemon={selectedPokemon}
-                    nurseId={1}  // Pass the nurseId if necessary
-                    reload={setUpdate}
-                    update={update}
-                    clearSelected={clearSelected}
-                  />
-                )}
-              </>
-            )}
-          </>
+              )}
+            </>
+          )
         )}
 
-        {/* If logged in as a nurse, show their Pokémon */}
+        {/* Nurse-specific view */}
         {role === 'nurse' && nurses.length === 0 ? (
           <p>No nurse found for the logged-in email.</p>
         ) : (
-          <>
-            {role === 'nurse' && selectedNurse && (
-              <>
-                <h2>
-                  {selectedNurse.user.firstName}
-                  {t('pokemon.nurse-pokemon')}
-                </h2>
-                <PokemonOverviewTable
-                  pokemon={selectedNurse.pokemon}  // Display the Pokémon of the nurse
-                  selectPokemon={handleSelectPokemon}
+          role === 'nurse' &&
+          selectedNurse && (
+            <>
+              <h2>
+                {selectedNurse.user.firstName}
+                {t('pokemon.nurse-pokemon')}
+              </h2>
+              <PokemonOverviewTable
+                pokemon={selectedNurse.pokemon}
+                selectPokemon={handleSelectPokemon}
+              />
+              {selectedPokemon && (
+                <PokemonDetailsNurse
+                  pokemon={selectedPokemon}
+                  nurseId={1}
+                  reload={setUpdate}
+                  update={update}
+                  clearSelected={clearSelected}
                 />
-                {selectedPokemon && (
-                  <PokemonDetailsNurse
-                    pokemon={selectedPokemon}
-                    nurseId={1}  // Pass the nurseId if necessary
-                    reload={setUpdate}
-                    update={update}
-                    clearSelected={clearSelected}
-                  />
-                )}
-              </>
-            )}
-          </>
+              )}
+            </>
+          )
         )}
 
-        {isModalOpen && (
-          <AddPokemonModal onClose={() => setIsModalOpen(false)} onAddPokemon={handleAddPokemon} />
+        {/* Admin-specific view */}
+        {role === 'admin' && (
+          <>
+            <h2>{t('trainers')}</h2>
+            {trainers.map((trainer) => (
+              <div key={trainer.id}>
+                <h3>{trainer.user.firstName}</h3>
+                <button
+                  onClick={() => setSelectedTrainer(trainer)}
+                  style={{ marginBottom: '1em' }}
+                >
+                  {t('pokemon.add-pokemon')}
+                </button>
+                <PokemonOverviewTable
+                  pokemon={trainer.pokemon}
+                  selectPokemon={handleSelectPokemon}
+                />
+              </div>
+            ))}
+            <h2>{t('nurses')}</h2>
+            {nurses.map((nurse) => (
+              <div key={nurse.id}>
+                <h3>{nurse.user.firstName}</h3>
+                <PokemonOverviewTable
+                  pokemon={nurse.pokemon}
+                  selectPokemon={handleSelectPokemon}
+                />
+              </div>
+            ))}
+            {selectedTrainer && isModalOpen && (
+              <AddPokemonModal
+                onClose={() => setIsModalOpen(false)}
+                onAddPokemon={handleAddPokemon}
+              />
+            )}
+            {selectedPokemon && (
+              <PokemonDetailsNurse
+                pokemon={selectedPokemon}
+                nurseId={1}
+                reload={setUpdate}
+                update={update}
+                clearSelected={clearSelected}
+              />
+            )}
+          </>
         )}
       </main>
     </>
