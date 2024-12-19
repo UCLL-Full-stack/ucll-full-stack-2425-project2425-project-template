@@ -61,9 +61,48 @@ const createUser = async (user: User): Promise<User> => {
     }
 }
 
+const addEventToFavorite = async (user: User, eventId: number): Promise<void> => {
+    try {
+        await database.user.update({
+            where: {
+                id: user.getId(),
+            },
+            data: {
+                events: {
+                    connect: {
+                        id: eventId,
+                    },
+                },
+            },
+        });
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+const getFavoriteEventsByUserEmail = async (email: string): Promise<Event[]> => {
+    const userPrisma = await database.user.findFirst({
+        where:
+        {
+            email: email
+        },
+        include: {
+            events: true,
+        }
+    });
+
+    if (userPrisma === null) {
+        throw new Error('User does not exist.');
+    }
+
+    return userPrisma.events.map((event) => Event.from(event));
+}
+
 export default {
     getAllUsers,
     getUserById,
     getUserByEmail,
     createUser,
+    addEventToFavorite,
+    getFavoriteEventsByUserEmail,
 };

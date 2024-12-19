@@ -8,7 +8,7 @@ import database from './database';
 const getAllTickets = async (): Promise<Ticket[]> => {
     const ticketsPrisma = await database.ticket.findMany({
         include: {
-            user: true,
+            user: {include: {events: true}},
             event: true,
         },
     });
@@ -23,7 +23,7 @@ const getTicketsByEventId = async (eventId: number): Promise<Ticket[]> => {
             },
         },
         include: {
-            user: true,
+            user: {include: {events: true}},
             event: true,
         },
     });
@@ -43,7 +43,7 @@ const userBuyTicket = async (ticketId: number, email: string) => {
             },
         },
         include: {
-            user: true,
+            user: {include: {events: true}},
             event: true,
         },
     });
@@ -59,7 +59,7 @@ const getTicketsByUserEmail = async (email: string): Promise<Ticket[]> => {
             }
         },
         include: {
-            user: true,
+            user: {include: {events: true}},
             event: true,
         }
     })
@@ -80,7 +80,7 @@ const removeUserFromTicket = async (ticketId: string) => {
             },
         },
         include: {
-            user: true,
+            user: {include: {events: true}},
             event: true,
         },
     })
@@ -101,7 +101,7 @@ const createTicket = async (type: string, cost: number, event: EventInput) => {
             },
         },
         include: {
-            user: true,
+            user: {include: {events: true}},
             event: true,
         },
     });

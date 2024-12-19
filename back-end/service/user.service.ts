@@ -1,4 +1,5 @@
 import { User } from "../model/user";
+import {Event} from "../model/event";
 import userDb from "../repository/user.db"
 import { AuthenticationResponse, Role, UserInput } from "../types";
 import bcrypt, { hash } from 'bcrypt';
@@ -44,6 +45,16 @@ const createUser = async (user: UserInput): Promise<User> => {
     return await userDb.createUser(newUser);
 }
 
+const addEventToFavorite = async (email: string, eventId: number): Promise<void> => {
+    const user = await userDb.getUserByEmail(email);
+
+    if (user === null){
+        throw new Error("User does not exist.");
+    }
+
+    return await userDb.addEventToFavorite(user, eventId);
+}
+
 //log-in authentication
 const authentication = async ({email, password}: UserInput): Promise<AuthenticationResponse> => {
     const user  = await userDb.getUserByEmail(email);
@@ -80,10 +91,16 @@ const generateJwtToken = (username: string, role: Role) => {
     }
 };
 
+const getFavoriteEventsByUserEmail = async (email: string): Promise<Event[]> => {
+    return userDb.getFavoriteEventsByUserEmail(email);
+}
+
 export default {
     getAllUsers,
     getUserById,
     getUserByEmail,
     createUser,
+    addEventToFavorite,
     authentication,
+    getFavoriteEventsByUserEmail,
 }
