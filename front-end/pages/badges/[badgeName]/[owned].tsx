@@ -7,12 +7,9 @@ import { Badge, Trainer } from "@types";
 import TrainerService from "@services/trainer.service";
 
 const namedBadge: React.FC = () => {
-    const [trainers, setTrainers] = useState<Trainer[]>([]);
     const [selectedTrainer, setSelectedTrainer] = useState<Trainer | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loggedInEmail, setLoggedInEmail] = useState<string>('');
-    const [role, setRole] = useState<string>("guest");
     const [badge, setBadge] = useState<Badge>()
+    const [ownedBool, setOwnedBool] = useState<boolean>(false)
     const router = useRouter();
     const { badgeName, owned} = router.query;
 
@@ -26,28 +23,39 @@ const namedBadge: React.FC = () => {
           {name:"Volcano badge", difficulty:5, location: "Seafoam Islands"},
           {name:"Earth badge", difficulty:5, location: "Viridian City"},
         ]
+
+        const getTrainerByEmail = async (email: string) => {
+            try {
+              const trainer = await TrainerService.getTrainerByEmail(email);
+              setSelectedTrainer(trainer);
+            } catch (error) {
+              console.error(error);
+            }
+          };
     
         useEffect(() => {
-          const allBadgesFilterd = allBadges.filter((badgeToFilter)=>badgeToFilter.name==badgeName);
-          console.log(allBadgesFilterd[0])
-          setBadge(allBadgesFilterd[0])
-          console.log(badge)
-          }, []);
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                getTrainerByEmail(JSON.parse(loggedInUser).email);
+              }
+            const allBadgesFilterd = allBadges.filter((badgeToFilter)=>badgeToFilter.name==badgeName);
+            setBadge(allBadgesFilterd[0])
+            if (owned === "true") {
+                setOwnedBool(true)
+            } else {
+                setOwnedBool(false)
+            }
+        }, []);
 
     const { t } = useTranslation();
 
     const handleAddBadge = async (newBadge: Badge) => {
         try {
           if (selectedTrainer && selectedTrainer.id) {
+            console.log("if")
             const updatedTrainer = await TrainerService.addBadgeToTrainerById(
               selectedTrainer.id,
               newBadge
-            );
-            setSelectedTrainer(updatedTrainer);
-            setTrainers((prevTrainers) =>
-              prevTrainers.map((trainer) =>
-                trainer.id === updatedTrainer.id ? updatedTrainer : trainer
-              )
             );
           }
         } catch (error) {
@@ -62,7 +70,7 @@ const namedBadge: React.FC = () => {
         <main>
             <p>{badgeName}</p>
             <p>{owned}</p>
-            {!owned && badge && (
+            {!ownedBool && badge && (
                 <button onClick={()=>handleAddBadge(badge)}>
                     add
                 </button>

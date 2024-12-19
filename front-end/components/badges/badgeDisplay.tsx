@@ -3,12 +3,12 @@ import { Badge } from '@types';
 import { useRouter } from 'next/router';
 import BadgeImage from './badgeImage';
 
-interface BadgeDetailsProps {
+interface BadgeDisplayProps {
   badges: Badge[];
   addBadge: (badge:Badge)=> void;
 }
 
-const BadgeDetails: React.FC<BadgeDetailsProps> = ({ badges, addBadge }) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badges, addBadge }) => {
     const router = useRouter();
     const [unownedBadges, setUnownedBadges] = useState<Badge[]>([])
     const allBadges = [
@@ -79,4 +79,4 @@ const BadgeDetails: React.FC<BadgeDetailsProps> = ({ badges, addBadge }) => {
   );
 };
 
-export default BadgeDetails;
+export default BadgeDisplay;

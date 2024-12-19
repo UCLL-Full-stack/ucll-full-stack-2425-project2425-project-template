@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serversideTranslations';
 import { useTranslation } from 'next-i18next';
 import { Badge, Trainer } from '@types';
 import TrainerService from '@services/trainer.service';
-import BadgeDetails from '@components/badges/badgeDetails';
+import BadgeDisplay from '@components/badges/badgeDisplay';
 
 
 const badges: React.FC = () => {
@@ -102,7 +102,7 @@ const badges: React.FC = () => {
             {selectedTrainer && (
               <>
                 <h2>{selectedTrainer.user.firstName}'s badges:</h2>
-                <BadgeDetails 
+                <BadgeDisplay
                 badges={selectedTrainer.badges}
                 addBadge={handleAddBadge}
                  />

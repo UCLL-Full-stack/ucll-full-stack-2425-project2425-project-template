@@ -49,7 +49,7 @@ const Header: React.FC = () => {
               {t('header.badges')}
             </Link>
             <button onClick={logOut} type='submit'>
-              {t("headers.logout")}
+              {t("header.logout")}
             </button>
           </>
         )}
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
               {t('header.pokemon')}
             </Link>
             <button onClick={logOut} type='submit'>
-              {t("headers.logout")}
+              {t("header.logout")}
             </button>
           </>
         )}
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
               {t('header.badges')}
             </Link>
             <button onClick={logOut} type='submit'>
-              {t("headers.logout")}
+              {t("header.logout")}
             </button>
           </>
         )}
