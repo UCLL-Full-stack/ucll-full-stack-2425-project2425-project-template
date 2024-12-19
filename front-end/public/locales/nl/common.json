@@ -27,7 +27,7 @@
     "home": {
         "welcome": "Welkom op de Race Website",
         "description": "Ontdek de laatste race-informatie en blijf op de hoogte van alle crashes en gebeurtenissen.",
-        "loggedInMessage": "Welkom {username}, je bent ingelogd als {permission}",
+        "loggedInMessage": "Welkom {{username}}, je bent ingelogd als {{permission}}",
         "usersToLogin": "Gebruikers om in te loggen",
         "username": "Gebruikersnaam",
         "password": "Wachtwoord",
