@@ -6,13 +6,15 @@ const validInhoud = "Dit is een nieuwsbericht.";
 const validDatum = new Date();
 const validAuteur = new Leiding({
     id: 1,
+    nieuwsberichten: [],
+    wachtwoord: "wachtwoord",
     voornaam: "Voornaam",
     naam: "Achternaam",
     email: "l@l.be",
     telefoon: "0123456789",
-    hoofdleiding: true,
+    rol: "HOOFDLEIDING",
     totem: "Totem",
-    groep: undefined
+    groepId: 1, 
 });
 
 test("given valid parameters, when new Nieuwsbericht, then Nieuwsbericht is created", () => {
@@ -20,12 +22,13 @@ test("given valid parameters, when new Nieuwsbericht, then Nieuwsbericht is crea
         titel: validTitel,
         inhoud: validInhoud,
         datum: validDatum,
-        auteur: validAuteur
+        auteur: validAuteur.getId(),
+        id: 1
     });
     expect(nieuwsbericht.getTitel()).toBe(validTitel);
     expect(nieuwsbericht.getInhoud()).toBe(validInhoud);
     expect(nieuwsbericht.getDatum()).toBe(validDatum);
-    expect(nieuwsbericht.getAuteur()).toBe(validAuteur);
+    expect(nieuwsbericht.getAuteur()).toBe(validAuteur.getId());
 });
 
 test("given valid parameters, when setTitel, then titel is set", () => {
@@ -33,7 +36,8 @@ test("given valid parameters, when setTitel, then titel is set", () => {
         titel: validTitel,
         inhoud: validInhoud,
         datum: validDatum,
-        auteur: validAuteur
+        auteur: validAuteur.getId(),
+        id: 1
     });
     const newTitel = "Nieuwsbericht 2";
     nieuwsbericht.setTitel(newTitel);
@@ -45,7 +49,8 @@ test("given valid parameters, when setInhoud, then inhoud is set", () => {
         titel: validTitel,
         inhoud: validInhoud,
         datum: validDatum,
-        auteur: validAuteur
+        auteur: validAuteur.getId(),
+        id: 1
     });
     const newInhoud = "Dit is een ander nieuwsbericht.";
     nieuwsbericht.setInhoud(newInhoud);
@@ -57,7 +62,8 @@ test("given valid parameters, when setDatum, then datum is set", () => {
         titel: validTitel,
         inhoud: validInhoud,
         datum: validDatum,
-        auteur: validAuteur
+        auteur: validAuteur.getId(),
+        id: 1
     });
     const newDatum = new Date();
     nieuwsbericht.setDatum(newDatum);
@@ -69,7 +75,8 @@ test("given valid parameters, when setAuteur, then auteur is set", () => {
         titel: validTitel,
         inhoud: validInhoud,
         datum: validDatum,
-        auteur: validAuteur
+        auteur: validAuteur.getId(),
+        id: 1
     });
     const newAuteur = new Leiding({
         id: 2,
@@ -77,10 +84,12 @@ test("given valid parameters, when setAuteur, then auteur is set", () => {
         naam: "Achternaam 2",
         email: "ll@l.be",
         telefoon: "0123456789",
-        hoofdleiding: false,
+        rol: "HOOFDLEIDING",
         totem: "Totem 2",
-        groep: undefined
+        groepId: 1,
+        nieuwsberichten: [],
+        wachtwoord: "wachtwoord"
     });
-    nieuwsbericht.setAuteur(newAuteur);
-    expect(nieuwsbericht.getAuteur()).toBe(newAuteur);
+    nieuwsbericht.setAuteur(newAuteur.getId());
+    expect(nieuwsbericht.getAuteur()).toBe(newAuteur.getId());
 });

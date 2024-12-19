@@ -32,7 +32,16 @@ const getAllLeiding = async (rol: Rol): Promise<PublicLeiding[]> => {
             throw new UnauthorizedError('credentials_required', new Error('wrong role'));
     }
     try {
-        return (await leidingRepo.getAllLeiding()).map(leiding => {return PublicLeiding.from({leiding})});
+        const leiding = await leidingRepo.getAllLeiding()
+        let pubLeiding: PublicLeiding[] = [];
+        for (const l of leiding) {
+            const groep = await groepService.getGroepById(l.getGroepId());
+            if (!groep) {
+                throw new Error('Groep not found');
+            }
+            pubLeiding.push(PublicLeiding.from({leiding: l, groep: groep.getNaam()}));
+        }
+        return pubLeiding;
     } catch (error) {
         throw error;
     }
@@ -44,6 +53,7 @@ const updateLeiding = async (leiding: Leiding, rol: Rol, totem: string): Promise
     }
     try {
         const leidingDB = await leidingRepo.getLeidingByTotem({totem});
+        const groep = await groepService.getGroepById(leidingDB.getGroepId());
         if (!leidingDB) {
             throw new Error('Leiding not found');
         }else if (leidingDB.getTotem() !== leiding.getTotem() && rol === 'LEIDING') {
@@ -82,9 +92,9 @@ const updateLeiding = async (leiding: Leiding, rol: Rol, totem: string): Promise
             groepId: leidingDB.getGroepId()
         });
         if (trueLeiding.getWachtwoord() === '') {
-            return await leidingRepo.updateLeidingNoPass(trueLeiding).then(leiding => {return PublicLeiding.from({leiding})});
+            return await leidingRepo.updateLeidingNoPass(trueLeiding).then(leiding => {return PublicLeiding.from({leiding, groep: groep.getNaam()})});
         }
-        const updatedLeiding = await leidingRepo.updateLeiding(trueLeiding).then(leiding => {return PublicLeiding.from({leiding})});
+        const updatedLeiding = await leidingRepo.updateLeiding(trueLeiding).then(leiding => {return PublicLeiding.from({leiding, groep: groep.getNaam()})});
         return updatedLeiding;
     } catch (error) {
         console.log(error);
@@ -111,7 +121,7 @@ const addLeiding = async (leiding: Leiding, rol: Rol): Promise<PublicLeiding> =>
             groepId: 0
         });
         const newLeiding = await leidingRepo.createLeiding(trueLeiding);
-        return PublicLeiding.from({leiding: newLeiding});
+        return PublicLeiding.from({leiding: newLeiding, groep: 'Losse leden'});
     } catch (error) {
         throw error;
     }
@@ -143,6 +153,10 @@ const updateRol = async (id: number, rol: string, uitvoerRol: Rol): Promise<Publ
         if (!leiding) {
             throw new Error('Leiding not found');
         }
+        const groep = await groepService.getGroepById(leiding.getGroepId());
+        if (!groep) {
+            throw new Error('Groep not found');
+        }
         let newRol: Rol = 'LEIDING';
         if (rol === 'HOOFDLEIDING') {
             newRol = 'HOOFDLEIDING';
@@ -150,7 +164,7 @@ const updateRol = async (id: number, rol: string, uitvoerRol: Rol): Promise<Publ
             newRol = 'LEIDING';
         }
         leiding.setRol(newRol);
-        const updatedLeiding = await leidingRepo.updateLeiding(leiding).then(leiding => {return PublicLeiding.from({leiding})});
+        const updatedLeiding = await leidingRepo.updateLeiding(leiding).then(leiding => {return PublicLeiding.from({leiding, groep: groep.getNaam()})});
         return updatedLeiding;
     } catch (error) {
         throw error;
@@ -163,7 +177,7 @@ const updateGroep = async (uitvoerId: number, groepNaam: string, rol: Rol): Prom
     }
     try {
         const leiding = await leidingRepo.getLeidingById({id: uitvoerId});
-        if (!leiding) {
+         if (!leiding) {
             throw new Error('Leiding not found');
         }
         const groep = await groepService.getGroepByNaam(groepNaam);
@@ -173,7 +187,7 @@ const updateGroep = async (uitvoerId: number, groepNaam: string, rol: Rol): Prom
         } else if (groep.getId()) {
             id = groep.getId();
         }
-        const updatedLeiding = await leidingRepo.veranderGroep(leiding, id).then(leiding => {return PublicLeiding.from({leiding})});
+        const updatedLeiding = await leidingRepo.veranderGroep(leiding, id).then(leiding => {return PublicLeiding.from({leiding, groep: groepNaam})});
         return updatedLeiding;
     } catch (error) {
         throw error;

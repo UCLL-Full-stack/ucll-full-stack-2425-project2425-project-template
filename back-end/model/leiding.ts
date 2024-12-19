@@ -108,6 +108,10 @@ export class Leiding{
         this.totem = totem;
     }
 
+    public setGroepId(groepId: number): void {
+        this.groepId = groepId;
+    }
+
     public addNieuwsbericht(nieuwsbericht: Nieuwsbericht): void {
         this.nieuwsbericht?.push(nieuwsbericht);
     }
@@ -194,7 +198,7 @@ export class PublicLeiding{
     private telefoon: string;
     private totem: string;
     private rol: Rol;
-    private groepId: number;
+    private groep: string;
 
     constructor(leiding:{
         id: number,
@@ -204,7 +208,7 @@ export class PublicLeiding{
         telefoon: string,
         totem: string,
         rol: Rol,
-        groepId: number
+        groep: string
     }) {
         this.id = leiding.id;
         this.naam = leiding.naam;
@@ -213,7 +217,7 @@ export class PublicLeiding{
         this.telefoon = leiding.telefoon;
         this.totem = leiding.totem;
         this.rol = leiding.rol;
-        this.groepId = leiding.groepId;
+        this.groep = leiding.groep;
     }
 
     public getId(): number {
@@ -244,14 +248,15 @@ export class PublicLeiding{
         return this.rol;
     }
 
-    public getGroepId(): number {
-        return this.groepId;
+    public getGroep(): string {
+        return this.groep;
     }
 
     static from({
         leiding,
+        groep
     }: {
-        leiding: Leiding;
+        leiding: Leiding, groep: string;
     }): PublicLeiding {
         return new PublicLeiding({
             id: leiding.getId(),
@@ -261,7 +266,7 @@ export class PublicLeiding{
             telefoon: leiding.getTelefoon(),
             totem: leiding.getTotem(),
             rol: leiding.getRol(),
-            groepId: leiding.getGroepId()
+            groep: groep
         });
     }
 }
