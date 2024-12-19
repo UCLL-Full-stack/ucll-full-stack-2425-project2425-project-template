@@ -8,7 +8,7 @@ import activiteitRouter from './controller/activiteit.routes';
 import groepRouter from './controller/groep.routes';
 import leidingRouter from './controller/leiding.routes';
 import { expressjwt } from 'express-jwt';
-import helmet from 'helmet';
+import nieuwsberichtRouter from './controller/nieuwsbericht.routes';
 
 const app = express();
 
@@ -32,7 +32,8 @@ app.use(
             '/api-docs',
             /^\/groep\/[^\/]+\/activiteiten$/,
             /^\/groep\/[^\/]+\/leiding$/,
-            '/groep'
+            '/groep',
+            '/nieuwsberichten',
             ],
     })
 );
@@ -40,6 +41,7 @@ app.use(
 app.use('/leiding', leidingRouter);
 app.use('/activiteit', activiteitRouter);
 app.use('/groep', groepRouter);
+app.use('/nieuwsberichten', nieuwsberichtRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
