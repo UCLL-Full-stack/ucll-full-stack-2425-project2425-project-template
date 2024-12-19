@@ -6,7 +6,8 @@ import leidingDb from "../repository/leiding.db";
 import { Leiding, PublicLeiding } from "../model/leiding";
 
 const getAllGroepen = async (): Promise<Groep[] | undefined> => {
-    return await groepDB.getAllGroepen();
+    const groepen = await groepDB.getAllGroepen();
+    return groepen.slice(1);
 }
 
 const getActiviteitenForGroep = async (naam: string): Promise<Activiteit[] | undefined> => {

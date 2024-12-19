@@ -5,31 +5,21 @@ type Props = {
     nieuwsberichten: Array<Nieuwsbericht>,
 }
 
-const NieuwsOverviewTable: React.FC<Props> = ({ nieuwsberichten }: Props) => {
+const NieuwsOverviewTableAdmin: React.FC<Props> = ({ nieuwsberichten }: Props) => {
     return (
         <>
-            <div className="p-4">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                    <tr className="bg-amber-600 border-b-2 border-amber-900">
-                        <th scope="col" className="p-2 border-r border-amber-900">Titel</th>
-                        <th scope="col" className="p-2 border-r border-amber-900">Groep</th>
-                        <th scope="col" className="p-2 border-r border-amber-900">Auteur</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {nieuwsberichten.map((nieuwsbericht, index) => (
-                        <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'} border-amber-900`}>
-                            <td className="p-2 border-r border-amber-900">{nieuwsbericht.titel}</td>
-                            <td className="p-2 border-r border-amber-900">{nieuwsbericht.groep}</td>
-                            <td className="p-2 border-r border-amber-900">{nieuwsbericht.auteur}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+            <div className='p-4'>
+                {nieuwsberichten.map((nieuwsbericht, index) => (
+                    <div key={index} className='border-b border-gray-200 p-4 mt-5'>
+                        <h2 className='text-2xl font-bold'>{nieuwsbericht.titel}</h2>
+                        <p className='text-lg'>{nieuwsbericht.inhoud}</p>
+                        <p className='text-sm text-right'>Stevige linker {nieuwsbericht.auteur}</p>
+                        <p className='text-sm text-right'>{new Date(nieuwsbericht.datum).toLocaleDateString()}</p>
+                    </div>
+                ))}
             </div>
         </>
     );
-};
+}
 
-export default NieuwsOverviewTable;
+export default NieuwsOverviewTableAdmin;

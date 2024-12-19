@@ -11,7 +11,7 @@ export type Groep = {
     naam: string;
     beschrijving: string;
     activiteiten: Activiteit[];
-    leiding: boolean;
+    leiding: Leiding[];
 };
 
 export type Leiding = {
@@ -30,7 +30,7 @@ export type Nieuwsbericht = {
     titel: string;
     inhoud: string;
     datum: Date;
-    auteur: Leiding;
+    auteur: string;
 };
 
 export type UserLogin = {

@@ -115,8 +115,10 @@ const main = async () => {
 
     const nieuwsbericht1 = await prisma.nieuwsbericht.create({
         data: {
-            titel: 'Nieuwsbericht1',
-            inhoud: 'Het eerste nieuwsbericht',
+            titel: 'inschrijvingen scoutsjaar 2024-2025',
+            inhoud: `Beste ouders en leden, 
+        na weer twee lange maanden zonder scouts zijn we eindelijk weer terug! Zondag 29 september start het nieuwe fantastische scoutsjaar, van 14u tot 17u is elke jongen van 6 tot 17 jaar van harte welkom. Hieronder vindt u de inschrijvingslink voor het scoutsjaar 2024-2025:
+        https://forms.office.com/Pages/ResponsePage.aspx?id=G4Y45tkV5k2mXbSHia4fCIrv-xVnqwhGiPRhhKckvedUN1ROQ1kyWTdGQ1ZGN1ZHQzI3MTNLUU5QRC4u`,
             datum: new Date(),
             leidingId: hoofdleiding.id
         }
@@ -124,8 +126,10 @@ const main = async () => {
 
     const nieuwsbericht2 = await prisma.nieuwsbericht.create({
         data: {
-            titel: 'Nieuwsbericht2',
-            inhoud: 'Het tweede nieuwsbericht',
+            titel: 'GDPR wetgeving',
+            inhoud: `Beste ouders, 
+            Via deze link kan u naar onze GDPR wetgeving pagina gaan.
+            https://docs.google.com/document/d/1pe6MTjk5iv7z-8TXW39-I7fcgSCO77TT7c1QmWDROIc/edit?usp=sharing`,
             datum: new Date(),
             leidingId: hoofdleiding.id
         }
