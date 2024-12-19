@@ -1,8 +1,8 @@
 import { Workout } from '../model/workout';
+import exerciseDb from '../repository/exercise.db';
 import userDb from '../repository/user.db';
 import workoutDb from '../repository/workout.db';
 import { WorkoutInput } from '../types';
-import exerciseService from './exercise.service';
 
 const getAllWorkouts = async (): Promise<Workout[]> => {
     const workouts = await workoutDb.getAllWorkouts();
@@ -33,26 +33,20 @@ const getWorkoutsByUserId = async (userId: string): Promise<Workout[]> => {
     return userWorkouts;
 };
 
-// const addExerciseToWorkout = (workoutId: number, exerciseId: number): Workout => {
-//     const workout = workoutDb.getWorkoutById(workoutId);
-//     if (!workout) {
-//         throw new Error(`Workout with ID ${workoutId} not found`);
-//     }
+const addExerciseToWorkout = async (workoutId: string, exerciseId: string): Promise<Workout> => {
+    const workout = await workoutDb.getWorkoutById({ id: workoutId });
+    if (!workout) {
+        throw new Error(`Workout with ID ${workoutId} not found`);
+    }
 
-//     const exercise = exerciseService.getExerciseById(exerciseId);
-//     if (!exercise) {
-//         throw new Error(`Exercise with ID ${exerciseId} not found`);
-//     }
+    const exercise = await exerciseDb.getExerciseById({ id: exerciseId });
+    if (!exercise) {
+        throw new Error(`Exercise with ID ${exerciseId} not found`);
+    }
 
-//     const isDuplicate = workout.exercises.some((existingExercise) => existingExercise.id === exerciseId);
-//     if (isDuplicate) {
-//         throw new Error(`Exercise with ID ${exerciseId} is already added to the workout`);
-//     }
-
-//     workoutDb.addExerciseToWorkout(workoutId, exercise);
-
-//     return workout;
-// };
+    workoutDb.addExerciseToWorkout(workoutId, exerciseId);
+    return workout;
+};
 
 // const removeExerciseFromWorkout = (workoutId: number, exerciseId: number): Workout => {
 //     const workout = workoutDb.getWorkoutById(workoutId);
@@ -94,7 +88,7 @@ export default {
     getWorkoutById,
     getWorkoutsByUserId,
     createWorkout,
-    // addExerciseToWorkout,
+    addExerciseToWorkout,
     // removeExerciseFromWorkout,
     removeWorkout,
 };

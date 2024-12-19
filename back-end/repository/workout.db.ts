@@ -91,13 +91,31 @@ const removeWorkout = async ({ id }: { id: string }): Promise<Workout | null> =>
     }
 };
 
+const addExerciseToWorkout = async (workoutId: string, exerciseId: string): Promise<Workout | null> => {
+    try {
+        const workoutPrisma = await database.workout.update({
+            where: { id: workoutId },
+            data: {
+                exercises: {
+                    connect: { id: exerciseId },
+                },
+            },
+            include: { user: true, exercises: true },
+        });
+        return workoutPrisma ? Workout.from(workoutPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllWorkouts,
     getWorkoutById,
     getWorkoutsByUserId,
     createWorkout,
     // workouts,
-    // addExerciseToWorkout,
+    addExerciseToWorkout,
     // removeExerciseFromWorkout,
     removeWorkout,
 };
