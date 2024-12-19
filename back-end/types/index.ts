@@ -1,5 +1,5 @@
 type Role = 'admin' | 'user';
-type SubscriptionType = 'normal' | 'premium' | 'admin'
+type SubscriptionType = 'basic' | 'premium'
 
 type UserInput = {
     id?: number;
