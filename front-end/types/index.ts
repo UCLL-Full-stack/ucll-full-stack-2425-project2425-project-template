@@ -1,5 +1,6 @@
 export type User = {
     id: number;
+    email: string;
     name: string;
     role?: string;
     password: string;
@@ -52,6 +53,15 @@ export type PositionUpdate = {
     y: number;
     active: boolean;
 };
+
+export type PositionInput = {
+  playerID: number;
+  x: number;
+  y: number;
+  type: string;
+  active: boolean;
+  floorID: number;
+}
 
 export type coordinate = {
     x: number;

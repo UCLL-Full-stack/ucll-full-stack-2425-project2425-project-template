@@ -1,8 +1,10 @@
 import Head from "next/head"
 import Header from "@components/header";
-import styles from "@styles/home.module.css"
+import styles from "@styles/home.module.css";
+import Link from 'next/link';
+import WorldSelection from "@components/game/WorldSelection";
 
-const Home: React.FC = () => {
+const Worlds: React.FC = () => {
     return(
         <>
             <Head>
@@ -13,13 +15,11 @@ const Home: React.FC = () => {
             </Head>
             <Header></Header>
             <main className="text-center md:mt-24 mx-auto md:w-3/5 lg:w-1/2">
-                <span className="flex flex-row justify-center items-center">
-                <p></p>
-                </span>
+                <WorldSelection></WorldSelection>
             </main>
         </>
     )
 }
 
 
-export default Home;
+export default Worlds;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
 import worldService from "@services/worldService";
-import { World, Floor, Line, Position, Player, PositionUpdate, coordinate } from '@types';
+import { World, Floor, Line, Position, Player, PositionUpdate, coordinate, PositionInput } from '@types';
 import useInterval from 'use-interval';
 import floorService from '@services/floorService';
 import playerService from '@services/playerService';
@@ -19,6 +19,53 @@ const GameMap: React.FC = () => {
     const [positions, setPositions] = useState<Position[]>([]);
     const [player, setPlayer] = useState<Player | null>(null);
     const [lastMoveTime, setLastMoveTime] = useState<number>(0)
+    const [spawnedIn, setSpawnedIn] = useState<boolean>(false)
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            if (floor && player){
+                event.preventDefault();
+                const prev = playerPosition;
+                console.log(prev)
+                if (!prev){
+                    return;
+                }
+                const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
+                floorService.updatePosition(res);
+                event.returnValue = 'are you sure...';
+            }
+        };
+    
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (floor && player && positions && !spawnedIn){
+            let gotPos = false;
+            positions.forEach(pos => {
+                if (pos.type === "player"){
+                    if (pos.playerID === player.id){
+                        const res: PositionUpdate = {posID: pos.id, floorID: floor.id, playerID: player.id, x: pos.x, y: pos.y, active: true};
+                        floorService.updatePosition(res);
+                        setPlayerPosition({x: pos.x, y: pos.y, posID: pos.id});
+                        gotPos = true;
+                        console.log("ik ben gestuurd: " + res);
+                        setSpawnedIn(true);
+                    }
+                }
+            });
+            if (!gotPos){
+                console.log("ik ben hier");
+                const newPos : PositionInput = {playerID: player.id, floorID: floor.id, x: 10, y: 10, type: "player", active: true};
+                floorService.addPosition(newPos);
+                setSpawnedIn(true);
+            }
+        }
+    }, [floor, update])
 
     useEffect(() => {
         getWorld();
@@ -59,8 +106,25 @@ const GameMap: React.FC = () => {
     }
 
     const getPlayer = async() => {
-        const res = await playerService.getPlayerById("1");
-        setPlayer(res);
+        const id = localStorage.getItem("selectedCharacter");
+        if (id){
+            const res = await playerService.getPlayerById(id);
+            setPlayer(res);
+        }
+    }
+
+    const leaveGame = async() => {
+        if (floor && player){
+            console.log("I hav")
+            const prev = playerPosition;
+            console.log(prev)
+            if (!prev){
+                return;
+            }
+            const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
+            await floorService.updatePosition(res);
+            router.push("/game");
+        }
     }
 
     useInterval(() => {
@@ -122,6 +186,11 @@ const GameMap: React.FC = () => {
         return <div className="text-center">Loading Floor...</div>;
     }
 
+    if (!player) {
+        return <div className="text-center"><p>Loading Player...</p><p>If loading takes too long, try logging in or selecting character.</p></div>;
+    }
+
+
     if (!playerPosition) {
         return <div className="text-center">Spawning Player...</div>;
     }
@@ -178,6 +247,15 @@ const GameMap: React.FC = () => {
                     backgroundRepeat: 'no-repeat',
                 }}
             ></div>
+
+            <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                <button
+                    onClick={leaveGame}
+                    className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600"
+                >
+                    Leave
+                </button>
+            </div>
         </div>
     );
 };

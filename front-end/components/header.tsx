@@ -62,7 +62,7 @@ const Header: React.FC = () => {
               before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
               before:transition before:ease-in-out before:duration-300"
                         >
-                            Login
+                            Log in
                         </Link>
                     )}
 
@@ -79,16 +79,27 @@ const Header: React.FC = () => {
                     )}
 
                     {loggedInUser && (
-                        <Link
-                            onClick={logout}
-                            href="/"
-                            className="md:p-3 md:m-2 md:mr-5 text-sm md:text-xl text-white relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
-                                  before:bottom-0 before:left-0 before:bg-[#5c00b2]
-                                  before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
-                                  before:transition before:ease-in-out before:duration-300"
-                        >
-                            Log out
-                        </Link>
+                        <>
+                            <Link
+                                href="/game"
+                                className="md:p-3 md:m-2 md:mr-5 text-sm md:text-xl text-white relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
+                                    before:bottom-0 before:left-0 before:bg-[#5c00b2]
+                                    before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
+                                    before:transition before:ease-in-out before:duration-300"
+                            >
+                                Game
+                            </Link>
+                            <Link
+                                onClick={logout}
+                                href="/"
+                                className="md:p-3 md:m-2 md:mr-5 text-sm md:text-xl text-white relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
+                                    before:bottom-0 before:left-0 before:bg-[#5c00b2]
+                                    before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
+                                    before:transition before:ease-in-out before:duration-300"
+                            >
+                                Log out
+                            </Link>
+                        </>
                     )}
                 </nav>
             </div>
