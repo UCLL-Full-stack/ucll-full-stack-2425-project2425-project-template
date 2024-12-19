@@ -164,9 +164,11 @@ const Players: React.FC = () => {
                   <img
                     src={player.imageUrl || "/images/shittylogo.png"}
                     alt={player.name}
-                    className="w-4/6 object-contain"
+                    className={`object-contain ${player.imageUrl ? "w-4/6" : "w-11/12"}`}
+                    draggable={false}
                   />
                 </div>
+
 
                 <div className="p-4 bg-gray-300 rounded-lg">
                   <div className="absolute right-4 top-2 flex gap-2">

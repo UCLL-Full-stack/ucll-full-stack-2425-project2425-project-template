@@ -156,6 +156,7 @@ const Coaches: React.FC = () => {
                       src={coach.imageUrl || "/images/shittylogo.png"}
                       alt={coach.name}
                       className="w-full h-auto mt-2 rounded"
+                      draggable={false}
                     />
                  </div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">{coach.name}</h2>
