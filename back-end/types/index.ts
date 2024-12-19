@@ -28,3 +28,8 @@ export type AuthenticationResponse = {
     email: string;
     role: string;
 };
+
+export type WorldInput = {
+    email: string,
+    name: string,
+}

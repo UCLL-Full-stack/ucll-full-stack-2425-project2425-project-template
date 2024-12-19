@@ -189,16 +189,6 @@ async function main() {
                     },
                 });
             }
-            await prisma.position.create({
-                data: {
-                    x: playerpos.getX(),
-                    y: playerpos.getY(),
-                    type: playerpos.getType(),
-                    active: playerpos.getActive(),
-                    floor: { connect: { id: createdFloor.id } },
-                    player: { connect: { id: 1 } },
-                },
-            });
         }
     }
 }

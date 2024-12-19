@@ -74,3 +74,8 @@ export type Auth = {
     email: string;
     password: string;
 };
+
+export type WorldInput = {
+    email: string,
+    name: string,
+}

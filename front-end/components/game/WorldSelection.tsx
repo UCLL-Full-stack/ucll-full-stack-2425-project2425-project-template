@@ -74,13 +74,13 @@ const WorldSelection: React.FC = () => {
             {userWorlds.length <= 0 ? (
                 <p>You have no worlds</p>
             ):(
-                <div className='flex flex-row'>
+                <div className='flex flex-row flex-wrap justify-center'>
                 {userWorlds.map((world, index) => (
                     <div className='border-solid hover:border-dotted border-2 rounded h-24 w-60 content-center m-2' key={index} onClick={() => joinworld(world.id)}>
                         <p className='text-2xl'>{world.name}</p>
                     </div>
                 ))}
-                    <div className='border-solid hover:border-dotted border-2 border-green-500 rounded h-24 w-60 content-center m-2 bg-green-200' onClick={() => joinworld(1)}>
+                    <div className='border-solid hover:border-dotted border-2 border-green-500 rounded h-24 w-60 content-center m-2 bg-green-200' onClick={() => router.push("/game/worlds/new")}>
                         <p className='text-2xl'>Create New World</p>
                     </div>
                 </div>
@@ -93,6 +93,7 @@ const WorldSelection: React.FC = () => {
                 {allWorldsMinusUser.map((world, index) => (
                     <div className='border-solid hover:border-dotted border-2 rounded h-24 w-60 content-center m-2' key={index} onClick={() => joinworld(world.id)}>
                         <p className='text-2xl'>{world.name}</p>
+                        <p className='text-xl'>{world.owner.name}</p>
                     </div>
                 ))}
                 </div>

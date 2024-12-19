@@ -14,6 +14,7 @@ const Header: React.FC = () => {
 
     const logout = () => {
         localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('selectedCharacter');
         setLoggedInUser(undefined);
     };
 

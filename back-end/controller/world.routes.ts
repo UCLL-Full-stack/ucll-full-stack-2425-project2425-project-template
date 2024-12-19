@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import worldService from '../service/world.service';
+import { WorldInput } from '../types';
 
 const worldRouter = express.Router();
 
@@ -30,5 +31,22 @@ worldRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
         });
     }
 });
+
+/*
+swagger documentation to be added.
+*/
+
+worldRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const world = <WorldInput>req.body;
+        const result = await worldService.generateWorld(world)
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({
+            status: '400',
+            errorMessage: `Something went wrong with updating the position.`,
+        });
+    }
+})
 
 export { worldRouter };
