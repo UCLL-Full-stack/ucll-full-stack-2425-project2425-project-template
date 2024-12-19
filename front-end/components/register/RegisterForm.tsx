@@ -86,12 +86,16 @@ const RegisterForm: React.FC = () => {
         phoneNumber: phoneNumber,
       });
   
-      setStatusMessages("Registration successful. Redirecting...");
-      console.log(register);
-  
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      if (register.token) {
+        setStatusMessages("Registration successful. Redirecting...");
+        console.log(register);
+    
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+      } else {
+        setStatusMessages("Registration failed.");
+      }
     } catch (error) {
       console.error("Error during registration:", error);
       setStatusMessages("Registration failed.");
