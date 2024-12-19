@@ -1,97 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
+import ActiviteitenAddModal from './ActiviteitenAddModal';
+import ActiviteitenEditModal from './ActiviteitenEditModal';
+import Image from "next/image";
 
 type Props = {
     activiteiten: Array<Activiteit>,
 }
 
-const ActiviteitenOverviewTable: React.FC<Props> = ({ activiteiten }: Props) => {
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [newActiviteit, setNewActiviteit] = useState({
-        name: '',
-        description: '',
-        beginDate: '',
-        endDate: ''
-    });
-    const [nameError, setNameError] = useState('');
-    const [descriptionError, setDescriptionError] = useState('');
-    const [beginDateError, setBeginDateError] = useState('');
-    const [endDateError, setEndDateError] = useState('');
+const ActiviteitenOverviewTable: React.FC<Props> = ({ activiteiten: initialActiviteiten }: Props) => {
+    const [activiteiten, setActiviteiten] = useState<Array<Activiteit>>(initialActiviteiten);
+    const [showAddModal, setShowAddModal] = useState<boolean>(false);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [selectedActiviteit, setSelectedActiviteit] = useState<Activiteit | null>(null);
 
     const router = useRouter();
     const { groepNaam } = router.query;
-    const isAdmin = router.pathname.endsWith('/admin');
+    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
 
-    const validate = (): boolean => {
-        let valid = true;
-        setNameError('');
-        setDescriptionError('');
-        setBeginDateError('');
-        setEndDateError('');
+    useEffect(() => {
+        if (loggedInUser && loggedInUser.groep !== groepNaam) {
+            router.push(`/activiteiten/${loggedInUser.groep}`);
+        }
+    }, [loggedInUser, groepNaam, router]);
 
-        if (newActiviteit.name === '') {
-            setNameError('Naam is verplicht.');
-            valid = false;
-        }
-        if (newActiviteit.description === '') {
-            setDescriptionError('Beschrijving is verplicht.');
-            valid = false;
-        }
-        if (newActiviteit.beginDate === '') {
-            setBeginDateError('Begindatum is verplicht.');
-            valid = false;
-        }
-        if (newActiviteit.endDate === '') {
-            setEndDateError('Einddatum is verplicht.');
-            valid = false;
-        }
-        return valid;
+    const handleEditClick = (activiteit: Activiteit) => {
+        setSelectedActiviteit(activiteit);
+        setShowEditModal(true);
     };
 
-    const addActiviteit = async () => {
-        if (!validate()) return;
+    const handleAddActiviteit = (newActiviteit: Activiteit) => {
+        setActiviteiten([...activiteiten, newActiviteit]);
+        setShowAddModal(false);
+    };
 
+    const handleEditActiviteit = (updatedActiviteit: Activiteit) => {
+        setActiviteiten(activiteiten.map(activiteit => 
+            activiteit.id === updatedActiviteit.id ? updatedActiviteit : activiteit
+        ));
+        setShowEditModal(false);
+    };
+
+    const handleDeleteClick = async (activiteitId: number) => {
         try {
-            if (typeof groepNaam === 'string') {
-                await ActiviteitService.addActiviteit(groepNaam, newActiviteit.name, newActiviteit.description, new Date(newActiviteit.beginDate), new Date(newActiviteit.endDate));
-            } else {
-                console.error('groepNaam is not a string:', groepNaam);
-            }
-            setShowModal(false);
-            setNewActiviteit({ name: '', description: '', beginDate: '', endDate: '' });
-            setNameError('');
-            setDescriptionError('');
-            setBeginDateError('');
-            setEndDateError('');
-            // await getActiviteiten();
+            await ActiviteitService.deleteActiviteit(groepNaam as string, activiteitId);
+            setActiviteiten(activiteiten.filter(activiteit => activiteit.id !== activiteitId));
         } catch (error) {
-            console.error('Failed to add activiteit:', error);
+            console.error('Failed to delete activiteit:', error);
         }
     };
 
     return (
         <>
             <div className="p-4">
-                {isAdmin && (
+                {loggedInUser && (
                     <div className="flex justify-end mb-4">
                         <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-800"
-                                onClick={() => setShowModal(true)}>Activiteit toevoegen
+                                onClick={() => setShowAddModal(true)}>Activiteit toevoegen
                         </button>
                     </div>
                 )}
-                {activiteiten.length > 0 ? (
-                    <table className="w-full text-left border-collapse">
-                        <thead>
+                <table className="w-full text-left border-collapse">
+                    <thead>
                         <tr className="bg-amber-600 border-b-2 border-amber-900">
                             <th scope="col" className="p-2 border-r border-amber-900">Naam</th>
                             <th scope="col" className="p-2 border-r border-amber-900">Beschrijving</th>
                             <th scope="col" className="p-2 border-r border-amber-900">Begindatum</th>
                             <th scope="col" className="p-2 border-r border-amber-900">Einddatum</th>
+                            {loggedInUser && (<th scope="col" className="p-2 border-r border-amber-900">Acties</th>)}
                         </tr>
-                        </thead>
-                        <tbody>
+                    </thead>
+                    <tbody>
                         {activiteiten.map((activiteit, index) => (
                             <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'} border-amber-900`}>
                                 <td className="p-2 border-r border-amber-900">{activiteit.naam}</td>
@@ -102,78 +83,48 @@ const ActiviteitenOverviewTable: React.FC<Props> = ({ activiteiten }: Props) => 
                                 <td className="p-2 border-r border-amber-900">
                                     {new Date(activiteit.einddatum).toLocaleDateString()} {new Date(activiteit.einddatum).toLocaleTimeString()}
                                 </td>
+                                {loggedInUser && (
+                                    <td className="p-2 border-r border-amber-900 text-center">
+                                        <Image
+                                            src="/edit-button.svg"
+                                            alt="Bewerken"
+                                            width={16}
+                                            height={16}
+                                            className="inline-block mr-2 cursor-pointer"
+                                            onClick={() => handleEditClick(activiteit)}
+                                        />
+                                        <Image
+                                            src="/delete-button.svg"
+                                            alt="Verwijderen"
+                                            width={16}
+                                            height={16}
+                                            className="inline-block ml-2 cursor-pointer"
+                                            onClick={() => handleDeleteClick(activiteit.id)}
+                                        />
+                                    </td>
+                                )}
                             </tr>
                         ))}
-                        </tbody>
-                    </table>
-                ) : (
+                    </tbody>
+                </table>
+                {activiteiten.length === 0 && (
                     <p className="text-center text-gray-600">Geen geplande activiteiten.</p>
                 )}
             </div>
-
-            {showModal && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-gray-300 p-6 rounded-lg w-96 shadow-lg">
-                        <h2 className="text-xl font-bold mb-4">Activiteit toevoegen</h2>
-                        <label className="block mb-3">
-                            Naam:
-                            <input
-                                type="text"
-                                className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md"
-                                value={newActiviteit.name}
-                                onChange={(e) => setNewActiviteit({ ...newActiviteit, name: e.target.value })}
-                            />
-                            {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
-                        </label>
-                        <label className="block mb-3">
-                            Beschrijving:
-                            <input
-                                type="text"
-                                className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md"
-                                value={newActiviteit.description}
-                                onChange={(e) => setNewActiviteit({ ...newActiviteit, description: e.target.value })}
-                            />
-                            {descriptionError && <p className="text-red-500 text-sm">{descriptionError}</p>}
-                        </label>
-                        <label className="block mb-3">
-                            Begindatum en uur:
-                            <input
-                                type="datetime-local"
-                                className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md"
-                                value={newActiviteit.beginDate}
-                                onChange={(e) => setNewActiviteit({ ...newActiviteit, beginDate: e.target.value })}
-                            />
-                            {beginDateError && <p className="text-red-500 text-sm">{beginDateError}</p>}
-                        </label>
-                        <label className="block mb-3">
-                            Einddatum en uur:
-                            <input
-                                type="datetime-local"
-                                className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md"
-                                value={newActiviteit.endDate}
-                                onChange={(e) => setNewActiviteit({ ...newActiviteit, endDate: e.target.value })}
-                            />
-                            {endDateError && <p className="text-red-500 text-sm">{endDateError}</p>}
-                        </label>
-                        <div className="text-center">
-                            <button
-                                className="bg-green-900 text-white px-4 py-2 rounded shadow-md hover:bg-green-950 mr-2"
-                                onClick={addActiviteit}>Toevoegen
-                            </button>
-                            <button
-                                className="bg-amber-800 text-white px-4 py-2 rounded shadow-md hover:bg-amber-900"
-                                onClick={() => {
-                                    setNewActiviteit({ name: '', description: '', beginDate: '', endDate: '' });
-                                    setNameError('');
-                                    setDescriptionError('');
-                                    setBeginDateError('');
-                                    setEndDateError('');
-                                    setShowModal(false);
-                                }}>Annuleren
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            {showAddModal && (
+                <ActiviteitenAddModal
+                    groepNaam={groepNaam as string}
+                    onClose={() => setShowAddModal(false)}
+                    onAdd={handleAddActiviteit}
+                />
+            )}
+            {showEditModal && selectedActiviteit && (
+                <ActiviteitenEditModal
+                    groepNaam={groepNaam as string}
+                    activiteit={selectedActiviteit}
+                    onClose={() => setShowEditModal(false)}
+                    onEdit={handleEditActiviteit}
+                />
             )}
         </>
     );

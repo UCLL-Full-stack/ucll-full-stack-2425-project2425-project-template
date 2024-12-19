@@ -17,10 +17,15 @@ const login = async (totem: string, password: string): Promise<AuthenticationRes
         if (!valid) {
             throw new Error('Totem of passwoord fout');
         }
+        const groep = await groepService.getGroepById(leiding.getGroepId());
+        if (!groep) {
+            throw new Error('Groep not found');
+        }
         return {
             token: generateSWTtoken(leiding.getTotem(), leiding.getRol()),
             totem: leiding.getTotem(),
-            rol: leiding.getRol()
+            rol: leiding.getRol(),
+            groep: groep.getNaam()
         }
     } catch (error) {
         throw new Error('Totem of passwoord fout');

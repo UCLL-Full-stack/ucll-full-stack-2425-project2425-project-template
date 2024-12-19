@@ -4,6 +4,7 @@ type AuthenticationResponse = {
     token: string;
     totem: string;
     rol: Rol;
+    groep: string;
 };
 
 type Activiteit = {

@@ -2,11 +2,14 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/header';
 import LeidingOverviewTable from '@/components/leiding/LeidingOverviewTable';
+import LeidingEditModal from '@/components/leiding/LeidingEditModal';
 import { Leiding } from '@/types';
 import LeidingService from '@/services/LeidingService';
 
 const Leiders: React.FC = () => {
     const [leiders, setLeiders] = useState<Array<Leiding>>([]);
+    const [selectedLeiding, setSelectedLeiding] = useState<Leiding | null>(null);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const getLeiders = async () => {
@@ -23,6 +26,27 @@ const Leiders: React.FC = () => {
         }
     }
 
+    const handleEdit = (leiding: Leiding) => {
+        setSelectedLeiding(leiding);
+        setShowEditModal(true);
+    };
+
+    const handleEditLeiding = (updatedLeiding: Leiding) => {
+        setLeiders(leiders.map(lid => 
+            lid.id === updatedLeiding.id ? updatedLeiding : lid
+        ));
+        setShowEditModal(false);
+    };
+
+    const handleDelete = async (leidingId: number) => {
+        try {
+            await LeidingService.deleteLeiding(leidingId);
+            setLeiders(leiders.filter(lid => lid.id !== leidingId));
+        } catch (error) {
+            console.error('Failed to delete leiding:', error);
+        }
+    };
+
     useEffect(() => {
         getLeiders();
     }, []);
@@ -38,12 +62,19 @@ const Leiders: React.FC = () => {
                 <section>
                     {error && <div className="text-red-800">{error}</div>}
                     {leiders.length > 0 ? (
-                        <LeidingOverviewTable leiding={leiders} />
+                        <LeidingOverviewTable leiding={leiders} onEdit={handleEdit} onDelete={handleDelete} />
                     ) : (
                         <p className="text-center text-gray-600">Geen leiding gevonden.</p>
                     )}
                 </section>
             </main>
+            {showEditModal && selectedLeiding && (
+                <LeidingEditModal
+                    leiding={selectedLeiding}
+                    onClose={() => setShowEditModal(false)}
+                    onEdit={handleEditLeiding}
+                />
+            )}
         </>
     );
 };
