@@ -3,9 +3,13 @@ import userDb from '../../repository/User.db';
 import { User } from '../../model/User';
 import { Permission } from '../../types';
 import bcrypt from 'bcrypt';
+import { generateJwtToken } from '../../util/jwt';
 
 jest.mock('../../repository/User.db');
 jest.mock('bcrypt');
+jest.mock('../../util/jwt');
+
+const mockGenerateJwtToken = generateJwtToken as jest.Mock;
 
 const userInput = {
     username: 'testuser',
@@ -23,6 +27,7 @@ let bcryptHashMock: jest.Mock;
 let bcryptCompareMock: jest.Mock;
 
 beforeEach(() => {
+    mockGenerateJwtToken.mockReturnValue('mockedToken');
     getUserByUsernameMock = jest.fn();
     createUserMock = jest.fn();
     bcryptHashMock = jest.fn();
