@@ -1,0 +1,147 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+    padding: 0px
+}
+
+.headerNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: green;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    background-color: green;
+    display: flex;
+    align-items: center;
+    height: auto;
+    justify-content: space-between;
+    width: 100%;
+}
+
+nav .logo img {
+    width: 100px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+nav .nav-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+}
+
+nav ul li {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    /* padding: 0 20px; */
+    height: 100%;
+}
+
+nav ul li a {
+    padding: 37px 30px 37px 30px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    color: #FFF;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+nav li a:hover {
+    background-color: rgb(1, 105, 6);
+}
+
+.language-label,
+.language-dropdown {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    /* padding: 0 20px; */
+    height: 100%;
+}
+
+.language-label {
+    color: white;
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.language-dropdown {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    height: 2rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 1287px) {
+    .headerNav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem 2rem;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100%;
+        padding: 0%;
+        margin-top: 1rem;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
+        width: auto;
+        text-align: right;
+    }
+
+    nav ul li a {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        text-align: right;
+        box-sizing: border-box;
+        width: auto;
+    }
+
+    .language-selector {
+        margin-top: 1rem;
+        margin-left: 0;
+        padding-left: 8px;
+        padding-right: 0;
+        margin-right: 0;
+    }
+}

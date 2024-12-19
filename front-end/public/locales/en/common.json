@@ -1,0 +1,18 @@
+{
+    "app.title": "BowlBuddies",
+    "page.title": "BowlBuddies Pokebowls",
+    "page.description": "At BowlBuddies, it's all about delicious bowls, togetherness, and healthy enjoyment. From colorful poke bowls to nutritious smoothie bowls, we have something for everyone!\n\n Get inspired by our fresh ingredients, discover our carefully curated favorites. Whether you're looking to quickly order something tasty or take your time to enjoy a meal in our cozy restaurant, we're here to make your dining experience unforgettable.\n\nYour bowl, your choice, your moment!\n\nTake a look around, get inspired, and become a true BowlBuddy too!",
+    "header": {
+        "nav": {
+          "home": "Home",
+          "orders": "Orders",
+          "order": "Order",
+          "ingredients": "Ingredients",
+          "pokebowls": "Pokebowls",
+          "login": "Login",
+          "logout": "Logout",
+          "profile": "Profile",
+          "language": "Language"
+        }
+    }
+  }

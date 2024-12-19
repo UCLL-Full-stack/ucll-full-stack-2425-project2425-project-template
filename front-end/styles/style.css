@@ -1,0 +1,211 @@
+body {
+    margin: 0;
+    background-color: antiquewhite;
+}
+
+main {
+    margin: 30px;
+}
+
+section {
+    margin: auto;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin: auto;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table-container table {
+    border-collapse: collapse;
+}
+
+.table-container button {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.table-container button[type="button"] {
+    background-color: #f44336;
+    color: white;
+}
+
+tr {
+    border: 1px solid black;
+}
+
+tr[role="button"] {
+    cursor: pointer;
+}
+
+td,
+th {
+    padding: 20px 60px 20px 60px;
+}
+
+td img {
+    width: 200px;
+}
+
+.totaalPrijs {
+    border-top: 2px solid black;
+    width: 20%;
+}
+
+.addForms {
+    padding: 10px;
+    background-color: green;
+    width: 40%;
+    margin: auto;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.addForms form {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.addForms label {
+    color: white;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.addForms input[type="text"],
+.addForms input[type="number"],
+.addForms input[type="password"],
+.addForms input[type="email"],
+input[type="number"],
+input[type="password"],
+select {
+    padding: 7px;
+    width: 95%;
+    margin-bottom: 20px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.addForms input[type="submit"] {
+    background-color: rgb(1, 105, 6);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 97%;
+    border-radius: 4px;
+}
+
+.addForms input[type="submit"]:hover {
+    background-color: rgb(0, 40, 2);
+}
+
+.addForms select {
+    width: 97%;
+    cursor: pointer;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.edit-form label {
+    margin: 0.5rem 0;
+    font-weight: bold;
+}
+
+.edit-form input,
+.edit-form select {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.edit-form button {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-form button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.edit-form button[type="button"] {
+    background-color: #f44336;
+    color: white;
+}
+
+
+.error-field {
+    color: darkred;
+    font-weight: bold;
+}
+
+.ok-field {
+    color: black;
+    font-weight: bold;
+}
+
+.status-message {
+    color: black;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.user-details {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: green;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: white;
+}
+
+.user-details p {
+    margin: 0.5rem 0;
+    min-width: 400px;
+}
+
+.user-details strong {
+    font-weight: bold;
+}
+
+.homepage-main {
+    display: flex;
+    margin-top: 50px;
+}
+
+.homepage-section {
+    margin: auto;
+}
