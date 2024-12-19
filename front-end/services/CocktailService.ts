@@ -52,6 +52,58 @@ async function addCocktail(cocktailData: {
   }
 }
 
+// const getAllCocktails = () => {
+//   const loggedInUser = localStorage.getItem("loggedInUser");
+//   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+//   if (!token) {
+//     throw new Error("User is not logged in");
+//   }
+
+//   return fetch(process.env.NEXT_PUBLIC_API_URL + "/cocktails", {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`
+//     },
+//   });
+// };
+
+// const getCocktailById = (cocktailId: string) => {
+//   const loggedInUser = localStorage.getItem("loggedInUser");
+//   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+//   if (!token) {
+//     throw new Error("User is not logged in");
+//   }
+
+//   return fetch(process.env.NEXT_PUBLIC_API_URL + `/cocktails/${cocktailId}`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`
+//     },
+//   });
+// };
+
+// const addCocktail = ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string }) => {
+//   const loggedInUser = localStorage.getItem("loggedInUser");
+//   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+//   if (!token) {
+//     throw new Error("User is not logged in");
+//   }
+
+//   return fetch(process.env.NEXT_PUBLIC_API_URL + "/cocktails", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`
+//     },
+//     body: JSON.stringify({ name, description, strongness, image })
+//   });
+// };
+
 export const CocktailService = {
   getAllCocktails,getCocktailById, addCocktail, 
 };
