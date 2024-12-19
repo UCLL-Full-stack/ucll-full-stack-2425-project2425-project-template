@@ -14,17 +14,6 @@ export type Exercise = {
   description?: string;
   video_link?: string;
   isFavorite?: boolean;
-  workoutExercise?: WorkoutExercise;
-};
-
-export type WorkoutExercise = {
-  id: string;
-  workoutId: string;
-  exerciseId: string;
-  sets: number;
-  reps: number;
-  rpe: number;
-  restTime: number;
 };
 
 export type Workout = {
