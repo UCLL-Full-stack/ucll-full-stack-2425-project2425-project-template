@@ -41,12 +41,12 @@ vehicleRouter.get('/cars', async (req: Request, res: Response) => {
         res.status(200).json(vehicles);
     }catch(error){
 
-        if (error instanceof Error) {
-            res.status(400).json({ status: 'error', message: error.message });
-        } else {
-            console.error('Unexpected error:', error);
-            res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
-        }
+    if (error instanceof Error) {
+        res.status(400).json({ status: 'error', message: error.message });
+    } else {
+        console.error('Unexpected error:', error);
+        res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
+    }
     }
 })
 

@@ -1,8 +1,13 @@
+import { PrismaClient } from "@prisma/client";
 import { Vehicle } from "../domain/model/vehicle";
 import database from "./database";
 
+const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+});
+
 const getAllVehicles = async (): Promise<Vehicle[]> => {
-    const vehiclesPrisma = await database.vehicle.findMany({
+    const vehiclesPrisma = await prisma.vehicle.findMany({
         include: { seller: true }
     });
     return vehiclesPrisma.map((vehiclePrisma) => Vehicle.from(vehiclePrisma))
@@ -10,7 +15,7 @@ const getAllVehicles = async (): Promise<Vehicle[]> => {
 
 const getVehicleByID = async ({ id }: { id: number }): Promise<Vehicle | null> => {
     try {
-        const vehiclePrisma = await database.vehicle.findUnique({
+        const vehiclePrisma = await prisma.vehicle.findUnique({
             where: { id },
             include: { seller: true }
         })
@@ -21,9 +26,96 @@ const getVehicleByID = async ({ id }: { id: number }): Promise<Vehicle | null> =
     }
 }
 
+const addVehicle = async (input: VehicleInput) => {
+
+
+    try {
+        return vehicleDB.createVehicle({
+            manufacturer: input.manufacturer,
+            model_name: input.model_name,
+            price: input.price,
+            fuelType: input.fuelType,
+            transmissionType: input.transmissionType,
+            year: input.year,
+            vehicleType: input.vehicleType,
+            bodyType: input.bodyType,
+            mileage: input.mileage,
+            engineCapacity: input.engineCapacity,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            // userId: input.userId
+        });
+    }catch(error){ 
+        console.error('Error creating vehicle:', error);
+    }
+
+    try {
+        const newVehicle = await prisma.vehicle.create({
+            data: {
+                manufacturer: input.manufacturer,
+                model_name: input.model_name,
+                price: input.price,
+                fuelType: input.fuelType,
+                transmissionType: input.transmissionType,
+                year: input.year,
+                vehicleType: input.vehicleType,
+                bodyType: input.bodyType,
+                mileage: input.mileage,
+                engineCapacity: input.engineCapacity,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            },
+        });
+
+        if (input.vehicleType === "Motorcycle") {
+            const NewMotorcycle = await prisma.motorcycle.create({
+                data: {
+                    manufacturer: input.manufacturer,
+                    model_name: input.model_name,
+                    price: input.price,
+                    fuelType: input.fuelType,
+                    transmissionType: input.transmissionType,
+                    year: input.year,
+                    vehicleType: input.vehicleType,
+                    bodyType: input.bodyType,
+                    mileage: input.mileage,
+                    engineCapacity: input.engineCapacity,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    vehicleId: newVehicle.id
+                },  
+            })
+        } else { 
+            const NewCar = await prisma.car.create({
+                data: {
+                    manufacturer: input.manufacturer,
+                    model_name: input.model_name,
+                    price: input.price,
+                    fuelType: input.fuelType,
+                    transmissionType: input.transmissionType,
+                    year: input.year,
+                    vehicleType: input.vehicleType,
+                    bodyType: input.bodyType,
+                    mileage: input.mileage,
+                    engineCapacity: input.engineCapacity,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    vehicleId: newVehicle.id
+
+                },  
+            })
+        }
+        return newVehicle;
+    } catch (error) {
+        console.error('Error creating vehicle:', error);
+        throw error;
+    }
+};
+
 export default {
     getAllVehicles,
     getVehicleByID,
+    addVehicle
     // createVehicle
 }
 

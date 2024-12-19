@@ -165,7 +165,6 @@ export class Vehicle {
         this.price = vehicle.price;
         this.fuelType = vehicle.fuelType;
         this.bodyType = vehicle.bodyType;
-        this.engineCapacity = vehicle.engineCapacity;
         this.transmissionType = vehicle.transmissionType;
         this.year = vehicle.year;
         this.vehicleType = vehicle.vehicleType;
