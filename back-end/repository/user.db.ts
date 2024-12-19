@@ -25,30 +25,8 @@ const createUser = async (user: User): Promise<User> => {
                 phoneNumber: user.getPhoneNumber(),
                 email: user.getEmail(),
                 password: user.getPassword(),
-                accounts: {
-                    create: accounts.map((account) => ({
-                        accountNumber: account.getAccountNumber(),
-                        balance: account.getBalance(),
-                        isShared: account.getIsShared(),
-                        startDate: account.getStartDate(),
-                        endDate: account.getEndDate(),
-                        status: account.getStatus(),
-                        type: account.getType(),
-                        transaction: {
-                            create: account.getTransactions().map((transaction) => ({
-                                referenceNumber: transaction.getReferenceNumber(),
-                                date: transaction.getDate(),
-                                amount: transaction.getAmount(),
-                                currency: transaction.getCurrency(),
-                                sourceAccountId: transaction.getSourceAccountId(),
-                                destinationAccountId: transaction.getDestinationAccountId(),
-                                type: transaction.getTransactionType(),
-                            })),
-                        },
-                    })),
-                },
             },
-            include: { accounts: { include: { expense: true, income: true } } },
+            include: { accounts: true },
         });
 
         return User.from(userPrisma);

@@ -6,6 +6,7 @@ import { User } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import styles from '@/styles/Home.module.css';
+import { useRouter } from "next/router";
 
 const RegisterUser: React.FC = () => {
     const [user, setUser] = useState<User>({
@@ -18,10 +19,13 @@ const RegisterUser: React.FC = () => {
         phoneNumber: ""
     });
 
+    const router = useRouter();
+
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        await createUser();
+        await UserService.createUser(user);
         alert("User created!");
+        router.push("/users/login");
     }
 
     const handleInputChange = (field: keyof User, value: any) => {
@@ -31,10 +35,6 @@ const RegisterUser: React.FC = () => {
     // useEffect(() =>{
     //     if (user) createUser();
     // }, [user]);
-
-    const createUser = async () => {
-        const response = await UserService.createUser(user);
-    }
 
     return (
         <>

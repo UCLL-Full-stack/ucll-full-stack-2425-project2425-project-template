@@ -11,7 +11,7 @@ const getAllUsers = async (): Promise<User[]> => userDb.getAllUsers();
 const createUser = async (userInput: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByNationalRegisterNumber(userInput.email);
 
-    if (existingUser == null) {
+    if (existingUser != null) {
         throw new Error(
             `User with national register number ${userInput.nationalRegisterNumber} already exists.`
         );

@@ -17,7 +17,7 @@ const generateReferenceNumber = (
     accountNumber: string,
     date: Date
 ): string => {
-    const lastThreeNumbers = accountNumber.slice(-3).split('').join(' '); // Last 3 digits of account number with spaces
+    const lastThreeNumbers = accountNumber.slice(-3).split(''); // Last 3 digits of account number with spaces
     const firstThreeLettersType = transactionType.substring(0, 3).toUpperCase(); // First 3 letters of the transaction type
     const year = date.getUTCFullYear().toString(); // Year of the transaction date
     const uniqueNumber = Date.now().toString().slice(-3) + Math.random().toString().substring(2, 5); // Unique number

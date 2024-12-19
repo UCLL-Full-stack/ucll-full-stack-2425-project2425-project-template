@@ -13,6 +13,8 @@ export class Transaction {
     private type: TransactionType;
 
     constructor(transaction: {
+        referenceNumber?: string;
+        date?: Date;
         amount: number;
         currency: string;
         sourceAccount: Account;
@@ -26,9 +28,10 @@ export class Transaction {
         this.currency = transaction.currency;
         this.sourceAccount = transaction.sourceAccount;
         this.destinationAccount = transaction.destinationAccount;
+        this.date = transaction.date || new Date();
+        this.referenceNumber =
+            transaction.referenceNumber || this.generateReferenceNumber(transaction.type);
         this.type = transaction.type;
-        this.date = new Date();
-        this.referenceNumber = this.generateReferenceNumber(transaction.type);
     }
 
     getId(): number | undefined {
@@ -94,23 +97,21 @@ export class Transaction {
         return referenceNumber;
     }
 
-    static from({
-        id,
-        amount,
-        currency,
-        type,
-        sourceAccount,
-        destinationAccount,
-    }: TransactionPrisma & { sourceAccount: AccountPrisma; destinationAccount: AccountPrisma }) {
+    static from(
+        transactionPrisma: TransactionPrisma & {
+            sourceAccount: AccountPrisma;
+            destinationAccount: AccountPrisma;
+        }
+    ): Transaction {
         return new Transaction({
-            id,
-            amount,
-            currency,
-            sourceAccount: Account.from({ ...sourceAccount }),
-            destinationAccount: Account.from({
-                ...destinationAccount,
-            }),
-            type,
+            id: transactionPrisma.id,
+            amount: transactionPrisma.amount,
+            currency: transactionPrisma.currency,
+            sourceAccount: Account.from(transactionPrisma.sourceAccount),
+            destinationAccount: Account.from(transactionPrisma.destinationAccount),
+            type: transactionPrisma.type,
+            referenceNumber: transactionPrisma.referenceNumber,
+            date: transactionPrisma.date,
         });
     }
 }

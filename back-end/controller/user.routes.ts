@@ -104,7 +104,7 @@ userRouter.get(
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserInput'
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: The user could not be created
  *         content:

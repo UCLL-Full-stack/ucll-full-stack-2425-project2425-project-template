@@ -1,8 +1,8 @@
-import { Transaction } from "@/types";
+import { Transaction, ExpenseData, TransactionFilter } from "@/types";
 
 const createExpense = async (
   accountNumber: string,
-  expenseData: any
+  expenseData: ExpenseData
 ): Promise<Transaction> => {
   const token = JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.token;
 
@@ -65,10 +65,62 @@ const getTransactionsByUserId = async (id: number): Promise<Transaction[]> => {
   return response.json();
 };
 
+const filterAccountTransactions = async (
+  id: number,
+  filter: TransactionFilter
+): Promise<Transaction[]> => {
+  const token = JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.token;
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/transaction/account/${id}/filter`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(filter),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to filter transactions");
+  }
+
+  return response.json();
+};
+
+const filterUserTransactions = async (
+  id: number,
+  filter: TransactionFilter
+): Promise<Transaction[]> => {
+  const token = JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.token;
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/transaction/user/${id}/filter`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(filter),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to filter transactions");
+  }
+
+  return response.json();
+};
+
 const TransactionService = {
   createExpense,
   getTransactionsByAccountId,
   getTransactionsByUserId,
+  filterAccountTransactions,
+  filterUserTransactions,
 };
 
 export default TransactionService;

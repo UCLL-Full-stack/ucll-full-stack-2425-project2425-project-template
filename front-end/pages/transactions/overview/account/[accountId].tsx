@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import Head from 'next/head';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import styles from '@/styles/Home.module.css';
-import TransactionOverviewOfAccount from '@/components/transactions/TransactionOverviewOfAccount';
+import TransactionOverview from '@/components/transactions/TransactionOverview';
 
 const OverviewExpenses = () => {
   return (
@@ -17,8 +16,7 @@ const OverviewExpenses = () => {
       </Head>
       <Header />
       <main className={styles.main}>
-        <h1>Transactions overview</h1>
-        <TransactionOverviewOfAccount />
+        <TransactionOverview type="account" />
       </main>
       <Footer />
     </>

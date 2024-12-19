@@ -1,6 +1,8 @@
+import { PrismaClient } from '@prisma/client';
 import { Account } from '../model/account';
 import { Transaction } from '../model/transaction';
-import database from '../util/database';
+
+const database = new PrismaClient();
 
 const createTransaction = async (transaction: Transaction): Promise<Transaction> => {
     try {
@@ -47,4 +49,65 @@ const getTransactionsByAccount = async (account: Account): Promise<Transaction[]
     }
 };
 
-export default { createTransaction, getTransactionsByAccount };
+const filterTransactionsByAccount = async (
+    account: Account,
+    filterOption: string,
+    filterValue: string
+): Promise<Transaction[]> => {
+    try {
+        const filterCondition: any = {
+            AND: [
+                {
+                    OR: [
+                        { sourceAccountId: account.getId() },
+                        { destinationAccountId: account.getId() },
+                    ],
+                },
+            ],
+        };
+
+        if (filterOption === 'amount') {
+            filterCondition.AND.push({
+                [filterOption]: Number(filterValue),
+            });
+        } else if (filterOption === 'sourceAccount' || filterOption === 'destinationAccount') {
+            filterCondition.AND.push({
+                [filterOption]: {
+                    accountNumber: { contains: filterValue },
+                },
+            });
+        } else if (filterOption === 'date') {
+            filterCondition.AND.push({
+                [filterOption]: {
+                    gte: new Date(filterValue),
+                    lt: new Date(
+                        new Date(filterValue).setDate(new Date(filterValue).getDate() + 1)
+                    ),
+                },
+            });
+        } else if (filterOption === 'type' || filterOption === 'currency') {
+            filterCondition.AND.push({
+                [filterOption]: filterValue,
+            });
+        } else {
+            filterCondition.AND.push({
+                [filterOption]: { contains: filterValue },
+            });
+        }
+
+        const transactionsPrisma = await database.transaction.findMany({
+            where: filterCondition,
+            include: {
+                sourceAccount: true,
+                destinationAccount: true,
+            },
+        });
+
+        return transactionsPrisma.map((transactionPrisma) => Transaction.from(transactionPrisma));
+    } catch (error: any) {
+        console.error('Database error:', error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { createTransaction, getTransactionsByAccount, filterTransactionsByAccount };
