@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
-import cors from 'cors';
+import express, { Request, Response, NextFunction } from 'express';import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import userRouter from './controller/user.routes';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -8,14 +7,23 @@ import swaggerUi from 'swagger-ui-express';
 import { cocktailRouter } from './controller/cocktail.routes';
 import { ingredientRouter } from './controller/ingredient.routes';
 import { cocktailIngredientRouter } from './controller/cocktailIngredient.routes';
+import { expressjwt } from 'express-jwt';
 
 const app = express();
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({ path: ['api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'] }) 
+);
 
 const swaggerOptions = {
     definition: {
