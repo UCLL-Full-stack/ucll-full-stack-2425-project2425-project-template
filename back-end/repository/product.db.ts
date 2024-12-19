@@ -21,7 +21,7 @@ const getProductById = async ({ id }: { id: number }): Promise<Product | null> =
     try {
         const productPrisma = await database.product.findUnique({
             where: { id },
-            include: {reviews: true },
+            include: { reviews: true },
         });
 
         return productPrisma ? Product.from(productPrisma) : null;
@@ -30,7 +30,6 @@ const getProductById = async ({ id }: { id: number }): Promise<Product | null> =
         throw new Error('Database error. See server log for details.');
     }
 };
-
 
 const getProductByName = async (name: string): Promise<Product | null> => {
     try {

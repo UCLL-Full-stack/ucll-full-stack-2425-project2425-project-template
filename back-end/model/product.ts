@@ -1,4 +1,5 @@
-import { Product as ProductPrisma } from '@prisma/client';
+import { Product as ProductPrisma, Review as ReviewPrisma } from '@prisma/client';
+
 export class Product {
     readonly id?: number;
     readonly name: string;
@@ -6,6 +7,7 @@ export class Product {
     readonly description: string;
     readonly rating: number;
     readonly url?: string;
+    readonly reviews?: ReviewPrisma[];
 
     constructor(product: {
         id?: number;
@@ -14,6 +16,7 @@ export class Product {
         description: string;
         rating: number;
         url?: string;
+        reviews?: ReviewPrisma[];
     }) {
         this.validate(product);
 
@@ -23,6 +26,7 @@ export class Product {
         this.description = product.description;
         this.rating = product.rating;
         this.url = product.url;
+        this.reviews = product.reviews;
     }
 
     static from({
@@ -32,7 +36,8 @@ export class Product {
         description,
         rating,
         url,
-    }: ProductPrisma) {
+        reviews,
+    }: ProductPrisma & { reviews?: ReviewPrisma[] }) {
         return new Product({
             id,
             name,
@@ -40,6 +45,7 @@ export class Product {
             description,
             rating,
             url,
+            reviews,
         });
     }
 
@@ -65,6 +71,10 @@ export class Product {
 
     getUrl(): string | undefined{
         return this.url;
+    }
+
+    getReviews(): ReviewPrisma[] | undefined {
+        return this.reviews;
     }
 
     validate(product: {
