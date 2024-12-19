@@ -57,6 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     },
                 });
                 const userData = await userResponse.data;
+                console.log('Discord user data:', userData);
                 const guildsData = await guildResponse.data;
                 const user = await UserService.getUser(userData.id);
                 if (user.error) {

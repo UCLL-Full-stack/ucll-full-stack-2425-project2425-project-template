@@ -21,14 +21,26 @@ const getUser = async (userId: string) => {
 };
 
 const addUser = async (user: any) => {
-    const response = await fetch(`${API_URL}/api/users`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-    });
-    return await response.json();
+    try {
+        const response = await fetch(`${API_URL}/api/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error from API: ${response.status} - ${errorText}`);
+            throw new Error(`API Error: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('addUser failed:', error);
+        throw error;
+    }
 };
 
 const updateUser = async (userId: string, user: any) => {
