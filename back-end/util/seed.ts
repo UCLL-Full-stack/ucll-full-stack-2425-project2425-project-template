@@ -10,6 +10,7 @@ const main = async () => {
     await prisma.ticket.deleteMany();
     await prisma.user.deleteMany();
     await prisma.event.deleteMany();
+    await prisma.invite.deleteMany();
 
     const admin = await prisma.user.create({
         data: {
@@ -19,6 +20,7 @@ const main = async () => {
             password: await bcrypt.hash('admin', 12),
             age: 99,
             role: 'ADMIN',
+            events: {}
         }
     });
 
@@ -30,6 +32,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordJohn', 12),
             age: 26,
             role: 'ORGANIZER',
+            events: {}
         }
     });
 
@@ -41,6 +44,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordJane', 12),
             age: 30,
             role: 'PARTICIPANT',
+            events: {}
         }
     });
 
@@ -52,6 +56,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordAlice', 12),
             age: 24,
             role: 'PARTICIPANT',
+            events: {}
         }
     });
 
@@ -63,6 +68,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordBob', 12),
             age: 29,
             role: 'PARTICIPANT',
+            events: {}
         }
     });
 
@@ -74,6 +80,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordCharlie', 12),
             age: 22,
             role: 'PARTICIPANT',
+            events: {}
         }
     });
 
@@ -85,6 +92,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordDiana', 12),
             age: 27,
             role: 'PARTICIPANT',
+            events: {}
         }
     });
 
@@ -96,6 +104,7 @@ const main = async () => {
             password: await bcrypt.hash('passwordEve', 12),
             age: 25,
             role: 'PARTICIPANT',
+            events: {}
         }
     });
 
@@ -107,16 +116,7 @@ const main = async () => {
             location: 'Amsterdam',
             category: 'Concert',
             backgroundImage: '/images/taylor-swift-concert.jpg',
-            // users: {
-            //     connect: [{ id: john.id }, { id: jane.id }]
-            // },
             isTrending: true,
-            // tickets: {
-            //     connect: [
-            //         { id: ticketVIP.id },
-            //         { id: ticketREGULAR.id },
-            //     ]
-            // }
         }
     });
 
@@ -128,17 +128,7 @@ const main = async () => {
             location: 'Brussels',
             category: 'Birthday Celebration',
             backgroundImage: '/images/chris-birthday-party.jpg',
-            // users: {
-            //     connect: [
-            //         { id: alice.id }
-            //     ]
-            // },
             isTrending: true,
-            // tickets: {
-            //     connect: [
-            //         { id: ticketFREE.id },
-            //     ]
-            // }
         }
     });
 
@@ -151,14 +141,7 @@ const main = async () => {
             location: 'Paris',
             category: 'Culinary Festival',
             backgroundImage: '/images/food-festival.jpg',
-            // users: {},
             isTrending: false,
-            // tickets: {
-            //     connect: [
-            //         { id: ticketREGULAR.id },
-            //         { id: ticketFREE.id },
-            //     ]
-            // }
         }
     });
 
@@ -171,19 +154,7 @@ const main = async () => {
             location: 'Berlin',
             category: 'Company Networking Exchange',
             backgroundImage: '/images/company-networking-night.jpg',
-            // users: {
-            //     connect: [
-            //         { id: bob.id },
-            //         { id: charlie.id },
-            //         { id: eve.id }
-            //     ]
-            // },
             isTrending: true,
-            // tickets: {
-            //     connect: [
-            //         { id: ticketFREE.id },
-            //     ]
-            // }
         }
     });
 
@@ -196,14 +167,7 @@ const main = async () => {
             location: 'London',
             category: 'Art Exhibition',
             backgroundImage: '/images/art-exhibition.jpg',
-            // users: {},
             isTrending: false,
-            // tickets : {
-            //     connect: [
-            //         { id: ticketVIP.id },
-            //         { id: ticketREGULAR.id },
-            //     ]
-            // }
         }
     });
 
@@ -215,9 +179,7 @@ const main = async () => {
             location: 'Barcelona',
             category: 'Mindfulness',
             backgroundImage: '/images/yoga-workshop.jpg',
-            // users: {},
             isTrending: false,
-            // tickets: {},
         }
     });
 
@@ -230,9 +192,7 @@ const main = async () => {
             location: 'Dublin',
             category: 'Entrepreneurship',
             backgroundImage: '/images/startup-pitch-competition.jpg',
-            // users: {},
             isTrending: false,
-            // tickets: {},
         }
     });
 
@@ -244,14 +204,7 @@ const main = async () => {
             location: 'Rome',
             category: 'Sommelier Events',
             backgroundImage: '/images/wine-tasting-evening.jpg',
-            // users: {},
             isTrending: false,
-            // tickets: {
-            //     connect: [
-            //         { id: ticketVIP.id },
-            //         { id: ticketREGULAR.id },
-            //     ]
-            // },
         }
     });
 

@@ -38,6 +38,7 @@ const createUser = async (user: UserInput): Promise<User> => {
             password: hashedPass,
             age: user.age,
             role: user.role,
+            events: [],
     });
 
     return await userDb.createUser(newUser);

@@ -1,30 +1,41 @@
 import { User } from "../model/user";
+import { Event } from "../model/event";
 import database from "./database";
 
 const getAllUsers = async (): Promise<User[]> => {
-        const usersPrisma = await database.user.findMany();
-        return usersPrisma.map((userPrisma) => User.from(userPrisma));
+    const usersPrisma = await database.user.findMany({
+        include: {
+            events: true,
+        }
+    });
+    return usersPrisma.map((userPrisma) => User.from(userPrisma));
 }
 
 const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
-        const userPrisma = await database.user.findUnique({
-            where: {
-                id: id,
-            }
-        });
+    const userPrisma = await database.user.findUnique({
+        where: {
+            id: id,
+        },
+        include: {
+            events: true,
+        }
+    });
 
-        return userPrisma ? User.from(userPrisma) : null;
+    return userPrisma ? User.from(userPrisma) : null;
 };
 
 const getUserByEmail = async (email: string): Promise<User | null> => {
-        const userPrisma = await database.user.findFirst({
-            where:
-            {
-                email: email
-            }
-        });
+    const userPrisma = await database.user.findFirst({
+        where:
+        {
+            email: email
+        },
+        include: {
+            events: true,
+        }
+    });
 
-        return userPrisma ? User.from(userPrisma) : null;
+    return userPrisma ? User.from(userPrisma) : null;
 };
 
 const createUser = async (user: User): Promise<User> => {
@@ -37,11 +48,15 @@ const createUser = async (user: User): Promise<User> => {
                 password: user.getPassword(),
                 age: user.getAge(),
                 role: user.getRole(),
+                events: {}
+            },
+            include: {
+                events: true,
             }
         });
 
         return User.from(userPrisma);
-    } catch (error){
+    } catch (error) {
         throw new Error('Database error. See server log for details.');
     }
 }

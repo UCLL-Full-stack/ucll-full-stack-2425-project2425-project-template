@@ -4,12 +4,12 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { eventRouter } from './controller/event.routes';
-// import { participantRouter } from './controller/participant.routes';
-import { userRouter } from './controller/user.routes';
-import { ticketRouter } from './controller/ticket.routes';
 import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
+
+import { eventRouter } from './controller/event.routes';
+import { userRouter } from './controller/user.routes';
+import { ticketRouter } from './controller/ticket.routes';
 import { inviteRouter } from './controller/invite.routes';
 
 

@@ -55,7 +55,7 @@ export class Invite {
         user,
         event,
     }: InvitePrisma & {
-        user: UserPrisma,
+        user: UserPrisma & {events: EventPrisma[]},
         event: EventPrisma,
     }) {
         return new Invite({

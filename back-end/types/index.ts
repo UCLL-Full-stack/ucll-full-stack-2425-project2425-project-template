@@ -10,6 +10,7 @@ type UserInput = {
     password: string,
     age: number,
     role: Role,
+    favoriteEvents?: EventInput[],
 };
 
 type EventInput = {

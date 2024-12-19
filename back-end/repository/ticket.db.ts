@@ -1,4 +1,6 @@
 import { Ticket } from '../model/ticket';
+import { User } from '../model/user';
+import { Event } from '../model/event';
 import { EventInput } from '../types';
 // import prisma from '../repository/database';
 import database from './database';

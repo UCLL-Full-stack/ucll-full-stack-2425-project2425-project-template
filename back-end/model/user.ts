@@ -1,8 +1,10 @@
 import { Role } from "../types";
+import { Event } from "./event";
 
 import {
     // Role as RolePrisma,
     User as UserPrisma,
+    Event as EventPrisma
 } from '@prisma/client';
 
 export class User {
@@ -13,6 +15,7 @@ export class User {
     private password: string;
     private age: number;
     private role: Role;
+    private events: Event[] = [];
 
     constructor(user: {
         id?: number,
@@ -22,6 +25,7 @@ export class User {
         password: string,
         age: number,
         role: Role,
+        events: Event[],
     }) {
         this.id = user.id;
         this.username = user.username;
@@ -30,6 +34,7 @@ export class User {
         this.password = user.password;
         this.age = user.age;
         this.role = user.role;
+        this.events = user.events;
     }
 
     getId(): number | undefined {
@@ -60,6 +65,10 @@ export class User {
         return this.role;
     }
 
+    getFavoriteEvents(): Event[] {
+        return this.events;
+    }
+
     equals(user: User): boolean {
         return (
             this.username === user.getUsername() &&
@@ -67,7 +76,7 @@ export class User {
             this.email === user.getEmail() &&
             this.password === user.getPassword() &&
             this.age === user.getAge() &&
-            this.role === user.getRole()
+            this.role === user.getRole() 
         );
     }
 
@@ -79,7 +88,8 @@ export class User {
         password,
         age,
         role,
-    }: UserPrisma) {
+        events
+    }: UserPrisma & {events: EventPrisma[]}) {
         return new User({
             id,
             username,
@@ -88,6 +98,7 @@ export class User {
             password,
             age,
             role: role as Role,
+            events: events.map(event => Event.from(event)),
         });
     };
 }

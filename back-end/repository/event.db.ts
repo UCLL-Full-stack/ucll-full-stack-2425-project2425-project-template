@@ -5,7 +5,7 @@ import database from './database';
 const getAllEvents = async (): Promise<Event[]> => {
     const eventsPrisma = await database.event.findMany({
         include: {
-            // users: true,
+            users: true,
             tickets: true,
         },
     });
@@ -18,6 +18,7 @@ const getEventById = async (id: number): Promise<Event> => {
             id: id,
         },
         include: {
+            users: true,
             tickets: true,
         },
     });
@@ -36,7 +37,10 @@ const createEvent = async (eventData: Event): Promise<Event> => {
             date: eventData.date,
             location: eventData.location,
             category: eventData.category,
-            isTrending: false
+            isTrending: false,
+            users: {
+                connect: []
+            }
         }
     });
 
