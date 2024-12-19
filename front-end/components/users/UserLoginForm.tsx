@@ -8,15 +8,15 @@ import { useTranslation } from "next-i18next";
 const UserLoginForm: React.FC = () => {
   const { t } = useTranslation();
 
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const router = useRouter();
 
   const clearErrors = () => {
-    setNameError(null);
+    setEmailError(null);
     setPasswordError(null);
     setStatusMessages([]);
   };
@@ -24,13 +24,13 @@ const UserLoginForm: React.FC = () => {
   const validate = (): boolean => {
     let result = true;
 
-    if (!name || name.trim() === "") {
-      setNameError(t('login.name'));
+    if (!email || email.trim() === "") {
+      setEmailError(t('login.emailRequired'));
       result = false;
     }
 
     if (!password || password.trim() === "") {
-      setPasswordError(t('login.password'));
+      setPasswordError(t('login.passwordRequired'));
       result = false;
     }
 
@@ -47,7 +47,7 @@ const UserLoginForm: React.FC = () => {
     }
 
     try {
-      const user = { username: name, password };
+      const user = { email, password };
       const response = await UserService.loginUser(user);
 
       if (response.status === 200) {
@@ -94,18 +94,18 @@ const UserLoginForm: React.FC = () => {
         </div>
       )}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="nameInput" className="mb-4">
+        <label htmlFor="emailInput" className="mb-4">
           {t('login.label.email')}
         </label>
         <div className="block mb-2 text-sm font-medium">
           <input
-            id="nameInput"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
+            id="emailInput"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             className="form-input"
           />
-          {nameError && <div className="error-text">{nameError}</div>}
+          {emailError && <div className="error-text">{emailError}</div>}
         </div>
         <div className="mb-4">
           <div>
@@ -125,7 +125,7 @@ const UserLoginForm: React.FC = () => {
               className="form-input"
             />
             {passwordError && (
-              <div className=" error-text">{passwordError}</div>
+              <div className="error-text">{passwordError}</div>
             )}
           </div>
         </div>
