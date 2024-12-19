@@ -1,155 +1,125 @@
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import TeamService from '@services/TeamsService';
+import React, { useState, useEffect } from 'react';
+import CompetitionService from '@services/CompetitionService';
+import { Competition } from '@types';
+import Link from 'next/link';
 import Header from '@components/header';
 
-interface Competition {
-    id: number;
-    name: string;
-}
-
-interface Team {
-    id: number;
-    name: string;
-    points: number;
-    competitionId: number;
-}
-
-const Competition: React.FC = () => {
+const CompetitionsPage: React.FC = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([]);
-    const [selectedCompetitionId, setSelectedCompetitionId] = useState<number | null>(null);
-    const [teams, setTeams] = useState<Team[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [competition, setCompetition] = useState<Competition | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [competitionId, setCompetitionId] = useState<number | ''>('');
 
     useEffect(() => {
         const fetchCompetitions = async () => {
             try {
-                const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/competitions');
-                if (!response.ok) throw new Error('Failed to fetch competitions');
-                const data = await response.json();
+                const data = await CompetitionService.getAllCompetitions();
                 setCompetitions(data);
-            } catch (err: any) {
-                setError(err.message);
+                setError(null);
+            } catch (err) {
+                setError('Failed to fetch all competitions.');
             }
         };
 
         fetchCompetitions();
     }, []);
 
-    useEffect(() => {
-        if (selectedCompetitionId === null) return;
-
-        const fetchTeams = async () => {
-            setLoading(true);
+    const handleGetCompetitionById = async () => {
+        if (!competitionId) return;
+        try {
+            const data = await CompetitionService.getCompetitionById(Number(competitionId));
+            setCompetition(data);
             setError(null);
-            try {
-                const response = await TeamService.fetchTeamsByCompetition(selectedCompetitionId);
-                if (!response.ok) throw new Error('Failed to fetch teams');
-                const data = await response.json();
-                setTeams(data);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTeams();
-    }, [selectedCompetitionId]);
-
-    const handleAddTeamClick = () => {
-        alert('Add team clicked!');
-    };
-
-    const handleBackButtonClick = () => {
-        setSelectedCompetitionId(null);
-        setTeams([]);
+        } catch (err) {
+            setError('Failed to fetch competition by ID.');
+        }
     };
 
     return (
         <>
-            <Head>
-                <title>Competitions</title>
-            </Head>
             <Header />
-            <main className="h-screen bg-gray-100 relative">
-                {selectedCompetitionId !== null && (
-                    <button
-                        onClick={handleBackButtonClick}
-                        className="absolute top-4 left-4 bg-gray-300 text-black px-4 py-2 rounded bg-transparent border border-white cursor-pointer"
+            <div className="container mx-auto p-4">
+                <div className="flex justify-between items-center mb-10">
+                    <h1 className="text-2xl font-bold">Competitions Management</h1>
+                    <Link
+                        href="/competition/add"
+                        className="border bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 m-2"
                     >
-                        Back to Competitions
-                    </button>
-                )}
+                        Add Competition
+                    </Link>
+                </div>
 
-                {selectedCompetitionId === null ? (
-                    <>
-                        <div className="text-center">
-                            <h1 className="font-semibold">Select a Competition</h1>
-                            {error && <p className="text-red-500">{error}</p>}
-                            <ul>
-                                {competitions.map((competition) => (
-                                    <li
-                                        key={competition.id}
-                                        className={`cursor-pointer ${
-                                            competition.id === selectedCompetitionId
-                                                ? 'text-blue-500'
-                                                : 'text-black'
-                                        }`}
-                                        onClick={() => setSelectedCompetitionId(competition.id)}
-                                    >
-                                        {competition.name}
-                                    </li>
-                                ))}
-                            </ul>
+                {error && <div className="text-red-500 mb-4">{error}</div>}
+
+                <section className="mb-6">
+                    <h2 className="text-lg font-semibold mb-2">Filter by ID</h2>
+                    <div className="flex gap-4 items-center">
+                        <input
+                            type="number"
+                            placeholder="Competition ID"
+                            value={competitionId}
+                            onChange={(e) => setCompetitionId(Number(e.target.value) || '')}
+                            className="border border-gray-300 rounded px-4 py-2"
+                        />
+                        <button
+                            onClick={handleGetCompetitionById}
+                            className="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600"
+                        >
+                            Filter
+                        </button>
+                    </div>
+                    {competition && (
+                        <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
+                            <p>
+                                <strong>Name:</strong> {competition.name}
+                            </p>
+                            <p>
+                                <strong>ID:</strong> {competition.id}
+                            </p>
+                            <p>
+                                <strong>Matches Played:</strong> {competition.matchesPlayed}
+                            </p>
                         </div>
-                    </>
-                ) : (
-                    <>
-                        <h1 className="font-semibold text-center">
-                            {competitions.find((c) => c.id === selectedCompetitionId)?.name}
-                        </h1>
-                        {loading ? (
-                            <p>Loading teams...</p>
-                        ) : (
-                            <table className="border border-gray-300 mx-auto w-full max-w-4xl">
-                                <thead>
-                                    <tr className="bg-gray-200">
-                                        <th className="text-center px-4 py-2 w-2/3">Team</th>{' '}
-                                        <th className="text-center px-4 py-2 w-1/3">Points</th>{' '}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {teams.map((team) => (
-                                        <tr
-                                            key={team.id}
-                                            className="border border-b border-gray-300"
-                                        >
-                                            <td className="px-4 py-2">{team.name}</td>
-                                            <td className="text-center px-4 py-2">{team.points}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td className="px-2 py-2" colSpan={2}>
-                                            <button
-                                                onClick={handleAddTeamClick}
-                                                className="bg-transparent border border-white cursor-pointer"
-                                            >
-                                                + Add Team
-                                            </button>
+                    )}
+                </section>
+
+                <h2 className="text-lg font-semibold mb-4">Competitions</h2>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="border border-gray-300 px-4 py-2">Name</th>
+                                <th className="border border-gray-300 px-4 py-2">Matches Played</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {competitions.length > 0 ? (
+                                competitions.map((comp) => (
+                                    <tr key={comp.id} className="hover:bg-gray-50">
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {comp.name}
+                                        </td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {comp.matchesPlayed}
                                         </td>
                                     </tr>
-                                </tfoot>
-                            </table>
-                        )}
-                    </>
-                )}
-            </main>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={2}
+                                        className="border border-gray-300 px-4 py-2 text-center"
+                                    >
+                                        No competitions found
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </>
     );
 };
 
-export default Competition;
+export default CompetitionsPage;

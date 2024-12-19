@@ -33,6 +33,13 @@ const Header: React.FC = () => {
                     >
                         Competitions
                     </Link>
+                    <Link
+                        href="/team"
+                        className="nav-link px-3 fs-5 text-white"
+                        style={{ transition: 'color 0.3s' }}
+                    >
+                        Teams
+                    </Link>
                 </nav>
             </div>
 

@@ -1,23 +1,39 @@
-export type Role = 'admin' | 'user';
+export type Role = 'admin' | 'owner' | 'player';
 
+export type User = {
+    id: number;
+    name: string;
+    password: string;
+    role: string;
+    team?: Team;
+};
 export type Team = {
-    id?: number;
+    id: number;
     name: string;
     points: number;
-    owner: User[];
+    userId: number;
+    user: User;
     competitionId: number;
+    competition: Competition;
+    matchesAsTeam1: Match[];
+    matchesAsTeam2: Match[];
 };
-
 export type Competition = {
-    id?: number;
+    id: number;
     name: string;
     matchesPlayed: number;
     teams: Team[];
+    matches: Match[];
 };
-
-export type User = {
-    id?: number;
-    name: string;
-    password: string;
-    role: Role;
+export type Match = {
+    id: number;
+    date: string;
+    scoreTeam1: number;
+    scoreTeam2: number;
+    competitionId: number;
+    competition: Competition;
+    team1Id: number;
+    team1: Team;
+    team2Id: number;
+    team2: Team;
 };
