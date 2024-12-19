@@ -63,8 +63,8 @@ const Header: React.FC = () => {
             {t('header.login')}
           </Link>
         )}
-        <Link href="/user" className="nav-link px-4 fs-5 text-white">
-          {t('header.user')}
+        <Link href="/mysubmissions" className="nav-link px-4 fs-5 text-white">
+          {t('header.mysubmissions')}
         </Link>
       </nav>
       <Language />

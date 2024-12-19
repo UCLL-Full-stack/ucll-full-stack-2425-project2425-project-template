@@ -22,7 +22,7 @@
         "submissionForm": "Submission Form",
         "login": "Login",
         "logout": "Logout",
-        "user": "user",
+        "mysubmissions": "My Submissions",
         "logoutConfirm": "Are you sure you want to logout?"
     },
     "home": {
@@ -58,6 +58,9 @@
         "pendingSubmissions": "Pending Submissions",
         "actions": "Actions",
         "accept": "Accept",
-        "deny": "Deny"
+        "deny": "Deny",
+        "type": "Type",
+        "createdAt": "Created At",
+        "noSubmissions": "You have no submissions."
     }
 }

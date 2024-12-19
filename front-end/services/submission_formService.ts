@@ -36,12 +36,22 @@ const getAllSubmissionForms = async () => {
       },
     });
   };
+
+  const getSubmissionsByCreatedBy = async (userId: number): Promise<Response> => {
+    return fetch(`${apiUrl}/submission_forms/createdBy/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  };
   
   const submission_formService = {
     getAllSubmissionForms,
     createSubmissionForm,
     acceptSubmissionForm,
     deleteSubmissionForm,
+    getSubmissionsByCreatedBy,
   };
 
   export default submission_formService;

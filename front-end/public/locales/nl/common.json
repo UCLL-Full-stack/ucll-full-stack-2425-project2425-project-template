@@ -22,7 +22,7 @@
         "submissionForm": "Inzendingsformulier",
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "user": "gebruiker",
+        "mysubmissions": "Mijn Inzendingsformulieren",
         "logoutConfirm": "Weet je zeker dat je wilt uitloggen?"
     },
     "home": {
@@ -58,6 +58,9 @@
         "pendingSubmissions": "In afwachting van inzendingen",
         "actions": "Acties",
         "accept": "Accepteren",
-        "deny": "Weigeren"
+        "deny": "Weigeren",
+        "type": "Type",
+        "createdAt": "Aangemaakt om",
+        "noSubmissions": "Je hebt geen Inzendingsformulieren."
     }
 }
