@@ -22,11 +22,14 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
     const [trip, setTrip] = useState<Trip | null>(initialTrip);
     const [loading, setLoading] = useState(!initialTrip);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userRole, setUserRole] = useState<string | null>(null);
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
         const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+        const role = loggedInUser ? JSON.parse(loggedInUser).role : null;
         setIsLoggedIn(!!token);
+        setUserRole(role);
     }, []);
 
     useEffect(() => {
@@ -99,6 +102,25 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
 
     if (!trip) {
         return <div>{t("error.tripNotFound")}</div>;
+    }
+
+    console.log("userRole", userRole)
+
+    if (userRole === 'guest') {
+        console.log("userRole", userRole)
+        return (
+            <>
+                <Head>
+                    <title>{t('error.noAccess')}</title>
+                </Head>
+                <Navbar />
+                <div className={styles['trip-details-body']}>
+                    <div className={errorStyles.errorMessage}>
+                        You have no access to this page
+                    </div>
+                </div>
+            </>
+        );
     }
 
     const startDate = new Date(trip.startDate);
