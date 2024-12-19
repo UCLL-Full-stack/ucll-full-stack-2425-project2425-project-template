@@ -40,6 +40,24 @@ const BMWX5 = await prisma.car.create({
     },
 })
 
+const manager = await prisma.user.create({
+    data: {
+        name: 'manager1',
+        password: await bcrypt.hash('manager123', 12),
+        email: 'manager@carshop.be',
+        role: 'Manager',
+    },
+});
+
+const salesman = await prisma.user.create({
+    data: {
+        name: 'salesman1',
+        password: await bcrypt.hash('salesman123', 12),
+        email: 'salesman@carshop.be',
+        role: 'Salesman',
+    },
+});
+
 const teslaModelSFrontBumper = await prisma.carPart.create({
     data: {
         name: "Tesla front Bumper",

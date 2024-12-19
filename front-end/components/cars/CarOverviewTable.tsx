@@ -4,6 +4,7 @@ import CarService from "@/services/CarService";
 import { useToast } from "@/src/hooks/use-toast";
 import { Toaster } from "@/src/components/ui/toaster";
 import { useRouter } from "next/router";
+import { Trash2 } from "lucide-react";
 
 type Props = {
   cars: Array<Car>;
@@ -85,9 +86,9 @@ const CarOverviewTable: React.FC<Props> = ({ cars, selectCar }: Props) => {
                         console.error("Car ID is undefined");
                       }
                     }}
-                    className="mt- px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition"
+                    className="mt- px-2 py-2 bg-[#ff8921] hover:bg-[#ff642bbb] rounded "
                   >
-                    Remove
+                    <Trash2 className="text-black"/>
                   </button>
                 </td>
               </tr>
