@@ -77,8 +77,8 @@ taskRouter.put('/:taskId', async (req, res) => {
     const { taskId } = req.params;
     const updatedTask = req.body;
     try {
-        await taskService.updateTask(taskId, updatedTask);
-        res.status(200).json({ message: 'Task updated successfully' });
+        const task = await taskService.updateTask(taskId, updatedTask);
+        res.status(200).json(task);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });

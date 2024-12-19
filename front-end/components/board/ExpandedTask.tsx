@@ -1,25 +1,83 @@
 import UserService from "@/services/UserService";
-import { Task } from "@/types";
+import TaskService from "@/services/TaskService";
+import GuildService from "@/services/GuildService";
+import { Task, User } from "@/types";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import ColumnService from "@/services/ColumnService";
+import BoardService from "@/services/BoardService";
 
 interface ExpandedTaskProps {
     task: Task;
     onClose: () => void;
+    onTaskUpdate: (task: Task) => void;
 }
 
-const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose }) => {
+const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate }) => {
+    const [isEditing, setIsEditing] = useState(false);
     const [assigneeNames, setAssigneeNames] = useState<string[]>([]);
+    const [title, setTitle] = useState(task.title);
+    const [description, setDescription] = useState(task.description);
+    const [dueDate, setDueDate] = useState(task.dueDate.split("T")[0]);
+    const [selectedAssignees, setSelectedAssignees] = useState<User[]>([]);
+    const [availableUsers, setAvailableUsers] = useState<User[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        const fetchAssigneeNames = async () => {
-            const userData = await Promise.all(
-                task.assigneeIds.map((assignee) => UserService.getUser(assignee))
+        const fetchAssigneesAndUsers = async () => {
+            const assigneeData = await Promise.all(
+                task.assigneeIds.map((id) => UserService.getUser(id))
             );
-            setAssigneeNames(userData.map((user) => user.globalName));
+            setAssigneeNames(assigneeData.map((user) => user.globalName));
+            setSelectedAssignees(assigneeData);
+            const column = await ColumnService.getColumnById(task.columnId);
+            const board = await BoardService.getBoard(column.boardId);
+            const guildUsers = await GuildService.getGuildMembers(board.guildId);
+            setAvailableUsers(guildUsers);
         };
-        fetchAssigneeNames();
-    }, [task.assigneeIds]);
+
+        fetchAssigneesAndUsers();
+    }, [task.assigneeIds, task.columnId]);
+
+    const handleUpdateTask = async () => {
+        if (!title.trim() || !description.trim() || !dueDate.trim()) {
+            setError("Title, description, and due date are required");
+            return;
+        }
+
+        const updatedTask = {
+            title: title.trim(),
+            description: description.trim(),
+            dueDate: new Date(dueDate),
+            assigneeIds: selectedAssignees.map((user) => user.userId),
+        };
+
+        try {
+            const newTask = await TaskService.updateTask(task.taskId, updatedTask);
+            onTaskUpdate(newTask);
+            setIsEditing(false);
+        } catch (err) {
+            console.error("Error updating task:", err);
+        }
+    };
+
+    const handleAddAssignee = (user: User) => {
+        if (!selectedAssignees.some((assignee) => assignee.userId === user.userId)) {
+            setSelectedAssignees((prev) => [...prev, user]);
+        }
+        setSearchQuery("");
+    };
+
+    const handleRemoveAssignee = (userId: string) => {
+        setSelectedAssignees((prev) => prev.filter((user) => user.userId !== userId));
+    };
+
+    const filteredUsers = availableUsers.filter(
+        (user) =>
+            user.globalName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !selectedAssignees.some((assignee) => assignee.userId === user.userId)
+    );
 
     const formattedDueDate = format(new Date(task.dueDate), "MMMM d, yyyy");
 
@@ -33,23 +91,112 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose }) => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
-                    onClick={onClose} 
+                    onClick={onClose}
                     className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
                 >
                     ✕
                 </button>
-                <h2 className="text-xl font-semibold mb-4">{task.title}</h2>
-                <div className="text-gray-300">
-                    <p className="mb-2">
-                        <strong>Description:</strong> {task.description}
-                    </p>
-                    <p className="mb-2">
-                        <strong>Due Date:</strong> {formattedDueDate}
-                    </p>
-                    <p>
-                        <strong>Assignees:</strong> {assigneeNames.length > 0 ? assigneeNames.join(", ") : "None"}
-                    </p>
-                </div>
+                {!isEditing ? (
+                    <>
+                        <h2 className="text-xl font-semibold mb-4">{task.title}</h2>
+                        <div className="text-gray-300">
+                            <p className="mb-2">
+                                <strong>Description:</strong> {task.description}
+                            </p>
+                            <p className="mb-2">
+                                <strong>Due Date:</strong> {formattedDueDate}
+                            </p>
+                            <p>
+                                <strong>Assignees:</strong>{" "}
+                                {assigneeNames.length > 0 ? assigneeNames.join(", ") : "None"}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setIsEditing(true)}
+                            className="mt-4 bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
+                        >
+                            Edit Task
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
+                        {error && <p className="text-red-500 mb-4">{error}</p>}
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Title"
+                            className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                        />
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Description"
+                            className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                        ></textarea>
+                        <label className="block text-sm mb-2">Due Date:</label>
+                        <input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                        />
+                        <p>Assignees:</p>
+                        {selectedAssignees.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-2 bg-gray-600 p-2 rounded-md">
+                                {selectedAssignees.map((assignee) => (
+                                    <div
+                                        key={assignee.userId}
+                                        className="bg-gray-700 px-3 py-1 rounded flex items-center"
+                                    >
+                                        <span>{assignee.globalName}</span>
+                                        <button
+                                            className="ml-2 text-gray-500 hover:text-red-600"
+                                            onClick={() => handleRemoveAssignee(assignee.userId)}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div className="mb-2">
+                            <input
+                                type="text"
+                                placeholder="Search users"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full p-2 rounded-md outline-none bg-gray-600 text-white"
+                            />
+                            <ul className="mt-2 bg-gray-800 rounded-md max-h-32 overflow-y-auto">
+                                {filteredUsers.map((user) => (
+                                    <li
+                                        key={user.userId}
+                                        className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                        onClick={() => handleAddAssignee(user)}
+                                    >
+                                        {user.globalName}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="flex justify-between mt-4">
+                            <button
+                                onClick={() => setIsEditing(false)}
+                                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleUpdateTask}
+                                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
+                            >
+                                Update
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

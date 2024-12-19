@@ -10,9 +10,10 @@ import BoardService from "@/services/BoardService";
 interface ColumnProps {
     column: Column;
     onDelete: (columnId: string) => void;
+    onTaskChange: () => void;
 }
 
-const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
+const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange }) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [columnName, setColumnName] = useState(column.columnName);
@@ -45,7 +46,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
 
         };
         fetchData();
-    }, [column.taskIds]);
+    }, [column.taskIds]); 
 
     const handleBlur = async () => {
         setIsEditing(false);
@@ -78,6 +79,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
 
         try {
             const newTask = await TaskService.addTask(taskPayload);
+            console.log(newTask);
             setTasks((prev) => [...prev, newTask]);
             setCreatingTask(false);
             setNewTaskTitle("");
@@ -86,9 +88,18 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
             setSelectedAssignees([]);
             setError("");
             console.log("Task created successfully");
+            onTaskChange();
         } catch (error) {
             console.error("Error creating task:", error);
         }
+    };
+
+    const handleTaskUpdate = (updatedTask: Task) => {
+        setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+                task.taskId === updatedTask.taskId ? updatedTask : task
+            )
+        );
     };
 
     const handleAddAssignee = (user: User) => {
@@ -139,17 +150,21 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
                         {...provided.droppableProps}
                     >
                         {tasks.map((task, index) => (
-                            <Draggable draggableId={task.taskId} index={index} key={task.taskId}>
-                                {(provided) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                    >
-                                        <TaskComponent task={task} index={index} />
-                                    </div>
-                                )}
-                            </Draggable>
+                            task.taskId && (
+                                <Draggable draggableId={task.taskId} index={index} key={task.taskId} >
+                                    {(provided) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            onMouseEnter={() => setIsHovered(false)}
+                                            onMouseLeave={() => setIsHovered(true)}
+                                        >
+                                            <TaskComponent task={task} index={index} onTaskUpdate={handleTaskUpdate}/>
+                                        </div>
+                                    )}
+                                </Draggable>
+                            )
                         ))}
                         {provided.placeholder}
                     </div>
@@ -274,6 +289,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete }) => {
                 ) : (
                     <button
                         onClick={() => setCreatingTask(true)}
+                        onMouseEnter={() => setIsHovered(false)}
+                        onMouseLeave={() => setIsHovered(true)}
                         className="w-full p-2 mt-4 bg-gray-800 text-white rounded-md hover:bg-gray-900"
                     >
                         + Create Task

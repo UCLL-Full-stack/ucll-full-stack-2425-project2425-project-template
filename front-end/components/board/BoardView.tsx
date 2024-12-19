@@ -16,16 +16,15 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
     const [columns, setColumns] = useState<Column[]>([]);
     const [addingColumn, setAddingColumn] = useState(false);
     const [newColumnName, setNewColumnName] = useState("");
+    const fetchData = async () => {
+        const fetchedColumns = await Promise.all(
+            board.columnIds.map((id) => ColumnService.getColumnById(id))
+        );
+        const sortedColumns = fetchedColumns.sort((a, b) => a.columnIndex - b.columnIndex);
+        setColumns(sortedColumns);
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const fetchedColumns = await Promise.all(
-                board.columnIds.map((id) => ColumnService.getColumnById(id))
-            );
-            const sortedColumns = fetchedColumns.sort((a, b) => a.columnIndex - b.columnIndex);
-
-            setColumns(sortedColumns);
-        };
         fetchData();
     }, [board.columnIds]);
 
@@ -158,6 +157,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                                 <ColumnComponent
                                                     column={column}
                                                     onDelete={onDeleteColumn}
+                                                    onTaskChange={fetchData}
                                                 />
                                             </div>
                                         )}
