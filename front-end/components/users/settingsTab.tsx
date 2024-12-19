@@ -51,6 +51,13 @@ const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
     await AccountService.updateAccount(updatedAccountStatus!);
   }
 
+  const handleDeleteAccount = async (accountNumber: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    await AccountService.deleteAccount(accountNumber);
+    const updatedAccountsList = updatedAccounts.filter((account) => account.accountNumber !== accountNumber);
+    setUpdatedAccounts(updatedAccountsList);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (updatedAccountStatus) {
@@ -182,7 +189,7 @@ const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
                           <option value="Inactive">Inactive</option>
                         </select>
                       </td>
-                      <td><button>Delete Account</button></td>
+                      <td><button onClick={(e) => account.accountNumber && handleDeleteAccount(account.accountNumber, e)}>Delete Account</button></td>
                     </tr>
                   ))
                 ) : (

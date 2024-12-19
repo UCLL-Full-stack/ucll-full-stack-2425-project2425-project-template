@@ -107,7 +107,14 @@ export class Account {
         if (type === 'income') {
             return (this.balance += amount);
         } else if (type === 'expense') {
-            return (this.balance -= amount);
+            if (this.balance - amount < 0) {
+                throw new Error('Insufficient funds.');
+            } else if (this.balance - amount === 0) {
+                this.status = 'Inactive';
+                return (this.balance -= amount);
+            } else {
+                return (this.balance -= amount);
+            }
         } else {
             throw new Error('Transaction type must be either "income" or "expense".');
         }
@@ -134,9 +141,6 @@ export class Account {
     }) {
         if (account.balance < 0) {
             throw new Error('Balance must be greater than or equal to 0.');
-        }
-        if (!account.accountNumber) {
-            throw new Error('Account number is required.');
         }
         if (!account.type) {
             throw new Error('Account type is required.');
