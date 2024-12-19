@@ -50,6 +50,45 @@ export class Booking {
         }
     }
 
+    addStudentToBooking(student: Student) {
+        if (!this.students.includes(student)) {
+            this.students.push(student);
+        }
+    }
+
+    public getId(): number | undefined {
+        return this.id;
+    }
+
+    public getStudents(): Student[] {
+        return this.students;
+    }
+
+    public getTrip(): Trip {
+        return this.trip;
+    }
+    public getStatus(): PaymentStatus {
+        return this.paymentStatus; 
+    }
+    getBookingDate() {
+        return this.bookingDate;
+      }
+    
+    getPaymentStatus() {
+        return this.paymentStatus;
+      }
+    
+    equals(booking: Booking): boolean {
+        return (
+            this.id === booking.getId() &&
+            this.bookingDate.getTime() === booking.bookingDate.getTime() &&
+            this.paymentStatus === booking.paymentStatus &&
+            this.trip.equals(booking.trip) &&
+            this.students.length === booking.students.length &&
+            this.students.every((student, index) => student.equals(booking.students[index]))
+        );
+    }
+
     static from({
         id,
         bookingDate,

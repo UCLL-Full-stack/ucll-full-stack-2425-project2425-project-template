@@ -1,8 +1,15 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { Booking } from '../model/booking';
 import { BookingInput } from '../types/index';
 
 import bookingService from '../service/booking.service';
+
+interface AuthRequest extends Request {
+  auth: {
+    username: string;
+    role: string;
+  };
+}
 
 const bookingRouter = express.Router();
 
@@ -54,7 +61,7 @@ const bookingRouter = express.Router();
  *           type: string
  *           format: date
  *           description: The end date of the trip.
- *     BookingInput:  # Add a schema for the BookingInput
+ *     BookingInput:
  *       type: object
  *       properties:
  *         bookingDate:
@@ -110,9 +117,12 @@ const bookingRouter = express.Router();
  *                   type: string
  *                   example: An error occurred while retrieving bookings.
  */
-bookingRouter.get('/', async (req: Request, res: Response) => {
+bookingRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const bookings = await bookingService.getAllBookings();
+    const { username, role } = (req as AuthRequest).auth;
+
+    const bookings = await bookingService.getAllBookings({ username, role });
+
     res.status(200).json(bookings);
   } catch (error) {
     const err = error as Error;
@@ -133,7 +143,7 @@ bookingRouter.get('/', async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/BookingInput'  # Reference to the BookingInput schema
+ *             $ref: '#/components/schemas/BookingInput'
  *     responses:
  *       201:
  *         description: Booking created successfully
@@ -202,7 +212,7 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
  *                   type: string
  *                   example: Booking with ID {bookingId} does not exist.
  */
-bookingRouter.get('/:bookingId', async (req: Request, res: Response) => {
+bookingRouter.get('/:bookingId', async (req: Request, res: Response, next: NextFunction) => {
   const { bookingId } = req.params;
 
   if (isNaN(Number(bookingId))) {

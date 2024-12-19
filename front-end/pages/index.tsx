@@ -10,20 +10,47 @@ const OverviewPage: React.FC = () => {
   const { t } = useTranslation("common");
 
   const users = [
-    { username: 'john_doe', email: 'john@example.com', role: 'student', firstName: 'John', lastName: 'Doe' },
-    { username: 'jane_smith', email: 'jane@example.com', role: 'student', firstName: 'Jane', lastName: 'Smith' },
-    { username: 'admin_user', email: 'admin@example.com', role: 'admin', firstName: 'Admin', lastName: 'User' },
-    { username: 'guest_user', email: 'guest@example.com', role: 'guest', firstName: 'Guest', lastName: 'User' }
+    {
+      username: 'john_doe',
+      email: 'john@example.com',
+      role: 'student',
+      firstName: 'John',
+      lastName: 'Doe',
+      password: 'Password123',
+    },
+    {
+      username: 'jane_smith',
+      email: 'jane@example.com',
+      role: 'student',
+      firstName: 'Jane',
+      lastName: 'Smith',
+      password: 'Password456', 
+    },
+    {
+      username: 'admin_user',
+      email: 'admin@example.com',
+      role: 'admin',
+      firstName: 'Admin',
+      lastName: 'User',
+      password: 'Adminpassword1', 
+    },
+    {
+      username: 'guest_user',
+      email: 'guest@example.com',
+      role: 'guest',
+      firstName: 'Guest',
+      lastName: 'User',
+      password: 'Guestpassword', 
+    }
   ];
 
   return (
     <div className={styles['overview-page']}>
       <Navbar />
+      
       <section className={styles['welcome-section']}>
         <h1>{t("index.welkom")}</h1>
-        <p>
-          {t("index.inleidendetekst")}
-        </p>
+        <p>{t("index.inleidendetekst")}</p>
       </section>
 
       <section className={styles['hero-image']}>
@@ -37,7 +64,6 @@ const OverviewPage: React.FC = () => {
       </section>
 
       <section className={styles['users-table-section']}>
-        <h2 className={styles['table-title']}>{t("index.usersTableTitle")}</h2>
         <div className={styles['table-container']}>
           <table className={styles['users-table']}>
             <thead>
@@ -45,8 +71,9 @@ const OverviewPage: React.FC = () => {
                 <th>{t("index.username")}</th>
                 <th>{t("index.email")}</th>
                 <th>{t("index.role")}</th>
-                <th>{t("index.firstname")}</th>
-                <th>{t("index.lastname")}</th>
+                <th>{t("index.firstName")}</th>
+                <th>{t("index.lastName")}</th>
+                <th>{t("index.password")}</th> 
               </tr>
             </thead>
             <tbody>
@@ -57,6 +84,7 @@ const OverviewPage: React.FC = () => {
                   <td>{user.role}</td>
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
+                  <td>{user.password}</td>
                 </tr>
               ))}
             </tbody>
@@ -71,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "nl", ["common"]))
+      ...(await serverSideTranslations(locale ?? "nl", ["common"])),
     },
   };
 };

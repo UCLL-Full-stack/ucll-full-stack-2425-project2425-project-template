@@ -1,7 +1,5 @@
 import { Booking } from './booking';
 import { Student as StudentPrisma, Booking as BookingPrisma, Review as ReviewPrisma, Trip as TripPrisma, User as UserPrisma } from '@prisma/client';
-import { Review } from './review';
-import { Role } from '../types';
 import { User } from './user';
 
 export class Student {
@@ -14,13 +12,12 @@ export class Student {
         id?: number;
         user: User;
         studentNumber: string;
-        bookings?: Booking[]; 
-        review?: Review | null; 
+        bookings?: Booking[];
     }) {
         this.id = student.id;
         this.user = student.user;
         this.studentNumber = student.studentNumber;
-        this.bookings = student.bookings || []; 
+        this.bookings = student.bookings || [];
     }
 
     getId(): number | undefined {
@@ -40,17 +37,28 @@ export class Student {
             throw new Error('Student number is required.');
         }
     }
+
+    equals(student: Student): boolean {
+        return (
+            this.id === student.getId() &&
+            this.studentNumber === student.getStudentnumber() &&
+            this.user.equals(student.getUser())
+        );
+    }
+
     static from({
         id,
         user,
         studentNumber,
         bookings = [],
-    }: StudentPrisma & { bookings: (BookingPrisma & { trip: TripPrisma })[]; user: UserPrisma }) : Student {
+    }: StudentPrisma & { bookings: (BookingPrisma & { trip: TripPrisma })[]; user: UserPrisma }): Student {
         return new Student({
             id: id ? Number(id) : undefined,
             user: User.from(user),
             studentNumber,
-            bookings: bookings.map((booking) => Booking.from({...booking, trip: booking.trip, students: []})),
+            bookings: bookings.map((booking) =>
+                Booking.from({ ...booking, trip: booking.trip, students: [] })
+            ),
         });
     }
 }

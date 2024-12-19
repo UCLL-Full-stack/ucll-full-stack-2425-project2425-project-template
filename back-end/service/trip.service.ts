@@ -1,6 +1,8 @@
 import tripDb from "../repository/trip.db";
 import { Trip } from "../model/trip";
 import { TripInput } from "../types";
+import bookingDb from "../repository/booking.db";
+import { Booking } from "../model/booking";
 
 const createTrip = async (input: TripInput): Promise<Trip> => {
     const { description, startDate, endDate, price, destination } = input;
@@ -21,11 +23,15 @@ const createTrip = async (input: TripInput): Promise<Trip> => {
         throw new Error("End date is required.");
     }
 
-    if (price < 0) {
+    if (price < 0 || isNaN(price)) {
         throw new Error("Price must be a positive number.");
     }
 
-    const newTrip = new Trip({ description, destination, startDate, endDate, price, });
+    if (new Date(startDate) >= new Date(endDate)) {
+        throw new Error("End date must be later than the start date.");
+    }
+
+    const newTrip = new Trip({ description, destination, startDate, endDate, price });
     newTrip.validate();
 
     try {
@@ -63,4 +69,36 @@ const getTripById = async (tripId: number): Promise<Trip | null> => {
     return trip;
 };
 
-export default { createTrip, getAllTrips, getTripById };
+const getBookingForTrip = async ({ tripId }: { tripId: number }): Promise<Booking[]> => {
+    try {
+        const bookingsPrisma = await tripDb.getBookingForTrip({ tripId });
+        return bookingsPrisma.map((bookingPrisma: any) => Booking.from(bookingPrisma));
+    } catch (error) {
+        console.error('Error fetching bookings for trip:', tripId, error);
+        throw new Error(`Unable to retrieve bookings for trip with ID: ${tripId}. Please try again later.`);
+    }
+};
+
+const updateBookingForTrip = async ({ booking }: { booking: Booking }): Promise<Booking | null> => {
+    const bookingId = booking.getId();  
+    const students = booking.getStudents();  
+    const trip = booking.getTrip();  
+    const status = booking.getStatus();  
+
+    if (!bookingId) {
+        throw new Error('Booking ID is required for updating the booking.');
+    }
+
+    try {
+        const updatedBooking = await tripDb.updateBookingForTrip({
+            booking: booking
+        });
+
+        return updatedBooking;
+    } catch (error) {
+        console.error('Error updating booking for trip:', bookingId, error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { createTrip, getAllTrips, getTripById, getBookingForTrip, updateBookingForTrip };

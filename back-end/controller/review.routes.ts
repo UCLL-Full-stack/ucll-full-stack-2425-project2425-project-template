@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import reviewService from '../service/review.service';
 
 const reviewRouter = express.Router();
-
 /**
  * @swagger
  * components:
