@@ -1,8 +1,9 @@
+import { Team } from "../model/team";
 import teamDb from "../repository/team.db"
 import { TeamInput } from "../types/types";
 
 
-const getAllTeams = async () => {
+const getAllTeams = async (): Promise<Team[]> => {
     return teamDb.findAll();
 }
 
