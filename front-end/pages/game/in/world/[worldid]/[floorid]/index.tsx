@@ -18,8 +18,9 @@ const GameMap: React.FC = () => {
     const [playerPosition, setPlayerPosition] = useState<coordinate | null>(null);
     const [positions, setPositions] = useState<Position[]>([]);
     const [player, setPlayer] = useState<Player | null>(null);
-    const [lastMoveTime, setLastMoveTime] = useState<number>(0)
-    const [spawnedIn, setSpawnedIn] = useState<boolean>(false)
+    const [lastMoveTime, setLastMoveTime] = useState<number>(0);
+    const [spawnedIn, setSpawnedIn] = useState<boolean>(false);
+    const [isBeyondLastFloor, setBeyondLastFloor] = useState<boolean>(false);
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -81,11 +82,14 @@ const GameMap: React.FC = () => {
 
     const getFloor = async() => {
         if (floorid && world && world.floors){
+            let outOfFloors = true;
             world.floors.forEach(aFloor => {
                 if (aFloor.floornumber === parseInt(floorid as string)){
                     setFloor(aFloor);
+                    outOfFloors = false;
                 }
             });
+            setBeyondLastFloor(outOfFloors)
         }
     }
 
@@ -208,6 +212,20 @@ const GameMap: React.FC = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [floor, player]);
+
+    if (isBeyondLastFloor){
+        return (
+            <div className="flex flex-col">
+                <p className="text-center m-6">You completed this world!</p>
+                <button
+                    onClick={() => router.push("/game")}
+                    className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 text-center m-6"
+                >
+                    Leave
+                </button>
+            </div>
+        )
+    }
 
     if (!floor) {
         return <div className="text-center">Loading Floor...</div>;
