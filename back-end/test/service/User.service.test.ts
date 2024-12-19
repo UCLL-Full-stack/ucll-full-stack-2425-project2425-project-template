@@ -194,5 +194,5 @@ test('given invalid password, when authenticate is called, then throw error', as
         surname: userInput.surname, 
         email: userInput.email, 
         permission: userInput.permission 
-    })).rejects.toThrowError('Incorrect password');
+    })).rejects.toThrowError('Incorrect username or password');
 });

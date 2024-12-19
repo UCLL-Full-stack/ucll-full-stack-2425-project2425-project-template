@@ -29,7 +29,7 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
         throw new Error('Incorrect username or password');
     }
     return {
-        token: generateJwtToken({ username: user.getUsername(), permission: user.getPermission() }),
+        token: generateJwtToken({id: user.getId() ?? 0, username: user.getUsername(), permission: user.getPermission() }),
         username: username,
         fullName: `${user.getName()} ${user.getSurname()}`,
         permission: user.getPermission(),

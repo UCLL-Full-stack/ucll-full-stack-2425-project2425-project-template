@@ -1,4 +1,4 @@
-import { Submission } from '../model/submission';
+import { Submission } from '../model/Submission';
 import database from '../util/database';
 
 const createSubmission = async ({ submission }: { submission: Submission }): Promise<Submission> => {
@@ -27,11 +27,7 @@ const createSubmission = async ({ submission }: { submission: Submission }): Pro
 
 const getAllSubmissions = async ():Promise<Submission[] | null> => {
     try {
-        const submissionPrisma = await database.submission.findMany({
-            include: {
-                user: true,
-            },
-        });
+        const submissionPrisma = await database.submission.findMany();
         return submissionPrisma.map((submissionPrisma) => Submission.from(submissionPrisma));
     } catch (error) {
         console.error(error);

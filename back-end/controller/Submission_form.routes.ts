@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
-import submissionFormService from '../service/Submission.service';
 import { SubmissionInput } from '../types';
+import submissionService from '../service/Submission.service';
 
-const submissionFormRouter = express.Router();
+const submissionRouter = express.Router();
 
 /**
  * @swagger
@@ -53,13 +53,12 @@ const submissionFormRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/SubmissionForm'
  */
-submissionFormRouter.get('/', (req, res) => {
+submissionRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const submissionForms = submissionFormService.getAllSubmissions();
-        res.status(200).json(submissionForms);
+        const submissions = await submissionService.getAllSubmissions();
+        res.status(200).json(submissions);
     } catch (error) {
-        const err = error as Error;
-        res.status(404).json({ error: err.message });
+        next(error);
     }
 });
 
@@ -104,14 +103,14 @@ submissionFormRouter.get('/', (req, res) => {
  *       500:
  *         description: Internal server error.
  */
-submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+submissionRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormInput: SubmissionInput = req.body;
         submissionFormInput.createdAt = new Date(submissionFormInput.createdAt); // Convert to Date object
         if (submissionFormInput.solvedAt) {
             submissionFormInput.solvedAt = new Date(submissionFormInput.solvedAt); // Convert to Date object if present
         }
-        const newSubmissionForm = await submissionFormService.createSubmission(submissionFormInput);
+        const newSubmissionForm = await submissionService.createSubmission(submissionFormInput);
         res.status(201).json(newSubmissionForm);
     } catch (error) {
         const err = error as Error;
@@ -149,10 +148,10 @@ submissionFormRouter.post('/', async (req: Request, res: Response, next: NextFun
  *       500:
  *         description: Internal server error.
  */
-submissionFormRouter.post('/accept/:id', async (req: Request, res: Response, next: NextFunction) => {
+submissionRouter.post('/accept/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormId = parseInt(req.params.id);
-        const acceptedSubmissionForm = submissionFormService.acceptSubmission(submissionFormId);
+        const acceptedSubmissionForm = submissionService.acceptSubmission(submissionFormId);
         res.status(200).json(acceptedSubmissionForm);
     } catch (error) {
         const err = error as Error;
@@ -183,10 +182,10 @@ submissionFormRouter.post('/accept/:id', async (req: Request, res: Response, nex
  *         description: Internal server error.
  */
 
-submissionFormRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+submissionRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const submissionFormId = parseInt(req.params.id);
-        submissionFormService.deleteSubmission(submissionFormId);
+        submissionService.deleteSubmission(submissionFormId);
         res.status(204).send();
     } catch (error) {
         const err = error as Error;
@@ -222,10 +221,10 @@ submissionFormRouter.delete('/:id', async (req: Request, res: Response, next: Ne
  *         description: Internal server error.
  */
 
-submissionFormRouter.get('/createdBy/:userId', async (req: Request, res: Response, next: NextFunction) => {
+submissionRouter.get('/createdBy/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = parseInt(req.params.userId);
-        const submissions = await submissionFormService.getSubmissionsByCreatedBy(userId);
+        const submissions = await submissionService.getSubmissionsByCreatedBy(userId);
         if (submissions) {
             res.status(200).json(submissions);
         } else {
@@ -237,4 +236,4 @@ submissionFormRouter.get('/createdBy/:userId', async (req: Request, res: Respons
 });
 
 
-export { submissionFormRouter };
+export { submissionRouter };
