@@ -3,10 +3,13 @@ import playerService from '@services/playerService';
 import { useState, useEffect } from 'react';
 import { Player, User, World } from '@types';
 import worldService from '@services/worldService';
+import { useRouter } from 'next/router';
 
 const WorldSelection: React.FC = () => {
+    const router = useRouter();
     const [loggedInUser, setLoggedInUser] = useState<User>();
     const [userWorlds, setUserWorlds] = useState<World[]>();
+    const [allWorldsMinusUser, setAllWorldsMinusUser] = useState<World[]>();
     const [allWorlds, setAllWorlds] = useState<World[]>();
 
     const getWorlds = async () => {
@@ -18,18 +21,23 @@ const WorldSelection: React.FC = () => {
 
     const getUserWorlds = async () => {
         if (allWorlds && loggedInUser){
-            let result: World[] = [];
+            let worldsOfUser: World[] = [];
+            let worldsNotOfUser: World[] = [];
             allWorlds.forEach(world => {
                 if (world.owner.email === loggedInUser.email) {
-                    result.push(world);
+                    worldsOfUser.push(world);
+                }
+                else {
+                    worldsNotOfUser.push(world);
                 }
             })
-            setUserWorlds(result);
+            setUserWorlds(worldsOfUser);
+            setAllWorldsMinusUser(worldsNotOfUser);
         }
     }
 
     const joinworld = async (id: number) => {
-        console.log("hallo");
+        router.push("/game/in/world/" + id + "/1");
     }
 
     useEffect(() => {
@@ -49,26 +57,45 @@ const WorldSelection: React.FC = () => {
     }, []);
 
     if (!allWorlds){
-        return <p>Loading Worlds...</p>
+        return <p>Loading worlds...</p>
     }
 
     if (!userWorlds){
-        return <p>Loading Worlds...</p>
+        return <p>Loading your worlds...</p>
+    }
+
+    if (!allWorldsMinusUser){
+        return <p>Loading other people's worlds...</p>
     }
 
     return (
         <div className="flex flex-col items-center justify-center ">
+            <p className='text-2xl m-6'>Your Worlds</p>
             {userWorlds.length <= 0 ? (
                 <p>You have no worlds</p>
             ):(
-                <>
-                <p className='text-2xl m-6'>Your Worlds</p>
+                <div className='flex flex-row'>
                 {userWorlds.map((world, index) => (
-                    <div className='border-solid hover:border-dotted border-2 rounded p-12' key={index} onClick={() => joinworld(world.id)}>
+                    <div className='border-solid hover:border-dotted border-2 rounded h-24 w-60 content-center m-2' key={index} onClick={() => joinworld(world.id)}>
                         <p className='text-2xl'>{world.name}</p>
                     </div>
                 ))}
-                </>
+                    <div className='border-solid hover:border-dotted border-2 border-green-500 rounded h-24 w-60 content-center m-2 bg-green-200' onClick={() => joinworld(1)}>
+                        <p className='text-2xl'>Create New World</p>
+                    </div>
+                </div>
+            )}
+            <p className='text-2xl m-6'>Other people's worlds</p>
+            {allWorldsMinusUser.length <= 0 ? (
+                <p>No other worlds found</p>
+            ):(
+                <div className='flex flex-row'>
+                {allWorldsMinusUser.map((world, index) => (
+                    <div className='border-solid hover:border-dotted border-2 rounded h-24 w-60 content-center m-2' key={index} onClick={() => joinworld(world.id)}>
+                        <p className='text-2xl'>{world.name}</p>
+                    </div>
+                ))}
+                </div>
             )}
         </div>
     );
