@@ -10,9 +10,19 @@ interface TaskProps {
     index: number;
     onTaskUpdate: (task: Task) => void;
     onTaskDelete: (taskId: string) => void;
+    permissions: {
+        canDeleteColumns: boolean;
+        canEditColumns: boolean;
+        canCreateTasks: boolean;
+        canEditTasks: boolean;
+        canDeleteTasks: boolean;
+        canAssignTasks: boolean;
+        canEditAssignees: boolean;
+        canEditTaskStatus: boolean;
+    }
 }
 
-const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskDelete }) => {
+const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskDelete, permissions }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -48,7 +58,7 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskD
         >
             <div className="flex justify-between items-center">
                 <h3 className="font-medium">{task.title}</h3>
-                {isHovered && (
+                {isHovered && permissions.canDeleteTasks&& (
                     <button
                         className="text-gray-500 hover:text-red-600"
                         onClick={(e) => {
@@ -59,7 +69,8 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskD
                         ✕
                     </button>
                 )}
-            </div>            <p>{task.description}</p>
+            </div>            
+            <p>{task.description}</p>
             {isExpanded && (
                 <ExpandedTask
                     task={task}
@@ -71,6 +82,7 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskD
                         onTaskDelete(taskId);
                         setIsExpanded(false);
                     }}
+                    permissions={permissions}
                 />
             )}
             <ConfirmationModal

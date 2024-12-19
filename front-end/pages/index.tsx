@@ -84,8 +84,22 @@ const Home: FC = () => {
       setSelectedGuildId(guild.guildId || guild.id);
       try {
           const fetchedBoards = await BoardService.getBoardsByGuild(guild.guildId);
-          setBoards(fetchedBoards || []);
-      } catch (error) {
+          const filteredBoards = await Promise.all(
+            fetchedBoards.map(async (board) => {
+              try {
+                  const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+                  const canViewBoard =
+                      permissions.includes(KanbanPermission.VIEW_BOARD) || 
+                      permissions.includes(KanbanPermission.ADMINISTRATOR);
+                  return canViewBoard ? board : null;
+              } catch (error) {
+                  console.error(`Error checking permissions for board ${board.boardId}:`, error);
+                  return null;
+              }
+          })
+          )
+          setBoards(filteredBoards.filter((board) => board !== null) || []);
+        } catch (error) {
           console.error('Error fetching boards', error);
       }
     }

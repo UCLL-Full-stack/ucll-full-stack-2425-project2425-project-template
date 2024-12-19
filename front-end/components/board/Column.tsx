@@ -7,14 +7,26 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import GuildService from "@/services/GuildService";
 import BoardService from "@/services/BoardService";
 import ConfirmationModal from "../ConfirmationModal";
+import { useUser } from "@/context/UserContext";
 
 interface ColumnProps {
     column: Column;
     onDelete: (columnId: string) => void;
     onTaskChange: () => void;
+    permissions: {
+        canDeleteColumns: boolean;
+        canEditColumns: boolean;
+        canCreateTasks: boolean;
+        canEditTasks: boolean;
+        canDeleteTasks: boolean;
+        canAssignTasks: boolean;
+        canEditAssignees: boolean;
+        canEditTaskStatus: boolean;
+    }
 }
 
-const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange }) => {
+const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange, permissions }) => {
+    const {user} = useUser();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [columnName, setColumnName] = useState(column.columnName);
@@ -64,6 +76,11 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
     };
 
     const handleCreateTask = async () => {
+        setIsHovered(false);
+        if(!permissions.canCreateTasks) {
+            setError("You do not have permission to create tasks");
+            return;
+        }
         if (!newTaskTitle.trim() || !newTaskDescription.trim() || !newTaskDueDate.trim()) {
             setError("Title, description, and due date are required");
             return;
@@ -118,11 +135,17 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
         setTasks((prevTasks) => prevTasks.filter((task) => task.taskId !== taskId));
     };    
 
-    const filteredUsers = availableUsers.filter(
-        (user) =>
-            user.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            !selectedAssignees.some((assignee) => assignee.userId === user.userId)
-    );
+    const filteredUsers = availableUsers.filter((u) => {
+        const matchesSearch = u.username.toLowerCase().includes(searchQuery.toLowerCase());
+        const isNotAlreadyAssigned = !selectedAssignees.some((assignee) => assignee.userId === u.userId);
+        if (permissions.canEditAssignees) {
+            return matchesSearch && isNotAlreadyAssigned;
+        }
+        if (permissions.canAssignTasks) {
+            return matchesSearch && isNotAlreadyAssigned && u.userId === user!.userId;
+        }
+        return false;
+    });
 
     return (
         <div
@@ -130,7 +153,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {isEditing ? (
+            {permissions.canEditColumns && isEditing ? (
                 <input
                     type="text"
                     value={columnName}
@@ -141,8 +164,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                 />
             ) : (
                 <h3
-                    className="font-semibold cursor-pointer"
-                    onClick={() => setIsEditing(true)}
+                    className={`font-semibold ${permissions.canEditColumns ? "cursor-pointer" : ""}`}
+                    onClick={() => permissions.canEditColumns && setIsEditing(true)}
                 >
                     {columnName}
                 </h3>
@@ -156,7 +179,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                     >
                         {tasks.map((task, index) => (
                             task.taskId && (
-                                <Draggable draggableId={task.taskId} index={index} key={task.taskId} >
+                                <Draggable draggableId={task.taskId} index={index} key={task.taskId} isDragDisabled={!permissions.canEditTaskStatus}>
                                     {(provided) => (
                                         <div
                                             ref={provided.innerRef}
@@ -170,6 +193,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                                                 index={index}
                                                 onTaskUpdate={handleTaskUpdate}
                                                 onTaskDelete={handleTaskDelete}
+                                                permissions={permissions}
                                             />
                                         </div>
                                     )}
@@ -180,7 +204,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                     </div>
                 )}
             </Droppable>
-            {isHovered && (
+            {permissions.canDeleteColumns && isHovered && (
                 <button
                     className="absolute top-2 right-2 text-gray-500 hover:text-red-600"
                     onClick={() => setConfirmingDelete(true)}
@@ -200,95 +224,97 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                 onCancel={() => {setConfirmingDelete(false); setIsHovered(false);}}
             />
             <div>
-                {creatingTask ? (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-gray-800 p-6 rounded-md w-96 text-white shadow-lg">
-                            <h4 className="font-semibold mb-4">Create Task</h4>
-                            {error && <p className="text-red-500 mb-4">{error}</p>}
-                            <input
-                                type="text"
-                                placeholder="Title"
-                                value={newTaskTitle}
-                                onChange={(e) => setNewTaskTitle(e.target.value)}
-                                className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
-                            />
-                            <textarea
-                                placeholder="Description"
-                                value={newTaskDescription}
-                                onChange={(e) => setNewTaskDescription(e.target.value)}
-                                className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
-                            ></textarea>
-                            <label className="block text-sm mb-2">Due Date:</label>
-                            <input
-                                type="date"
-                                value={newTaskDueDate}
-                                onChange={(e) => setNewTaskDueDate(e.target.value)}
-                                className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
-                            />
-                            <p>Assignees:</p>
-                            {selectedAssignees.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mb-2 bg-gray-600 p-2 rounded-md">
-                                    {selectedAssignees.map((assignee) => (
-                                        <div
-                                            key={assignee.userId}
-                                            className="bg-gray-700 px-3 py-1 rounded flex items-center"
-                                        >
-                                            <span>{assignee.globalName}</span>
-                                            <button
-                                                className="ml-2 text-gray-500 hover:text-red-600"
-                                                onClick={() => handleRemoveAssignee(assignee.userId)}
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            <div className="mb-2">
+                {permissions.canCreateTasks && (
+                    creatingTask ? (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                            <div className="bg-gray-800 p-6 rounded-md w-96 text-white shadow-lg">
+                                <h4 className="font-semibold mb-4">Create Task</h4>
+                                {error && <p className="text-red-500 mb-4">{error}</p>}
                                 <input
                                     type="text"
-                                    placeholder="Search users"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full p-2 rounded-md outline-none bg-gray-600 text-white"
+                                    placeholder="Title"
+                                    value={newTaskTitle}
+                                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                                    className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
                                 />
-                                <ul className="mt-2 bg-gray-800 rounded-md max-h-32 overflow-y-auto">
-                                    {filteredUsers.map((user) => (
-                                        <li
-                                            key={user.userId}
-                                            className="p-2 hover:bg-gray-700 cursor-pointer rounded"
-                                            onClick={() => handleAddAssignee(user)}
-                                        >
-                                            {user.globalName}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex justify-between">
-                                <button
-                                    onClick={() => setCreatingTask(false)}
-                                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleCreateTask}
-                                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
-                                >
-                                    Create
-                                </button>
+                                <textarea
+                                    placeholder="Description"
+                                    value={newTaskDescription}
+                                    onChange={(e) => setNewTaskDescription(e.target.value)}
+                                    className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                                ></textarea>
+                                <label className="block text-sm mb-2">Due Date:</label>
+                                <input
+                                    type="date"
+                                    value={newTaskDueDate}
+                                    onChange={(e) => setNewTaskDueDate(e.target.value)}
+                                    className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                                />
+                                <p>Assignees:</p>
+                                {selectedAssignees.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mb-2 bg-gray-600 p-2 rounded-md">
+                                        {selectedAssignees.map((assignee) => (
+                                            <div
+                                                key={assignee.userId}
+                                                className="bg-gray-700 px-3 py-1 rounded flex items-center"
+                                            >
+                                                <span>{assignee.globalName}</span>
+                                                <button
+                                                    className="ml-2 text-gray-500 hover:text-red-600"
+                                                    onClick={() => handleRemoveAssignee(assignee.userId)}
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                <div className="mb-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Search users"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="w-full p-2 rounded-md outline-none bg-gray-600 text-white"
+                                    />
+                                    <ul className="mt-2 bg-gray-800 rounded-md max-h-32 overflow-y-auto">
+                                        {filteredUsers.map((user) => (
+                                            <li
+                                                key={user.userId}
+                                                className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                                onClick={() => handleAddAssignee(user)}
+                                            >
+                                                {user.globalName}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="flex justify-between">
+                                    <button
+                                        onClick={() =>{ setCreatingTask(false); setIsHovered(false);}}
+                                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleCreateTask}
+                                        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
+                                    >
+                                        Create
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ) : (
-                    <button
-                        onClick={() => setCreatingTask(true)}
-                        onMouseEnter={() => setIsHovered(false)}
-                        onMouseLeave={() => setIsHovered(true)}
-                        className="w-full p-2 mt-4 bg-gray-800 text-white rounded-md hover:bg-gray-900"
-                    >
-                        + Create Task
-                    </button>
+                    ) : (
+                        <button
+                            onClick={() => setCreatingTask(true)}
+                            onMouseEnter={() => setIsHovered(false)}
+                            onMouseLeave={() => setIsHovered(true)}
+                            className="w-full p-2 mt-4 bg-gray-800 text-white rounded-md hover:bg-gray-900"
+                        >
+                            + Create Task
+                        </button>
+                    )
                 )}
             </div>
         </div>

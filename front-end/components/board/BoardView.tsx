@@ -1,10 +1,12 @@
 import ColumnService from "@/services/ColumnService";
-import { Board, Column } from "@/types";
+import { Board, Column, KanbanPermission } from "@/types";
 import { useEffect, useState } from "react";
 import ColumnComponent from "./Column";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import BoardService from "@/services/BoardService";
 import TaskService from "@/services/TaskService";
+import { useUser } from "@/context/UserContext";
+import UserService from "@/services/UserService";
 
 interface BoardViewProps {
     board: Board;
@@ -13,9 +15,21 @@ interface BoardViewProps {
 }
 
 const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColumn }) => {
+    const { user } = useUser();
     const [columns, setColumns] = useState<Column[]>([]);
     const [addingColumn, setAddingColumn] = useState(false);
     const [newColumnName, setNewColumnName] = useState("");
+    const [permissions, setPermissions] = useState({
+        canCreateColumns: false,
+        canEditColumns: false,
+        canDeleteColumns: false,
+        canCreateTasks: false,
+        canEditTasks: false,
+        canDeleteTasks: false,
+        canAssignTasks: false,
+        canEditAssignees: false,
+        canEditTaskStatus: false,
+    });
     const fetchData = async () => {
         const fetchedColumns = await Promise.all(
             board.columnIds.map((id) => ColumnService.getColumnById(id))
@@ -26,6 +40,35 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
 
     useEffect(() => {
         fetchData();
+
+        const checkPermissions = async () => {
+            try {
+                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+                const hasCreatePermission = permissions.includes(KanbanPermission.CREATE_COLUMNS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasEditPermission = permissions.includes(KanbanPermission.EDIT_COLUMNS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasDeletePermission = permissions.includes(KanbanPermission.DELETE_COLUMNS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasCreateTaskPermission = permissions.includes(KanbanPermission.CREATE_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasEditTaskPermission = permissions.includes(KanbanPermission.EDIT_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasDeleteTaskPermission = permissions.includes(KanbanPermission.DELETE_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasAssignTaskPermission = permissions.includes(KanbanPermission.ASSIGN_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasEditAssigneesPermission = permissions.includes(KanbanPermission.MANAGE_TASK_ASSIGNEES) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                const hasEditTaskStatusPermission = permissions.includes(KanbanPermission.CHANGE_TASK_STATUS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
+                setPermissions({
+                    canCreateColumns: hasCreatePermission,
+                    canEditColumns: hasEditPermission,
+                    canDeleteColumns: hasDeletePermission,
+                    canCreateTasks: hasCreateTaskPermission,
+                    canEditTasks: hasEditTaskPermission,
+                    canDeleteTasks: hasDeleteTaskPermission,
+                    canAssignTasks: hasAssignTaskPermission,
+                    canEditAssignees: hasEditAssigneesPermission,
+                    canEditTaskStatus: hasEditTaskStatusPermission,
+                });
+            } catch (error) {
+                console.error("Error checking permissions:", error);
+            }
+        };
+        checkPermissions();
     }, [board.columnIds]);
 
     const handleDragEnd = async (result: any) => {
@@ -34,6 +77,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
         if (!destination) return;
 
         if (type === "COLUMN") {
+            if(!permissions.canEditColumns) return;
             const reorderedColumns = Array.from(columns);
             const [movedColumn] = reorderedColumns.splice(source.index, 1);
             reorderedColumns.splice(destination.index, 0, movedColumn);
@@ -56,6 +100,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                 console.error("Error updating column order:", error);
             }
         } else if (type === "TASK") {
+            if (!permissions.canEditTaskStatus) return;
             const sourceColumn = columns.find((col) => col.columnId === source.droppableId);
             const destinationColumn = columns.find(
                 (col) => col.columnId === destination.droppableId
@@ -115,7 +160,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
     };
 
     const handleAddColumn = async () => {
-        if (newColumnName.trim() !== "") {
+        if (newColumnName.trim() !== "" && permissions.canCreateColumns) {
             onAddColumn(newColumnName.trim());
         }
         setAddingColumn(false);
@@ -146,6 +191,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                         draggableId={column.columnId}
                                         index={index}
                                         key={column.columnId}
+                                        isDragDisabled={!permissions.canEditColumns}
                                     >
                                         {(provided) => (
                                             <div
@@ -158,13 +204,14 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                                     column={column}
                                                     onDelete={onDeleteColumn}
                                                     onTaskChange={fetchData}
+                                                    permissions={permissions}
                                                 />
                                             </div>
                                         )}
                                     </Draggable>
                                 ))}
                                 {provided.placeholder}
-                                {addingColumn ? (
+                                {permissions.canCreateColumns && addingColumn && (
                                     <div className="w-64 flex-shrink-0 border-2 border-dashed border-blue-500 rounded-md p-4">
                                         <input
                                             type="text"
@@ -181,7 +228,8 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                             placeholder="Enter column name"
                                         />
                                     </div>
-                                ) : (
+                                )}
+                                {!addingColumn && permissions.canCreateColumns && (
                                     <button
                                         onClick={() => setAddingColumn(true)}
                                         className="w-64 flex-shrink-0 border-2 border-dashed border-gray-500 text-gray-500 rounded-md flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition-colors h-20"

@@ -7,15 +7,27 @@ import { format } from "date-fns";
 import ColumnService from "@/services/ColumnService";
 import BoardService from "@/services/BoardService";
 import ConfirmationModal from "../ConfirmationModal";
+import { useUser } from "@/context/UserContext";
 
 interface ExpandedTaskProps {
     task: Task;
     onClose: () => void;
     onTaskUpdate: (task: Task) => void;
     onTaskDelete: (taskId: string) => void;
+    permissions: {
+        canDeleteColumns: boolean;
+        canEditColumns: boolean;
+        canCreateTasks: boolean;
+        canEditTasks: boolean;
+        canDeleteTasks: boolean;
+        canAssignTasks: boolean;
+        canEditAssignees: boolean;
+        canEditTaskStatus: boolean;
+    }
 }
 
-const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate, onTaskDelete }) => {
+const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate, onTaskDelete, permissions }) => {
+    const {user} = useUser();
     const [isEditing, setIsEditing] = useState(false);
     const [assigneeNames, setAssigneeNames] = useState<string[]>([]);
     const [title, setTitle] = useState(task.title);
@@ -88,11 +100,17 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
         setSelectedAssignees((prev) => prev.filter((user) => user.userId !== userId));
     };
 
-    const filteredUsers = availableUsers.filter(
-        (user) =>
-            user.globalName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            !selectedAssignees.some((assignee) => assignee.userId === user.userId)
-    );
+    const filteredUsers = availableUsers.filter((u) => {
+        const matchesSearch = u.username.toLowerCase().includes(searchQuery.toLowerCase());
+        const isNotAlreadyAssigned = !selectedAssignees.some((assignee) => assignee.userId === u.userId);
+        if (permissions.canEditAssignees) {
+            return matchesSearch && isNotAlreadyAssigned;
+        }
+        if (permissions.canAssignTasks) {
+            return matchesSearch && isNotAlreadyAssigned && u.userId === user!.userId;
+        }
+        return false;
+    });
 
     const formattedDueDate = format(new Date(task.dueDate), "MMMM d, yyyy");
 
@@ -127,18 +145,22 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                             </p>
                         </div>
                         <div className="flex justify-between mt-4">
-                            <button
-                                onClick={() => setIsConfirmingDelete(true)}
-                                className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
-                            >
-                                Delete Task
-                            </button>
-                            <button
-                                onClick={() => setIsEditing(true)}
-                                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
-                            >
-                                Edit Task
-                            </button>
+                            {permissions.canDeleteTasks && (
+                                <button
+                                    onClick={() => setIsConfirmingDelete(true)}
+                                    className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
+                                >
+                                    Delete Task
+                                </button>
+                            )}
+                            {(permissions.canEditTasks || permissions.canAssignTasks) && (
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
+                                >
+                                    Edit Task
+                                </button>
+                            )}
                         </div>
                     </>
                 ) : (
@@ -150,20 +172,29 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="Title"
-                            className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                            className={`w-full p-2 mb-2 rounded-md outline-none ${
+                                permissions.canEditTasks ? "bg-gray-600 text-white" : "bg-gray-700 text-gray-400"
+                            }`}
+                            disabled={!permissions.canEditTasks}
                         />
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Description"
-                            className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                            className={`w-full p-2 mb-2 rounded-md outline-none ${
+                                permissions.canEditTasks ? "bg-gray-600 text-white" : "bg-gray-700 text-gray-400"
+                            }`}
+                            disabled={!permissions.canEditTasks}
                         ></textarea>
                         <label className="block text-sm mb-2">Due Date:</label>
                         <input
                             type="date"
                             value={dueDate}
                             onChange={(e) => setDueDate(e.target.value)}
-                            className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
+                            className={`w-full p-2 mb-2 rounded-md outline-none ${
+                                permissions.canEditTasks ? "bg-gray-600 text-white" : "bg-gray-700 text-gray-400"
+                            }`}
+                            disabled={!permissions.canEditTasks}
                         />
                         <p>Assignees:</p>
                         {selectedAssignees.length > 0 && (
