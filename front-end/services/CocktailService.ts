@@ -156,8 +156,42 @@ const deleteCocktail = (cocktailId: string) => {
   });
 };
 
+const favoriteCocktail = (cocktailId: string) => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+  if (!token) {
+    throw new Error("User is not logged in");
+  }
+
+  return fetch(`${apiUrl}/favorites/${cocktailId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+  });
+};
+
+const unfavoriteCocktail = (cocktailId: string) => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+  if (!token) {
+    throw new Error("User is not logged in");
+  }
+
+  return fetch(`${apiUrl}/favorites/${cocktailId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+  });
+};
+
 export const CocktailService = {
-  getAllCocktails,getCocktailById, addCocktail, deleteCocktail, updateCocktail, getAllFavoriteCocktails
+  getAllCocktails,getCocktailById, addCocktail, deleteCocktail, updateCocktail, getAllFavoriteCocktails, favoriteCocktail, unfavoriteCocktail,
 };
 
 export default CocktailService;

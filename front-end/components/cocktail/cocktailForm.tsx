@@ -1,22 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import classNames from "classnames";
 
 interface CocktailFormProps {
+  initialData?: {
+    name: string;
+    description: string;
+    strongness: number;
+    image: string;
+  };
   onSubmit: (formData: any) => void;
+  submitButtonText: string;
 }
 
-const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
+const CocktailForm: React.FC<CocktailFormProps> = ({ initialData, onSubmit, submitButtonText }) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    strongness: 0,
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    strongness: initialData?.strongness || 0,
+    image: initialData?.image || "/placeholder.png",
   });
   const [nameError, setNameError] = useState<string | null>(null);
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [strongnessError, setStrongnessError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<{ message: string; type: string }[]>([]);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   const clearErrors = () => {
     setNameError(null);
@@ -38,7 +52,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
       result = false;
     }
 
-    if (formData.strongness <0 || formData.strongness > 5) {
+    if (formData.strongness < 0 || formData.strongness > 5) {
       setStrongnessError(t("addCocktail.strongnessRange"));
       result = false;
     }
@@ -59,7 +73,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
       return;
     }
 
-    onSubmit({ ...formData, image: "/placeholder.png" });
+    onSubmit(formData);
   };
 
   return (
@@ -122,7 +136,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
           {strongnessError && <div className="error-text">{strongnessError}</div>}
         </div>
         <button className="btn-primary" type="submit">
-          {t("addCocktail.submit")}
+          {submitButtonText}
         </button>
       </form>
     </>

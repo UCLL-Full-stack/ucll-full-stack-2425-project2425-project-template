@@ -62,12 +62,13 @@ const Header: React.FC = () => {
         <Link href="/cocktails/">
           <button className="navbarbutton-stylah">{t("header.cocktails")}</button>
         </Link>
-        <Link href="/addcocktail/">
-          <button className="navbarbutton-stylah">{t("header.addCocktail")}</button>
-        </Link>
         <Link href="/favorites/">
           <button className="navbarbutton-stylah">{t("header.favorites")}</button>
         </Link>
+        <Link href="/addcocktail/">
+          <button className="navbarbutton-stylah">{t("header.addCocktail")}</button>
+        </Link>
+        
         {!loggedInUser ? (
           <Link href="/login/">
             <button className="navbarbutton-stylah">{t("header.login")}</button>

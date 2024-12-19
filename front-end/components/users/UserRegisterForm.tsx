@@ -11,9 +11,11 @@ const UserRegisterForm: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [roleError, setRoleError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const router = useRouter();
 
@@ -21,6 +23,7 @@ const UserRegisterForm: React.FC = () => {
     setNameError(null);
     setEmailError(null);
     setPasswordError(null);
+    setRoleError(null);
     setStatusMessages([]);
   };
 
@@ -42,6 +45,14 @@ const UserRegisterForm: React.FC = () => {
       result = false;
     }
 
+    if (!role || role.trim() === "") {
+      setRoleError(t('register.roleRequired'));
+      result = false;
+    } else if (!["user", "moderator", "admin"].includes(role.toLowerCase())) {
+      setRoleError(t('register.roleInvalid'));
+      result = false;
+    }
+
     return result;
   };
 
@@ -55,7 +66,7 @@ const UserRegisterForm: React.FC = () => {
     }
 
     try {
-      const user = { name, email, password };
+      const user = { name, email, password, role };
       const response = await UserService.createUser(user);
 
       if (response.status === 200) {
@@ -119,27 +130,31 @@ const UserRegisterForm: React.FC = () => {
           />
           {emailError && <div className="error-text">{emailError}</div>}
         </div>
-        <div className="mb-4">
-          <div>
-            <label
-              htmlFor="passwordInput"
-              className="block mb-2 text-sm font-medium"
-            >
-              {t('register.label.password')}
-            </label>
-          </div>
-          <div className="block mb-2 text-sm font-medium">
-            <input
-              id="passwordInput"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              className="form-input"
-            />
-            {passwordError && (
-              <div className=" error-text">{passwordError}</div>
-            )}
-          </div>
+        <label htmlFor="passwordInput" className="mb-4">
+          {t('register.label.password')}
+        </label>
+        <div className="block mb-2 text-sm font-medium">
+          <input
+            id="passwordInput"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="form-input"
+          />
+          {passwordError && <div className="error-text">{passwordError}</div>}
+        </div>
+        <label htmlFor="roleInput" className="mb-4">
+          {t('register.label.role')}
+        </label>
+        <div className="block mb-2 text-sm font-medium">
+          <input
+            id="roleInput"
+            type="text"
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            className="form-input"
+          />
+          {roleError && <div className="error-text">{roleError}</div>}
         </div>
         <button
           className="btn-primary"

@@ -1,6 +1,18 @@
 {
   "app.title": "Sip Happens Online",
   "general.error": "An error occurred, please try again later.",
+  "cocktailContainer": {
+    "cocktail": "Cocktail",
+    "description": "Description",
+    "strongness": "Strongness",
+    "ingredients": "Ingredients",
+    "edit": "Edit",
+    "delete": "Delete",
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "noCocktails": "No cocktails found.",
+    "noFavorites": "No favorites found."
+  },
   "home": {
     "title": "Welcome to Sip Happens Online",
     "description1": "Discover a world of exquisite cocktails and elevate your mixology skills. Sip Happens Online is your ultimate destination for all things cocktails. Sign up and log in to add and view your favorite drinks, and explore a central list of all cocktails with a counter showing how many users have favorited each one.",
@@ -34,7 +46,8 @@
     "cancel": "Cancel",
     "nameRequired": "Name is required",
     "descriptionRequired": "Description is required",
-    "strongnessRequired": "Strongness is required"
+    "strongnessRequired": "Strongness is required",
+    "strongnessRange": "Strongness must be between 0 and 5"
   },
   "login": {
     "title": "Login",
@@ -55,11 +68,14 @@
     "label": {
       "name": "Name",
       "email": "Email",
-      "password": "Password"
+      "password": "Password",
+      "role": "Role"
     },
     "nameRequired": "Name is required",
     "emailRequired": "Email is required",
     "passwordRequired": "Password is required",
+    "roleRequired": "Role is required",
+    "roleInvalid": "Role must be one of the following: user, moderator, admin",
     "success": "Registration successful! Redirecting to login...",
     "error": "Registration failed. Please try again.",
     "button": "Register"
