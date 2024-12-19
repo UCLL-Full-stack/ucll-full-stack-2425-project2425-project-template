@@ -18,11 +18,22 @@ const getWorkoutById = async (workoutId: string) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 };
 
-const addExerciseToWorkout = async (workoutId: number, exerciseId: number) => {
+const getWorkoutsByUserId = async (userId: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `workouts/user/${userId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+const addExerciseToWorkout = async (workoutId: string, exerciseId: string) => {
   return fetch(
     process.env.NEXT_PUBLIC_API_URL +
       `/workouts/${workoutId}/exercises/${exerciseId}`,
@@ -30,6 +41,7 @@ const addExerciseToWorkout = async (workoutId: number, exerciseId: number) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -46,18 +58,30 @@ const createWorkout = async (workout: Workout) => {
   });
 };
 
-const removeWorkout = async (workoutId: number) => {
+const updateWorkout = async (workout: Workout) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/workouts`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(workout),
+  });
+};
+
+const removeWorkout = async (workoutId: string) => {
   return fetch(process.env.NEXT_PUBLIC_API_URL + `/workouts/${workoutId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 };
 
 const removeExerciseFromWorkout = async (
-  workoutId: number,
-  exerciseId: number
+  workoutId: string,
+  exerciseId: string
 ) => {
   return fetch(
     process.env.NEXT_PUBLIC_API_URL +
@@ -66,6 +90,7 @@ const removeExerciseFromWorkout = async (
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -78,4 +103,6 @@ export default {
   createWorkout,
   removeWorkout,
   removeExerciseFromWorkout,
+  getWorkoutsByUserId,
+  updateWorkout,
 };

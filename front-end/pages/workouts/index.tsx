@@ -12,6 +12,7 @@ import { Plus } from "react-feather";
 
 const Workouts: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
+  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("loggedInUser");
@@ -54,16 +55,10 @@ const Workouts: React.FC = () => {
                 {error && <div className="text-red-800">{error}</div>}
                 {isLoading && <div className="text-green-800">Loading...</div>}
                 {data && (
-                  <>
-                    <WorkoutOverviewTable workouts={data.workouts} />
-                    <div className="mt-4">
-                      <Link href="/workouts/add">
-                        <button className="w-full flex items-center justify-center bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-medium py-3 rounded-lg shadow-md">
-                          <Plus className="mr-2" /> Add New Workout
-                        </button>
-                      </Link>
-                    </div>
-                  </>
+                  <WorkoutOverviewTable
+                    workouts={data.workouts}
+                    setWorkouts={setWorkouts}
+                  />
                 )}
               </>
             )}

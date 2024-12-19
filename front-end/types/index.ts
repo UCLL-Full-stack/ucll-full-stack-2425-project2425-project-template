@@ -28,10 +28,11 @@ export type WorkoutExercise = {
 };
 
 export type Workout = {
-  id?: number;
+  id: string;
   name?: string;
   description?: string;
   user?: User;
+  exercises: Array<Exercise>;
 };
 
 export type StatusMessage = {

@@ -4,7 +4,7 @@ import { Plus, Trash } from "react-feather";
 
 type Props = {
   workout: Workout;
-  onRemoveExercise: (exerciseId: number) => void;
+  onRemoveExercise: (exerciseId: string) => void;
   onRemoveWorkout: () => void;
 };
 
@@ -56,7 +56,7 @@ const WorkoutInfo: React.FC<Props> = ({
                       href={exercise.video_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
+                      className="text-blue-500 hover:underline cursor-pointer"
                     >
                       Watch Video
                     </a>
