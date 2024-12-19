@@ -55,6 +55,18 @@ app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
 
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'CoursesError') {
+        res.status(400).json({ status: 'domain error', message: err.message });
+    } else {
+        res.status(400).json({ status: 'application error', message: err.message });
+    }
+});
+
+
+
 app.listen(port, () => {
     console.log(`Back-end is running on port ${port}.`);
     console.log(`http://localhost:${port}/api-docs`);
