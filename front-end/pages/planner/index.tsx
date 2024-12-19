@@ -1,19 +1,19 @@
-/* This is currently the homepage of the app, hence why the <Head /> and meta information */
-
 import CalendarGrid from "@/components/planner/calendar/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
 import ShoppingList from "@/components/planner/ShoppingListSidebar";
 import Head from "next/head";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
 const MealPlanner: React.FC = () => {
+  const { t } = useTranslation("common");
+
   return (
     <>
       <Head>
-        <title>Plateful</title>
-        <meta
-          name="description"
-          content="Plateful - Your personal meal planning and shopping list app"
-        />
+        <title>{t("title")}</title>
+        <meta name="description" content={t("description")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -23,7 +23,7 @@ const MealPlanner: React.FC = () => {
         <section className="flex-1 overflow-auto">
           <section className="p-6">
             <Greeting />
-            <h1 className="text-2xl font-bold mb-3">Meal Planner</h1>
+            <h1 className="text-2xl font-bold mb-3">{t("mealPlanner")}</h1>
             <CalendarGrid />
           </section>
         </section>
@@ -35,6 +35,15 @@ const MealPlanner: React.FC = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  const localeString = locale || "en"; // Provide a default value for locale
+  return {
+    props: {
+      ...(await serverSideTranslations(localeString, ["common"])),
+    },
+  };
 };
 
 export default MealPlanner;

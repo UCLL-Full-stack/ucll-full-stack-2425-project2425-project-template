@@ -1,8 +1,3 @@
-/*
- * STILL TO IMPLEMENT FUNCTIONALITIES, but the right clicks work.
- * RightClickMenu component is a context menu
- */
-
 import { Plus, Trash, Copy, ClipboardPaste, Heart } from "lucide-react";
 import {
   ContextMenu,
@@ -10,6 +5,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   children: React.ReactNode;
@@ -30,32 +26,34 @@ const RightClickMenu: React.FC<Props> = ({
   onCopyMeal,
   onPasteMeal,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-48">
         <ContextMenuItem onClick={onAddNewMeal}>
           <Plus className="mr-2 h-4 w-4" />
-          Add New Meal
+          {t('addNewMeal')}
         </ContextMenuItem>
         <ContextMenuItem onClick={onAddExistingMeal}>
-          Add Existing Meal
+          {t('addExistingMeal')}
         </ContextMenuItem>
         <ContextMenuItem onClick={onAddFavoriteMeal}>
           <Heart className="mr-2 h-4 w-4" />
-          Add Favorite Meal
+          {t('addFavoriteMeal')}
         </ContextMenuItem>
         <ContextMenuItem onClick={onDeleteMeal}>
           <Trash className="mr-2 h-4 w-4" />
-          Delete Meal
+          {t('deleteMeal')}
         </ContextMenuItem>
         <ContextMenuItem onClick={onCopyMeal}>
           <Copy className="mr-2 h-4 w-4" />
-          Copy Meal
+          {t('copyMeal')}
         </ContextMenuItem>
         <ContextMenuItem onClick={onPasteMeal}>
           <ClipboardPaste className="mr-2 h-4 w-4" />
-          Paste Meal
+          {t('pasteMeal')}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

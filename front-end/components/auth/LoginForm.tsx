@@ -7,12 +7,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import authService from "@/services/authService";
 import { LoginData } from "@/types/auth";
 import { AlertCircle } from "lucide-react";
+import { useTranslation } from 'next-i18next';
 
 type Props = {
   onSuccess: () => void;
 };
 
 const LoginForm: React.FC<Props> = ({ onSuccess }) => {
+  const { t } = useTranslation('common');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -25,7 +27,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
     const value = e.target.value;
     setEmail(value);
     if (!value.includes("@")) {
-      setEmailError("Invalid email address.");
+      setEmailError(t("invalidEmail"));
     } else {
       setEmailError("");
     }
@@ -35,7 +37,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
     const value = e.target.value;
     setPassword(value);
     if (value.length < 6) {
-      setPasswordError("Password must be at least 6 characters.");
+      setPasswordError(t("passwordTooShort"));
     } else {
       setPasswordError("");
     }
@@ -44,8 +46,8 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!email) setEmailError("Email is required");
-    if (!password) setPasswordError("Password is required");
+    if (!email) setEmailError(t("emailRequired"));
+    if (!password) setPasswordError(t("passwordRequired"));
 
     if (!emailError && !passwordError) {
       try {
@@ -54,7 +56,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
         onSuccess();
         router.push("/"); // Redirect to home on success
       } catch (error) {
-        setFormError("Invalid email or password. Please try again.");
+        setFormError(t("invalidCredentials"));
       }
     }
   };
@@ -62,7 +64,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input
           id="email"
           name="email"
@@ -79,7 +81,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input
           id="password"
           name="password"
@@ -102,7 +104,7 @@ const LoginForm: React.FC<Props> = ({ onSuccess }) => {
         </Alert>
       )}
       <Button type="submit" className="w-full">
-        Login
+        {t("login")}
       </Button>
     </form>
   );

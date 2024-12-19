@@ -12,8 +12,10 @@ import {
 } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
+import { useTranslation } from 'next-i18next';
 
 const AuthToggle = () => {
+  const { t } = useTranslation('common');
   const [isLogin, setIsLogin] = useState(true);
   const [isPending, startTransition] = useTransition();
 
@@ -34,7 +36,7 @@ const AuthToggle = () => {
       <CardHeader>
         <CardTitle>Plateful</CardTitle>
         <CardDescription>
-          {isLogin ? "Welcome back!" : "Create a new account"}
+          {isLogin ? t("welcomeBack") : t("createNewAccount")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -44,8 +46,8 @@ const AuthToggle = () => {
           onValueChange={handleTabChange}
         >
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsTrigger value="login">{t("login")}</TabsTrigger>
+            <TabsTrigger value="register">{t("register")}</TabsTrigger>
           </TabsList>
           <div
             className={`mt-4 transition-opacity duration-300 ${
@@ -64,7 +66,7 @@ const AuthToggle = () => {
       <CardFooter className="flex justify-center">
         {isLogin && (
           <Button variant="link" className="p-0">
-            Forgot password?
+            {t("forgotPassword")}
           </Button>
         )}
       </CardFooter>

@@ -1,9 +1,3 @@
-/*
- * Parent component of DailyMealsView and SingleMealCard.
- * MealsDayPopup component displays a popup with a list of meals for a specific day.
- * It fetches meal details based on the user ID and date, and provides actions for deleting meals.
- */
-
 import { useState, useEffect, useCallback } from "react";
 import PlannerService from "@/services/PlannerService";
 import { Button } from "@/components/ui/button";
@@ -12,6 +6,7 @@ import DailyMealsView from "./DailyMealsView";
 import SingleMealView from "./SingleMealCard";
 import { Recipe } from "@/types/recipes";
 import RecipeService from "@/services/RecipeService";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   userId: number;
@@ -28,6 +23,7 @@ const categoryOrder: string[] = [
 ]; // temporary categories (the user will be able to make their own custom categories)
 
 const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
+  const { t } = useTranslation();
   const [meals, setMeals] = useState<Recipe[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,9 +42,9 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
       const meals = await PlannerService.fetchMealDetails(userId, dateString);
       setMeals(meals);
     } catch (error) {
-      setError("Error fetching meals");
+      setError(t('errorFetchingMeals'));
     }
-  }, [userId, date]);
+  }, [userId, date, t]);
 
   useEffect(() => {
     fetchMeals();
@@ -59,7 +55,7 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
       await PlannerService.deleteMeal(userId, mealId, formatDateUTC(date));
       await fetchMeals(); // fetch again after deleting
     } catch (error) {
-      setError("Error deleting meal");
+      setError(t('errorDeletingMeal'));
     }
   };
 
@@ -70,7 +66,7 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
       });
       await fetchMeals(); // fetch again after updating
     } catch (error) {
-      setError("Error updating meal");
+      setError(t('errorUpdatingMeal'));
     }
   };
 
@@ -102,7 +98,7 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
       <section className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <article className="sticky top-0 bg-white border-b p-6 flex items-center justify-between z-10">
           <h2 className="text-2xl font-semibold">
-            Meals for {formatDate(date)}
+            {t('mealsFor')} {formatDate(date)}
           </h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-6 w-6" />
@@ -112,7 +108,7 @@ const DailyMealsPopup: React.FC<Props> = ({ userId, date, onClose }) => {
         <section className="p-6">
           {allMeals.length === 0 ? (
             <p className="text-center text-gray-500 py-8">
-              No meals planned for this day :(
+              {t('noMealsPlanned')}
             </p>
           ) : allMeals.length === 1 ? (
             <SingleMealView

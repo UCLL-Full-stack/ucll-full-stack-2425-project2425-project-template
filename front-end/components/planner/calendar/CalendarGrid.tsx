@@ -1,9 +1,3 @@
-/**
- * CalendarGrid component displays a grid of days for the current month (or week --> to implement)
- * It manages the state for the current date, view mode, selected dates, and other interactions.
- */
-
-// QUESTION: Is this component correct? Or the fetch logic should be in the planner index.tsx page?
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import PlannerService from "@/services/PlannerService";
@@ -11,10 +5,12 @@ import CalendarHeader from "./CalendarHeader";
 import CalendarDay from "./CalendarDay";
 import DailyMealsPopup from "../calendar-functionality/DailyMealsPopup";
 import { Recipe } from "@/types/recipes";
+import { useTranslation } from 'next-i18next';
 
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]; // make a type?
 
 const CalendarGrid: React.FC = () => {
+  const { t } = useTranslation('common');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<"Month" | "Week">("Month"); // to implement
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -172,7 +168,7 @@ const CalendarGrid: React.FC = () => {
         <section className="grid grid-cols-7 gap-2">
           {daysOfWeek.map((day) => (
             <div key={day} className="text-center font-semibold p-2">
-              {day}
+              {t(day)}
             </div>
           ))}
 

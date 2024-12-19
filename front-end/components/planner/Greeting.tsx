@@ -1,14 +1,9 @@
-/*
- * A greeting message for the user based on the current time of day :)
- * Still to fully implement as it will take the @username
- * It shows "Good morning" with a coffee icon, "Good afternoon" with a sun icon,
- * and "Good evening" with a moon icon
- */
-
 import { Coffee, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 
 const Greeting = () => {
+  const { t } = useTranslation('common');
   const [greeting, setGreeting] = useState("");
   const [greetingIcon, setGreetingIcon] = useState(<Sun />);
 
@@ -16,16 +11,16 @@ const Greeting = () => {
     const hour = new Date().getHours();
 
     if (hour >= 5 && hour < 12) {
-      setGreeting(`Good morning`);
+      setGreeting(t("goodMorning"));
       setGreetingIcon(<Coffee className="h-6 w-6" />);
     } else if (hour >= 12 && hour < 18) {
-      setGreeting("Good afternoon");
+      setGreeting(t("goodAfternoon"));
       setGreetingIcon(<Sun className="h-6 w-6" />);
     } else {
-      setGreeting("Good evening");
+      setGreeting(t("goodEvening"));
       setGreetingIcon(<Moon className="h-6 w-6" />);
     }
-  }, []);
+  }, [t]);
 
   return (
     <article className="flex items-center py-2 px-0 w-full">
