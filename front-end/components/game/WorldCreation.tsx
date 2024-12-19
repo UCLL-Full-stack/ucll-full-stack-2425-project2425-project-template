@@ -1,7 +1,5 @@
-import userService from '@services/userService';
-import playerService from '@services/playerService';
 import { useState, useEffect } from 'react';
-import { Player, User, World, WorldInput } from '@types';
+import { User, WorldInput } from '@types';
 import worldService from '@services/worldService';
 import { useRouter } from 'next/router';
 import useInterval from 'use-interval';
@@ -41,7 +39,6 @@ const WorldCreation: React.FC = () => {
             const input: WorldInput = {name: name, email: loggedInUser.email}
             const response = await worldService.generateWorld(input);
     
-            console.log(response);
             if (response.status === 200) {
                 setStatusMessages({ message: 'Creation Successful', type: 'success' });
                 setStatusMessages({

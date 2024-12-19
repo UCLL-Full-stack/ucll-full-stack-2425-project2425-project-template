@@ -95,7 +95,7 @@ const createFloor = async (floor: Floor, createdWorld: number): Promise<number> 
         return createdFloor.id;
     } catch(error){
         console.error(error);
-        throw new Error("World could not be made");
+        throw new Error("Floor could not be made");
     }
 }
 

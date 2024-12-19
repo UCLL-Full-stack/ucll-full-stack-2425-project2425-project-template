@@ -97,10 +97,15 @@ const GameMap: React.FC = () => {
         if (floor){
             const res = await floorService.getFloorPositions(floor.id);
             setPositions(res);
-            res.forEach(pos => {
+            res.forEach(async pos => {
                 if (pos.type === "player" && pos.active === true){
                     if (pos.playerID === player?.id){
                         setPlayerPosition({x: pos.x, y: pos.y, posID: pos.id});
+                    }
+                    else{
+                        if (pos.playerID){
+                            pos.image = await playerService.getPlayerImage(pos.playerID);
+                        }
                     }
                 }
             });
@@ -273,7 +278,7 @@ const GameMap: React.FC = () => {
                             style={{
                                 top: `${pos.y * 64}px`,
                                 left: `${pos.x * 64}px`,
-                                backgroundImage: `url(/images/${pos.type}.png)`,
+                                backgroundImage: `url(/images/${pos.type === "player" ? (pos.image):(pos.type)}.png)`,
                                 backgroundSize: 'cover',
                                 backgroundRepeat: 'no-repeat',
                             }}
@@ -287,7 +292,7 @@ const GameMap: React.FC = () => {
                 style={{
                     top: `calc(50% - 32px)`,
                     left: `calc(50% - 32px)`,
-                    backgroundImage: 'url(/images/character.png)',
+                    backgroundImage: `url(/images/${player.image}.png)`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                 }}

@@ -55,6 +55,7 @@ async function main() {
             statistics: 'Stats1',
             class: 'Warrior',
             currency: 100,
+            image: "ch1",
             user: users[0],
         }),
         new Player({
@@ -62,6 +63,7 @@ async function main() {
             statistics: 'hp: 20, power: veel',
             class: 'JAS 39 Gripen',
             currency: 2389,
+            image: "ch1",
             user: users[0],
         }),
         new Player({
@@ -69,6 +71,7 @@ async function main() {
             statistics: 'hp: 2000, power: -1',
             class: 'Impostor',
             currency: 100004,
+            image: "ch3",
             user: users[1],
         }),
         new Player({
@@ -76,6 +79,7 @@ async function main() {
             statistics: 'hp: 100, power: 100',
             class: 'Warrior',
             currency: 1454,
+            image: "ch2",
             user: users[0],
         }),
         new Player({
@@ -83,6 +87,7 @@ async function main() {
             statistics: 'hp: 2000, power: 1500',
             class: 'Teacher',
             currency: 15474,
+            image: "ch1",
             user: users[1],
         }),
     ];
@@ -108,8 +113,6 @@ async function main() {
         }),
     ];
 
-    const playerpos = new Position({playerID: 1, x: 10, y: 10, type: "player", active: true})
-
     let createdUsers = [];
 
     for (const user of users) {
@@ -133,6 +136,7 @@ async function main() {
                 statistics: player.getStatistics(),
                 class: player.getClass(),
                 currency: player.getCurrency(),
+                image: player.getImage(),
                 userId: createdUsers[0].id,
             },
         });
