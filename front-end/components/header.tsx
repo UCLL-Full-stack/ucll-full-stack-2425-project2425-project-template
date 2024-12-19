@@ -1,3 +1,4 @@
+import userSerivce from '@services/userService';
 import { User } from '@types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -7,8 +8,12 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         const user = localStorage.getItem('loggedInUser');
-        if (user) {
-            setLoggedInUser(JSON.parse(user));
+        if (user && JSON.parse(user).email) {
+            userSerivce.getUserByEmail(JSON.parse(user).email).then((userByEmail) => {
+                userByEmail.json().then((userData) => {
+                    setLoggedInUser(userData.name);
+                });
+            });
         }
     }, []);
 

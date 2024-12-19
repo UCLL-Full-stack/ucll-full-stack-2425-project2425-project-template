@@ -1,3 +1,5 @@
+export type Role = 'admin' | 'user' | 'payedUser';
+
 export type PositionInput = {
     id: number;
     x: number;

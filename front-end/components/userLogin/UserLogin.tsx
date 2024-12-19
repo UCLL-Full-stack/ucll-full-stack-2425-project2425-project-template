@@ -49,14 +49,12 @@ const UserLogin: React.FC = () => {
 
         if (response.status === 200) {
             setStatusMessages({ message: 'Login successful', type: 'success' });
-            const userByEmailResponse = await userService.getUserByEmail(email);
-            const userByEmail = await userByEmailResponse.json();
             const user = await response.json();
 
             localStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({
-                    name: userByEmail.name,
+                    token: user.token,
                     email: user.email,
                     role: user.role,
                 })
