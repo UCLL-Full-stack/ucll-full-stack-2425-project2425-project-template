@@ -1,13 +1,13 @@
 import { Coffee, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 
 type GreetingProps = {
   user: { name: string } | null;
 };
 
 const Greeting: React.FC<GreetingProps> = ({ user }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const [greeting, setGreeting] = useState("");
   const [greetingIcon, setGreetingIcon] = useState(<Sun />);
 
