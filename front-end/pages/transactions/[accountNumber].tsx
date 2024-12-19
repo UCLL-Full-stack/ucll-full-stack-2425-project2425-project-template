@@ -3,6 +3,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import CreateExpense from "@/components/transactions/CreateExpense";
 import styles from '@/styles/Home.module.css';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const CreateExpensePage = () => {
   return (
@@ -21,6 +22,16 @@ const CreateExpensePage = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  const { locale } = context;
+
+  return {
+      props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default CreateExpensePage;

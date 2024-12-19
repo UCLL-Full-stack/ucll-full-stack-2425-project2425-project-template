@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styles from '@/styles/Home.module.css';
-import TransactionService from '@/services/TransactionService';
-import AccountService from '@/services/AccountService';
+import AccountService from '../../services/AccountService';
+import TransactionService from '../../services/TransactionService';
+import styles from '../../styles/Home.module.css';
 
 const CreateExpense: React.FC = () => {
   const [amount, setAmount] = useState<number>(0);
@@ -11,10 +11,6 @@ const CreateExpense: React.FC = () => {
   const [redirect, setRedirect] = useState<boolean>(false);
   const router = useRouter();
   const { accountNumber } = router.query;
-
-  useEffect(() => {
-    setRedirect(false);
-  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,40 +43,21 @@ const CreateExpense: React.FC = () => {
   }
 
   return (
-    <section>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <label htmlFor="amount">Amount:</label>
-        <input
-          type="number"
-          id="amount"
-          name="amount"
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
-          required
-        />
-        <label htmlFor="currency">Currency:</label>
-        <select
-          name="currency"
-          id="currency"
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
-        >
-          <option value="EUR">EUR</option>
-          <option value="USD">USD</option>
-          <option value="GBP">GBP</option>
-        </select>
-        <label htmlFor="destinationAccountNumber">Destination Account Number:</label>
-        <input
-          type="text"
-          id="destinationAccountNumber"
-          name="destinationAccountNumber"
-          value={destinationAccountNumber}
-          onChange={(e) => setDestinationAccountNumber(e.target.value)}
-          required
-        />
-        <button type="submit">Create Expense</button>
-      </form>
-    </section>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <label>
+        Amount:
+        <input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
+      </label>
+      <label>
+        Currency:
+        <input type="text" value={currency} onChange={(e) => setCurrency(e.target.value)} />
+      </label>
+      <label>
+        Destination Account Number:
+        <input type="text" value={destinationAccountNumber} onChange={(e) => setDestinationAccountNumber(e.target.value)} />
+      </label>
+      <button type="submit">Create Expense</button>
+    </form>
   );
 };
 
