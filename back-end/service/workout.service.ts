@@ -82,7 +82,11 @@ const getWorkoutsByUserId = async (userId: string): Promise<Workout[]> => {
 //     return workout;
 // };
 
-const createWorkout = async ({ name, description, user }: WorkoutInput): Promise<Workout> => {
+const createWorkout = async ({
+    name,
+    description,
+    user,
+}: WorkoutInput): Promise<Workout> => {
     const workout = new Workout({ name, description, user });
     return workoutDb.createWorkout(workout);
 };

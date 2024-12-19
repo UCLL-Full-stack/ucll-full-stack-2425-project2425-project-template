@@ -37,21 +37,21 @@ model Exercise {
   description String  
   videoLink   String 
   isFavorite  Boolean 
-
-  workoutExercise WorkoutExercise?
+  workoutExercises WorkoutExercise[]
 }
 
 
 model WorkoutExercise {
-  id         String   @id @default(cuid())
-  workoutId  String
-  exerciseId String   @unique
+  id          String   @id @default(cuid())
+  workoutId   String
+  exerciseId  String
+  sets        Int
+  reps        Int
+  rpe         String
+  restTime    String
 
-  sets     Int
-  reps     Int
-  rpe      Float
-  restTime Int
+  workout     Workout  @relation(fields: [workoutId], references: [id])
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
 
-  workout  Workout  @relation(fields: [workoutId], references: [id])
-  exercise Exercise @relation(fields: [exerciseId], references: [id])
+  @@unique([workoutId, exerciseId]) 
 }

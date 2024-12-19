@@ -10,7 +10,6 @@ type ExerciseInput = {
     description: string;
     videoLink: string;
     isFavorite: boolean;
-    workoutExercise?: WorkoutExerciseInput;
 };
 
 type UserInput = {
@@ -31,12 +30,12 @@ type WorkoutInput = {
 
 type WorkoutExerciseInput = {
     id?: string;
-    sets?: number;
-    reps?: number;
-    rpe?: number;
-    restTime?: number;
-    workout?: Workout;
-    exercise?: Exercise;
+    sets: number;
+    reps: number;
+    rpe: string;
+    restTime: string;
+    workout: Workout;
+    exercise: Exercise;
 };
 
 type TokenPayload = {

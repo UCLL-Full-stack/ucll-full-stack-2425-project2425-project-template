@@ -23,9 +23,9 @@ const workoutExerciseRouter = express.Router();
  *         reps:
  *           type: integer
  *         rpe:
- *           type: integer
+ *           type: string
  *         restTime:
- *           type: integer
+ *           type: string
  *     WorkoutExerciseInput:
  *       type: object
  *       properties:
@@ -38,9 +38,9 @@ const workoutExerciseRouter = express.Router();
  *         reps:
  *           type: integer
  *         rpe:
- *           type: integer
+ *           type: string
  *         restTime:
- *           type: integer
+ *           type: string
  *     Workout:
  *       type: object
  *       properties:

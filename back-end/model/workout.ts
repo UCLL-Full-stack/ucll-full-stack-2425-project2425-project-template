@@ -1,12 +1,12 @@
+import { User } from './user';
+import { WorkoutExercise } from './workoutexercise';
 import {
-    Workout as WorkoutPrisma,
     User as UserPrisma,
+    Workout as WorkoutPrisma,
     WorkoutExercise as WorkoutExercisePrisma,
     Exercise as ExercisePrisma,
 } from '@prisma/client';
 
-import { User } from './user';
-import { WorkoutExercise } from './workoutexercise';
 export class Workout {
     readonly id?: string;
     readonly name: string;
@@ -20,40 +20,16 @@ export class Workout {
         this.user = workout.user;
     }
 
-    validate(workout: { id: string; name: string; description: string }) {
-        if (!workout.name || typeof workout.name !== 'string' || workout.name.trim().length === 0) {
-            throw new Error('Name is required and cannot be empty.');
+    static from(
+        workoutPrisma: WorkoutPrisma & {
+            user: UserPrisma;
         }
-        if (
-            workout.description &&
-            (typeof workout.description !== 'string' || workout.description.trim().length === 0)
-        ) {
-            throw new Error('Description must be a string and cannot be empty.');
-        }
-    }
-
-    equals({ id, name, description, user }: Workout): boolean {
-        return (
-            this.id === id &&
-            this.name === name &&
-            this.description === description &&
-            this.user === user
-        );
-    }
-
-    static from({
-        id,
-        name,
-        description,
-        user,
-    }: WorkoutPrisma & {
-        user: UserPrisma;
-    }) {
+    ): Workout {
         return new Workout({
-            id,
-            name,
-            description,
-            user: User.from(user),
+            id: workoutPrisma.id,
+            name: workoutPrisma.name,
+            description: workoutPrisma.description,
+            user: User.from(workoutPrisma.user),
         });
     }
 }
