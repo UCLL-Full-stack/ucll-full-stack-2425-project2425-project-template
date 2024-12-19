@@ -31,7 +31,12 @@ type Props = {
   date: Date;
 };
 
-const AddNewMealPopup: React.FC<Props> = ({ isOpen, onClose, onSave }) => {
+const AddNewMealPopup: React.FC<Props> = ({
+  isOpen,
+  onClose,
+  onSave,
+  date,
+}) => {
   const [recipe, setRecipe] = useState<Omit<Recipe, "id">>({
     title: "",
     instructions: "",
@@ -99,7 +104,9 @@ const AddNewMealPopup: React.FC<Props> = ({ isOpen, onClose, onSave }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-h-full overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Meal</DialogTitle>
+          <DialogTitle>
+            Add New Meal for {date.toLocaleDateString()}
+          </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Label htmlFor="title">Title</Label>

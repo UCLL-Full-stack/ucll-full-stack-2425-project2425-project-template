@@ -45,7 +45,8 @@ const CalendarGrid: React.FC = () => {
           0
         );
 
-        // Iterate over each day in the month
+        const newRecipesByDate: Record<string, Recipe[]> = {};
+
         for (
           let date = new Date(startDate);
           date <= endDate;
@@ -57,12 +58,8 @@ const CalendarGrid: React.FC = () => {
               dateString,
               userToken
             );
-
             if (recipes.length > 0) {
-              setRecipesByDate((prev) => ({
-                ...prev,
-                [dateString]: recipes,
-              }));
+              newRecipesByDate[dateString] = recipes;
             }
           } catch (error) {
             console.error(
@@ -72,6 +69,8 @@ const CalendarGrid: React.FC = () => {
             );
           }
         }
+
+        setRecipesByDate(newRecipesByDate);
       } catch (error) {
         console.error("Error fetching month recipes:", error);
       }

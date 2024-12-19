@@ -12,7 +12,6 @@ type Props = {
   onClose: () => void;
   onSelect: (recipe: Recipe) => void;
   date: Date;
-  showFavoritesOnly: boolean;
   existingMeals: Recipe[];
 };
 
@@ -21,16 +20,13 @@ const AddExistingMealPopup: React.FC<Props> = ({
   onClose,
   onSelect,
   date,
-  showFavoritesOnly,
   existingMeals,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {showFavoritesOnly ? "Add Favorite Meal" : "Add Existing Meal"}
-          </DialogTitle>
+          <DialogTitle>Add Existing Meal</DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {existingMeals.map((meal) => (

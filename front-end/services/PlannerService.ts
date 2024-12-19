@@ -74,58 +74,6 @@ const deleteScheduledMeal = async (
   }
 };
 
-const copyMeals = async (
-  dateString: string,
-  token: string
-): Promise<Recipe[]> => {
-  try {
-    const response = await fetch(`${apiUrl}/schedules/copy`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ date: dateString }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to copy meals");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error copying meals:", error);
-    throw error;
-  }
-};
-
-const pasteMeals = async (
-  sourceDateString: string,
-  targetDateString: string,
-  token: string
-): Promise<void> => {
-  try {
-    const response = await fetch(`${apiUrl}/schedules/paste`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        sourceDate: sourceDateString,
-        targetDate: targetDateString,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to paste meals");
-    }
-  } catch (error) {
-    console.error("Error pasting meals:", error);
-    throw error;
-  }
-};
-
 const saveNewMeal = async (recipe: Recipe, date: string, token: string) => {
   const response = await fetch(`${apiUrl}/recipes`, {
     method: "POST",
@@ -190,37 +138,13 @@ const scheduleExistingMeal = async (
   }
 };
 
-const getFavoriteMeals = async (token: string): Promise<Recipe[]> => {
-  try {
-    const response = await fetch(`${apiUrl}/recipes?favorite=true`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch favorite meals");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching favorite meals:", error);
-    throw error;
-  }
-};
-
 const PlannerService = {
   fetchMealDetails,
   updateMealDate,
   deleteMeal: deleteScheduledMeal,
-  copyMeals,
-  pasteMeals,
   saveNewMeal,
   scheduleExistingMeal,
   getExistingMeals,
-  getFavoriteMeals,
 };
 
 export default PlannerService;

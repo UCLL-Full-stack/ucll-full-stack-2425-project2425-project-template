@@ -38,43 +38,31 @@ const CalendarDay: React.FC<Props> = ({
   fetchMonthRecipes,
 }) => {
   const [isAddMealOpen, setIsAddMealOpen] = useState(false);
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [copiedMeals, setCopiedMeals] = useState<Recipe[] | null>(null);
   const [existingMeals, setExistingMeals] = useState<Recipe[]>([]);
-  const [favoriteMeals, setFavoriteMeals] = useState<Recipe[]>([]);
   const [isAddNewMealOpen, setIsAddNewMealOpen] = useState(false);
 
   useEffect(() => {
-    const fetchMeals = async () => {
+    const fetchExistingMeals = async () => {
       const userToken = localStorage.getItem("token");
       if (userToken) {
         try {
-          const [existing, favorites] = await Promise.all([
-            PlannerService.getExistingMeals(userToken),
-            PlannerService.getFavoriteMeals(userToken),
-          ]);
-          setExistingMeals(existing);
-          setFavoriteMeals(favorites);
+          const meals = await PlannerService.getExistingMeals(userToken);
+          setExistingMeals(meals);
         } catch (error) {
-          console.error("Error fetching meals:", error);
+          console.error("Error fetching existing meals:", error);
         }
       } else {
         console.error("No token found in local storage");
       }
     };
 
-    fetchMeals();
+    fetchExistingMeals();
   }, []);
 
   const isOtherMonth: boolean = date.getMonth() !== currentMonth;
 
   const handleAddExistingMeal = () => {
-    setShowFavoritesOnly(false);
-    setIsAddMealOpen(true);
-  };
-
-  const handleAddFavoriteMeal = () => {
-    setShowFavoritesOnly(true);
     setIsAddMealOpen(true);
   };
 
@@ -95,57 +83,12 @@ const CalendarDay: React.FC<Props> = ({
             console.error("Recipe ID is undefined");
           }
         }
-        fetchMonthRecipes();
+        await fetchMonthRecipes();
       } catch (error) {
         console.error("Error deleting meals:", error);
       }
     } else {
       console.error("No token found in local storage");
-    }
-  };
-
-  const handleCopyMeals = async () => {
-    const userToken = localStorage.getItem("token");
-    if (userToken) {
-      try {
-        const dateString = formatDateUTC(date);
-        const copiedMeals = await PlannerService.copyMeals(
-          dateString,
-          userToken
-        );
-        setCopiedMeals(copiedMeals);
-      } catch (error) {
-        console.error("Error copying meals:", error);
-      }
-    } else {
-      console.error("No token found in local storage");
-    }
-  };
-
-  const handlePasteMeals = async () => {
-    const userToken = localStorage.getItem("token");
-    if (
-      userToken &&
-      copiedMeals &&
-      copiedMeals.length > 0 &&
-      copiedMeals[0].scheduledDate
-    ) {
-      try {
-        const targetDateString = formatDateUTC(date);
-        const sourceDateString = formatDateUTC(
-          new Date(copiedMeals[0].scheduledDate)
-        );
-        await PlannerService.pasteMeals(
-          sourceDateString,
-          targetDateString,
-          userToken
-        );
-        fetchMonthRecipes();
-      } catch (error) {
-        console.error("Error pasting meals:", error);
-      }
-    } else {
-      console.error("No token found in local storage or no meals copied");
     }
   };
 
@@ -173,13 +116,13 @@ const CalendarDay: React.FC<Props> = ({
     }
   };
 
-  const handleSaveNewMeal = async (recipe: Recipe) => {
+  const handleSaveNewMeal = async (recipe: Omit<Recipe, "id">) => {
     const userToken = localStorage.getItem("token");
     if (userToken) {
       try {
         const dateString = formatDateUTC(date);
         await PlannerService.saveNewMeal(recipe, dateString, userToken);
-        fetchMonthRecipes();
+        await fetchMonthRecipes();
         setIsAddNewMealOpen(false);
       } catch (error) {
         console.error("Error saving new meal:", error);
@@ -194,10 +137,7 @@ const CalendarDay: React.FC<Props> = ({
       <RightClickMenu
         onAddNewMeal={handleAddNewMeal}
         onAddExistingMeal={handleAddExistingMeal}
-        onAddFavoriteMeal={handleAddFavoriteMeal}
         onDeleteMeals={handleDeleteMeals}
-        onCopyMeals={handleCopyMeals}
-        onPasteMeals={handlePasteMeals}
         date={date}
       >
         <section
@@ -275,8 +215,7 @@ const CalendarDay: React.FC<Props> = ({
         onClose={() => setIsAddMealOpen(false)}
         onSelect={handleSelectMeal}
         date={date}
-        showFavoritesOnly={showFavoritesOnly}
-        existingMeals={showFavoritesOnly ? favoriteMeals : existingMeals}
+        existingMeals={existingMeals}
       />
       <AddNewMealPopup
         isOpen={isAddNewMealOpen}
