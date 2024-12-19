@@ -45,7 +45,7 @@ export class User {
     }
 
     validate(user: { id?: number , email: string, password: string, role: Role }) {
-        if (user.email?.trim()) {
+        if (user.email?.trim() === '') {
             throw new Error('Email cannot be empty.');
         }
 

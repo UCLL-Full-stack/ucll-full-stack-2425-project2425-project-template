@@ -1,3 +1,4 @@
+import db from "../util/database";
 import { Coach } from "./coach";
 import { Match } from "./match";
 import { Player } from "./player";
@@ -39,6 +40,9 @@ export class Team {
         this.points = points;
         this.goalsFor = goalsFor;
         this.goalsAg = goalsAg;
+
+        this.saveToDatabase();
+
     }
 
     getId(): number {
@@ -151,4 +155,17 @@ export class Team {
             awayMatches: awayMatches ? awayMatches.map(Match.from) : undefined,
         });
     }
+
+    async saveToDatabase(): Promise<void> {
+        await db.team.update({
+            where: { id: this.id },
+            data: {
+                points: this.points,
+                goalsFor: this.goalsFor,
+                goalsAg: this.goalsAg,
+            },
+        });
+    }
+
+    
 }
