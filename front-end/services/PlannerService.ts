@@ -1,7 +1,8 @@
+import { Recipe } from "@/types/recipes";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const fetchMealDetails = async (date: string, token: string) => {
-  console.log(`Fetching meal details for date: ${date} with token: ${token}`);
   const response = await fetch(`${apiUrl}/schedules?date=${date}`, {
     method: "GET",
     headers: {
@@ -10,15 +11,11 @@ const fetchMealDetails = async (date: string, token: string) => {
     },
   });
 
-  console.log(`Response status: ${response.status}`);
   if (!response.ok) {
-    console.error("Failed to fetch meal details", await response.text());
     throw new Error("Failed to fetch meal details");
   }
 
-  const data = await response.json();
-  console.log("Fetched meal details:", data);
-  return data;
+  return await response.json();
 };
 
 const updateMealDate = async (
@@ -51,7 +48,11 @@ const updateMealDate = async (
   }
 };
 
-const deleteMeal = async (recipeId: number, date: string, token: string) => {
+const deleteScheduledMeal = async (
+  recipeId: number,
+  date: string,
+  token: string
+) => {
   try {
     const response = await fetch(
       `${apiUrl}/schedules/${recipeId}?date=${date}`,
@@ -73,6 +74,153 @@ const deleteMeal = async (recipeId: number, date: string, token: string) => {
   }
 };
 
-const PlannerService = { fetchMealDetails, updateMealDate, deleteMeal };
+const copyMeals = async (
+  dateString: string,
+  token: string
+): Promise<Recipe[]> => {
+  try {
+    const response = await fetch(`${apiUrl}/schedules/copy`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ date: dateString }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to copy meals");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error copying meals:", error);
+    throw error;
+  }
+};
+
+const pasteMeals = async (
+  sourceDateString: string,
+  targetDateString: string,
+  token: string
+): Promise<void> => {
+  try {
+    const response = await fetch(`${apiUrl}/schedules/paste`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        sourceDate: sourceDateString,
+        targetDate: targetDateString,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to paste meals");
+    }
+  } catch (error) {
+    console.error("Error pasting meals:", error);
+    throw error;
+  }
+};
+
+const saveNewMeal = async (recipe: Recipe, date: string, token: string) => {
+  const response = await fetch(`${apiUrl}/recipes`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ ...recipe, scheduledDate: date }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to save new meal");
+  }
+
+  return await response.json();
+};
+
+const getExistingMeals = async (token: string): Promise<Recipe[]> => {
+  try {
+    const response = await fetch(`${apiUrl}/recipes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch existing meals");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching existing meals:", error);
+    throw error;
+  }
+};
+
+const scheduleExistingMeal = async (
+  recipeId: number,
+  date: string,
+  token: string
+) => {
+  try {
+    const response = await fetch(`${apiUrl}/schedules`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ recipeId, date }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to schedule existing meal");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error scheduling existing meal:", error);
+    throw error;
+  }
+};
+
+const getFavoriteMeals = async (token: string): Promise<Recipe[]> => {
+  try {
+    const response = await fetch(`${apiUrl}/recipes?favorite=true`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch favorite meals");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching favorite meals:", error);
+    throw error;
+  }
+};
+
+const PlannerService = {
+  fetchMealDetails,
+  updateMealDate,
+  deleteMeal: deleteScheduledMeal,
+  copyMeals,
+  pasteMeals,
+  saveNewMeal,
+  scheduleExistingMeal,
+  getExistingMeals,
+  getFavoriteMeals,
+};
 
 export default PlannerService;

@@ -1,6 +1,5 @@
 import CalendarGrid from "@/components/planner/calendar/CalendarGrid";
 import Greeting from "@/components/planner/Greeting";
-import ShoppingList from "@/components/planner/ShoppingListSidebar";
 import { useEffect, useState } from "react";
 
 const MealPlanner: React.FC = () => {
@@ -33,9 +32,9 @@ const MealPlanner: React.FC = () => {
         </section>
 
         {/* Shopping List Sidebar */}
-        <section className="w-80 flex-shrink-0">
+        {/* <section className="w-80 flex-shrink-0">
           <ShoppingList />
-        </section>
+        </section> */}
       </main>
     </>
   );

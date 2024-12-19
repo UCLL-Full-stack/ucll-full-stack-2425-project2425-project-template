@@ -3,7 +3,7 @@
  * RightClickMenu component is a context menu
  */
 
-import { Plus, Trash, Copy, ClipboardPaste, Heart } from "lucide-react";
+import { Plus, Trash2, Copy, ClipboardPaste, Heart } from "lucide-react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -13,12 +13,13 @@ import {
 
 type Props = {
   children: React.ReactNode;
-  onAddNewMeal?: () => void;
-  onAddExistingMeal?: () => void;
-  onAddFavoriteMeal?: () => void;
-  onDeleteMeal?: () => void;
-  onCopyMeal?: () => void;
-  onPasteMeal?: () => void;
+  onAddNewMeal: () => void;
+  onAddExistingMeal: () => void;
+  onAddFavoriteMeal: () => void;
+  onDeleteMeals: () => void;
+  onCopyMeals: () => void;
+  onPasteMeals: () => void;
+  date: Date;
 };
 
 const RightClickMenu: React.FC<Props> = ({
@@ -26,9 +27,10 @@ const RightClickMenu: React.FC<Props> = ({
   onAddNewMeal,
   onAddExistingMeal,
   onAddFavoriteMeal,
-  onDeleteMeal,
-  onCopyMeal,
-  onPasteMeal,
+  onDeleteMeals,
+  onCopyMeals,
+  onPasteMeals,
+  date,
 }) => {
   return (
     <ContextMenu>
@@ -39,23 +41,24 @@ const RightClickMenu: React.FC<Props> = ({
           Add New Meal
         </ContextMenuItem>
         <ContextMenuItem onClick={onAddExistingMeal}>
+          <Plus className="mr-2 h-4 w-4" />
           Add Existing Meal
         </ContextMenuItem>
         <ContextMenuItem onClick={onAddFavoriteMeal}>
           <Heart className="mr-2 h-4 w-4" />
           Add Favorite Meal
         </ContextMenuItem>
-        <ContextMenuItem onClick={onDeleteMeal}>
-          <Trash className="mr-2 h-4 w-4" />
-          Delete Meal
+        <ContextMenuItem onClick={onDeleteMeals}>
+          <Trash2 className="mr-2 h-4 w-4" />
+          Delete Meals
         </ContextMenuItem>
-        <ContextMenuItem onClick={onCopyMeal}>
+        <ContextMenuItem onClick={onCopyMeals}>
           <Copy className="mr-2 h-4 w-4" />
-          Copy Meal
+          Copy Meals
         </ContextMenuItem>
-        <ContextMenuItem onClick={onPasteMeal}>
+        <ContextMenuItem onClick={onPasteMeals}>
           <ClipboardPaste className="mr-2 h-4 w-4" />
-          Paste Meal
+          Paste Meals
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

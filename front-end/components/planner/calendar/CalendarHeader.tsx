@@ -48,7 +48,7 @@ const CalendarHeader: React.FC<Props> = ({
   onToggleSelectionMode,
   onChangeViewMode,
   onDeleteMeals,
-  onAddToShoppingList,
+  // onAddToShoppingList,
   onToday,
 }) => {
   return (
@@ -88,14 +88,14 @@ const CalendarHeader: React.FC<Props> = ({
         >
           Delete Meals
         </Button>
-        <Button
+        {/* <Button
           variant="outline"
           disabled={selectedDatesCount === 0}
           onClick={onAddToShoppingList}
         >
           <ShoppingCart className="h-4 w-4 mr-1" />
           Add to Shopping List
-        </Button>
+        </Button> */}
         <Select
           onValueChange={(value) => onChangeViewMode(value as "Month" | "Week")}
         >
@@ -104,7 +104,7 @@ const CalendarHeader: React.FC<Props> = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Month">Month</SelectItem>
-            <SelectItem value="Week">Week</SelectItem>
+            {/* <SelectItem value="Week">Week</SelectItem> */}
           </SelectContent>
         </Select>
       </div>
