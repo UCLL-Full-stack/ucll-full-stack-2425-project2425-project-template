@@ -20,10 +20,10 @@ const LeidingOverviewTable: React.FC<Props> = ({ leiding }: Props) => {
                 <tbody>
                     {leiding.map((lid, index) => (
                         <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'} border-amber-900`}>
-                            <td className="p-2 border-r border-amber-900">{lid.naam}</td>
+                            <td className="p-2 border-r border-amber-900">{lid.naam + " " + lid.voornaam}</td>
                             <td className="p-2 border-r border-amber-900">{lid.totem}</td>
                             <td className="p-2 border-r border-amber-900">{lid.telefoon}</td>
-                            <td className="p-2 border-r border-amber-900">{lid.groep.naam}</td>
+                            <td className="p-2 border-r border-amber-900">{lid.groep ? lid.groep.naam : 'Geen groep'}</td>
                         </tr>
                     ))}
                 </tbody>

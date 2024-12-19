@@ -20,7 +20,7 @@ const getActiviteitenByGroupName = async (groepNaam: string) => {
 };
 
 const addActiviteit = async ( groepNaam: string, name: string, description: string, beginDate: Date, endDate: Date) => {
-  const token = JSON.parse(sessionStorage.getItem("loggedIn") || "{}").token;
+  const token = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}").token;
   const response = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/activiteit/${groepNaam}`,
     {
       method: "POST",
@@ -37,15 +37,8 @@ const addActiviteit = async ( groepNaam: string, name: string, description: stri
     }
   );
   if (!response.ok) {
-    console.log(groepNaam);
-    console.log(name);
-    console.log(description);
-    console.log(beginDate);
-    console.log(endDate);
-    console.log("response" + response);
-    //throw new Error("Activiteit toevoegen mislukt.");
+    throw new Error("Activiteit toevoegen mislukt.");
   }
-  console.log(response.status, response.body)
   return response.json();
 };
 

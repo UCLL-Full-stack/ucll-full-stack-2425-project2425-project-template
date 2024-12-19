@@ -1,15 +1,31 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '@/components/header';
 import LeidingOverviewTable from '@/components/leiding/LeidingOverviewTable';
+import { Leiding } from '@/types';
+import LeidingService from '@/services/LeidingService';
 
-const Leiding: React.FC = () => {
-    const leiding = [
-        { naam: "Jan Janssen", totem: "Leeuw", telefoon: "0123456789", groep: { naam: "Groep A" } },
-        { naam: "Piet Pieters", totem: "Tijger", telefoon: "0987654321", groep: { naam: "Groep B" } },
-        { naam: "Klaas Klaassen", totem: "Olifant", telefoon: "1234567890", groep: { naam: "Groep C" } },
-        { naam: "Marie Maries", totem: "Panter", telefoon: "9876543210", groep: { naam: "Groep D" } }
-    ];
+const Leiders: React.FC = () => {
+    const [leiders, setLeiders] = useState<Array<Leiding>>([]);
+    const [error, setError] = useState<string | null>(null);
+
+    const getLeiders = async () => {
+        setError("");
+        try {
+            const response = await LeidingService.getLeiding();
+            setLeiders(response);
+        } catch (error) {
+            if (error.message === "Failed to get leiding.") {
+                setError("You are not authorized to view this page. Please login first.");
+            } else {
+                setError(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getLeiders();
+    }, []);
 
     return (
         <>
@@ -19,12 +35,17 @@ const Leiding: React.FC = () => {
             <Header />
             <main>
                 <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Leiding Overzicht</h1>
-                <div className="m-5">
-                    <LeidingOverviewTable leiding={leiding} />
-                </div>
+                <section>
+                    {error && <div className="text-red-800">{error}</div>}
+                    {leiders.length > 0 ? (
+                        <LeidingOverviewTable leiding={leiders} />
+                    ) : (
+                        <p className="text-center text-gray-600">Geen leiding gevonden.</p>
+                    )}
+                </section>
             </main>
         </>
     );
 };
 
-export default Leiding;
+export default Leiders;

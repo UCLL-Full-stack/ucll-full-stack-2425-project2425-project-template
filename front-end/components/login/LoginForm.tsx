@@ -38,12 +38,13 @@ const LoginForm: React.FC = () => {
             try {
                 setStatusMessages([{message : ('Login gelukt!'), type : "success"}]);
                 const data = await response.json();
-                sessionStorage.setItem("loggedIn", JSON.stringify({
+                sessionStorage.setItem("loggedInUser", JSON.stringify({
                     'token': data.token,
                     'totem': data.totem,
                     'role': data.role
                 }));
-                router.push('/'); 
+                setTimeout(() => {
+                    router.push('/'); }, 2000);
             } catch (error) {
                 setStatusMessages([{ message: "Server Error; no connection possible", type: "error" }]);
             }

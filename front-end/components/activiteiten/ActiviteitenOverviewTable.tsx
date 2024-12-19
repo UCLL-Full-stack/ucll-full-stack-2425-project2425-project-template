@@ -65,6 +65,7 @@ const ActiviteitenOverviewTable: React.FC<Props> = ({ activiteiten }: Props) => 
             setDescriptionError('');
             setBeginDateError('');
             setEndDateError('');
+            // await getActiviteiten();
         } catch (error) {
             console.error('Failed to add activiteit:', error);
         }
