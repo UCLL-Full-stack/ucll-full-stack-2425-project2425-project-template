@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Race } from '@types';
-import Link from 'next/link';
 
 interface Props {
   races: Array<Race>;

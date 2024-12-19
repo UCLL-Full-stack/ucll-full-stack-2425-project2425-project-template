@@ -1,4 +1,4 @@
-import AuthService from '@services/authService';
+import AuthService from '@services/AuthService';
 import { StatusMessage } from "@types";
 import classNames from "classnames";
 import { useTranslation } from "next-i18next";

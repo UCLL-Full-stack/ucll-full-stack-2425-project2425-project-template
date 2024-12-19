@@ -36,7 +36,7 @@ const Header: React.FC = () => {
         <Link href="/" className="nav-link px-4 fs-5 text-white">
           {t('header.home')}
         </Link>
-        <Link href="/races" className="nav-link px-4 fs-5 text-white">
+        <Link href="/overview" className="nav-link px-4 fs-5 text-white">
           {t('header.informationOverview')}
         </Link>
         <Link href="/submission_form" className="nav-link px-4 fs-5 text-white">

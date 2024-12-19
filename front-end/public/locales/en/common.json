@@ -33,6 +33,10 @@
         "password": "Password",
         "role": "Role"
     },
+    "overview": {
+        "title": "Information Overview",
+        "instructions": "Click on a race to see its crashes"
+    },
     "submissionForm": {
         "title": "Submission Forms",
         "addCrash": "Add a Crash",

@@ -3,7 +3,7 @@ import Header from '@components/header';
 import { useState, useEffect } from 'react';
 import raceService from '@services/RaceService';
 import { Race, Crash, Gebruiker } from '@types';
-import RaceOverviewTable from '@components/races/RaceOverviewTable';
+import RaceOverviewTable from '@components/overview/RaceOverviewTable';
 import CrashOverviewTable from '@components/crashes/CrashOverviewTable';
 import { useRouter } from 'next/router';
 import { Line, Bar } from 'react-chartjs-2';
@@ -103,14 +103,14 @@ const InformationOverview: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Information Overview</title>
+        <title>{t('header.informationOverview')}</title>
       </Head>
       <Header />
       <main className="container">
-        <h1>Information Overview</h1>
+        <h1>{t('overview.title')}</h1>
         <section>
           <h2>Races</h2>
-          <p>Click on a race to see its crashes</p>
+          <p>{t('overview.instructions')}</p>
           {error && <div className="text-red-800">{error}</div>}
           {races.length > 0 && (
             <RaceOverviewTable

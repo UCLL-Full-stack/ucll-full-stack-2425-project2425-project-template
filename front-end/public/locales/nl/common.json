@@ -17,7 +17,7 @@
         }
     },
     "header": {
-        "home": "Home",
+        "home": "Thuis",
         "informationOverview": "Informatie Overzicht",
         "submissionForm": "Inzendingsformulier",
         "login": "Inloggen",
@@ -32,6 +32,10 @@
         "username": "Gebruikersnaam",
         "password": "Wachtwoord",
         "role": "Rol"
+    },
+    "overview": {
+        "title": "Informatie Overzicht",
+        "instructions": "Click op een race om zijn crashes te bekijken."
     },
     "submissionForm": {
         "title": "Inzendingsformulieren",
