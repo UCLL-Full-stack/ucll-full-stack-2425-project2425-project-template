@@ -9,9 +9,10 @@ interface GuildCardProps {
     onClick: (guild: Guild & {greyedOut?: boolean; inviteLink?: string}) => void;
     onCreateClick: (guildId: string) => void;
     onGuildSettingsClick: (guildId: string) => void;
+    permissions: any[];
 }
 
-const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, onGuildSettingsClick }) => {
+const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, onGuildSettingsClick, permissions }) => {
     const { user } = useUser();
     const [canCreateBoard, setCanCreateBoard] = React.useState(false);
     const [canEditSettings, setCanEditSettings] = React.useState(false);
@@ -34,7 +35,7 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, on
         };
 
         checkPermissions();
-    }, [user!.userId, guild.guildId]);
+    }, [user!.userId, guild.guildId, permissions]);
 
     const handleEditSettings = async () => {
         onGuildSettingsClick(guild.guildId);

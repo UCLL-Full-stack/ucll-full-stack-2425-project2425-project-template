@@ -153,7 +153,7 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                                     Delete Task
                                 </button>
                             )}
-                            {(permissions.canEditTasks || permissions.canAssignTasks) && (
+                            {(permissions.canEditTasks || permissions.canAssignTasks || permissions.canEditAssignees) && (
                                 <button
                                     onClick={() => setIsEditing(true)}
                                     className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"

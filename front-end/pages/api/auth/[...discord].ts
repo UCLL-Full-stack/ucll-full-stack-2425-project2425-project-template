@@ -178,7 +178,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     .map((guild: any) => guild.guildId);
                 
                 await UserService.updateUser(userData.id, {
-                    guilds: userGuildIds,
+                    guildIds: userGuildIds,
                 });
                 const data = {
                     userId: userData.id,
