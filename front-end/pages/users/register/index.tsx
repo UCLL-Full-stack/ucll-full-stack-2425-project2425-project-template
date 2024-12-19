@@ -36,10 +36,6 @@ const RegisterUser: React.FC = () => {
         setUser({ ...user, [field]: value });
     };
 
-    const createUser = async () => {
-        await UserService.createUser(user);
-    }
-
     return (
         <>
             <Head>

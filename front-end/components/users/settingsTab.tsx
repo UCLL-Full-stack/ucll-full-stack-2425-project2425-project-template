@@ -144,6 +144,7 @@ const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
             <th>{t("accountOverview.accountNumber")}</th>
             <th>{t("accountOverview.balance")}</th>
             <th>Status</th>
+            <th>{t("accountOverview.deleteAccount")}</th>
           </tr>
           </thead>
               <tbody>
@@ -167,6 +168,7 @@ const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
                           <option value="Inactive">Inactive</option>
                         </select>
                       </td>
+                      <td><button>Delete Account</button></td>
                     </tr>
                   ))
                 ) : (

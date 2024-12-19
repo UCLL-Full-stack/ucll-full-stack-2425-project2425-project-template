@@ -13,9 +13,17 @@ const getAllUsers = async (): Promise<User[]> => {
 };
 
 const createUser = async (user: User): Promise<User> => {
-    const accounts = user.getAccounts();
-
     try {
+        console.log('Creating user with data:', {
+            nationalRegisterNumber: user.getNationalRegisterNumber(),
+            name: user.getName(),
+            birthDate: user.getBirthDate(),
+            isAdministrator: user.getIsAdministrator(),
+            phoneNumber: user.getPhoneNumber(),
+            email: user.getEmail(),
+            password: user.getPassword(),
+        });
+
         const userPrisma = await database.user.create({
             data: {
                 nationalRegisterNumber: user.getNationalRegisterNumber(),
@@ -31,6 +39,7 @@ const createUser = async (user: User): Promise<User> => {
 
         return User.from(userPrisma);
     } catch (error: any) {
+        console.error('Database error:', error);
         throw new Error('Database error. See server log for details.');
     }
 };
