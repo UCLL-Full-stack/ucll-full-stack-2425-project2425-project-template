@@ -190,6 +190,8 @@ const unfavoriteCocktail = (cocktailId: string) => {
   });
 };
 
+
+
 export const CocktailService = {
   getAllCocktails,getCocktailById, addCocktail, deleteCocktail, updateCocktail, getAllFavoriteCocktails, favoriteCocktail, unfavoriteCocktail,
 };

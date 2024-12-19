@@ -45,4 +45,33 @@ const addCocktail = async ({ name, description, strongness, image }: { name: str
   }
 }
 
-export default { getAllCocktails, getCocktailById, addCocktail };
+const deleteCocktail = async (id: number): Promise<void> => {
+  try {
+    await database.cocktail.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Database error.');
+  }
+}
+
+const updateCocktail = async ({ id, name, description, strongness, image }: { id: number; name: string; description: string; strongness: number; image: string }): Promise<Cocktail> => {
+  try {
+    const updatedCocktail = await database.cocktail.update({
+      where: { id },
+      data: {
+        name,
+        description,
+        strongness,
+        image,
+      },
+    });
+    return Cocktail.from(updatedCocktail);
+  } catch (error) {
+    console.error(error);
+    throw new Error('Database error.');
+  }
+}
+
+export default { getAllCocktails, getCocktailById, addCocktail, deleteCocktail, updateCocktail };
