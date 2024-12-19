@@ -13,11 +13,12 @@ model User {
   email        String   @unique
   password     String
   role         String
-  phone_number String      @unique
+  phone_number String   @unique
   birth_date   DateTime
   reviews      Review[]
-  Cart         Cart?
-  Address      Address?
+  cart         Cart?
+  address      Address?
+  orders       Order[]
 }
 
 model Review {
@@ -25,38 +26,42 @@ model Review {
   rating    Int
   text      String
   createdAt DateTime @default(now())
-  userId    Int      
+  userId    Int
   user      User     @relation(fields: [userId], references: [id])
   productId Int
   product   Product  @relation(fields: [productId], references: [id])
 }
 
 model Product {
-  id          Int    @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   name        String
   price       Float
   description String
   rating      Int
-  url         String  @default("https://placehold.co/600x400")
-  carts       Cart[]
+  url         String         @default("https://placehold.co/600x400")
+  carts       Cart[]         @relation("CartProducts")
   reviews     Review[]
+  orders      OrderProduct[]
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   totalPrice Float
-  orderDate  DateTime @default(now())
-  cartId     Int      @unique
-  cart       Cart     @relation(fields: [cartId], references: [id])
+  orderDate  DateTime       @default(now())
+  userId     Int
+  user       User           @relation(fields: [userId], references: [id])
+  products   OrderProduct[]
+  Cart       Cart[]
 }
 
 model Cart {
   id         Int       @id @default(autoincrement())
   totalPrice Float
-  products   Product[]
+  products   Product[] @relation("CartProducts")
   userId     Int       @unique
   user       User      @relation(fields: [userId], references: [id])
-  Order      Order?
+  order      Order?    @relation(fields: [orderId], references: [id])
+  orderId    Int?
 }
 
 model Address {
@@ -68,4 +73,13 @@ model Address {
   houseNumber Int
   userId      Int    @unique
   user        User   @relation(fields: [userId], references: [id])
+}
+
+model OrderProduct {
+  orderId   Int
+  productId Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@id([orderId, productId])
 }
