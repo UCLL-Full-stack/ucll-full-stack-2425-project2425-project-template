@@ -59,7 +59,7 @@ const MatchPlayers: React.FC<MatchPlayersProps> = ({ matchId, onClose }) => {
             onClick={onClose}
             className="px-4 py-2 bg-gray-700 text-white font-bold rounded hover:bg-gray-600"
           >
-            Close
+            {t('table.match.close')}
           </button>
         </div>
       </div>
