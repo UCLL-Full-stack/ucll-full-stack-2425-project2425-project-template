@@ -12,11 +12,11 @@ type Props = {
 
 const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
   const { t } = useTranslation();
-//   const [originalUser, setOriginalUser] = useState(user); 
   const [updatedUser, setUpdatedUser] = useState<User>(user);
   const [updatedAccountStatus, setUpdatedAccountStatus] = useState<Account | null>(null);
   const [updatedAccounts, setUpdatedAccounts] = useState<Account[]>(accounts);
-  
+  const [type, setType] = useState('password');
+
   const handleUserInputChange = (field: keyof User, value: any) => {
     setUpdatedUser((prevState) => ({
       ...prevState,
@@ -61,9 +61,18 @@ const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
   };
 
   useEffect(() => {
-    setUpdatedAccounts(accounts)
+    if (accounts) setUpdatedAccounts(accounts);
     setUpdatedUser(user);
   }, [user, accounts]);
+
+  const togglePassword = () => {
+    if (type === "password") {
+      setType("text");
+      
+    } else {
+      setType("password");
+    }
+  }
 
   return (
     <>
@@ -123,16 +132,21 @@ const Settings: React.FC<Props> = ({ user, accounts }: Props) => {
                   </tr>
                   <tr>
                     <td>{t("userDetails.birthDate")}:</td>
+                    <td>{updatedUser.birthDate ? new Date(updatedUser.birthDate).toISOString().split('T')[0] : ''}</td>
+                  </tr>
+                  <td>Password:</td>
                     <td>
                       <input
-                        type="date"
-                        id="birthDate"
-                        name="birthDate"
-                        value={updatedUser.birthDate ? new Date(updatedUser.birthDate).toISOString().split('T')[0] : ''}
-                        onChange={(e) => handleUserInputChange("birthDate", e.target.value)}
+                        type={type}
+                        id="password"
+                        name="password"
+                        value={updatedUser.password}
+                        onChange={(e) => handleUserInputChange("password", e.target.value)}
+                        onClick={() => handleUserInputChange("password", '')}
+                        onBlur={() => { if (updatedUser.password === '') handleUserInputChange("password", user.password)}}
                       />
+                      <input type="checkbox" onClick={togglePassword}/>
                     </td>
-                  </tr>
                 </tbody>
               </table>
           </section>

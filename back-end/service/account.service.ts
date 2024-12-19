@@ -59,10 +59,6 @@ const updateAccount = async (email: string, accountInput: AccountInput): Promise
     const accountsOfUser = user.getAccounts();
 
     const account = accountsOfUser.filter((account) => account.getId() === accountInput.id)[0];
- 
-    // if (!user.getIsAdministrator()) {
-    //     throw new Error("You do not have permissions!");
-    // }
 
     account.update({
         status: accountInput.status
