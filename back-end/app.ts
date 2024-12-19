@@ -8,7 +8,7 @@ import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
 import exerciseRouter from './controller/exercise.routes';
 import workoutExerciseRouter from './controller/workoutExercise.routes';
-
+import { expressjwt } from 'express-jwt';
 
 const app = express();
 dotenv.config();
@@ -16,6 +16,15 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default-secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
+    })
+);
 
 app.use('/exercises', exerciseRouter);
 app.use('/users', userRouter);
@@ -25,8 +34,6 @@ app.use('/workoutExercises', workoutExerciseRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
-
-
 
 const swaggerOpts = {
     definition: {

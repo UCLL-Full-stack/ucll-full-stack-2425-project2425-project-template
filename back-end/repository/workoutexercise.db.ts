@@ -1,10 +1,6 @@
 import { WorkoutExercise } from '../model/workoutexercise';
 import database from '../util/database';
 
-// const workoutexercises: WorkoutExercise[] = [
-//     new WorkoutExercise({ workout_exercise_id: 1, workout_id: 1, exercise_id: 1, sets: 3, reps: 10, rpe: '7-8', rest_time: '1:00' }),
-// ];
-
 const getAllWorkoutExercises = async (): Promise<WorkoutExercise[]> => {
     try {
         const workoutExercisePrisma = await database.workoutExercise.findMany({
@@ -19,12 +15,10 @@ const getAllWorkoutExercises = async (): Promise<WorkoutExercise[]> => {
     }
 };
 
-const getWorkoutExerciseById = async (id: string): Promise<WorkoutExercise | null> => {
+const getWorkoutExerciseById = async ({ id }: { id: string }): Promise<WorkoutExercise | null> => {
     try {
         const workoutExercisePrisma = await database.workoutExercise.findUnique({
-            where: {
-                id: id,
-            },
+            where: { id },
             include: { workout: { include: { user: true } }, exercise: true },
         });
         return workoutExercisePrisma ? WorkoutExercise.from(workoutExercisePrisma) : null;
@@ -34,12 +28,14 @@ const getWorkoutExerciseById = async (id: string): Promise<WorkoutExercise | nul
     }
 };
 
-const getWorkoutExercisesByWorkoutId = async (id: string): Promise<WorkoutExercise[]> => {
+const getWorkoutExercisesByWorkoutId = async ({
+    workoutId,
+}: {
+    workoutId: string;
+}): Promise<WorkoutExercise[]> => {
     try {
         const workoutExercisePrisma = await database.workoutExercise.findMany({
-            where: {
-                workoutId: id,
-            },
+            where: { workoutId },
             include: { workout: { include: { user: true } }, exercise: true },
         });
         return workoutExercisePrisma.map((workoutExercise) =>
@@ -51,28 +47,36 @@ const getWorkoutExercisesByWorkoutId = async (id: string): Promise<WorkoutExerci
     }
 };
 
-// const createWorkoutExercise = async ({
-//     workoutId,
-//     exerciseId,
-//     sets,
-//     reps,
-//     rpe,
-//     restTime,
-// }: WorkoutExercise): Promise<WorkoutExercise> => {
-//     try {
-//         const workoutExercisePrisma = await database.workoutExercise.create({
-//             data: { workoutId, exerciseId, sets, reps, rpe, restTime },
-//         });
-//         return WorkoutExercise.from(workoutExercisePrisma);
-//     } catch (error) {
-//         console.error(error);
-//         throw new Error('Database error. See server log for details.');
-//     }
-// };
+const createWorkoutExercise = async ({
+    sets,
+    reps,
+    rpe,
+    restTime,
+    workout,
+    exercise,
+}: WorkoutExercise): Promise<WorkoutExercise> => {
+    try {
+        const workoutExercisePrisma = await database.workoutExercise.create({
+            data: {
+                sets,
+                reps,
+                rpe,
+                restTime,
+                workout: { connect: { id: workout.id } },
+                exercise: { connect: { id: exercise.id } },
+            },
+            include: { workout: { include: { user: true } }, exercise: true },
+        });
+        return WorkoutExercise.from(workoutExercisePrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default {
     getAllWorkoutExercises,
     getWorkoutExerciseById,
     getWorkoutExercisesByWorkoutId,
-    // createWorkoutExercise,
+    createWorkoutExercise,
 };

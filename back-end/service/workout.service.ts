@@ -1,8 +1,7 @@
-
-
 import { Workout } from '../model/workout';
 import userDb from '../repository/user.db';
 import workoutDb from '../repository/workout.db';
+import workoutexerciseDb from '../repository/workoutexercise.db';
 import { WorkoutInput } from '../types';
 import exerciseService from './exercise.service';
 
@@ -14,22 +13,22 @@ const getAllWorkouts = async (): Promise<Workout[]> => {
     return workouts;
 };
 
-const getWorkoutById = async (id: string): Promise<Workout | null> => {
-    const workout = await workoutDb.getWorkoutById(id);
+const getWorkoutById = async (id: string): Promise<Workout> => {
+    const workout = await workoutDb.getWorkoutById({ id });
     if (!workout) {
         throw new Error(`Workout with ID ${id} not found`);
     }
     return workout;
 };
 
-const getWorkoutsByUserId = async (id: string): Promise<Workout[]> => {
-    const user = await userDb.getUserById(id);
+const getWorkoutsByUserId = async (userId: string): Promise<Workout[]> => {
+    const user = await userDb.getUserById({ id: userId });
     if (!user) {
-        throw new Error(`User with ID ${id} not found`);
+        throw new Error(`User with ID ${userId} not found`);
     }
-    const userWorkouts = await workoutDb.getWorkoutsByUserId(id);
+    const userWorkouts = await workoutDb.getWorkoutsByUserId({ userId });
     if (userWorkouts.length === 0) {
-        throw new Error(`No workouts found for user with ID ${id}`);
+        throw new Error(`No workouts found for user with ID ${userId}`);
     }
 
     return userWorkouts;
@@ -83,22 +82,16 @@ const getWorkoutsByUserId = async (id: string): Promise<Workout[]> => {
 //     return workout;
 // };
 
-// const createWorkout = ({ workout_id, user_id, name, description }: WorkoutInput): Workout => {
-//     const existingWorkout = workoutDb.getWorkoutById(workout_id);
-    
-//     if (existingWorkout) {
-//         throw new Error(`Workout with ID ${workout_id} already exists`);
-//     }
-    
-//     const workout = new Workout({ workout_id, user_id, name, description, exercises: [] });
-//     return workoutDb.createWorkout(workout);
-// };
+const createWorkout = async ({ name, description, user }: WorkoutInput): Promise<Workout> => {
+    const workout = new Workout({ name, description, user });
+    return workoutDb.createWorkout(workout);
+};
 
 export default {
     getAllWorkouts,
     getWorkoutById,
     getWorkoutsByUserId,
-    // createWorkout,
+    createWorkout,
     // addExerciseToWorkout,
     // removeExerciseFromWorkout,
     // removeWorkout,

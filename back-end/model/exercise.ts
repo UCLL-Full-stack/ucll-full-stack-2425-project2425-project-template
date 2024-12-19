@@ -3,28 +3,18 @@ import { WorkoutExercise as WorkoutExercisePrisma } from '@prisma/client';
 import { WorkoutExercise } from './workoutexercise';
 
 export class Exercise {
-    readonly id: string;
+    readonly id?: string;
     readonly name: string;
-    readonly description: string | null;
-    readonly videoLink: string | null;
+    readonly description: string;
+    readonly videoLink: string;
 
-    constructor(exercise: {
-        id: string;
-        name: string;
-        description: string | null;
-        videoLink: string | null;
-    }) {
+    constructor(exercise: { id?: string; name: string; description: string; videoLink: string }) {
         this.id = exercise.id;
         this.name = exercise.name;
         this.description = exercise.description;
         this.videoLink = exercise.videoLink;
     }
-    validate(exercise: {
-        id: string;
-        name: string;
-        description: string | null;
-        videoLink: string | null;
-    }) {
+    validate(exercise: { id: string; name: string; description: string; videoLink: string }) {
         if (
             !exercise.name ||
             typeof exercise.name !== 'string' ||
@@ -53,8 +43,8 @@ export class Exercise {
     }: {
         id: string;
         name: string;
-        description: string | null;
-        videoLink: string | null;
+        description: string;
+        videoLink: string;
     }): boolean {
         return (
             this.id === id &&

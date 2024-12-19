@@ -1,60 +1,65 @@
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     Workout:
  *       type: object
  *       properties:
  *         id:
  *           type: string
- *         userId:
- *           type: string
  *         name:
  *           type: string
  *         description:
  *           type: string
- *         exercises:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Exercise'
+ *         user:
+ *           $ref: '#/components/schemas/User'
  *     WorkoutInput:
  *       type: object
  *       properties:
- *         id:
- *           type: number
- *           format: int64
- *         userId:
- *           type: string
  *         name:
  *           type: string
  *         description:
  *           type: string
- *         exercises:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/ExerciseInput'
- *     Exercise:
+ *         user:
+ *           $ref: '#/components/schemas/UserInput'
+ *     User:
  *       type: object
  *       properties:
  *         id:
  *           type: string
- *         name:
+ *         firstName:
  *           type: string
- *         description:
+ *         lastName:
  *           type: string
- *         videoLink:
+ *         email:
  *           type: string
- *     ExerciseInput:
+ *           format: email
+ *         password:
+ *           type: string
+ *         role:
+ *           $ref: '#/components/schemas/Role'
+ *     UserInput:
  *       type: object
  *       properties:
- *         id:
+ *         firstName:
  *           type: string
- *         name:
+ *         lastName:
  *           type: string
- *         description:
+ *         email:
  *           type: string
- *         videoLink:
+ *           format: email
+ *         password:
  *           type: string
+ *         role:
+ *           $ref: '#/components/schemas/Role'
+ *     Role:
+ *       type: string
+ *       enum: [admin, user]
  */
 
 import express, { Router, Request, Response, NextFunction } from 'express';
@@ -66,6 +71,8 @@ const workoutRouter = express.Router();
  * @swagger
  * /workouts:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all workouts
  *     tags: [Workouts]
  *     description: Retrieve a list of all workouts.
@@ -161,8 +168,11 @@ workoutRouter.get('/user/:id', async (req: Request, res: Response, next: NextFun
  * @swagger
  * /workouts:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new workout
- *     tags: [Workouts]
+ *     tags:
+ *       - Workouts
  *     description: Create a new workout entry in the database.
  *     requestBody:
  *       required: true
@@ -176,18 +186,18 @@ workoutRouter.get('/user/:id', async (req: Request, res: Response, next: NextFun
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/WorkoutInput'
+ *               $ref: '#/components/schemas/Workout'
  */
-// workoutRouter.post('/', async (req: Request, res: Response) => {
-//     try {
-//         const workoutInput = req.body;
-//         const newWorkout = await workoutService.createWorkout(workoutInput);
-//         res.status(200).json(newWorkout);
-//     } catch (error: any) {
-//         const errorMessage = error.message || "An unexpected error occurred";
-//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
-//     }
-// });
+workoutRouter.post('/', async (req: Request, res: Response) => {
+    try {
+        const workoutInput = req.body;
+        const newWorkout = await workoutService.createWorkout(workoutInput);
+        res.status(200).json(newWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
 
 /**
  * @swagger

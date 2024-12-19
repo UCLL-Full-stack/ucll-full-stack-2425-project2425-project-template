@@ -13,7 +13,7 @@ const validExercise = {
         sets: 3,
         reps: 12,
         rpe: '9-10',
-        rest_time: '00:30',
+        restTime: '00:30',
     }),
 };
 
@@ -63,7 +63,7 @@ test(`given: Exercise equals method called with non-matching properties; when: o
             sets: 4,
             reps: 15,
             rpe: '7-8',
-            rest_time: '00:45',
+            restTime: '00:45',
         }),
     });
 
@@ -94,14 +94,14 @@ test(`given: Exercise equals method called; when: only one field is different; t
                 sets: 4,
                 reps: 15,
                 rpe: '7-8',
-                rest_time: '00:45',
+                restTime: '00:45',
             }),
         })
     ).toBe(false);
 });
 
 test(`given: invalid video_link; when: Exercise is created; then: an error is thrown`, () => {
-    //given 
+    //given
     const invalidVideoLink = { ...validExercise, video_link: 'invalid link' };
 
     //when

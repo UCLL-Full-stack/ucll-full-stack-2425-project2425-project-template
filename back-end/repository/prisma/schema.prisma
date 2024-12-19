@@ -12,10 +12,11 @@ generator client {
 
 model User {
   id        String   @id @default(cuid())
-  firstName String   @db.VarChar(50)
-  lastName  String   @db.VarChar(50)
-  email     String   @unique @db.VarChar(100)
-  password  String   @db.VarChar(255)
+  firstName String   
+  lastName  String   
+  email     String   @unique 
+  password  String
+  role      String   
   workouts  Workout[]
 }
 
@@ -23,18 +24,18 @@ model User {
 model Workout {
   id          String   @id @default(cuid())
   userId      String
-  name        String   @db.VarChar(100)
-  description String?  @db.Text
+  name        String   
+  description String 
   workoutExercises WorkoutExercise[]
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 
 model Exercise {
   id          String   @id @default(cuid())
-  name        String   @db.VarChar(100)
-  description String?  @db.Text
-  videoLink   String?  @db.VarChar(255)
+  name        String   
+  description String  
+  videoLink   String  
 
   workoutExercise WorkoutExercise?
 }
@@ -45,13 +46,11 @@ model WorkoutExercise {
   workoutId  String
   exerciseId String   @unique
 
-  sets     Int?
-  reps     Int?
-  rpe      Float?
-  restTime Int?
+  sets     Int
+  reps     Int
+  rpe      Float
+  restTime Int
 
-  workout  Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
-
-  @@unique([workoutId, exerciseId])
+  workout  Workout  @relation(fields: [workoutId], references: [id])
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
 }

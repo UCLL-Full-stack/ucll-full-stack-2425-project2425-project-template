@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import exerciseService from '../service/exercise.service';
+import { ExerciseInput } from '../types';
 
 const exerciseRouter = Router();
 
@@ -16,7 +17,7 @@ const exerciseRouter = Router();
  *           type: string
  *         description:
  *           type: string
- *         video_link:
+ *         videoLink:
  *           type: string
  *           format: uri
  *     ExerciseInput:
@@ -26,7 +27,7 @@ const exerciseRouter = Router();
  *           type: string
  *         description:
  *           type: string
- *         video_link:
+ *         videoLink:
  *           type: string
  *           format: uri
  */
@@ -52,8 +53,8 @@ exerciseRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
     try {
         const exercises = await exerciseService.getAllExercises();
         res.status(200).json(exercises);
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
@@ -87,8 +88,41 @@ exerciseRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
         const exerciseId = req.params.id;
         const exercise = await exerciseService.getExerciseById(exerciseId);
         res.status(200).json(exercise);
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
+/**
+ * @swagger
+ * /exercises:
+ *   post:
+ *     summary: Create a new exercise
+ *     tags: [Exercises]
+ *     description: Create a new exercise.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ExerciseInput'
+ *     responses:
+ *       200:
+ *         description: The exercise was successfully created.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Exercise'
+ */
+
+exerciseRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const exercise = <ExerciseInput>req.body;
+        const result = await exerciseService.createExercise(exercise);
+        res.status(200).json(result);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });

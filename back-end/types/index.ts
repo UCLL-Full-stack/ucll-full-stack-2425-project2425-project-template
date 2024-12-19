@@ -1,35 +1,60 @@
+import { User } from '../model/user';
+import { Exercise } from '../model/exercise';
+import { Workout } from '../model/workout';
+
+type Role = 'admin' | 'user';
+
 type ExerciseInput = {
-    id?: number;
+    id?: string;
     name?: string;
     description?: string;
-    video_link?: string;
+    videoLink?: string;
     workoutExercise?: WorkoutExerciseInput;
 };
 
 type UserInput = {
-    user_id?: number;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    password?: string;
+    id?: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: Role;
 };
 
 type WorkoutInput = {
-    workout_id?: number;
-    user_id?: number;
-    name?: string;
-    description?: string;
-    exercises?: ExerciseInput[];
+    id?: string;
+    name: string;
+    description: string;
+    user: User;
 };
 
 type WorkoutExerciseInput = {
-    workout_exercise_id?: number;
-    workout_id?: number;
-    exercise_id?: number;
+    id?: string;
     sets?: number;
     reps?: number;
-    rpe?: string;
-    rest_time?: string;
+    rpe?: number;
+    restTime?: number;
+    workout?: Workout;
+    exercise?: Exercise;
 };
 
-export { ExerciseInput, UserInput, WorkoutInput, WorkoutExerciseInput };
+type TokenPayload = {
+    email: string;
+    role: Role;
+};
+
+type AuthenticationResponse = {
+    token: string;
+    email: string;
+    fullname: string;
+    role: string;
+};
+export {
+    ExerciseInput,
+    UserInput,
+    WorkoutInput,
+    WorkoutExerciseInput,
+    Role,
+    TokenPayload,
+    AuthenticationResponse,
+};

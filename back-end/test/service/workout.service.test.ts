@@ -1,5 +1,3 @@
-
-
 import exerciseDb from '../../repository/exercise.db';
 import workoutDb from '../../repository/workout.db';
 import workoutService from '../../service/workout.service';
@@ -33,7 +31,7 @@ const workouts: WorkoutInput[] = [
                     sets: 3,
                     reps: 10,
                     rpe: '8-9',
-                    rest_time: '00:30s',
+                    restTime: '00:30s',
                 },
             },
         ],
@@ -56,7 +54,7 @@ const workouts: WorkoutInput[] = [
                     sets: 3,
                     reps: 10,
                     rpe: '8-9',
-                    rest_time: '00:30s',
+                    restTime: '00:30s',
                 },
             },
         ],
@@ -199,7 +197,10 @@ test(`given: valid workout and exercise IDs; when: adding an exercise to a worko
 
     //then
     expect(result).toEqual(workouts[0]);
-    expect(workoutDb.addExerciseToWorkout).toHaveBeenCalledWith(workoutId, workouts[0].exercises[0]);
+    expect(workoutDb.addExerciseToWorkout).toHaveBeenCalledWith(
+        workoutId,
+        workouts[0].exercises[0]
+    );
 });
 
 test(`given: exercise ID that already exists in the workout; when: adding an exercise to a workout; then: an error is thrown`, () => {
@@ -207,13 +208,17 @@ test(`given: exercise ID that already exists in the workout; when: adding an exe
     const workoutId = 1;
     const exerciseId = 1;
     workoutDb.getWorkoutById = mockWorkoutDbGetWorkoutById.mockReturnValue(workouts[0]);
-    exerciseDb.getExerciseById = mockExerciseDbGetExerciseById.mockReturnValue(workouts[0].exercises[0]);
+    exerciseDb.getExerciseById = mockExerciseDbGetExerciseById.mockReturnValue(
+        workouts[0].exercises[0]
+    );
 
     //when
     const addExerciseToWorkout = () => workoutService.addExerciseToWorkout(workoutId, exerciseId);
 
     //then
-    expect(addExerciseToWorkout).toThrow(`Exercise with ID ${exerciseId} is already added to the workout`);
+    expect(addExerciseToWorkout).toThrow(
+        `Exercise with ID ${exerciseId} is already added to the workout`
+    );
     expect(workoutDb.getWorkoutById).toHaveBeenCalledWith(workoutId);
     expect(exerciseDb.getExerciseById).toHaveBeenCalledWith(exerciseId);
 });
@@ -241,10 +246,13 @@ test(`given: invalid exercise ID; when: removing an exercise from a workout; the
     exerciseDb.getExerciseById = mockExerciseDbGetExerciseById.mockReturnValueOnce(null);
 
     //when
-    const removeExerciseFromWorkout = () => workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
+    const removeExerciseFromWorkout = () =>
+        workoutService.removeExerciseFromWorkout(workoutId, exerciseId);
 
     //then
-    expect(removeExerciseFromWorkout).toThrow(`Exercise with ID ${exerciseId} not found in the workout`);
+    expect(removeExerciseFromWorkout).toThrow(
+        `Exercise with ID ${exerciseId} not found in the workout`
+    );
     expect(workoutDb.getWorkoutById).toHaveBeenCalledWith(workoutId);
 });
 
@@ -253,7 +261,9 @@ test(`given: valid workout and exercise IDs; when: removing an exercise from a w
     const workoutId = 1;
     const exerciseId = 1;
     workoutDb.getWorkoutById = mockWorkoutDbGetWorkoutById.mockReturnValue(workouts[0]);
-    workoutDb.removeExerciseFromWorkout = mockWorkoutDbRemoveExerciseFromWorkout.mockReturnValue(workouts[0]);
+    workoutDb.removeExerciseFromWorkout = mockWorkoutDbRemoveExerciseFromWorkout.mockReturnValue(
+        workouts[0]
+    );
 
     //when
     const result = workoutService.removeExerciseFromWorkout(workoutId, exerciseId);

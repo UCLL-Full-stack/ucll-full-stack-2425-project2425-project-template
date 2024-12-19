@@ -1,5 +1,6 @@
-
 import { WorkoutExercise } from '../model/workoutexercise';
+import exerciseDb from '../repository/exercise.db';
+import workoutDb from '../repository/workout.db';
 import workoutexerciseDb from '../repository/workoutexercise.db';
 import { WorkoutExerciseInput } from '../types';
 
@@ -12,54 +13,38 @@ const getAllWorkoutExercises = async (): Promise<WorkoutExercise[]> => {
 };
 
 const getWorkoutExerciseById = async (id: string): Promise<WorkoutExercise> => {
-    const workoutExercise = await workoutexerciseDb.getWorkoutExerciseById(id);
+    const workoutExercise = await workoutexerciseDb.getWorkoutExerciseById({ id });
     if (!workoutExercise) {
         throw new Error(`Workout exercise with ID ${id} not found`);
     }
     return workoutExercise;
 };
 
-const getWorkoutExercisesByWorkoutId = async (id: string): Promise<WorkoutExercise[]> => {
-    const workoutExercises = await workoutexerciseDb.getWorkoutExercisesByWorkoutId(id);
+const getWorkoutExercisesByWorkoutId = async (workoutId: string): Promise<WorkoutExercise[]> => {
+    const workoutExercises = await workoutexerciseDb.getWorkoutExercisesByWorkoutId({ workoutId });
     if (workoutExercises.length === 0) {
-        throw new Error(`No workout exercises found for workout with ID ${id}`);
+        throw new Error(`No workout exercises found for workout with ID ${workoutId}`);
     }
     return workoutExercises;
 };
 
-// const createWorkoutExercise = ({
-//     workout_exercise_id,
-//     workout_id,
-//     exercise_id,
+// const createWorkoutExercise = async ({
+//     id,
 //     sets,
 //     reps,
 //     rpe,
-//     rest_time,
-// }: WorkoutExerciseInput): WorkoutExercise => {
-//     const existingExercise = workoutexerciseDb.getWorkoutExerciseById(workout_exercise_id);
-
-//     if (existingExercise) {
-//         throw new Error(`Workout exercise with ID ${workout_exercise_id} already exists`);
-//     }
-
-//     const duplicateExercise = workoutexerciseDb
-//         .getWorkoutExercisesByWorkoutId(workout_id)
-//         .find((exercise) => exercise.exercise_id === exercise_id);
-
-//     if (duplicateExercise) {
-//         throw new Error(
-//             `Workout exercise with workout ID ${workout_id} and exercise ID ${exercise_id} already exists`
-//         );
-//     }
-
+//     restTime,
+//     workout,
+//     exercise,
+// }: WorkoutExerciseInput): Promise<WorkoutExercise> => {
 //     const workoutExercise = new WorkoutExercise({
-//         workout_exercise_id,
-//         workout_id,
-//         exercise_id,
+//         id,
+//         workout,
+//         exercise,
 //         sets,
 //         reps,
 //         rpe,
-//         rest_time,
+//         restTime,
 //     });
 //     return workoutexerciseDb.createWorkoutExercise(workoutExercise);
 // };

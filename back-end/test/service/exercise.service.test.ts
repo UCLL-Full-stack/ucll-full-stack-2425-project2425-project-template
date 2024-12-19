@@ -1,4 +1,3 @@
-
 import exerciseDb from '../../repository/exercise.db';
 import exerciseService from '../../service/exercise.service';
 import { ExerciseInput } from '../../types';
@@ -16,7 +15,7 @@ const exercises: ExerciseInput[] = [
             sets: 3,
             reps: 10,
             rpe: '8-9',
-            rest_time: '00:30s',
+            restTime: '00:30s',
         },
     },
     {
@@ -31,7 +30,7 @@ const exercises: ExerciseInput[] = [
             sets: 3,
             reps: 10,
             rpe: '8-9',
-            rest_time: '00:30s',
+            restTime: '00:30s',
         },
     },
 ];

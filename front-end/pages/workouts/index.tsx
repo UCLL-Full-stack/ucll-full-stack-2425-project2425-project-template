@@ -4,24 +4,37 @@ import WorkoutService from "@/services/workout/WorkoutService";
 import { Workout } from "@/types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { Toaster } from "sonner";
+import useSWR, { mutate } from "swr";
+import useInterval from "use-interval";
+import { CirclePlus } from "lucide-react";
+import Link from "next/link";
 
 const Workouts: React.FC = () => {
-  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
-  const [error, setError] = useState<string>();
+  // const [workouts, setWorkouts] = useState<Array<Workout>>([]);
+  // const [error, setError] = useState<string>();
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const userRole = loggedInUser ? JSON.parse(loggedInUser).role : null;
+    setRole(userRole);
+  }, []);
 
   const getWorkouts = async () => {
-    try {
-      const response = await WorkoutService.getAllWorkouts();
+    const response = await WorkoutService.getAllWorkouts();
+
+    if (response.ok) {
       const workouts = await response.json();
-      setWorkouts(workouts);
-    } catch (err) {
-      setError("Failed to fetch workouts.");
+      return { workouts };
     }
   };
 
-  useEffect(() => {
-    getWorkouts();
-  }, []);
+  const { data, error, isLoading } = useSWR("workouts", getWorkouts);
+
+  useInterval(() => {
+    mutate("workouts", getWorkouts());
+  }, 1000);
 
   return (
     <>
@@ -32,20 +45,30 @@ const Workouts: React.FC = () => {
 
       <main className="py-4 bg-gray-50 min-h-screen">
         <div className="max-w-screen-xl mx-auto px-6">
-          <h1 className="text-4xl font-bold text-black mb-8 py-5">Workouts</h1>
+          <div className="flex items-center justify-between mb-8 py-5">
+            <div className="flex items-center gap-2">
+              <h1 className="text-4xl font-bold text-black">Workouts</h1>
+              <Link href="/workouts/add">
+                <button className=" hover:text-blue-400 text-blue-700 font-bold p-0 ml-3 mt-2 rounded">
+                  <CirclePlus size={30} />
+                </button>
+              </Link>
+            </div>
+          </div>
           <section className="space-y-4">
-            {error ? (
-              <p className="text-red-500 text-center">{error}</p>
-            ) : workouts ? (
-              <WorkoutOverviewTable
-                workouts={workouts}
-                setWorkouts={setWorkouts}
-              />
-            ) : (
-              <p className="text-center text-gray-600">Loading workouts...</p>
+            {role === "user" && (
+              <>
+                {error && <div className="text-red-800">{error}</div>}
+                {isLoading && <div className="text-green-800">Loading...</div>}
+                {data && <WorkoutOverviewTable workouts={data.workouts} />}
+              </>
+            )}
+            {role !== "user" && (
+              <div>You do not have permission to view this page.</div>
             )}
           </section>
         </div>
+        <Toaster richColors />
       </main>
     </>
   );

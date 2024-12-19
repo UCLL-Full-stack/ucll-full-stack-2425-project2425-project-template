@@ -21,6 +21,7 @@ const main = async () => {
             lastName: 'Doe',
             email: 'john.doe@example.com',
             password: await bcrypt.hash('password123', 10),
+            role: 'admin',
         },
     });
 
@@ -30,6 +31,7 @@ const main = async () => {
             lastName: 'Smith',
             email: 'jane.smith@example.com',
             password: await bcrypt.hash('password123', 10),
+            role: 'admin',
         },
     });
 
@@ -58,6 +60,22 @@ const main = async () => {
         },
     });
 
+    await prisma.exercise.create({
+        data: {
+            name: 'Dips',
+            description: 'A dips exercise for tricep strength.',
+            videoLink: 'https://example.com/dips-video',
+        },
+    });
+
+    await prisma.exercise.create({
+        data: {
+            name: 'Deadlift',
+            description: 'A deadlift exercise for back strength.',
+            videoLink: 'https://example.com/deadlift-video',
+        },
+    });
+
     // Create Workouts
     const workout1 = await prisma.workout.create({
         data: {
@@ -78,6 +96,30 @@ const main = async () => {
             user: {
                 connect: {
                     id: user2.id,
+                },
+            },
+        },
+    });
+
+    await prisma.workout.create({
+        data: {
+            name: 'Arm Day',
+            description: 'A workout focused on arm exercises.',
+            user: {
+                connect: {
+                    id: user2.id,
+                },
+            },
+        },
+    });
+
+    await prisma.workout.create({
+        data: {
+            name: 'Full Body Workout',
+            description: 'A full body workout for overall strength.',
+            user: {
+                connect: {
+                    id: user1.id,
                 },
             },
         },

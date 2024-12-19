@@ -20,7 +20,7 @@ const validWorkout = {
                 sets: 3,
                 reps: 12,
                 rpe: '9-10',
-                rest_time: '00:30',
+                restTime: '00:30',
             }),
         }),
     ],
@@ -78,7 +78,7 @@ test(`given: Workout equals method called with non-matching properties; when: on
                     sets: 4,
                     reps: 15,
                     rpe: '7-8',
-                    rest_time: '00:45',
+                    restTime: '00:45',
                 }),
             }),
         ],
@@ -112,7 +112,7 @@ test(`given: Workout equals method called; when: only one field is different; th
                         sets: 4,
                         reps: 15,
                         rpe: '7-8',
-                        rest_time: '00:45',
+                        restTime: '00:45',
                     }),
                 }),
             ],
@@ -121,7 +121,7 @@ test(`given: Workout equals method called; when: only one field is different; th
 });
 
 test(`given: an empty name; when: Workout is created; then: an error is thrown`, () => {
-    //given 
+    //given
     const invalidName = { ...validWorkout, name: '' };
 
     //when

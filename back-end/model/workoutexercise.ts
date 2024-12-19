@@ -8,20 +8,20 @@ import { Workout } from './workout';
 import { Exercise } from './exercise';
 
 export class WorkoutExercise {
-    readonly id: string;
-    readonly sets: number | null;
-    readonly reps: number | null;
-    readonly rpe: number | null;
-    readonly restTime: number | null;
+    readonly id?: string;
+    readonly sets: number;
+    readonly reps: number;
+    readonly rpe: number;
+    readonly restTime: number;
     readonly workout: Workout;
     readonly exercise: Exercise;
 
     constructor(workoutExercise: {
-        id: string;
-        sets: number | null;
-        reps: number | null;
-        rpe: number | null;
-        restTime: number | null;
+        id?: string;
+        sets: number;
+        reps: number;
+        rpe: number;
+        restTime: number;
         workout: Workout;
         exercise: Exercise;
     }) {
@@ -36,10 +36,10 @@ export class WorkoutExercise {
 
     validate(workoutExercise: {
         id: string;
-        sets: number | null;
-        reps: number | null;
-        rpe: number | null;
-        restTime: number | null;
+        sets: number;
+        reps: number;
+        rpe: number;
+        restTime: number;
     }) {
         if (workoutExercise.sets && typeof workoutExercise.sets !== 'number') {
             throw new Error('Sets must be a number.');
@@ -65,10 +65,10 @@ export class WorkoutExercise {
         exercise,
     }: {
         id: string;
-        sets: number | null;
-        reps: number | null;
-        rpe: number | null;
-        restTime: number | null;
+        sets: number;
+        reps: number;
+        rpe: number;
+        restTime: number;
         workout: Workout;
         exercise: Exercise;
     }): boolean {
@@ -92,8 +92,10 @@ export class WorkoutExercise {
         workout,
         exercise,
     }: WorkoutExercisePrisma & {
-        workout: WorkoutPrisma & { user: UserPrisma };
         exercise: ExercisePrisma;
+        workout: WorkoutPrisma & {
+            user: UserPrisma;
+        };
     }) {
         return new WorkoutExercise({
             id,

@@ -27,7 +27,7 @@ const ExerciseOverviewTable: React.FC<Props> = ({
             href={exercise.video_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 hover:underline mt-2 block"
+            className="text-blue-500 hover:underline mt-2 block cursor-pointer"
           >
             Watch Video
           </a>

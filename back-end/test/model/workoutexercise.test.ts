@@ -7,7 +7,7 @@ const validWorkoutExercise = {
     sets: 3,
     reps: 12,
     rpe: '9-10',
-    rest_time: '00:30',
+    restTime: '00:30',
 };
 
 test(`given: valid values for WorkoutExercise properties; when: WorkoutExercise is created; then: properties are set correctly`, () => {
@@ -21,7 +21,7 @@ test(`given: valid values for WorkoutExercise properties; when: WorkoutExercise 
     expect(workoutexercise.sets).toEqual(validWorkoutExercise.sets);
     expect(workoutexercise.reps).toEqual(validWorkoutExercise.reps);
     expect(workoutexercise.rpe).toEqual(validWorkoutExercise.rpe);
-    expect(workoutexercise.rest_time).toEqual(validWorkoutExercise.rest_time);
+    expect(workoutexercise.restTime).toEqual(validWorkoutExercise.restTime);
 });
 
 test(`given: WorkoutExercise equals method called with matching properties; when: all properties match; then: return true`, () => {
@@ -36,7 +36,7 @@ test(`given: WorkoutExercise equals method called with matching properties; when
         sets: 3,
         reps: 12,
         rpe: '9-10',
-        rest_time: '00:30',
+        restTime: '00:30',
     });
 
     // then
@@ -55,7 +55,7 @@ test(`given: WorkoutExercise equals method called with non-matching properties; 
         sets: 4,
         reps: 10,
         rpe: '8-9',
-        rest_time: '00:50',
+        restTime: '00:50',
     });
 
     // then
@@ -72,7 +72,7 @@ test(`given: WorkoutExercise equals method called; when: only one field is diffe
     expect(workoutexercise.equals({ ...validWorkoutExercise, sets: 2 })).toBe(false);
     expect(workoutexercise.equals({ ...validWorkoutExercise, reps: 2 })).toBe(false);
     expect(workoutexercise.equals({ ...validWorkoutExercise, rpe: '8-9' })).toBe(false);
-    expect(workoutexercise.equals({ ...validWorkoutExercise, rest_time: '50s' })).toBe(false);
+    expect(workoutexercise.equals({ ...validWorkoutExercise, restTime: '50s' })).toBe(false);
 });
 
 test(`given: invalid sets; when: WorkoutExercise is created; then: an error is thrown`, () => {
@@ -83,7 +83,7 @@ test(`given: invalid sets; when: WorkoutExercise is created; then: an error is t
     const workoutExercise = () => new WorkoutExercise(invalidSets);
 
     //then
-    expect(workoutExercise).toThrow("Invalid Sets: Must be a positive integer");
+    expect(workoutExercise).toThrow('Invalid Sets: Must be a positive integer');
 });
 
 test(`given: invalid reps; when: WorkoutExercise is created; then: an error is thrown`, () => {
@@ -94,5 +94,5 @@ test(`given: invalid reps; when: WorkoutExercise is created; then: an error is t
     const workoutExercise = () => new WorkoutExercise(invalidReps);
 
     //then
-    expect(workoutExercise).toThrow("Invalid Reps: Must be a positive integer");
+    expect(workoutExercise).toThrow('Invalid Reps: Must be a positive integer');
 });

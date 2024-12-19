@@ -1,11 +1,6 @@
 import { User } from '../model/user';
 import database from '../util/database';
 
-// const users: User[] = [
-//     new User({ user_id: 1, firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', password: 't'}),
-//     new User({ user_id: 2, firstName: 'Jane', lastName: 'Doe', email: 'jane.doe@example.com', password: 't'})
-// ]
-
 const getAllUsers = async (): Promise<User[]> => {
     try {
         const userPrisma = await database.user.findMany();
@@ -16,12 +11,10 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-const getUserById = async (id: string): Promise<User | null> => {
+const getUserById = async ({ id }: { id: string }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
-            where: {
-                id: id,
-            },
+            where: { id },
         });
         return userPrisma ? User.from(userPrisma) : null;
     } catch (error) {
@@ -30,4 +23,33 @@ const getUserById = async (id: string): Promise<User | null> => {
     }
 };
 
-export default { getAllUsers, getUserById };
+const getUserByEmail = async ({ email }: { email: string }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findUnique({
+            where: { email },
+        });
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const createUser = async (user: User): Promise<User> => {
+    try {
+        const userPrisma = await database.user.create({
+            data: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                password: user.password,
+                role: user.role,
+            },
+        });
+        return User.from(userPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+export default { getAllUsers, getUserById, getUserByEmail, createUser };

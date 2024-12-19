@@ -7,47 +7,58 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Toaster, toast } from "sonner";
+import useSWR, { mutate } from "swr";
+import useInterval from "use-interval";
 
 const Exercises: React.FC = () => {
-  const [exercises, setExercises] = useState<Array<Exercise>>([]);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-  const { workoutId, showAddButton } = router.query;
+  // const [exercises, setExercises] = useState<Array<Exercise>>([]);
+  // const [error, setError] = useState<string | null>(null);
+  // const router = useRouter();
+  // // const { workoutId, showAddButton } = router.query;
 
-  const getExercises = async () => {
-    try {
-      const response = await ExerciseService.getAllExercises();
-      const exercises = await response.json();
-      setExercises(exercises);
-    } catch (err) {
-      setError("Failed to fetch exercises.");
-    }
-  };
-
-  const handleAddExercise = async (exercise: Exercise) => {
-    if (!workoutId) {
-      toast.error("Workout ID is not provided.");
-      return;
-    }
-
-    try {
-      const response = await workoutService.addExerciseToWorkout(
-        parseInt(workoutId as string),
-        exercise.id
-      );
-      if (!response.ok) {
-        throw new Error("Failed to add exercise to workout.");
-      }
-      toast.success("Exercise added successfully!");
-    } catch (err) {
-      console.error(err);
-      toast.error("This exercise is already part of your workout");
-    }
-  };
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
-    getExercises();
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const userRole = loggedInUser ? JSON.parse(loggedInUser).role : null;
+    setRole(userRole);
   }, []);
+
+  const getExercises = async () => {
+    const response = await ExerciseService.getAllExercises();
+
+    if (response.ok) {
+      const exercises = await response.json();
+      return { exercises };
+    }
+  };
+
+  const { data, error, isLoading } = useSWR("exercises", getExercises);
+
+  useInterval(() => {
+    mutate("exercises", getExercises());
+  }, 1000);
+
+  // const handleAddExercise = async (exercise: Exercise) => {
+  //   if (!workoutId) {
+  //     toast.error("Workout ID is not provided.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await workoutService.addExerciseToWorkout(
+  //       parseInt(workoutId as string),
+  //       exercise.id
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Failed to add exercise to workout.");
+  //     }
+  //     toast.success("Exercise added successfully!");
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("This exercise is already part of your workout");
+  //   }
+  // };
 
   return (
     <>
@@ -61,16 +72,15 @@ const Exercises: React.FC = () => {
             Exercises
           </h1>
           <section className="space-y-4">
-            {error ? (
-              <p className="text-red-500 text-center">{error}</p>
-            ) : exercises.length > 0 ? (
-              <ExerciseOverviewTable
-                exercises={exercises}
-                onAddExercise={handleAddExercise}
-                showAddButton={showAddButton === "true"}
-              />
-            ) : (
-              <p className="text-center text-gray-600">Loading exercises...</p>
+            {role === "user" && (
+              <>
+                {error && <div className="text-red-800">{error}</div>}
+                {isLoading && <div className="text-green-800">Loading...</div>}
+                {data && <ExerciseOverviewTable exercises={data.exercises} />}
+              </>
+            )}
+            {role !== "user" && (
+              <div>You do not have permission to view this page.</div>
             )}
           </section>
         </div>

@@ -1,5 +1,6 @@
-import { Router, Request, Response, NextFunction } from "express";
-import userService from "../service/user.service";
+import { Router, Request, Response, NextFunction } from 'express';
+import userService from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = Router();
 
@@ -7,6 +8,30 @@ const userRouter = Router();
  * @swagger
  * components:
  *   schemas:
+ *     AuthenticationResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Authentication response.
+ *         token:
+ *           type: string
+ *           description: JWT access token.
+ *         email:
+ *           type: string
+ *           format: email
+ *         fullname:
+ *           type: string
+ *           description: Full name.
+ *     AuthenticationRequest:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+ *           description: User password.
  *     User:
  *       type: object
  *       properties:
@@ -21,6 +46,8 @@ const userRouter = Router();
  *           format: email
  *         password:
  *           type: string
+ *         role:
+ *            $ref: '#/components/schemas/Role'
  *     UserInput:
  *       type: object
  *       properties:
@@ -33,6 +60,11 @@ const userRouter = Router();
  *           format: email
  *         password:
  *           type: string
+ *         role:
+ *            $ref: '#/components/schemas/Role'
+ *     Role:
+ *       type: string
+ *       enum: [admin, user]
  */
 
 /**
@@ -56,8 +88,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
@@ -91,10 +123,67 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
         const userId = req.params.id;
         const user = await userService.getUserById(userId);
         res.status(200).json(user);
-    } catch (error: any) { 
-        const errorMessage = error.message || "An unexpected error occurred";
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
         res.status(400).json({ status: 'error', errorMessage: errorMessage });
     }
 });
 
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *      summary: Create a user
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user object.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const user = await userService.createUser(userInput);
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *      summary: Login using username/password. Returns an with JWT token and user name when successful.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AuthenticationRequest'
+ *      responses:
+ *         200:
+ *            description: The created user object.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/AuthenticationResponse'
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const response = await userService.authenticate(userInput);
+        res.status(200).json({ message: 'Authentication successful', ...response });
+    } catch (error) {
+        next(error);
+    }
+});
 export default userRouter;
