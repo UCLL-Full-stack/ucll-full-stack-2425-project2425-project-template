@@ -31,7 +31,7 @@ const main = async () => {
             lastName: 'Smith',
             email: 'jane.smith@example.com',
             password: await bcrypt.hash('password123', 10),
-            role: 'admin',
+            role: 'user',
         },
     });
 
@@ -41,6 +41,7 @@ const main = async () => {
             name: 'Squat',
             description: 'A basic squat exercise for leg strength.',
             videoLink: 'https://example.com/squat-video',
+            isFavorite: true,
         },
     });
 
@@ -49,6 +50,7 @@ const main = async () => {
             name: 'Push-Up',
             description: 'A basic push-up exercise for upper body strength.',
             videoLink: 'https://example.com/pushup-video',
+            isFavorite: false,
         },
     });
 
@@ -57,6 +59,7 @@ const main = async () => {
             name: 'Pull-Up',
             description: 'A pull-up exercise for back and arm strength.',
             videoLink: 'https://example.com/pullup-video',
+            isFavorite: true,
         },
     });
 
@@ -65,6 +68,7 @@ const main = async () => {
             name: 'Dips',
             description: 'A dips exercise for tricep strength.',
             videoLink: 'https://example.com/dips-video',
+            isFavorite: false,
         },
     });
 
@@ -73,6 +77,7 @@ const main = async () => {
             name: 'Deadlift',
             description: 'A deadlift exercise for back strength.',
             videoLink: 'https://example.com/deadlift-video',
+            isFavorite: true,
         },
     });
 

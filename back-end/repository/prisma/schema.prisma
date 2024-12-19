@@ -35,7 +35,8 @@ model Exercise {
   id          String   @id @default(cuid())
   name        String   
   description String  
-  videoLink   String  
+  videoLink   String 
+  isFavorite  Boolean 
 
   workoutExercise WorkoutExercise?
 }

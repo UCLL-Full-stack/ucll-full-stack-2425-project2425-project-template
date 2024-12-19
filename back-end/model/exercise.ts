@@ -7,12 +7,20 @@ export class Exercise {
     readonly name: string;
     readonly description: string;
     readonly videoLink: string;
+    readonly isFavorite?: boolean;
 
-    constructor(exercise: { id?: string; name: string; description: string; videoLink: string }) {
+    constructor(exercise: {
+        id?: string;
+        name: string;
+        description: string;
+        videoLink: string;
+        isFavorite?: boolean;
+    }) {
         this.id = exercise.id;
         this.name = exercise.name;
         this.description = exercise.description;
         this.videoLink = exercise.videoLink;
+        this.isFavorite = exercise.isFavorite;
     }
     validate(exercise: { id: string; name: string; description: string; videoLink: string }) {
         if (
@@ -40,17 +48,20 @@ export class Exercise {
         name,
         description,
         videoLink,
+        isFavorite,
     }: {
         id: string;
         name: string;
         description: string;
         videoLink: string;
+        isFavorite: boolean;
     }): boolean {
         return (
             this.id === id &&
             this.name === name &&
             this.description === description &&
-            this.videoLink === videoLink
+            this.videoLink === videoLink &&
+            this.isFavorite === isFavorite
         );
     }
 
@@ -60,6 +71,7 @@ export class Exercise {
             name: exercisePrisma.name,
             description: exercisePrisma.description,
             videoLink: exercisePrisma.videoLink,
+            isFavorite: exercisePrisma.isFavorite,
         });
     }
 }

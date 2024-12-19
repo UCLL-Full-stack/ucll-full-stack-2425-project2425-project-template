@@ -11,8 +11,8 @@ const getAllExercises = async () => {
   });
 };
 
-const getExerciseById = async (exerciseId: string) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/exercises/${exerciseId}`, {
+const getExerciseById = async (id: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/exercises/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +20,18 @@ const getExerciseById = async (exerciseId: string) => {
   });
 };
 
+const toggleFavorite = async (id: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/exercises/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export default {
   getAllExercises,
   getExerciseById,
+  toggleFavorite,
 };

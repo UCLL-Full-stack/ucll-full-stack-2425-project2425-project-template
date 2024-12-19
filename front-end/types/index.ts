@@ -9,21 +9,22 @@ export type User = {
 };
 
 export type Exercise = {
-  id: number;
-  name: string;
-  description: string;
-  video_link: string;
-  workoutExercise: WorkoutExercise;
+  id: string;
+  name?: string;
+  description?: string;
+  video_link?: string;
+  isFavorite?: boolean;
+  workoutExercise?: WorkoutExercise;
 };
 
 export type WorkoutExercise = {
-  workout_exercise_id: number;
-  workout_id: number;
-  exercise_id: number;
+  id: string;
+  workoutId: string;
+  exerciseId: string;
   sets: number;
   reps: number;
-  rpe: string;
-  restTime: string;
+  rpe: number;
+  restTime: number;
 };
 
 export type Workout = {

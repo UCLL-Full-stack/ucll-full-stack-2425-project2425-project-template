@@ -24,13 +24,33 @@ const getExerciseById = async ({ id }: { id: string }): Promise<Exercise | null>
     }
 };
 
-const createExercise = async ({ name, description, videoLink }: Exercise): Promise<Exercise> => {
+const toggleFavorite = async ({ id }: { id: string }): Promise<Exercise | null> => {
+    try {
+        const exercisePrisma = await database.exercise.findUnique({
+            where: { id },
+        });
+        if (exercisePrisma) {
+            const updatedExercise = await database.exercise.update({
+                where: { id },
+                data: { isFavorite: !exercisePrisma.isFavorite },
+            });
+            return Exercise.from(updatedExercise);
+        }
+        return null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const createExercise = async ({ name, description, videoLink, isFavorite }: Exercise): Promise<Exercise> => {
     try {
         const exercisePrisma = await database.exercise.create({
             data: {
                 name: name,
                 description: description,
                 videoLink: videoLink,
+                isFavorite: isFavorite === false,
             },
         });
         return Exercise.from(exercisePrisma);
@@ -40,4 +60,4 @@ const createExercise = async ({ name, description, videoLink }: Exercise): Promi
     }
 };
 
-export default { getAllExercises, getExerciseById, createExercise };
+export default { getAllExercises, getExerciseById, createExercise, toggleFavorite };

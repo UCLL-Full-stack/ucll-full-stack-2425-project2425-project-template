@@ -6,9 +6,10 @@ type Role = 'admin' | 'user';
 
 type ExerciseInput = {
     id?: string;
-    name?: string;
-    description?: string;
-    videoLink?: string;
+    name: string;
+    description: string;
+    videoLink: string;
+    isFavorite: boolean;
     workoutExercise?: WorkoutExerciseInput;
 };
 

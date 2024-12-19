@@ -18,17 +18,22 @@ const getExerciseById = async (id: string): Promise<Exercise | null> => {
     return exercise;
 };
 
+const toggleFavorite = async (id: string): Promise<Exercise | null> => {
+    const exercise = await exerciseDb.getExerciseById({ id });
+    if (!exercise) {
+        throw new Error(`Exercise with ID ${id} not found`);
+    }
+    return await exerciseDb.toggleFavorite({ id });
+};
+
 const createExercise = async ({
     name,
     description,
     videoLink,
 }: ExerciseInput): Promise<Exercise> => {
-    if (!name || !description || !videoLink) {
-        throw new Error('Missing required fields: name, description, or videoLink');
-    }
 
     const exercise = new Exercise({ name, description, videoLink });
     return await exerciseDb.createExercise(exercise);
 };
 
-export default { getAllExercises, getExerciseById, createExercise };
+export default { getAllExercises, getExerciseById, createExercise, toggleFavorite };
