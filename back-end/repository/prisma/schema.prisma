@@ -28,6 +28,8 @@ model Submission {
     solvedAt    DateTime?
     user        User        @relation(fields: [userId], references: [id])
     userId      Int
+    race        Race?       @relation(fields: [raceId], references: [id])
+    raceId      Int?
 }
 
 model Racecar {
@@ -35,8 +37,6 @@ model Racecar {
     name        String
     type        String
     brand       String
-    hp          Int
-    participation Participant[]
 }
 
 model Driver {
@@ -77,5 +77,5 @@ model Race {
     description String
     location    String
     date        DateTime
-    crashes     Crash[]
+    submission  Submission?
 }

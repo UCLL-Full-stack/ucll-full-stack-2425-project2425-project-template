@@ -41,6 +41,8 @@ const main = async () => {
         },
     });
 
+    
+
     await prisma.user.create({
         data: {
             username: 'user2',
@@ -62,6 +64,37 @@ const main = async () => {
             email: 'piotr.brzaczykiewiczkowski@ucll.be',
             permission: "GUEST",
             createdAt: new Date()
+        },
+    });
+
+    const user1 = await prisma.user.findUnique({
+        where: { username: 'user1' }
+    });
+    if (!user1) {
+        throw new Error('User with username "user1" not found');
+    }
+
+    await prisma.submission.create({
+        data: {
+            title: 'First Submission',
+            content: 'This is the first submission content.',
+            type: 'Type1',
+            createdAt: new Date(),
+            user: {
+                connect: { id: user1.id },
+            },
+        },
+    });
+    
+    await prisma.submission.create({
+        data: {
+            title: 'Second Submission',
+            content: 'This is the second submission content.',
+            type: 'Type2',
+            createdAt: new Date(),
+            user: {
+                connect: { id: user1.id },
+            },
         },
     });
 

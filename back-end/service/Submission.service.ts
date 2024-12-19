@@ -1,5 +1,5 @@
 import SubmissionDb from '../repository/submission.db';
-import { Submission } from '../model/Submission';
+import { Submission } from '../model/submission';
 
 const getAllSubmissions = async (): Promise<Submission[] | null> => {
     return SubmissionDb.getAllSubmissions();
@@ -48,9 +48,14 @@ const deleteSubmission = async (submissionId: number): Promise<void> => {
     SubmissionDb.deleteSubmissionById({ submissionId });
 };
 
+const getSubmissionsByCreatedBy = async (createdBy: number): Promise<Submission[] | null> => {
+    return SubmissionDb.getSubmissionsByCreatedBy(createdBy);
+};
+
 export default {
     getAllSubmissions,
     createSubmission,
     acceptSubmission,
     deleteSubmission,
+    getSubmissionsByCreatedBy
 };
