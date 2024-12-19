@@ -20,6 +20,10 @@ const createExpense = async (ExpenseInput: TransactionInput): Promise<Transactio
         );
     }
 
+    if (sourceAccount.getStatus() === "Blocked" || sourceAccount.getStatus() === "Closed") {
+        throw new Error(`Account is ${sourceAccount.getStatus()}, no transactions can be made or received.`);
+    }
+
     sourceAccount.calculateBalance(amount, 'expense');
     destinationAccount.calculateBalance(amount, 'income');
 

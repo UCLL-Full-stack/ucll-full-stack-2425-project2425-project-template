@@ -1,5 +1,6 @@
 import { Account } from '../model/account';
 import database from '../util/database';
+import userDb from '../repository/user.db';
 
 // const accounts: Account[] = [];
 
@@ -20,7 +21,7 @@ const createAccount = async (account: Account): Promise<Account> => {
             },
         });
 
-        return Account.from({ ...accountPrisma });
+        return Account.from(accountPrisma);
     } catch (error: any) {
         throw new Error('Database error. See server log for details.');
     }
@@ -79,9 +80,11 @@ const updateAccount = async (account: Account): Promise<Account> => {
             },
         });
 
-        return Account.from({ ...accountPrisma });
+        return Account.from(accountPrisma);
     } catch (error: any) {
-        throw new Error('Database error. See server log for details.');
+        // throw new Error('Database error. See server log for details.');
+        
+        throw new Error(`Database error: ${error.message}`);
     }
 };
 

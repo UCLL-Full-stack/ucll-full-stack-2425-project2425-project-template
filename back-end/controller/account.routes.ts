@@ -150,4 +150,80 @@ accountRouter.get(
     }
 );
 
+
+
+/**
+ * @swagger
+ * /account:
+ *   get:
+ *     summary: Get accounts associated with the authenticated user.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: JSON array consisting of account objects.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Account'
+ *       401:
+ *         description: Unauthorized.
+ *       404:
+ *         description: No accounts found for the user.
+ *       500:
+ *         description: Internal server error.
+ */accountRouter.get('/', async (req: Request & { auth: any}, res: Response, next: NextFunction) => {
+    try { 
+        const request = req as Request & { auth: { email: string } };
+        const { email } = request.auth;
+        const accounts = await accountService.getAccountsOfUser(email);
+        res.status(200).json(accounts);
+    } catch (error: any) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /account:
+ *   put:
+ *     summary: Update account by ID (primarily used to update status)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AccountInput'
+ *     responses:
+ *       200:
+ *         description: The updated account object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Account'
+ *       400:
+ *         description: Invalid input.
+ *       401:
+ *         description: Unauthorized.
+ *       404:
+ *         description: Account not found.
+ *       500:
+ *         description: Internal server error.
+ */
+accountRouter.put('/', async (req: Request & { auth: any}, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { email: string } };
+        const { email } = request.auth;
+        const accountInput = <AccountInput>req.body;
+        const updatedAccount = await accountService.updateAccount(email, accountInput);
+        res.status(200).json(updatedAccount);
+    } catch (error: any) {
+        next(error);
+    }
+});
+
 export { accountRouter };

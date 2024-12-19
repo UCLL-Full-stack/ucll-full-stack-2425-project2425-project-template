@@ -145,7 +145,8 @@ const getUserById = async (id: number): Promise<User | null> => {
             return null;
         }
     } catch (error: any) {
-        throw new Error('Database error. See server log for details.');
+        // throw new Error('Database error. See server log for details.');
+        throw new Error(`Database error: ${error.message}`);
     }
 };
 

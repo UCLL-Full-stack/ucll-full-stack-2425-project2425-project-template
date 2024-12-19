@@ -1,13 +1,17 @@
 import React from 'react';
-import { User } from '@/types';
+import { Account, User } from '@/types';
 import styles from '@/styles/Home.module.css';
 import { useRouter } from 'next/router';
+import AccountService from '@/services/AccountService';
+import useSWR, { mutate } from 'swr';
+import { useTranslation } from 'next-i18next';
 
 type AccountOverviewProps = {
-  user: User;
+  // user: User;
+  accounts: Account[];
 };
 
-const AccountOverview: React.FC<AccountOverviewProps> = ({ user }) => {
+const AccountOverview: React.FC<AccountOverviewProps> = ({ accounts }) => {
   const router = useRouter();
 
   const handleTransactionClick = (accountNumber: string) => {
@@ -17,23 +21,25 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({ user }) => {
   const handleRowClick = (id: number) => {
     router.push(`/transactions/overview/account/${id}`);
   };
+  const { t } = useTranslation();
+
   return (
     <div className={styles.accountOverview}>
       <table>
         <thead>
           <tr>
-            <th>Account Number</th>
-            <th>Balance</th>
+            <th>{t("accountOverview.accountNumber")}</th>
+            <th>{t("accountOverview.balance")}</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th>{t("accountOverview.startDate")}</th>
+            <th>{t("accountOverview.endDate")}</th>
             <th>Transaction</th>
           </tr>
         </thead>
         <tbody>
-          {user.accounts && user.accounts.length > 0 ? (
-            user.accounts.map((account) => (
+          {accounts && accounts.length > 0 ? (
+            accounts.map((account) => (
               <tr key={account.id} onClick={() => account.accountNumber && account.id !== undefined && handleRowClick(account.id)} style={{ cursor: 'pointer' }}>
                 <td>{account.accountNumber}</td>
                 <td>{account.balance}</td>
@@ -46,7 +52,7 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({ user }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={6}>You currently do not have any accounts.</td>
+              <td colSpan={6}>{t("accountOverview.noAccounts")}</td>
             </tr>
           )}
         </tbody>
