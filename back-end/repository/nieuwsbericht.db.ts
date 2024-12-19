@@ -1,14 +1,18 @@
-import { Nieuwsbericht } from "../model/nieuwsbericht";
+import { Nieuwsbericht, PublicNieuwsbericht } from "../model/nieuwsbericht";
 import database from "../util/database";
 
-const createNieuwsbericht = async (nieuwsbericht: Nieuwsbericht): Promise<Nieuwsbericht> => {
+const createNieuwsbericht = async (nieuwsbericht: Nieuwsbericht, id: number): Promise<Nieuwsbericht> => {
     try {
         const nieuwsberichtPrisma = await database.nieuwsbericht.create({
             data: {
                 titel: nieuwsbericht.getTitel(),
                 inhoud: nieuwsbericht.getInhoud(),
                 datum: nieuwsbericht.getDatum(),
-                leidingId: nieuwsbericht.getAuteur()
+                leiding:{
+                    connect: {
+                        id: id
+                    }
+                }
             }
         });
 
@@ -22,13 +26,22 @@ const createNieuwsbericht = async (nieuwsbericht: Nieuwsbericht): Promise<Nieuws
     }
 }
 
-const getAllNieuwsberichten = async (): Promise<Nieuwsbericht[]> => {
+const getAllNieuwsberichten = async (): Promise<PublicNieuwsbericht[]> => {
     try {
-        const nieuwsberichtenPrisma = await database.nieuwsbericht.findMany();
-        return nieuwsberichtenPrisma.map((nieuwsberichtPrisma) => Nieuwsbericht.from({ ...nieuwsberichtPrisma, auteurId: nieuwsberichtPrisma.leidingId }));
+        const nieuwsberichtenPrisma = await database.nieuwsbericht.findMany({
+            include: {
+                leiding: {
+                    select: {
+                        totem: true
+                    }
+                }
+            }
+        });
+        const nieuwsberichten =  nieuwsberichtenPrisma.map((nieuwsberichtPrisma) => PublicNieuwsbericht.from({nieuwsbericht: Nieuwsbericht.from({ ...nieuwsberichtPrisma, auteurId: nieuwsberichtPrisma.leidingId }), auteur: nieuwsberichtPrisma.leiding.totem}));
+        return nieuwsberichten;
     } catch (error) {
         console.error(error);
-        throw new Error('An error occurred while getting all nieuwsberichten');
+        throw error;
     }
 }
 
@@ -49,7 +62,7 @@ const getNieuwsberichtById = async ({ id }: { id: number }): Promise<Nieuwsberic
     }
 }
 
-const updateNieuwsbericht = async (nieuwsbericht: Nieuwsbericht): Promise<Nieuwsbericht> => {
+const updateNieuwsbericht = async (nieuwsbericht: Nieuwsbericht): Promise<PublicNieuwsbericht> => {
     try {
         const nieuwsberichtPrisma = await database.nieuwsbericht.update({
             where: {
@@ -59,10 +72,18 @@ const updateNieuwsbericht = async (nieuwsbericht: Nieuwsbericht): Promise<Nieuws
                 titel: nieuwsbericht.getTitel(),
                 inhoud: nieuwsbericht.getInhoud(),
                 datum: nieuwsbericht.getDatum(),
-                leidingId: nieuwsbericht.getAuteur()
+            },
+            include: {
+                leiding: {
+                    select: {
+                        totem: true
+                    }
+                }
             }
         });
-        return Nieuwsbericht.from({ ...nieuwsberichtPrisma, auteurId: nieuwsberichtPrisma.leidingId });
+        return PublicNieuwsbericht.from({
+            nieuwsbericht: Nieuwsbericht.from({ ...nieuwsberichtPrisma, auteurId: nieuwsberichtPrisma.leidingId }),
+             auteur: nieuwsberichtPrisma.leiding.totem});
     } catch (error) {
         console.error(error);
         throw new Error('An error occurred while updating a nieuwsbericht');

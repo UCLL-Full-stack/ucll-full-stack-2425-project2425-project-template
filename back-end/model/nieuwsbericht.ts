@@ -21,7 +21,7 @@ export class Nieuwsbericht {
         this.auteur = nieuwsbericht.auteur;
     }
 
-    public getId(): number | undefined {
+    public getId(): number{
         return this.id;
     }
 
@@ -93,5 +93,37 @@ export class Nieuwsbericht {
             return false;
         }
         
+    }
+}
+
+export class PublicNieuwsbericht{
+    private id: number;
+    private titel: string;
+    private inhoud: string;
+    private datum: Date;
+    private auteur: string;
+
+    constructor(nieuwsbericht:{
+        id: number,
+        titel: string,
+        inhoud: string,
+        datum: Date,
+        auteur: string
+    }) {
+        this.id = nieuwsbericht.id;
+        this.titel = nieuwsbericht.titel;
+        this.inhoud = nieuwsbericht.inhoud;
+        this.datum = nieuwsbericht.datum;
+        this.auteur = nieuwsbericht.auteur;
+    }
+
+    static from({nieuwsbericht, auteur}: {nieuwsbericht: Nieuwsbericht, auteur: string}): PublicNieuwsbericht {
+        return new PublicNieuwsbericht({
+            id: nieuwsbericht.getId(),
+            titel: nieuwsbericht.getTitel(),
+            inhoud: nieuwsbericht.getInhoud(),
+            datum: nieuwsbericht.getDatum(),
+            auteur: auteur
+        });
     }
 }

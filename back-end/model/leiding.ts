@@ -6,6 +6,7 @@ import {
     Nieuwsbericht as NieuwsberichtPrisma
 } from "@prisma/client";
 import { Nieuwsbericht } from "./nieuwsbericht";
+import { th } from "date-fns/locale";
 
 export class Leiding{
     private id: number;

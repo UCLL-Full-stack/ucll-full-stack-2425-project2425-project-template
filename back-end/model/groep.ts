@@ -28,7 +28,7 @@ export class Groep {
         this.leiding = groep.leiding;
     }
 
-    public getId(): number | undefined {
+    public getId(): number{
         return this.id;
     }
 

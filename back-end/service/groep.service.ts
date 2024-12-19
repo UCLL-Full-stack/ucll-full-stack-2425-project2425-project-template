@@ -24,7 +24,7 @@ const addActiviteitToGroep = async (naam: string, activiteit: Activiteit): Promi
     return await groepDB.addActiviteitToGroep({groep, activiteit});
 }
 
-const getGroepByNaam = async (naam: string): Promise<Groep | undefined> => {
+const getGroepByNaam = async (naam: string): Promise<Groep> => {
     const standard = capitalizeFirstLetter(naam);
     return await groepDB.getGroepByNaam({naam: standard});
 }
