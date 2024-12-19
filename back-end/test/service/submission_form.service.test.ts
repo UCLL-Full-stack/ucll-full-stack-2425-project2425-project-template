@@ -1,5 +1,5 @@
 import submissionService from '../../service/Submission.service';
-import submissionDb from '../../repository/submission.db';
+import submissionDb from '../../repository/Submission.db';
 import { Submission } from '../../model/Submission';
 import { User } from '../../model/User';
 import Permissions from '../../model/Permissions';

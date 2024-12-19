@@ -41,8 +41,6 @@ const main = async () => {
         },
     });
 
-    
-
     await prisma.user.create({
         data: {
             username: 'user2',

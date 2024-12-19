@@ -1,5 +1,5 @@
-import SubmissionDb from '../repository/submission.db';
-import { Submission } from '../model/submission';
+import { Submission } from '../model/Submission';
+import SubmissionDb from '../repository/Submission.db';
 
 const getAllSubmissions = async (): Promise<Submission[] | null> => {
     return SubmissionDb.getAllSubmissions();
@@ -38,9 +38,6 @@ const acceptSubmission = async (submissionId: number): Promise<Submission> => {
     if (!submission) {
         throw new Error(`Submission form not found with ID ${submissionId}`);
     }
-
-
-
     return submission;
 };
 

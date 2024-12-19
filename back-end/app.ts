@@ -4,7 +4,7 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { submissionFormRouter } from './controller/Submission_form.routes';
+import { submissionRouter } from './controller/Submission_form.routes';
 import { raceRouter } from './controller/Race.routes';
 import { authRouter } from './controller/Auth.routes';
 import { crashRouter } from './controller/Crash.routes';
@@ -23,7 +23,7 @@ app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
 
-app.use('/submission_forms', submissionFormRouter);
+app.use('/submission_forms', submissionRouter);
 app.use('/races', raceRouter);
 app.use('/crashes', crashRouter);
 app.use('/auth', authRouter);
