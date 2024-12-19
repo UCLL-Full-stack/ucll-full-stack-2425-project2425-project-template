@@ -1,70 +1,57 @@
-/* LoginPage.module.css */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f7f7f7;
+  background-color: #f4f4f9;
   padding: 20px;
 }
 
 .header {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 2.5rem; /* Increased header size */
+  font-weight: 700;
+  margin-bottom: 25px; /* Added more space */
   color: #333;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 300px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.radioGroup {
-  display: flex;
-  justify-content: space-between;
-}
-
-.radioLabel {
-  font-size: 1rem;
-}
-
-.radio {
-  margin-right: 5px;
+  width: 100%;
+  max-width: 480px; /* Increased form width */
+  padding: 30px; /* Increased padding */
+  background-color: #fff;
+  border-radius: 12px; /* Slightly rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Larger shadow */
 }
 
 .inputGroup {
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 20px; /* Increased margin between input fields */
 }
 
 .label {
-  font-size: 1rem;
-  margin-bottom: 5px;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px; /* Increased space between label and input */
 }
 
 .input {
-  padding: 8px;
-  font-size: 1rem;
+  width: 100%;
+  padding: 12px; /* Increased padding for larger input fields */
+  font-size: 16px; /* Increased font size */
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px; /* Slightly more rounded inputs */
+  box-sizing: border-box;
 }
 
 .button {
-  padding: 10px;
-  font-size: 1rem;
+  width: 100%;
+  padding: 15px; /* Increased button padding */
   background-color: #007BFF;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px; /* Slightly rounded corners */
+  font-size: 18px; /* Larger font size for button */
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .button:hover {
@@ -72,7 +59,106 @@
 }
 
 .error {
-  color: red;
-  font-size: 0.9rem;
-  margin-top: 10px;
+  color: #ff4d4d;
+  font-size: 16px; /* Increased error text size */
+  text-align: center;
+  margin-top: 15px; /* Added margin for spacing */
+}
+
+.toggle {
+  margin-top: 30px; /* Increased space below the form */
+  text-align: center;
+}
+
+.toggle p {
+  font-size: 16px; /* Slightly larger font size for the text */
+  color: #555;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: #007BFF;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.toggleButton:hover {
+  text-decoration: underline;
+}
+
+.tableContainer {
+  margin-top: 25px; /* Added spacing above the table */
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Smaller shadow for the table */
+  margin-top: 25px;
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden;
+}
+
+.table th, .table td {
+  padding: 8px 12px; /* Reduced padding to make table smaller */
+  text-align: left;
+  font-size: 14px; /* Smaller font size */
+}
+
+.table th {
+  background-color: #007BFF;
+  color: white;
+  font-size: 15px; /* Slightly smaller font for headers */
+  font-weight: bold;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.table tbody tr {
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+
+.table tbody tr:hover {
+  background-color: #e2e2e2;
+}
+
+.table td {
+  color: #333;
+}
+
+.table td:nth-child(3) {
+  text-transform: capitalize;
+}
+
+.table td, .table th {
+  border-bottom: 1px solid #ddd;
+}
+
+.table td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.table th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.table td:first-child {
+  border-left: 1px solid #ddd;
+}
+
+.table td:last-child {
+  border-right: 1px solid #ddd;
+}
+
+.table td, .table th {
+  word-wrap: break-word;
 }

@@ -54,6 +54,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   return (
     <form onSubmit={handleLogin} className={styles.form}>
       <div className={styles.radioGroup}>
+        {/* Add your radio buttons for role if needed */}
       </div>
 
       <div className={styles.inputGroup}>
@@ -80,9 +81,45 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
         />
       </div>
 
+
       <button type="submit" className={styles.button}>Login</button>
 
       {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+
+      {/* Table to display the email, password, and role */}
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Password</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>red@gmail.com</td>
+              <td>GonnaBeTheBest151</td>
+              <td>trainer</td>
+            </tr>
+            <tr>
+              <td>blue@gmail.com</td>
+              <td>Sm3llY4L4ter</td>
+              <td>trainer</td>
+            </tr>
+            <tr>
+              <td>joy@gmail.com</td>
+              <td>easyNurse</td>
+              <td>nurse</td>
+            </tr>
+            <tr>
+              <td>roak@gmail.com</td>
+              <td>GoAsh!Go4</td>
+              <td>admin</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </form>
   );
 };
