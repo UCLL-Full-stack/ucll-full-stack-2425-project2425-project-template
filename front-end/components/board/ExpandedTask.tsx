@@ -41,18 +41,24 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
 
     useEffect(() => {
         const fetchAssigneesAndUsers = async () => {
-            const assigneeData = await Promise.all(
-                task.assigneeIds.map((id) => UserService.getUser(id))
-            );
-            setAssigneeNames(assigneeData.map((user) => user.globalName));
-            setSelectedAssignees(assigneeData);
-            const column = await ColumnService.getColumnById(task.columnId);
-            const board = await BoardService.getBoard(column.boardId);
-            const guildUsers = await GuildService.getGuildMembers(board.guildId);
-            setAvailableUsers(guildUsers);
+            try{
+                const assigneeData = await Promise.all(
+                    task.assigneeIds.map((id) => UserService.getUser(id))
+                );
+                setAssigneeNames(assigneeData.map((user) => user.globalName));
+                setSelectedAssignees(assigneeData);
+                const column = await ColumnService.getColumnById(task.columnId);
+                const board = await BoardService.getBoard(column.boardId);
+                const guildUsers = await GuildService.getGuildMembers(board.guildId);
+                setAvailableUsers(guildUsers);
+            } catch (error) {
+                console.error("Error fetching assignees and users:", error);
+            }
         };
 
-        fetchAssigneesAndUsers();
+        if(!isEditing){
+            fetchAssigneesAndUsers();
+        }
     }, [task.assigneeIds, task.columnId]);
 
     const handleUpdateTask = async () => {
@@ -97,6 +103,9 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
     };
 
     const handleRemoveAssignee = (userId: string) => {
+        if (!permissions.canEditAssignees && userId !== user?.userId) {
+            return;
+        }
         setSelectedAssignees((prev) => prev.filter((user) => user.userId !== userId));
     };
 

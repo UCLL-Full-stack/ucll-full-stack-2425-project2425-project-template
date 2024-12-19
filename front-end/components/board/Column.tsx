@@ -26,6 +26,7 @@ interface ColumnProps {
 }
 
 const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange, permissions }) => {
+    if(column.columnId === undefined) return null;
     const {user} = useUser();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isEditing, setIsEditing] = useState(false);

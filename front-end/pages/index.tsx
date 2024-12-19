@@ -33,6 +33,16 @@ const Home: FC = () => {
   const [editingBoardId, setEditingBoardId] = useState<string | null>(null);
   const [editingBoardPermissionsId, setEditingBoardPermissionsId] = useState<string | null>(null);
 
+  const refreshSelectedBoard = async () => {
+    if (!selectedBoard) return;
+    try {
+      const updatedBoard = await BoardService.getBoard(selectedBoard.boardId);
+      setSelectedBoard(updatedBoard);
+    } catch (error) {
+      console.error('Error refreshing selected board:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,15 +63,13 @@ const Home: FC = () => {
           displayGuilds.sort((a: any, b: any) => a.greyedOut - b.greyedOut);
           setGuilds(dbGuilds);
           setDisplayGuilds(displayGuilds);
-          if (permissions.length === 0) {
-            const fetchedPermissions = await Promise.all(
-              dbGuilds.map(async (guild: { guildId: string }) => {
-                const permission = await UserService.getUserGuildKanbanPermissions(parsedUser.userId, guild.guildId);
-                return { guildId: guild.guildId, permissions: permission };
-              })
-            );
-            setPermissions(fetchedPermissions);
-          }
+          const fetchedPermissions = await Promise.all(
+            dbGuilds.map(async (guild: { guildId: string }) => {
+              const permission = await UserService.getUserGuildKanbanPermissions(parsedUser.userId, guild.guildId);
+              return { guildId: guild.guildId, permissions: permission };
+            })
+          );
+          setPermissions(fetchedPermissions);
         }
       } catch (error) {
         console.error('Error fetching user data', error);
@@ -70,8 +78,47 @@ const Home: FC = () => {
       }
     };
     fetchData();
-    console.log("Fetching data");
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
   }, [permissions, setUser]);
+
+  useEffect(() => {
+    if (selectedGuildId) {
+      const fetchBoards = async () => {
+        try {
+          const fetchedBoards = await BoardService.getBoardsByGuild(selectedGuildId);
+          const filteredBoards = await Promise.all(
+            fetchedBoards.map(async (board) => {
+              try {
+                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+                const canViewBoard =
+                  permissions.includes(KanbanPermission.VIEW_BOARD) || 
+                  permissions.includes(KanbanPermission.ADMINISTRATOR);
+                return canViewBoard ? board : null;
+              } catch (error) {
+                console.error(`Error checking permissions for board ${board.boardId}:`, error);
+                return null;
+              }
+            })
+          );
+          setBoards(filteredBoards.filter((board) => board !== null) || []);
+        } catch (error) {
+          console.error('Error fetching boards', error);
+        }
+      };
+
+      fetchBoards();
+      const interval = setInterval(fetchBoards, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedGuildId, user]);
+  
+  useEffect(() => {
+    if (selectedBoard) {
+      const interval = setInterval(refreshSelectedBoard, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedBoard]);
 
   const handleDiscordLogin = () => {
     const redirectUri = `http://localhost:8080/api/auth/discord`;

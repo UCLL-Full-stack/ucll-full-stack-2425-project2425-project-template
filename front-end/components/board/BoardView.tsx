@@ -30,45 +30,43 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
         canEditAssignees: false,
         canEditTaskStatus: false,
     });
-    const fetchData = async () => {
-        const fetchedColumns = await Promise.all(
-            board.columnIds.map((id) => ColumnService.getColumnById(id))
-        );
-        const sortedColumns = fetchedColumns.sort((a, b) => a.columnIndex - b.columnIndex);
-        setColumns(sortedColumns);
+
+    const fetchColumnsAndPermissions = async () => {
+        try {
+            const fetchedColumns = await Promise.all(
+                board.columnIds.map(async (id) => {
+                  try {
+                    return await ColumnService.getColumnById(id);
+                  } catch (error) {
+                    console.warn(`Column with ID ${id} could not be fetched:`, error);
+                    return undefined;
+                  }
+                })
+              );
+              const validColumns = fetchedColumns.filter((col) => col !== undefined) as Column[];
+              const sortedColumns = validColumns.sort((a, b) => a.columnIndex - b.columnIndex);
+              setColumns(sortedColumns);
+            const userPermissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
+            setPermissions({
+                canCreateColumns: userPermissions.includes(KanbanPermission.CREATE_COLUMNS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canEditColumns: userPermissions.includes(KanbanPermission.EDIT_COLUMNS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canDeleteColumns: userPermissions.includes(KanbanPermission.DELETE_COLUMNS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canCreateTasks: userPermissions.includes(KanbanPermission.CREATE_TASKS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canEditTasks: userPermissions.includes(KanbanPermission.EDIT_TASKS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canDeleteTasks: userPermissions.includes(KanbanPermission.DELETE_TASKS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canAssignTasks: userPermissions.includes(KanbanPermission.ASSIGN_TASKS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canEditAssignees: userPermissions.includes(KanbanPermission.MANAGE_TASK_ASSIGNEES) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+                canEditTaskStatus: userPermissions.includes(KanbanPermission.CHANGE_TASK_STATUS) || userPermissions.includes(KanbanPermission.ADMINISTRATOR),
+            });
+        } catch (error) {
+            console.error("Error fetching columns or permissions:", error);
+        }
     };
 
     useEffect(() => {
-        fetchData();
-
-        const checkPermissions = async () => {
-            try {
-                const permissions = await UserService.getAllKanbanPermissionsForBoard(user!.userId, board.boardId);
-                const hasCreatePermission = permissions.includes(KanbanPermission.CREATE_COLUMNS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasEditPermission = permissions.includes(KanbanPermission.EDIT_COLUMNS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasDeletePermission = permissions.includes(KanbanPermission.DELETE_COLUMNS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasCreateTaskPermission = permissions.includes(KanbanPermission.CREATE_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasEditTaskPermission = permissions.includes(KanbanPermission.EDIT_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasDeleteTaskPermission = permissions.includes(KanbanPermission.DELETE_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasAssignTaskPermission = permissions.includes(KanbanPermission.ASSIGN_TASKS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasEditAssigneesPermission = permissions.includes(KanbanPermission.MANAGE_TASK_ASSIGNEES) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                const hasEditTaskStatusPermission = permissions.includes(KanbanPermission.CHANGE_TASK_STATUS) || permissions.includes(KanbanPermission.ADMINISTRATOR);
-                setPermissions({
-                    canCreateColumns: hasCreatePermission,
-                    canEditColumns: hasEditPermission,
-                    canDeleteColumns: hasDeletePermission,
-                    canCreateTasks: hasCreateTaskPermission,
-                    canEditTasks: hasEditTaskPermission,
-                    canDeleteTasks: hasDeleteTaskPermission,
-                    canAssignTasks: hasAssignTaskPermission,
-                    canEditAssignees: hasEditAssigneesPermission,
-                    canEditTaskStatus: hasEditTaskStatusPermission,
-                });
-            } catch (error) {
-                console.error("Error checking permissions:", error);
-            }
-        };
-        checkPermissions();
+        fetchColumnsAndPermissions();
+        const interval = setInterval(fetchColumnsAndPermissions, 5000);
+        return () => clearInterval(interval);
     }, [board.columnIds]);
 
     const handleDragEnd = async (result: any) => {
@@ -77,7 +75,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
         if (!destination) return;
 
         if (type === "COLUMN") {
-            if(!permissions.canEditColumns) return;
+            if (!permissions.canEditColumns) return;
             const reorderedColumns = Array.from(columns);
             const [movedColumn] = reorderedColumns.splice(source.index, 1);
             reorderedColumns.splice(destination.index, 0, movedColumn);
@@ -126,9 +124,9 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                 }
                 return col;
             });
-        
+
             setColumns(updatedColumns);
-        
+
             try {
                 const updateTasksPromises: Promise<any>[] = [];
                 destinationTasks.forEach((taskId, index) => {
@@ -149,14 +147,13 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                         );
                     });
                 }
-        
+
                 await Promise.all(updateTasksPromises);
                 console.log("Task order updated successfully");
             } catch (error) {
                 console.error("Error updating task order:", error);
             }
         }
-        
     };
 
     const handleAddColumn = async () => {
@@ -203,7 +200,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                                 <ColumnComponent
                                                     column={column}
                                                     onDelete={onDeleteColumn}
-                                                    onTaskChange={fetchData}
+                                                    onTaskChange={fetchColumnsAndPermissions}
                                                     permissions={permissions}
                                                 />
                                             </div>
