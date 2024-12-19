@@ -15,7 +15,7 @@
     "header": {
         "home": "Accueil",
         "cocktails": "Cocktails",
-        "addCocktial": "Ajouter un Cocktail",
+        "addCocktail": "Ajouter un Cocktail",
         "search": "Rechercher",
         "login": "Connexion",
         "logout": "Déconnexion",

@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     return (
         <>
             <Head>
-                <title>User Signup</title>
+                <title>{t('login.title')}</title>
             </Head>
             <Header />
             <main>

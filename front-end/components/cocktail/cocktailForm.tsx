@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+import { useTranslation } from "next-i18next";
+
 
 type CocktailFormProps = {
   onSubmit: (cocktail: { name: string; description: string; strongness: number; image: string }) => void;
 };
 
 const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
+
+  const {t} = useTranslation()
+
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -27,7 +33,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit} className="cocktail-form">
       <div className="form-group">
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="Name">{t('addCocktail.name')}:</label>
         <input
           type="text"
           id="name"
@@ -37,7 +43,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="description">Description:</label>
+        <label htmlFor="description">{t('addCocktail.description')}:</label>
         <textarea
           id="description"
           value={formData.description}
@@ -46,7 +52,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="strongness">Strongness (0-5):</label>
+        <label htmlFor="strongness">{t('addCocktail.strongness')}:</label>
         <input
           type="number"
           id="strongness"
@@ -57,7 +63,7 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
           max="5"
         />
       </div>
-      <button type="submit" className="submit-btn">Add Cocktail</button>
+      <button type="submit" className="submit-btn">{t('addCocktail.save')}</button>
     </form>
   );
 };
