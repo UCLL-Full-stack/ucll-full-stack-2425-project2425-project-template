@@ -1,0 +1,33 @@
+{
+    "app.title": "Car stock application",
+    "general.error": "An error has occurred. Please try again later.",
+    "header": {
+        "welcome": "Welcome",
+        "nav": {
+            "home": "Home",
+            "carStock": "Car stock",
+            "carPartStock": "Car parts",
+            "orders": "Orders",
+            "login": "Login",
+            "logout": "Logout"
+        }
+    },
+    "login": {
+        "title": "Login",
+        "button": "Login",
+        "success": "Login succesful. Redirecting to homepage...",
+        "validate": {
+            "emailError": "Email error",
+            "email": "Email is required",
+            "passwordError": "Password error",
+            "password": "Password is required"
+        },
+        "label": { "email": "Email:", "password": "Password:" }
+    },
+    "home": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "role": "Role"
+    }
+}

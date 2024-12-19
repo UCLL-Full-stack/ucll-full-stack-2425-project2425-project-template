@@ -1,6 +1,7 @@
 import React from 'react';
 import AddCarForm from '@/components/cars/AddCarForm';
 import Header from '@/components/header';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const AddCarPage: React.FC = () => {
     return (
@@ -14,5 +15,14 @@ const AddCarPage: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+    };
+  };
 
 export default AddCarPage;

@@ -19,9 +19,11 @@ const getUserByEmail = async (email: string) => {
 };
 
 const addUser = async (userData: User) => {
+  const token = localStorage.getItem("loggedInUser") as string
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
     method: "POST",
     headers: {
+      Authorization: "Bearer " + token,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
@@ -31,11 +33,13 @@ const addUser = async (userData: User) => {
 };
 
 const deleteUser = async (userId: number) => {
+  const token = localStorage.getItem("loggedInUser") as string
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
     {
       method: "DELETE",
       headers: {
+        Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
     },

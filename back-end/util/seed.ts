@@ -40,6 +40,15 @@ const BMWX5 = await prisma.car.create({
     },
 })
 
+const admin = await prisma.user.create({
+    data: {
+        name: 'admin1',
+        password: await bcrypt.hash('admin123', 12),
+        email: 'admin@carshop.be',
+        role: 'Admin',
+    },
+});
+
 const manager = await prisma.user.create({
     data: {
         name: 'manager1',

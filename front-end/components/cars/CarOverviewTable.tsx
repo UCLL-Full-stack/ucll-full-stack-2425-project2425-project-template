@@ -16,6 +16,9 @@ const CarOverviewTable: React.FC<Props> = ({ cars, selectCar }: Props) => {
     const router = useRouter();
     const { toast } = useToast();
 
+    selectCar = (car: Car) => {
+      router.push(`/cars/${car.id}`);
+    }
     const deleteCar = (e:Event,car:Car) => {
       e.stopPropagation();
       if (car.id !== undefined) {
@@ -86,7 +89,7 @@ const CarOverviewTable: React.FC<Props> = ({ cars, selectCar }: Props) => {
                         console.error("Car ID is undefined");
                       }
                     }}
-                    className="mt- px-2 py-2 bg-[#ff8921] hover:bg-[#ff642bbb] rounded "
+                    className="mt- px-2 py-2 bg-[#ff3f21] hover:bg-[#ff3f21b9] rounded "
                   >
                     <Trash2 className="text-black"/>
                   </button>

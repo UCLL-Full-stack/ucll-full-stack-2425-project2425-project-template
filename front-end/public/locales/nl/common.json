@@ -1,0 +1,33 @@
+{
+    "app.title": "Auto stock applicatie",
+    "general.error": "Er is een error opgedoken. Probeer het later opnieuw.",
+    "header": {
+        "welcome": "Welkom",
+        "nav": {
+            "home": "Startpagina",
+            "carStock": "Auto's",
+            "carPartStock": "Auto onderdelen",
+            "orders": "Bestellingen",
+            "login": "Aanmelden",
+            "logout": "Afmelden"
+        }
+    },
+    "login": {
+        "title": "Aanmelden",
+        "button": "Aanmelden",
+        "success": "Aanmelden succesvol. Doorsturen naar startpagina...",
+        "validate": {
+            "emailError": "E-mail error",
+            "name": "E-mail is verplicht",
+            "passwordError": "Wachtwoord error",
+            "password": "Wachtwoord is verplicht"
+        },
+        "label": { "email": "E-mail:", "password": "Wachtwoord:" }
+    },
+    "home": {
+        "username": "Gebruikersnaam",
+        "email": "E-mail",
+        "password": "Wachtwoord",
+        "role": "Rol"
+    }
+}

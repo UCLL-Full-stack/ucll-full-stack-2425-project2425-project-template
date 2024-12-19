@@ -2,6 +2,7 @@ type UserRole = "Salesman" | "Manager" | "Admin";
 
 type AuthenticationResponse = {
     token: string;
+    name: string;
     email: string;
     role: string;
 };

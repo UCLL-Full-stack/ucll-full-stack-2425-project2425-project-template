@@ -20,7 +20,7 @@ const addUser = async ({ name, password, email, role }: UserInput): Promise<User
     return userDb.addUser(user);
 };
 
-const authenticate = async ({ email, password, role }: UserInput): Promise<AuthenticationResponse> => {
+const authenticate = async ({ email, password }: UserInput): Promise<AuthenticationResponse> => {
     const user = await userDb.getUserByEmail(email);
 
     if (!user) {
@@ -32,9 +32,10 @@ const authenticate = async ({ email, password, role }: UserInput): Promise<Authe
     }
 
     return {
-        token: generateJwtToken({ email, role: role }),
+        token: generateJwtToken({ name: user.getName() , email, role: user.getRole().toString() }),
+        name: user.getName(),
         email: email,
-        role: role
+        role: user.getRole().toString(),
     };
 };
 

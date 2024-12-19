@@ -2,6 +2,7 @@ import CarOverviewTable from "@/components/cars/CarOverviewTable";
 import Header from "@/components/header";
 import CarService from "@/services/CarService";
 import { Car } from "@/types";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -31,7 +32,7 @@ const Cars: React.FC = () => {
                 <h1 className="text-3xl font-bold my-6">Car Stock</h1>
                 <section>
                     {cars && <CarOverviewTable cars={cars} selectCar={setSelectedCar} />}
-                    <button className="fixed bottom-6 right-10 bg-[#ff8921] rounded p-2.5 text-black" 
+                    <button className="fixed bottom-6 right-10 bg-[#21b5ff] hover:bg-[#21b5ff97] rounded p-2.5 text-black" 
                     onClick={() => router.push("/cars/add")}
                     >
                         Add new car
@@ -41,5 +42,14 @@ const Cars: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const { locale } = context;
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+    };
+  };
 
 export default Cars;
