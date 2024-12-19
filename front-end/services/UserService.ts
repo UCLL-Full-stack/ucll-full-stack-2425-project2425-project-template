@@ -80,26 +80,32 @@ const loginUser = async (username: string, password: string, user: User) => {
       });
   
       const data = await response.json();
+      console.log("API Response:", data);
   
-      if (data.id && data.username && data.role) {
+      if (Array.isArray(data) && data.length > 0) {
+      const student = data[0];
+      if (student.id && student.user && student.user.username && student.user.role) {
         return {
           success: true,
           student: {
-            id: data.id,
-            username: data.username,
-            role: data.role,
+            id: student.id,
+            username: student.user.username,
+            role: student.user.role,
           },
         };
       } else {
         throw new Error('Invalid response data. Missing required fields.');
       }
-    } catch (error) {
-      return {
-        success: false,
-        message: error instanceof Error ? error.message : 'An error occurred during the user data fetch process.',
-      };
+    } else {
+      throw new Error('Invalid response data. Missing required fields.');
     }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'An error occurred during the user data fetch process.',
+    };
   }
+};
 
 
   

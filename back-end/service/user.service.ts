@@ -3,6 +3,7 @@ import userDB from '../repository/user.db';
 import { generateJwtToken } from '../util/jwt';
 import { AuthenticationResponse, UserInput } from '../types';
 import { User } from '../model/user';
+import studentService from './student.service';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
@@ -35,8 +36,18 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
             throw new Error('Invalid username or password.');
         }
 
+        const students = await studentService.getAllStudents();
+
+        let studentId : number | undefined;
+
+        students.forEach(student => {
+            if (student.getUser().getId() == user.getId()) {
+                studentId = student.getId();
+            }
+        });
+
         return {
-            token: generateJwtToken({ username, role: user.getRole() }),
+            token: generateJwtToken({ username, role: user.getRole(), studentId}),
             username: username,
             fullname: `${user.getFirstName()} ${user.getLastName()}`,
             role: user.getRole(),

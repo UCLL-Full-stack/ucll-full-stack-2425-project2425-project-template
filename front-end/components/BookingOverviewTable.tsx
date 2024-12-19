@@ -1,43 +1,89 @@
-import { Booking } from '@/types';
+import { Booking, DecodedToken } from '@/types';
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Bookings.module.css';
 import { useTranslation } from 'next-i18next';
 import errorStyles from '../styles/errorMessage.module.css';
+import UserService from '@/services/UserService';
+import bookingService from '@/services/bookingService';
+import useSWR from 'swr';
+import { jwtDecode } from 'jwt-decode';
 
-type Props = {
-    bookings: Array<Booking>;
-};
-
-const BookingOverviewTable: React.FC<Props> = ({ bookings }) => {
+const BookingOverviewTable: React.FC = () => {
     const { t } = useTranslation("common");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    const [studentId, setStudentId] = useState<number | null>(null);
+
+    
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
         const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
         const role = loggedInUser ? JSON.parse(loggedInUser).role : null;
-        setIsLoggedIn(!!token);
-        setUserRole(role);
+        const username = loggedInUser ? JSON.parse(loggedInUser).username : null;
+        const studentId = loggedInUser ? JSON.parse(loggedInUser).studentId : null;
+
+        if (token) {
+            try {
+                const decodedToken = jwtDecode<DecodedToken>(token);
+
+                if (decodedToken.studentId) {
+                    setStudentId(decodedToken.studentId);
+                }
+            } catch (error) {
+                console.error('Failed to decode token:', error);
+            }
+        }
+        if(token) {
+            setIsLoggedIn(true);
+            setUserRole(role);
+        }
+
     }, []);
+
+    const fetchBookings = async (): Promise<Booking[] | null> => {
+        try {
+            const response = await bookingService.getAllBookings();
+            const bookings : Booking[] = await response.json();
+
+            let bookingsOfStudent : Booking[] = [];
+
+            bookings.forEach(booking => {
+                booking.students.forEach(student => {
+                    if(student.id == studentId) {
+                        bookingsOfStudent.push(booking)
+                    }
+                })
+            });
+
+            return bookingsOfStudent;
+        } catch (error) {
+            console.error('Error fetching juniors:', error);
+            return null;
+        }
+    };
+
+    const { data: bookings } = useSWR('fetchBookings', fetchBookings, {
+        refreshInterval: 1000,
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+        return <div>{t("booking.noBookings")}</div>;
+    }
 
     if (!isLoggedIn) {
         return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
     }
 
-    // If the user is a guest, show a permission error
     if (userRole === 'guest') {
         return <div className={errorStyles.logInMessage}>{t("error.notAuthorized")}</div>;
     }
 
-    // Only render for admin or student
     if (userRole !== 'admin' && userRole !== 'student') {
         return null;
-    }
-
-    // If no bookings, show a fallback message
-    if (!Array.isArray(bookings) || bookings.length === 0) {
-        return <div>{t("booking.noBookings")}</div>;
     }
 
     return (
@@ -52,14 +98,16 @@ const BookingOverviewTable: React.FC<Props> = ({ bookings }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {bookings.map((booking, index) => (
-                        <tr key={index}>
-                            <td>{booking.trip.id}</td>
-                            <td>{booking.trip.destination}</td>
-                            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-                            <td>{booking.paymentStatus}</td>
-                        </tr>
-                    ))}
+                {bookings && bookings
+                .filter(booking => booking.students.some(student => student.id === studentId))
+                .map((booking, index) => (
+                    <tr key={index}>
+                        <td>{booking.trip.id}</td>
+                        <td>{booking.trip.destination}</td>
+                        <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                        <td>{booking.paymentStatus}</td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
         </div>

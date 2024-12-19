@@ -15,8 +15,8 @@ type Trip = {
 
 type Booking = {
     id?: number;
-    studentId: number;  
-    tripId: number;    
+    students : Student[];  
+    trip: Trip;    
     bookingDate: Date;
     paymentStatus: 'Pending' | 'Confirmed' | 'Cancelled';
 }
@@ -51,4 +51,9 @@ export type {
 export type StatusMessage = {
     message: string;
     type: "error" | "success";
+}
+export interface DecodedToken {
+    role: string;
+    username: string;
+    studentId: number;
 }

@@ -135,4 +135,19 @@ studentRouter.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
+studentRouter.get('/:username', async (req: Request, res: Response) => {
+  const username = req.params.username
+  try {
+    const student = await studentService.getStudentByUsername(username);
+    res.status(200).json(student);
+  } catch (error) {
+    const err = error as Error;
+    if (err.message.includes("does not exist")) {
+      res.status(404).json({ status: "error", errorMessage: err.message });
+    } else {
+      res.status(400).json({ status: "error", errorMessage: err.message });
+    }
+  }
+});
+
 export { studentRouter };

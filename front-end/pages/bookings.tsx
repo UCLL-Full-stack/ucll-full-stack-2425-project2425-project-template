@@ -14,16 +14,6 @@ const Bookings: React.FC = () => {
 
     const { t } = useTranslation("common");
 
-    const getAllBookings = async () => {
-        const response = await bookingService.getAllBookings();
-        const newBookings = await response.json();
-        setBookings(newBookings);
-    };
-
-    useEffect(() => {
-        getAllBookings();
-    }, []);
-
     return (
         <>
             <Head>
@@ -33,7 +23,7 @@ const Bookings: React.FC = () => {
             <main className={styles['bookings-page']}>
                 <section className={styles['bookings-overview-section']}>
                     <h2>{t("booking.mijn")}</h2>
-                    {bookings && <BookingOverviewTable bookings={bookings} />}
+                    <BookingOverviewTable/>
                 </section>
             </main>
         </>
