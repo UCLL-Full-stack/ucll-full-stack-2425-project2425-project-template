@@ -7,12 +7,10 @@ import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
-import { CirclePlus } from "lucide-react";
 import Link from "next/link";
+import { Plus } from "react-feather";
 
 const Workouts: React.FC = () => {
-  // const [workouts, setWorkouts] = useState<Array<Workout>>([]);
-  // const [error, setError] = useState<string>();
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,26 +39,32 @@ const Workouts: React.FC = () => {
       <Head>
         <title>Workouts</title>
       </Head>
+
       <Header />
 
       <main className="py-4 bg-gray-50 min-h-screen">
         <div className="max-w-screen-xl mx-auto px-6">
-          <div className="flex items-center justify-between mb-8 py-5">
-            <div className="flex items-center gap-2">
-              <h1 className="text-4xl font-bold text-black">Workouts</h1>
-              <Link href="/workouts/add">
-                <button className=" hover:text-blue-400 text-blue-700 font-bold p-0 ml-3 mt-2 rounded">
-                  <CirclePlus size={30} />
-                </button>
-              </Link>
-            </div>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-4xl font-bold text-black">Workouts</h1>
           </div>
+
           <section className="space-y-4">
             {role === "user" && (
               <>
                 {error && <div className="text-red-800">{error}</div>}
                 {isLoading && <div className="text-green-800">Loading...</div>}
-                {data && <WorkoutOverviewTable workouts={data.workouts} />}
+                {data && (
+                  <>
+                    <WorkoutOverviewTable workouts={data.workouts} />
+                    <div className="mt-4">
+                      <Link href="/workouts/add">
+                        <button className="w-full flex items-center justify-center bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-medium py-3 rounded-lg shadow-md">
+                          <Plus className="mr-2" /> Add New Workout
+                        </button>
+                      </Link>
+                    </div>
+                  </>
+                )}
               </>
             )}
             {role !== "user" && (
