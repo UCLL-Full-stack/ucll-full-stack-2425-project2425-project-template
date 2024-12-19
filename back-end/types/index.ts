@@ -1,11 +1,12 @@
 export type Role = 'admin' | 'user' | 'payedUser';
 
 export type PositionInput = {
-    id: number;
+    playerID: number;
     x: number;
     y: number;
     type: string;
     active: boolean;
+    floorID: number;
 };
 
 export type PositionUpdate = {
@@ -29,3 +30,8 @@ export type AuthenticationResponse = {
     email: string;
     role: string;
 };
+
+export type WorldInput = {
+    email: string,
+    name: string,
+}

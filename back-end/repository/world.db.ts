@@ -36,7 +36,29 @@ const getWorldById = async (id: number): Promise<World> => {
     }
 }
 
+const createWorld = async (world: World): Promise<number> => {
+    try {
+        const createdWorld = await database.world.create({
+            data: {
+                name: world.getName(),
+                owner: {
+                    connect: {
+                        id: world.getOwner().getId(),
+                        name: world.getOwner().getName(),
+                        email: world.getOwner().getEmail(),
+                    },
+                },
+            },
+        });
+        return createdWorld.id;
+    } catch(error){
+        console.error(error);
+        throw new Error("World could not be made");
+    }
+}
+
 export default {
     getAllWorlds,
     getWorldById,
+    createWorld,
 };

@@ -1,8 +1,9 @@
 import { Floor } from '../model/floor';
 import { Position } from '../model/position';
 import FloorDb from '../repository/floor.db';
+import positionDb from '../repository/position.db';
 import PositionDb from '../repository/position.db';
-import { PositionUpdate } from '../types';
+import { PositionInput, PositionUpdate } from '../types';
 
 const getAllFloors = (): Promise<Floor[]> => {
     return FloorDb.getAllFloors();
@@ -19,6 +20,9 @@ const getFloorPositions = (id: number): Promise<Position[]> => {
 const updatePosition = async (pos: PositionUpdate): Promise<Position> => {
     const currentFloor = await getFloorById(pos.floorID);
     const currentPos = PositionDb.getPositionById(pos.posID);
+    if (pos.active === false){
+        return PositionDb.changePosition(pos);
+    }
     if (currentFloor.canMoveToPosition(pos.x, pos.y)){
         return PositionDb.changePosition(pos);
     }
@@ -27,9 +31,14 @@ const updatePosition = async (pos: PositionUpdate): Promise<Position> => {
     }
 }
 
+const addPosition = async (pos: PositionInput): Promise<Position> => {
+    return positionDb.addPosition(pos);
+}
+
 export default {
     getAllFloors,
     getFloorById,
     getFloorPositions,
     updatePosition,
+    addPosition,
 };

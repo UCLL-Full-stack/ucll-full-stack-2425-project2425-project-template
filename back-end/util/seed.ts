@@ -91,6 +91,12 @@ async function main() {
         new Floor({
             floornumber: 1,
         }),
+        new Floor({
+            floornumber: 2,
+        }),
+        new Floor({
+            floornumber: 3,
+        }),
     ];
 
     const worlds = [
@@ -183,16 +189,6 @@ async function main() {
                     },
                 });
             }
-            await prisma.position.create({
-                data: {
-                    x: playerpos.getX(),
-                    y: playerpos.getY(),
-                    type: playerpos.getType(),
-                    active: playerpos.getActive(),
-                    floor: { connect: { id: createdFloor.id } },
-                    player: { connect: { id: 1 } },
-                },
-            });
         }
     }
 }

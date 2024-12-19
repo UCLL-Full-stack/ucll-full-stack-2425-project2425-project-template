@@ -1,5 +1,6 @@
 export type User = {
     id: number;
+    email: string;
     name: string;
     role?: string;
     password: string;
@@ -27,6 +28,7 @@ export type Floor = {
     id: number;
     floornumber: number;
     tiles: Line[];
+    positions: Position[];
 };
 
 export type Line = {
@@ -53,6 +55,15 @@ export type PositionUpdate = {
     active: boolean;
 };
 
+export type PositionInput = {
+  playerID: number;
+  x: number;
+  y: number;
+  type: string;
+  active: boolean;
+  floorID: number;
+}
+
 export type coordinate = {
     x: number;
     y: number;
@@ -63,3 +74,8 @@ export type Auth = {
     email: string;
     password: string;
 };
+
+export type WorldInput = {
+    email: string,
+    name: string,
+}
