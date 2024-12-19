@@ -287,6 +287,8 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
  * @swagger
  * /workouts/{id}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove a workout
  *     tags: [Workouts]
  *     description: Remove a workout by its ID and return the removed workout.
@@ -307,15 +309,15 @@ workoutRouter.post('/', async (req: Request, res: Response) => {
  *       404:
  *         description: Workout not found
  */
-// workoutRouter.delete('/:id', (req: Request, res: Response) => {
-//     try {
-//         const workoutId = parseInt(req.params.id);
-//         const deletedWorkout = workoutService.removeWorkout(workoutId);
-//         res.status(200).json(deletedWorkout);
-//     } catch (error: any) {
-//         const errorMessage = error.message || "An unexpected error occurred";
-//         res.status(400).json({ status: 'error', errorMessage: errorMessage });
-//     }
-// });
+workoutRouter.delete('/:id', (req: Request, res: Response) => {
+    try {
+        const workoutId = req.params.id;
+        const deletedWorkout = workoutService.removeWorkout(workoutId);
+        res.status(200).json(deletedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
 
 export default workoutRouter;

@@ -75,14 +75,18 @@ const getWorkoutsByUserId = async ({ userId }: { userId: string }): Promise<Work
     }
 };
 
-// const removeWorkout = (workoutId: number): boolean => {
-//     const index = workouts.findIndex((w) => w.workout_id === workoutId);
-//     if (index !== -1) {
-//         workouts.splice(index, 1);
-//         return true;
-//     }
-//     return false;
-// };
+const removeWorkout = async ({ id }: { id: string }): Promise<Workout | null> => {
+    try {
+        const workoutPrisma = await database.workout.delete({
+            where: { id },
+            include: { user: true },
+        });
+        return workoutPrisma ? Workout.from(workoutPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default {
     getAllWorkouts,
@@ -92,5 +96,5 @@ export default {
     // workouts,
     // addExerciseToWorkout,
     // removeExerciseFromWorkout,
-    // removeWorkout,
+    removeWorkout,
 };
