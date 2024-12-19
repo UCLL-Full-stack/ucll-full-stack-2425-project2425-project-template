@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import Header from '@components/header';
 import PokemonOverviewTable from '@components/pokemon/pokemonOverviewTable';
 import TrainerService from '@services/trainer.service';
-import { Pokemon, Trainer } from '@types';
+import nurseService from '@services/nurse.service';
+import { Nurse, Pokemon, Trainer } from '@types';
 import PokemonDetails from '@components/pokemon/pokemonDetails';
-import TrainerOverviewTable from '@components/trainer/trainerOverviewTable';
 import AddPokemonModal from '@components/pokemon/addPokemonModal';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serversideTranslations';
+import PokemonDetailsNurse from '@components/pokemon/pokemonDetailsNurse';
 
 const Pokemons: React.FC = () => {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
+  const [nurses, setNurses] = useState<Nurse[]>([]);  // Store the list of nurses
   const [selectedTrainer, setSelectedTrainer] = useState<Trainer | null>(null);
+  const [selectedNurse, setSelectedNurse] = useState<Nurse | null>(null);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loggedInEmail, setLoggedInEmail] = useState<string>('');
-  const [role, setRole] = useState<String>("guest")
+  const [role, setRole] = useState<string>('guest');
 
   const { t } = useTranslation();
 
@@ -23,59 +26,45 @@ const Pokemons: React.FC = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const loggedInUser = localStorage.getItem('loggedInUser');
-      let email = ''
+      let email = '';
       if (loggedInUser) {
-        const parsedUser = JSON.parse(loggedInUser)
-        email = parsedUser.email
-        setRole(parsedUser.role)
-      } 
+        const parsedUser = JSON.parse(loggedInUser);
+        email = parsedUser.email;
+        setRole(parsedUser.role);
+      }
       setLoggedInEmail(email);
     }
-  }, []);  // Empty dependency array ensures this runs only once when the component mounts
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
 
-  const getTrainers = async () => {
+  const getTrainerByEmail = async (email: string) => {
     try {
-      const allTrainers = await TrainerService.getAllTrainers();
-
-      // Filter trainers by the logged-in user's email
-      const filteredTrainers = allTrainers.filter((trainer) => trainer.user.email === loggedInEmail);
-
-      setTrainers(filteredTrainers);
-
-      // If we found a matching trainer, set them as the selected trainer
-      if (filteredTrainers.length > 0) {
-        setSelectedTrainer(filteredTrainers[0]); // Only set the first matching trainer
-      }
+      const trainer = await TrainerService.getTrainerByEmail(email);
+      setTrainers([trainer]);
+      setSelectedTrainer(trainer);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getTrainerByEmail = async(email:string) =>{
+  const getNurseByEmail = async (email: string) => {
     try {
-      const trainer = await TrainerService.getTrainerByEmail(email);
-      console.log(trainer)
-
-      setTrainers([trainer]);
-      setSelectedTrainer(trainer)
-      }
-     catch (error) {
+      const nurse = await nurseService.getNurseByEmail(email);
+      setNurses([nurse]); // Store the nurse's data
+      setSelectedNurse(nurse);
+    } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    // Only run the getTrainers function when loggedInEmail is available
-    if (loggedInEmail) {
-      if (role== "trainer") {
-        getTrainerByEmail(loggedInEmail)
+    if (loggedInEmail && role) {
+      if (role === 'trainer') {
+        getTrainerByEmail(loggedInEmail);
+      } else if (role === 'nurse') {
+        getNurseByEmail(loggedInEmail);
       }
     }
-  }, [loggedInEmail]);
-
-  const handleSelectTrainer = (trainer: Trainer) => {
-    setSelectedTrainer(trainer);
-  };
+  }, [loggedInEmail, role]); // Make sure to re-run the effect when these values change
 
   const handleSelectPokemon = (pokemon: Pokemon) => {
     setSelectedPokemon(pokemon);
@@ -83,15 +72,14 @@ const Pokemons: React.FC = () => {
 
   const handleAddPokemon = async (newPokemon: Pokemon) => {
     try {
-      if (selectedTrainer != null && selectedTrainer.id != null) {
-        const updatedTrainer = await TrainerService.addPokemonToTrainerById(selectedTrainer.id, newPokemon);
-
-        // Update the selected trainer with the new Pokemon list
+      if (selectedTrainer && selectedTrainer.id) {
+        const updatedTrainer = await TrainerService.addPokemonToTrainerById(
+          selectedTrainer.id,
+          newPokemon
+        );
         setSelectedTrainer(updatedTrainer);
-
-        // Update the trainers list with the modified trainer
-        setTrainers(prevTrainers =>
-          prevTrainers.map(trainer =>
+        setTrainers((prevTrainers) =>
+          prevTrainers.map((trainer) =>
             trainer.id === updatedTrainer.id ? updatedTrainer : trainer
           )
         );
@@ -105,44 +93,74 @@ const Pokemons: React.FC = () => {
     <>
       <Header />
       <main>
-        <h1>{t("pokemon.pokemon")}</h1>
-        {trainers.length === 0 ? (
+        <h1>{t('pokemon.pokemon')}</h1>
+        {/* If logged in as a trainer, display their Pokémon */}
+        {role === 'trainer' && trainers.length === 0 ? (
           <p>No trainers found for the logged-in email.</p>
         ) : (
           <>
-            {/* Ensure selectedTrainer is not null before accessing its properties */}
-            {selectedTrainer && (
+            {role === 'trainer' && selectedTrainer && (
               <>
-                <h2>{selectedTrainer.user.firstName}{t("pokemon.users-pokemon")}</h2>
-                <button onClick={() => setIsModalOpen(true)}>{t("pokemon.add")}</button>
-                <PokemonOverviewTable 
-                  pokemon={selectedTrainer.pokemon} 
-                  selectPokemon={handleSelectPokemon} 
+                <h2>
+                  {selectedTrainer.user.firstName}
+                  {t('pokemon.users-pokemon')}
+                </h2>
+                <button onClick={() => setIsModalOpen(true)}>{t('pokemon.add')}</button>
+                <PokemonOverviewTable
+                  pokemon={selectedTrainer.pokemon}
+                  selectPokemon={handleSelectPokemon}
                 />
-                {selectedPokemon && <PokemonDetails pokemon={selectedPokemon} />}
+                {selectedPokemon && (
+                  <PokemonDetails
+                    pokemon={selectedPokemon}
+                    nurseId={1}  // Pass the nurseId if necessary
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
+
+        {/* If logged in as a nurse, show their Pokémon */}
+        {role === 'nurse' && nurses.length === 0 ? (
+          <p>No nurse found for the logged-in email.</p>
+        ) : (
+          <>
+            {role === 'nurse' && selectedNurse && (
+              <>
+                <h2>
+                  {selectedNurse.user.firstName}
+                  {t('pokemon.nurse-pokemon')}
+                </h2>
+                <PokemonOverviewTable
+                  pokemon={selectedNurse.pokemon}  // Display the Pokémon of the nurse
+                  selectPokemon={handleSelectPokemon}
+                />
+                {selectedPokemon && (
+                  <PokemonDetailsNurse
+                    pokemon={selectedPokemon}
+                    nurseId={1}  // Pass the nurseId if necessary
+                  />
+                )}
               </>
             )}
           </>
         )}
 
         {isModalOpen && (
-          <AddPokemonModal 
-            onClose={() => setIsModalOpen(false)} 
-            onAddPokemon={handleAddPokemon} 
-          />
+          <AddPokemonModal onClose={() => setIsModalOpen(false)} onAddPokemon={handleAddPokemon} />
         )}
       </main>
     </>
   );
 };
 
-export const getServerSideProps = async (context: { locale: any; }) => {
-  const {locale} = context;
-
+export const getServerSideProps = async (context: { locale: any }) => {
+  const { locale } = context;
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? "en", ["common"]))
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
   };
 };
 

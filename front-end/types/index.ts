@@ -9,6 +9,7 @@ export type User ={
     password:string
 }
 
+
 export type PokemonStats ={
     hp: number;
     attack: number;
@@ -27,6 +28,11 @@ export type Pokemon = {
     canEvolve: boolean;
 }
 
+export type Nurse = {
+    id?: number;
+    user: User;
+    pokemon: Pokemon[];
+}
 
 export type Trainer = {
     id?: number;

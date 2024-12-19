@@ -59,10 +59,72 @@ const TrainerService = {
     }
     const trainer = await response.json();
     return trainer as Trainer;
-  }
+  },
 
-  
+  transferPokemonToNurse: async (
+    pokemonId: number,
+    nurseId: number
+  ): Promise<Trainer> => {
+    const user = localStorage.getItem('loggedInUser');
+    let token = null;
+
+    if (user) {
+      token = JSON.parse(user).token; // Retrieve JWT token from localStorage
+    }
+
+    const response = await fetch(
+      `${API_URL}/trainers/pokemon/${pokemonId}/nurse/${nurseId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Attach token for authentication
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to transfer Pokémon.');
+    }
+
+    const updatedTrainer = await response.json();
+    return updatedTrainer as Trainer; // Return the updated trainer data
+  },
+
+  addPokemonToTrainer: async (pokemonId: number): Promise<Trainer> => {
+    const user = localStorage.getItem('loggedInUser');
+    let token = null;
+    if (user) {
+      token = JSON.parse(user).token;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/trainers/pokemon/${pokemonId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Failed to add Pokémon to Trainer: ${errorText}`);
+      }
+
+      const data = await response.json();
+      return data as Trainer;  // Return updated trainer object
+    } catch (error) {
+      console.error('Error adding Pokémon to Trainer:', error);
+      throw error;
+    }
+  },
 };
+
+
+
 
 
 

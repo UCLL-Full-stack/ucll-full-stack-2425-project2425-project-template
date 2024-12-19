@@ -208,18 +208,12 @@ trainerRouter.post('/:id', async (req: Request, res: Response, next: NextFunctio
 
 /**
  * @swagger
- * /trainers/{id}/pokemon/{idPokemon}/nurse/{idNurse}:
+ * /trainers/pokemon/{idPokemon}/nurse/{idNurse}:
  *   put:
  *     summary: Remove a Pokémon from a Trainer and add it to a Nurse
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The numeric ID of the trainer
  *       - in: path
  *         name: idPokemon
  *         required: true
@@ -246,7 +240,7 @@ trainerRouter.post('/:id', async (req: Request, res: Response, next: NextFunctio
  *       500:
  *         description: Server error
  */
-trainerRouter.put('/:id/pokemon/:idPokemon/nurse/:idNurse', async (req: Request, res: Response, next: NextFunction) => {
+trainerRouter.put('/pokemon/:idPokemon/nurse/:idNurse', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { idPokemon, idNurse } = req.params;
 
@@ -423,6 +417,7 @@ nurseRouter.get('/:email', async (req: Request, res: Response, next: NextFunctio
 
 
 import { PrismaClient } from '@prisma/client';
+import database from '../util/database';
 
 const prisma = new PrismaClient();
 
@@ -526,24 +521,18 @@ nurseRouter.patch('/:nurseId/heal/:pokemonId', async (req: Request, res: Respons
 
 /**
  * @swagger
- * /trainers/{id}/pokemon/{idPokemon}:
+ * /trainers/pokemon/{idPokemon}:
  *   post:
- *     summary: Add a new Pokémon to a specific trainer
+ *     summary: Add a new Pokémon to the trainer of that Pokémon (using previousTrainerId)
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The numeric ID of the trainer
  *       - in: path
  *         name: idPokemon
  *         required: true
  *         schema:
  *           type: integer
- *         description: The ID of the Pokémon to add to the trainer
+ *         description: The ID of the Pokémon to add to its previous trainer
  *     responses:
  *       200:
  *         description: Pokémon successfully added to the trainer
@@ -554,58 +543,68 @@ nurseRouter.patch('/:nurseId/heal/:pokemonId', async (req: Request, res: Respons
  *       400:
  *         description: Invalid input or data
  *       404:
- *         description: Trainer or Pokémon not found
+ *         description: Pokémon or previous trainer not found
  *       500:
  *         description: Server error
  */
-trainerRouter.post('/:id/pokemon/:idPokemon', async (req: Request, res: Response, next: NextFunction) => {
+trainerRouter.post('/pokemon/:idPokemon', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const idPokemon = Number(req.params.idPokemon);
-        const idTrainer = Number(req.params.id);
 
-        // Validate input parameters
-        if (isNaN(idPokemon) || isNaN(idTrainer)) {
-            return res.status(400).json({ message: 'Trainer ID and Pokémon ID must be valid numbers.' });
+        // Validate the Pokémon ID
+        if (isNaN(idPokemon)) {
+            return res.status(400).json({ message: 'Pokémon ID must be a valid number.' });
         }
 
-        // Call service to add Pokémon to the Trainer
-        const updatedTrainer = await nurseService.addPokemonToTrainer(idPokemon, idTrainer);
+        // Retrieve Pokémon from the database, including the `previousTrainerId` and `nurse`
+        const pokemon = await database.pokemon.findUnique({
+            where: { id: idPokemon },
+            include: { nurse: true }, // Only include relationships like nurse
+        });
+
+        // If Pokémon doesn't exist, return a 404 error
+        if (!pokemon) {
+            return res.status(404).json({ message: `Pokémon with ID ${idPokemon} not found.` });
+        }
+
+        // Ensure Pokémon has a `previousTrainerId` and is assigned to a Nurse
+        if (!pokemon.previousTrainerId) {
+            return res.status(404).json({ message: `Pokémon with ID ${idPokemon} is not associated with any trainer.` });
+        }
+
+        if (!pokemon.nurseId) {
+            return res.status(404).json({ message: `Pokémon with ID ${idPokemon} is not assigned to any Nurse.` });
+        }
+
+        // Now call the service to add the Pokémon to the Trainer using `previousTrainerId`
+        const updatedTrainer = await nurseService.addPokemonToTrainer(idPokemon, pokemon.previousTrainerId);
 
         // Return the updated trainer object if successful
         res.status(200).json(updatedTrainer);
 
     } catch (error) {
-        // If the error is related to invalid Pokémon being assigned to a Nurse, 
-        // you can return a 404 or 400 depending on your use case.
         if (error instanceof Error) {
-            // Now that we know it's an instance of Error, we can access `error.message`
-            if (error.message.includes('Pokémon is not assigned to any Nurse')) {
-                return res.status(404).json({ message: `Pokémon with ID ${req.params.idPokemon} is not assigned to a Nurse.` });
-            }
+            return res.status(500).json({ message: error.message });  // Return generic server error
         }
 
-        // For other errors, pass it to the global error handler
-        next(error); 
+        next(error); // Pass other errors to the global error handler
     }
 });
 
 
 
 
+
+
 /**
  * @swagger
- * /nurses/{nurseId}/pokemon/{pokemonId}:
+ * /nurses/pokemon/{pokemonId}:
  *   delete:
  *     summary: Remove a Pokémon from a Nurse and disassociate it
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: nurseId
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the Nurse
+
  *       - in: path
  *         name: pokemonId
  *         required: true
@@ -630,7 +629,7 @@ trainerRouter.post('/:id/pokemon/:idPokemon', async (req: Request, res: Response
  *       500:
  *         description: Server error
  */
-nurseRouter.delete('/:nurseId/pokemon/:pokemonId', async (req: Request, res: Response, next: NextFunction) => {
+nurseRouter.delete('/pokemon/:pokemonId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { nurseId, pokemonId } = req.params;
         // Logic to remove the Pokémon from the nurse's care

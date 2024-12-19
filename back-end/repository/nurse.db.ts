@@ -9,7 +9,7 @@ const getNurseByEmail = async (email: string): Promise<Nurse | null> => {
     });
 
     if (!user) {
-        throw new Error(`User with email ${email} not found.`);
+        throw new Error(`User with email${email} not found.`);
     }
 
     // Then, find the trainer using the userId
@@ -28,7 +28,7 @@ const getNurseByEmail = async (email: string): Promise<Nurse | null> => {
     });
 
     if (!nursePrisma) {
-        throw new Error(`Trainer with userId ${user.id} not found.`);
+        throw new Error(`nurse with userId ${user.id} not found.`);
     }
 
     // Return the transformed trainer object
@@ -152,7 +152,8 @@ const addPokemonToTrainer = async ({
         throw new Error(`Pokémon with id ${idPokemon} does not exist.`);
     }
 
-    if (pokemon.nurse) {
+    // Check if the Pokémon is assigned to a Nurse
+    if (pokemon.nurseId) {
         // If the Pokémon is already associated with a Nurse, proceed to add it to the Trainer
         await database.pokemon.update({
             where: { id: idPokemon },
@@ -160,6 +161,7 @@ const addPokemonToTrainer = async ({
                 trainer: {
                     connect: { id: idTrainer }, // Associate Pokémon with the trainer
                 },
+                previousTrainerId: pokemon.trainerId, // Save the current trainer ID if moving
             },
         });
     } else {
@@ -188,6 +190,7 @@ const addPokemonToTrainer = async ({
         gymBattle: updatedTrainer.gymBattles,
     });
 };
+
 
 
 

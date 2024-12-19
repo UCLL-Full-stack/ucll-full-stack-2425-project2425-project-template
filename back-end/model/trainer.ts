@@ -13,7 +13,7 @@ import {
  } from '@prisma/client'
 
 export class Trainer {
-    private id?: number;
+    readonly id?: number;
     private user: User
     private pokemon: Pokemon[];
     private badges: Badge[];

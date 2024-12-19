@@ -1,18 +1,45 @@
-
 import React from 'react';
 import { Pokemon } from '@types';
-import styles from '../../styles/pokemon.module.css'; 
+import TrainerService from '../../services/trainer.service';
+import styles from '../../styles/pokemon.module.css';
 
 interface PokemonDetailsProps {
   pokemon: Pokemon;
+  nurseId: number;
 }
 
-const PokemonDetails: React.FC<PokemonDetailsProps> = ({ pokemon }) => {
+const PokemonDetails: React.FC<PokemonDetailsProps> = ({
+  pokemon,
+  nurseId,
+}) => {
+  const handleTransfer = async () => {
+    if (pokemon.id === undefined) {
+      alert('Pokémon ID is missing. Cannot send to hospital.');
+      return;
+    }
+
+    try {
+      await TrainerService.transferPokemonToNurse(pokemon.id, nurseId);
+      alert(`${pokemon.name} has been sent to the hospital.`);
+    } catch (error: any) {
+      alert(error.message || 'Failed to transfer Pokémon.');
+    }
+  };
+
   return (
     <div className={styles.card}>
       <h3>Details for {pokemon.name}</h3>
       <p>Type: {pokemon.type}</p>
-      <p>Health: {pokemon.health}</p>
+      <div className={styles.healthContainer}>
+        <p>
+          Health: {pokemon.health} / {pokemon.stats.hp}
+          {pokemon.health < pokemon.stats.hp && (
+            <button className={styles.healButton} onClick={handleTransfer}>
+              Send to Hospital
+            </button>
+          )}
+        </p>
+      </div>
       <p>Stats:</p>
       <ul>
         <li>HP: {pokemon.stats.hp}</li>

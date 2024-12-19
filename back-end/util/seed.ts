@@ -71,7 +71,7 @@ const main = async () => {
             data: {
                 firstName: "Nurse",
                 lastName: "Joy",
-                email: 'Joy@nurse.com',
+                email: 'joy@gmail.com',
                 password: hashedPasswordNurse,
                 role: 'nurse',
             },

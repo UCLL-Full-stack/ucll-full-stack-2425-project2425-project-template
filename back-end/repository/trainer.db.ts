@@ -249,10 +249,11 @@ const removePokemonAndAddToNurse = async ({ idPokemon, idNurse }: { idPokemon: n
         throw new Error(`Nurse with id ${idNurse} does not exist.`);
     }
 
-    // Step 3: Disconnect the Pokémon from the current Trainer
+    // Step 3: Store the current Trainer's ID in `previousTrainerId`
     await database.pokemon.update({
         where: { id: idPokemon },
         data: {
+            previousTrainerId: pokemon.trainer.id, // Save the trainer's ID
             trainer: { disconnect: true }, // Remove the association with the trainer
         },
     });
@@ -289,6 +290,7 @@ const removePokemonAndAddToNurse = async ({ idPokemon, idNurse }: { idPokemon: n
         gymBattle: updatedTrainer.gymBattles,
     });
 };
+
 
 
 

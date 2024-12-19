@@ -51,10 +51,12 @@ model Pokemon {
   health      Int
   canEvolve   Boolean
 
+  previousTrainerId Int?  
+
   trainerId   Int?
   trainer     Trainer? @relation(fields: [trainerId], references: [id])
 
-  nurseId     Int?     // Foreign key column
+  nurseId     Int?     
   nurse       Nurse?   @relation("NursePokemon", fields: [nurseId], references: [id])
 
   stats       Stats    @relation(fields: [statsId], references: [id])
