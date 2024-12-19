@@ -23,7 +23,7 @@ const Header: React.FC = () => {
             </Link>
       
             <Link href="/movie">
-                <button className={styles.registerButton}>Movie</button>
+                <button className={styles.registerButton}>Movies</button>
             </Link>
 
             <Link href="/register">

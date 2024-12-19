@@ -6,7 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { movieRouter } from './controller/movie.routes';
-
+import { watchlistRouter } from './controller/watchlist.routes';
 
 const app = express();
 dotenv.config();
@@ -38,3 +38,4 @@ app.listen(port || 3000, () => {
 
 app.use("/movie", movieRouter);
 app.use("/users", userRouter);
+app.use('/watchlist', watchlistRouter);

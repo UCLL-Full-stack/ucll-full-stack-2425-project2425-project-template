@@ -1,27 +1,18 @@
-import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 
 const prisma = new PrismaClient();
-const router = Router();
 
 const watchlistRouter = express.Router();
 
-watchlistRouter.post('/watchlist', async (req, res) => {
+watchlistRouter.post('/', async (req, res) => {
   const { userId, movieId } = req.body;
+  
   try {
-    const existingEntry = await prisma.watchlist.findFirst({
-      where: { userId, movieId },
-    });
-
-    if (existingEntry) {
-      return res.status(400).json({ message: 'Movie already in watchlist' });
-    }
-
     const watchlistEntry = await prisma.watchlist.create({
       data: {
-        userId,
-        movieId,
+        user: { connect: { id: userId } }, 
+        movie: { connect: { id: movieId } }, 
       },
     });
 
@@ -32,4 +23,4 @@ watchlistRouter.post('/watchlist', async (req, res) => {
   }
 });
 
-export default watchlistRouter;
+export { watchlistRouter };
