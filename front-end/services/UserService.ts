@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const getUsers = async () => {
     const response = await fetch(`${API_URL}/api/users`, {
@@ -6,6 +6,7 @@ const getUsers = async () => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -16,6 +17,7 @@ const getUser = async (userId: string) => {
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -27,6 +29,7 @@ const addUser = async (user: any) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -38,6 +41,7 @@ const updateUser = async (userId: string, user: any) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -48,6 +52,7 @@ const getGuilds = async (userId: string) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -58,6 +63,7 @@ const getUserGuildKanbanPermissions = async (userId: string, guildId: string) =>
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -68,6 +74,7 @@ const getAllKanbanPermissionsForBoard = async (userId: string, boardId: string) 
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include'
     });
     return await response.json();
 };
@@ -78,6 +85,7 @@ const getUserBoardPermissions = async (userId: string, boardId: string) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include'
     });
     return await response.json();
 };

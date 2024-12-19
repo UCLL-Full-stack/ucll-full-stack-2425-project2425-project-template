@@ -15,11 +15,11 @@ const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
-// Updated CORS configuration
+
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:8080', 'http://localhost:3000'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'], 
   credentials: true
 }));
 
