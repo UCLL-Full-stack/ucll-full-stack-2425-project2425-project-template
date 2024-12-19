@@ -13,6 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
 import { useTranslation } from "next-i18next";
+import { Globe } from "lucide-react";
 
 const AuthToggle = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,6 +21,7 @@ const AuthToggle = () => {
 
   const router = useRouter();
   const { t } = useTranslation("common");
+  const { locale, pathname, asPath, query } = router;
 
   const handleSuccess = () => {
     router.push("/planner"); // redirects to planner page after successful login/signup
@@ -30,9 +32,20 @@ const AuthToggle = () => {
       setIsLogin(value === "login");
     });
   };
+  const handleLanguageChange = () => {
+    const newLocale = locale === "en" ? "zh" : "en";
+    router.push({ pathname, query }, asPath, { locale: newLocale });
+  };
 
   return (
-    <Card className="w-[350px]">
+    <Card className="relative w-[350px]">
+      <button
+        onClick={handleLanguageChange}
+        className="absolute top-4 right-4 flex justify-center items-center w-8 h-8 rounded-full text-primary hover:bg-avatar-hover-bg"
+        aria-label="Change Language"
+      >
+        <Globe size={24} />
+      </button>
       <CardHeader>
         <CardTitle>Plateful</CardTitle>
         <CardDescription>
@@ -73,5 +86,6 @@ const AuthToggle = () => {
     </Card>
   );
 };
+
 
 export default AuthToggle;
