@@ -17,6 +17,16 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, showLikeButt
   const [user, setUsers] = useState<UserInput[]>();
   const [showTickets, setShowTickets] = useState<boolean>(false);
   const [successfullyAddedEventToMyFavorites, setSuccessfullyAddedEventToMyFavorites] = useState<string>("");
+  const [emailData, setEmailData] = useState<string>(email);
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    const user = loggedInUser ? JSON.parse(loggedInUser) : null;
+
+    if (user) {
+      setEmailData(user.email);
+    }
+}, []);
 
   const handleEventClick = (eventId: number) => {
     sessionStorage.setItem('eventId', eventId.toString());
@@ -34,7 +44,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, showLikeButt
   }
 
   const addEventToFavorite = async (eventId: number, name: string) => {
-    const response = await UserService.addEventToFavorite(email, eventId);
+    const response = await UserService.addEventToFavorite(emailData, eventId);
 
     if (response.ok) {
       alert(`Event ${name} has been added to your favorite list!`);
@@ -73,7 +83,7 @@ const EventOverview: React.FC<Props> = ({ events, showDeleteButton, showLikeButt
                     ><img src="/icons/close-white.png" alt="Close icon" width="40px" height="40px" />
                     </button>
                   }
-                  {showLikeButton === true &&
+                  {showLikeButton === true && emailData !== "" &&
                     <div className={styles.addToMyFavorite}>
                       <button
                         className={styles.addToMyFavoriteButton}

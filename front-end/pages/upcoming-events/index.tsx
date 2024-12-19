@@ -16,13 +16,6 @@ const UpcomingEvents: React.FC = () => {
         getAll();
     }, []);
 
-    useEffect(() => {
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            setLoggedUser(JSON.parse(loggedInUser));
-        }
-    }, []);
-
     const getAll = async () => {
         const response = await EventService.getAll();
         const events = await response.json();
@@ -48,10 +41,10 @@ const UpcomingEvents: React.FC = () => {
             <Header />
             <main className={styles.upcomingEventsMain}>
                 <h1>Top Trending Events</h1>
-                {trendingEvents && <EventOverview events={trendingEvents} showDeleteButton={false} showLikeButton={true} email={loggedUser.email} />}
+                {trendingEvents && <EventOverview events={trendingEvents} showDeleteButton={false} showLikeButton={true} email="" />}
                 
                 <h1>Other events that you might like</h1>
-                {otherEvents && <EventOverview events={otherEvents} showDeleteButton={false} showLikeButton={true} email={loggedUser.email} />}
+                {otherEvents && <EventOverview events={otherEvents} showDeleteButton={false} showLikeButton={true} email="" />}
             </main>
         </>
     );

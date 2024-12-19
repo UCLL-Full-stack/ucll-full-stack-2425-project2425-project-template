@@ -7,10 +7,10 @@ const prisma = new PrismaClient();
 
 
 const main = async () => {
-    await prisma.ticket.deleteMany();
-    await prisma.user.deleteMany();
-    await prisma.event.deleteMany();
     await prisma.invite.deleteMany();
+    await prisma.ticket.deleteMany();
+    await prisma.event.deleteMany();
+    await prisma.user.deleteMany();
 
     const admin = await prisma.user.create({
         data: {
@@ -223,8 +223,7 @@ const main = async () => {
         data: {
             type: 'VIP',
             cost: 120,
-            user: {
-            },
+            user: {},
             event: {
                 connect: { id: taylorswiftconcert.id }
             },
@@ -235,9 +234,7 @@ const main = async () => {
         data: {
             type: 'VIP',
             cost: 140,
-            user: {
-                connect: { id: alice.id }
-            },
+            user: {},
             event: {
                 connect: { id: taylorswiftconcert.id }
             },
@@ -248,9 +245,7 @@ const main = async () => {
         data: {
             type: 'VIP',
             cost: 140,
-            user: {
-                connect: { id: john.id }
-            },
+            user: {},
             event: {
                 connect: { id: artExhibition.id }
             },
@@ -261,9 +256,7 @@ const main = async () => {
         data: {
             type: 'VIP',
             cost: 140,
-            user: {
-                connect: { id: jane.id }
-            },
+            user: {},
             event: {
                 connect: { id: artExhibition.id }
             },
@@ -274,9 +267,7 @@ const main = async () => {
         data: {
             type: 'REGULAR',
             cost: 50,
-            user: {
-                connect: { id: eve.id }
-            },
+            user: {},
             event: {
                 connect: { id: companyNetworkingNight.id }
             },
@@ -287,9 +278,7 @@ const main = async () => {
         data: {
             type: 'REGULAR',
             cost: 45,
-            user: {
-                connect: { id: bob.id }
-            },
+            user: {},
             event: {
                 connect: { id: companyNetworkingNight.id }
             },
@@ -300,9 +289,7 @@ const main = async () => {
         data: {
             type: 'REGULAR',
             cost: 65,
-            user: {
-                connect: { id: eve.id }
-            },
+            user: {},
             event: {
                 connect: { id: companyNetworkingNight.id }
             },
@@ -313,9 +300,7 @@ const main = async () => {
         data: {
             type: 'REGULAR',
             cost: 55,
-            user: {
-                connect: { id: charlie.id }
-            },
+            user: {},
             event: {
                 connect: { id: yogaWorkshop.id }
             },
@@ -326,9 +311,7 @@ const main = async () => {
         data: {
             type: 'REGULAR',
             cost: 55,
-            user: {
-                connect: { id: diana.id }
-            },
+            user: {},
             event: {
                 connect: { id: startupPitchCompetition.id }
             },
@@ -339,9 +322,7 @@ const main = async () => {
         data: {
             type: 'FREE',
             cost: 0,
-            user: {
-                connect: { id: eve.id }
-            },
+            user: {},
             event: {
                 connect: { id: companyNetworkingNight.id }
             },
@@ -352,9 +333,7 @@ const main = async () => {
         data: {
             type: 'FREE',
             cost: 0,
-            user: {
-                connect: { id: bob.id }
-            },
+            user: {},
             event: {
                 connect: { id: companyNetworkingNight.id }
             },
@@ -365,9 +344,7 @@ const main = async () => {
         data: {
             type: 'FREE',
             cost: 0,
-            user: {
-                connect: { id: bob.id }
-            },
+            user: {},
             event: {
                 connect: { id: companyNetworkingNight.id }
             },
@@ -378,9 +355,7 @@ const main = async () => {
         data: {
             type: 'FREE',
             cost: 0,
-            user: {
-                connect: { id: bob.id }
-            },
+            user: {},
             event: {
                 connect: { id: chrisBirthdayParty.id }
             },
@@ -391,9 +366,7 @@ const main = async () => {
         data: {
             type: 'STUDENT',
             cost: 12,
-            user: {
-                connect: { id: charlie.id }
-            },
+            user: {},
             event: {
                 connect: { id: yogaWorkshop.id }
             },
@@ -404,9 +377,7 @@ const main = async () => {
         data: {
             type: 'STUDENT',
             cost: 17,
-            user: {
-                connect: { id: diana.id }
-            },
+            user: {},
             event: {
                 connect: { id: yogaWorkshop.id }
             },
@@ -417,9 +388,7 @@ const main = async () => {
         data: {
             type: 'STUDENT',
             cost: 15,
-            user: {
-                connect: { id: charlie.id }
-            },
+            user: {},
             event: {
                 connect: { id: startupPitchCompetition.id }
             },
