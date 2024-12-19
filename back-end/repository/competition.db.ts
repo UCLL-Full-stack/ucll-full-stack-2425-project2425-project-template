@@ -26,6 +26,18 @@ const createCompetition = async ({ name, matchesPlayed }: Competition): Promise<
     }
 };
 
+const getCompetitionByName = async ({ name }: { name: string }): Promise<Competition | null> => {
+    try {
+        const competitionPrisma = await database.competition.findFirst({
+            where: { name },
+        });
+        return competitionPrisma ? Competition.from(competitionPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 const getCompetitionById = async ({ id }: { id: number }): Promise<Competition | null> => {
     try {
         const competitionPrisma = await database.competition.findUnique({
@@ -42,4 +54,5 @@ export default {
     getAllCompetitions,
     createCompetition,
     getCompetitionById,
+    getCompetitionByName,
 };
