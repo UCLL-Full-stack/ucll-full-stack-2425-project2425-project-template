@@ -38,7 +38,12 @@ const CocktailForm: React.FC<CocktailFormProps> = ({ onSubmit }) => {
       result = false;
     }
 
-    if (formData.strongness <= 0) {
+    if (formData.strongness <0 || formData.strongness > 5) {
+      setStrongnessError(t("addCocktail.strongnessRange"));
+      result = false;
+    }
+
+    if (formData.strongness === null || formData.strongness === undefined || isNaN(formData.strongness)) {
       setStrongnessError(t("addCocktail.strongnessRequired"));
       result = false;
     }
