@@ -1,8 +1,10 @@
 import { UnauthorizedError } from 'express-jwt';
 import { Recipe } from '../model/recipe';
 import recipeDb from '../repository/recipe.db';
-import { RecipeUpdateInput, Role } from '../types';
+import { RecipeUpdateInput, Role, NewRecipeInput, RecipeCategory } from '../types';
 import userDb from '../repository/user.db';
+import { RecipeIngredient } from '../model/recipeIngredient';
+import { Ingredient } from '../model/ingredient';
 
 const getRecipesByUserId = async (userId: number): Promise<Recipe[]> => {
     return await recipeDb.getRecipesByUserId(userId);
@@ -67,4 +69,41 @@ const deleteRecipe = async (id: number, userId: number, role: Role): Promise<voi
 
     await recipeDb.deleteRecipe({ id });
 };
-export default { getRecipesByUserId, getRecipeById, updateRecipe, deleteRecipe };
+
+const getFavoriteRecipesByUserId = async (userId: number): Promise<Recipe[]> => {
+    const recipes = await recipeDb.getRecipesByUserId(userId);
+    return recipes.filter((recipe) => recipe.getIsFavorite());
+};
+
+const createRecipe = async (recipeData: NewRecipeInput, userId: number): Promise<Recipe> => {
+    const ingredients: RecipeIngredient[] = recipeData.ingredients.map(
+        (ingredient) =>
+            new RecipeIngredient({
+                recipeId: 0,
+                ingredientId: ingredient.id,
+                ingredient: new Ingredient({
+                    id: ingredient.id,
+                    name: ingredient.name,
+                    category: ingredient.category,
+                }),
+                unit: ingredient.unit,
+                quantity: ingredient.quantity,
+            })
+    );
+
+    const recipe = new Recipe({
+        ...recipeData,
+        category: recipeData.category as RecipeCategory,
+        ingredients,
+    });
+    return await recipeDb.addRecipe(recipe, userId);
+};
+
+export default {
+    getRecipesByUserId,
+    getRecipeById,
+    updateRecipe,
+    deleteRecipe,
+    getFavoriteRecipesByUserId,
+    createRecipe,
+};

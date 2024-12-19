@@ -35,18 +35,20 @@ type NewRecipeInput = {
     cookingTime: number;
     category: string;
     ingredients: {
+        id: number;
         name: string;
+        category: IngredientCategory;
         quantity: number;
         unit: string;
-    };
+    }[];
 };
 
 type RecipeUpdateInput = {
-    title?: string;
-    instructions?: string;
-    cookingTime?: number;
-    category?: string;
-    ingredients?: {
+    title: string;
+    instructions: string;
+    cookingTime: number;
+    category: RecipeCategory;
+    ingredients: {
         ingredient: Ingredient;
         unit: string;
         quantity: number;
@@ -58,17 +60,17 @@ type RecipeUpdateInput = {
     scheduledDate?: Date;
 };
 
-type RecipeCategory = 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'other';
+type RecipeCategory = 'BREAKFAST' | 'LUNCH' | 'DINNER' | 'SNACK' | 'OTHER';
 
 type IngredientCategory =
-    | 'Produce' // Combines Vegetables & Fruits
-    | 'Meat & Fish' // Combines Meats & Seafood
-    | 'Dairy & Eggs'
-    | 'Pantry' // Combines Grain, Pasta, Canned, Baking, Spices, Oils
-    | 'Snacks'
-    | 'Beverages'
-    | 'Frozen'
-    | 'Other';
+    | 'PRODUCE' // Combines Vegetables & Fruits
+    | 'MEAT_FISH' // Combines Meats & Seafood
+    | 'DAIRY_EGGS'
+    | 'PANTRY' // Combines Grain, Pasta, Canned, Baking, Spices, Oils
+    | 'SNACKS'
+    | 'BEVERAGES'
+    | 'FROZEN'
+    | 'OTHER';
 
 export {
     IngredientCategory,

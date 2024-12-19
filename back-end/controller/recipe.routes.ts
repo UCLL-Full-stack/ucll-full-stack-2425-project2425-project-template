@@ -79,6 +79,54 @@ recipeRouter.get('/:recipeId', async (req: Request, res: Response, next: NextFun
     }
 });
 
+recipeRouter.get('/favorites', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username } = request.auth;
+        const userId = await userService.getUserIdFromUsername(username);
+
+        const favorites = await recipeService.getFavoriteRecipesByUserId(userId);
+        res.status(200).json(favorites.map((recipe) => recipe.toJSON()));
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /recipes:
+ *   post:
+ *     summary: Create a new recipe
+ *     tags: [Recipes]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NewRecipeInput'
+ *     responses:
+ *       201:
+ *         description: The created recipe object
+ *       403:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Internal server error
+ */
+recipeRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username } = request.auth;
+        const userId = await userService.getUserIdFromUsername(username);
+
+        const newRecipe = await recipeService.createRecipe(req.body, userId);
+        res.status(201).json(newRecipe.toJSON());
+    } catch (error) {
+        next(error);
+    }
+});
+
 /**
  * @swagger
  * /recipes/{recipeId}:

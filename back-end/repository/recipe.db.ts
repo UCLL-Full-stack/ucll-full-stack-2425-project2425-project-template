@@ -1,6 +1,7 @@
-import { RecipeCategory } from '@prisma/client';
+import { IngredientCategory, RecipeCategory } from '@prisma/client';
 import { Recipe } from '../model/recipe';
 import database from './database';
+import { Ingredient } from '../model/ingredient';
 
 const getAllRecipes = async (): Promise<Recipe[]> => {
     try {
@@ -41,8 +42,12 @@ const getRecipesByUserId = async (userId: number): Promise<Recipe[]> => {
 
 const getRecipeById = async ({ id }: { id: number }): Promise<Recipe | null> => {
     try {
+        if (typeof id !== 'number' || isNaN(id)) {
+            throw new Error('Invalid id type');
+        }
+
         const recipePrisma = await database.recipe.findUnique({
-            where: { id },
+            where: { id: id },
             include: {
                 ingredients: {
                     include: {
@@ -58,36 +63,112 @@ const getRecipeById = async ({ id }: { id: number }): Promise<Recipe | null> => 
     }
 };
 
+// Method to get ingredient ID by name and category
+const getIngredientIdByName = async (name: string): Promise<number | null> => {
+    const ingredient = await database.ingredient.findUnique({
+        where: {
+            name: name,
+        },
+    });
+    return ingredient ? ingredient.id : null;
+};
+
+// Method to add a new ingredient
+const addIngredient = async (name: string, category: IngredientCategory): Promise<Ingredient> => {
+    const newIngredient = await database.ingredient.create({
+        data: {
+            name,
+            category,
+        },
+    });
+    return Ingredient.from(newIngredient);
+};
+
 const addRecipe = async (recipe: Recipe, userId: number): Promise<Recipe> => {
     try {
+        const category = recipe.getCategory().toUpperCase() as RecipeCategory;
+        const scheduledDate =
+            recipe.getScheduledDate() instanceof Date
+                ? recipe.getScheduledDate()?.toISOString()
+                : null;
+
+        // Process ingredients
+        const ingredients = await Promise.all(
+            recipe.getIngredients()?.map(async (ingredient) => {
+                const ingredientData = ingredient.getIngredient();
+                const ingredientName = ingredientData?.getName() || '';
+                const ingredientCategory =
+                    (ingredientData?.getCategory()?.toUpperCase() as IngredientCategory) || 'Other';
+
+                let ingredientId = ingredientData?.getId();
+                console.log(
+                    `Processing ingredient: ${ingredientName}, category: ${ingredientCategory}, initial ID: ${ingredientId}`
+                );
+
+                if (!ingredientId) {
+                    ingredientId = (await getIngredientIdByName(ingredientName)) ?? undefined;
+                    console.log(
+                        `Found ingredient ID: ${ingredientId} for ingredient: ${ingredientName}`
+                    );
+
+                    if (!ingredientId) {
+                        const newIngredient = await addIngredient(
+                            ingredientName,
+                            ingredientCategory
+                        );
+                        ingredientId = newIngredient.getId();
+                        console.log(
+                            `Created new ingredient ID: ${ingredientId} for ingredient: ${ingredientName}`
+                        );
+                    }
+                }
+
+                if (ingredientId === undefined) {
+                    throw new Error(`Ingredient ID not found for ingredient: ${ingredientName}`);
+                }
+
+                return {
+                    unit: ingredient.getUnit(),
+                    quantity: ingredient.getQuantity(),
+                    ingredientId,
+                };
+            }) ?? []
+        );
+
+        console.log('Ingredients processed:', ingredients);
+
+        // Save the recipe first
         const newRecipePrisma = await database.recipe.create({
             data: {
                 title: recipe.getTitle(),
                 instructions: recipe.getInstructions(),
                 cookingTime: recipe.getCookingTime(),
-                category: recipe.getCategory() as RecipeCategory,
-                imageUrl: recipe.getImageUrl(),
-                isFavorite: recipe.getIsFavorite(),
-                notes: recipe.getNotes(),
-                source: recipe.getSource(),
-                scheduledDate: recipe.getScheduledDate() ?? null,
+                category,
+                imageUrl: recipe.getImageUrl() || null,
+                isFavorite: recipe.getIsFavorite() || false,
+                notes: recipe.getNotes() || null,
+                source: recipe.getSource() || null,
+                scheduledDate,
+                userId,
                 ingredients: {
-                    create: recipe.getIngredients()?.map((ingredient) => ({
-                        ingredientId: ingredient.getIngredientId(),
-                        unit: ingredient.getUnit(),
-                        quantity: ingredient.getQuantity(),
+                    create: ingredients.map((ingredient) => ({
+                        ingredientId: ingredient.ingredientId,
+                        unit: ingredient.unit,
+                        quantity: ingredient.quantity,
                     })),
                 },
-                userId: userId,
             },
             include: {
                 ingredients: true,
             },
         });
+
+        console.log('Recipe created with ID:', newRecipePrisma.id);
+
         return Recipe.from(newRecipePrisma);
     } catch (error) {
-        console.log(error);
-        throw new Error('Database error. See server log for details');
+        console.error('Error adding recipe:', error);
+        throw error;
     }
 };
 

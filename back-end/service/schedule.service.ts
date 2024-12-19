@@ -75,8 +75,57 @@ const deleteScheduledRecipe = async (
     await recipeDb.saveRecipe(recipe, userId);
 };
 
+const copyMeals = async (userId: number, date: Date): Promise<Recipe[]> => {
+    const schedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date);
+    if (!schedule) throw new Error('No meals found for the specified date');
+
+    return schedule.getRecipes() || [];
+};
+
+const pasteMeals = async (
+    userId: number,
+    sourceDate: Date,
+    targetDate: Date
+): Promise<Recipe[]> => {
+    const sourceSchedule = await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, sourceDate);
+    if (!sourceSchedule) throw new Error('No meals found for the source date');
+
+    const targetSchedule =
+        (await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, targetDate)) ||
+        (await scheduleDb.createSchedule(userId, targetDate));
+
+    const recipes = sourceSchedule.getRecipes() || [];
+    for (const recipe of recipes) {
+        targetSchedule.addRecipe(recipe);
+    }
+
+    await scheduleDb.saveSchedule(targetSchedule);
+
+    return targetSchedule.getRecipes() || [];
+};
+
+const scheduleRecipe = async (userId: number, recipeId: number, date: Date): Promise<Recipe> => {
+    const recipe = await recipeDb.getRecipeById({ id: recipeId });
+    if (!recipe) throw new Error(`Recipe with id ${recipeId} does not exist.`);
+
+    const schedule =
+        (await scheduleDb.getScheduledRecipesByUserIdAndDate(userId, date)) ||
+        (await scheduleDb.createSchedule(userId, date));
+
+    schedule.addRecipe(recipe);
+    await scheduleDb.saveSchedule(schedule);
+
+    recipe.setScheduledDate(date);
+    await recipeDb.saveRecipe(recipe, userId);
+
+    return recipe;
+};
+
 export default {
     getScheduledRecipeDetails,
     updateRecipeDate,
     deleteScheduledRecipe,
+    copyMeals,
+    pasteMeals,
+    scheduleRecipe,
 };
