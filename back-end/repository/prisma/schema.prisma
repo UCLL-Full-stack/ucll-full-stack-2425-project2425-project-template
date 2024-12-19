@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  password  String
+  profile   Profile?
+  recipes   Recipe[]
+  schedule  Schedule?
+}
+
+model Profile {
+  id        Int    @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String  @unique
+  userId    Int     @unique
+  user      User    @relation(fields: [userId], references: [id])
+}
+
+model Recipe {
+  id           Int               @id @default(autoincrement())
+  title        String
+  instructions String
+  cookingTime  Int
+  category     RecipeCategory
+  userId       Int
+  user         User              @relation(fields: [userId], references: [id])
+  ingredients  RecipeIngredient[]
+  imageUrl     String?
+  isFavorite   Boolean?
+  notes        String?
+  source       String?
+  scheduleId   Int?
+  schedule     Schedule?         @relation(fields: [scheduleId], references: [id])
+  scheduledDate DateTime?
+}
+
+model Ingredient {
+  id        Int               @id @default(autoincrement())
+  name      String
+  category  IngredientCategory
+  store     String?
+  recipes   RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  id          Int        @id @default(autoincrement())
+  recipeId    Int
+  recipe      Recipe     @relation(fields: [recipeId], references: [id])
+  ingredientId Int
+  ingredient  Ingredient @relation(fields: [ingredientId], references: [id])
+  unit        String
+  quantity    Float
+}
+
+model Schedule {
+  id       Int      @id @default(autoincrement())
+  userId   Int      @unique
+  user     User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  recipes  Recipe[]
+}
+
+enum RecipeCategory {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+  OTHER
+}
+
+enum IngredientCategory {
+  PRODUCE
+  MEAT_FISH
+  DAIRY_EGGS
+  PANTRY
+  SNACKS
+  BEVERAGES
+  FROZEN
+  OTHER
+}
