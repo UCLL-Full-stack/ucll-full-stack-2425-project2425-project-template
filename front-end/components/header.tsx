@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Language from './language/Language';
 import { useTranslation } from "next-i18next";
@@ -6,7 +6,19 @@ import { useTranslation } from "next-i18next";
 const Header: React.FC = () => {
 
       const {t} = useTranslation()
+
+      const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
   
+      useEffect(() => {
+        const user = localStorage.getItem("loggedInUser");
+        if (user) {
+          const parsedUser = JSON.parse(user);
+          setLoggedInUser(parsedUser.fullname);
+        }
+        // setLoggedInUser(localStorage.getItem("loggedInUser"));
+        
+      }, []);
+
 
   const banners = [
     "/banners/neonbanner.png",
@@ -26,6 +38,11 @@ const Header: React.FC = () => {
 
   const handleBannerClick = () => {
     setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
+  };
+
+  const handleClick = () => {
+    localStorage.removeItem("loggedInUser");
+    setLoggedInUser(null);
   };
 
   return (
@@ -59,11 +76,28 @@ const Header: React.FC = () => {
             {t('header.search')}
           </button>
         </Link>
+        {!loggedInUser && (
         <Link href="http://localhost:8080/login/">
           <button className="navbarbutton-stylah">
             {t('header.login')}
           </button>
         </Link>
+      )}
+       {loggedInUser && (
+          <a
+            href="/login"
+            onClick={handleClick}
+            className="navbarbutton-stylah"
+          >
+            {t("header.nav.logout")}
+          </a>
+        )}
+        {loggedInUser && (
+          <div className="navbarbutton-stylah">
+            {t("header.welcome")}, {loggedInUser}!
+          </div>
+
+        )}
         <Language />
       </nav>
     </header>

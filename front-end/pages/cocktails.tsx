@@ -1,8 +1,11 @@
 import CocktailList from '@components/cocktail/CocktailList';
 import Head from 'next/head';
 import Header from '@components/header';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const Home: React.FC = () => {
+  const {t} = useTranslation()
   return (
     <>
       <Head>
@@ -18,5 +21,15 @@ const Home: React.FC = () => {
     </>
   );
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+}; 
 
 export default Home;
