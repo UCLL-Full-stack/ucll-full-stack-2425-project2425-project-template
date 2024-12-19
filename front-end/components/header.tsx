@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import Language from "@components/language/Language";
 import i18next from 'i18next';
+import React from 'react';
 
 const Header: React.FC = () => {
-  const [loggedInUser, setLoggedInUser] = useState<{ username: string; role: string } | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<{ username: string; permission: string } | null>(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -39,13 +40,24 @@ const Header: React.FC = () => {
         <Link href="/overview" className="nav-link px-4 fs-5 text-white">
           {t('header.informationOverview')}
         </Link>
-        <Link href="/submission_form" className="nav-link px-4 fs-5 text-white">
-          {t('header.submissionForm')}
-        </Link>
         {loggedInUser ? (
-          <button onClick={handleLogout} className="nav-link px-4 fs-5 text-white btn btn-link">
-            {t('header.logout')}
-          </button>
+          <>
+            <>
+              {loggedInUser.permission === 'ADMIN' ? (
+                <React.Fragment>
+                  <Link href="/administration" className="nav-link px-4 fs-5 text-white">Overview Users</Link>
+                  <Link href="/submission_form" className="nav-link px-4 fs-5 text-white">Overview Submissions</Link>
+                </React.Fragment>
+              ) : (
+                <Link href="/submission_form" className="nav-link px-4 fs-5 text-white">
+                  {t('header.submissionForm')}
+                </Link>
+              )}
+            </>
+            <button onClick={handleLogout} className="nav-link px-4 fs-5 text-white btn btn-link">
+              {loggedInUser.username}
+            </button>
+          </>
         ) : (
           <Link href="/login" className="nav-link px-4 fs-5 text-white">
             {t('header.login')}
