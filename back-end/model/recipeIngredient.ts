@@ -40,7 +40,7 @@ export class RecipeIngredient {
             quantity,
         });
         if (ingredient) {
-            recipeIngredient.ingredient = Ingredient.from(ingredient); // Assume an `Ingredient.from` method exists
+            recipeIngredient.ingredient = Ingredient.from(ingredient);
         }
         return recipeIngredient;
     }

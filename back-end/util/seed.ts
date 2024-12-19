@@ -15,13 +15,11 @@ const main = async () => {
 
     const user1 = await prisma.user.create({
         data: {
-            id: 1,
             username: 'annie',
             password: await bcrypt.hash('@NNie123', 12),
             role: 'admin',
             profile: {
                 create: {
-                    id: 1,
                     firstName: 'Anette',
                     lastName: 'Hardy',
                     email: 'annie@ucll.be',
@@ -32,13 +30,11 @@ const main = async () => {
 
     const user2 = await prisma.user.create({
         data: {
-            id: 2,
             username: 'shulin',
             password: await bcrypt.hash('Shul!n123', 12),
             role: 'user',
             profile: {
                 create: {
-                    id: 2,
                     firstName: 'Shulin',
                     lastName: 'Xu',
                     email: 'shulin@ucll.be',
@@ -49,13 +45,11 @@ const main = async () => {
 
     const user3 = await prisma.user.create({
         data: {
-            id: 3,
             username: 'amelie',
             password: await bcrypt.hash('h0tchOcol@te101', 12),
             role: 'guest',
             profile: {
                 create: {
-                    id: 3,
                     firstName: 'Amelie',
                     lastName: 'Lammens',
                     email: 'amelie@ucll.be',
@@ -66,7 +60,6 @@ const main = async () => {
 
     const schedule1 = await prisma.schedule.create({
         data: {
-            id: 1,
             userId: user1.id,
             createdAt: new Date(),
         },
@@ -74,25 +67,26 @@ const main = async () => {
 
     const ingredients = await prisma.ingredient.createMany({
         data: [
-            { id: 1, name: 'Spaghetti', category: 'PANTRY' },
-            { id: 2, name: 'Tomato Sauce', category: 'PANTRY' },
-            { id: 3, name: 'Chicken Breast', category: 'MEAT_FISH' },
-            { id: 4, name: 'Lettuce', category: 'PRODUCE' },
-            { id: 5, name: 'Bread', category: 'PANTRY' },
-            { id: 6, name: 'Cheese', category: 'DAIRY_EGGS' },
-            { id: 7, name: 'Butter', category: 'DAIRY_EGGS' },
-            { id: 8, name: 'Apple', category: 'PRODUCE' },
-            { id: 9, name: 'Mixed Vegetables', category: 'PRODUCE' },
-            { id: 10, name: 'Soy Sauce', category: 'PANTRY' },
-            { id: 11, name: 'Flour', category: 'PANTRY' },
-            { id: 12, name: 'Sugar', category: 'PANTRY' },
-            { id: 13, name: 'Chocolate Chips', category: 'PANTRY' },
+            { name: 'Spaghetti', category: 'PANTRY' },
+            { name: 'Tomato Sauce', category: 'PANTRY' },
+            { name: 'Chicken Breast', category: 'MEAT_FISH' },
+            { name: 'Lettuce', category: 'PRODUCE' },
+            { name: 'Bread', category: 'PANTRY' },
+            { name: 'Cheese', category: 'DAIRY_EGGS' },
+            { name: 'Butter', category: 'DAIRY_EGGS' },
+            { name: 'Apple', category: 'PRODUCE' },
+            { name: 'Mixed Vegetables', category: 'PRODUCE' },
+            { name: 'Soy Sauce', category: 'PANTRY' },
+            { name: 'Flour', category: 'PANTRY' },
+            { name: 'Sugar', category: 'PANTRY' },
+            { name: 'Chocolate Chips', category: 'PANTRY' },
         ],
     });
 
+    const ingredientIds = await prisma.ingredient.findMany();
+
     const recipe1 = await prisma.recipe.create({
         data: {
-            id: 1,
             title: 'Spaghetti Bolognese',
             instructions: 'Cook pasta, prepare sauce, mix together',
             cookingTime: 30,
@@ -108,7 +102,6 @@ const main = async () => {
 
     const recipe2 = await prisma.recipe.create({
         data: {
-            id: 2,
             title: 'Chicken Salad',
             instructions: 'Grill chicken, chop lettuce, mix together',
             cookingTime: 20,
@@ -124,7 +117,6 @@ const main = async () => {
 
     const recipe3 = await prisma.recipe.create({
         data: {
-            id: 3,
             title: 'Grilled Cheese Sandwich',
             instructions: 'Butter the bread, Place cheese between slices, Grill until golden brown',
             cookingTime: 10,
@@ -142,7 +134,6 @@ const main = async () => {
 
     const recipe4 = await prisma.recipe.create({
         data: {
-            id: 4,
             title: 'Apple Snack',
             instructions: 'Wash the apple and enjoy!',
             cookingTime: 1,
@@ -158,7 +149,6 @@ const main = async () => {
 
     const recipe5 = await prisma.recipe.create({
         data: {
-            id: 5,
             title: 'Vegetable Stir Fry',
             instructions:
                 'Heat oil in a wok, add vegetables, stir fry for 5 minutes, add soy sauce, cook for 2 more minutes',
@@ -175,7 +165,6 @@ const main = async () => {
 
     const recipe6 = await prisma.recipe.create({
         data: {
-            id: 6,
             title: 'Chocolate Chip Cookies',
             instructions:
                 'Cream butter and sugar, add flour and chocolate chips, bake at 180°C for 10-12 minutes',
@@ -192,20 +181,90 @@ const main = async () => {
 
     await prisma.recipeIngredient.createMany({
         data: [
-            { recipeId: recipe1.id, ingredientId: 1, unit: 'g', quantity: 200 },
-            { recipeId: recipe1.id, ingredientId: 2, unit: 'ml', quantity: 150 },
-            { recipeId: recipe2.id, ingredientId: 3, unit: 'g', quantity: 150 },
-            { recipeId: recipe2.id, ingredientId: 4, unit: 'g', quantity: 100 },
-            { recipeId: recipe3.id, ingredientId: 5, unit: 'slices', quantity: 2 },
-            { recipeId: recipe3.id, ingredientId: 6, unit: 'g', quantity: 50 },
-            { recipeId: recipe3.id, ingredientId: 7, unit: 'g', quantity: 10 },
-            { recipeId: recipe4.id, ingredientId: 8, unit: 'piece', quantity: 1 },
-            { recipeId: recipe5.id, ingredientId: 9, unit: 'g', quantity: 300 },
-            { recipeId: recipe5.id, ingredientId: 10, unit: 'ml', quantity: 30 },
-            { recipeId: recipe6.id, ingredientId: 7, unit: 'g', quantity: 113 },
-            { recipeId: recipe6.id, ingredientId: 11, unit: 'g', quantity: 150 },
-            { recipeId: recipe6.id, ingredientId: 12, unit: 'g', quantity: 100 },
-            { recipeId: recipe6.id, ingredientId: 13, unit: 'g', quantity: 170 },
+            {
+                recipeId: recipe1.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Spaghetti')!.id,
+                unit: 'g',
+                quantity: 200,
+            },
+            {
+                recipeId: recipe1.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Tomato Sauce')!.id,
+                unit: 'ml',
+                quantity: 150,
+            },
+            {
+                recipeId: recipe2.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Chicken Breast')!.id,
+                unit: 'g',
+                quantity: 150,
+            },
+            {
+                recipeId: recipe2.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Lettuce')!.id,
+                unit: 'g',
+                quantity: 100,
+            },
+            {
+                recipeId: recipe3.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Bread')!.id,
+                unit: 'slices',
+                quantity: 2,
+            },
+            {
+                recipeId: recipe3.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Cheese')!.id,
+                unit: 'g',
+                quantity: 50,
+            },
+            {
+                recipeId: recipe3.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Butter')!.id,
+                unit: 'g',
+                quantity: 10,
+            },
+            {
+                recipeId: recipe4.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Apple')!.id,
+                unit: 'piece',
+                quantity: 1,
+            },
+            {
+                recipeId: recipe5.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Mixed Vegetables')!.id,
+                unit: 'g',
+                quantity: 300,
+            },
+            {
+                recipeId: recipe5.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Soy Sauce')!.id,
+                unit: 'ml',
+                quantity: 30,
+            },
+            {
+                recipeId: recipe6.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Butter')!.id,
+                unit: 'g',
+                quantity: 113,
+            },
+            {
+                recipeId: recipe6.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Flour')!.id,
+                unit: 'g',
+                quantity: 150,
+            },
+            {
+                recipeId: recipe6.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Sugar')!.id,
+                unit: 'g',
+                quantity: 100,
+            },
+            {
+                recipeId: recipe6.id,
+                ingredientId: ingredientIds.find((i) => i.name === 'Chocolate Chips')!.id,
+                unit: 'g',
+                quantity: 170,
+            },
         ],
     });
 };

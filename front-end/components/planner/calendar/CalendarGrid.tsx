@@ -47,7 +47,8 @@ const CalendarGrid: React.FC = () => {
           0
         );
 
-        // Iterate over each day in the month
+        const newRecipesByDate: Record<string, Recipe[]> = {};
+
         for (
           let date = new Date(startDate);
           date <= endDate;
@@ -59,12 +60,8 @@ const CalendarGrid: React.FC = () => {
               dateString,
               userToken
             );
-
             if (recipes.length > 0) {
-              setRecipesByDate((prev) => ({
-                ...prev,
-                [dateString]: recipes,
-              }));
+              newRecipesByDate[dateString] = recipes;
             }
           } catch (error) {
             console.error(
@@ -74,6 +71,8 @@ const CalendarGrid: React.FC = () => {
             );
           }
         }
+
+        setRecipesByDate(newRecipesByDate);
       } catch (error) {
         console.error(t("errorFetchingMonthRecipes"), error);
       }
@@ -157,8 +156,30 @@ const CalendarGrid: React.FC = () => {
     // to implement!
   };
 
-  const handleDeleteMeals = () => {
-    // to implement!
+  const handleDeleteMeals = async () => {
+    const userToken = localStorage.getItem("token");
+    if (userToken) {
+      try {
+        const updatedRecipesByDate = { ...recipesByDate };
+        for (const date of selectedDates) {
+          const dateString = formatDateUTC(date);
+          const recipes = recipesByDate[dateString] || [];
+          for (const recipe of recipes) {
+            if (recipe.id !== undefined) {
+              await PlannerService.deleteMeal(recipe.id, dateString, userToken);
+            }
+          }
+          delete updatedRecipesByDate[dateString]; // remove date from the state
+        }
+        setRecipesByDate(updatedRecipesByDate); // update the state
+        setSelectedDates([]);
+        fetchMonthRecipes(); // refresh calendar after deletion
+      } catch (error) {
+        console.error("Error deleting meals:", error);
+      }
+    } else {
+      console.error("No token found in local storage");
+    }
   };
 
   const handleGoToToday = () => {
@@ -212,13 +233,15 @@ const CalendarGrid: React.FC = () => {
               }}
               onMouseEnter={setHoveredDate}
               onMouseLeave={() => setHoveredDate(null)}
+              recipesByDate={recipesByDate}
+              fetchMonthRecipes={fetchMonthRecipes}
             />
           ))}
         </section>
       </CardContent>
       {showRecipePopup && selectedDate && (
         <DailyMealsPopup
-          userId={1}
+          userId={1} // Replace with actual user ID
           date={selectedDate}
           onClose={() => setShowRecipePopup(false)}
         />

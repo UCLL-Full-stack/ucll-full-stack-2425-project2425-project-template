@@ -1,4 +1,8 @@
-import { Plus, Trash, Copy, ClipboardPaste, Heart } from "lucide-react";
+/*
+ * RightClickMenu component is a context menu
+ */
+
+import { Plus, Trash2, Heart } from "lucide-react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -9,22 +13,18 @@ import { useTranslation } from "react-i18next";
 
 type Props = {
   children: React.ReactNode;
-  onAddNewMeal?: () => void;
-  onAddExistingMeal?: () => void;
-  onAddFavoriteMeal?: () => void;
-  onDeleteMeal?: () => void;
-  onCopyMeal?: () => void;
-  onPasteMeal?: () => void;
+  onAddNewMeal: () => void;
+  onAddExistingMeal: () => void;
+  onDeleteMeals: () => void;
+  date: Date;
 };
 
 const RightClickMenu: React.FC<Props> = ({
   children,
   onAddNewMeal,
   onAddExistingMeal,
-  onAddFavoriteMeal,
-  onDeleteMeal,
-  onCopyMeal,
-  onPasteMeal,
+  onDeleteMeals,
+  date,
 }) => {
   const { t } = useTranslation();
 
@@ -34,26 +34,15 @@ const RightClickMenu: React.FC<Props> = ({
       <ContextMenuContent className="w-48">
         <ContextMenuItem onClick={onAddNewMeal}>
           <Plus className="mr-2 h-4 w-4" />
-          {t('addNewMeal')}
+          {t("addNewMeal")}
         </ContextMenuItem>
         <ContextMenuItem onClick={onAddExistingMeal}>
-          {t('addExistingMeal')}
-        </ContextMenuItem>
-        <ContextMenuItem onClick={onAddFavoriteMeal}>
           <Heart className="mr-2 h-4 w-4" />
-          {t('addFavoriteMeal')}
+          Add Existing Meal
         </ContextMenuItem>
-        <ContextMenuItem onClick={onDeleteMeal}>
-          <Trash className="mr-2 h-4 w-4" />
-          {t('deleteMeal')}
-        </ContextMenuItem>
-        <ContextMenuItem onClick={onCopyMeal}>
-          <Copy className="mr-2 h-4 w-4" />
-          {t('copyMeal')}
-        </ContextMenuItem>
-        <ContextMenuItem onClick={onPasteMeal}>
-          <ClipboardPaste className="mr-2 h-4 w-4" />
-          {t('pasteMeal')}
+        <ContextMenuItem onClick={onDeleteMeals}>
+          <Trash2 className="mr-2 h-4 w-4" />
+          Delete Meals
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

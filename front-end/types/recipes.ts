@@ -7,28 +7,28 @@ type Ingredient = {
   store?: string;
 };
 
-type RecipeIngredient = {
-  ingredient: Ingredient;
-  unit: string;
-  quantity: number;
-};
+// type RecipeIngredient = {
+//   ingredient: Ingredient;
+//   unit: string;
+//   quantity: number;
+// };
 
 type Recipe = {
-  id: number;
+  id?: number;
   title: string;
   instructions: string;
   cookingTime: number;
   category: RecipeCategory;
-  ingredients: RecipeIngredient[];
+  ingredients: Ingredient[];
   user: {
     id: number;
     username: string;
   };
-  imageUrl: string;
-  isFavorite: boolean;
+  imageUrl?: string;
+  isFavorite?: boolean;
   notes?: string;
   source?: string;
-  scheduledDate: Date;
+  scheduledDate?: Date;
 };
 
 type RecipeCategory = "breakfast" | "lunch" | "dinner" | "snack" | "other";
@@ -44,5 +44,5 @@ enum IngredientCategory {
   Other = "Other",
 }
 
-export type { Ingredient, RecipeIngredient, Recipe };
+export type { Ingredient, Recipe, RecipeCategory };
 export { IngredientCategory };

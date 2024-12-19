@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 
 type Props = {
   currentDate: Date;
@@ -46,10 +46,10 @@ const CalendarHeader: React.FC<Props> = ({
   onToggleSelectionMode,
   onChangeViewMode,
   onDeleteMeals,
-  onAddToShoppingList,
+  // onAddToShoppingList,
   onToday,
 }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
 
   return (
     <section className="flex justify-between items-center mb-4">
@@ -88,14 +88,14 @@ const CalendarHeader: React.FC<Props> = ({
         >
           {t("deleteMeals")}
         </Button>
-        <Button
+        {/* <Button
           variant="outline"
           disabled={selectedDatesCount === 0}
           onClick={onAddToShoppingList}
         >
           <ShoppingCart className="h-4 w-4 mr-1" />
           {t("addToShoppingList")}
-        </Button>
+        </Button> */}
         <Select
           onValueChange={(value) => onChangeViewMode(value as "Month" | "Week")}
         >

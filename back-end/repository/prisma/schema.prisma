@@ -46,10 +46,11 @@ model Recipe {
 
 model Ingredient {
   id        Int               @id @default(autoincrement())
-  name      String
+  name      String            @unique
   category  IngredientCategory
   store     String?
   recipes   RecipeIngredient[]
+
 }
 
 model RecipeIngredient {
