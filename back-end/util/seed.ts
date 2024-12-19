@@ -44,53 +44,56 @@ async function main() {
   // Seed Ingredients
   const ingredients = await prisma.ingredient.createMany({
     data: [
-      { name: "White rum" },
-      { name: "Mint leaves" },
-      { name: "Lime" },
-      { name: "Sugar" },
-      { name: "Soda water" },
-      { name: "Ice" },
-      { name: "Vodka" },
-      { name: "Ginger beer" },
-      { name: "Lime juice" },
-      { name: "Lime wedge" },
-      { name: "Amaretto liqueur" },
-      { name: "Lemon juice" },
-      { name: "Simple syrup" },
-      { name: "Egg white" },
-      { name: "Cherry" },
-      { name: "Vanilla vodka" },
-      { name: "Passion fruit puree" },
-      { name: "Prosecco" },
-      { name: "Half passion fruit" },
-      { name: "Cachaça" },
-      { name: "Gin" },
-      { name: "Lillet Blanc" },
-      { name: "Lemon twist" },
-      { name: "Dry vermouth" },
-      { name: "Olive" },
-      { name: "Triple sec" },
-      { name: "Cranberry juice" },
-      { name: "Coffee liqueur" },
-      { name: "Espresso" },
-      { name: "Basil leaves" },
-      { name: "Coconut cream" },
-      { name: "Pineapple juice" },
-      { name: "Tequila" },
-      { name: "Dark rum" },
-      { name: "Apricot brandy" },
-      { name: "Orange curaçao" },
-      { name: "Campari" },
-      { name: "Sweet vermouth" },
-      { name: "Tomato juice" },
-      { name: "Worcestershire sauce" },
-      { name: "Tabasco" },
-      { name: "Salt and pepper" },
-      { name: "Rye whiskey" },
-      { name: "Angostura bitters" },
-      { name: "Blended scotch" },
-      { name: "Honey-ginger syrup" },
-      { name: "Islay scotch" },
+      { name: "White rum" }, // 1
+      { name: "Mint leaves" },// 2
+      { name: "Lime" },// 3
+      { name: "Sugar" },// 4
+      { name: "Soda water" }, //5
+      { name: "Ice" }, // 6
+      { name: "Vodka" }, // 7
+      { name: "Ginger beer" }, // 8
+      { name: "Lime juice" }, // 9
+      { name: "Lime wedge" }, // 10
+      { name: "Amaretto liqueur" }, // 11
+      { name: "Lemon juice" }, // 12
+      { name: "Simple syrup" },   // 13
+      { name: "Egg white" }, // 14
+      { name: "Cherry" }, // 15
+      { name: "Vanilla vodka" }, // 16
+      { name: "Passion fruit puree" }, // 17
+      { name: "Prosecco" }, // 18
+      { name: "Half passion fruit" }, // 19
+      { name: "Cachaça" }, // 20
+      { name: "Gin" }, // 21
+      { name: "Lillet Blanc" }, // 22
+      { name: "Lemon twist" }, // 23
+      { name: "Dry vermouth" }, // 24
+      { name: "Olive" }, // 25
+      { name: "Triple sec" },   // 26
+      { name: "Cranberry juice" }, // 27
+      { name: "Coffee liqueur" }, // 28
+      { name: "Espresso" }, // 29
+      { name: "Basil leaves" }, // 30
+      { name: "Coconut cream" }, // 31
+      { name: "Pineapple juice" }, // 32
+      { name: "Tequila" }, // 33
+      { name: "Dark rum" }, // 34
+      { name: "Apricot brandy" }, // 35
+      { name: "Orange curaçao" }, // 36
+      { name: "Campari" }, // 37
+      { name: "Sweet vermouth" }, // 38
+      { name: "Tomato juice" }, // 39
+      { name: "Worcestershire sauce" }, // 40
+      { name: "Tabasco" }, // 41
+      { name: "Salt and pepper" }, // 42
+      { name: "Rye whiskey" }, // 43
+      { name: "Angostura bitters" }, // 44
+      { name: "Blended scotch" }, // 45
+      { name: "Honey-ginger syrup" }, // 46
+      { name: "Islay scotch" }, // 47
+      { name: "Aperol" }, // 48
+      { name: "Prosecco" }, // 49
+      { name: "Soda water" }, // 50
     ],
   });
 
@@ -116,8 +119,132 @@ async function main() {
       { cocktailId: 1, ingredientId: 4, amount: "2 tsp" },
       { cocktailId: 1, ingredientId: 5, amount: "Top off" },
       { cocktailId: 1, ingredientId: 6, amount: "As needed" },
-      // Additional cocktail-ingredient relationships... hmm, I'm not going to type all of them
-    ],
+
+      { cocktailId: 2, ingredientId: 7, amount: "60ml" }, // Vodka
+      { cocktailId: 2, ingredientId: 8, amount: "120ml" }, // Ginger beer
+      { cocktailId: 2, ingredientId: 9, amount: "15ml" }, // Lime juice
+      { cocktailId: 2, ingredientId: 6, amount: "As needed" }, // Ice
+      { cocktailId: 2, ingredientId: 10, amount: "1 wedge" }, // Lime wedge
+
+      // Amaretto Sour
+      { cocktailId: 3, ingredientId: 11, amount: "45ml" }, // Amaretto liqueur
+      { cocktailId: 3, ingredientId: 12, amount: "30ml" }, // Lemon juice
+      { cocktailId: 3, ingredientId: 13, amount: "10ml" }, // Simple syrup
+      { cocktailId: 3, ingredientId: 14, amount: "(1 optional)" }, // Egg white
+      { cocktailId: 3, ingredientId: 6, amount: "As needed" }, // Ice
+      { cocktailId: 3, ingredientId: 15, amount: "For garnish" }, // Cherry
+
+      // Pornstar Martini
+      { cocktailId: 4, ingredientId: 16, amount: "45ml" }, // Vanilla vodka
+      { cocktailId: 4, ingredientId: 17, amount: "30ml" }, // Passion fruit puree
+      { cocktailId: 4, ingredientId: 12, amount: "15ml" }, // Lime juice
+      { cocktailId: 4, ingredientId: 18, amount: "Served on the side" }, // Prosecco
+      { cocktailId: 4, ingredientId: 6, amount: "As needed" }, // Ice
+      { cocktailId: 4, ingredientId: 19, amount: "1/2 for garnish" }, // Half passion fruit
+
+      // Caipirinha
+      { cocktailId: 5, ingredientId: 20, amount: "50ml" }, // Cachaça
+      { cocktailId: 5, ingredientId: 3, amount: "1 whole" }, // Lime
+      { cocktailId: 5, ingredientId: 4, amount: "2 tsp" }, // Sugar
+      { cocktailId: 5, ingredientId: 6, amount: "As needed" }, // Ice
+
+      // Vesper
+      { cocktailId: 6, ingredientId: 21, amount: "60ml" }, // Gin
+      { cocktailId: 6, ingredientId: 7, amount: "15ml" }, // Vodka
+      { cocktailId: 6, ingredientId: 22, amount: "7.5ml" }, // Lillet Blanc
+      { cocktailId: 6, ingredientId: 23, amount: "1 for garnish" }, // Lemon twist
+
+      // Vodka Martini
+      { cocktailId: 7, ingredientId: 7, amount: "60ml" }, // Vodka
+      { cocktailId: 7, ingredientId: 24, amount: "15ml" }, // Dry vermouth
+      { cocktailId: 7, ingredientId: 25, amount: "1 for garnish" }, // Olive
+
+      // Cosmopolitan
+      { cocktailId: 8, ingredientId: 7, amount: "45ml" }, // Vodka
+      { cocktailId: 8, ingredientId: 26, amount: "15ml" }, // Triple sec
+      { cocktailId: 8, ingredientId: 27, amount: "30ml" }, // Cranberry juice
+      { cocktailId: 8, ingredientId: 9, amount: "10ml" }, // Lime juice
+
+      // Carajillo
+      { cocktailId: 9, ingredientId: 28, amount: "45ml" }, // Coffee liqueur
+      { cocktailId: 9, ingredientId: 29, amount: "30ml" }, // Espresso
+
+      // Gin Basil Smash
+      { cocktailId: 10, ingredientId: 21, amount: "50ml" }, // Gin
+      { cocktailId: 10, ingredientId: 12, amount: "25ml" }, // Lemon juice
+      { cocktailId: 10, ingredientId: 13, amount: "15ml" }, // Simple syrup
+      { cocktailId: 10, ingredientId: 30, amount: "10 leaves" }, // Basil leaves
+
+      // Pina Colada
+      { cocktailId: 11, ingredientId: 1, amount: "45ml" }, // White rum
+      { cocktailId: 11, ingredientId: 31, amount: "30ml" }, // Coconut cream
+      { cocktailId: 11, ingredientId: 32, amount: "90ml" }, // Pineapple juice
+      { cocktailId: 11, ingredientId: 6, amount: "As needed" }, // Ice
+
+      // Margarita
+      { cocktailId: 12, ingredientId: 33, amount: "50ml" }, // Tequila
+      { cocktailId: 12, ingredientId: 26, amount: "25ml" }, // Triple sec
+      { cocktailId: 12, ingredientId: 9, amount: "20ml" }, // Lime juice
+      { cocktailId: 12, ingredientId: 34, amount: "For rim" }, // Salt
+
+      // Zombie
+      { cocktailId: 13, ingredientId: 35, amount: "20ml" }, // Dark rum
+      { cocktailId: 13, ingredientId: 1, amount: "20ml" }, // White rum
+      { cocktailId: 13, ingredientId: 36, amount: "15ml" }, // Apricot brandy
+      { cocktailId: 13, ingredientId: 32, amount: "30ml" }, // Pineapple juice
+      { cocktailId: 13, ingredientId: 9, amount: "10ml" }, // Lime juice
+
+      // Mai Tai
+      { cocktailId: 14, ingredientId: 35, amount: "30ml" }, // Dark rum
+      { cocktailId: 14, ingredientId: 1, amount: "30ml" }, // White rum
+      { cocktailId: 14, ingredientId: 37, amount: "15ml" }, // Orange curaçao
+      { cocktailId: 14, ingredientId: 9, amount: "15ml" }, // Lime juice
+
+      // Americano
+      { cocktailId: 15, ingredientId: 38, amount: "30ml" }, // Campari
+      { cocktailId: 15, ingredientId: 39, amount: "30ml" }, // Sweet vermouth
+      { cocktailId: 15, ingredientId: 5, amount: "Top off" }, // Soda water
+
+      // Bloody Mary
+      { cocktailId: 16, ingredientId: 7, amount: "45ml" }, // Vodka
+      { cocktailId: 16, ingredientId: 40, amount: "90ml" }, // Tomato juice
+      { cocktailId: 16, ingredientId: 12, amount: "15ml" }, // Lemon juice
+      { cocktailId: 16, ingredientId: 41, amount: "2 dashes" }, // Worcestershire sauce
+      { cocktailId: 16, ingredientId: 42, amount: "to taste" }, // Tabasco
+      { cocktailId: 16, ingredientId: 43, amount: "to taste" }, // Salt and pepper
+
+      // Manhattan
+      { cocktailId: 17, ingredientId: 43, amount: "60ml" }, // Rye whiskey
+      { cocktailId: 17, ingredientId: 39, amount: "30ml" }, // Sweet vermouth
+      { cocktailId: 17, ingredientId: 44, amount: "2 dashes" }, // Angostura bitters
+
+      // Penicillin
+      { cocktailId: 18, ingredientId: 45, amount: "45ml" }, // Blended scotch
+      { cocktailId: 18, ingredientId: 46, amount: "15ml" }, // Honey-ginger syrup
+      { cocktailId: 18, ingredientId: 9, amount: "20ml" }, // Lemon juice
+      { cocktailId: 18, ingredientId: 47, amount: "7.5ml float" }, // Islay scotch
+
+      // Aperol Spritz
+      { cocktailId: 19, ingredientId: 48, amount: "60ml" }, // Aperol
+      { cocktailId: 19, ingredientId: 49, amount: "90ml" }, // Prosecco
+      { cocktailId: 19, ingredientId: 50, amount: "30ml" }, // Soda water
+
+      // Dry Martini
+      { cocktailId: 20, ingredientId: 21, amount: "60ml" }, // Gin
+      { cocktailId: 20, ingredientId: 24, amount: "10ml" }, // Dry vermouth
+      { cocktailId: 20, ingredientId: 25, amount: "1 for garnish" }, // Olive
+
+      // Whiskey Sour
+      { cocktailId: 21, ingredientId: 43, amount: "50ml" }, // Whiskey
+      { cocktailId: 21, ingredientId: 12, amount: "20ml" }, // Lemon juice
+      { cocktailId: 21, ingredientId: 13, amount: "15ml" }, // Simple syrup
+
+      // Daiquiri
+      { cocktailId: 22, ingredientId: 1, amount: "60ml" }, // White rum
+      { cocktailId: 22, ingredientId: 9, amount: "20ml" }, // Lime juice
+      { cocktailId: 22, ingredientId: 13, amount: "10ml" }, // Simple syrup
+    
+    ]
   });
 
   console.log(`${cocktailIngredients.count} cocktail ingredients created.`);
