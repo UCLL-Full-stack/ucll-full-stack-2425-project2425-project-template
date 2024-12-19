@@ -8,6 +8,7 @@
         "pokemon" : "pokemon",
         "calender" : "kalender",
         "badges" : "badges",
+        "logout" : "logout",
         "language" : "taal"
     },
     "login" : {
