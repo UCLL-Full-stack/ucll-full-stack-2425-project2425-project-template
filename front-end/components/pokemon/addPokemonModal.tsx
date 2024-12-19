@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Pokemon } from '@types'; 
 import styles from '../../styles/AddPokemonModal.module.css';
+import { useTranslation } from 'next-i18next';
 
 interface AddPokemonModalProps {
   onClose: () => void;
@@ -22,6 +23,8 @@ const AddPokemonModal: React.FC<AddPokemonModalProps> = ({ onClose, onAddPokemon
   });
   const [canEvolve, setCanEvolve] = useState(false); 
 
+  const { t } = useTranslation();
+
   const handleAdd = () => {
     const newPokemon: Pokemon = {
       id: Math.random(), 
@@ -37,50 +40,50 @@ const AddPokemonModal: React.FC<AddPokemonModalProps> = ({ onClose, onAddPokemon
 
   return (
     <div className={styles.modal}>
-      <h2>Add Pokémon</h2>
+      <h2>{t("pokemon.add")}</h2>
       <label>
-        Name:
+        {t("pokemon.name")}:
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
-        Type:
+        {t("pokemon.type")}:
         <input type="text" value={type} onChange={(e) => setType(e.target.value)} />
       </label>
       <label>
-        Health:
+        {t("pokemon.health")}
         <input type="number" value={health} onChange={(e) => setHealth(Number(e.target.value))} />
       </label>
-      <h3>Stats</h3>
+      <h3>{t("pokemon.stats")}</h3>
       <label>
-        HP:
+        {t("pokemon.hp")}
         <input type="number" value={stats.hp} onChange={(e) => setStats({ ...stats, hp: Number(e.target.value) })} />
       </label>
       <label>
-        Attack:
+        {t("pokemon.attack")}
         <input type="number" value={stats.attack} onChange={(e) => setStats({ ...stats, attack: Number(e.target.value) })} />
       </label>
       <label>
-        Defence:
+        {t("pokemon.defence")}
         <input type="number" value={stats.defence} onChange={(e) => setStats({ ...stats, defence: Number(e.target.value) })} />
       </label>
       <label>
-        Special Attack:
+        {t("pokemon.special-attack")}
         <input type="number" value={stats.specialAttack} onChange={(e) => setStats({ ...stats, specialAttack: Number(e.target.value) })} />
       </label>
       <label>
-        Special Defence:
+        {t("pokemon.special-defence")}
         <input type="number" value={stats.specialDefence} onChange={(e) => setStats({ ...stats, specialDefence: Number(e.target.value) })} />
       </label>
       <label>
-        Speed:
+        {t("pokemon.speed")}
         <input type="number" value={stats.speed} onChange={(e) => setStats({ ...stats, speed: Number(e.target.value) })} />
       </label>
       <label>
-        Can Evolve:
+        {t("pokemon.evolve")}
         <input type="checkbox" checked={canEvolve} onChange={(e) => setCanEvolve(e.target.checked)} />
       </label>
-      <button onClick={handleAdd}>Add Pokémon</button>
-      <button onClick={onClose}>Cancel</button>
+      <button onClick={handleAdd}>{t("pokemon.add")}</button>
+      <button onClick={onClose}>{t("pokemon.cancel")}</button>
     </div>
   );
 };

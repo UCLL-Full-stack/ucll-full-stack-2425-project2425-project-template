@@ -2,7 +2,7 @@ import React from 'react';
 import { Pokemon } from '@types';
 import TrainerService from '../../services/trainer.service';
 import styles from '../../styles/pokemon.module.css';
-
+import { useTranslation } from 'next-i18next';
 interface PokemonDetailsProps {
   pokemon: Pokemon;
   nurseId: number;
@@ -18,6 +18,8 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
   update,
   clearSelected
 }) => {
+  const { t } = useTranslation();
+
   const handleTransfer = async () => {
     if (pokemon.id === undefined) {
       alert('Pokémon ID is missing. Cannot send to hospital.');
@@ -26,7 +28,7 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
 
     try {
       await TrainerService.transferPokemonToNurse(pokemon.id, nurseId);
-      alert(`${pokemon.name} has been sent to the hospital.`);
+      alert(`${pokemon.name} ${t('pokemon.has-been-send-to-hospital')}`);
       reload(!update);
       clearSelected(null);
     } catch (error: any) {
@@ -36,26 +38,26 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
 
   return (
     <div className={styles.card}>
-      <h3>Details for {pokemon.name}</h3>
-      <p>Type: {pokemon.type}</p>
+      <h3>{t("pokemon.details")} {pokemon.name}</h3>
+      <p>{t("pokemon.type")}: {pokemon.type}</p>
       <div className={styles.healthContainer}>
         <p>
-          Health: {pokemon.health} / {pokemon.stats.hp}
+          {t("pokemon.health")} {pokemon.health} / {pokemon.stats.hp}
           {pokemon.health < pokemon.stats.hp && (
             <button className={styles.healButton} onClick={handleTransfer}>
-              Send to Hospital
+              {t("pokemon.send-to-hospital")}
             </button>
           )}
         </p>
       </div>
-      <p>Stats:</p>
+      <p>{t("pokemon.stats")}</p>
       <ul>
-        <li>HP: {pokemon.stats.hp}</li>
-        <li>Attack: {pokemon.stats.attack}</li>
-        <li>Defence: {pokemon.stats.defence}</li>
-        <li>Special Attack: {pokemon.stats.specialAttack}</li>
-        <li>Special Defence: {pokemon.stats.specialDefence}</li>
-        <li>Speed: {pokemon.stats.speed}</li>
+        <li>{t("pokemon.hp")} {pokemon.stats.hp}</li>
+        <li>{t("pokemon.attack")} {pokemon.stats.attack}</li>
+        <li>{t("pokemon.defence")} {pokemon.stats.defence}</li>
+        <li>{t("pokemon.special-attack")} {pokemon.stats.specialAttack}</li>
+        <li>{t("pokemon.special-defence")} {pokemon.stats.specialDefence}</li>
+        <li>{t("pokemon.speed")} {pokemon.stats.speed}</li>
       </ul>
     </div>
   );
