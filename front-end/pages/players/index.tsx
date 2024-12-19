@@ -161,11 +161,11 @@ const Players: React.FC = () => {
                 style={{ transitionDelay: `${index * 150}ms` }}
               >
                 <div className="bg-gray-300 flex justify-center items-center p-2 rounded-lg">
-                  <img
-                    src={player.imageUrl || "/images/shittylogo.png"}
-                    alt={player.name}
-                    className="w-4/6 object-contain"
-                  />
+                <img
+                  src={player.imageUrl || "/images/shittylogo.png"}
+                  alt={player.name}
+                  className={`${player.imageUrl ? "w-4/6" : "w-5/6"} object-contain`}
+                />
                 </div>
 
                 <div className="p-4 bg-gray-300 rounded-lg">
