@@ -123,7 +123,7 @@ const GameMap: React.FC = () => {
             }
             const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
             await floorService.updatePosition(res);
-            router.push("/game")
+            router.push("/game");
         }
     }
 
