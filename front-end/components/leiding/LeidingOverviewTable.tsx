@@ -1,11 +1,17 @@
 import React from 'react';
 import { Leiding } from '@/types';
+import Image from "next/image";
 
 type Props = {
     leiding: Array<Leiding>,
+    onEdit: (leiding: Leiding) => void;
+    onDelete: (leidingId: number) => void;
 }
 
-const LeidingOverviewTable: React.FC<Props> = ({ leiding }: Props) => {
+const LeidingOverviewTable: React.FC<Props> = ({ leiding, onEdit, onDelete }: Props) => {
+    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+    const isHoofdleidingOrAdmin = loggedInUser.role === 'HOOFDLEIDING' || loggedInUser.role === 'ADMIN';
+
     return (
         <div className="p-4">
             <table className="w-full text-left border-collapse">
@@ -15,6 +21,7 @@ const LeidingOverviewTable: React.FC<Props> = ({ leiding }: Props) => {
                         <th scope="col" className="p-2 border-r border-amber-900">Totem</th>
                         <th scope="col" className="p-2 border-r border-amber-900">Gsm/Telefoon</th>
                         <th scope="col" className="p-2 border-r border-amber-900">Groep</th>
+                        {loggedInUser && <th scope="col" className="p-2 border-r border-amber-900">Acties</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -24,6 +31,30 @@ const LeidingOverviewTable: React.FC<Props> = ({ leiding }: Props) => {
                             <td className="p-2 border-r border-amber-900">{lid.totem}</td>
                             <td className="p-2 border-r border-amber-900">{lid.telefoon}</td>
                             <td className="p-2 border-r border-amber-900">{lid.groep}</td>
+                            {loggedInUser && (
+                                <td className="p-2 border-r border-amber-900 text-center">
+                                    {(isHoofdleidingOrAdmin || loggedInUser.totem === lid.totem) && (
+                                        <Image
+                                            src="/edit-button.svg"
+                                            alt="Bewerken"
+                                            width={16}
+                                            height={16}
+                                            className="inline-block mr-2 cursor-pointer"
+                                            onClick={() => onEdit(lid)}
+                                        />
+                                    )}
+                                    {isHoofdleidingOrAdmin && (
+                                        <Image
+                                            src="/delete-button.svg"
+                                            alt="Verwijderen"
+                                            width={16}
+                                            height={16}
+                                            className="inline-block ml-2 cursor-pointer"
+                                            onClick={() => onDelete(lid.id)}
+                                        />
+                                    )}
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>

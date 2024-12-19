@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Activiteit } from '@/types';
 import ActiviteitService from '@/services/ActiviteitenService';
+import { Activiteit } from '@/types';
 
 type Props = {
     groepNaam: string;
     onClose: () => void;
-    onAdd: () => void;
+    onAdd: (activiteit: Activiteit) => void;
 };
 
-const ActiviteitenModal: React.FC<Props> = ({ groepNaam, onClose, onAdd }) => {
+const ActiviteitenAddModal: React.FC<Props> = ({ groepNaam, onClose, onAdd }) => {
     const [newActiviteit, setNewActiviteit] = useState({
         name: '',
         description: '',
@@ -50,8 +50,14 @@ const ActiviteitenModal: React.FC<Props> = ({ groepNaam, onClose, onAdd }) => {
         if (!validate()) return;
 
         try {
-            await ActiviteitService.addActiviteit(groepNaam, newActiviteit.name, newActiviteit.description, new Date(newActiviteit.beginDate), new Date(newActiviteit.endDate));
-            onAdd();
+            const response = await ActiviteitService.addActiviteit(
+                groepNaam,
+                newActiviteit.name,
+                newActiviteit.description,
+                new Date(newActiviteit.beginDate),
+                new Date(newActiviteit.endDate)
+            );
+            onAdd(response);
             onClose();
         } catch (error) {
             console.error('Failed to add activiteit:', error);
@@ -60,7 +66,7 @@ const ActiviteitenModal: React.FC<Props> = ({ groepNaam, onClose, onAdd }) => {
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-gray-300 p-6 rounded-lg w-96 shadow-lg">
+            <div className="bg-gray-300 p-6 rounded-lg w-5/12 shadow-lg">
                 <h2 className="text-xl font-bold mb-4">Activiteit toevoegen</h2>
                 <label className="block mb-3">
                     Naam:
@@ -74,7 +80,7 @@ const ActiviteitenModal: React.FC<Props> = ({ groepNaam, onClose, onAdd }) => {
                 </label>
                 <label className="block mb-3">
                     Beschrijving:
-                    <input
+                    <textarea
                         type="text"
                         className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-200 shadow-md"
                         value={newActiviteit.description}
@@ -117,4 +123,4 @@ const ActiviteitenModal: React.FC<Props> = ({ groepNaam, onClose, onAdd }) => {
     );
 };
 
-export default ActiviteitenModal;
+export default ActiviteitenAddModal;

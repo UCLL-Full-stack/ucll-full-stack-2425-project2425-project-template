@@ -8,7 +8,7 @@ const Header: React.FC = () => {
     const isAdmin = pathname.endsWith('/admin');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLUListElement>(null);
-    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+    const [loggedInUser, setLoggedInUser] = useState<{ totem: string, groep: string } | null>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -20,7 +20,7 @@ const Header: React.FC = () => {
         document.addEventListener('mousedown', handleClickOutside);
         const user = sessionStorage.getItem("loggedInUser");
         if (user) {
-            setLoggedInUser(user);
+            setLoggedInUser(JSON.parse(user));
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -41,69 +41,78 @@ const Header: React.FC = () => {
                         <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/admin" : "/"}>
                             Home
                         </Link>
-                    
-                        <button
-                            className="hover:bg-green-600 px-3 py-2 rounded relative"
-                            onClick={() => setDropdownOpen(!dropdownOpen)}
-                        >
-                            Takken
-                        </button>
-                        {dropdownOpen && (
-                            <ul ref={dropdownRef}
-                                    className="absolute bg-green-600 text-white mt-2 rounded shadow-lg">
-                                    <Link className="block px-4 py-2 hover:bg-green-500 rounded"
+                        {loggedInUser ? (
+                            <>
+                                <Link
+                                    className="hover:bg-green-600 px-3 py-2 rounded"
+                                    href={`/activiteiten/${loggedInUser.groep}`}
+                                >
+                                    {loggedInUser.groep}
+                                </Link>
+                                <Link
+                                    className="hover:bg-green-600 px-3 py-2 rounded"
+                                    href="/leiding"
+                                >
+                                    Leiding
+                                </Link>
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    className="hover:bg-green-600 px-3 py-2 rounded relative"
+                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                >
+                                    Takken
+                                </button>
+                                {dropdownOpen && (
+                                    <ul ref={dropdownRef} className="absolute bg-green-600 text-white mt-2 rounded shadow-lg">
+                                        <Link
+                                            className="block px-4 py-2 hover:bg-green-500 rounded"
                                             href={isAdmin ? "/activiteiten/losse leden/admin" : "/activiteiten/losse leden"}
-                                            onClick={() => setDropdownOpen(false)}>
-                                        Losse leden
-                                    </Link>
-                                    <Link className="block px-4 py-2 hover:bg-green-500 rounded"
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            Losse leden
+                                        </Link>
+                                        <Link
+                                            className="block px-4 py-2 hover:bg-green-500 rounded"
                                             href={isAdmin ? "/activiteiten/kapoenen/admin" : "/activiteiten/kapoenen"}
-                                            onClick={() => setDropdownOpen(false)}>
-                                        Kapoenen
-                                    </Link>
-                                    <Link className="block px-4 py-2 hover:bg-green-500 rounded"
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            Kapoenen
+                                        </Link>
+                                        <Link
+                                            className="block px-4 py-2 hover:bg-green-500 rounded"
                                             href={isAdmin ? "/activiteiten/welpen/admin" : "/activiteiten/welpen"}
-                                            onClick={() => setDropdownOpen(false)}>
-                                        Welpen
-                                    </Link>
-                            </ul>
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            Welpen
+                                        </Link>
+                                    </ul>
+                                )}
+                            </>
                         )}
-                        <Link 
-                            className="hover:bg-green-600 px-3 py-2 rounded" 
-                            href="/nieuws">
+                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/nieuws">
                             Nieuws
                         </Link>
-                        <Link 
-                            className="hover:bg-green-600 px-3 py-2 rounded" 
-                            href="/kalender">
+                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/kalender">
                             Kalender
                         </Link>
-                        {loggedInUser && (
-                            <Link 
-                                className="hover:bg-green-600 px-3 py-2 rounded" 
-                                href="/leiding">
-                                Leiding
+                        {loggedInUser ? (
+                            <>
+                                <a
+                                    href="/"
+                                    className="hover:bg-green-600 px-3 py-2 rounded"
+                                    onClick={handleClick}
+                                >
+                                    Logout
+                                </a>
+                                <div>Welcome, {loggedInUser.totem}</div>
+                            </>
+                        ) : (
+                            <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/login">
+                                Login
                             </Link>
                         )}
-                        {loggedInUser && (<Link 
-                            className="hover:bg-green-600 px-3 py-2 rounded" 
-                            href="/gegevens">
-                            Gegevens
-                        </Link>
-                        )}
-                        {!loggedInUser  && <Link 
-                            className="hover:bg-green-600 px-3 py-2 rounded" 
-                            href="/login">
-                            Login
-                        </Link>}
-                        {loggedInUser && 
-                        <a 
-                            href="/" 
-                            className="hover:bg-green-600 px-3 py-2 rounded" 
-                            onClick={handleClick}>
-                            Logout
-                        </a>}
-                        {loggedInUser && <div>Welcome, {JSON.parse(loggedInUser).totem}</div>}
                     </div>
                 </nav>
             </div>

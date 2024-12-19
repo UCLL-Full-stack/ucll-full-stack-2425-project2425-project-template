@@ -36,12 +36,13 @@ const LoginForm: React.FC = () => {
 
         if (response.status === 200) {
             try {
-                setStatusMessages([{message : ('Login gelukt!'), type : "success"}]);
+                setStatusMessages([{message : ('Login gelukt! Terugsturen naar de startpagina...'), type : "success"}]);
                 const data = await response.json();
                 sessionStorage.setItem("loggedInUser", JSON.stringify({
                     'token': data.token,
                     'totem': data.totem,
-                    'role': data.role
+                    'role': data.rol,
+                    'groep' : data.groep
                 }));
                 setTimeout(() => {
                     router.push('/'); }, 2000);
