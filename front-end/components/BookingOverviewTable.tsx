@@ -70,12 +70,12 @@ const BookingOverviewTable: React.FC = () => {
     });
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    if (!Array.isArray(bookings) || bookings.length === 0) {
-        return <div>{t("booking.noBookings")}</div>;
-    }
-
     if (!isLoggedIn) {
         return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
+    }
+
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+        return <div className={errorStyles.loading}>{t("loading")}</div>;
     }
 
     if (userRole === 'guest') {

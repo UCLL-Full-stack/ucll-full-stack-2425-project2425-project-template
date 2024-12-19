@@ -3,12 +3,12 @@
     color: rgb(0, 164, 0);
     font-family: Arial, sans-serif;
     min-height: 100vh;
-    padding: 2rem; /* Add padding similar to trips-page */
+    padding: 2rem;
 }
 
 .bookings-overview-section {
-    width: 80%; /* Match the width of trips-overview-section */
-    margin: 2rem auto; /* Add consistent margins */
+    width: 80%;
+    margin: 2rem auto;
     background-color: #ffffff;
     border-radius: 8px;
     padding: 2rem;
