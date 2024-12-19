@@ -10,6 +10,8 @@ import DeletePlayer from "@/components/player/DeletePlayer";
 import PlayerService from "@/services/PlayerService";
 import useSWR from "swr";
 import AddPlayer from "@/components/player/AddPlayer";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const Players: React.FC = () => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
@@ -19,7 +21,7 @@ const Players: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [sortAscending, setSortAscending] = useState(true);
   const [sortedPlayers, setSortedPlayers] = useState<Player[]>([]);
-
+  const { t } = useTranslation("");
   // Fetch players 
   const { data: playerList, error, mutate } = useSWR("/players", PlayerService.getAllPlayers);
 
@@ -88,7 +90,7 @@ const Players: React.FC = () => {
     return (
       <>
         <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">
-          Failed to load players!
+          F{t('squad.fail')}
         </div>
         <div className="absolute top-12 right-8">
           <NavbarSheet />
@@ -100,7 +102,7 @@ const Players: React.FC = () => {
     return (
       <>
         <div className="text-3xl absolute inset-0 flex items-center justify-center text-yellow-500 font-bebas bg-zinc-900">
-          Loading players...
+        {t('squad.loading')}
         </div>
         <div className="absolute top-12 right-8">
           <NavbarSheet />
@@ -125,14 +127,14 @@ const Players: React.FC = () => {
             onClick={() => setIsAdding(true)}
             className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-green-600 hover:text-white transition"
           >
-            <FaPlus /> Player
+            <FaPlus /> {t('squad.add_button')}
           </button>
           <button
             onClick={handleSortPlayers}
             className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-blue-600 hover:text-white transition"
           >
             {sortAscending ? <FaSortNumericDown /> : <FaSortNumericUp />}
-            Sort by Number
+            {t('squad.sort_button')}
           </button>
         </div>
 
@@ -148,7 +150,7 @@ const Players: React.FC = () => {
               className="mr-4 cursor-pointer"
               onClick={() => router.push("/")}
             />
-            <h1 className="text-6xl font-bold text-yellow-500 font-bebas">The Squad</h1>
+            <h1 className="text-6xl font-bold text-yellow-500 font-bebas">{t('squad.title')}</h1>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
@@ -186,26 +188,26 @@ const Players: React.FC = () => {
 
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">{player.name}</h2>
                   <p className="text-gray-800">
-                    <strong>Position:</strong> {player.position}
+                    <strong>{t('squad.player_position')}</strong> {player.position}
                   </p>
                   <p className="text-gray-800">
-                    <strong>Number:</strong> {player.number}
+                    <strong>{t('squad.player_number')}</strong> {player.number}
                   </p>
                   <p className="text-gray-800">
-                    <strong>Birthdate:</strong>{" "}
+                    <strong>{t('squad.player_birthdate')}</strong>{" "}
                     {new Intl.DateTimeFormat("en-GB").format(new Date(player.birthdate))}
                   </p>
 
                   {player.stat && (
                         <div className="mt-4">
                         <p className="text-gray-800">
-                            <strong>Appearances:</strong> {player.stat.appearances}
+                            <strong>{t('squad.player_apps')}</strong> {player.stat.appearances}
                         </p>
                         <p className="text-gray-800">
-                            <strong>Goals:</strong> {player.stat.goals}
+                            <strong>{t('squad.player_goals')}</strong> {player.stat.goals}
                         </p>
                         <p className="text-gray-800">
-                            <strong>Assists:</strong> {player.stat.assists}
+                            <strong>{t('squad.player_assists')}</strong> {player.stat.assists}
                         </p>
                         </div>
                     )}
@@ -241,6 +243,18 @@ const Players: React.FC = () => {
       )}
     </>
   );
+};
+
+
+
+export const getServerSideProps = async (context) => {
+  const {locale} = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    }
+  }
 };
 
 export default Players;

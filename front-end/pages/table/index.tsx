@@ -14,6 +14,8 @@ import EditMatch from "@/components/matches/EditMatch";
 import AddPlayerToMatch from "@/components/matches/AddPlayerToMatch";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import MatchPlayers from "@/components/matches/MatchPlayers";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const Table: React.FC = () => {
   const [teams, setTeams] = useState<Array<Team>>([]);
@@ -22,21 +24,12 @@ const Table: React.FC = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isAddingPlayers, setIsAddingPlayers] = useState(false); // State for adding players
+  const [isAddingPlayers, setIsAddingPlayers] = useState(false); 
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
-  const [showAllGames, setShowAllGames] = useState(false); // State to toggle between Our Games and All Games
-  const [isViewingPlayers, setIsViewingPlayers] = useState(false); // New state
-  const [matchPlayers, setMatchPlayers] = useState<Player[]>([]); // Players of the selected match
+  const [showAllGames, setShowAllGames] = useState(false); 
+  const [isViewingPlayers, setIsViewingPlayers] = useState(false); 
 
-const handleViewPlayers = async (match: Match) => {
-  setSelectedMatch(match);
-  setIsViewingPlayers(true);
-
-  // Fetch players for the selected match
-  //const players = await MatchService.getMatchPlayers(match.id); // Adjust service method as needed
-  //setMatchPlayers(players);
-};
-
+  const { t } = useTranslation("");
 
   const { data: teamList, error, mutate } = useSWR("/teams", TeamService.getAllTeams);
   const { data: matchList, error: matchError, mutate: mutateMatches } = useSWR("/matches", MatchService.getAllMatches);
@@ -121,7 +114,7 @@ const handleViewPlayers = async (match: Match) => {
               onClick={() => router.push("/")}
             />
             <h1 className="text-6xl font-extrabold text-yellow-500 ml-4 font-bebas">
-              League Table
+            {t('table.title')}
             </h1>
           </div>
 
@@ -133,12 +126,12 @@ const handleViewPlayers = async (match: Match) => {
             <table className="w-full table-fixed">
               <thead>
                 <tr className="bg-yellow-500 text-black text-xl">
-                  <th className="w-1/12 py-4 text-center">#</th>
-                  <th className="w-5/12 py-4 text-center pl-4">Club</th>
-                  <th className="w-1/12 py-4 text-center">GS</th>
-                  <th className="w-1/12 py-4 text-center">GA</th>
-                  <th className="w-1/12 py-4 text-center">GD</th>
-                  <th className="w-1/12 py-4 text-center">Points</th>
+                  <th className="w-1/12 py-4 text-center">{t('#')}</th>
+                  <th className="w-5/12 py-4 text-center pl-4">{t('table.header.club')}</th>
+                  <th className="w-1/12 py-4 text-center">{t('table.header.goals_scored')}</th>
+                  <th className="w-1/12 py-4 text-center">{t('table.header.goals_against')}</th>
+                  <th className="w-1/12 py-4 text-center">{t('table.header.goal_difference')}</th>
+                  <th className="w-1/12 py-4 text-center">{t('table.header.points')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -174,7 +167,7 @@ const handleViewPlayers = async (match: Match) => {
           </div>
           <div className="flex items-center justify-center mt-8">
             <h1 className="text-6xl font-extrabold text-yellow-500 ml-4 font-bebas">
-              {showAllGames ? "All Games" : "Our Games"}
+              {showAllGames ? t('table.games.all') : t('table.games.our')}
             </h1>
           </div>
           <div className="flex mt-4 gap-2">
@@ -182,13 +175,13 @@ const handleViewPlayers = async (match: Match) => {
               onClick={() => setShowAllGames((prev) => !prev)}
               className="px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-blue-600 hover:text-white transition"
             >
-              {showAllGames ? "Our Games" : "All Games"}
+              {showAllGames ? t('table.games.our') : t('table.games.all')}
             </button>
             <button
               onClick={() => setIsAdding(true)}
               className="flex items-center px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-green-600 hover:text-white transition"
             >
-              <FaPlus /> Match
+              <FaPlus /> {t('table.buttons.match')}
             </button>
           </div>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -217,7 +210,6 @@ const handleViewPlayers = async (match: Match) => {
                       {match.homeTeamName} vs {match.awayTeamName}
                     </h2>
                     <div className="absolute right-4 top-2 flex gap-2">
-                      {/* Only show the "+" button if Manchester Shitty is part of the match */}
                       {(match.homeTeamName === "Manchester Shitty" || match.awayTeamName === "Manchester Shitty") && (
                         <button
                           onClick={() => {
@@ -251,13 +243,13 @@ const handleViewPlayers = async (match: Match) => {
                       })}
                     </p>
                     <p className="text-center mt-2">
-                      <span className="font-bold text-gray-800">Location:</span> {match.location}
+                      <span className="font-bold text-gray-800">{t('table.games.location')}</span> {match.location}
                     </p>
                     <p className="text-center mt-2">
-                      <span className="font-bold text-gray-800">Score:</span>{" "}
+                      <span className="font-bold text-gray-800">{t('table.games.score')}</span>{" "}
                       {match.homeScore !== null && match.awayScore !== null
                         ? `${match.homeScore} - ${match.awayScore}`
-                        : "TBD"}
+                        : t('table.games.tbd')}
                     </p>
                 </div>
 
@@ -308,6 +300,18 @@ const handleViewPlayers = async (match: Match) => {
 
     </>
   );
+};
+
+
+
+export const getServerSideProps = async (context) => {
+  const {locale} = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    }
+  }
 };
 
 export default Table;

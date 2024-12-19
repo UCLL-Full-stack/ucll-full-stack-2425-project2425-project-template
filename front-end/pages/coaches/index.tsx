@@ -11,6 +11,8 @@ import EditCoach from "@/components/coaches/EditCoach";
 import DeleteCoach from "@/components/coaches/DeleteCoach";
 import CoachService from "@/services/CoachService";
 import router from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const Coaches: React.FC = () => {
   const [selectedCoach, setSelectedCoach] = useState<Coach | null>(null);
@@ -22,7 +24,7 @@ const Coaches: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const { data: coachList, error, mutate } = useSWR("/coaches", CoachService.getAllCoaches);
-
+  const  {t} = useTranslation('');
   useEffect(() => {
     if (coachList) {
       setSortedCoaches([...coachList]);
@@ -74,14 +76,14 @@ const Coaches: React.FC = () => {
   if (error)
     return (
       <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">
-        Failed to load coaches!
+        {t('coach.messages.fail')}
       </div>
     );
 
   if (!coachList)
     return (
       <div className="text-3xl absolute inset-0 flex items-center justify-center text-yellow-500 font-bebas bg-zinc-900">
-        Loading coaches...
+        {t('coach.messages.loading')}
       </div>
     );
 
@@ -102,13 +104,13 @@ const Coaches: React.FC = () => {
             onClick={() => setIsAdding(true)}
             className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-green-600 hover:text-white transition"
           >
-            <FaPlus /> Coach
+            <FaPlus /> {t('coach.coach')}
           </button>
           <button
             onClick={handleSortCoaches}
             className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-zinc-900 font-bold rounded hover:bg-blue-600 hover:text-white transition"
           >
-            {sortAscending ? <FaSortAlphaDown /> : <FaSortAlphaUp />} Sort by Name
+            {sortAscending ? <FaSortAlphaDown /> : <FaSortAlphaUp />} {t('coach.buttons.sort')}
           </button>
         </div>
 
@@ -124,7 +126,7 @@ const Coaches: React.FC = () => {
               className="mr-4 cursor-pointer"
               onClick={() => router.push("/")}
             />
-            <h1 className="text-6xl font-bold text-yellow-500 font-bebas">The Coaches</h1>
+            <h1 className="text-6xl font-bold text-yellow-500 font-bebas">{t('coach.title')}</h1>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
@@ -160,7 +162,7 @@ const Coaches: React.FC = () => {
                  </div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">{coach.name}</h2>
                   <p className="text-gray-800">
-                    <strong>Job:</strong> {coach.job}
+                    <strong>{t('coach.fields.job')}</strong> {coach.job}
                   </p>
                   
                 </div>
@@ -188,5 +190,18 @@ const Coaches: React.FC = () => {
     </>
   );
 };
+
+export const getServerSideProps = async (context) => {
+  const {locale} = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    }
+  }
+};
+
+
+
 
 export default Coaches;

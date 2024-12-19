@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -10,6 +11,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsVisible(true);
@@ -56,11 +58,11 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
           isVisible ? "scale-100 opacity-100" : "scale-90 opacity-0"
         }`}
       >
-        <h2 className="text-xl font-bold text-white mb-4">Login</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('login.in')}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-white">
-              Username
+            {t('login.popup.username')}
             </label>
             <input
               type="text"
@@ -80,7 +82,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
           {/* Password Input */}
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-white">
-              Password
+            {t('login.popup.password')}
             </label>
             <input
               type="password"
@@ -100,22 +102,22 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-yellow-500 text-black py-2 px-4 rounded-lg hover:bg-zinc-800 hover:text-yellow-500 border border-yellow-500 transition"
+              className="bg-yellow-500 font-bold text-black py-2 px-4 rounded-lg hover:bg-zinc-800 hover:text-yellow-500 border border-yellow-500 transition"
             >
-              Login
+              {t('login.in')}
             </button>
             <button
               type="button"
               onClick={handleClose}
               className="text-sm text-gray-500 hover:underline hover:text-red-500"
             >
-              Cancel
+              {t('cancel')}
             </button>
           </div>
         </form>
 
         <p className="mt-4 text-sm text-gray-500 text-center">
-          Don't have an account? <span className="text-blue-500 hover:underline cursor-pointer" onClick={() => router.push("/register")}>Register</span>
+        {t('login.popup.no_account')}<span className="text-blue-500 hover:underline cursor-pointer" onClick={() => router.push("/register")}>{t('login.popup.register')}</span>
         </p>
       </div>
     </div>

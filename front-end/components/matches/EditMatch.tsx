@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Match } from "@/types";
+import { useTranslation } from "next-i18next";
 
 interface EditMatchProps {
   match: Match;
@@ -19,7 +20,7 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
   });
 
   const [isVisible, setIsVisible] = useState(false);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -62,10 +63,10 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">Edit Match</h2>
+        <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">{t('table.match.edit')}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-yellow-500">Location:</label>
+            <label className="block text-yellow-500">{t('table.match.location')}</label>
             <input
               type="text"
               name="location"
@@ -76,7 +77,7 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Date:</label>
+            <label className="block text-yellow-500">{t('table.match.date')}</label>
             <input
               type="datetime-local"
               name="date"
@@ -87,7 +88,7 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Home Team:</label>
+            <label className="block text-yellow-500">{t('table.match.home')}</label>
             <input
               type="text"
               name="homeTeamName"
@@ -98,7 +99,7 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Away Team:</label>
+            <label className="block text-yellow-500">{t('table.match.away')}</label>
             <input
               type="text"
               name="awayTeamName"
@@ -109,7 +110,7 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Home Score:</label>
+            <label className="block text-yellow-500">{t('table.match.home_score')}</label>
             <input
               type="number"
               name="homeScore"
@@ -119,7 +120,7 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500">Away Score:</label>
+            <label className="block text-yellow-500">{t('table.match.away_score')}</label>
             <input
               type="number"
               name="awayScore"
@@ -134,13 +135,13 @@ const EditMatch: React.FC<EditMatchProps> = ({ match, onSave, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 bg-gray-700 font-bold text-white rounded hover:bg-gray-600"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-yellow-500 text-black font-bold rounded hover:bg-yellow-600"
             >
-              Save
+              {t('save')}
             </button>
           </div>
         </form>

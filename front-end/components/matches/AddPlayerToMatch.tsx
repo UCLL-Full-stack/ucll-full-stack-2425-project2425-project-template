@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import useSWR from "swr";
 import PlayerService from "@/services/PlayerService";
 import { Player } from "@/types";
+import { useTranslation } from "next-i18next";
 
 interface AddPlayerToMatchProps {
   matchId: number;
@@ -18,8 +19,8 @@ const AddPlayerToMatch: React.FC<AddPlayerToMatchProps> = ({
   const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Use all players without filtering by teamId
   const players = allPlayers || [];
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (allPlayers) {
@@ -58,7 +59,7 @@ const AddPlayerToMatch: React.FC<AddPlayerToMatchProps> = ({
   };
 
   if (error) {
-    return <div className="text-yellow-500">Failed to load players. Please try again later.</div>;
+    return <div className="text-yellow-500">{t('table.messages.fail_players')}</div>;
   }
 
   return (
@@ -74,7 +75,7 @@ const AddPlayerToMatch: React.FC<AddPlayerToMatchProps> = ({
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">Add Players to Match</h2>
+        <h2 className="text-3xl font-bold mb-4 text-yellow-500 font-bebas">{t('table.match.add_to_game')}</h2>
         <div className="space-y-4">
           {players.length > 0 ? (
             <ul className="max-h-64 overflow-y-auto space-y-2">
@@ -92,7 +93,7 @@ const AddPlayerToMatch: React.FC<AddPlayerToMatchProps> = ({
               ))}
             </ul>
           ) : (
-            <p className="text-yellow-500">No players available.</p>
+            <p className="text-yellow-500">{t('table.messages.fr_no_players')}.</p>
           )}
         </div>
         <div className="flex justify-end gap-2 mt-4">
@@ -101,14 +102,14 @@ const AddPlayerToMatch: React.FC<AddPlayerToMatchProps> = ({
             onClick={onClose}
             className="px-4 py-2 bg-gray-700 font-bold text-white rounded hover:bg-gray-600"
           >
-            Cancel
+            {t('cancel')}
           </button>
           <button
             type="button"
             onClick={handleSubmit}
             className="px-4 py-2 bg-yellow-500 text-black font-bold rounded hover:bg-yellow-600"
           >
-            Add Players
+            {t('table.match.add_player')}
           </button>
         </div>
       </div>
