@@ -1,56 +1,68 @@
 
 
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import playerService from '../service/player.service';
 import exp from 'constants';
 import { PlayerInput } from '../types/types';
 import statsService from '../service/stats.service';
+import { decodeJwtToken } from '../util/jwt';
  
 
 const playerRouter = express.Router();
 
-playerRouter.get('/', async (req: Request, res: Response) => {
+playerRouter.get('/', async (req: Request , res: Response , next: NextFunction) => {
     try {
+        const token = req.headers.authorization?.slice(7);
+
+    
+        console.log(token);
+
+
+        if (!token) {
+            throw new Error('Authorization token is missing');
+        }
+        const decode = decodeJwtToken(token);
+        console.log(decode);        
         const players = await playerService.getAllPlayers();
         res.status(200).json(players);
     } catch (error) {
-        res.status(400).json({status: 'error' ,message: error});
+        next(error);
     }
 })
 
-playerRouter.get('/:id', async (req: Request, res: Response) => {
+playerRouter.get('/:id', async (req: Request , res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const player = await playerService.getPlayerById(id);
         res.status(200).json(player);
     } catch (error) {
-        res.status(400).json({status: 'error' ,message: error});
+        next(error);
     }
 })
 
-playerRouter.post('/add', async (req: Request, res: Response) => {
+playerRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const player = <PlayerInput>req.body;
         const result = await playerService.addPlayer(player);
-        res.status(201).json({status: 'success', message: result});
+        res.status(201).json(result);
     } catch (error) {
-        res.status(400).json({status: 'error' ,message: error}); 
+        next(error);
     }
 });
 
 
-playerRouter.delete('/delete/:id', async (req: Request, res: Response) => {
+playerRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const result = await playerService.RemovePlayer(id);
         res.status(200).json(result);
     } catch (error) {
-        res.status(400).json({status: 'error' ,message: error});
+        next(error);
     }
 })
 
 
-playerRouter.put('/update/:id', async (req: Request, res: Response) => {
+playerRouter.put('/update/:id', async (req: Request, res: Response, next: NextFunction) => {   
     try {
       const id = parseInt(req.params.id);
       const { name, number, position, birthdate, stat } = req.body;
@@ -72,7 +84,7 @@ playerRouter.put('/update/:id', async (req: Request, res: Response) => {
   
       res.status(200).json(updatedPlayer);
     } catch (error) {
-      res.status(500).json({ error: "Failed to update player and stats" });
+        next(error); 
     }
   });
   

@@ -1,20 +1,44 @@
 
 
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import playerService from '../service/player.service';
+import { LogInput, UserInput } from '../types/types';
+import userService from '../service/user.service';
 
 
 const userRouter = express.Router();
 
 
-userRouter.get('/', async (req: Request, res: Response) => {
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const players = await playerService.getAllPlayers();
-        res.status(200).json(players);
+        const users = await userService.getAllUsers();
+        res.status(200).json(users);
     } catch (error) {
-        res.status(400).json({status: 'error' ,message: error});
+        next(error);
     }
 })
+
+userRouter.post('/signup', async (req: Request, res: Response , next: NextFunction) => {
+    try {
+        const user = <UserInput>req.body;
+        const result = await userService.createUser(user);
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+userRouter.post('/login', async (req: Request , res: Response, next: NextFunction) => {
+    try {
+        const user = <LogInput>req.body;
+        const response = await userService.authenticate(user);
+        res.status(200).json({ message: 'User authenticated', ...response});
+    } catch (error) {
+        next(error);
+    }
+})
+
 
 
 export { userRouter };

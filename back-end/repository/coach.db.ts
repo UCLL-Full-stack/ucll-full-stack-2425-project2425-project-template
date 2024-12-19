@@ -3,10 +3,10 @@ import { CoachInput } from '../types/types';
 import db from '../util/database';
 
 
-const findAll = async () => {
+const findAll = async (): Promise<Coach[]> => {
     try {
-        const coaches = await db.coach.findMany();
-        return coaches;
+        const coachesPrisma = await db.coach.findMany();
+        return coachesPrisma.map((coachPrisma) => Coach.from(coachPrisma));
     } catch (error) {
         throw new Error('Database error. See server log for details.');
     }

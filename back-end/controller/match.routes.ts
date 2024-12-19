@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import teamService from '../service/team.service';
 import { MatchInput } from '../types/types';
 import { Match } from '../model/match';
@@ -9,7 +9,7 @@ import { match } from 'assert';
 const matchRouter = express.Router()
 
 
-matchRouter.get('/', async (req: Request, res: Response) => {
+matchRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const matches = await matchService.getAllMatches();
         res.status(200).json(matches);
@@ -19,7 +19,7 @@ matchRouter.get('/', async (req: Request, res: Response) => {
 })
 
 
-matchRouter.post('/add', async (req: Request, res: Response) => {
+matchRouter.post('/add', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const match = <MatchInput>req.body;
         const result = await matchService.addMatch(match);
@@ -29,7 +29,7 @@ matchRouter.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-matchRouter.put('/update/:id', async (req: Request, res: Response) => {
+matchRouter.put('/update/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const match = <MatchInput>req.body;
@@ -40,7 +40,7 @@ matchRouter.put('/update/:id', async (req: Request, res: Response) => {
     }
 });
 
-matchRouter.delete('/delete/:id', async (req: Request, res: Response) => {
+matchRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
         const result = await matchService.deleteMatch(id);

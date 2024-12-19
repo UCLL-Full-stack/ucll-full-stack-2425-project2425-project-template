@@ -3,6 +3,10 @@ import { Player } from "../model/player";
 import { PlayerInput } from "../types/types";
 
 const getAllPlayers = async (): Promise<Player[]> => {
+    // if (!email) {
+    //     throw new Error('Cooked token not found');
+    // }
+
     return playerDb.findAll();
 }
 
@@ -27,8 +31,7 @@ const addPlayer = async ({name, number ,position, birthdate, imageUrl, teamId, s
 }
 
 const updatePlayer = async (id: number, {name, number, position, birthdate}: PlayerInput): Promise<Player> => {
-    const player = await getPlayerById(id);
-    if (player.number !== number && await findPlayerByNumber(number)) {
+    if (await playerDb.findByNumber(number)) {
         throw new Error(`Player with number ${number} already exists`);
     }
 

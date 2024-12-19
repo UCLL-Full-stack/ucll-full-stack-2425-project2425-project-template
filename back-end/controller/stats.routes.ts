@@ -18,10 +18,11 @@ statsRouter.get('/', async (req: Request, res: Response) => {
 });
 
 
-statsRouter.post('/add', async (req: Request, res: Response) => {
+statsRouter.post('/add/:id', async (req: Request, res: Response) => {
     try {
+        const id = parseInt(req.params.id);
         const stats = <StatsInput>req.body;
-        const result = await statsService.addStatsToPlayer(stats);
+        const result = await statsService.addStatsToPlayer(id ,stats);
         res.status(201).json(result);
     } catch (error) {
         res.status(400).json({status: 'error' ,message: error}); 

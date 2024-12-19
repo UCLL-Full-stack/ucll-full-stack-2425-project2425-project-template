@@ -8,9 +8,17 @@ const getAllTeams = async (): Promise<Team[]> => {
 }
 
 
-const addTeam = async ({name}: TeamInput) => {
+const addTeam = async ({name}: TeamInput): Promise<Team> => {
     return teamDb.addTeam({name});
 }
 
+const updateTeam = async (id: number, {name}: TeamInput) => {
+    return teamDb.updateTeam(id, {name});
+}
 
-export default { getAllTeams, addTeam }; 
+const deleteTeam = async (id: number) => {
+    return teamDb.deleteTeam(id);
+}
+
+
+export default { getAllTeams, addTeam, updateTeam, deleteTeam }; 
