@@ -19,8 +19,13 @@ const Pokemons: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loggedInEmail, setLoggedInEmail] = useState<string>('');
   const [role, setRole] = useState<string>('guest');
+  const [update, setUpdate] = useState<boolean>(true);
 
   const { t } = useTranslation();
+
+  const clearSelected = (pokemon: Pokemon | null) => {
+    setSelectedPokemon(pokemon)
+  }
 
   // Check if the code is running in the browser and then access localStorage
   useEffect(() => {
@@ -64,7 +69,7 @@ const Pokemons: React.FC = () => {
         getNurseByEmail(loggedInEmail);
       }
     }
-  }, [loggedInEmail, role]); // Make sure to re-run the effect when these values change
+  }, [loggedInEmail, role, update]); // Make sure to re-run the effect when these values change
 
   const handleSelectPokemon = (pokemon: Pokemon) => {
     setSelectedPokemon(pokemon);
@@ -114,6 +119,9 @@ const Pokemons: React.FC = () => {
                   <PokemonDetails
                     pokemon={selectedPokemon}
                     nurseId={1}  // Pass the nurseId if necessary
+                    reload={setUpdate}
+                    update={update}
+                    clearSelected={clearSelected}
                   />
                 )}
               </>
@@ -140,6 +148,9 @@ const Pokemons: React.FC = () => {
                   <PokemonDetailsNurse
                     pokemon={selectedPokemon}
                     nurseId={1}  // Pass the nurseId if necessary
+                    reload={setUpdate}
+                    update={update}
+                    clearSelected={clearSelected}
                   />
                 )}
               </>

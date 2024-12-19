@@ -22,7 +22,9 @@ const Header: React.FC = () => {
 
   const logOut = () => {
     localStorage.clear();
-    window.location.reload();
+    setTimeout(() => {
+      router.push("/");
+    }, 1000);
   }
 
   return (

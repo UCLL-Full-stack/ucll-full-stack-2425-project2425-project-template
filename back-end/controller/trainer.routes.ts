@@ -424,7 +424,7 @@ const prisma = new PrismaClient();
 /**
  * @swagger
  * /nurses/{nurseId}/heal/{pokemonId}:
- *   patch:
+ *   put:
  *     summary: Heal a Pokémon using a Nurse and reset its health to stats.hp
  *     security:
  *       - bearerAuth: []
@@ -467,7 +467,7 @@ const prisma = new PrismaClient();
  *       500:
  *         description: Server error
  */
-nurseRouter.patch('/:nurseId/heal/:pokemonId', async (req: Request, res: Response, next: NextFunction) => {
+nurseRouter.put('/:nurseId/heal/:pokemonId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { nurseId, pokemonId } = req.params;
 

@@ -43,10 +43,7 @@ const LoginPage: React.FC = () => {
       }
       setTimeout(() => {
         router.push("/");
-      }, 2000);
-  
-      console.log("Login successful, redirecting to home...");
-      router.push("/"); // Redirect to home page
+      }, 1000);
     } catch (error) {
       setErrorMessage("Login failed: User not found or incorrect credentials.");
       console.error("Login error:", error);

@@ -42,7 +42,7 @@
 
       try {
         const response = await fetch(`${API_URL}/nurses/${nurseId}/heal/${pokemonId}`, {
-          method: 'PATCH',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

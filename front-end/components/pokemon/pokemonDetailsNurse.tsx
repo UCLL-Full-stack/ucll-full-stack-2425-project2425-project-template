@@ -7,11 +7,17 @@ import styles from '../../styles/pokemon.module.css';
 interface PokemonDetailsProps {
   pokemon: Pokemon;
   nurseId: number;
+  reload: (boolean:boolean) => void;
+  update: boolean;
+  clearSelected: (pokemon:Pokemon | null)=>void;
 }
 
 const PokemonDetails: React.FC<PokemonDetailsProps> = ({
   pokemon,
   nurseId,
+  reload,
+  update,
+  clearSelected
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,6 +32,8 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
       // Call the healPokemon method from nurseService
       const response = await nurseService.healPokemon(nurseId, pokemon.id);
       alert(`${pokemon.name} has been healed successfully.`);
+      reload(!update);
+      clearSelected(null);
       // You can update the state or UI with the healed pokemon here
     } catch (error: any) {
       alert(error.message || 'Failed to heal Pokémon.');
@@ -54,6 +62,8 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
             // Call removePokemonFromNurse method after 2 seconds
             await nurseService.removePokemonFromNurse(pokemon.id);
             alert(`${pokemon.name} has been removed from nurse's care.`);
+            reload(!update);
+            clearSelected(null);
           } catch (error: any) {
             alert(error.message || 'Failed to remove Pokémon from nurse.');
           }

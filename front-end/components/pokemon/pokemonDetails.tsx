@@ -6,11 +6,17 @@ import styles from '../../styles/pokemon.module.css';
 interface PokemonDetailsProps {
   pokemon: Pokemon;
   nurseId: number;
+  reload: (boolean:boolean) => void;
+  update: boolean;
+  clearSelected: (pokemon:Pokemon | null)=>void;
 }
 
 const PokemonDetails: React.FC<PokemonDetailsProps> = ({
   pokemon,
   nurseId,
+  reload,
+  update,
+  clearSelected
 }) => {
   const handleTransfer = async () => {
     if (pokemon.id === undefined) {
@@ -21,6 +27,8 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
     try {
       await TrainerService.transferPokemonToNurse(pokemon.id, nurseId);
       alert(`${pokemon.name} has been sent to the hospital.`);
+      reload(!update);
+      clearSelected(null);
     } catch (error: any) {
       alert(error.message || 'Failed to transfer Pokémon.');
     }
