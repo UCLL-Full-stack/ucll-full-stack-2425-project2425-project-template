@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import getAllGroepen from '@/services/GroepService';
+import { Groep } from '@/types';
 
 const Header: React.FC = () => {
     const router = useRouter();
@@ -8,7 +10,9 @@ const Header: React.FC = () => {
     const isAdmin = pathname.endsWith('/admin');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLUListElement>(null);
+    const [groepen, setGroepen] = useState<Groep[]>([]);
     const [loggedInUser, setLoggedInUser] = useState<{ totem: string, groep: string } | null>(null);
+
 
     const handleClickOutside = (event: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -27,6 +31,16 @@ const Header: React.FC = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const fetchGroepen = async () => {
+            const response = await getAllGroepen();
+            const groepenArray = await response.json();
+            console.log(groepenArray);
+            setGroepen(groepenArray);
+        }
+        fetchGroepen();
+    }, []);
+
     const handleClick = () => {
         sessionStorage.removeItem("loggedInUser");
         setLoggedInUser(null);
@@ -39,8 +53,13 @@ const Header: React.FC = () => {
                 <nav>
                     <div className="flex space-x-4 items-center">
                         <Link className="hover:bg-green-600 px-3 py-2 rounded" href={isAdmin ? "/admin" : "/"}>
+                            Login Gegevens
+                        </Link>
+
+                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/nieuws">
                             Home
                         </Link>
+                      
                         {loggedInUser ? (
                             <>
                                 <Link
@@ -65,36 +84,18 @@ const Header: React.FC = () => {
                                     Takken
                                 </button>
                                 {dropdownOpen && (
-                                    <ul ref={dropdownRef} className="absolute bg-green-600 text-white mt-2 rounded shadow-lg">
-                                        <Link
-                                            className="block px-4 py-2 hover:bg-green-500 rounded"
-                                            href={isAdmin ? "/activiteiten/losse leden/admin" : "/activiteiten/losse leden"}
-                                            onClick={() => setDropdownOpen(false)}
-                                        >
-                                            Losse leden
-                                        </Link>
-                                        <Link
-                                            className="block px-4 py-2 hover:bg-green-500 rounded"
-                                            href={isAdmin ? "/activiteiten/kapoenen/admin" : "/activiteiten/kapoenen"}
-                                            onClick={() => setDropdownOpen(false)}
-                                        >
-                                            Kapoenen
-                                        </Link>
-                                        <Link
-                                            className="block px-4 py-2 hover:bg-green-500 rounded"
-                                            href={isAdmin ? "/activiteiten/welpen/admin" : "/activiteiten/welpen"}
-                                            onClick={() => setDropdownOpen(false)}
-                                        >
-                                            Welpen
-                                        </Link>
-                                    </ul>
-                                )}
+                                <ul ref={dropdownRef} className="absolute left-0 bg-green-600 text-white mt-2 rounded shadow-lg z-10">
+                                    {groepen && groepen.map((groep, index) => (
+                                        <li key={index} className="hover:bg-green-700 px-3 py-2">
+                                            <Link href={`/tak/${groep.id}`}>{groep.naam}</Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                             </>
                         )}
-                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/nieuws">
-                            Nieuws
-                        </Link>
                         <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/kalender">
+
                             Kalender
                         </Link>
                         {loggedInUser ? (
