@@ -14,7 +14,8 @@ type Props = {
     useEffect(() => {
       const fetchCocktails = async () => {
         try {
-          const retrievedCocktails = await CocktailService.getAllCocktails();
+          const response = await CocktailService.getAllCocktails();
+          const retrievedCocktails = await response.json();
           setCocktails(retrievedCocktails);
         } catch (error) {
           console.error("Failed to fetch cocktails:", error);
