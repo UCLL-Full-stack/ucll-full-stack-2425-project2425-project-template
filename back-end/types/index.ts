@@ -29,7 +29,8 @@ type VehicleInput = {
     bodyType?:string;
     mileage?:number;
     createdAt?: Date;
-    updatedAt?:Date
+    updatedAt?:Date;
+    seller?: UserInput;
 };
 
 

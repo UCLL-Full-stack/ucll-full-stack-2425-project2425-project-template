@@ -89,12 +89,16 @@ import { set } from "date-fns";
 import Head from "next/head";
 import Header from "@/components/header";
 import VehiclesOverviewTable from "@/components/vehicles/VehiclesOverviewTable";
+import VehicleService from "@/services/VehicleService";
+import AddCarModal from "@/components/vehicles/addCarModal";
 
 const userVehicles = () => {
     const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
     const { userId } = router.query;
     const [userVehicles, setUserVehicles] = useState<Array<Vehicle>>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const getUserById = async () => {
         try {
             const [userResponse] = await Promise.all([UserService.getUserById(userId as string)]);
@@ -107,7 +111,7 @@ const userVehicles = () => {
     // setUserVehicles(user?.listOfCarsForSelling || []);
 
     useEffect(() => {
-        if(userId){
+        if (userId) {
             getUserById();
         }
     }, [router.isReady, userId])
@@ -115,10 +119,33 @@ const userVehicles = () => {
         if (user) {
             setUserVehicles(user.listOfCarsForSelling || []);
             console.log(user.listOfCarsForSelling);
-            
+
         }
     }, [user]);
 
+
+
+    const handleAddCar = async (newCar: Vehicle) => {
+        try {
+            const response = await VehicleService.addVehicle(newCar, userId as string);
+            if (response.ok) {
+                const addedCar = await response.json();
+                setUserVehicles((prevVehicles) => [...prevVehicles, addedCar]);
+                console.log(addedCar);
+                
+            }
+        } catch (error) {
+            console.error("Failed to add car:", error);
+        }
+    };
+
+    const handleAddCarClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <>
@@ -132,12 +159,12 @@ const userVehicles = () => {
                 <div className="mr-10 ml-10 mt-10">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-2xl font-bold">My Cars</h1>
-                        {/* <button
+                        <button
                             onClick={handleAddCarClick}
                             className="flex items-center px-4 py-2 text-lg font-medium text-black bg-[#FCBA04] hover:bg-[#FDCD49] drop-shadow-lg align-middle rounded-lg transition duration-500"
                         >
                             ADD VEHICLE
-                        </button> */}
+                        </button>
                     </div>
 
                     <section>
@@ -149,12 +176,11 @@ const userVehicles = () => {
                     </section>
                 </div>
 
-                {/* Render the AddCarModal */}
-                {/* <AddCarModal
+                <AddCarModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
                     onAddCar={handleAddCar}
-                /> */}
+                />
 
             </main>
         </>

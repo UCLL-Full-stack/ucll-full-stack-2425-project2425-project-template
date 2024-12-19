@@ -8,6 +8,15 @@ const main = async () => {
   await prisma.vehicle.deleteMany();
   await prisma.user.deleteMany();
 
+  const user2 = await prisma.user.create({
+    data: {
+      email: 'user2@example.com',
+      name: 'John Doe',
+      password: 'password123',
+      phoneNumber: 123456789,
+    },
+  });
+
   const vehicle1 = await prisma.vehicle.create({
     data: {
       manufacturer: 'Toyota',
@@ -22,8 +31,19 @@ const main = async () => {
       engineCapacity: 2500,
       createdAt: new Date(),
       updatedAt: new Date(),
+      seller: {
+        connect: { id: user2.id },
+      }
     },
   });
+  const user1 = await prisma.user.create({
+    data: {
+      email: 'user1@example.com',
+      name: 'John Doe',
+      password: 'password123',
+      phoneNumber: 123456789,
+    },
+  }); 
   
   const vehicle2 = await prisma.vehicle.create({
     data: {
@@ -39,30 +59,13 @@ const main = async () => {
       engineCapacity: 1500,
       createdAt: new Date(),
       updatedAt: new Date(),
+      seller:{
+        connect: {id: user1.id}
+      }
     },
   });
-  const user1 = await prisma.user.create({
-    data: {
-      email: 'user1@example.com',
-      name: 'John Doe',
-      password: 'password123',
-      phoneNumber: 123456789,
-      listOfCarsForSelling: {
-        connect: [{id: vehicle1.id}]
-      },
-    },
-  });  
-  const user2 = await prisma.user.create({
-    data: {
-      email: 'user2@example.com',
-      name: 'John Doe',
-      password: 'password123',
-      phoneNumber: 123456789,
-      listOfCarsForSelling: {
-        connect: [{id: vehicle2.id}]
-      },
-    },
-  });
+   
+  
   
 };
 

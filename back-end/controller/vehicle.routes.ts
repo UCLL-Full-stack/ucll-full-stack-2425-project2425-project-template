@@ -50,20 +50,20 @@ vehicleRouter.get('/cars', async (req: Request, res: Response) => {
     }
 })
 
-vehicleRouter.post('/', async (req: Request, res: Response) => {
-    try{
-        const vehicle = await vehicleService.addVehicle(req.body);
-        res.status(201).json(vehicle);
-    }catch(error){
+// vehicleRouter.post('/:sellerId', async (req: Request, res: Response) => {
+//     try{
+//         const vehicle = await vehicleService.addVehicle(req.body);
+//         res.status(201).json(vehicle);
+//     }catch(error){
 
-        if (error instanceof Error) {
-            res.status(400).json({ status: 'error', message: error.message });
-        } else {
-            console.error('Unexpected error:', error);
-            res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
-        }
-    }
-})
+//         if (error instanceof Error) {
+//             res.status(400).json({ status: 'error', message: error.message });
+//         } else {
+//             console.error('Unexpected error:', error);
+//             res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
+//         }
+//     }
+// })
 
 vehicleRouter.get('/:id', async (req, res) => {
     const vehicleId = Number(req.params.id);
@@ -81,62 +81,57 @@ vehicleRouter.get('/:id', async (req, res) => {
     }
 })  
 
-vehicleRouter.delete('/:id', async (req, res) => {
+// vehicleRouter.delete('/:id', async (req, res) => {
 
-    const vehicleId = Number(req.params.id);
+//     const vehicleId = Number(req.params.id);
 
-    try {
-        await vehicleService.deleteVehicle(vehicleId);
-        res.status(200).json({ status: `Vehicle with ID ${vehicleId} was deleted.` });
-    } catch (error) {
+//     try {
+//         await vehicleService.deleteVehicle(vehicleId);
+//         res.status(200).json({ status: `Vehicle with ID ${vehicleId} was deleted.` });
+//     } catch (error) {
 
-        if (error instanceof Error) {
-            res.status(400).json({ status: 'error', message: error.message });
-        } else {
-            console.error('Unexpected error:', error);
-            res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
-        } 
-    }
-});
+//         if (error instanceof Error) {
+//             res.status(400).json({ status: 'error', message: error.message });
+//         } else {
+//             console.error('Unexpected error:', error);
+//             res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
+//         } 
+//     }
+// });
 
-vehicleRouter.put('/:id', async (req, res) => {
-    const vehicleId = Number(req.params.id);
-    const newVehicle = req.body;
-    try {
-        await vehicleService.editVehicle(vehicleId, newVehicle);
-        const updatedVehicle = await vehicleService.getVehicleById(vehicleId);
-        res.status(200).json(updatedVehicle);
-    } catch (error) {
+// vehicleRouter.put('/:id', async (req, res) => {
+//     const vehicleId = Number(req.params.id);
+//     const newVehicle = req.body;
+//     try {
+//         await vehicleService.editVehicle(vehicleId, newVehicle);
+//         const updatedVehicle = await vehicleService.getVehicleById(vehicleId);
+//         res.status(200).json(updatedVehicle);
+//     } catch (error) {
 
-        if (error instanceof Error) {
-            res.status(400).json({ status: 'error', message: error.message });
-        } else {
-            console.error('Unexpected error:', error);
-            res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
-        }
-    }
-});
+//         if (error instanceof Error) {
+//             res.status(400).json({ status: 'error', message: error.message });
+//         } else {
+//             console.error('Unexpected error:', error);
+//             res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
+//         }
+//     }
+// });
 
+// vehicleRouter.get('/',async( req: Request, res: Response) => {
+//     try{
+//         const filters = req.query;
+//         const vehicles = await vehicleService.getFilteredVehicles(filters);
+//         res.status(200).json(vehicles);
+//     }catch(error){
 
-
-
-
-
-vehicleRouter.get('/',async( req: Request, res: Response) => {
-    try{
-        const filters = req.query;
-        const vehicles = await vehicleService.getFilteredVehicles(filters);
-        res.status(200).json(vehicles);
-    }catch(error){
-
-        if (error instanceof Error) {
-            res.status(400).json({ status: 'error', message: error.message });
-        } else {
-            console.error('Unexpected error:', error);
-            res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
-        }
-    }
-})
+//         if (error instanceof Error) {
+//             res.status(400).json({ status: 'error', message: error.message });
+//         } else {
+//             console.error('Unexpected error:', error);
+//             res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
+//         }
+//     }
+// })
 
 // vehicleRouter.get('/seller/:sellerId', async (req: Request, res: Response) => {
 //     try{

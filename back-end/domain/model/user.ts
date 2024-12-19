@@ -12,7 +12,7 @@ export class User {
     readonly name: string;
     private password: string;
     readonly phoneNumber: number;
-    private listOfCarsForSelling: Vehicle[];
+    // private listOfCarsForSelling: Vehicle[];
     // private listOfFavoriteCars: Vehicle[]
 
     constructor(user: {
@@ -21,7 +21,7 @@ export class User {
         name: string;
         password: string;
         phoneNumber: number;
-        listOfCarsForSelling: Vehicle[];
+        // listOfCarsForSelling: Vehicle[];
         // listOfFavoriteCars: Vehicle[];
     }) {
 
@@ -30,7 +30,7 @@ export class User {
         this.name = user.name;
         this.password = user.password;
         this.phoneNumber = user.phoneNumber;
-        this.listOfCarsForSelling = user.listOfCarsForSelling || [];
+        // this.listOfCarsForSelling = user.listOfCarsForSelling || [];
         // this.listOfFavoriteCars = user.listOfFavoriteCars || [];
     }
 
@@ -54,34 +54,28 @@ export class User {
     getName(): string {
         return this.name
     }
-    getlistOfCarsForSelling(): Vehicle[] {
-        return this.listOfCarsForSelling;
-    }
+    // getlistOfCarsForSelling(): Vehicle[] {
+    //     return this.listOfCarsForSelling;
+    // }
     // getlistOfFavoriteCars(): Vehicle[] {
     //     return this.listOfFavoriteCars;
     // }
 
-    addCarForSelling(car: Vehicle): void {
-        this.listOfCarsForSelling.push(car);
-    }
+    // addCarForSelling(car: Vehicle): void {
+    //     this.listOfCarsForSelling.push(car);
+    // }
 
     static from({
-        id, email, name, password, phoneNumber, listOfCarsForSelling,
-    }: UserPrisma & { listOfCarsForSelling: VehiclePrisma[]; }) {
+        id, email, name, password, phoneNumber, 
+        // listOfCarsForSelling,
+    }: UserPrisma) {
         return new User({
             id,
             email,
             name,
             password,
             phoneNumber,
-            listOfCarsForSelling: listOfCarsForSelling.map((vehiclePrisma: {
-                id: number; manufacturer:
-                string; model_name: string; price: number;
-                fuelType: string; transmissionType: string; year: number;
-                vehicleType: string; bodyType: string; mileage: number;
-                engineCapacity: number; createdAt: Date; updatedAt: Date;
-                sellerId: number | null;
-            }) => Vehicle.from(vehiclePrisma))
+            // listOfCarsForSelling: Vehicle.from(listOfCarsForSelling)
         });
     }
 }

@@ -9,15 +9,15 @@ const getAllVehicles = ()=>{
     })
 }
 
-const getVehicleByOwner = async (sellerId: string) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/owner/${sellerId}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        }
-    })
-    return await response.json()
-}
+// const getVehicleByOwner = async (sellerId: string) => {
+//     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/owner/${sellerId}`, {
+//         method: "GET",
+//         headers: {
+//             "Content-Type": "application/json",
+//         }
+//     })
+//     return await response.json()
+// }
 
 const getVehicleById = async (vehicleId: number): Promise<Vehicle> => {
     const  vehicle = await fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/${vehicleId}`,{
@@ -29,8 +29,8 @@ const getVehicleById = async (vehicleId: number): Promise<Vehicle> => {
     return await vehicle.json()
 }
 
-const addVehicle = (vehicle: any) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + '/vehicles',{
+const addVehicle = (vehicle: any, sellerId: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/${sellerId}`,{
         method: 'POST',
         headers:{
             'Content-Type': 'application/json'
