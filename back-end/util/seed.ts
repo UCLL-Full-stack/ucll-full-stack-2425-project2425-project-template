@@ -1,18 +1,15 @@
-// Execute: npx ts-node util/seed.ts
-
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 const main = async () => {
-    // Delete existing data to avoid duplication on re-run
-    // await prisma.workoutExercise.deleteMany();
+
     await prisma.workout.deleteMany();
     await prisma.exercise.deleteMany();
     await prisma.user.deleteMany();
 
-    // Create Users
+
     const user1 = await prisma.user.create({
         data: {
             firstName: 'John',
@@ -33,7 +30,17 @@ const main = async () => {
         },
     });
 
-    // Create Exercises
+    const trainer = await prisma.user.create({
+        data: {
+            firstName: 'Emily',
+            lastName: 'Trainer',
+            email: 'emily.trainer@example.com',
+            password: await bcrypt.hash('password123', 10),
+            role: 'trainer',
+        },
+    });
+
+
     const squat = await prisma.exercise.create({
         data: {
             name: 'Squat',
@@ -79,6 +86,7 @@ const main = async () => {
         },
     });
 
+
     await prisma.workout.create({
         data: {
             name: 'Arm Day',
@@ -96,11 +104,11 @@ const main = async () => {
 
     await prisma.workout.create({
         data: {
-            name: 'Full Body Workout',
-            description: 'A full body workout for overall strength.',
+            name: 'Trainer Special',
+            description: 'A special workout designed by the trainer.',
             user: {
                 connect: {
-                    id: user1.id,
+                    id: trainer.id,
                 },
             },
             exercises: {

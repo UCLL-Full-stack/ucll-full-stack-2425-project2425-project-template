@@ -190,4 +190,72 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+
+/**
+ * @swagger
+ * /users/promote/{id}:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Promote a user to trainer
+ *     tags: [Users]
+ *     description: Promote a user to the role of "trainer".
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: The updated user with the new role.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ */
+userRouter.post('/promote/:id', async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+        const updatedUser = await userService.promoteToTrainer(userId);
+        res.status(200).json(updatedUser);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
+/**
+ * @swagger
+ * /users/trainers:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get all trainers
+ *     tags: [Users]
+ *     description: Retrieve a list of all users with the role of "trainer".
+ *     responses:
+ *       200:
+ *         description: A list of trainers.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+userRouter.get('/trainers', async (req: Request, res: Response) => {
+    try {
+        const trainers = await userService.getAllTrainers();
+        res.status(200).json(trainers);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
 export default userRouter;

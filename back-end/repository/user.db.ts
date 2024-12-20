@@ -52,4 +52,45 @@ const createUser = async (user: User): Promise<User> => {
         throw new Error('Database error. See server log for details.');
     }
 };
-export default { getAllUsers, getUserById, getUserByEmail, createUser };
+
+const getAllTrainers = async (): Promise<User[]> => {
+    try {
+        const trainers = await database.user.findMany({
+            where: { role: 'trainer' },
+        });
+        return trainers.map((trainer) => User.from(trainer));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const promoteToTrainer = async ({ id }: { id: string }): Promise<User> => {
+    try {
+        const updatedUser = await database.user.update({
+            where: { id },
+            data: { role: 'trainer' },
+        });
+        return User.from(updatedUser);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const updateUserRole = async ({ id, role }: { id: string; role: string }): Promise<User> => {
+    try {
+        const updatedUser = await database.user.update({
+            where: { id },
+            data: { role },
+        });
+        return User.from(updatedUser); 
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+
+
+export default { getAllUsers, getUserById, getUserByEmail, createUser, getAllTrainers, promoteToTrainer, updateUserRole };

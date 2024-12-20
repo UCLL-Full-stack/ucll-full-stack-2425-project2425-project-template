@@ -396,4 +396,52 @@ workoutRouter.put('/', (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /workouts/{workoutId}/assign/{userId}:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Assign a workout to a user
+ *     tags: [Workouts]
+ *     description: Assign a workout to a specific user by their IDs.
+ *     parameters:
+ *       - in: path
+ *         name: workoutId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The workout ID
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: The updated workout object with the assigned user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Workout'
+ *       404:
+ *         description: Workout or user not found
+ */
+workoutRouter.post('/:workoutId/assign/:userId', async (req: Request, res: Response) => {
+    try {
+        const { workoutId, userId } = req.params;
+
+        // Call the workout service to assign the workout to the user
+        const updatedWorkout = await workoutService.assignWorkoutToUser(workoutId, userId);
+
+        res.status(200).json(updatedWorkout);
+    } catch (error: any) {
+        const errorMessage = error.message || 'An unexpected error occurred';
+        res.status(400).json({ status: 'error', errorMessage: errorMessage });
+    }
+});
+
+
+
 export default workoutRouter;

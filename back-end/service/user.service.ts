@@ -65,4 +65,22 @@ async function authenticate({ email, password }: UserInput): Promise<Authenticat
         fullname: `${user.firstName} ${user.lastName}`,
     };
 }
-export default { getAllUsers, getUserById, getUserByEmail, createUser, authenticate };
+
+const getAllTrainers = async (): Promise<User[]> => {
+    const trainers = await userDb.getAllUsers(); 
+    return trainers.filter((user) => user.role === 'trainer'); 
+};
+
+const promoteToTrainer = async (userId: string): Promise<User> => {
+    const user = await userDb.getUserById({ id: userId });
+    if (!user) {
+        throw new Error(`User with ID ${userId} not found`);
+    }
+
+    if (user.role === 'trainer') {
+        throw new Error('User is already a trainer');
+    }
+
+    return await userDb.updateUserRole({ id: userId, role: 'trainer' });
+};
+export default { getAllUsers, getUserById, getUserByEmail, createUser, authenticate, getAllTrainers, promoteToTrainer };

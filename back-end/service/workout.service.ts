@@ -94,6 +94,23 @@ const updateWorkout = async (workout: Workout): Promise<Workout> => {
     return updatedWorkout;
 };
 
+const assignWorkoutToUser = async (workoutId: string, userId: string): Promise<void> => {
+    // Validate if the user exists
+    const user = await userDb.getUserById({ id: userId });
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+  
+    // Validate if the workout exists
+    const workout = await workoutDb.getWorkoutById({ id: workoutId });
+    if (!workout) {
+      throw new Error(`Workout with ID ${workoutId} not found`);
+    }
+  
+    // Update the workout to link it with the user
+    await workoutDb.assignWorkoutToUser(workoutId, userId);
+  };
+
 export default {
     getAllWorkouts,
     getWorkoutById,
@@ -103,4 +120,5 @@ export default {
     removeExerciseFromWorkout,
     removeWorkout,
     updateWorkout,
+    assignWorkoutToUser,
 };
