@@ -11,8 +11,10 @@ import { crashRouter } from './controller/Crash.routes';
 import { userRouter } from './controller/User.routes';
 import { racecarRouter } from './controller/Racecar.routes';
 import { driverRouter } from './controller/Driver.routes';
+import helmet from 'helmet';
 
 const app = express();
+app.use(helmet());
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
