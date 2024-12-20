@@ -25,6 +25,7 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
   const [ingredientNames, setIngredientNames] = useState<{ [key: number]: string }>({});
   const [author, setAuthor] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -57,6 +58,7 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
           const user = await UserService.getUserById(parseInt(parsedUser.userId));
           const userData = await user.json();
           setAuthor(userData.name);
+          setUserRole(userData.role);
         } catch (error) {
           console.error("Error fetching user:", error);
         }
@@ -109,8 +111,12 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
               </li>
             ))}
           </ul>
-          <button onClick={() => setIsEditing(true)} className="btn-edit">Edit Cocktail</button>
-          <button onClick={handleDelete} className="delete-btn">Delete Cocktail</button>
+          {userRole === 'Moderator' || userRole === 'Admin' ? (
+            <button onClick={() => setIsEditing(true)} className="btn-edit">Edit Cocktail</button>
+          ) : null}
+          {userRole === 'Admin' ? (
+            <button onClick={handleDelete} className="delete-btn">Delete Cocktail</button>
+          ) : null}
         </>
       )}
     </div>

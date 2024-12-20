@@ -29,7 +29,7 @@ const getUserByName = async ({ name }: { name: string }): Promise<User> => {
 const getUserByEmail = async ({ email }: { email: string }): Promise<User> => {
   const user = await userDb.getUserByEmail({ email });
   if (!user) {
-    throw new Error(`User with name: ${email} does not exist.`);
+    throw new Error(`User with email: ${email} does not exist.`);
   }
   return user;
 };
