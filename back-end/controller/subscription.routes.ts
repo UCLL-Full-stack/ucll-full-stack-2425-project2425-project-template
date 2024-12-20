@@ -1,22 +1,23 @@
 /**
  * @swagger
- *   components:
- *    schemas:
- *      Subscription:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            type:
- *              type: string
- *              description: Subscription type.
- *            start_date:
- *              type: date
- *              description: Subscription start date.
- *            duration:
- *              type: string
- *              description: Subscription length.
+ * components:
+ *   schemas:
+ *     Subscription:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         type:
+ *           type: string
+ *           description: Subscription type.
+ *         start_date:
+ *           type: string
+ *           format: date
+ *           description: Subscription start date.
+ *         duration:
+ *           type: string
+ *           description: Subscription length.
  *     UserInput:
  *       type: object
  *       properties:

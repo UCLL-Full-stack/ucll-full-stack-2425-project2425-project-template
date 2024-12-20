@@ -27,9 +27,11 @@
  *            name:
  *              type: string
  *            user:
- *              id:
- *                  type: number
- *                  format: int64
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: number
+ *                      format: int64
  *      AddSongInput:
  *          type: object
  *          properties:
@@ -185,13 +187,6 @@ playlistRouter.post('/addSong', async (req: Request, res: Response, next: NextFu
  *     security:
  *       - bearerAuth: []
  *     summary: create playlist
- *     parameters:
- *       - in: query
- *         name: id
- *         required: true
- *         schema:
- *           type: number
- *           description: ID of the playlist
  *     requestBody:
  *       required: true
  *       content:
