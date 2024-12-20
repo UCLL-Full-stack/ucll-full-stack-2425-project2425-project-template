@@ -93,6 +93,46 @@ const main = async () => {
     },
   });
 
+  const trip3 = await prisma.trip.create({
+    data: {
+      description: "City Tour",
+      destination: "New York, NY",
+      startDate: new Date("2024-09-01"),
+      endDate: new Date("2024-09-05"),
+      price: 599.99,
+    },
+  });
+
+  const trip4 = await prisma.trip.create({
+    data: {
+      description: "Desert Adventure",
+      destination: "Phoenix, AZ",
+      startDate: new Date("2024-10-01"),
+      endDate: new Date("2024-10-07"),
+      price: 399.99,
+    },
+  });
+
+  const trip5 = await prisma.trip.create({
+    data: {
+      description: "Safari Expedition",
+      destination: "Kenya, Africa",
+      startDate: new Date("2024-11-01"),
+      endDate: new Date("2024-11-15"),
+      price: 2499.99,
+    },
+  });
+
+  const trip6 = await prisma.trip.create({
+    data: {
+      description: "Northern Lights Experience",
+      destination: "Reykjavik, Iceland",
+      startDate: new Date("2024-12-01"),
+      endDate: new Date("2024-12-10"),
+      price: 1599.99,
+    },
+  });
+
   const booking1 = await prisma.booking.create({
     data: {                         
       students: {
@@ -114,6 +154,54 @@ const main = async () => {
       },
       tripId: trip2.id,
       paymentStatus: PaymentStatus.Pending,  
+    },
+  });
+
+  const booking3 = await prisma.booking.create({
+    data: {                         
+      students: {
+        connect: {
+          id: student1.id,
+        },
+      },
+      tripId: trip3.id,
+      paymentStatus: PaymentStatus.Paid,  
+    },
+  });
+
+  const booking4 = await prisma.booking.create({
+    data: {
+      students: {
+        connect: {
+          id: student2.id,
+        },
+      },
+      tripId: trip4.id,
+      paymentStatus: PaymentStatus.Pending,  
+    },
+  });
+
+  const booking5 = await prisma.booking.create({
+    data: {
+      students: {
+        connect: {
+          id: student1.id,
+        },
+      },
+      tripId: trip5.id,
+      paymentStatus: PaymentStatus.Pending,  
+    },
+  });
+
+  const booking6 = await prisma.booking.create({
+    data: {
+      students: {
+        connect: {
+          id: student2.id,
+        },
+      },
+      tripId: trip6.id,
+      paymentStatus: PaymentStatus.Paid,  
     },
   });
 

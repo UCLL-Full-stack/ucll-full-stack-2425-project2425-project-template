@@ -36,7 +36,7 @@
  *         password:
  *           type: string
  *           description: User's password.
- *           example: "password123"
+ *           example: "Password123"
  *     User:
  *       type: object
  *       properties:
@@ -72,7 +72,7 @@
  *         password:
  *           type: string
  *           description: User's password.
- *           example: "password123"
+ *           example: "Password123"
  *         firstName:
  *           type: string
  *           description: User's first name.
