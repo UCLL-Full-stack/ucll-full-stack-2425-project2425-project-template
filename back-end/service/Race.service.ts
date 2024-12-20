@@ -323,4 +323,8 @@ const createTempRace = async (raceInput: RaceInput): Promise<TempRace> => {
     return newTempRace;
 };
 
-export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getRaceByCrashId, createTempRace };
+const getRaceByName = async (name: string): Promise<Race | null> => {
+    return raceDb.getRaceByName(name);
+}
+
+export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getRaceByCrashId, createTempRace, getRaceByName };

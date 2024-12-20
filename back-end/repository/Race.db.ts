@@ -232,4 +232,21 @@ const getRaceByCrashId = async (id: number): Promise<Race | null> => {
         throw new Error('Database error. See server logs for details.');
     }
 };
-export default { addCrashToRace, removeCrashFromRace, editCrash, getAllRaces, getRaceById, createRace, getRaceByCrashId };
+
+const getRaceByName = async (name: string): Promise<Race | null> => {
+    try {
+        const racePrisma = await database.race.findFirst({
+            where: { name },
+            include: {
+                crashes: { include: { participants: { include: { driver: true, racecar: true } } } },
+            },
+        });
+        return racePrisma ? Race.from(racePrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server logs for details.');
+    }
+};
+
+
+export default { addCrashToRace, removeCrashFromRace, editCrash, getAllRaces, getRaceById, createRace, getRaceByCrashId, getRaceByName };

@@ -587,4 +587,43 @@ raceRouter.post('/temp', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
+/**
+ * @swagger
+ * /races/name/{name}:
+ *   get:
+ *     summary: Retrieve a race by name
+ *     tags: [Races]
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The race name
+ *     responses:
+ *       200:
+ *         description: A race object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Race'
+ *       404:
+ *         description: Race not found
+ *       500:
+ *         description: Internal server error
+ */
+raceRouter.get('/name/:name', async (req: Request, res: Response) => {
+    const name = req.params.name;
+    try {
+        const race = await raceService.getRaceByName(name);
+        if (race) {
+            res.json(race);
+        } else {
+            res.status(404).json({ message: 'Race not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 export { raceRouter };

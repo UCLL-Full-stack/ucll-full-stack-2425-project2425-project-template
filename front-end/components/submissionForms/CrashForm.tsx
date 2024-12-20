@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { use } from 'react';
 import { useState } from 'react';
-import { Driver, Race, Racecar, Submission_form } from '@types';
+import { Crash, Driver, Race, Racecar, Submission_form } from '@types';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import DriverService from '@services/DriverService';
 import RacecarService from '@services/RacecarService';
-import TempRaceService from '@services/TempRaceService';
 import submission_formService from '@services/SubmissionService';
+import crashService from '@services/CrashService';
+import raceService from '@services/RaceService';
 
 interface Props {
   races: Race[];
@@ -18,6 +19,8 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
+  const [selectedRace, setSelectedRace] = useState('');
+  const [availableCrashes, setAvailableCrashes] = useState<string[]>([]);
   const [items, setItems] = useState<string[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [racecars, setRacecars] = useState<Racecar[]>([]);
@@ -204,6 +207,39 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
         </div>
       )
       }
+      {(selectedOption === 'option3') && (
+        <>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label>{t('Select Race')}</label>
+            <select
+              value={selectedRace}
+              onChange={async (e) => {
+                setSelectedRace(e.target.value);
+                const raceResponse = await raceService.getRaceByName(e.target.value);
+                const raceData = await raceResponse.json();
+                const crashResponse = await crashService.getCrashByRaceId(raceData.id);
+                const crashData = await crashResponse.json();
+                setAvailableCrashes(crashData.description);
+              }}
+              style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+            >
+              {races.map((race, index) => (
+                <option key={index} value={race.id}>
+                  {race.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label>{t('Available Crashes')}</label>
+            <ul>
+              {availableCrashes.map((crash, index) => (
+                <li key={index}>{crash}</li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
       <button type="submit" style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }}>
         {t('Submit')}
       </button>
