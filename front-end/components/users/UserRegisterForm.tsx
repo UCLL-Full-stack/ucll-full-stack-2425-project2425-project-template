@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 import UserService from '../../services/UserService';
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 
 const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +38,21 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
         const user = { name, email, password, role };
         const response = await UserService.createUser(user);
         if (response.ok) {
-          onSubmit(await response.json());
+          const userPayload = await response.json();
+          const userthing = userPayload.response;
+
+          sessionStorage.setItem("loggedInUser", JSON.stringify({
+            token: userthing.token,
+            role: userthing.role,
+            userId: userthing.userId,
+          }));
+
+
+          setTimeout(() => {
+            router.push("/");
+          }, 500);
+
+          onSubmit(userPayload);
         } else {
           setErrors({ form: t('register.error') });
         }
