@@ -49,12 +49,22 @@ const removeCrashFromRace = async (raceId: number, crashId: number) => {
   });
 };
 
+const getRaceByName = async (name: string) => {
+  return fetch(`${apiUrl}/races/name/${name}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 const raceService = {
   getAllRaces,
   getRaceById,
   addCrashToRace,
   editCrash,
   removeCrashFromRace,
+  getRaceByName,
 };
 
 export default raceService;
