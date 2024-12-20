@@ -135,7 +135,7 @@ const BookingOverviewTable: React.FC = () => {
                         <th scope="col">{t("booking.destination")}</th>
                         <th scope="col">{t("booking.datum")}</th>
                         <th scope="col">{t("booking.status")}</th>
-                        {userRole === 'admin' && <th scope="col">{t("booking.actions")}</th>}
+                        {userRole === 'admin' && <th scope="col">{t("booking.delete")}</th>}
                     </tr>
                 </thead>
                 <tbody>
