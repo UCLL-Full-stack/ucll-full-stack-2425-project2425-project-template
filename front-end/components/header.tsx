@@ -59,6 +59,10 @@ const Header: React.FC = () => {
                         <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/nieuws">
                             Home
                         </Link>
+
+                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/takken">
+                            Takken
+                        </Link>
                       
                         {loggedInUser ? (
                             <>
@@ -94,10 +98,6 @@ const Header: React.FC = () => {
                             )}
                             </>
                         )}
-                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/kalender">
-
-                            Kalender
-                        </Link>
                         {loggedInUser ? (
                             <>
                                 <a
