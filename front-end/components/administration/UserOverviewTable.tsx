@@ -21,7 +21,7 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser }: Props) => {
           <tbody>
             {users.map((user, index) => (
               <tr key={index} onClick={() => selectUser(user)} role="button">
-                <td>{user.name} {user.surname}</td>
+                <td>{user.fullname}</td>
                 <td>{user.email}</td>
                 <td>{user.permission}</td>
               </tr>

@@ -30,10 +30,13 @@ const SubmissionForms: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <h1>Submission Forms</h1>
         <CrashForm races={races} setSubmissionForms={() => {}} />
       </div>
+      <br />
+      <br />
+      <br />
     </div>
   );
 };
