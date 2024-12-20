@@ -72,6 +72,13 @@
     height: auto; 
     border-radius: 10px;
 }
+
+.users-table-section{
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color:rgb(0, 164, 0)
+}
+
 .users-table {
     width: 80%; /* Set a fixed width or percentage of the container */
     margin: 20px auto; /* This centers the table */
