@@ -15,10 +15,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useTranslation } from "next-i18next";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,9 +42,9 @@ const App = ({ Component, pageProps }: AppProps) => {
   const getPageName = () => {
     const routeNameMap: { [key: string]: string } = {
       "/": "Home",
-      "/planner": "Planner",
-      "/recipes": "Recipes",
-      "/users": "Users",
+      "/planner": "planner",
+      "/recipes": "recipes",
+      "/users": "users",
     };
 
     if (router.pathname.startsWith("/recipes/[id]")) {
@@ -87,7 +89,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{getPageName()}</BreadcrumbPage>
+                  <BreadcrumbPage>{t(getPageName())}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

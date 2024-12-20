@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { User, Users, Calendar, LogOut, Globe } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "next-i18next";
 
 const AppSidebar: React.FC = () => {
@@ -14,13 +13,6 @@ const AppSidebar: React.FC = () => {
 
   const { t } = useTranslation("common");
   const { locale, pathname: currentPath, asPath, query } = router;
-
-  const handleLanguageChange = () => {
-    const newLocale = locale === "en" ? "zh" : "en";
-    router.push({ pathname: currentPath, query }, asPath, {
-      locale: newLocale,
-    });
-  };
 
   useEffect(() => {
     const role = localStorage.getItem("role");
@@ -43,7 +35,7 @@ const AppSidebar: React.FC = () => {
 
   const sidebarItems = [
     { href: "/planner", icon: Calendar, label: t("planner") },
-    ...(isAdmin ? [{ href: "/users", icon: Users, label: "Users" }] : []),
+    ...(isAdmin ? [{ href: "/users", icon: Users, label: t("users") }] : []),
   ];
 
   return (

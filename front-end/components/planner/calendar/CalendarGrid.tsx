@@ -8,8 +8,9 @@ import { Recipe } from "@/types/recipes";
 import { useTranslation } from "next-i18next";
 
 const CalendarGrid: React.FC = () => {
+  const { t } = useTranslation("common");
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<"Month" | "Week">("Month"); // to implement
+  const [viewMode, setViewMode] = useState<"month" | "week">("month"); // to implement
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectionModeActive, setSelectionModeActive] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
@@ -18,7 +19,6 @@ const CalendarGrid: React.FC = () => {
   const [recipesByDate, setRecipesByDate] = useState<Record<string, Recipe[]>>(
     {}
   );
-  const { t } = useTranslation("common");
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
