@@ -1,12 +1,24 @@
 import Head from 'next/head';
-import React from 'react';
-import Link from 'next/link';
-import header from '@/components/header';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/header';
 
 const Home: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+    const [userRole, setUserRole] = useState<string | null>(null);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const user = sessionStorage.getItem("loggedInUser");
+            const role = sessionStorage.getItem("role");
+            setUserRole(role);
+            setLoggedInUser(user);
+            setIsClient(true);
+        }
+    }, []);
+
     return (
-        <>
+        <div className='flex flex-col min-h-screen'>
             <Head>
                 <title>Agenda</title>
                 <meta name="description" content="Agenda app" />
@@ -14,30 +26,41 @@ const Home: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <main>
-                <span>
-                    <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Welkom op de agenda van Scouts Overijse!</h1>
-                </span>
-                <div className="m-5">
-                    <h3>Nieuws</h3>
-                    <h4>Inschrijvingen scoutsjaar 2024-2025</h4>
-                    <p>Beste ouders en leden,
-                        na weer twee lange maanden zonder scouts zijn we eindelijk weer terug! Zondag 29 september start het nieuwe fantastische scoutsjaar, van 14u tot 17u is elke jongen van 6 tot 17 jaar van harte welkom. Hieronder vindt u de inschrijvingslink voor het scoutsjaar 2024-2025
-                    </p>
-                    <a className="underline text-blue-700 hover:text-gray-500" href="https://forms.office.com/Pages/ResponsePage.aspx?id=G4Y45tkV5k2mXbSHia4fCIrv-xVnqwhGiPRhhKckvedUN1ROQ1kyWTdGQ1ZGN1ZHQzI3MTNLUU5QRC4u">Forum</a>
-                    <p>Stevige Linker</p>
-                    <p>De groepsleiding</p>
-                </div>
-                <div className="m-5">
-                    <h4>GDPR wetgeving</h4>
-                    <p>Beste ouders, Via deze link kan u naar onze GDPR wetgeving pagina gaan.</p>
-                    <a className="underline text-blue-700 hover:text-gray-500" href="https://docs.google.com/document/d/1pe6MTjk5iv7z-8TXW39-I7fcgSCO77TT7c1QmWDROIc/edit?usp=sharing">GDPR link</a>
-                    <p>Met scoutieve groeten,</p>
-                    <p>De leiding</p>
-                </div>
+            <main className="container mx-auto place-items-center flex-grow">
+                <table className="w-8/12 text-left border-collapse border border-black border-solid mt-10">
+                    <thead>
+                        <tr>
+                            <th className="border border-black m-5">Naam</th>
+                            <th className="border border-black m-5">Wachtwoord</th>
+                            <th className="border border-black m-5">Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="border border-black">Leiding1</td>
+                            <td className="border border-black">leiding1</td>
+                            <td className="border border-black">LEIDING (basis rol om dingen toe te voegen)</td>
+                        </tr>
+                        <tr>
+                            <td className="border border-black">Leiding2</td>
+                            <td className="border border-black">leiding2</td>
+                            <td className="border border-black">LEIDING (basis rol om dingen toe te voegen)</td>
+                        </tr>
+                        <tr>
+                            <td className="border border-black">Hoofdleiding</td>
+                            <td className="border border-black">hoofdleiding</td>
+                            <td className="border border-black">HOOFDLEIDING (kan bijna alles)</td>
+                        </tr>
+                        <tr>
+                            <td className="border border-black">Admin</td>
+                            <td className="border border-black">admin</td>
+                            <td className="border border-black">ADMIN (kan alles wat hoofdleiding niet kan, maar kan enkele hoofdleiding specifieke dingen niet)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </main>
-        </>
+        </div>
     );
-};
+}
 
 export default Home;

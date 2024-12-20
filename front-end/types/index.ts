@@ -11,7 +11,7 @@ export type Groep = {
     naam: string;
     beschrijving: string;
     activiteiten: Activiteit[];
-    leiding: boolean;
+    leiding: Leiding[];
 };
 
 export type Leiding = {
@@ -22,7 +22,7 @@ export type Leiding = {
     telefoon: string;
     hoofdleiding: boolean;
     totem: string;
-    groep: Groep;
+    groep: string;
 };
 
 export type Nieuwsbericht = {
@@ -30,5 +30,15 @@ export type Nieuwsbericht = {
     titel: string;
     inhoud: string;
     datum: Date;
-    auteur: Leiding;
+    auteur: string;
+};
+
+export type UserLogin = {
+    totem: string;
+    wachtwoord: string;
+};
+
+export type StatusMessage = {
+    message: String;
+    type: "error" | "success";
 };

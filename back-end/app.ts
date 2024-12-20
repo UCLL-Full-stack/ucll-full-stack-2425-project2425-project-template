@@ -32,6 +32,7 @@ app.use(
             '/api-docs',
             /^\/groep\/[^\/]+\/activiteiten$/,
             /^\/groep\/[^\/]+\/leiding$/,
+            /^\/groep\/[^\/]+$/,
             '/groep',
             '/nieuwsberichten',
             ],

@@ -6,7 +6,8 @@ import leidingDb from "../repository/leiding.db";
 import { Leiding, PublicLeiding } from "../model/leiding";
 
 const getAllGroepen = async (): Promise<Groep[] | undefined> => {
-    return await groepDB.getAllGroepen();
+    const groepen = await groepDB.getAllGroepen();
+    return groepen.slice(1);
 }
 
 const getActiviteitenForGroep = async (naam: string): Promise<Activiteit[] | undefined> => {
@@ -53,11 +54,21 @@ const getGroepById = async (id: number): Promise<Groep> => {
     return groep;
 }
 
+const getGroepByNaamForRoute = async (naam: string): Promise<Groep> => {
+    const standard = capitalizeFirstLetter(naam);
+    const groep = await groepDB.getGroepByNaamForRoute({naam: standard});
+    if (!groep) {
+        throw new Error('Groep not found');
+    }
+    return groep;
+}
+
 export default {
     getAllGroepen, 
     getActiviteitenForGroep, 
     addActiviteitToGroep, 
     getGroepByNaam,
     getLeidingForGroep,
-    getGroepById
+    getGroepById,
+    getGroepByNaamForRoute
 };
