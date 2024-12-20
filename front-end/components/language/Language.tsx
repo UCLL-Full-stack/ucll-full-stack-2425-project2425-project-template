@@ -1,23 +1,24 @@
 import { useRouter } from "next/router";
+import React from "react";
 
 const Language: React.FC = () => {
   const router = useRouter();
-  const { locale, pathname, asPath, query } = router;
+  const { locale } = router;
 
-  const handleLanguageChange = (event: { target: { value: string } }) => {
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newLocale = event.target.value;
     const { pathname, query, asPath } = router;
     router.push({ pathname, query }, asPath, { locale: newLocale });
   };
 
   return (
-    <div className="ml-6">
-      <label htmlFor="language" className="text-white">
+    <div className="navbarbutton-stylah-lang">
+      <label htmlFor="language" className="hidden">
         Language
       </label>
       <select
         id="language"
-        className="ml-2 p-1"
+        className="navbar-dropdown"
         value={locale}
         onChange={handleLanguageChange}
       >

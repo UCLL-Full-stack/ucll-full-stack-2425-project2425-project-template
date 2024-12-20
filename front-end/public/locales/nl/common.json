@@ -1,47 +1,65 @@
 {
     "app.title": "Sip Happens Online",
-    "app.language": "Nederlands",
     "general.error": "Er is een fout opgetreden, probeer het later opnieuw.",
     "home": {
-        "title": "Welkom bij Sip Happens Online",
-        "description1": "Ontdek een wereld van verfijnde cocktails en verbeter je mixologievaardigheden. Sip Happens Online is jouw ultieme bestemming voor alles wat met cocktails te maken heeft. Meld je aan en log in om je favoriete drankjes toe te voegen en te bekijken, en ontdek een centrale lijst van alle cocktails met een teller die laat zien hoeveel gebruikers elk drankje als favoriet hebben gemarkeerd.",
-        "description2": "Onze uitgebreide collectie cocktailrecepten bevat gedetailleerde ingrediënten, en je kunt eenvoudig cocktails filteren op basis van je voorkeuren. Of je nu een ervaren mixoloog bent of net begint, Sip Happens Online heeft voor ieder wat wils. Word lid van onze gemeenschap en begin vandaag nog met het mixen van je perfecte drankje!",
-        "userInformation": {
-            "title": "Gebruikersinformatie",
-            "username": "Gebruikersnaam",
-            "password": "Wachtwoord",
-            "role": "Rol"
-        }
+      "title": "Welkom bij Sip Happens Online",
+      "description1": "Ontdek een wereld van verfijnde cocktails en verbeter je mixologievaardigheden. Sip Happens Online is jouw ultieme bestemming voor alles wat met cocktails te maken heeft. Meld je aan en log in om je favoriete drankjes toe te voegen en te bekijken, en ontdek een centrale lijst van alle cocktails met een teller die laat zien hoeveel gebruikers elk drankje als favoriet hebben gemarkeerd.",
+      "description2": "Onze uitgebreide collectie cocktailrecepten bevat gedetailleerde ingrediënten, en je kunt eenvoudig cocktails filteren op basis van je voorkeuren. Of je nu een ervaren mixoloog bent of net begint, Sip Happens Online heeft voor ieder wat wils. Word lid van onze gemeenschap en begin vandaag nog met het mixen van je perfecte drankje!",
+      "userInformation": {
+        "title": "Gebruikersinformatie",
+        "email": "E-Mail",
+        "password": "Wachtwoord",
+        "role": "Rol"
+      }
     },
     "header": {
-        "home": "thuis",
-        "cocktails": "Cocktails",
-        "addCocktail": "Cocktail Toevoegen",
-        "search": "Zoeken",
-        "login": "Inloggen",
-        "logout": "Uitloggen",
-        "register": "Registreren"
+      "home": "Home",
+      "cocktails": "Cocktails",
+      "addCocktail": "Cocktail Toevoegen",
+      "favorites": "Favorieten",
+      "login": "Inloggen",
+      "logout": "Uitloggen",
+      "register": "Registreren",
+      "welcome": "Welkom"
     },
     "addCocktail": {
-        "title": "Cocktail Toevoegen",
-        "id": "ID",
-        "name": "Naam",
-        "description": "Beschrijving",
-        "strongness": "Sterkte (0-5)",
-        "addIngredient": "Ingrediënt Toevoegen",
-        "removeIngredient": "Ingrediënt Verwijderen",
-        "save": "Opslaan",
-        "cancel": "Annuleren"
+      "title": "Cocktail Toevoegen",
+      "id": "ID",
+      "name": "Naam",
+      "description": "Beschrijving",
+      "strongness": "Sterkte (0-5)",
+      "addIngredient": "Ingrediënt Toevoegen",
+      "removeIngredient": "Ingrediënt Verwijderen",
+      "save": "Opslaan",
+      "cancel": "Annuleren"
     },
     "login": {
-        "title": "Inloggen",
-        "label": {
-            "username": "Gebruikersnaam",
-            "password": "Wachtwoord"
-        },
-        "button": "Inloggen",
-        "name": "Vul een gebruikersnaam in.",
-        "password": "Vul een wachtwoord in.",
-        "success": "Inloggen succesvol. U wordt doorgestuurd..."
+      "title": "Inloggen",
+      "label": {
+        "email": "E-Mail",
+        "password": "Wachtwoord"
+      },
+      "button": "Inloggen",
+      "name": "Vul een E-Mail in.",
+      "password": "Vul een wachtwoord in.",
+      "success": "Inloggen succesvol. U wordt doorgestuurd..."
+    },
+    "register": {
+      "title": "Registreren",
+      "label": {
+        "name": "Naam",
+        "email": "E-Mail",
+        "password": "Wachtwoord"
+      },
+      "nameRequired": "Naam is verplicht",
+      "emailRequired": "E-Mail is verplicht",
+      "passwordRequired": "Wachtwoord is verplicht",
+      "success": "Registratie succesvol! Doorsturen naar inloggen...",
+      "error": "Registratie mislukt. Probeer het opnieuw.",
+      "button": "Registreren"
+    },
+    "favorites": {
+      "title": "Favorieten",
+      "description": "Hier vind je al je favoriete cocktails. Klik op een cocktail om de details te bekijken."
     }
-}
+  }
