@@ -1,0 +1,44 @@
+{
+  "home": {
+    "home": "Homepagina",
+    "text1": "Welkom bij een betere versie dan Spotify.",
+    "text2": "Geniet van de muziek en verwijder Spotify. €9,99 per maand is oplichterij.",
+    "text3": "Nee, grapje, ik hou van Spotify. Het is een heel goede app."
+  },
+
+  "signup": {
+    "title": "Registreren",
+    "label": {
+      "firstname": "Voornaam",
+      "lastName": "Achternaam",
+      "username": "Gebruikersnaam",
+      "email": "E-mail",
+      "password": "Wachtwoord"
+    },
+    "button": "Registreren",
+    "validate": {
+      "firstName": "Voornaam is verplicht.",
+      "lastName": "Achternaam is verplicht.",
+      "username": "Gebruikersnaam is verplicht.",
+      "email": "E-mailadres is verplicht.",
+      "password": "Wachtwoord is verplicht."
+    },
+    "success": "Je registratie is succesvol!",
+    "error": "Er is een fout opgetreden tijdens het registreren. Probeer het opnieuw."
+  },
+  "general": {
+    "error": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw."
+  },
+
+  "header" : {
+    "home": "Home",
+    "songs": "Nummers",
+    "playlist": "Playlists",
+    "login": "Inloggen",
+    "subscription" : "Abonnementen",
+    "signup": "Registeren",
+    "logout": "Uitloggen",
+    "welcome": "Welkom",
+    "users": "Gebruikers"
+  }
+}

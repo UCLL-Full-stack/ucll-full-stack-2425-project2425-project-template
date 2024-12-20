@@ -1,0 +1,45 @@
+{
+  "home": {
+    "home": "Homepage",
+    "text1": "Welcome to a better version than Spotify.",
+    "text2": "Enjoy the music and delete Spotify. 9.99€ a month is a scam.",
+    "text3": "No, just kidding, I love Spotify. It’s a pretty good app."
+  },
+
+  "signup": {
+    "title": "Sign Up",
+    "label": {
+      "firstname": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password"
+    },
+    "button": "Sign Up",
+    "validate": {
+      "firstName": "First name is required.",
+      "lastName": "Last name is required.",
+      "username": "Username is required.",
+      "email": "Email is required.",
+      "password": "Password is required."
+    },
+    "success": "Your registration was successful!",
+    "error": "An error occurred during registration. Please try again."
+  },
+  "general": {
+    "error": "An unexpected error occurred. Please try again later."
+  },
+
+  "header" : {
+    "home": "Home",
+    "songs": "Songs",
+    "playlist": "Playlists",
+    "login": "Login",
+    "subscription" : "Subscription",
+    "signup": "Signup",
+    "logout": "Logout",
+    "welcome": "Welcome",
+    "users": "Users"
+  }
+}
+  
