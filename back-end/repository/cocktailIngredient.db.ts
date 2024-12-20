@@ -1,5 +1,5 @@
 import { CocktailIngredient } from '../model/cocktailIngredients';
-import database from './database';
+import database from '../util/database';
 
 const getAllRelations = async (): Promise<CocktailIngredient[]> => {
     try{

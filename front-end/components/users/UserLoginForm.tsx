@@ -25,7 +25,7 @@ const UserLoginForm: React.FC = () => {
     let result = true;
 
     if (!email || email.trim() === "") {
-      setEmailError(t('login.emailRequired'));
+      setEmailError(t('login.email'));
       result = false;
     }
 
@@ -39,29 +39,29 @@ const UserLoginForm: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     clearErrors();
-
+  
     if (!validate()) {
       return;
     }
-
+  
     try {
       const user = { email, password };
       const response = await UserService.loginUser(user);
-
+  
       if (response.status === 200) {
+        const userPayload = await response.json();
+        const userthing = userPayload.response;
+  
         setStatusMessages([{ message: t('login.success'), type: "success" }]);
-
-        const user = await response.json();
-
+  
+        console.log("User logged in:", userPayload);
         localStorage.setItem("loggedInUser", JSON.stringify({
-          token: user.token,
-          fullname: user.fullname,
-          username: user.username,
-          role: user.role
+          token: userthing.token,
+          role: userthing.role,
         }));
-
+  
         setTimeout(() => {
           router.push("/");
         }, 2000);
@@ -69,9 +69,11 @@ const UserLoginForm: React.FC = () => {
         setStatusMessages([{ message: t('login.error'), type: "error" }]);
       }
     } catch (error) {
+      console.error("Login error:", error);
       setStatusMessages([{ message: t('login.error'), type: "error" }]);
     }
   };
+  
 
   return (
     <>
@@ -94,18 +96,18 @@ const UserLoginForm: React.FC = () => {
         </div>
       )}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="emailInput" className="mb-4">
+        <label htmlFor="emailInput" className="block mb-2 text-sm font-medium">
           {t('login.label.email')}
         </label>
         <div className="block mb-2 text-sm font-medium">
           <input
             id="emailInput"
-            type="email"
+            type="text"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="form-input"
+            className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue:500 block w-full p-2.5"
           />
-          {emailError && <div className="error-text">{emailError}</div>}
+          {emailError && <div className="text-red-800 ">{emailError}</div>}
         </div>
         <div className="mb-4">
           <div>

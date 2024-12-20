@@ -9,11 +9,10 @@ export type User = {
 
 export type UserInput = {
   id?: number;
-  username: string;
-  password: string;
-  email: string;
-  role: string;
-
+  name?: string;
+  password?: string;
+  email?: string;
+  role?: string;
 };
 
 export type Cocktail = {
@@ -38,6 +37,6 @@ export type CocktailIngredient = {
 
 export type AuthenticationResponse = {
     token: string;
-    username: string;
+    email: string;
     role: string;
 };

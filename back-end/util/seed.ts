@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -102,9 +103,9 @@ async function main() {
   // Seed Users
   const users = await prisma.user.createMany({
     data: [
-      { name: "Bazinga", email: "Bazinga@email.com", password: "L" , role: "admin" },
-      { name: "Badinga", email: "Badinga@email.com", password: "L" , role : "user" },
-      { name: "BazingaBadinga", email: "BazingaBadinga", password: "L" , role: "Moderator" },
+      { name: "admin", email: "admin@email.com", password: await bcrypt.hash('admin', 12), role: "admin" },
+      { name: "Badinga", email: "Badinga@email.com", password: await bcrypt.hash('test', 12) , role : "user" },
+      { name: "BazingaBadinga", email: "BazingaBadinga@email.com", password: await bcrypt.hash('test', 12) , role: "Moderator" },
     ],
   });
 

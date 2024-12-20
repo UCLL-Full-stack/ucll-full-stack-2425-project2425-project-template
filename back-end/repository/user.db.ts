@@ -1,5 +1,5 @@
 import { User } from '../model/user';
-import database from './database';
+import database from '../util/database';
 
 const getAllUsers = async (): Promise<User[]> => {
   try {
@@ -24,6 +24,19 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
   }
 };
 
+const getUserByEmail = async ({ email }: { email: string }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { email },
+        });
+
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error.');
+    }
+}
+
 const createUser = async (user: User): Promise<User> => {
   try {
       const userPrisma = await database.user.create({
@@ -41,10 +54,10 @@ const createUser = async (user: User): Promise<User> => {
   }
 };
 
-const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
+const getUserByName = async ({ name }: { name: string }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findFirst({
-            where: { name: username },
+            where: { name: name },
         });
 
         return userPrisma ? User.from(userPrisma) : null;
@@ -54,4 +67,4 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     }
 };
 
-export default { getAllUsers, getUserById, createUser, getUserByUsername };
+export default { getAllUsers, getUserById,getUserByEmail, createUser, getUserByName };
