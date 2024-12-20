@@ -120,6 +120,27 @@ const deleteBooking = async (bookingId: number): Promise<void> => {
         throw new Error(`Unable to delete booking with ID: ${bookingId}.`);
     }
 };
+const updatePaymentStatus = async (bookingId: number, newStatus: PaymentStatus): Promise<Booking | null> => {
+    try {
+        const updatedBookingPrisma = await database.booking.update({
+            where: { id: bookingId },
+            data: {
+                paymentStatus: newStatus,
+            },
+            include: {
+                trip: true,
+                students: {
+                    include: { user: true },
+                },
+            },
+        });
+
+        return updatedBookingPrisma ? Booking.from(updatedBookingPrisma) : null;
+    } catch (error) {
+        console.error('Error updating payment status for booking:', bookingId, error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default {
     getAllBookings,
@@ -127,5 +148,6 @@ export default {
     deleteBooking,
     createBooking,
     getBookingForStudent,
+    updatePaymentStatus,
     updateStudentsOfBooking
 };

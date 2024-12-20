@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/Bookings.module.css';
 import { useTranslation } from 'next-i18next';
 import errorStyles from '../styles/errorMessage.module.css';
-import UserService from '@/services/UserService';
 import bookingService from '@/services/bookingService';
-import useSWR from 'swr';
 import { jwtDecode } from 'jwt-decode';
 
 const BookingOverviewTable: React.FC = () => {
@@ -18,28 +16,25 @@ const BookingOverviewTable: React.FC = () => {
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
-        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
-        const role = loggedInUser ? JSON.parse(loggedInUser).role : null;
-        const username = loggedInUser ? JSON.parse(loggedInUser).username : null;
-        const studentId = loggedInUser ? JSON.parse(loggedInUser).studentId : null;
-
-        if (token) {
-            try {
-                const decodedToken = jwtDecode<DecodedToken>(token);
-
-                if (decodedToken.studentId) {
-                    setStudentId(decodedToken.studentId);
-                }
-            } catch (error) {
-                console.error('Failed to decode token:', error);
+        if (!loggedInUser) return;
+    
+        const { token, role } = JSON.parse(loggedInUser);
+    
+        setIsLoggedIn(!!token);
+        setUserRole(role || null);
+    
+        if (!token) return;
+    
+        try {
+            const decodedToken = jwtDecode<DecodedToken>(token);
+            if (decodedToken?.studentId) {
+                setStudentId(decodedToken.studentId);
             }
+        } catch (error) {
+            console.error('Failed to decode token:', error);
         }
-        if(token) {
-            setIsLoggedIn(true);
-            setUserRole(role);
-        }
-
     }, []);
+    
 
     const fetchBookings = async (): Promise<Booking[] | null> => {
         try {
@@ -49,15 +44,9 @@ const BookingOverviewTable: React.FC = () => {
             if (userRole === 'admin') {
                 return bookings;
             } else {
-                let bookingsOfStudent: Booking[] = [];
-                bookings.forEach(booking => {
-                    booking.students.forEach(student => {
-                        if(student.id == studentId) {
-                            bookingsOfStudent.push(booking)
-                        }
-                    });
-                });
-                return bookingsOfStudent;
+                return bookings.filter((booking) =>
+                    booking.students.some((student) => student.id === studentId)
+                );
             }
         } catch (error) {
             console.error('Error fetching bookings:', error);
@@ -86,8 +75,7 @@ const BookingOverviewTable: React.FC = () => {
         try {
             const response = await bookingService.deleteBooking(bookingId.toString(), token);
             if (response.ok) {
-                // Remove the deleted booking from the state
-                setBookings((prevBookings) => prevBookings?.filter(booking => booking.id !== bookingId) || null);
+                setBookings((prevBookings) => prevBookings?.filter((booking) => booking.id !== bookingId) || null);
                 alert('Booking deleted successfully.');
             } else {
                 alert('Failed to delete booking.');
@@ -95,6 +83,32 @@ const BookingOverviewTable: React.FC = () => {
         } catch (error) {
             console.error('Error deleting booking:', error);
             alert('Error deleting booking.');
+        }
+    };
+
+    const handleUpdatePaymentStatus = async (bookingId: number, newStatus: string) => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+        if (!token) {
+            alert('You must be logged in to update a booking.');
+            return;
+        }
+
+        try {
+            const response = await bookingService.updatePaymentStatus(bookingId.toString(), newStatus, token);
+            if (response.ok) {
+                const updatedBooking = await response.json();
+                setBookings((prevBookings) =>
+                    prevBookings?.map((booking) => (booking.id === bookingId ? updatedBooking : booking)) || null
+                );
+                alert('Payment status updated successfully.');
+            } else {
+                alert('Failed to update payment status.');
+            }
+        } catch (error) {
+            console.error('Error updating payment status:', error);
+            alert('Error updating payment status.');
         }
     };
 
@@ -110,7 +124,7 @@ const BookingOverviewTable: React.FC = () => {
         return <div className={errorStyles.loading}>{t("loading")}</div>;
     }
 
-    const filteredBookings = userRole === 'admin' ? bookings : bookings.filter(booking => booking.students.some(student => student.id === studentId));
+    const filteredBookings = userRole === 'admin' ? bookings : bookings.filter((booking) => booking.students.some((student) => student.id === studentId));
 
     return (
         <div className={styles['bookings-table-container']}>
@@ -121,28 +135,42 @@ const BookingOverviewTable: React.FC = () => {
                         <th scope="col">{t("booking.destination")}</th>
                         <th scope="col">{t("booking.datum")}</th>
                         <th scope="col">{t("booking.status")}</th>
-                        {userRole === 'admin' && <th scope="col">{t("booking.delete")}</th>}
+                        {userRole === 'admin' && <th scope="col">{t("booking.actions")}</th>}
                     </tr>
                 </thead>
                 <tbody>
-    {filteredBookings.map((booking, index) => (
-        <tr key={index}>
-            <td>{booking.trip.id}</td>
-            <td>{booking.trip.destination}</td>
-            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-            <td>{booking.paymentStatus}</td>
-            {userRole === 'admin' && (
-                <td>
-                <button className={styles['delete']} onClick={() => handleDelete(booking.id ?? 0)}>
-                    {t("booking.delete")}
-                </button>
-
-                </td>
-            )}
-        </tr>
-    ))}
-</tbody>
-
+                    {filteredBookings.map((booking, index) => (
+                        <tr key={index}>
+                            <td>{booking.trip.id}</td>
+                            <td>{booking.trip.destination}</td>
+                            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                            <td>
+                                {userRole === 'admin' ? (
+                                    <select
+                                        value={booking.paymentStatus}
+                                        onChange={(e) => handleUpdatePaymentStatus(booking.id ?? 0, e.target.value)}
+                                    >
+                                        <option value="Paid">{t("booking.paid")}</option>
+                                        <option value="Pending">{t("booking.pending")}</option>
+                                        <option value="Confirmed">{t("booking.confirmed")}</option>
+                                    </select>
+                                ) : (
+                                    booking.paymentStatus
+                                )}
+                            </td>
+                            {userRole === 'admin' && (
+                                <td>
+                                    <button
+                                        className={styles['delete']}
+                                        onClick={() => handleDelete(booking.id ?? 0)}
+                                    >
+                                        {t("booking.delete")}
+                                    </button>
+                                </td>
+                            )}
+                        </tr>
+                    ))}
+                </tbody>
             </table>
         </div>
     );

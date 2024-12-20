@@ -162,6 +162,24 @@ const updateStudentsOfBooking = async ({
         throw new Error('Database error. See server log for details.');
     }
 };
+const updatePaymentStatus = async (bookingId: number, newStatus: PaymentStatus): Promise<Booking | null> => {
+    if (typeof bookingId !== 'number' || bookingId <= 0) {
+        throw new Error("Invalid Booking ID");
+    }
+
+    const booking = await bookingDb.getBookingById(bookingId);
+    if (!booking) {
+        throw new Error(`Booking with ID ${bookingId} does not exist.`);
+    }
+
+    try {
+        const updatedBooking = await bookingDb.updatePaymentStatus(bookingId, newStatus);
+        return updatedBooking;
+    } catch (error) {
+        console.error("Error updating payment status for booking:", bookingId, error);
+        throw new Error("Failed to update payment status. Please try again later.");
+    }
+};
 
 
-export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, updateStudentsOfBooking, deleteBooking};
+export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, updateStudentsOfBooking, deleteBooking, updatePaymentStatus};

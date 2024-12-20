@@ -3,6 +3,7 @@ import { Booking } from '../model/booking';
 import { BookingInput } from '../types/index';
 
 import bookingService from '../service/booking.service';
+import { PaymentStatus } from '../model/paymentStatusEnum';
 
 interface AuthRequest extends Request {
   auth: {
@@ -166,14 +167,14 @@ bookingRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *                   example: Booking creation failed due to a database error.
  */
 bookingRouter.post('/', async (req: Request, res: Response) => {
-  // try {
+  try {
     const booking = await bookingService.createBooking(req.body as BookingInput);
-    console.log("booking", booking)
+    console.log("booking", booking);
     res.status(201).json(booking);
-  // } catch (error) {
-  //   const err = error as Error;
-  //   res.status(400).json({ status: 'error', errorMessage: err.message });
-  // }
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).json({ status: 'error', errorMessage: err.message });
+  }
 });
 
 /**
@@ -314,5 +315,92 @@ bookingRouter.delete('/:bookingId', async (req: Request, res: Response) => {
     }
   }
 });
+
+/**
+ * @swagger
+ * /bookings/{bookingId}/payment-status:
+ *   put:
+ *     summary: Update the payment status of a booking
+ *     description: Updates the payment status of a specific booking.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: bookingId
+ *         required: true
+ *         description: ID of the booking to update
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               paymentStatus:
+ *                 type: string
+ *                 enum:
+ *                   - PENDING
+ *                   - PAID
+ *                   - FAILED
+ *     responses:
+ *       200:
+ *         description: Payment status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Booking'
+ *       400:
+ *         description: Invalid booking ID or payment status
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: "Invalid Booking ID or Payment Status"
+ *       404:
+ *         description: Booking not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: "Booking with ID {bookingId} does not exist."
+ */
+
+bookingRouter.get('/:bookingId', async (req: Request, res: Response, next: NextFunction) => {
+  const { bookingId } = req.params;
+
+  if (isNaN(Number(bookingId))) {
+    return res.status(400).json({
+      status: 'error',
+      errorMessage: 'Invalid booking ID provided.',
+    });
+  }
+
+  try {
+    const booking = await bookingService.getBookingById(Number(bookingId));
+    return res.status(200).json(booking);
+  } catch (error) {
+    const err = error as Error;
+    if (err.message.includes("does not exist")) {
+      return res.status(404).json({ status: 'error', errorMessage: err.message });
+    } else {
+      return res.status(400).json({ status: 'error', errorMessage: err.message });
+    }
+  }
+});
+
 
 export { bookingRouter };
