@@ -1,96 +1,58 @@
-import { PermissionEntry } from '../types';
-import { Column } from './column';
-import { Guild } from './guild';
 import { User } from './user';
-import { Guild as GuildPrisma, Role as RolePrisma, Board as BoardPrisma, Column as ColumnPrisma, Task as TaskPrisma, User as UserPrisma } from '@prisma/client';
+import { Guild } from './guild';
+import { Column } from './column';
+import { PermissionEntry } from '../types';
+import { Board as BoardPrisma } from '@prisma/client';
 
 export class Board {
-  private boardId: string;
-  private boardName: string;
-  private createdByUserId: string;
-  private guildId: string;
-  private columnIds: string[];
-  private permissions: PermissionEntry[];
+    private boardId: string;
+    private boardName: string;
+    private createdByUser: User;
+    private guild: Guild;
+    private columns: Column[];
+    private permissions: PermissionEntry[];
 
-  constructor(boardId: string, boardName: string, createdByUserId: string, columnIds: string[], guildId: string, permissions: PermissionEntry[]) {
-    this.validate(boardName, createdByUserId, columnIds, guildId, permissions);
-    this.boardId = boardId;
-    this.boardName = boardName;
-    this.createdByUserId = createdByUserId;
-    this.columnIds = columnIds;
-    this.guildId = guildId;
-    this.permissions = permissions;
-  }
-
-  static from({ boardId, boardName, createdByUserId, columns, guildId, permissions }: BoardPrisma & {columns: {columnId: string}[]}): Board {
-    const typedPermissions = JSON.parse(permissions as unknown as string) as PermissionEntry[];
-    const columnIds = columns.map(column => column.columnId);
-      return new Board(
-          boardId,
-          boardName,
-          createdByUserId,
-          columnIds,
-          guildId,
-          typedPermissions
-      );
-  }
-
-  validate(boardName: string, createdByUserId: string, columnIds: string[], guildId: string, permissions: PermissionEntry[]): void {
-    if(boardName === undefined || boardName === "") {
-      throw new Error("Board name cannot be empty.");
+    constructor(boardId: string, boardName: string, createdByUser: User, guild: Guild, columns: Column[], permissions: PermissionEntry[]) {
+        this.boardId = boardId;
+        this.boardName = boardName;
+        this.createdByUser = createdByUser;
+        this.guild = guild;
+        this.columns = columns;
+        this.permissions = permissions;
     }
-    if(createdByUserId === undefined || createdByUserId === "") {
-      throw new Error("Created by user ID cannot be empty.");
+
+    static from(boardPrisma: BoardPrisma & { createdByUser: User; guild: Guild; columns: Column[]; permissions: PermissionEntry[] }): Board {
+        return new Board(
+            boardPrisma.boardId,
+            boardPrisma.boardName,
+            boardPrisma.createdByUser,
+            boardPrisma.guild,
+            boardPrisma.columns,
+            boardPrisma.permissions
+        );
     }
-    if(guildId === undefined || guildId === "") {
-      throw new Error("Guild ID cannot be empty.");
+
+    getBoardId(): string {
+        return this.boardId;
     }
-    if(permissions === undefined || permissions.length === 0) {
-      throw new Error("Permissions cannot be empty.");
+
+    getBoardName(): string {
+        return this.boardName;
     }
-  }
 
-  getBoardId(): string {
-    return this.boardId;
-  }
+    getCreatedByUser(): User {
+        return this.createdByUser;
+    }
 
-  setBoardName(boardName: string): void {
-    this.boardName = boardName;
-  }
+    getGuild(): Guild {
+        return this.guild;
+    }
 
-  getBoardName(): string {
-    return this.boardName;
-  }
+    getColumns(): Column[] {
+        return this.columns;
+    }
 
-  setCreatedByUserId(userId: string): void {
-    this.createdByUserId = userId;
-  }
-
-  getCreatedByUserId(): string {
-    return this.createdByUserId;
-  }
-
-  setGuildId(guildId: string): void {
-    this.guildId = guildId;
-  }
-
-  getGuildId(): string {
-    return this.guildId;
-  }
-
-  setColumnIds(columnIds: string[]): void {
-    this.columnIds = columnIds;
-  }
-
-  getColumnIds(): string[] {
-    return this.columnIds;
-  }
-
-  setPermissions(permissions: PermissionEntry[]): void {
-    this.permissions = permissions;
-  }
-
-  getPermissions(): PermissionEntry[] {
-    return this.permissions;
-  }
+    getPermissions(): PermissionEntry[] {
+        return this.permissions;
+    }
 }

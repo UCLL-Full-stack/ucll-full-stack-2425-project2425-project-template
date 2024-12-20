@@ -6,13 +6,11 @@ import roleDb from "../repository/role.db";
 import userDb from "../repository/user.db";
 import { CreateUserInput, DiscordPermission, KanbanPermission, UpdateUserInput } from "../types";
 
-
-
 const getAllUsers = async (): Promise<User[]> => {
     return await userDb.getAllUsers();
 }
 
-const getUserById = async (userId: string): Promise<User> => {
+const getUserById = async (userId: string): Promise<User | null> => {
     return await userDb.getUserById(userId);
 }
 
@@ -78,11 +76,11 @@ const getAllDiscordPermissionsForGuild = async (userId: string, guildId: string)
 
 const getAllKanbanPermissionsForBoard = async (userId: string, boardId: string): Promise<KanbanPermission[]> => {
     const board = await boardDb.getBoardById(boardId);
-    if(board.getCreatedByUserId() === userId) {
+    if(board.getCreatedByUser().getUserId() === userId) {
         return [KanbanPermission.ADMINISTRATOR];
     }
     const permissions = board.getPermissions();
-    const userDiscordPermissions = await getAllDiscordPermissionsForGuild(userId, board.getGuildId());
+    const userDiscordPermissions = await getAllDiscordPermissionsForGuild(userId, board.getGuild().getGuildId());
     let kanbanPermissions: KanbanPermission[] = [];
     for (const permission of permissions) {
         if (permission.identifier === userId) {

@@ -7,55 +7,56 @@ export class Role {
     private roleName: string;
     private permissions: DiscordPermission[];
     private guildId: string;
-  
-    constructor(roleId: string, roleName: string, permissions: DiscordPermission[], guild: string) {
-      this.validate(roleName, guild);
-      this.roleId = roleId;
-      this.roleName = roleName;
-      this.permissions = permissions;
-      this.guildId = guild;
+
+    constructor(roleId: string, roleName: string, permissions: DiscordPermission[], guildId: string) {
+        this.validate(roleId, roleName, permissions, guildId);
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.permissions = permissions;
+        this.guildId = guildId;
     }
 
-    static from({ roleId, roleName, permissions, guildId }: RolePrisma): Role {
-        let permissionsArray = JSON.parse(permissions as string) as DiscordPermission[];
-        return new Role(roleId, roleName, permissionsArray, guildId);
+    validate(roleId: string, roleName: string, permissions: DiscordPermission[], guildId: string): void {
+        if (!roleId) {
+            throw new Error('Role ID cannot be empty.');
+        }
+        if (!roleName) {
+            throw new Error('Role name cannot be empty.');
+        }
+        if (!permissions || permissions.length === 0) {
+            throw new Error('Permissions cannot be empty.');
+        }
+        if (!guildId) {
+            throw new Error('Guild ID cannot be empty.');
+        }
     }
 
-    validate(roleName: string, guildId: string): void {
-        if(roleName === undefined || roleName === "") {
-            throw new Error("Role name cannot be empty.");
-        }
-        if(guildId === undefined || guildId === "") {
-            throw new Error("Guild ID cannot be empty.");
-        }
-    }
-  
     getRoleId(): string {
-      return this.roleId;
+        return this.roleId;
     }
-  
+
     setRoleName(roleName: string): void {
-      this.roleName = roleName;
+        this.roleName = roleName;
     }
-  
+
     getRoleName(): string {
-      return this.roleName;
+        return this.roleName;
     }
-  
+
     setPermissions(permissions: DiscordPermission[]): void {
-      this.permissions = permissions;
+        this.permissions = permissions;
     }
-  
+
     getPermissions(): DiscordPermission[] {
-      return this.permissions;
+        return this.permissions;
     }
-  
+
     setGuildId(guildId: string): void {
-      this.guildId = guildId;
+        this.guildId = guildId;
     }
-  
+
     getGuildId(): string {
-      return this.guildId;
+        return this.guildId;
     }
-  }
+}
   

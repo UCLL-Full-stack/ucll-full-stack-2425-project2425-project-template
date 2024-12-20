@@ -10,74 +10,77 @@ export class Task {
     private dueDate: Date;
     private assigneeIds: string[];
     private columnId: string;
-  
-    constructor(taskId: string, title: string, description: string, taskIndex: number, dueDate: Date, assigneeIds: string[], column: string) {
-        this.validate(title, column);
+
+    constructor(taskId: string, title: string, description: string, taskIndex: number, dueDate: Date, assigneeIds: string[], columnId: string) {
+        this.validate(taskId, title, columnId);
         this.taskId = taskId;
         this.title = title;
         this.description = description;
         this.taskIndex = taskIndex;
         this.dueDate = dueDate;
         this.assigneeIds = assigneeIds;
-        this.columnId = column;
+        this.columnId = columnId;
     }
 
-    static from({ taskId, title, description, taskIndex ,dueDate, assignees, columnId }: TaskPrisma & {assignees: {userId: string}[]}): Task {
+    static from({ taskId, title, description, taskIndex, dueDate, assignees, columnId }: TaskPrisma & { assignees: { userId: string }[] }): Task {
         const assigneeIds = assignees.map(assignee => assignee.userId);
         return new Task(taskId, title, description, taskIndex, dueDate, assigneeIds, columnId);
     }
 
-    validate(title: string, columnId: string): void {
-        if(title === undefined || title === "") {
+    validate(taskId: string, title: string, columnId: string): void {
+        if (!taskId) {
+            throw new Error("Task ID cannot be empty.");
+        }
+        if (!title) {
             throw new Error("Task title cannot be empty.");
         }
-        if(columnId === undefined || columnId === "") {
+        if (!columnId) {
             throw new Error("Column ID cannot be empty.");
         }
     }
-  
+
     getTaskId(): string {
-      return this.taskId;
+        return this.taskId;
     }
-  
+
     setTitle(title: string): void {
-      this.title = title;
+        this.title = title;
     }
-  
+
     getTitle(): string {
-      return this.title;
+        return this.title;
     }
-  
+
     setDescription(description: string): void {
-      this.description = description;
+        this.description = description;
     }
-  
+
     getDescription(): string {
-      return this.description;
+        return this.description;
     }
-  
+
     setDueDate(dueDate: Date): void {
-      this.dueDate = dueDate;
+        this.dueDate = dueDate;
     }
-  
+
     getDueDate(): Date {
-      return this.dueDate;
+        return this.dueDate;
     }
-  
+
     setAssigneeIds(assignees: string[]): void {
-      this.assigneeIds = assignees;
+        this.assigneeIds = assignees;
     }
-  
+
     getAssigneeIds(): string[] {
-      return this.assigneeIds;
+        return this.assigneeIds;
     }
-  
+
     setColumnId(columnId: string): void {
-      this.columnId = columnId;
+        this.columnId = columnId;
     }
-  
+
     getColumnId(): string {
-      return this.columnId;
+        return this.columnId;
     }
 
     getTaskIndex(): number {
@@ -87,5 +90,4 @@ export class Task {
     setTaskIndex(taskIndex: number): void {
         this.taskIndex = taskIndex;
     }
-  }
-  
+}

@@ -90,6 +90,8 @@ export interface CreateUserInput {
     boardIds?: string[];
     taskIds?: string[];
 }
+ 
+
   
 export interface UpdateUserInput {
     username?: string;
