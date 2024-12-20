@@ -35,7 +35,7 @@
     "welcome": "Welcome"
   },
   "addCocktail": {
-    "title": "Add Cocktail",
+    "title": "Cocktail",
     "id": "ID",
     "name": "Name",
     "description": "Description",
