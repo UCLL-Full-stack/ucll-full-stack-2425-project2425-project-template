@@ -4,6 +4,7 @@ import CocktailForm from '@components/cocktail/cocktailForm';
 import CocktailService from '@services/CocktailService';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import UserAuthorisation from '@components/users/UserAuthorisation';
 
 const Home: React.FC = () => {
   return (
@@ -16,8 +17,10 @@ const Home: React.FC = () => {
       </Head>
       <main>
         <Header></Header>
-
+        <UserAuthorisation>
+        <div>
         <CocktailForm
+        submitButtonText="Add Cocktail"
         onSubmit={async function (cocktail: { name: string; description: string; strongness: number; image: string; auhtorId: number; }) {
             try {
             await CocktailService.addCocktail(cocktail);
@@ -29,6 +32,8 @@ const Home: React.FC = () => {
             }
         }}
         ></CocktailForm>
+        </div>
+        </UserAuthorisation>
       </main>
     </>
   );

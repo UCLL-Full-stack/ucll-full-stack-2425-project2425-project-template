@@ -7,6 +7,7 @@ import { Cocktail } from "@types";
 import CocktailDetails from '@components/cocktail/cocktailDetails';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import UserAuthorisation from '@components/users/UserAuthorisation';
 
 const CocktailDetailsPage: React.FC = () => {
       const {t} = useTranslation()
@@ -38,7 +39,13 @@ const CocktailDetailsPage: React.FC = () => {
         </Head>
         <Header></Header>
         <main>
-            {cocktail && <CocktailDetails cocktail={cocktail} />}      
+        <UserAuthorisation>
+            <div>
+
+            {cocktail && <CocktailDetails cocktail={cocktail} />}  
+
+             </div>
+        </UserAuthorisation>    
         </main>
         
         </>
