@@ -29,7 +29,9 @@
         "booking": "Booking",
         "nummer": "Booking Number",
         "datum": "Booking Date",
-        "status": "Payment Status"
+        "status": "Payment Status",
+        "delete": "Delete",
+        "destination": "Destination"
     },
 
     "login": {

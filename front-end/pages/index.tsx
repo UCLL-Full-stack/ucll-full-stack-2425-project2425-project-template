@@ -71,8 +71,8 @@ const OverviewPage: React.FC = () => {
                 <th>{t("index.username")}</th>
                 <th>{t("index.email")}</th>
                 <th>{t("index.role")}</th>
-                <th>{t("index.firstName")}</th>
-                <th>{t("index.lastName")}</th>
+                <th>{t("index.firstname")}</th>
+                <th>{t("index.lastname")}</th>
                 <th>{t("index.password")}</th> 
               </tr>
             </thead>

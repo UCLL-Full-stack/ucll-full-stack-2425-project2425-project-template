@@ -121,7 +121,7 @@ const BookingOverviewTable: React.FC = () => {
                         <th scope="col">{t("booking.destination")}</th>
                         <th scope="col">{t("booking.datum")}</th>
                         <th scope="col">{t("booking.status")}</th>
-                        {userRole === 'admin' && <th scope="col">{t("booking.actions")}</th>} {/* Show actions column only for admin */}
+                        {userRole === 'admin' && <th scope="col">{t("booking.delete")}</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -133,10 +133,7 @@ const BookingOverviewTable: React.FC = () => {
             <td>{booking.paymentStatus}</td>
             {userRole === 'admin' && (
                 <td>
-                <button
-                    className="deleteButton"
-                    onClick={() => handleDelete(booking.id ?? 0)} 
-                >
+                <button className={styles['delete']} onClick={() => handleDelete(booking.id ?? 0)}>
                     {t("booking.delete")}
                 </button>
 

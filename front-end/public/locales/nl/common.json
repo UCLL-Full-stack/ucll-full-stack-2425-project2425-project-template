@@ -10,6 +10,7 @@
         "role": "Rol",
         "firstname": "Voorname",
         "lastname": "Lastname",
+        "password": "Password",
         "usersTableTitle": "Gebruikerstabel"
     },
 
@@ -29,7 +30,9 @@
         "booking": "Boeking",
         "nummer": "Boeking Nummer",
         "datum": "Boeking Datum",
-        "status": "Betaal Status"
+        "status": "Betaal Status",
+        "delete": "Verwijderen",
+        "destination": "Bestemming"
     },
 
     "login": {
