@@ -65,7 +65,28 @@
         "gebruikersnaam": "Username",
         "email": "Email",
         "wachtwoord": "Password",
-        "bevestigwachtwoord": "Confirm Password"
+        "bevestigwachtwoord": "Confirm Password",
+        "voornaam": "Firstname",
+        "achternaam": "Lastname",
+        "rol": "Role",
+        "studentennummer": "Student Number",
+        "roles": {
+            "guest": "Guest",
+            "student": "Student",
+            "admin": "Admin"
+        },
+        "success": "Login successful. Redirecting to login...",
+        "errors": {
+            "firstNameRequired": "Firstname is required",
+            "lastNameRequired": "Lastname is required",
+            "usernameRequired": "Username is required",
+            "invalidEmail": "Email is invalid",
+            "passwordTooShort": "Password must be at least 8 characters",
+            "passwordsDoNotMatch": "Passwords do not match",
+            "studentNumberRequired": "Student number is required",
+            "generic": "An error occurred while processing the request.",
+            "server": "An error occurred while processing the request."
+        }
     },
 
     "validation": {
@@ -94,7 +115,9 @@
         "studentNumber": {
             "required": "Student number is required",
             "format": "Student number must start with a letter followed by 8 numbers"
-        }
+        },
+        
+        "failed": "An error occurred while processing the request."
     },
 
     "error": {

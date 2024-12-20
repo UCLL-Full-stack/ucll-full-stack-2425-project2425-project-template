@@ -62,7 +62,7 @@ const OverviewPage: React.FC = () => {
         <Link href="/trips">{t("index.trips")}</Link>
         <Link href="/bookings">{t("index.bookings")}</Link>
       </section>
-
+{/* 
       <section className={styles['users-table-section']}>
         <div className={styles['table-container']}>
           <table className={styles['users-table']}>
@@ -90,7 +90,7 @@ const OverviewPage: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

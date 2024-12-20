@@ -63,7 +63,28 @@
         "gebruikersnaam": "Gebruikersnaam",
         "email": "Email",
         "wachtwoord": "Wachtwoord",
-        "bevestigwachtwoord": "Bevestig Wachtwoord"
+        "bevestigwachtwoord": "Bevestig Wachtwoord",
+        "voornaam": "Voornaam",
+        "achternaam": "Achternaam",
+        "rol": "Rol",
+        "studentennummer": "Studentennummer",
+        "roles": {
+            "guest": "Gast",
+            "student": "Student",
+            "admin": "Beheerder"
+        },
+        "success": "Inloggen geslaagd. Doorsturen naar inloggen...",
+        "errors": {
+            "firstNameRequired": "Voornaam is verplicht",
+            "lastNameRequired": "Achternaam is verplicht",
+            "usernameRequired": "Gebruikersnaam is verplicht",
+            "invalidEmail": "Email is ongeldig",
+            "passwordTooShort": "Wachtwoord moet minimaal 8 karakters bevatten",
+            "passwordsDoNotMatch": "Wachtwoorden komen niet overeen",
+            "studentNumberRequired": "Studentennummer is verplicht",
+            "generic": "Er is een fout opgetreden bij het verwerken van het verzoek.",
+            "server": "Er is een fout opgetreden bij het verwerken van het verzoek."
+        }
     },
 
     "validation": {
@@ -92,7 +113,9 @@
         "studentNumber": {
             "required": "Studentnummer is verplicht",
             "format": "Studentnummer moet beginnen met een letter gevolgd door 8 cijfers"
-        }
+        },
+
+        "failed": "Er is een fout opgetreden bij het verwerken van het verzoek."
     },
 
     "error": {
