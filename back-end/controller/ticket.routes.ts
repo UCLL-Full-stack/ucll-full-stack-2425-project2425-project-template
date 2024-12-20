@@ -293,7 +293,7 @@ ticketRouter.put('/:ticketId/user', async (req: Request, res: Response, next: Ne
  *               cost:
  *                 type: number
  *               event:
- *                 type: string
+ *                 $ref: '#/components/schemas/Event'
  *     responses:
  *       200:
  *         description: A ticket.
