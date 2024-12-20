@@ -47,19 +47,16 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
     if (validate()) {
       try {
         const response = await UserService.login({ email, password });
-
-        // Store in sessionStorage
         sessionStorage.setItem("token", response.token);
         sessionStorage.setItem("role", response.role);
         sessionStorage.setItem("email", response.email);
-
         console.log("Login successful:", response);
 
-        setIsLoggedIn(true); // Show success message
+        setIsLoggedIn(true); 
         setTimeout(() => {
-          router.push("/"); // Redirect after showing success message
+          router.push("/"); 
           handleClose();
-        }, 2000); // Delay to show the success message
+        }, 2000); 
       } catch (error: any) {
         setErrors({ general: error.message || t("login.fail") });
       }
@@ -86,7 +83,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
             )}
             <div className="mb-4">
               <label htmlFor="email" className="block text-sm font-medium text-white">
-                {t("login.popup.username")}
+                {t("login.popup.email")}
               </label>
               <input
                 type="email"
