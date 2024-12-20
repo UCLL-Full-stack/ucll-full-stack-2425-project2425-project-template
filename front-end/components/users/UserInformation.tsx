@@ -35,6 +35,11 @@ const UserInformation: React.FC = () => {
             <td>user1</td>
             <td>User</td>
           </tr>
+          <tr>
+            <td>moderator1@email.com</td>
+            <td>moderator1</td>
+            <td>Moderator</td>
+          </tr>
         </tbody>
       </table>
     </section>

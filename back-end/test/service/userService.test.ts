@@ -94,7 +94,7 @@ test('givenAnInvalidUserEmail_whenGetUserByEmailIsCalled_thenThrowsError', async
   (userDb.getUserByEmail as jest.Mock).mockResolvedValue(null);
 
   // when / then
-  await expect(userService.getUserByEmail({ email })).rejects.toThrow(`User with name: ${email} does not exist.`);
+    await expect(userService.getUserByEmail({ email })).rejects.toThrow(`User with email: ${email} does not exist.`);
 });
 
 test('givenValidCredentials_whenAuthenticateIsCalled_thenReturnsAuthenticationResponse', async () => {
@@ -112,7 +112,7 @@ test('givenValidCredentials_whenAuthenticateIsCalled_thenReturnsAuthenticationRe
   expect(userDb.getUserByEmail).toHaveBeenCalledWith({ email });
   expect(bcrypt.compare).toHaveBeenCalledWith(password, mockUser.getPassword());
   expect(generateJwtToken).toHaveBeenCalledWith({ email, role: mockUser.getRole() });
-  expect(result).toEqual({ token: 'token', email, role: mockUser.getRole() });
+  expect(result).toEqual({ token: 'token', email, role: mockUser.getRole(), userId: mockUser.getId() });
 });
 
 test('givenInvalidPassword_whenAuthenticateIsCalled_thenThrowsError', async () => {
