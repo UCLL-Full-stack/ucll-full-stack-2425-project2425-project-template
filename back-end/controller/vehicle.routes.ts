@@ -81,6 +81,20 @@ vehicleRouter.get('/:id', async (req, res) => {
     }
 })  
 
+vehicleRouter.get('/seller/:sellerId', async(req: Request, res: Response) => {
+    try{
+        const sellerId = Number(req.params.sellerId);
+        const vehicles = await vehicleService.getVehicleBySeller(sellerId);
+        res.status(200).json(vehicles);
+    }catch(error){
+        if (error instanceof Error) {
+            res.status(400).json({ status: 'error', message: error.message });
+        } else {
+            console.error('Unexpected error:', error);
+            res.status(500).json({ status: 'error', message: 'Unexpected error occurred' });
+        }
+    }
+})
 // vehicleRouter.delete('/:id', async (req, res) => {
 
 //     const vehicleId = Number(req.params.id);

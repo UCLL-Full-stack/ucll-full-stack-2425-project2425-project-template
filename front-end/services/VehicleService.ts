@@ -58,12 +58,23 @@ const editVehicle = async (vehicleId: number, input: Vehicle)=>{
     })
 }
 
+const getVehiclesBySeller = async (sellerId: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/vehicles/seller/${sellerId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    
+}
+
 const VehicleService = {
     getAllVehicles,
     addVehicle,
     deleteVehicle,
     editVehicle,
-    getVehicleById
+    getVehicleById,
+    getVehiclesBySeller
 }
 
 export default VehicleService;

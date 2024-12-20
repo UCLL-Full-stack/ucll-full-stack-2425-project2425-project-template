@@ -10,21 +10,48 @@ const getAllVehicles = async (): Promise<Vehicle[]> => {
 
 const getVehicleByID = async ({ id }: { id: number }): Promise<Vehicle | null> => {
     try {
-        const vehiclePrisma = await database.vehicle.findUnique({
+        const vehiclesPrisma = await database.vehicle.findUnique({
             where: { id },
             include: { seller: true }
         })
-        return vehiclePrisma ? Vehicle.from(vehiclePrisma) : null;
+        return vehiclesPrisma ? Vehicle.from(vehiclesPrisma) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
 }
 
+// const getVehicleBySeller = async ({ sellerId }: { sellerId: number }): Promise<Vehicle[] | null> => {
+//     try {
+//         const vehiclesPrisma = await database.vehicle.findMany({
+//             where: { sellerId },
+//             include: { seller: true }
+//         })
+//         return vehiclesPrisma.map((vehiclePrisma) => Vehicle.from(vehiclePrisma & {sellerId: sellerId}));
+//     } catch (error) {
+//         console.error(error);
+//         throw new Error('Database error. See server log for details.');
+//     }
+    
+// }
+const getVehicleBySeller = async ({ sellerId }: { sellerId: number }): Promise<Vehicle[] | null> => {
+    try {
+        const vehiclesPrisma = await database.vehicle.findMany({
+            where: { sellerId }, // Filter by sellerId
+            include: { seller: true }, // Include seller relation
+        });
+
+        return vehiclesPrisma.map((vehiclePrisma) => Vehicle.from(vehiclePrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 export default {
     getAllVehicles,
     getVehicleByID,
     // createVehicle
+    getVehicleBySeller
 }
 
 // import { Vehicle } from "../domain/model/vehicle";

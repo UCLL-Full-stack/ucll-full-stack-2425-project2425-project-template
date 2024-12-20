@@ -48,67 +48,67 @@ const prisma = new PrismaClient({
 //         console.error('Error creating vehicle:', error);
 //     }
 
-    // try {
-    //     const newVehicle = await prisma.vehicle.create({
-    //         data: {
-    //             manufacturer: input.manufacturer,
-    //             model_name: input.model_name,
-    //             price: input.price,
-    //             fuelType: input.fuelType,
-    //             transmissionType: input.transmissionType,
-    //             year: input.year,
-    //             vehicleType: input.vehicleType,
-    //             bodyType: input.bodyType,
-    //             mileage: input.mileage,
-    //             engineCapacity: input.engineCapacity,
-    //             createdAt: new Date(),
-    //             updatedAt: new Date()
-    //         },
-    //     });
+// try {
+//     const newVehicle = await prisma.vehicle.create({
+//         data: {
+//             manufacturer: input.manufacturer,
+//             model_name: input.model_name,
+//             price: input.price,
+//             fuelType: input.fuelType,
+//             transmissionType: input.transmissionType,
+//             year: input.year,
+//             vehicleType: input.vehicleType,
+//             bodyType: input.bodyType,
+//             mileage: input.mileage,
+//             engineCapacity: input.engineCapacity,
+//             createdAt: new Date(),
+//             updatedAt: new Date()
+//         },
+//     });
 
-    //     if (input.vehicleType === "Motorcycle") {
-    //         const NewMotorcycle = await prisma.motorcycle.create({
-    //             data: {
-    //                 manufacturer: input.manufacturer,
-    //                 model_name: input.model_name,
-    //                 price: input.price,
-    //                 fuelType: input.fuelType,
-    //                 transmissionType: input.transmissionType,
-    //                 year: input.year,
-    //                 vehicleType: input.vehicleType,
-    //                 bodyType: input.bodyType,
-    //                 mileage: input.mileage,
-    //                 engineCapacity: input.engineCapacity,
-    //                 createdAt: new Date(),
-    //                 updatedAt: new Date(),
-    //                 vehicleId: newVehicle.id
-    //             },  
-    //         })
-    //     } else { 
-    //         const NewCar = await prisma.car.create({
-    //             data: {
-    //                 manufacturer: input.manufacturer,
-    //                 model_name: input.model_name,
-    //                 price: input.price,
-    //                 fuelType: input.fuelType,
-    //                 transmissionType: input.transmissionType,
-    //                 year: input.year,
-    //                 vehicleType: input.vehicleType,
-    //                 bodyType: input.bodyType,
-    //                 mileage: input.mileage,
-    //                 engineCapacity: input.engineCapacity,
-    //                 createdAt: new Date(),
-    //                 updatedAt: new Date(),
-    //                 vehicleId: newVehicle.id
+//     if (input.vehicleType === "Motorcycle") {
+//         const NewMotorcycle = await prisma.motorcycle.create({
+//             data: {
+//                 manufacturer: input.manufacturer,
+//                 model_name: input.model_name,
+//                 price: input.price,
+//                 fuelType: input.fuelType,
+//                 transmissionType: input.transmissionType,
+//                 year: input.year,
+//                 vehicleType: input.vehicleType,
+//                 bodyType: input.bodyType,
+//                 mileage: input.mileage,
+//                 engineCapacity: input.engineCapacity,
+//                 createdAt: new Date(),
+//                 updatedAt: new Date(),
+//                 vehicleId: newVehicle.id
+//             },  
+//         })
+//     } else { 
+//         const NewCar = await prisma.car.create({
+//             data: {
+//                 manufacturer: input.manufacturer,
+//                 model_name: input.model_name,
+//                 price: input.price,
+//                 fuelType: input.fuelType,
+//                 transmissionType: input.transmissionType,
+//                 year: input.year,
+//                 vehicleType: input.vehicleType,
+//                 bodyType: input.bodyType,
+//                 mileage: input.mileage,
+//                 engineCapacity: input.engineCapacity,
+//                 createdAt: new Date(),
+//                 updatedAt: new Date(),
+//                 vehicleId: newVehicle.id
 
-    //             },  
-    //         })
-    //     }
-    //     return newVehicle;
-    // } catch (error) {
-    //     console.error('Error creating vehicle:', error);
-    //     throw error;
-    // }
+//             },  
+//         })
+//     }
+//     return newVehicle;
+// } catch (error) {
+//     console.error('Error creating vehicle:', error);
+//     throw error;
+// }
 // };
 
 export const getVehicleById = async (id: number) => {
@@ -250,16 +250,7 @@ const getAllCars = async () => {
         throw error;
     }
 };
-
-const getAllVehicles = async () => {
-    try {
-        const vehicles = await prisma.vehicle.findMany();
-        return vehicles;
-    } catch (error) {
-        console.error('Error fetching vehicles:', error);
-        throw error;
-    }
-};
+const getAllVehicles = async (): Promise<Car[]> => vehicleDB.getAllVehicles();
 
 const getAllMotorcycles = async () => {
     try {
@@ -271,10 +262,10 @@ const getAllMotorcycles = async () => {
     }
 };
 
-// const getVehicleBySeller = async (sellerId: number) => {
-//     const vehicles = await vehicleDB.getVehicleBySeller(sellerId);
-//     return vehicles;
-// }
+const getVehicleBySeller = async (sellerId: number) => {
+    const vehicles = await vehicleDB.getVehicleBySeller({ sellerId });
+    return vehicles;
+}
 
 export default {
     getAllCars,
@@ -285,5 +276,5 @@ export default {
     // editVehicle,
     // getFilteredVehicles,
     getVehicleById,
-    // getVehicleBySeller
+    getVehicleBySeller
 }

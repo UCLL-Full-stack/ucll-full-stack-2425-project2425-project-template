@@ -141,7 +141,7 @@ export class Vehicle {
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
     readonly seller: User;
-    
+
 
     constructor(vehicle: {
         id?: number;
@@ -237,19 +237,45 @@ export class Vehicle {
         return this.seller;
     }
 
+    // static from({
+    //     id, manufacturer, model_name, price, fuelType, bodyType,
+    //     transmissionType, year, vehicleType, mileage, engineCapacity,
+    //     createdAt, updatedAt, seller
+    // }: VehiclePrisma & {seller: UserPrisma | null}){
+    //     if (!seller) {
+    //         throw new Error('Seller cannot be null');
+    //     }
+    //     return new Vehicle({
+    //         id, manufacturer, model_name, price, fuelType,bodyType, 
+    //         transmissionType, year, vehicleType, mileage, engineCapacity,
+    //         createdAt, updatedAt, 
+    //         seller: User.from(seller)
+    //     })
+    // }
+
     static from({
         id, manufacturer, model_name, price, fuelType, bodyType,
         transmissionType, year, vehicleType, mileage, engineCapacity,
         createdAt, updatedAt, seller
-    }: VehiclePrisma & {seller: UserPrisma | null}){
+    }: VehiclePrisma & { seller: UserPrisma | null }) {
         if (!seller) {
             throw new Error('Seller cannot be null');
         }
         return new Vehicle({
-            id, manufacturer, model_name, price, fuelType,bodyType, 
-            transmissionType, year, vehicleType, mileage, engineCapacity,
-            createdAt, updatedAt, 
-            seller: User.from(seller)
-        })
+            id,
+            manufacturer,
+            model_name,
+            price,
+            fuelType,
+            bodyType,
+            transmissionType,
+            year,
+            vehicleType,
+            mileage,
+            engineCapacity,
+            createdAt,
+            updatedAt,
+            seller: User.from(seller),
+        });
     }
 }
