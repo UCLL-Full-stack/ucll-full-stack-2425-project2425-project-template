@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const UserInformation: React.FC = () => {
   const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
 
   return (
     <section className="home-section">
@@ -24,12 +33,7 @@ const UserInformation: React.FC = () => {
           <tr>
             <td>user1@email.com</td>
             <td>user1</td>
-            <td>a normal user</td>
-          </tr>
-          <tr>
-            <td>moderator1@email.com</td>
-            <td>moderator1</td>
-            <td>Moderator</td>
+            <td>User</td>
           </tr>
         </tbody>
       </table>

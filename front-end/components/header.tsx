@@ -77,7 +77,7 @@ const Header: React.FC = () => {
           </Link>
         ) : (
           <>
-            <a href="/login" onClick={handleClick} className="navbarbutton-stylah">
+            <a href="/" onClick={handleClick} className="navbarbutton-stylah">
               {t("header.logout")}
             </a>
             <div className="navbarbutton-stylah">

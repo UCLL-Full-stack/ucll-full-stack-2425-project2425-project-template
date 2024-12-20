@@ -431,3 +431,73 @@ body {
   margin: 0;
   font-weight: bold;
 }
+
+/* Existing styles... */
+
+.cocktail-details {
+  border: 15px solid #f42cff;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #2e24b3;
+  margin: 20px auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  text-align: center;
+}
+
+.cocktail-details h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #fe7cef;
+}
+
+.cocktail-details p {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.cocktail-details h2 {
+  font-size: 2em;
+  margin-bottom: 15px;
+  color: #0dd62e;
+}
+
+.cocktail-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cocktail-details ul li {
+  margin: 8px 0;
+  font-size: 1.2em;
+}
+
+.btn-edit {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.btn-edit:hover {
+  background-color: #45a049;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: #ff1a1a;
+}

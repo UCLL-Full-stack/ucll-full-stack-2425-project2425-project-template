@@ -75,7 +75,7 @@
     "emailRequired": "Email is required",
     "passwordRequired": "Password is required",
     "roleRequired": "Role is required",
-    "roleInvalid": "Role must be one of the following: user, moderator, admin",
+    "roleInvalid": "Role must be one of the following: User, Moderator, Admin",
     "success": "Registration successful! Redirecting to login...",
     "error": "Registration failed. Please try again.",
     "button": "Register"

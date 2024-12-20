@@ -48,7 +48,7 @@ const UserRegisterForm: React.FC = () => {
     if (!role || role.trim() === "") {
       setRoleError(t('register.roleRequired'));
       result = false;
-    } else if (!["user", "moderator", "admin"].includes(role.toLowerCase())) {
+    } else if (!["User", "Moderator", "Admin"].includes(role)) {
       setRoleError(t('register.roleInvalid'));
       result = false;
     }

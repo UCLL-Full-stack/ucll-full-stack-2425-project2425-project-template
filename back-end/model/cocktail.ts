@@ -10,6 +10,9 @@ export class Cocktail {
     private authorId?: number;
 
     constructor(cocktail: { id?: number; name: string; description: string; strongness: number; image: string, authorId?: number }) {
+        
+        this.validate(cocktail);
+
         this.id = cocktail.id;
         this.name = cocktail.name;
         this.description = cocktail.description;
@@ -62,6 +65,29 @@ export class Cocktail {
         this.strongness === cocktail.getStrongness()
     );
 }
+validate(cocktail: {
+    name: string;
+    description: string;
+    strongness: number;
+    image: string;
+    authorId?: number;
+  }) {
+    if (!cocktail.name?.trim()) {
+      throw new Error('Name is required');
+    }
+    if (!cocktail.description?.trim()) {
+      throw new Error('Description is required');
+    }
+    if (cocktail.strongness === undefined || cocktail.strongness === null) {
+      throw new Error('Strongness is required');
+    }
+    if (!cocktail.image?.trim()) {
+      throw new Error('Image is required');
+    }
+    if (cocktail.authorId === undefined || cocktail.authorId === null) {
+      throw new Error('Author ID is required');
+    }
+  }
     static from({ id, name, description, strongness, image , authorId}: CocktailPrisma) {    
         return new Cocktail({id, name, description, strongness, image, authorId});
     }
