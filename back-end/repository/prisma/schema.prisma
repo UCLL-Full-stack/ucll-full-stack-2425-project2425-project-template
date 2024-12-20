@@ -1,0 +1,70 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    userId     String  @id
+    username   String
+    globalName String
+    userAvatar String
+    guilds     Guild[] @relation("UserGuilds")
+    boards     Board[]
+    tasks      Task[]
+    guildOwner Guild[]
+}
+
+model Guild {
+    guildId      String  @id
+    guildName    String
+    guildOwner   User?   @relation(fields: [guildOwnerId], references: [userId])
+    guildOwnerId String?
+    settings     Json
+    roles        Role[]
+    members      Json
+    users        User[]  @relation("UserGuilds")
+    boards       Board[]
+}
+
+model Role {
+    roleId      String @id
+    roleName    String
+    permissions Json
+    guild       Guild  @relation(fields: [guildId], references: [guildId])
+    guildId     String
+}
+
+model Board {
+    boardId         String   @id @default(cuid())
+    boardName       String
+    createdByUser   User     @relation(fields: [createdByUserId], references: [userId])
+    createdByUserId String
+    guild           Guild    @relation(fields: [guildId], references: [guildId])
+    guildId         String
+    columns         Column[]
+    permissions     Json
+}
+
+model Column {
+    columnId    String @id @default(cuid())
+    columnName  String
+    columnIndex Int
+    tasks       Task[]
+    board       Board  @relation(fields: [boardId], references: [boardId])
+    boardId     String
+}
+
+model Task {
+    taskId      String   @id @default(cuid())
+    title       String
+    description String
+    taskIndex   Int
+    dueDate     DateTime
+    assignees   User[]
+    column      Column   @relation(fields: [columnId], references: [columnId])
+    columnId    String
+}
