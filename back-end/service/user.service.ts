@@ -29,7 +29,7 @@ const getUserByName = async ({ name }: { name: string }): Promise<User> => {
 const getUserByEmail = async ({ email }: { email: string }): Promise<User> => {
   const user = await userDb.getUserByEmail({ email });
   if (!user) {
-    throw new Error(`User with name: ${email} does not exist.`);
+    throw new Error(`User with email: ${email} does not exist.`);
   }
   return user;
 };
@@ -65,18 +65,24 @@ const authenticate = async ({ email, password }: UserInput): Promise<Authenticat
   };
 };
 
-// const createUser = async ({
-//   name,
-//   email,
-//   password,
-// }: UserInput): Promise<User> => {
-//   const existing = await userDb.getUserByEmail({ email });
-//   if (existing) {
-//       throw new Error(`User with Email: ${email} is already registered.`);
-//   }
-//   const hashedPassword = await bcrypt.hash(password, 12);
-//   // default new user to user
-//   const user = new User({ name, email, role : "User", password: hashedPassword });
-//   return await userDb.createUser(user);
-// };
-export default { getUserByName,getUserByEmail, getAllUsers,  authenticate, getUserById };
+const createUser = async (
+  name: string,
+  email: string,
+  password: string,
+  role: string,
+): Promise<User> => {
+  const existingUser = await userDb.getUserByEmail({ email });
+  if (existingUser) {
+    throw new Error('User with this email already exists.');
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = new User({
+    name: name,
+    email: email,
+    password: hashedPassword,
+    role: role
+  });
+  return userDb.createUser(newUser);
+}
+
+export default {createUser, getUserByName,getUserByEmail, getAllUsers,  authenticate, getUserById };

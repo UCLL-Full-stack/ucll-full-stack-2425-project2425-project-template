@@ -39,6 +39,7 @@ const getUserByEmail = async ({ email }: { email: string }): Promise<User | null
 
 const createUser = async (user: User): Promise<User> => {
   try {
+    console.log(user);
       const userPrisma = await database.user.create({
           data: {
               name: user.getName(),

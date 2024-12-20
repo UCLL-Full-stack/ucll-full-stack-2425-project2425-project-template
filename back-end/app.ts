@@ -25,7 +25,7 @@ app.use(
             '/api-docs', 
             /^\/api-docs\/.*/, 
             '/users/login', 
-            '/users/signup', 
+            '/users/register', 
             '/status',
         ],
     })

@@ -91,62 +91,74 @@ userRouter.get('/findbyid/:id', async (req: Request, res: Response, next: NextFu
     }
 });
 
-// /**
-//  * @swagger
-//  * /users/signup:
-//  *   post:
-//  *     summary: Create a new user
-//  *     description: Add a new user to the database.
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               name:
-//  *                 type: string
-//  *                 description: The name of the new user.
-//  *               email:
-//  *                 type: string
-//  *                 description: The email address of the new user.
-//  *               password:
-//  *                 type: string
-//  *                 description: The password of the new user.
-//  *     responses:
-//  *       201:
-//  *         description: User created successfully.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 id:
-//  *                   type: integer
-//  *                   description: The unique ID of the user.
-//  *                 name:
-//  *                   type: string
-//  *                   description: The name of the user.
-//  *                 email:
-//  *                   type: string
-//  *                   description: The email address of the user.
-//  *                 password:
-//  *                   type: string
-//  *                   description: The password of the user.
-//  *       400:
-//  *         description: Bad request.
-//  *       500:
-//  *         description: Server error.
-//  */
-// userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const userData = req.body;
-//         const newUser = await userService.createUser(userData);
-//         res.status(201).json(newUser);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Register a new user
+ *     description: Create a new user in the system.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: test
+ *                 description: The name of the user.
+ *               email:
+ *                 type: string
+ *                 example: test@email.com
+ *                 description: The email address of the user.
+ *               password:
+ *                 type: string
+ *                 description: The password of the user.
+ *               role:
+ *                 type: string
+ *                 example: User
+ *                 description: Role yeah
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - role  
+ *     responses:
+ *       201:
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message.
+ *                 response:
+ *                   type: object
+ *                   description: The created user data.
+ *       400:
+ *         description: Bad request.
+ *       500:
+ *         description: Server error.
+ */
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = req.body;
+        const response = await userService.createUser(
+            userInput.name,
+            userInput.email,
+            userInput.password,
+            userInput.role,
+        );
+        res.status(201).json({ message: 'User created successfully', response });
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 
 
