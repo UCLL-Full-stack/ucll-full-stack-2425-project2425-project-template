@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "next": "^15.0.2"
+  },
+  "devDependencies": {
+    "@types/date-fns": "^2.6.3",
+    "@types/express": "^5.0.0"
+  }
+}
