@@ -26,17 +26,6 @@ const CompetitionsPage: React.FC = () => {
         fetchCompetitions();
     }, []);
 
-    const handleGetCompetitionByName = async () => {
-        if (!competitionName) return;
-        try {
-            const data = await CompetitionService.getCompetitionByName(competitionName);
-            setCompetition(data);
-            setError(null);
-        } catch (err) {
-            setError('Failed to fetch competition by name.');
-        }
-    };
-
     // Function to fetch teams in a competition
     const handleCompetitionClick = async (id: number) => {
         try {
