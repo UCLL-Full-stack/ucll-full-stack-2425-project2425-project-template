@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import styles from '../../styles/Navbar.module.css';
 
 const Language: React.FC = () => {
   const router = useRouter();
@@ -16,12 +17,12 @@ const Language: React.FC = () => {
       </label>
       <select
         id="language"
-        className={"ml-2 p-1"}
+        className={styles["navbar-language-default"]}
         value={locale}
         onChange={handleLanguageChange}
       >
-        <option value="en">English</option>
-        <option value="nl">Nederlands</option>
+        <option className={styles['navbar-language-update']} value="en">English</option>
+        <option className={styles['navbar-language-update']} value="nl">Nederlands</option>
       </select>
     </div>
   );

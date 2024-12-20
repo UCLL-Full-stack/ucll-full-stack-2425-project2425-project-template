@@ -147,12 +147,13 @@ const BookingOverviewTable: React.FC = () => {
                             <td>
                                 {userRole === 'admin' ? (
                                     <select
+                                        className={styles['booking-payment-default']}
                                         value={booking.paymentStatus}
                                         onChange={(e) => handleUpdatePaymentStatus(booking.id ?? 0, e.target.value)}
                                     >
-                                        <option value="Paid">{t("booking.paid")}</option>
-                                        <option value="Pending">{t("booking.pending")}</option>
-                                        <option value="Confirmed">{t("booking.confirmed")}</option>
+                                        <option className={styles['booking-payment-update']} value="Paid">{t("booking.paid")}</option>
+                                        <option className={styles['booking-payment-update']} value="Pending">{t("booking.pending")}</option>
+                                        <option className={styles['booking-payment-update']} value="Confirmed">{t("booking.confirmed")}</option>
                                     </select>
                                 ) : (
                                     booking.paymentStatus

@@ -31,7 +31,10 @@
         "datum": "Booking Date",
         "status": "Payment Status",
         "delete": "Delete",
-        "destination": "Destination"
+        "destination": "Destination",
+        "paid": "Paid",
+        "pending": "Pending",
+        "confirmed": "Confirmed"
     },
 
     "login": {

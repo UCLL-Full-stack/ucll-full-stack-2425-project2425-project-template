@@ -32,7 +32,10 @@
         "datum": "Boeking Datum",
         "status": "Betaal Status",
         "delete": "Verwijderen",
-        "destination": "Bestemming"
+        "destination": "Bestemming",
+        "paid": "Betaald",
+        "pending": "In Afwachting",
+        "confirmed": "Bevestigd"
     },
 
     "login": {

@@ -80,5 +80,29 @@
     color: #333;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
+}
+
+.bookings-overview-section {
+    width: 80%;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.navbar-language-update {
+    background-color: white;
+    color: rgb(0, 164, 0);
+}
+
+.navbar-language-default {
+    margin-left: 1rem;
+    background-color: white;
+    color: rgb(0, 164, 0);
+    padding-right: 1rem;
+    padding-left: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 4px;
+}
 

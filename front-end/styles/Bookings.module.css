@@ -14,6 +14,21 @@
     padding: 2rem;
 }
 
+.booking-payment-default {
+    background-color: white;
+    color: rgb(0, 164, 0);
+    padding-right: 1rem;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.booking-payment-update {
+    background-color: white;
+    color: rgb(0, 164, 0);
+}
+
 .delete {
     background-color: #ff0000;
     color: white;
