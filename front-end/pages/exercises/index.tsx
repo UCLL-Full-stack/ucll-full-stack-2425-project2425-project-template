@@ -11,12 +11,12 @@ import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
 
 const Exercises: React.FC = () => {
-  // const [exercises, setExercises] = useState<Array<Exercise>>([]);
-  // const [error, setError] = useState<string | null>(null);
-  // const router = useRouter();
-  // // const { workoutId, showAddButton } = router.query;
-
   const [role, setRole] = useState<string | null>(null);
+  const [addedExerciseIds, setAddedExerciseIds] = useState<Set<string>>(
+    new Set()
+  ); // Tracks added exercises
+  const router = useRouter();
+  const { workoutId, showAddButton } = router.query;
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("loggedInUser");
@@ -39,26 +39,33 @@ const Exercises: React.FC = () => {
     mutate("exercises", getExercises());
   }, 1000);
 
-  // const handleAddExercise = async (exercise: Exercise) => {
-  //   if (!workoutId) {
-  //     toast.error("Workout ID is not provided.");
-  //     return;
-  //   }
+  const handleAddExercise = async (exercise: Exercise) => {
+    if (!workoutId) {
+      toast.error("Workout ID is not provided.");
+      return;
+    }
 
-  //   try {
-  //     const response = await workoutService.addExerciseToWorkout(
-  //       parseInt(workoutId as string),
-  //       exercise.id
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error("Failed to add exercise to workout.");
-  //     }
-  //     toast.success("Exercise added successfully!");
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("This exercise is already part of your workout");
-  //   }
-  // };
+    if (addedExerciseIds.has(exercise.id)) {
+      toast.error("This exercise is already part of your workout.");
+      return;
+    }
+
+    try {
+      const response = await workoutService.addExerciseToWorkout(
+        workoutId as string,
+        exercise.id
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add exercise to workout.");
+      }
+      setAddedExerciseIds((prev) => new Set(prev).add(exercise.id));
+      toast.success("Exercise added successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add exercise to workout.");
+    }
+  };
 
   return (
     <>
@@ -76,7 +83,13 @@ const Exercises: React.FC = () => {
               <>
                 {error && <div className="text-red-800">{error}</div>}
                 {isLoading && <div className="text-green-800">Loading...</div>}
-                {data && <ExerciseOverviewTable exercises={data.exercises} />}
+                {data && (
+                  <ExerciseOverviewTable
+                    exercises={data.exercises}
+                    onAddExercise={handleAddExercise}
+                    showAddButton={showAddButton === "true"}
+                  />
+                )}
               </>
             )}
             {role !== "user" && (

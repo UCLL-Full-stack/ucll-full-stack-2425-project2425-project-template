@@ -22,7 +22,6 @@ const Workouts: React.FC = () => {
 
   const getWorkouts = async () => {
     const response = await WorkoutService.getAllWorkouts();
-
     if (response.ok) {
       const workouts = await response.json();
       return { workouts };
