@@ -14,7 +14,7 @@ const BadgeImage: React.FC<BadgeImageProps> = ({badgeName, owned}) => {
         if (owned) {
             source = "/images/badges/" + badgeNameTrimmed + ".png"
         } else {
-            source = "/images/badges/" + badgeNameTrimmed + "-grey.png"
+            source = "/images/badges/" + badgeNameTrimmed + "-black.png"
         }
         return source
     }
