@@ -1,77 +1,64 @@
-import { Ingredient } from "../../model/ingredient";
-import ingredientDb from "../../repository/ingredient.db";
-import ingredientService from "../../service/ingredient.service";
+import ingredientService from '../../service/ingredient.service';
+import ingredientDb from '../../repository/ingredient.db';
+import { Ingredient } from '../../model/ingredient';
 
+jest.mock('../../repository/ingredient.db');
 
-let mockGetAllIngredients: jest.Mock;
-let mockGetIngredientById: jest.Mock;
-let mockAddIngredient: jest.Mock;
+let mockIngredient: Ingredient;
 
 beforeEach(() => {
-    mockGetAllIngredients = jest.fn();
-    mockGetIngredientById = jest.fn();
-    mockAddIngredient = jest.fn();
-
-    ingredientDb.getAllIngredients = mockGetAllIngredients;
-    ingredientDb.getIngredientById = mockGetIngredientById;
-    ingredientDb.addIngredient = mockAddIngredient;
+  mockIngredient = new Ingredient({ id: 1, name: 'Sugar' });
+  jest.clearAllMocks();
 });
 
-afterEach(() => {
-    jest.clearAllMocks();
+test('givenIngredientsInDatabase_whenGetAllIngredientsIsCalled_thenItReturnsAllIngredients', async () => {
+  // given
+  const ingredients = [
+    new Ingredient({ id: 1, name: 'Sugar' }),
+    new Ingredient({ id: 2, name: 'Salt' }),
+  ];
+  (ingredientDb.getAllIngredients as jest.Mock).mockResolvedValue(ingredients);
+
+  // when
+  const result = await ingredientService.getAllIngredients();
+
+  // then
+  expect(ingredientDb.getAllIngredients).toHaveBeenCalled();
+  expect(result).toEqual(ingredients);
 });
 
-test('givenIngredientsInDatabase_whenGetAllIngredientsIsCalled_thenItReturnsAllIngredients', () => {
-    // given
-    const ingredients = [
-        new Ingredient(1, 'Sugar'),
-        new Ingredient(2, 'Salt'),
-    ];
-    mockGetAllIngredients.mockReturnValue(ingredients);
+test('givenValidIngredientId_whenGetIngredientByIdIsCalled_thenItReturnsTheIngredient', async () => {
+  // given
+  const id = 1;
+  (ingredientDb.getIngredientById as jest.Mock).mockResolvedValue(mockIngredient);
 
-    // when
-    const result = ingredientService.getAllIngredients();
+  // when
+  const result = await ingredientService.getIngredientById({ id });
 
-    // then
-    expect(mockGetAllIngredients).toHaveBeenCalled();
-    expect(result).toEqual(ingredients);
+  // then
+  expect(ingredientDb.getIngredientById).toHaveBeenCalledWith({ id });
+  expect(result).toBe(mockIngredient);
 });
 
-test('givenValidIngredientId_whenGetIngredientByIdIsCalled_thenItReturnsTheIngredient', () => {
-    // given
-    const ingredient = new Ingredient(1, 'Sugar');
-    mockGetIngredientById.mockReturnValue(ingredient);
+test('givenInvalidIngredientId_whenGetIngredientByIdIsCalled_thenThrowsError', async () => {
+  // given
+  const id = 999;
+  (ingredientDb.getIngredientById as jest.Mock).mockResolvedValue(null);
 
-    // when
-    const result = ingredientService.getIngredientById({ id: 1 });
-
-    // then
-    expect(mockGetIngredientById).toHaveBeenCalledWith({ id: 1 });
-    expect(result).toEqual(ingredient);
+  // when / then
+  await expect(ingredientService.getIngredientById({ id })).rejects.toThrow(`Ingredient with id ${id} not found`);
 });
 
-test('givenInvalidIngredientId_whenGetIngredientByIdIsCalled_thenItThrowsAnError', () => {
-    // given
-    mockGetIngredientById.mockReturnValue(null);
+test('givenValidIngredientData_whenAddIngredientIsCalled_thenItAddsAndReturnsTheIngredient', async () => {
+  // given
+  const newIngredientData = { name: 'Pepper' };
+  const newIngredient = new Ingredient({ id: 3, ...newIngredientData });
+  (ingredientDb.addIngredient as jest.Mock).mockResolvedValue(newIngredient);
 
-    // when
-    const callWithInvalidId = () => ingredientService.getIngredientById({ id: 999 });
+  // when
+  const result = await ingredientService.addIngredient(newIngredient);
 
-    // then
-    expect(callWithInvalidId).toThrowError('Ingredient with id 999 not found');
-    expect(mockGetIngredientById).toHaveBeenCalledWith({ id: 999 });
-});
-
-test('givenValidIngredientName_whenAddIngredientIsCalled_thenItAddsAndReturnsTheIngredient', () => {
-    // given
-    const ingredientName = 'Pepper';
-    const addedIngredient = new Ingredient(3, 'Pepper');
-    mockAddIngredient.mockReturnValue(addedIngredient);
-
-    // when
-    const result = ingredientService.addIngredient(ingredientName);
-
-    // then
-    expect(mockAddIngredient).toHaveBeenCalledWith(new Ingredient(0, ingredientName));
-    expect(result).toEqual(addedIngredient);
+  // then
+  expect(ingredientDb.addIngredient).toHaveBeenCalledWith(newIngredient.getName());
+  expect(result).toBe(newIngredient);
 });

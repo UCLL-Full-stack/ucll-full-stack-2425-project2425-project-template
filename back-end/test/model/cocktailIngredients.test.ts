@@ -1,72 +1,49 @@
-import { CocktailIngredient } from "../../model/cocktailIngredients";
+import { CocktailIngredient } from '../../model/cocktailIngredients';
 
-describe('CocktailIngredient Class', () => {
-    let cocktailIngredient: CocktailIngredient;
+let cocktailIngredient: CocktailIngredient;
 
-    beforeEach(() => {
-        // Initialize a new CocktailIngredient before each test
-        cocktailIngredient = new CocktailIngredient(1, 101, 202, '50ml');
-    });
+beforeEach(() => {
+  cocktailIngredient = new CocktailIngredient(1, 101, 201, '50ml');
+});
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
+test('givenValidProperties_whenConstructorIsCalled_thenPropertiesAreInitializedCorrectly', () => {
+  expect(cocktailIngredient.getId()).toBe(1);
+  expect(cocktailIngredient.getCocktailId()).toBe(101);
+  expect(cocktailIngredient.getIngredientId()).toBe(201);
+  expect(cocktailIngredient.getAmount()).toBe('50ml');
+});
 
-    test('givenACocktailIngredient_whenCreated_thenItHasCorrectProperties', () => {
-        // when
-        const id = cocktailIngredient.getId();
-        const cocktailId = cocktailIngredient.getCocktailId();
-        const ingredientId = cocktailIngredient.getIngredientId();
-        const amount = cocktailIngredient.getAmount();
+test('givenCocktailIngredientInstance_whenGettersAreCalled_thenReturnCorrectValues', () => {
+  expect(cocktailIngredient.getId()).toBe(1);
+  expect(cocktailIngredient.getCocktailId()).toBe(101);
+  expect(cocktailIngredient.getIngredientId()).toBe(201);
+  expect(cocktailIngredient.getAmount()).toBe('50ml');
+});
 
-        // then
-        expect(id).toBe(1);
-        expect(cocktailId).toBe(101);
-        expect(ingredientId).toBe(202);
-        expect(amount).toBe('50ml');
-    });
+test('givenCocktailIngredientInstance_whenSettersAreCalled_thenPropertiesAreUpdatedCorrectly', () => {
+  cocktailIngredient.setId(2);
+  cocktailIngredient.setCocktailId(102);
+  cocktailIngredient.setIngredientId(202);
+  cocktailIngredient.setAmount('100ml');
 
-    test('givenANewId_whenSetIdIsCalled_thenTheIdIsUpdated', () => {
-        // given
-        const newId = 2;
+  expect(cocktailIngredient.getId()).toBe(2);
+  expect(cocktailIngredient.getCocktailId()).toBe(102);
+  expect(cocktailIngredient.getIngredientId()).toBe(202);
+  expect(cocktailIngredient.getAmount()).toBe('100ml');
+});
 
-        // when
-        cocktailIngredient.setId(newId);
+test('givenCocktailIngredientPrismaObject_whenFromIsCalled_thenCreatesCocktailIngredientInstance', () => {
+  const cocktailIngredientPrisma = {
+    id: 1,
+    cocktailId: 101,
+    ingredientId: 201,
+    amount: '50ml'
+  };
 
-        // then
-        expect(cocktailIngredient.getId()).toBe(newId);
-    });
+  const newCocktailIngredient = CocktailIngredient.from(cocktailIngredientPrisma);
 
-    test('givenANewCocktailId_whenSetCocktailIdIsCalled_thenTheCocktailIdIsUpdated', () => {
-        // given
-        const newCocktailId = 102;
-
-        // when
-        cocktailIngredient.setCocktailId(newCocktailId);
-
-        // then
-        expect(cocktailIngredient.getCocktailId()).toBe(newCocktailId);
-    });
-
-    test('givenANewIngredientId_whenSetIngredientIdIsCalled_thenTheIngredientIdIsUpdated', () => {
-        // given
-        const newIngredientId = 203;
-
-        // when
-        cocktailIngredient.setIngredientId(newIngredientId);
-
-        // then
-        expect(cocktailIngredient.getIngredientId()).toBe(newIngredientId);
-    });
-
-    test('givenANewAmount_whenSetAmountIsCalled_thenTheAmountIsUpdated', () => {
-        // given
-        const newAmount = '100ml';
-
-        // when
-        cocktailIngredient.setAmount(newAmount);
-
-        // then
-        expect(cocktailIngredient.getAmount()).toBe(newAmount);
-    });
+  expect(newCocktailIngredient.getId()).toBe(1);
+  expect(newCocktailIngredient.getCocktailId()).toBe(101);
+  expect(newCocktailIngredient.getIngredientId()).toBe(201);
+  expect(newCocktailIngredient.getAmount()).toBe('50ml');
 });

@@ -1,81 +1,117 @@
-import { Cocktail } from "../../model/cocktail";
-import cocktailDb from "../../repository/cocktail.db";
-import cocktailService from "../../service/cocktail.service";
+import cocktailService from '../../service/cocktail.service';
+import cocktailDb from '../../repository/cocktail.db';
+import { Cocktail } from '../../model/cocktail';
 
-let mockGetAllCocktails: jest.Mock;
-let mockGetCocktailById: jest.Mock;
-let mockAddCocktail: jest.Mock;
+jest.mock('../../repository/cocktail.db');
+
+let mockCocktail: Cocktail;
 
 beforeEach(() => {
-    mockGetAllCocktails = jest.fn();
-    mockGetCocktailById = jest.fn();
-    mockAddCocktail = jest.fn();
-
-    cocktailDb.getAllCocktails = mockGetAllCocktails;
-    cocktailDb.getCocktailById = mockGetCocktailById;
-    cocktailDb.addCocktail = mockAddCocktail;
+  mockCocktail = new Cocktail({
+    id: 1,
+    name: 'Mojito',
+    description: 'A refreshing cocktail',
+    strongness: 5,
+    image: 'mojito.jpg'
+  });
 });
 
-afterEach(() => {
-    jest.clearAllMocks();
+test('givenCocktailsInDatabase_whenGetAllCocktailsIsCalled_thenItReturnsAllCocktails', async () => {
+  // given
+  const cocktails = [
+    new Cocktail({ id: 1, name: 'Mojito', description: 'A refreshing cocktail', strongness: 5, image: 'mojito.jpg' }),
+    new Cocktail({ id: 2, name: 'Old Fashioned', description: 'A classic cocktail', strongness: 7, image: 'old-fashioned.jpg' }),
+  ];
+  (cocktailDb.getAllCocktails as jest.Mock).mockResolvedValue(cocktails);
+
+  // when
+  const result = await cocktailService.getAllCocktails();
+
+  // then
+  expect(cocktailDb.getAllCocktails).toHaveBeenCalled();
+  expect(result).toEqual(cocktails);
 });
 
-test('givenCocktailsInDatabase_whenGetAllCocktailsIsCalled_thenItReturnsAllCocktails', () => {
-    // given
-    const cocktails = [
-        new Cocktail(1, 'Mojito', 'A refreshing cocktail', 5, 'mojito.jpg'),
-        new Cocktail(2, 'Old Fashioned', 'A classic cocktail', 7, 'old-fashioned.jpg'),
-    ];
-    mockGetAllCocktails.mockReturnValue(cocktails);
+test('givenAValidCocktailId_whenGetCocktailByIdIsCalled_thenItReturnsTheCocktail', async () => {
+  // given
+  const id = 1;
+  (cocktailDb.getCocktailById as jest.Mock).mockResolvedValue(mockCocktail);
 
-    // when
-    const result = cocktailService.getAllCocktails();
+  // when
+  const result = await cocktailService.getCocktailById({ id });
 
-    // then
-    expect(mockGetAllCocktails).toHaveBeenCalled();
-    expect(result).toEqual(cocktails);
+  // then
+  expect(cocktailDb.getCocktailById).toHaveBeenCalledWith(id);
+  expect(result).toBe(mockCocktail);
 });
 
-test('givenAValidCocktailId_whenGetCocktailByIdIsCalled_thenItReturnsTheCocktail', () => {
-    // given
-    const cocktail = new Cocktail(1, 'Mojito', 'A refreshing cocktail', 5, 'mojito.jpg');
-    mockGetCocktailById.mockReturnValue(cocktail);
+test('givenAnInvalidCocktailId_whenGetCocktailByIdIsCalled_thenThrowsError', async () => {
+  // given
+  const id = 999;
+  (cocktailDb.getCocktailById as jest.Mock).mockResolvedValue(null);
 
-    // when
-    const result = cocktailService.getCocktailById({ id: 1 });
-
-    // then
-    expect(mockGetCocktailById).toHaveBeenCalledWith({ id: 1 });
-    expect(result).toEqual(cocktail);
+  // when / then
+  await expect(cocktailService.getCocktailById({ id })).rejects.toThrow(`Cocktail with id ${id} not found`);
 });
 
-test('givenAnInvalidCocktailId_whenGetCocktailByIdIsCalled_thenItThrowsAnError', () => {
-    // given
-    mockGetCocktailById.mockReturnValue(null);
+test('givenValidCocktailData_whenAddCocktailIsCalled_thenItAddsAndReturnsTheCocktail', async () => {
+  // given
+  const newCocktailData = { name: 'Margarita', description: 'A classic cocktail', strongness: 6, image: 'margarita.jpg' };
+  const newCocktail = new Cocktail({ id: 3, ...newCocktailData });
+  (cocktailDb.addCocktail as jest.Mock).mockResolvedValue(newCocktail);
 
-    // when
-    const callWithInvalidId = () => cocktailService.getCocktailById({ id: 999 });
+  // when
+  const result = await cocktailService.addCocktail(newCocktailData);
 
-    // then
-    expect(callWithInvalidId).toThrowError('Cocktail with id 999 not found');
-    expect(mockGetCocktailById).toHaveBeenCalledWith({ id: 999 });
+  // then
+  expect(cocktailDb.addCocktail).toHaveBeenCalledWith(newCocktailData);
+  expect(result).toBe(newCocktail);
 });
 
-test('givenValidCocktailData_whenAddCocktailIsCalled_thenItAddsTheCocktailAndReturnsIt', () => {
-    // given
-    const newCocktailData = {
-        name: 'Margarita',
-        description: 'A tangy, classic cocktail',
-        strongness: 6,
-        imageUrl: 'margarita.jpg',
-    };
-    const addedCocktail = new Cocktail(3, 'Margarita', 'A tangy, classic cocktail', 6, 'margarita.jpg');
-    mockAddCocktail.mockReturnValue(addedCocktail);
+test('givenAValidCocktailId_whenDeleteCocktailIsCalled_thenItDeletesTheCocktail', async () => {
+  // given
+  const id = 1;
+  (cocktailDb.getCocktailById as jest.Mock).mockResolvedValue(mockCocktail);
+  (cocktailDb.deleteCocktail as jest.Mock).mockResolvedValue(undefined);
 
-    // when
-    const result = cocktailService.addCocktail(newCocktailData);
+  // when
+  await cocktailService.deleteCocktail(id);
 
-    // then
-    expect(mockAddCocktail).toHaveBeenCalledWith(newCocktailData);
-    expect(result).toEqual(addedCocktail);
+  // then
+  expect(cocktailDb.getCocktailById).toHaveBeenCalledWith(id);
+  expect(cocktailDb.deleteCocktail).toHaveBeenCalledWith(id);
+});
+
+test('givenAnInvalidCocktailId_whenDeleteCocktailIsCalled_thenThrowsError', async () => {
+  // given
+  const id = 999;
+  (cocktailDb.getCocktailById as jest.Mock).mockResolvedValue(null);
+
+  // when / then
+  await expect(cocktailService.deleteCocktail(id)).rejects.toThrow(`Cocktail with id ${id} not found`);
+});
+
+test('givenValidCocktailData_whenUpdateCocktailIsCalled_thenItUpdatesAndReturnsTheCocktail', async () => {
+  // given
+  const updatedCocktailData = { id: 1, name: 'Updated Mojito', description: 'An updated refreshing cocktail', strongness: 5, image: 'updated-mojito.jpg' };
+  const updatedCocktail = new Cocktail(updatedCocktailData);
+  (cocktailDb.getCocktailById as jest.Mock).mockResolvedValue(mockCocktail);
+  (cocktailDb.updateCocktail as jest.Mock).mockResolvedValue(updatedCocktail);
+
+  // when
+  const result = await cocktailService.updateCocktail(updatedCocktailData);
+
+  // then
+  expect(cocktailDb.getCocktailById).toHaveBeenCalledWith(updatedCocktailData.id);
+  expect(cocktailDb.updateCocktail).toHaveBeenCalledWith(updatedCocktailData);
+  expect(result).toBe(updatedCocktail);
+});
+
+test('givenAnInvalidCocktailId_whenUpdateCocktailIsCalled_thenThrowsError', async () => {
+  // given
+  const updatedCocktailData = { id: 999, name: 'Updated Mojito', description: 'An updated refreshing cocktail', strongness: 5, image: 'updated-mojito.jpg' };
+  (cocktailDb.getCocktailById as jest.Mock).mockResolvedValue(null);
+
+  // when / then
+  await expect(cocktailService.updateCocktail(updatedCocktailData)).rejects.toThrow(`Cocktail with id ${updatedCocktailData.id} not found`);
 });
