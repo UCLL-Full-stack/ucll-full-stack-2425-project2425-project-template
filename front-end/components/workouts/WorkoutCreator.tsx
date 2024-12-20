@@ -3,25 +3,19 @@ import { User } from "@/types";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Toaster, toast } from "sonner";
-
 type Props = {
   user: User;
 };
-
 const WorkoutCreator: React.FC<Props> = ({ user }) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-
   const router = useRouter();
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     if (!name.trim() || !description.trim()) {
       toast.error("Both fields are required.");
       return;
     }
-
     try {
       const workout = {
         id: "",
@@ -30,14 +24,11 @@ const WorkoutCreator: React.FC<Props> = ({ user }) => {
         user,
         exercises: [],
       };
-
       const response = await WorkoutService.createWorkout(workout);
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || "Failed to create the workout.");
       }
-
       toast.success("Workout created successfully!");
       setTimeout(() => {
         router.push("/workouts");
@@ -48,7 +39,6 @@ const WorkoutCreator: React.FC<Props> = ({ user }) => {
       );
     }
   };
-
   return (
     <>
       <form
@@ -68,7 +58,6 @@ const WorkoutCreator: React.FC<Props> = ({ user }) => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Description
@@ -82,7 +71,6 @@ const WorkoutCreator: React.FC<Props> = ({ user }) => {
             required
           />
         </div>
-
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -94,5 +82,4 @@ const WorkoutCreator: React.FC<Props> = ({ user }) => {
     </>
   );
 };
-
 export default WorkoutCreator;

@@ -23,10 +23,10 @@ model User {
 model Workout {
   id          String     @id @default(cuid())
   userId      String
-  name        String   
-  description String 
-  exercises Exercise[]
-  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  description String
+  exercises   Exercise[]
+  user        User       @relation(fields: [userId], references: [id])
 }
 
 model Exercise {
