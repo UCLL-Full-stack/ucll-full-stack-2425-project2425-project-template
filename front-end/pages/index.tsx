@@ -49,36 +49,6 @@ const Home: React.FC = () => {
                         {t("main.description2")}
                     </p>
                 </div>
-
-                <div className={styles.usersHomeTableHolder}>
-                    <h2>{t("predefinedUserTable.title")}</h2>
-                    <table className={styles.usersHomeTable}>
-                        <thead>
-                            <tr>
-                                <th className={styles.usersTableth1}>{t("predefinedUserTable.email")}</th>
-                                <th>{t("predefinedUserTable.password")}</th>
-                                <th className={styles.usersTableth2}>{t("predefinedUserTable.role")}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>admin@admin</td>
-                                <td>admin</td>
-                                <td>{t("predefinedUserTable.admin")}</td>
-                            </tr>
-                            <tr>
-                                <td>john.doe@ucll.be</td>
-                                <td>passwordJohn</td>
-                                <td>{t("predefinedUserTable.organizer")}</td>
-                            </tr>
-                            <tr>
-                                <td>jane.doe@ucll.be</td>
-                                <td>passwordJane</td>
-                                <td>{t("predefinedUserTable.participant")}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </main>
         </>
     )

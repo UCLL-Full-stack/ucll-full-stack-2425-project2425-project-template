@@ -572,6 +572,10 @@
     gap: 1rem;
 }
 
+.loginMyEvents {
+    margin-top: 1rem !important;
+}
+
 .createEventForm {
     display: flex;
     flex-direction: column;
