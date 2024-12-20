@@ -62,7 +62,9 @@ const Workouts: React.FC = () => {
               </>
             )}
             {role !== "user" && (
-              <div>You do not have permission to view this page.</div>
+              <div className="text-red-600 font-medium">
+                You do not have permission to view this page.
+              </div>
             )}
           </section>
         </div>

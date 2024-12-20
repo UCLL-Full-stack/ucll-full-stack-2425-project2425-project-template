@@ -46,6 +46,61 @@ const Home: React.FC = () => {
             Get started <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </MaxWidthWrapper>
+
+        {/* User Details Table */}
+        <section className="mt-12 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">User Details</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-sm font-medium text-gray-700"
+                  >
+                    Email
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-sm font-medium text-gray-700"
+                  >
+                    Password
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-sm font-medium text-gray-700"
+                  >
+                    Role
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    user1@example.com
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    User1!
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    Admin
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    user2@example.com
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    User2!
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    User
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </>
   );

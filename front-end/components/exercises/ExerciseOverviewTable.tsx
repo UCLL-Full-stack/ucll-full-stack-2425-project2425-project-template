@@ -3,6 +3,7 @@ import { Exercise } from "@/types";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Plus } from "react-feather";
+import { toast } from "sonner";
 
 type Props = {
   exercises: Array<Exercise>;
@@ -34,18 +35,37 @@ const ExerciseOverviewTable: React.FC<Props> = ({
   }, [filter, exercises]);
 
   const toggleFavorite = async (id: string) => {
-    const response = await ExerciseService.toggleFavorite(id);
-    const data = await response.json();
+    try {
+      const response = await ExerciseService.toggleFavorite(id);
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error("Failed to toggle the exercise");
-    } else {
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to toggle favorite status.");
+      }
+
       const updatedExercises = exerciseList.map((exercise) =>
         exercise.id === id
           ? { ...exercise, isFavorite: !exercise.isFavorite }
           : exercise
       );
       setExerciseList(updatedExercises);
+
+      // Show a toast message
+      const toggledExercise = exerciseList.find(
+        (exercise) => exercise.id === id
+      );
+      const status = toggledExercise?.isFavorite ? "removed from" : "added to";
+      toast.success(
+        `Exercise "${toggledExercise?.name}" has been ${status} favorites.`,
+        { duration: 2000 } // Toast will disappear in 2 seconds
+      );
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to toggle favorite status.",
+        { duration: 2000 } // Toast will disappear in 2 seconds
+      );
     }
   };
 

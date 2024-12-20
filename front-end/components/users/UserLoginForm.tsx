@@ -148,29 +148,7 @@ const UserLoginForm: React.FC = () => {
           Login
         </button>
       </form>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Password</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>user1@example.com</td>
-              <td>User1!</td>
-              <td>Admin</td>
-            </tr>
-            <tr>
-              <td>user2@example.com</td>
-              <td>User2!</td>
-              <td>User</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div></div>
     </>
   );
 };
