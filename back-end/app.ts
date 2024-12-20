@@ -9,8 +9,10 @@ import groepRouter from './controller/groep.routes';
 import leidingRouter from './controller/leiding.routes';
 import { expressjwt } from 'express-jwt';
 import nieuwsberichtRouter from './controller/nieuwsbericht.routes';
+import helmet from 'helmet';
 
 const app = express();
+app.use(helmet());
 
 app.use(express.json());
 
@@ -32,6 +34,7 @@ app.use(
             '/api-docs',
             /^\/groep\/[^\/]+\/activiteiten$/,
             /^\/groep\/[^\/]+\/leiding$/,
+            /^\/groep\/[^\/]+$/,
             '/groep',
             '/nieuwsberichten',
             ],

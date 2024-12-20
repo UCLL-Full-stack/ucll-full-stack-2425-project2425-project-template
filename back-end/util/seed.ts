@@ -22,14 +22,14 @@ const main = async () => {
     const kapoenen = await prisma.groep.create({
         data: {
             naam: 'Kapoenen',
-            beschrijving: 'De kapoenen',
+            beschrijving: `Het leven van een kapoen (6-8 jaar) is er één vol spel, fantasie, creativiteit en expressie. Spelenderwijs en ongedwongen ontdekken we samen met hen de wereld. De leiding gaat hierbij uit van het kind zelf, van wat hen boeit en aanspreekt. Algemeen contact: kapoenen@scoutsoverijse.be`,
         }
     })
 
     const welpen = await prisma.groep.create({
         data: {
             naam: 'Welpen',
-            beschrijving: 'De welpen',
+            beschrijving: `Wie tussen 8 en 10 jaar is, kan meespelen bij de welpen. Het is typisch voor welpen dat ze zelf dingen leren doen. Ze krijgen ruimte en kansen om dingen uit te proberen en van elkaar te leren. De werking wordt ingekleed met verhalen en fantasie. Hierbij wordt gebruik gemaakt van het Jungleboek. Zo komt het dat vaste kleine groepen “nesten” genoemd worden. “Raadsrots” is het moment waarop welpen gaan samenzitten om over van alles te kletsen en mee te beslissen. Algemeen contact: welpen@scoutsoverijse.be`,
         }
     })
 
@@ -91,8 +91,8 @@ const main = async () => {
 
     const activiteit1 = await prisma.activiteit.create({
         data: {
-            naam: 'Activiteit1',
-            beschrijving: 'De eerste activiteit',
+            naam: 'Buiten spelen',
+            beschrijving: 'Vandaag gaan we een hele dag buitenspelen, zorg er dus voor dat je de juiste kledij aan hebt!',
             beginDatum: new Date(),
             eindDatum: new Date(),
             groepen: {
@@ -109,6 +109,30 @@ const main = async () => {
             eindDatum: new Date(),
             groepen: {
                 connect: { id: welpen.id }
+            }
+        }
+    })
+
+    const activiteit3 = await prisma.activiteit.create({
+        data: {
+            naam: 'Activiteit3',
+            beschrijving: 'De derde activiteit',
+            beginDatum: new Date("2024-09-29 14:00:00"),
+            eindDatum: new Date("2024-09-29 17:00:00"),
+            groepen: {
+                connect: { id: kapoenen.id }
+            }
+        }
+    })
+
+    const activiteit4 = await prisma.activiteit.create({
+        data: {
+            naam: 'Activiteit4',
+            beschrijving: 'De vierde activiteit',
+            beginDatum: new Date("2024-10-5 14:00:00"),
+            eindDatum: new Date("2024-10-6 17:00:00"),
+            groepen: {
+                connect: { id: kapoenen.id }
             }
         }
     })

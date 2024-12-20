@@ -1,5 +1,5 @@
 import { Activiteit } from "./activiteit";
-import { Leiding } from "./leiding";
+import { Leiding, PublicLeiding } from "./leiding";
 import { 
     Activiteit as ActiviteitPrisma,
     Leiding as LeidingPrisma,
@@ -12,14 +12,14 @@ export class Groep {
     private naam: string;
     private beschrijving: string;
     private activiteiten?: Activiteit[];
-    private leiding?: Leiding[];
+    private leiding?: (Leiding | PublicLeiding)[];
 
     constructor(groep:{
         id: number,
         naam: string
         beschrijving: string
         activiteiten?: Activiteit[]
-        leiding?: Leiding[]
+        leiding?: Leiding[] | PublicLeiding[]
     }) {
         this.id = groep.id;
         this.naam = groep.naam;
@@ -44,7 +44,7 @@ export class Groep {
         return this.activiteiten;
     }
 
-    public getLeiding(): Leiding[] | undefined {
+    public getLeiding(): (Leiding | PublicLeiding)[] | undefined {
         return this.leiding;
     }
 
@@ -72,7 +72,7 @@ export class Groep {
         this.activiteiten = this.activiteiten.filter((a) => !a.equals(activiteit));
     } 
 
-    public addLeiding(leiding: Leiding): void {
+    public addLeiding(leiding: Leiding | PublicLeiding): void {
         if (this.leiding === undefined) {
             this.leiding = [];
         }
@@ -82,7 +82,7 @@ export class Groep {
         this.leiding.push(leiding);
     }
 
-    public removeLeiding(leiding: Leiding): void {
+    public removeLeiding(leiding: Leiding | PublicLeiding): void {
         if (this.leiding === undefined) {
             return;
         }
@@ -111,7 +111,7 @@ export class Groep {
                 begindatum: activiteit.beginDatum,
                 einddatum: activiteit.eindDatum
             })),
-            leiding: leiding.map((l) => Leiding.from({ ...l, nieuwsberichten: [] }))
+            leiding: leiding.map((l) => PublicLeiding.from({leiding: Leiding.from({ ...l, nieuwsberichten: [] }), groep: naam}))
         });
     }
 

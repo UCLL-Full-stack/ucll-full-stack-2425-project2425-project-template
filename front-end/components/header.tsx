@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import getAllGroepen from '@/services/GroepService';
 import { Groep } from '@/types';
 import Language from "@/components/language/Language";
 import { useTranslation } from "next-i18next";
+import GroepService from '@/services/GroepService';
+
 
 const Header: React.FC = () => {
     const { t } = useTranslation();
@@ -34,9 +35,8 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         const fetchGroepen = async () => {
-            const response = await getAllGroepen();
+            const response = await GroepService.getAllGroepen();
             const groepenArray = await response.json();
-            console.log(groepenArray);
             setGroepen(groepenArray);
         }
         fetchGroepen();

@@ -269,4 +269,21 @@ export class PublicLeiding{
             groep: groep
         });
     }
+
+    equals(leiding: any): boolean {
+        if (leiding === null) {
+            return false;
+        } else if (leiding === undefined) {
+            return false;
+        } else if (leiding instanceof Leiding) {
+            return this.naam === leiding.getNaam() && 
+            this.voornaam === leiding.getVoornaam() && 
+            this.email === leiding.getEmail() && 
+            this.telefoon === leiding.getTelefoon() && 
+            this.rol === leiding.getRol() &&
+            this.totem === leiding.getTotem() 
+        } else {
+            return false;
+        }
+    }
 }
