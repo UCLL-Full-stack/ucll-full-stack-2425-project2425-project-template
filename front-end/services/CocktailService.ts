@@ -53,7 +53,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // }
 
 const getAllCocktails = () => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -70,7 +70,7 @@ const getAllCocktails = () => {
 };
 
 const getCocktailById = (cocktailId: number) => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -87,7 +87,7 @@ const getCocktailById = (cocktailId: number) => {
 };
 
 const addCocktail = ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string }) => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -105,7 +105,7 @@ const addCocktail = ({ name, description, strongness, image }: { name: string; d
 };
 
 const updateCocktail = ({ cocktailId, name, description, strongness, image }: { cocktailId: string; name: string; description: string; strongness: number; image: string }) => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -123,7 +123,7 @@ const updateCocktail = ({ cocktailId, name, description, strongness, image }: { 
 };
 
 const getAllFavoriteCocktails = () => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -140,7 +140,7 @@ const getAllFavoriteCocktails = () => {
 };
 
 const deleteCocktail = (cocktailId: string) => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -157,7 +157,7 @@ const deleteCocktail = (cocktailId: string) => {
 };
 
 const favoriteCocktail = (cocktailId: string) => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
@@ -174,7 +174,7 @@ const favoriteCocktail = (cocktailId: string) => {
 };
 
 const unfavoriteCocktail = (cocktailId: string) => {
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
   if (!token) {
