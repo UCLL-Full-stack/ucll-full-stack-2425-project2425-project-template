@@ -39,7 +39,7 @@ model Product {
   description String
   rating      Int
   url         String         @default("https://placehold.co/600x400")
-  carts       Cart[]         @relation("CartProducts")
+  carts       CartProducts[]
   reviews     Review[]
   orders      OrderProduct[]
 }
@@ -55,12 +55,12 @@ model Order {
 }
 
 model Cart {
-  id         Int       @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   totalPrice Float
-  products   Product[] @relation("CartProducts")
-  userId     Int       @unique
-  user       User      @relation(fields: [userId], references: [id])
-  order      Order?    @relation(fields: [orderId], references: [id])
+  products   CartProducts[]
+  userId     Int            @unique
+  user       User           @relation(fields: [userId], references: [id])
+  order      Order?         @relation(fields: [orderId], references: [id])
   orderId    Int?
 }
 
@@ -82,4 +82,12 @@ model OrderProduct {
   product   Product @relation(fields: [productId], references: [id])
 
   @@id([orderId, productId])
+}
+
+model CartProducts {
+  id        Int      @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }

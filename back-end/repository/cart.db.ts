@@ -5,8 +5,12 @@ const getAllCarts = async (): Promise<Cart[]> => {
     try {
         const cartsPrisma = await database.cart.findMany({
             include: {
-                products: true,
                 user: true,
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
             },
         });
         return cartsPrisma.map((cartPrisma) => Cart.from(cartPrisma));
@@ -21,8 +25,12 @@ const getCartById = async (id: number): Promise<Cart | null> => {
         const cartPrisma = await database.cart.findUnique({
             where: { id },
             include: {
-                products: true,
                 user: true,
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
             },
         });
         if (!cartPrisma) {
@@ -39,7 +47,14 @@ const getCartByUserId = async (userId: number): Promise<Cart | null> => {
     try {
         const cartPrisma = await database.cart.findUnique({
             where: { userId },
-            include: { products: true, user: true },
+            include: {
+                user: true,
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
+            },
         });
         return cartPrisma ? Cart.from(cartPrisma) : null;
     } catch (error) {
@@ -52,7 +67,14 @@ const putProductToCart = async (cartId: number, productId: number): Promise<Cart
     try {
         const cart = await database.cart.findUnique({
             where: { id: cartId },
-            include: { products: true, user: true },
+            include: {
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
+                user: true,
+            },
         });
 
         if (!cart) {
@@ -71,12 +93,16 @@ const putProductToCart = async (cartId: number, productId: number): Promise<Cart
             where: { id: cartId },
             data: {
                 products: {
-                    connect: { id: productId },
+                    create: { product: { connect: { id: productId } } },
                 },
             },
             include: {
-                products: true,
                 user: true,
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
             },
         });
 
@@ -93,8 +119,12 @@ const updateCartTotalPrice = async (cartId: number, totalPrice: number): Promise
             where: { id: cartId },
             data: { totalPrice },
             include: {
-                products: true,
                 user: true,
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
             },
         });
         return Cart.from(updatedCart);
@@ -116,13 +146,17 @@ const createCart = async ({ products, user, totalPrice }: Cart): Promise<Cart> =
             data: {
                 userId,
                 products: {
-                    connect: products.map(product => ({ id: product.getId() })),
+                    create: products.map(product => ({ product: { connect: { id: product.getId() } } })),
                 },
-                totalPrice: 0,
+                totalPrice,
             },
             include: {
-                products: true,
                 user: true,
+                products: {
+                    include: {
+                        product: true
+                    }
+                },
             },
         });
         return Cart.from(newCart);
@@ -151,18 +185,30 @@ const clearCartProducts = async (cartId: number): Promise<void> => {
 
 const removeProductFromCart = async (cartId: number, productId: number): Promise<Cart> => {
     try {
-        const updatedCart = await database.cart.update({
+        const cartProduct = await database.cartProducts.findFirst({
+            where: { cartId, productId },
+        });
+
+        if (!cartProduct) {
+            throw new Error('Product not found in cart');
+        }
+
+        await database.cartProducts.delete({
+            where: { id: cartProduct.id },
+        });
+
+        const updatedCart = await database.cart.findUnique({
             where: { id: cartId },
-            data: {
+            include: {
+                user: true,
                 products: {
-                    disconnect: { id: productId },
+                    include: {
+                        product: true,
+                    },
                 },
             },
-            include: {
-                products: true,
-                user: true,
-            },
         });
+
         return Cart.from(updatedCart);
     } catch (error) {
         console.error(error);

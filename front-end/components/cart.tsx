@@ -6,6 +6,7 @@ interface Product {
   price: number;
   description: string;
   rating: number;
+  quantity: number;
 }
 
 interface CartProps {
@@ -24,6 +25,7 @@ const Cart: React.FC<CartProps> = ({ items = [], totalPrice, onDeleteProduct }) 
         <table>
           <thead>
             <tr>
+              <th>Quantity</th>
               <th>Name</th>
               <th>Price</th>
               <th>Description</th>
@@ -34,6 +36,7 @@ const Cart: React.FC<CartProps> = ({ items = [], totalPrice, onDeleteProduct }) 
           <tbody>
             {items.map((item) => (
               <tr key={item.id}>
+                <td>x{item.quantity}</td>
                 <td>{item.name}</td>
                 <td>{item.price}</td>
                 <td>{item.description}</td>

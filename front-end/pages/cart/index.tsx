@@ -12,8 +12,12 @@ interface Product {
     rating: number;
 }
 
+interface CartItem extends Product {
+    quantity: number;
+}
+
 const CartPage = () => {
-    const [items, setItems] = useState<Product[]>([]);
+    const [items, setItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const router = useRouter();
 
@@ -29,7 +33,18 @@ const CartPage = () => {
                 const cart = await CartService.getCart(token);
                 console.log('Fetched cart items:', cart);
                 const products = cart.products || [];
-                setItems(products);
+                const productMap: { [key: number]: CartItem } = {};
+
+                products.forEach((product: Product) => {
+                    if (productMap[product.id]) {
+                        productMap[product.id].quantity += 1;
+                    } else {
+                        productMap[product.id] = { ...product, quantity: 1 };
+                    }
+                });
+
+                const cartItems = Object.values(productMap);
+                setItems(cartItems);
                 setTotalPrice(cart.totalPrice);
             } catch (error) {
                 console.error('Error fetching cart items:', error);
@@ -67,9 +82,17 @@ const CartPage = () => {
     const handleDeleteProduct = async (productId: number) => {
         try {
             await CartService.deleteProductFromCart(productId);
-            setItems(items.filter(item => item.id !== productId));
-            const updatedTotalPrice = items.reduce((total, item) => total + item.price, 0);
-            setTotalPrice(updatedTotalPrice);
+            setItems(prevItems => {
+                const updatedItems = prevItems.map(item => {
+                    if (item.id === productId) {
+                        return { ...item, quantity: item.quantity - 1 };
+                    }
+                    return item;
+                }).filter(item => item.quantity > 0);
+                const updatedTotalPrice = updatedItems.reduce((total, item) => total + item.price * item.quantity, 0);
+                setTotalPrice(updatedTotalPrice);
+                return updatedItems;
+            });
         } catch (error) {
             console.error('Error deleting product from cart:', error);
             alert('Failed to delete product from cart.');

@@ -10,6 +10,7 @@ export class Cart {
 
     constructor(cart: {
         id?: number;
+        totalPrice?: number;
         products: Product[];
         user: User;
     }) {
@@ -17,19 +18,17 @@ export class Cart {
 
         this.id = cart.id;
         this.products = cart.products;
-        this.totalPrice = this.calculateTotalPrice();
+        this.totalPrice = cart.totalPrice ?? this.calculateTotalPrice();
         this.user = cart.user;
     }
 
-    static from({
-        id,
-        products,
-        user,
-    }: CartPrisma & { products: ProductPrisma[]; user: UserPrisma }): Cart {
+    static from(data: any): Cart {
+        const products = data.products.map((cartProduct: any) => Product.from(cartProduct.product));
         return new Cart({
-            id,
-            products: products.map(product => Product.from(product)),
-            user: User.from(user),
+            id: data.id,
+            totalPrice: data.totalPrice,
+            products,
+            user: User.from(data.user),
         });
     }
 
