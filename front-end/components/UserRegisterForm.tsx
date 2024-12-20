@@ -88,10 +88,10 @@ const UserRegisterForm: React.FC = () => {
         setStatusMessages([{ message: t("register.success"), type: "success" }]);
         setTimeout(() => router.push("/login"), 2000);
       } else {
-        setStatusMessages([{ message: response.message || t("register.error.generic"), type: "error" }]);
+        setStatusMessages([{ message: response.message || t("register.errors.generic"), type: "error" }]);
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || t("register.error.server");
+      const errorMessage = error.response?.data?.message || t("register.errors.server");
       setStatusMessages([{ message: errorMessage, type: "error" }]);
     }
   };
@@ -104,7 +104,7 @@ const UserRegisterForm: React.FC = () => {
 
         {/* First Name */}
         <label htmlFor="firstName" className={styles.formLabels}>
-          {t("register.firstName")}
+          {t("register.voornaam")}
         </label>
         <input
           id="firstName"
@@ -118,7 +118,7 @@ const UserRegisterForm: React.FC = () => {
 
         {/* Last Name */}
         <label htmlFor="lastName" className={styles.formLabels}>
-          {t("register.lastName")}
+          {t("register.achternaam")}
         </label>
         <input
           id="lastName"
@@ -132,7 +132,7 @@ const UserRegisterForm: React.FC = () => {
 
         {/* Username */}
         <label htmlFor="username" className={styles.formLabels}>
-          {t("register.username")}
+          {t("register.gebruikersnaam")}
         </label>
         <input
           id="username"
@@ -146,7 +146,7 @@ const UserRegisterForm: React.FC = () => {
 
         {/* Role */}
         <label htmlFor="role" className={styles.formLabels}>
-          {t("register.role")}
+          {t("register.rol")}
         </label>
         <select
           id="role"
@@ -164,7 +164,7 @@ const UserRegisterForm: React.FC = () => {
         {formValues.role === "student" && (
           <>
             <label htmlFor="studentNumber" className={styles.formLabels}>
-              {t("register.studentNumber")}
+              {t("register.studentennummer")}
             </label>
             <input
               id="studentNumber"
@@ -194,7 +194,7 @@ const UserRegisterForm: React.FC = () => {
 
         {/* Password */}
         <label htmlFor="password" className={styles.formLabels}>
-          {t("register.password")}
+          {t("register.wachtwoord")}
         </label>
         <input
           id="password"
@@ -208,7 +208,7 @@ const UserRegisterForm: React.FC = () => {
 
         {/* Confirm Password */}
         <label htmlFor="confirmPassword" className={styles.formLabels}>
-          {t("register.confirmPassword")}
+          {t("register.bevestigwachtwoord")}
         </label>
         <input
           id="confirmPassword"
