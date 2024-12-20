@@ -168,7 +168,7 @@ eventRouter.get('/details/:id', async (req: Request, res: Response, next: NextFu
 eventRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const event = await eventService.createEvent(req.body);
-        res.status(201).json(event);
+        res.status(200).json(event);
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ message: error.message });

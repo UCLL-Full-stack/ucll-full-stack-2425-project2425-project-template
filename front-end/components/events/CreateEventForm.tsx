@@ -42,6 +42,10 @@ const CreateEventForm: React.FC = () => {
             setDateError('Date is required.');
             return false;
         }
+        if (date < new Date()) {
+            setDateError('Date must be in the future.');
+            return false;
+        }
         if (!location || location.trim() === '') {
             setLocationError('Location is required.');
             return false;
@@ -62,13 +66,17 @@ const CreateEventForm: React.FC = () => {
             setTicketPriceError('Ticket price is required.');
             return false;
         }
+        if (ticketPrice < 0) {
+            setTicketPriceError('Ticket price must be a positive number.');
+            return false;
+        }
 
         return true;
     }
 
     const handleCreateEventSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+    
         setEventNameError('');
         setDescriptionError('');
         setDateError('');
@@ -77,22 +85,28 @@ const CreateEventForm: React.FC = () => {
         setTicketAmountError('');
         setTicketTypeError('');
         setTicketPriceError('');
-
+    
         if (validateForm()) {
             const eventData = {name: eventName, description: description, date: date, location: location, category: category, isTrending: false};
+    
+            try {
+                const response = await EventService.createEvent(eventData);
+                const createdEvent = await response.json();
+    
+                for (let i = 0; i < ticketAmount; i++) {
+                    await TicketService.createTicket(ticketType, ticketPrice, createdEvent);
+                }
+    
+                setStatus('Event and its tickets were created successfully. Redirecting...');
+    
+                setTimeout(() => {
+                    router.push('/upcoming-events');
+                }, 3000);
 
-            const response = await EventService.createEvent(eventData);
-            const createdEvent = await response.json();
-
-            for (let i = 0; i < ticketAmount; i++) {
-                await TicketService.createTicket(ticketType, ticketPrice, createdEvent);
+            } catch (error) {
+                console.log(10);
+                setStatus(error.message);
             }
-
-            setStatus('Event and its tickets were created successfully. Redirecting to upcoming events page...');
-
-            setTimeout(() => {
-                router.push('/upcoming-events');
-            }, 3000);
         }
     };
 

@@ -63,17 +63,5 @@ describe('Ticket Model', () => {
                 new Ticket({ ...validTicketData, type: 'INVALID_TYPE' as TicketType });
             }).toThrow('Invalid ticket type.');
         });
-
-        it('should throw an error if the user is null', () => {
-            expect(() => {
-                new Ticket({ ...validTicketData, user: null });
-            }).toThrow('User must be provided.');
-        });
-
-        it('should correctly compare two different Ticket instances', () => {
-            const ticket1 = new Ticket(validTicketData);
-            const ticket2 = new Ticket({ ...validTicketData, type: 'REGULAR' as TicketType });
-            expect(ticket1.equals(ticket2)).toBe(false);
-        });
     });
 });

@@ -49,13 +49,7 @@ const MyEvents: React.FC = () => {
 
     const getFavoriteEventsByUserEmail = async (email: string) => {
         const response = await UserService.getFavoriteEventsByUserEmail(email);
-
-        console.log(response);
-
         const favoriteEventsData = await response.json();
-
-        console.log(favoriteEventsData);
-
         setMyFavoriteEvents(favoriteEventsData);
     }
 

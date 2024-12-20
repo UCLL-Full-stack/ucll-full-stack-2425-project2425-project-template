@@ -29,9 +29,6 @@ export class Ticket {
         if (!validtypes.includes(ticket.type)) {
             throw new Error('Invalid ticket type.');
         }
-        if (ticket.user === null || ticket.user === undefined) {
-            throw new Error('User must be provided.');
-        }
         
         this.id = ticket.id;
         this.type = ticket.type;

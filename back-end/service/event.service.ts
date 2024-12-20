@@ -39,11 +39,12 @@ const getEventsByUserEmail = async (email: string): Promise<Event[]> => {
 };
 
 const createEvent = async (eventData: Event): Promise<Event> => {
+
     if (!eventData.name || eventData.name.trim().length === 0 || !eventData.description || !eventData.date || !eventData.location) {
         throw new Error('Missing required fields.');
     }
 
-    if (new Date(eventData.getDate()) < new Date()) {
+    if (new Date(eventData.date) < new Date()) {
         throw new Error('Event date cannot be in the past.');
     }
 
