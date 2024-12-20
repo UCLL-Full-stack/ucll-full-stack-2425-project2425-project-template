@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Header from '@components/header';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import UserAuthorisation from '@components/users/UserAuthorisation';
 
 const Home: React.FC = () => {
   const {t} = useTranslation()
@@ -16,7 +17,11 @@ const Home: React.FC = () => {
       </Head>
       <main>
         <Header></Header>
-        <CocktailList></CocktailList>
+        <UserAuthorisation>
+          <div>
+          <CocktailList></CocktailList>
+          </div>
+        </UserAuthorisation>
       </main>
     </>
   );
