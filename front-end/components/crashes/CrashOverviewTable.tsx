@@ -1,3 +1,4 @@
+import React from 'react';
 import { Crash, Race, Gebruiker } from "@types";
 import { useState, useEffect } from "react";
 import ParticipantList from "./ParticipantList";

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Participant } from "@types";
 import Link from "next/link";
 
