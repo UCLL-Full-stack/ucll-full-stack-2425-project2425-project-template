@@ -79,13 +79,24 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const userData = localStorage.getItem('loggedInUser');
+    if (!userData) {
+        alert('User not logged in');
+        return;
+    }
+
+    const loggedInUser = JSON.parse(userData);
+
     const newSubmissionForm = {
       title,
       content: description,
       type: selectedOption,
       createdAt: new Date(),
-      user: loggedInUser
+      solvedAt: new Date(),
+      createdBy: loggedInUser.id
     };
+
+    console.log('Submitting form:', newSubmissionForm);
 
     const response = await submission_formService.createSubmissionForm(newSubmissionForm);
     if (response.ok) {
@@ -126,9 +137,10 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
           onChange={(e) => setSelectedOption(e.target.value)}
           style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
         >
-          <option value="option1">Add Crash</option>
-          <option value="option2">Edit Crash</option>
-          <option value="option3">Remove Crash</option>
+          <option value="">Select an option</option>
+          <option value="Add Crash">Add Crash</option>
+          <option value="Edit Crash">Edit Crash</option>
+          <option value="Remove Crash">Remove Crash</option>
         </select>
       </div>
       {selectedOption !== 'option2' && selectedOption !== 'option3' && (
