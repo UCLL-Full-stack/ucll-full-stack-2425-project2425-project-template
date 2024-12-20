@@ -11,12 +11,12 @@ import { useTranslation } from "next-i18next";
 
 type Props = {
   currentDate: Date;
-  viewMode: "Month" | "Week"; // not implemented yet
+  viewMode: "month" | "week"; // not implemented yet
   selectionModeActive: boolean;
   selectedDatesCount: number;
   onChangeMonth: (value: number) => void;
   onToggleSelectionMode: () => void;
-  onChangeViewMode: (mode: "Month" | "Week") => void; // not implemented yet
+  onChangeViewMode: (mode: "month" | "week") => void; // not implemented yet
   onDeleteMeals: () => void;
   onAddToShoppingList: () => void;
   onToday: () => void;
@@ -88,23 +88,15 @@ const CalendarHeader: React.FC<Props> = ({
         >
           {t("deleteMeals")}
         </Button>
-        {/* <Button
-          variant="outline"
-          disabled={selectedDatesCount === 0}
-          onClick={onAddToShoppingList}
-        >
-          <ShoppingCart className="h-4 w-4 mr-1" />
-          {t("addToShoppingList")}
-        </Button> */}
         <Select
-          onValueChange={(value) => onChangeViewMode(value as "Month" | "Week")}
+          onValueChange={(value) => onChangeViewMode(value as "month" | "week")}
         >
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder={viewMode} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Month">{t("month")}</SelectItem>
-            <SelectItem value="Week">{t("week")}</SelectItem>
+            <SelectItem value="month">{t("month")}</SelectItem>
+            <SelectItem value="week">{t("week")}</SelectItem>
           </SelectContent>
         </Select>
       </div>

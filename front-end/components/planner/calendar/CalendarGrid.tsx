@@ -8,8 +8,9 @@ import { Recipe } from "@/types/recipes";
 import { useTranslation } from "next-i18next";
 
 const CalendarGrid: React.FC = () => {
+  const { t } = useTranslation("common");
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<"Month" | "Week">("Month"); // to implement
+  const [viewMode, setViewMode] = useState<"month" | "week">("month"); // to implement
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectionModeActive, setSelectionModeActive] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
@@ -18,7 +19,6 @@ const CalendarGrid: React.FC = () => {
   const [recipesByDate, setRecipesByDate] = useState<Record<string, Recipe[]>>(
     {}
   );
-  const { t } = useTranslation("common");
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -64,11 +64,7 @@ const CalendarGrid: React.FC = () => {
               newRecipesByDate[dateString] = recipes;
             }
           } catch (error) {
-            console.error(
-              t("errorFetchingMeals"),
-              dateString,
-              error
-            );
+            console.error(t("errorFetchingMeals"), dateString, error);
           }
         }
 
@@ -188,8 +184,8 @@ const CalendarGrid: React.FC = () => {
   };
 
   return (
-    <Card>
-      <CardContent className="p-6">
+    <Card className="w-full">
+      <CardContent className="p-6 w-full">
         <CalendarHeader
           currentDate={currentDate}
           viewMode={viewMode}
@@ -203,7 +199,7 @@ const CalendarGrid: React.FC = () => {
           onToday={handleGoToToday}
         />
 
-        <section className="grid grid-cols-7 gap-2">
+        <section className="grid grid-cols-7 gap-2 w-full">
           {daysOfWeek.map((day) => (
             <div key={day} className="text-center font-semibold p-2">
               {t(day)}

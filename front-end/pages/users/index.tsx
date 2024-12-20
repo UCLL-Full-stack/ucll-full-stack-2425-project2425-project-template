@@ -4,16 +4,25 @@ import { useRouter } from "next/router";
 import { UserTable } from "../../types/auth";
 import { UserOverviewTable } from "../../components/users/UserOverviewTable";
 import UserService from "@/services/UserService";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useTranslation } from "next-i18next";
 
 const Users: React.FC = () => {
   const router = useRouter();
   const [users, setUsers] = useState<Array<UserTable>>([]);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [unauthorizedMessage, setUnauthorizedMessage] = useState<string | null>(
+    null
+  );
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const role = localStorage.getItem("role");
     if (role !== "admin") {
-      router.push("/planner");
+      setUnauthorizedMessage("You are not authorized to access this page.");
+      setTimeout(() => {
+        router.push("/planner");
+      }, 3000);
     } else {
       setIsAdmin(true);
       getAllUsers();
@@ -34,6 +43,16 @@ const Users: React.FC = () => {
     }
   };
 
+  if (unauthorizedMessage) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Alert variant="destructive">
+          <AlertDescription>{unauthorizedMessage}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   if (!isAdmin) {
     return null;
   }
@@ -41,13 +60,11 @@ const Users: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Users</title>
+        <title>{t("users")}</title>
       </Head>
-      <main className="flex flex-col items-center justify-start min-h-screen py-8 bg-gray-100">
-        <section className="w-full max-w-6xl bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            Users Overview
-          </h2>
+      <main className="flex flex-col items-start justify-start min-h-screen">
+        <h1 className="page-title">{t("users")}</h1>
+        <section className="w-full bg-white p-8 rounded-lg">
           {users.length > 0 && <UserOverviewTable data={users} />}
         </section>
       </main>

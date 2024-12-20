@@ -50,7 +50,7 @@ const DailyMealsView: React.FC<Props> = ({
           <Button
             variant="outline"
             onClick={() =>
-              onToggleFavorite(Number(recipe.id), recipe.isFavorite)
+              onToggleFavorite(Number(recipe.id), recipe.isFavorite ?? false)
             }
             className="flex-1 hover:bg-gray-100"
           >

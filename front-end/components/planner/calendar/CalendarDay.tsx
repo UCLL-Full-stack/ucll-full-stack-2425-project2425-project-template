@@ -38,7 +38,6 @@ const CalendarDay: React.FC<Props> = ({
   fetchMonthRecipes,
 }) => {
   const [isAddMealOpen, setIsAddMealOpen] = useState(false);
-  const [copiedMeals, setCopiedMeals] = useState<Recipe[] | null>(null);
   const [existingMeals, setExistingMeals] = useState<Recipe[]>([]);
   const [isAddNewMealOpen, setIsAddNewMealOpen] = useState(false);
 

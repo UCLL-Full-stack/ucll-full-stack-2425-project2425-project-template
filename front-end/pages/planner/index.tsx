@@ -29,27 +29,17 @@ const MealPlanner: React.FC = () => {
 
   return (
     <>
-      {/* Main Content */}
-      <main className="flex h-screen overflow-hidden">
-        <section className="flex-1 overflow-auto">
-          <section className="p-6">
-            <Greeting user={null} />
-            <h1 className="text-2xl font-bold mb-3">{t("mealPlanner")}</h1>
-            <CalendarGrid />
-          </section>
-        </section>
-
-        {/* Shopping List Sidebar */}
-        {/* <section className="w-80 flex-shrink-0">
-          <ShoppingList />
-        </section> */}
-      </main>
+      <div className="px-3">
+        <Greeting user={user} />
+        <h1 className="page-title mt-2 px-1">{t("mealPlanner")}</h1>
+        <CalendarGrid />
+      </div>
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  const localeString = locale || "en"; // Provide a default value for locale
+  const localeString = locale || "en";
   return {
     props: {
       ...(await serverSideTranslations(localeString, ["common"])),

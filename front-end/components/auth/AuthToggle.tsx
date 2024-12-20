@@ -6,12 +6,10 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Button } from "../ui/button";
 import { useTranslation } from "next-i18next";
 import { Globe } from "lucide-react";
 
@@ -24,7 +22,7 @@ const AuthToggle = () => {
   const { locale, pathname, asPath, query } = router;
 
   const handleSuccess = () => {
-    router.push("/planner"); // redirects to planner page after successful login/signup
+    router.push("/planner");
   };
 
   const handleTabChange = (value: string) => {
@@ -38,19 +36,19 @@ const AuthToggle = () => {
   };
 
   return (
-    <Card className="relative w-[350px]">
-      <button
-        onClick={handleLanguageChange}
-        className="absolute top-4 right-4 flex justify-center items-center w-8 h-8 rounded-full text-primary hover:bg-avatar-hover-bg"
-        aria-label="Change Language"
-      >
-        <Globe size={24} />
-      </button>
-      <CardHeader>
-        <CardTitle>Plateful</CardTitle>
+    <Card className="w-[350px]">
+      <CardHeader className="relative">
+        <CardTitle className="text-2xl">Plateful</CardTitle>
         <CardDescription>
           {isLogin ? t("welcomeBack") : t("createNewAccount")}
         </CardDescription>
+        <button
+          onClick={handleLanguageChange}
+          className="absolute top-0 right-0 flex justify-center items-center w-8 h-8 rounded-full text-primary hover:bg-avatar-hover-bg"
+          aria-label="Change Language"
+        >
+          <Globe size={24} />
+        </button>
       </CardHeader>
       <CardContent>
         <Tabs
@@ -76,16 +74,8 @@ const AuthToggle = () => {
           </div>
         </Tabs>
       </CardContent>
-      <CardFooter className="flex justify-center">
-        {isLogin && (
-          <Button variant="link" className="p-0">
-            {t("forgotPassword")}
-          </Button>
-        )}
-      </CardFooter>
     </Card>
   );
 };
-
 
 export default AuthToggle;
