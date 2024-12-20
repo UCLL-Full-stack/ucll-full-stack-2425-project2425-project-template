@@ -77,9 +77,9 @@ const bookingRouter = express.Router();
  *         paymentStatus:
  *           type: string
  *           enum:
- *             - PENDING
- *             - PAID
- *             - FAILED
+ *             - Pending
+ *             - Paid
+ *             - Confirmed
  *       required:
  *         - bookingDate
  *         - tripId

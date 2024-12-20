@@ -33,7 +33,7 @@ const tripRouter = express.Router();
  *                   description:
  *                     type: string
  *                     example: "A relaxing beach holiday"
- *                   location:
+ *                   destination:
  *                     type: string
  *                     example: "Hawaii"
  *                   startDate:
@@ -89,9 +89,9 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                 type: string
  *                 description: The description of the trip
  *                 example: "A relaxing beach holiday"
- *               location:
+ *               destination:
  *                 type: string
- *                 description: The location of the trip
+ *                 description: The destination of the trip
  *                 example: "Hawaii"
  *               startDate:
  *                 type: string
@@ -121,7 +121,7 @@ tripRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                 description:
  *                   type: string
  *                   example: "A relaxing beach holiday"
- *                 location:
+ *                 destination:
  *                   type: string
  *                   example: "Hawaii"
  *                 startDate:
@@ -189,7 +189,7 @@ tripRouter.post('/', async (req: Request, res: Response) => {
  *                 description:
  *                   type: string
  *                   example: "A relaxing beach holiday"
- *                 location:
+ *                 destination:
  *                   type: string
  *                   example: "Hawaii"
  *                 startDate:
