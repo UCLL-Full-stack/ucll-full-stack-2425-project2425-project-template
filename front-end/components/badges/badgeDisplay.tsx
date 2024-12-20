@@ -54,7 +54,6 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badges}) => {
           }}>
             <BadgeImage badgeName={badge.name} owned={true}/>
             <p>{badge.name}</p>
-            <p>{badge.difficulty}</p>
         </div>
       ))}
       {unownedBadges.map((badge) => (
@@ -71,7 +70,6 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badges}) => {
         }}>
             <BadgeImage badgeName={badge.name} owned={false}/>
             <p>{badge.name}</p>
-            <p>{badge.difficulty}</p>
         </div>
       ))}
     </div>

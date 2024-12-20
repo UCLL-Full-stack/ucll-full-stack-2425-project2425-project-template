@@ -12,7 +12,15 @@ interface BadgeInfoProps {
 
 const BadgeInfo: React.FC<BadgeInfoProps> = ({badge, owned, handleAddBadge}) => {
     return (
-        <div>
+        <div className="flex flex-colom flex-wrap justify-start items-center gap-4"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
             <BadgeImage
             badgeName={badge.name}
             owned={true}/>
