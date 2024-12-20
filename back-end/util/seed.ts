@@ -104,8 +104,8 @@ async function main() {
   const users = await prisma.user.createMany({
     data: [
       { name: "admin", email: "admin@email.com", password: await bcrypt.hash('admin', 12), role: "Admin" },
-      { name: "user01", email: "user1@email.com	", password: await bcrypt.hash('user1', 12) , role : "User" },
-      { name: "moderator", email: "moderator1@email.com	", password: await bcrypt.hash('moderator', 12) , role: "Moderator" },
+      { name: "user01", email: "user1@email.com", password: await bcrypt.hash('user1', 12) , role : "User" },
+      { name: "moderator1", email: "moderator1@email.com", password: await bcrypt.hash('moderator1', 12) , role: "Moderator" },
     ],
   });
 

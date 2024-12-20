@@ -9,6 +9,10 @@ import UserInformation from "@components/users/UserInformation";
 const Login: React.FC = () => {
   const { t } = useTranslation();
 
+  const handleRegisterSubmit = (data: any) => {
+    console.log('User registered:', data);
+  };
+
   return (
     <>
       <Head>
@@ -25,7 +29,7 @@ const Login: React.FC = () => {
               <UserInformation /> 
               </div>
             <div className="form-section">
-              <UserRegisterForm />
+              <UserRegisterForm onSubmit={handleRegisterSubmit}/>
             </div>
             
           </div>

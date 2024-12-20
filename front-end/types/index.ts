@@ -20,11 +20,8 @@ export type CocktailIngredient = {
 };
 
 export type User = {
-    firstName?: string;
-    lastName?: string;
-    fullname?: string;
+    name?: string;
     email?: string;
-    username?: string;
     password?: string;
     role?: string;
 };

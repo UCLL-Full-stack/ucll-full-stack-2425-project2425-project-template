@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import UserService from '../../services/UserService';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -28,10 +29,21 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      onSubmit({ name, email, password, role });
+      try {
+        const user = { name, email, password, role };
+        const response = await UserService.createUser(user);
+        if (response.ok) {
+          onSubmit(await response.json());
+        } else {
+          setErrors({ form: t('register.error') });
+        }
+      } catch (error) {
+        console.log(error);
+        setErrors({ form: t('register.error') });
+      }
     }
   };
 
@@ -61,6 +73,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
         <input type="text" value={role} onChange={(e) => setRole(e.target.value)} />
         {errors.role && <p className="error">{errors.role}</p>}
       </div>
+      {errors.form && <p className="error">{errors.form}</p>}
       <button type="submit">{t('register.button')}</button>
     </form>
   );
