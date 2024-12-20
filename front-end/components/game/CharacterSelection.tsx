@@ -2,8 +2,10 @@ import userService from '@services/userService';
 import playerService from '@services/playerService';
 import { useState, useEffect } from 'react';
 import { Player, User } from '@types';
+import { useRouter } from 'next/router';
 
 const CharacterSelection: React.FC = () => {
+    const router = useRouter();
     const [loggedInUser, setLoggedInUser] = useState<User>();
     const [characters, setCharacters] = useState<Player[]>();
     const [selectedCharacter, setSelectedCharacter] = useState<Player>();
@@ -95,6 +97,13 @@ const CharacterSelection: React.FC = () => {
                 ))}
                 </tbody>
             </table>
+            <button onClick={() => router.push("/game/characters/new")}
+                className="
+                border-solid hover:border-dotted border-2 border-green-500 hover:border-green-600
+                rounded p-4 content-center m-4 bg-green-200 hover:bg-green-300"
+            >
+                Create Character
+            </button>
         </div>
     );
 };

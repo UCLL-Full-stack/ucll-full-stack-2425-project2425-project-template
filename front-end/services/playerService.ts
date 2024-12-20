@@ -26,10 +26,13 @@ const getPlayerById = async (id: string) => {
 };
 
 const getPlayerImage = async (id: number) => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const token = loggedInUser.token;
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/players/image/' + id, {
         method: 'GET',
         headers: {
             'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
     });
     return await res.json();
@@ -49,10 +52,13 @@ const getPlayersFromUser = async (email: string) => {
 };
 
 const createPlayer = async (player: PlayerInput) => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const token = loggedInUser.token;
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/players/add', {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(player),
     });
