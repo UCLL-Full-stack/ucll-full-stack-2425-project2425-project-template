@@ -1,8 +1,10 @@
+import React from 'react';
 import { GetServerSideProps } from 'next';
 import { Driver } from '@types';
 import driverService from '@services/DriverService';
 import Header from '@components/header';
-import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface Props {
   driver: Driver;
@@ -27,10 +29,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params!;
   const response = await driverService.getDriverById(id as string);
   const driver = await response.json();
+  const { locale } = context;
 
   return {
     props: {
       driver,
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
     },
   };
 };

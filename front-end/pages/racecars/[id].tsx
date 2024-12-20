@@ -1,8 +1,9 @@
+import React from 'react';
 import { GetServerSideProps } from 'next';
 import { Racecar } from '@types';
 import racecarService from '@services/RacecarService';
 import Header from '@components/header';
-import Link from 'next/link';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface Props {
   racecar: Racecar;
@@ -26,10 +27,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params!;
   const response = await racecarService.getRacecarById(id as string);
   const racecar = await response.json();
+  const { locale } = context;
 
   return {
     props: {
       racecar,
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
     },
   };
 };

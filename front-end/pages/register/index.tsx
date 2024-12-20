@@ -1,8 +1,11 @@
+import React from 'react';
 import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Header from '@components/header';
 import userService from '@services/UserService';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -119,11 +122,21 @@ const Register: React.FC = () => {
           </div>
           {error && <div className="alert alert-danger">{error}</div>}
           {successMessage && <div className="alert alert-success">{successMessage}</div>}
+          <br/><br/>
           <button type="submit" className="btn btn-primary w-100">Register</button>
         </form>
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+  };
 };
 
 export default Register;

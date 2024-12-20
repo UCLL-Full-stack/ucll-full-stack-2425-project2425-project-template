@@ -1,7 +1,8 @@
+import React from 'react';
 import Head from 'next/head';
 import Header from '@components/header';
 import { useState, useEffect } from 'react';
-import submissionFormService from '@services/submission_formService';
+import submissionFormService from '@services/SubmissionService';
 import raceService from '@services/RaceService';
 import { Submission_form, Race, Gebruiker } from '@types';
 import AddCrashForm from '@components/submissionForms/AddCrashForm';

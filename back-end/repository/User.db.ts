@@ -2,6 +2,20 @@ import bcrypt from 'bcrypt';
 import { User } from '../model/User';
 import database from '../util/database';
 
+const getAllUsers = async (): Promise<User[]> => {
+    try {
+        const usersPrisma = await database.user.findMany({
+            include: {
+                submissions: true,
+            }
+        });
+        return usersPrisma.map(User.from);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
@@ -40,6 +54,7 @@ const createUser = async ({ user }: { user: User }): Promise<User> => {
 };
 
 export default {
+    getAllUsers,
     getUserByUsername,
     createUser,
 };

@@ -17,6 +17,16 @@ const createUser = async (userInput: {
   });
 };
 
+const getAllUsers = async (): Promise<Response> => {
+  return fetch(`${apiUrl}/users`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+};
+
 export default {
   createUser,
+  getAllUsers,
 };

@@ -52,8 +52,8 @@ const Header: React.FC = () => {
             <>
               {loggedInUser.permission === 'ADMIN' ? (
                 <React.Fragment>
-                  <Link href="/administration" className="nav-link px-4 fs-5 text-white btn btn-link">Overview Users</Link>
-                  <Link href="/submission_form" className="nav-link px-4 fs-5 text-white btn btn-link">Overview Submissions</Link>
+                  <Link href="/user_administration" className="nav-link px-4 fs-5 text-white btn btn-link">Overview Users</Link>
+                  <Link href="/submission_administration" className="nav-link px-4 fs-5 text-white btn btn-link">Overview Submissions</Link>
                 </React.Fragment>
               ) : (
                 <Link href="/submission_form" className="nav-link px-4 fs-5 text-white btn btn-link">

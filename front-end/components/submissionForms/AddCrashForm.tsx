@@ -1,6 +1,7 @@
+import React from 'react';
 import { useState } from 'react';
 import { Gebruiker, Race, Crash, Submission_form } from '@types';
-import submissionFormService from '@services/submission_formService';
+import submissionFormService from '@services/SubmissionService';
 import raceService from '@services/RaceService';
 import { useTranslation } from 'next-i18next';
 
@@ -232,6 +233,7 @@ const AddCrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
       </div>
       {error && <div className="alert alert-danger">{error}</div>}
       {successMessage && <div className="alert alert-success">{successMessage}</div>}
+      <br/><br/>
       <button type="submit" className="btn btn-primary w-100">{t('submissionForm.submit')}</button>
     </form>
   );

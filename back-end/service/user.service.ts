@@ -4,6 +4,10 @@ import { User } from '../model/User';
 import { AuthenticationResponse, UserInput } from '../types';
 import { generateJwtToken } from '../util/jwt';
 
+const getAllUsers = async (): Promise<User[]> => {
+    return await userDB.getAllUsers();
+}
+
 const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
     const user = await userDB.getUserByUsername({ username });
     if (!user) {
@@ -51,4 +55,4 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     return userDB.createUser({ user: newUser });
 };
 
-export default { getUserByUsername, authenticate, createUser };
+export default { getUserByUsername, authenticate, createUser, getAllUsers };
