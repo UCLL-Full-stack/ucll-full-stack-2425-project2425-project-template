@@ -73,4 +73,31 @@ driverRouter.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /drivers:
+ *   get:
+ *     summary: Retrieve a list of drivers
+ *     tags: [Drivers]
+ *     responses:
+ *       200:
+ *         description: A list of drivers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Driver'
+ *       500:
+ *         description: Internal server error
+ */
+driverRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const drivers = await driverService.getAllDrivers();
+        res.json(drivers);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 export { driverRouter };

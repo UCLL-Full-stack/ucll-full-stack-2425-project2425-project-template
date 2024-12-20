@@ -523,4 +523,29 @@ raceRouter.get('/crash/:id', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /races:
+ *   get:
+ *     summary: Retrieve a list of all races
+ *     tags: [Races]
+ *     responses:
+ *       200:
+ *         description: A list of races.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Race'
+ */
+raceRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const races = await raceService.getAllRaces();
+        res.status(200).json(races);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { raceRouter };

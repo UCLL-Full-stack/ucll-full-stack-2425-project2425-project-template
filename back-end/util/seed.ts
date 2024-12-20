@@ -3,17 +3,20 @@
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import { TempRace } from '../model/TempRace';
 
 dotenv.config();
 
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.race.deleteMany();
-    await prisma.crash.deleteMany();
     await prisma.participant.deleteMany();
-    await prisma.racecar.deleteMany();
     await prisma.driver.deleteMany();
+    await prisma.racecar.deleteMany();
+    await prisma.participant.deleteMany();
+    await prisma.crash.deleteMany();
+    await prisma.race.deleteMany();
+    await prisma.tempRace.deleteMany();
     await prisma.submission.deleteMany();
     await prisma.user.deleteMany();
 
@@ -72,6 +75,16 @@ const main = async () => {
         throw new Error('User with username "user1" not found');
     }
 
+    const tempRace1 = await prisma.tempRace.create({
+        data: {
+            name: 'Grand Prix Monaco',
+            type: 'Formula 1',
+            description: 'A high-speed race',
+            location: 'Monaco',
+            date: new Date('2023-05-28T00:00:00Z'),
+        },
+    })
+
     await prisma.submission.create({
         data: {
             title: 'First Submission',
@@ -81,6 +94,9 @@ const main = async () => {
             user: {
                 connect: { id: user1.id },
             },
+            race: { 
+                connect: { id: tempRace1.id }
+            }
         },
     });
     

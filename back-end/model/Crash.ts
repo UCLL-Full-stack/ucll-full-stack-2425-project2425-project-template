@@ -1,5 +1,5 @@
 import { Crash as CrashPrisma, Participant as ParticipantPrisma, Racecar as RacecarPrisma, Driver as DriverPrisma } from '@prisma/client';
-import { Participant } from './participant';
+import { Participant } from './Participant';
 
 export class Crash {
     private id?: number;

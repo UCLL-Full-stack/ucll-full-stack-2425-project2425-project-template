@@ -1,5 +1,6 @@
 import { Submission } from '../model/Submission';
 import SubmissionDb from '../repository/Submission.db';
+import { TempRace } from '../model/TempRace';
 
 const getAllSubmissions = async (): Promise<Submission[] | null> => {
     return SubmissionDb.getAllSubmissions();
@@ -26,6 +27,7 @@ const createSubmission = async (submissionInput: any): Promise<Submission> => {
         createdAt: new Date(submissionInput.createdAt),
         solvedAt: submissionInput.solvedAt ? new Date(submissionInput.solvedAt) : undefined,
         createdBy: submissionInput.createdBy,
+        race: submissionInput.race
     });
 
     SubmissionDb.createSubmission({ submission: newSubmission });

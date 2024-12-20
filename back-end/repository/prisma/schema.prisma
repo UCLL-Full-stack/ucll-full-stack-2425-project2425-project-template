@@ -28,8 +28,8 @@ model Submission {
     solvedAt    DateTime?
     user        User        @relation(fields: [userId], references: [id])
     userId      Int
-    race        Race?       @relation(fields: [raceId], references: [id])
-    raceId      Int?
+    race        TempRace?       @relation(fields: [raceId], references: [id])
+    raceId      Int?        @unique
 }
 
 model Racecar {
@@ -37,6 +37,8 @@ model Racecar {
     name        String
     type        String
     brand       String
+    hp          Int
+    participants Participant[]
 }
 
 model Driver {
@@ -66,8 +68,9 @@ model Crash {
     description     String
     casualties      Int
     deaths          Int
-    Races           Race[]
+    races           Race[] @relation("RaceCrash")
     participants    Participant[]
+    TempRace        TempRace[] @relation("TempRaceCrash")
 }
 
 model Race {
@@ -77,5 +80,16 @@ model Race {
     description String
     location    String
     date        DateTime
+    crashes     Crash[] @relation("RaceCrash")
+}
+
+model TempRace {
+    id          Int         @id @default(autoincrement())
+    name        String
+    type        String
+    description String
+    location    String
+    date        DateTime
     submission  Submission?
+    crashes     Crash[] @relation("TempRaceCrash")
 }

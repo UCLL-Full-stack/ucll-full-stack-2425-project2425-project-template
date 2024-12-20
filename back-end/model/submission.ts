@@ -1,4 +1,4 @@
-import { Submission as SubmissionPrisma } from "@prisma/client";
+import { TempRace, Submission as SubmissionPrisma } from "@prisma/client";
 
 export class Submission {
     public id?: number;
@@ -8,8 +8,9 @@ export class Submission {
     private createdAt: Date;
     private solvedAt?: Date;
     private createdBy: number;
+    private race?: TempRace;
 
-    constructor(submission: { title: string, content: string, type: string, createdAt: Date, solvedAt?: Date, createdBy: number, id?: number }) {
+    constructor(submission: { title: string, content: string, type: string, createdAt: Date, solvedAt?: Date, createdBy: number, race: TempRace, id?: number }) {
         this.validate(submission);
 
         this.title = submission.title;
@@ -18,6 +19,7 @@ export class Submission {
         this.createdAt = submission.createdAt;
         this.createdBy = submission.createdBy;
         if (submission.solvedAt) this.solvedAt = submission.solvedAt;
+        if (submission.race) this.race = submission.race;
         if (submission.id) this.id = submission.id;
     }
 
@@ -67,6 +69,10 @@ export class Submission {
         return this.createdBy;
     }
 
+    getRace(): TempRace | undefined {
+        return this.race;
+    }
+
     equals(other: Submission): boolean {
         return (
             this.id === other.id &&
@@ -74,7 +80,8 @@ export class Submission {
             this.content === other.content &&
             this.type === other.type &&
             this.createdAt === other.createdAt &&
-            this.solvedAt === other.solvedAt
+            this.solvedAt === other.solvedAt &&
+            this.race === other.race
         );
     }
 
@@ -86,6 +93,7 @@ export class Submission {
         createdAt,
         solvedAt,
         userId,
+        raceId,
     }: SubmissionPrisma) {
         return new Submission({
             id,
@@ -95,6 +103,7 @@ export class Submission {
             createdAt: createdAt as Date,
             solvedAt: solvedAt as Date,
             createdBy: userId,
+            race: { id: raceId } as TempRace,
         });
     }
 }
