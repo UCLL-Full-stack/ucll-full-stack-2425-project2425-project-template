@@ -8,10 +8,14 @@ const Header: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
   useEffect(() => {
-    const user = localStorage.getItem("loggedInUser");
+    const user = sessionStorage.getItem("loggedInUser");
+    console.log(user);
     if (user) {
       const parsedUser = JSON.parse(user);
-      setLoggedInUser(parsedUser.email);
+      console.log(parsedUser)
+      setLoggedInUser(parsedUser.role);
+      console.log(loggedInUser)
+
     }
   }, []);
 
@@ -36,7 +40,7 @@ const Header: React.FC = () => {
   };
 
   const handleClick = () => {
-    localStorage.removeItem("loggedInUser");
+    sessionStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
   };
 

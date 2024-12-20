@@ -57,7 +57,7 @@ const UserLoginForm: React.FC = () => {
         setStatusMessages([{ message: t('login.success'), type: "success" }]);
   
         console.log("User logged in:", userPayload);
-        localStorage.setItem("loggedInUser", JSON.stringify({
+        sessionStorage.setItem("loggedInUser", JSON.stringify({
           token: userthing.token,
           role: userthing.role,
         }));
