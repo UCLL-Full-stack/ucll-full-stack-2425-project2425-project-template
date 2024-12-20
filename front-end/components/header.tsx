@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "../public/SCR-20241102-bsdc (1).png";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
+import Language from "./language/Language";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -93,6 +94,7 @@ const Header: React.FC = () => {
               Welcome, {loggedInUser?.fullname}!
             </div>
           )}
+          <Language />
         </nav>
       </div>
     </header>
