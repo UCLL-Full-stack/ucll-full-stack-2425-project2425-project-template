@@ -9,8 +9,10 @@ import workoutRouter from './controller/workout.routes';
 import exerciseRouter from './controller/exercise.routes';
 import { expressjwt } from 'express-jwt';
 import profileRouter from './controller/profile.routes';
+import helmet from 'helmet';
 
 const app = express();
+app.use(helmet());
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
