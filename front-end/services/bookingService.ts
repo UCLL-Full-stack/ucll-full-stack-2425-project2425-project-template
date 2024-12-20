@@ -41,7 +41,7 @@ const deleteBooking = async (bookingId: string, token: string) => {
   });
 };
 const updatePaymentStatus = async (bookingId: string, newStatus: string, token: string) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/bookings/${bookingId}/payment-status`, {
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/payment-status`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -49,8 +49,7 @@ const updatePaymentStatus = async (bookingId: string, newStatus: string, token: 
     },
     body: JSON.stringify({ paymentStatus: newStatus }),
   });
-};
-
+}
   const BookingService = {
     getAllBookings,
     getBookingById,

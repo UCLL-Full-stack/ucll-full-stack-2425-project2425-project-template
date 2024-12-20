@@ -19,7 +19,7 @@ app.use(helmet());
 
 const port = process.env.APP_PORT || 3000;
 app.use(cors({
-  origin:'http://localhost:8080',
+  origin:['http://localhost:8080','http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));

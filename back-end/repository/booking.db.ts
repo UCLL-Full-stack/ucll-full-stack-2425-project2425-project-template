@@ -79,9 +79,8 @@ const updateStudentsOfBooking = async ({
 }: {
     booking: Booking;
 }): Promise<Booking | null> => {
-    const bookingId = booking.getId();  // Use the getter method
-    const students = booking.getStudents();  // Use the getter method
-
+    const bookingId = booking.getId(); 
+    const students = booking.getStudents();  
     if (!bookingId) {
         throw new Error('Booking ID is required for updating students.');
     }
@@ -95,7 +94,7 @@ const updateStudentsOfBooking = async ({
             where: { id: bookingId },
             data: {
                 students: {
-                    connect: students.map((student) => ({ id: student.getId() })),  // Assuming `student.getId()` exists
+                    connect: students.map((student) => ({ id: student.getId() })),  
                 },
             },
             include: {
@@ -122,25 +121,26 @@ const deleteBooking = async (bookingId: number): Promise<void> => {
 };
 const updatePaymentStatus = async (bookingId: number, newStatus: PaymentStatus): Promise<Booking | null> => {
     try {
-        const updatedBookingPrisma = await database.booking.update({
-            where: { id: bookingId },
-            data: {
-                paymentStatus: newStatus,
-            },
-            include: {
-                trip: true,
-                students: {
-                    include: { user: true },
-                },
-            },
-        });
-
-        return updatedBookingPrisma ? Booking.from(updatedBookingPrisma) : null;
+      const updatedBookingPrisma = await database.booking.update({
+        where: { id: bookingId },
+        data: {
+          paymentStatus: newStatus,
+        },
+        include: {
+          trip: true,
+          students: {
+            include: { user: true },
+          },
+        },
+      });
+  
+      return updatedBookingPrisma ? Booking.from(updatedBookingPrisma) : null;
     } catch (error) {
-        console.error('Error updating payment status for booking:', bookingId, error);
-        throw new Error('Database error. See server log for details.');
+      console.error('Error updating payment status for booking:', bookingId, error);
+      throw new Error('Database error. See server log for details.');
     }
-};
+  };
+  
 
 export default {
     getAllBookings,

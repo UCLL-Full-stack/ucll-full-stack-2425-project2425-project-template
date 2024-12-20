@@ -219,22 +219,23 @@ bookingRouter.get('/:bookingId', async (req: Request, res: Response, next: NextF
   if (isNaN(Number(bookingId))) {
     return res.status(400).json({
       status: 'error',
-      errorMessage: 'Invalid booking ID provided.'
+      errorMessage: 'Invalid booking ID provided.',
     });
   }
 
   try {
     const booking = await bookingService.getBookingById(Number(bookingId));
-    res.status(200).json(booking);
+    return res.status(200).json(booking);
   } catch (error) {
     const err = error as Error;
     if (err.message.includes("does not exist")) {
-      res.status(404).json({ status: 'error', errorMessage: err.message });
+      return res.status(404).json({ status: 'error', errorMessage: err.message });
     } else {
-      res.status(400).json({ status: 'error', errorMessage: err.message });
+      return res.status(400).json({ status: 'error', errorMessage: err.message });
     }
   }
 });
+
 /**
  * @swagger
  * /bookings/{bookingId}:
@@ -304,17 +305,18 @@ bookingRouter.delete('/:bookingId', async (req: Request, res: Response) => {
   try {
     const isDeleted = await bookingService.deleteBooking(Number(bookingId));
     if (isDeleted) {
-      res.status(200).json({ status: 'success', message: 'Booking deleted successfully.' });
+      return res.status(200).json({ status: 'success', message: 'Booking deleted successfully.' });
     }
   } catch (error) {
     const err = error as Error;
     if (err.message.includes("does not exist")) {
-      res.status(404).json({ status: 'error', errorMessage: err.message });
+      return res.status(404).json({ status: 'error', errorMessage: err.message });
     } else {
-      res.status(400).json({ status: 'error', errorMessage: err.message });
+      return res.status(400).json({ status: 'error', errorMessage: err.message });
     }
   }
 });
+
 
 /**
  * @swagger
@@ -379,8 +381,17 @@ bookingRouter.delete('/:bookingId', async (req: Request, res: Response) => {
  *                   example: "Booking with ID {bookingId} does not exist."
  */
 
-bookingRouter.get('/:bookingId', async (req: Request, res: Response, next: NextFunction) => {
+bookingRouter.put('/:bookingId/payment-status', async (req: Request, res: Response) => {
   const { bookingId } = req.params;
+  const { paymentStatus } = req.body;
+
+  // Validate paymentStatus
+  if (!Object.values(PaymentStatus).includes(paymentStatus)) {
+    return res.status(400).json({
+      status: 'error',
+      errorMessage: 'Invalid Payment Status',
+    });
+  }
 
   if (isNaN(Number(bookingId))) {
     return res.status(400).json({
@@ -390,15 +401,22 @@ bookingRouter.get('/:bookingId', async (req: Request, res: Response, next: NextF
   }
 
   try {
-    const booking = await bookingService.getBookingById(Number(bookingId));
-    return res.status(200).json(booking);
+    const updatedBooking = await bookingService.updatePaymentStatus(Number(bookingId), paymentStatus);
+    
+    if (!updatedBooking) {
+      return res.status(404).json({
+        status: 'error',
+        errorMessage: `Booking with ID ${bookingId} does not exist.`,
+      });
+    }
+
+    return res.status(200).json(updatedBooking);
   } catch (error) {
     const err = error as Error;
-    if (err.message.includes("does not exist")) {
-      return res.status(404).json({ status: 'error', errorMessage: err.message });
-    } else {
-      return res.status(400).json({ status: 'error', errorMessage: err.message });
-    }
+    return res.status(400).json({
+      status: 'error',
+      errorMessage: err.message,
+    });
   }
 });
 
