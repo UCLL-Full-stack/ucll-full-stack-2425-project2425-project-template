@@ -63,7 +63,6 @@ const Header: React.FC = () => {
               <div className="dropdown nav-link px-4 fs-5 text-white btn btn-link">
                 <button className="dropbtn">{loggedInUser.username}</button>
                 <div className="dropdown-content">
-                  <button onClick={gotoSetings}>Account Setings</button>
                   <button onClick={gotoMysubmissions}>{t('header.mysubmissions')}</button>
                   <button onClick={handleLogout}>Logout</button>
                 </div>
