@@ -11,6 +11,7 @@ const Activiteiten: React.FC = () => {
 
     const router = useRouter();
     const { groepNaam } = router.query;
+    console.log(groepNaam);
     const formatGroupName = (name: string) => {
         return name
             .split(' ')
