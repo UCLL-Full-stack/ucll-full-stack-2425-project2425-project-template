@@ -35,24 +35,25 @@
     "welcome": "Welcome"
   },
   "addCocktail": {
-    "title": "Cocktail",
+    "title": "Add Cocktail",
     "id": "ID",
     "name": "Name",
     "description": "Description",
     "strongness": "Strongness (0-5)",
     "addIngredient": "Add Ingredient",
     "removeIngredient": "Remove Ingredient",
-    "submit": "Submit",
+    "save": "Save",
     "cancel": "Cancel",
     "nameRequired": "Name is required",
     "descriptionRequired": "Description is required",
     "strongnessRequired": "Strongness is required",
-    "strongnessRange": "Strongness must be between 0 and 5"
+    "imageRequired": "Image is required",
+    "authorIdRequired": "Author ID is required"
   },
   "login": {
     "title": "Login",
     "label": {
-      "email": "E-Mail",
+      "email": "Email",
       "password": "Password"
     },
     "button": "Login",
