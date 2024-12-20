@@ -15,6 +15,27 @@ const port = process.env.APP_PORT || 3000;
 app.use(cors({ origin: ['http://localhost:8080', 'http://www.cedvinvu.be'] }));
 app.use(express.json());
 
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Project API',
+            version: '1.0.0',
+            description: 'API documentation for the project',
+        },
+        servers: [
+            {
+                url: `http://localhost:${port}`,
+                description: 'Local server',
+            },
+        ],
+    },
+    apis: ['./controller/*.routes.ts'], // Path to the API docs
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use(
     expressjwt({
         secret:

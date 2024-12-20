@@ -30,7 +30,7 @@ const Header: React.FC = () => {
             </div>
             {loggedInUser && (
                 <p className="text-white p-10 text-xl">
-                    Hello,{' '}
+                    Hello, {loggedInUser}!
                     {localStorage.getItem('loggedInUser')
                         ? JSON.parse(localStorage.getItem('loggedInUser')!).name
                         : ''}
