@@ -25,14 +25,15 @@ app.use(
     algorithms: ['HS256'],
 }).unless({
     path: [
-        '/api-docs', 
+        '/api-docs',
         /^\/api-docs\/.*/, 
         '/users/login', 
         '/users/signup', 
         '/status',
         '/products',
-        '/products/:id',
+        /^\/products\/[^/]+$/ // Matches /products/<id> with a single segment
     ]
+    
 })
 )
 

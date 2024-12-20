@@ -1,4 +1,4 @@
-import axios from "axios";
+import Link from "next/link";
 import { FC } from "react";
 
 interface Product {
@@ -14,15 +14,7 @@ interface ProductsTableProps {
 }
 
 const ProductsTable: FC<ProductsTableProps> = ({ products }) => {
-  const addToCart = (product: Product) => {
-      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/carts`, { productId: product.id }, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-        }
-      })
-        .then(response => alert(`${product.name} added to cart`))
-        .catch(error => console.error("Error adding product to cart:", error));
-    };
+
 
   return (
     <table>
@@ -43,7 +35,7 @@ const ProductsTable: FC<ProductsTableProps> = ({ products }) => {
             <td>{product.description}</td>
             <td>{product.rating}</td>
             <td>
-              <button onClick={() => addToCart(product)}>Add to Cart</button>
+            <Link href={`/products/${product.id}`}>  <button>Click for more info</button></Link>
             </td>
           </tr>
         ))}

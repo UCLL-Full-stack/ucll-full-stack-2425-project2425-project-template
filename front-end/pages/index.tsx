@@ -14,6 +14,34 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
+        
+      <table border="1">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Password</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>user1</td>
+      <td>user1</td>
+      <td>User</td>
+    </tr>
+    <tr>
+      <td>admin1</td>
+      <td>admin1</td>
+      <td>Admin</td>
+    </tr>
+    <tr>
+      <td>owner1</td>
+      <td>owner1</td>
+      <td>Owner</td>
+    </tr>
+  </tbody>
+</table>
+
         {/* Header content */}
       </main>
     </>
