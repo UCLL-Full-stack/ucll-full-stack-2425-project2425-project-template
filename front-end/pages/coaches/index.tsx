@@ -75,9 +75,14 @@ const Coaches: React.FC = () => {
 
   if (error)
     return (
-      <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">
-        {t('coach.messages.fail')}
-      </div>
+      <>
+        <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">
+          {t('coach.messages.fail')}
+        </div>
+        <div className="absolute top-12 right-8">
+          <NavbarSheet />
+        </div>
+      </>
     );
 
   if (!coachList)

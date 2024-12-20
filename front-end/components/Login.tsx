@@ -1,6 +1,7 @@
 import { useTranslation } from "next-i18next";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import UserService from "@/services/UserService";
 
 interface LoginProps {
   onClose: () => void;
@@ -8,9 +9,10 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login success
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -29,22 +31,38 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
   };
 
   const validate = () => {
-    const newErrors: { username?: string; password?: string } = {};
-    if (!username.trim()) {
-      newErrors.username = "Username is required.";
+    const newErrors: { email?: string; password?: string } = {};
+    if (!email.trim()) {
+      newErrors.email = `${t("login.popup.username")} ${t("login.fail")}`;
     }
     if (!password.trim()) {
-      newErrors.password = "Password is required.";
+      newErrors.password = `${t("login.popup.password")} ${t("login.fail")}`;
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; 
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Form submitted", { username, password });
-      handleClose(); 
+      try {
+        const response = await UserService.login({ email, password });
+
+        // Store in sessionStorage
+        sessionStorage.setItem("token", response.token);
+        sessionStorage.setItem("role", response.role);
+        sessionStorage.setItem("email", response.email);
+
+        console.log("Login successful:", response);
+
+        setIsLoggedIn(true); // Show success message
+        setTimeout(() => {
+          router.push("/"); // Redirect after showing success message
+          handleClose();
+        }, 2000); // Delay to show the success message
+      } catch (error: any) {
+        setErrors({ general: error.message || t("login.fail") });
+      }
     }
   };
 
@@ -58,67 +76,81 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
           isVisible ? "scale-100 opacity-100" : "scale-90 opacity-0"
         }`}
       >
-        <h2 className="text-xl font-bold text-white mb-4">{t('login.in')}</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-white">
-            {t('login.popup.username')}
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className={`p-1 mt-1 block w-full ${
-                errors.username ? "border-red-500" : "border-gray-300"
-              } bg-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 text-black`}
-            />
-            {errors.username && (
-              <p className="mt-1 text-xs text-red-500">{errors.username}</p>
+        <h2 className="text-xl font-bold text-white mb-4">{t("login.in")}</h2>
+        {isLoggedIn ? (
+          <p className="text-green-500 text-center mb-4">{t("login.success")}</p>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            {errors.general && (
+              <p className="text-red-500 text-sm mb-4">{errors.general}</p>
             )}
-          </div>
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-sm font-medium text-white">
+                {t("login.popup.username")}
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`p-1 mt-1 block w-full ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } bg-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 text-black`}
+              />
+              {errors.email && (
+                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+              )}
+            </div>
 
-          {/* Password Input */}
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-white">
-            {t('login.popup.password')}
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`p-1 mt-1 block w-full ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              } bg-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 text-black`}
-            />
-            {errors.password && (
-              <p className="mt-1 text-xs text-red-500">{errors.password}</p>
-            )}
-          </div>
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-sm font-medium text-white">
+                {t("login.popup.password")}
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`p-1 mt-1 block w-full ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } bg-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 text-black`}
+              />
+              {errors.password && (
+                <p className="mt-1 text-xs text-red-500">{errors.password}</p>
+              )}
+            </div>
 
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="bg-yellow-500 font-bold text-black py-2 px-4 rounded-lg hover:bg-zinc-800 hover:text-yellow-500 border border-yellow-500 transition"
+            <div className="flex items-center justify-between">
+              <button
+                type="submit"
+                className="bg-yellow-500 font-bold text-black py-2 px-4 rounded-lg hover:bg-zinc-800 hover:text-yellow-500 border border-yellow-500 transition"
+              >
+                {t("login.in")}
+              </button>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="text-sm text-gray-500 hover:underline hover:text-red-500"
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {!isLoggedIn && (
+          <p className="mt-4 text-sm text-gray-500 text-center">
+            {t("login.popup.no_account")}
+            <span
+              className="text-blue-500 hover:underline cursor-pointer"
+              onClick={() => router.push("/register")}
             >
-              {t('login.in')}
-            </button>
-            <button
-              type="button"
-              onClick={handleClose}
-              className="text-sm text-gray-500 hover:underline hover:text-red-500"
-            >
-              {t('cancel')}
-            </button>
-          </div>
-        </form>
-
-        <p className="mt-4 text-sm text-gray-500 text-center">
-        {t('login.popup.no_account')}<span className="text-blue-500 hover:underline cursor-pointer" onClick={() => router.push("/register")}>{t('login.popup.register')}</span>
-        </p>
+              {t("login.popup.register")}
+            </span>
+          </p>
+        )}
       </div>
     </div>
   );

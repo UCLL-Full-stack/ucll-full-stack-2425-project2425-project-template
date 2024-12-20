@@ -90,7 +90,7 @@ const Players: React.FC = () => {
     return (
       <>
         <div className="text-3xl absolute inset-0 flex items-center justify-center text-red-500 font-bebas bg-zinc-900">
-          F{t('squad.fail')}
+          {t('squad.fail')}
         </div>
         <div className="absolute top-12 right-8">
           <NavbarSheet />

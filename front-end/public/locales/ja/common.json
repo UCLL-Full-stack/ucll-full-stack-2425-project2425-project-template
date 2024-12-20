@@ -154,11 +154,14 @@
         "popup": {
             "username": "ユーザー名",
             "password": "パスワード",
+            "email": "メール",
             "login": "ログイン",
             "cancel": "キャンセル",
             "no_account": "アカウントをお持ちでないですか？ ",
             "register": "登録"
-        }
+        },
+        "fail": "ログインに失敗しました",
+        "success": "ログインに成功しました!"
     },
 
     "register": {

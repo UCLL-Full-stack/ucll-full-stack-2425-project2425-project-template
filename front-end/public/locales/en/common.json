@@ -154,11 +154,14 @@
         "popup": {
             "username": "Username",
             "password": "Password",
+            "email": "Email",
             "login": "Login",
             "cancel": "Cancel",
             "no_account": "Don't have an account? ",
             "register": "Register"
-        }
+        },
+        "fail": "Invalid username or password",
+        "success": "Logged in successfully!"
     },
 
     "register": {
