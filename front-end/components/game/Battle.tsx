@@ -10,8 +10,8 @@ const BattleScreen: React.FC<Props> = ({player}) => {
 
   const [enemy, setEnemy] = useState<inBattleCharacter>({
     name: "Enemy",
-    hp: 20,
-    power: 2,
+    hp: getRandomInt(7,50),
+    power: getRandomInt(2,5),
     image: "enemy",
   });
 
@@ -75,20 +75,20 @@ const BattleScreen: React.FC<Props> = ({player}) => {
   if (!playerChar) return (<></>);
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Battle Screen</h1>
+    <div className="w-80 p-10 bg-gray-800 text-white">
+      <p className="text-4xl">Battle</p>
 
-      <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>
+      <div className="justify-around flex mb-5">
         <div>
-          <h2>{playerChar.name}</h2>
-          <img src={playerChar.image} alt="Player" style={{ width: "150px" }} />
+          <p className="text-2xl">{playerChar.name}</p>
+          <img src={"/images/" + playerChar.image + ".png"} alt="Player" className="w-24"/>
           <p>HP: {playerChar.hp}</p>
           <p>Power: {playerChar.power}</p>
         </div>
 
         <div>
-          <h2>{enemy.name}</h2>
-          <img src={enemy.image} alt="Enemy" style={{ width: "150px" }} />
+          <p className="text-2xl">{enemy.name}</p>
+          <img src={"/images/" + enemy.image + ".png"} alt="Enemy" className="w-24"/>
           <p>HP: {enemy.hp}</p>
           <p>Power: {enemy.power}</p>
         </div>
@@ -100,7 +100,7 @@ const BattleScreen: React.FC<Props> = ({player}) => {
 
       {playerTurn && playerChar.hp > 0 && enemy.hp > 0 && (
         <div>
-          <button onClick={handleAttack} style={{ marginRight: "10px" }}>
+          <button onClick={handleAttack} className="mr-2">
             Attack
           </button>
           <button onClick={handleHeal}>Heal</button>
@@ -109,5 +109,11 @@ const BattleScreen: React.FC<Props> = ({player}) => {
     </div>
   );
 };
+
+export function getRandomInt(min: number, max: number): number {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 export default BattleScreen;

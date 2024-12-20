@@ -61,7 +61,32 @@ const addPlayer = async (player: Player): Promise<number> => {
     }
 }
 
-const updatePlayer()
+const updatePlayer = async  (player: Player): Promise<Player> => {
+    try {
+        const createdPlayer = await database.player.update({
+            where: { id: player.getId() },
+            data: {
+                name: player.getName(),
+                statistics: player.getStatistics(),
+                class: player.getClass(),
+                currency: player.getCurrency(),
+                image: player.getImage(),
+                user: {
+                    connect: {
+                        id: player.getUser().getId(),
+                        name: player.getUser().getName(),
+                        email: player.getUser().getEmail(),
+                    },
+                },
+            },
+            include: { user: true },
+        })
+        return Player.from(createdPlayer);
+    } catch(error){
+        console.error(error);
+        throw new Error("Player could not be made");
+    }
+}
 
 
 
@@ -69,4 +94,5 @@ export default {
     getAllPlayers,
     getPlayerById,
     addPlayer,
+    updatePlayer,
 };

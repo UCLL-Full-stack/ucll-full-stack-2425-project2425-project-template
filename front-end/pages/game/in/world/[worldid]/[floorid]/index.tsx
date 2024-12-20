@@ -23,6 +23,7 @@ const GameMap: React.FC = () => {
     const [spawnedIn, setSpawnedIn] = useState<boolean>(false);
     const [isBeyondLastFloor, setBeyondLastFloor] = useState<boolean>(false);
     const [showBattleScreen, setBattleScreen] = useState<boolean>(false);
+    const [enemyPos, setEnemyPos] = useState<Position>();
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -146,6 +147,7 @@ const GameMap: React.FC = () => {
                     return true;
                 }
                 if (pos.type === "enemy"){
+                    setEnemyPos(pos);
                     setBattleScreen(true);
                     return true;
                 }
@@ -155,15 +157,28 @@ const GameMap: React.FC = () => {
     }
 
     const checkBattleState = () => {
-        sessionStorage.getItem("battleResult");
+        const result = sessionStorage.getItem("battleResult");
+        if (result){
+            if (result === "Victory"){
+                if (player) playerService.giveACoin(player.id);
+                if (enemyPos && floor){
+                    const enemyPosition: PositionUpdate = ({posID: enemyPos.id, floorID: floor.id, playerID: 0, x: enemyPos.x, y: enemyPos.y, active: false})
+                    floorService.updatePosition(enemyPosition);
+                }
+            }
+            else if (result === "Loss"){
+                changeFloor(-1)
+            }
+            setBattleScreen(false);
+            sessionStorage.removeItem('battleResult');
+        }
     }
 
     const changeFloor = async (difference: number) => {
         if (floorid && floor && player){
             const prev = playerPosition;
-            if (!prev){
-                return;
-            }
+            if (!prev) return;
+            if (floor.floornumber === 1 && difference === -1) return;
             const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
             await floorService.updatePosition(res);
             const toFloor = +floorid + difference;
@@ -260,10 +275,6 @@ const GameMap: React.FC = () => {
     return (
         <div className="relative overflow-hidden w-screen h-screen bg-black">
 
-            {showBattleScreen && player && (
-                <BattleScreen player={player} />
-            )}
-
             <div
             className="absolute transform"
             style={{
@@ -323,6 +334,12 @@ const GameMap: React.FC = () => {
                     Leave
                 </button>
             </div>
+
+            {showBattleScreen && player && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75">
+                    <BattleScreen player={player} />
+                </div>
+            )}
         </div>
     );
 };

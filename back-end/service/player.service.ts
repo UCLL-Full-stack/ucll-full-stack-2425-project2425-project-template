@@ -44,7 +44,8 @@ const addPlayer = async (input: PlayerInput): Promise<Player> => {
 
 const giveCoin = async (input: string): Promise<Player> => {
     const player = await playerDb.getPlayerById(+input);
-    pla
+    player.giveCoin();
+    return playerDb.updatePlayer(player);
 };
 
 export default {
