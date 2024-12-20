@@ -8,6 +8,7 @@ import GuildService from "@/services/GuildService";
 import BoardService from "@/services/BoardService";
 import ConfirmationModal from "../ConfirmationModal";
 import { useUser } from "@/context/UserContext";
+import { useTranslation } from "react-i18next";
 
 interface ColumnProps {
     column: Column;
@@ -26,6 +27,7 @@ interface ColumnProps {
 }
 
 const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange, permissions }) => {
+    if(column.columnId === undefined) return null;
     const {user} = useUser();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isEditing, setIsEditing] = useState(false);
@@ -40,6 +42,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
     const [selectedAssignees, setSelectedAssignees] = useState<User[]>([]);
     const [availableUsers, setAvailableUsers] = useState<User[]>([]);
     const [searchQuery, setSearchQuery] = useState("");    const [error, setError] = useState("");
+    const { t } = useTranslation(["common"]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,11 +85,11 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
     const handleCreateTask = async () => {
         setIsHovered(false);
         if(!permissions.canCreateTasks) {
-            setError("You do not have permission to create tasks");
+            setError(t("task.errors.noPermission"));
             return;
         }
         if (!newTaskTitle.trim() || !newTaskDescription.trim() || !newTaskDueDate.trim()) {
-            setError("Title, description, and due date are required");
+            setError(t("task.errors.missingFields"));
             return;
         }
 
@@ -218,9 +221,9 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
             )}
             <ConfirmationModal
                 isOpen={confirmingDelete}
-                title="Delete Column"
-                message="Are you sure you want to delete this column? All associated tasks will be deleted."
-                warning="This action is irreversible."
+                title={t("column.delete")}
+                message={t("column.deleteConfirm")}
+                warning={t("column.deleteWarning")}
                 onConfirm={() => {
                     setConfirmingDelete(false);
                     onDelete(column.columnId);
@@ -232,29 +235,29 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                     creatingTask ? (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                             <div className="bg-gray-800 p-6 rounded-md w-96 text-white shadow-lg">
-                                <h4 className="font-semibold mb-4">Create Task</h4>
+                                <h4 className="font-semibold mb-4">{t("column.addTask")}</h4>
                                 {error && <p className="text-red-500 mb-4">{error}</p>}
                                 <input
                                     type="text"
-                                    placeholder="Title"
+                                    placeholder={t("task.create.title")}
                                     value={newTaskTitle}
                                     onChange={(e) => setNewTaskTitle(e.target.value)}
                                     className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
                                 />
                                 <textarea
-                                    placeholder="Description"
+                                    placeholder={t("task.create.description")}
                                     value={newTaskDescription}
                                     onChange={(e) => setNewTaskDescription(e.target.value)}
                                     className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
                                 ></textarea>
-                                <label className="block text-sm mb-2">Due Date:</label>
+                                <label className="block text-sm mb-2">{t("task.create.dueDate")}:</label>
                                 <input
                                     type="date"
                                     value={newTaskDueDate}
                                     onChange={(e) => setNewTaskDueDate(e.target.value)}
                                     className="w-full p-2 mb-2 rounded-md outline-none bg-gray-600 text-white"
                                 />
-                                <p>Assignees:</p>
+                                <p>{t("task.create.assignees")}:</p>
                                 {selectedAssignees.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mb-2 bg-gray-600 p-2 rounded-md">
                                         {selectedAssignees.map((assignee) => (
@@ -276,7 +279,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                                 <div className="mb-2">
                                     <input
                                         type="text"
-                                        placeholder="Search users"
+                                        placeholder={t("task.create.searchUsers")}
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         className="w-full p-2 rounded-md outline-none bg-gray-600 text-white"
@@ -298,13 +301,13 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                                         onClick={() =>{ setCreatingTask(false); setIsHovered(false);}}
                                         className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md"
                                     >
-                                        Cancel
+                                        {t("actions.cancel")}
                                     </button>
                                     <button
                                         onClick={handleCreateTask}
                                         className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
                                     >
-                                        Create
+                                        {t("actions.create")}
                                     </button>
                                 </div>
                             </div>
@@ -316,7 +319,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column, onDelete, onTaskChange
                             onMouseLeave={() => setIsHovered(true)}
                             className="w-full p-2 mt-4 bg-gray-800 text-white rounded-md hover:bg-gray-900"
                         >
-                            + Create Task
+                            + {t("column.addTask")}
                         </button>
                     )
                 )}

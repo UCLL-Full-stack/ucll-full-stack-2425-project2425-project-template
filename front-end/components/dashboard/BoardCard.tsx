@@ -8,6 +8,7 @@ import BoardService from '@/services/BoardService';
 import { FaPlus, FaGear } from "react-icons/fa6"
 import { MdEdit } from "react-icons/md"
 import ConfirmationModal from "../ConfirmationModal";
+import { useTranslation } from 'react-i18next';
 
 interface BoardCardProps {
     board: Board;
@@ -26,6 +27,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
     const [canEditPermissions, setCanEditPermissions] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
+    const { t } = useTranslation(['common']);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,8 +82,8 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
             onClick={() => onSelect(board)}
         >
             <h3 className="text-lg font-semibold">{board.boardName}</h3>
-            <p>Created by: {creator}</p>
-            <p className="truncate max-w-[70%]">Columns: {columns.join(', ')}</p>
+            <p>{t("board.createdBy", { creator: creator})}</p>
+            <p className="truncate max-w-[70%]">{t('board.columns')}: {columns.join(', ')}</p>
             {canDelete && isHovered && (
                 <button 
                     onClick={(e) => {
@@ -98,9 +100,9 @@ const BoardCard: React.FC<BoardCardProps> = ({ board, onDelete, onEdit, onEditPe
             >
                 <ConfirmationModal
                     isOpen={confirmingDelete}
-                    title="Delete Board"
-                    message="Are you sure you want to delete this board? This action cannot be undone."
-                    warning="This will remove all related columns and tasks."
+                    title={t('board.delete.title')}
+                    message={t('board.delete.confirmation')}
+                    warning={t('board.delete.warning')}
                     onConfirm={handleDelete}
                     onCancel={() => {setConfirmingDelete(false); setIsHovered(false)}}
                 />

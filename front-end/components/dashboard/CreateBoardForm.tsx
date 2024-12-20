@@ -1,5 +1,6 @@
 import { DiscordPermission, Guild, KanbanPermission, User } from '@/types';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CreateBoardFormProps {
     isOpen: boolean;
@@ -25,6 +26,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [filteredGuilds, setFilteredGuilds] = useState<Guild[]>(guilds);
+    const { t } = useTranslation(['common']);
 
     useEffect(() => {
         console.log("For some reason we need this console log for it to display guilds in the create board");
@@ -58,7 +60,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if(!selectedGuild) {
-            setError('Please select a guild');
+            setError(t('errors.selectGuild'));
             return;
         }
         setError(null);
@@ -79,11 +81,11 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h2 className="text-white text-xl mb-4">Create a New Board</h2>
+                <h2 className="text-white text-xl mb-4">{t('board.create.title')}</h2>
                 {error && <p className="text-red-500">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-white mb-2">Board Title</label>
+                        <label className="block text-white mb-2">{t("board.create.nameLabel")}</label>
                         <input
                             type="text"
                             value={boardName}
@@ -100,7 +102,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                             value={selectedGuild || ''}
                         >
                             <option value="" disabled>
-                                Select a guild
+                                {t("board.create.selectGuild")}
                             </option>
                             {filteredGuilds.map((guild) => (
                                 <option key={guild.guildId} value={guild.guildId}>
@@ -111,7 +113,7 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                     </div>
                     <div className="mb-4">
                         <label className="block text-white mb-2">
-                            Columns (separated by commas)
+                            {t("board.create.columnsLabel")}
                         </label>
                         <input
                             type="text"
@@ -126,10 +128,10 @@ const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
                             onClick={onClose}
                             className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded mr-2"
                         >
-                            Cancel
+                            {t("actions.cancel")}
                         </button>
                         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            Create Board
+                            {t("actions.create")}
                         </button>
                     </div>
                 </form>

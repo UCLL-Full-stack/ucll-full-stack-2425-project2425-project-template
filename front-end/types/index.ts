@@ -110,6 +110,7 @@ export interface Column{
     boardId: string;
     columnId: string;
     columnName: string;
+    columnIndex: number;
     taskIds: string[];
 }
 

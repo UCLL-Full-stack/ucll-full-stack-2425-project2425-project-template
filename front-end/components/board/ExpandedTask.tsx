@@ -8,6 +8,7 @@ import ColumnService from "@/services/ColumnService";
 import BoardService from "@/services/BoardService";
 import ConfirmationModal from "../ConfirmationModal";
 import { useUser } from "@/context/UserContext";
+import { useTranslation } from "react-i18next";
 
 interface ExpandedTaskProps {
     task: Task;
@@ -38,26 +39,33 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
     const [searchQuery, setSearchQuery] = useState("");
     const [error, setError] = useState("");
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+    const { t } = useTranslation(["common"]);
 
     useEffect(() => {
         const fetchAssigneesAndUsers = async () => {
-            const assigneeData = await Promise.all(
-                task.assigneeIds.map((id) => UserService.getUser(id))
-            );
-            setAssigneeNames(assigneeData.map((user) => user.globalName));
-            setSelectedAssignees(assigneeData);
-            const column = await ColumnService.getColumnById(task.columnId);
-            const board = await BoardService.getBoard(column.boardId);
-            const guildUsers = await GuildService.getGuildMembers(board.guildId);
-            setAvailableUsers(guildUsers);
+            try{
+                const assigneeData = await Promise.all(
+                    task.assigneeIds.map((id) => UserService.getUser(id))
+                );
+                setAssigneeNames(assigneeData.map((user) => user.globalName));
+                setSelectedAssignees(assigneeData);
+                const column = await ColumnService.getColumnById(task.columnId);
+                const board = await BoardService.getBoard(column.boardId);
+                const guildUsers = await GuildService.getGuildMembers(board.guildId);
+                setAvailableUsers(guildUsers);
+            } catch (error) {
+                console.error("Error fetching assignees and users:", error);
+            }
         };
 
-        fetchAssigneesAndUsers();
+        if(!isEditing){
+            fetchAssigneesAndUsers();
+        }
     }, [task.assigneeIds, task.columnId]);
 
     const handleUpdateTask = async () => {
         if (!title.trim() || !description.trim() || !dueDate.trim()) {
-            setError("Title, description, and due date are required");
+            setError(t("task.errors.missingFields"));
             return;
         }
 
@@ -97,6 +105,9 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
     };
 
     const handleRemoveAssignee = (userId: string) => {
+        if (!permissions.canEditAssignees && userId !== user?.userId) {
+            return;
+        }
         setSelectedAssignees((prev) => prev.filter((user) => user.userId !== userId));
     };
 
@@ -134,13 +145,13 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                         <h2 className="text-xl font-semibold mb-4">{task.title}</h2>
                         <div className="text-gray-300">
                             <p className="mb-2">
-                                <strong>Description:</strong> {task.description}
+                                <strong>{t("task.description")}:</strong> {task.description}
                             </p>
                             <p className="mb-2">
-                                <strong>Due Date:</strong> {formattedDueDate}
+                                <strong>{t("task.dueDate")}:</strong> {formattedDueDate}
                             </p>
                             <p>
-                                <strong>Assignees:</strong>{" "}
+                                <strong>{t("task.assignees")}:</strong>{" "}
                                 {assigneeNames.length > 0 ? assigneeNames.join(", ") : "None"}
                             </p>
                         </div>
@@ -150,7 +161,7 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                                     onClick={() => setIsConfirmingDelete(true)}
                                     className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
                                 >
-                                    Delete Task
+                                    {t("task.delete")}
                                 </button>
                             )}
                             {(permissions.canEditTasks || permissions.canAssignTasks || permissions.canEditAssignees) && (
@@ -158,20 +169,20 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                                     onClick={() => setIsEditing(true)}
                                     className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
                                 >
-                                    Edit Task
+                                    {t("task.edit")}
                                 </button>
                             )}
                         </div>
                     </>
                 ) : (
                     <>
-                        <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
+                        <h2 className="text-xl font-semibold mb-4">{t("task.edit")}</h2>
                         {error && <p className="text-red-500 mb-4">{error}</p>}
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Title"
+                            placeholder={t("task.title")}
                             className={`w-full p-2 mb-2 rounded-md outline-none ${
                                 permissions.canEditTasks ? "bg-gray-600 text-white" : "bg-gray-700 text-gray-400"
                             }`}
@@ -180,13 +191,13 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Description"
+                            placeholder={t("task.description")}
                             className={`w-full p-2 mb-2 rounded-md outline-none ${
                                 permissions.canEditTasks ? "bg-gray-600 text-white" : "bg-gray-700 text-gray-400"
                             }`}
                             disabled={!permissions.canEditTasks}
                         ></textarea>
-                        <label className="block text-sm mb-2">Due Date:</label>
+                        <label className="block text-sm mb-2">{t("task.dueDate")}:</label>
                         <input
                             type="date"
                             value={dueDate}
@@ -196,7 +207,7 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                             }`}
                             disabled={!permissions.canEditTasks}
                         />
-                        <p>Assignees:</p>
+                        <p>{t("task.dueDate")}:</p>
                         {selectedAssignees.length > 0 && (
                             <div className="flex flex-wrap gap-2 mb-2 bg-gray-600 p-2 rounded-md">
                                 {selectedAssignees.map((assignee) => (
@@ -218,7 +229,7 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                         <div className="mb-2">
                             <input
                                 type="text"
-                                placeholder="Search users"
+                                placeholder={t("task.create.searchUsers")}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full p-2 rounded-md outline-none bg-gray-600 text-white"
@@ -240,21 +251,21 @@ const ExpandedTask: React.FC<ExpandedTaskProps> = ({ task, onClose, onTaskUpdate
                                 onClick={() => setIsEditing(false)}
                                 className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md"
                             >
-                                Cancel
+                                {t("actions.cancel")}
                             </button>
                             <button
                                 onClick={handleUpdateTask}
                                 className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
                             >
-                                Update
+                                {t("actions.save")}
                             </button>
                         </div>
                     </>
                 )}
                 <ConfirmationModal
                     isOpen={isConfirmingDelete}
-                    title="Delete Task"
-                    message="Are you sure you want to delete this task?"
+                    title={t("task.delete")}
+                    message={t("task.deleteConfirm")}
                     onConfirm={handleDeleteTask}
                     onCancel={() => setIsConfirmingDelete(false)}
                 />

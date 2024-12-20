@@ -1,0 +1,109 @@
+{
+    "actions": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "back": "Back to Dashboard",
+        "confirm": "Confirm",
+        "refresh": "Refresh Discord",
+        "add": "Add"
+    },
+    "loading": "Loading...",
+    "errors": {
+        "required": "This field is required",
+        "invalidInput": "Invalid input",
+        "serverError": "A server error occurred"
+    },
+    "header": {
+        "login": "Login",
+        "logout": "Log Out"
+    },
+    "board": {
+        "createdBy": "Created by: {{creator}}",
+        "columns": "Columns",
+        "settings": "Board Settings",
+        "delete": {
+            "title": "Delete Board",
+            "confirmation": "Are you sure you want to delete this board? This action cannot be undone.",
+            "warning": "This will remove all related columns and tasks."
+        },
+        "create": {
+            "title": "Create a New Board",
+            "nameLabel": "Board Title",
+            "namePlaceholder": "Enter board name",
+            "columnsLabel": "Columns (separated by commas)",
+            "columnPlaceholder": "To Do, In Progress, Done",
+            "selectGuild": "Select a server"
+        },
+        "edit": {
+            "title": "Edit Board",
+            "nameLabel": "Board Name"
+        },
+        "permissions": {
+            "title": "Edit Permissions for {{name}}",
+            "addIdentifier": "Add Identifier",
+            "searchPlaceholder": "Search users, roles, or permissions",
+            "role": "Role: {{name}}",
+            "user": "User: {{name}}",
+            "discord": "Permission: {{permission}}"
+        }
+    },
+    "column": {
+        "placeholder": "Enter column name",
+        "add": "+ Add Column",
+        "addTask": "Create Task",
+        "delete": "Delete Column",
+        "edit": "Edit Column",
+        "deleteConfirm": "Are you sure you want to delete this column? All associated tasks will be deleted.",
+        "deleteWarning": "This action cannot be undone."
+    },
+    "task": {
+        "edit": "Edit Task",
+        "delete": "Delete Task",
+        "deleteConfirm": "Are you sure you want to delete this task?",
+        "dueDate": "Due Date",
+        "assignees": "Assignees",
+        "description": "Description",
+        "untitled": "task.untitled",
+        "noDescription": "task.noDescription",
+        "status": "Status",
+        "assignedTo": "Assigned To",
+        "unassigned": "Unassigned",
+        "errors": {
+            "noCreatePermission": "You do not have permission to create tasks",
+            "missingFields": "Title, description and due date are required"
+        },
+        "create": {
+            "title": "Title",
+            "description": "Description",
+            "dueDate": "Due Date",
+            "assignees": "Assignees",
+            "searchUsers": "Search users"
+        }
+    },
+    "permissions": {
+        "role": "Role: {{name}}",
+        "user": "User: {{name}}",
+        "discord": "Permission: {{permission}}",
+        "addIdentifier": "Add Identifier",
+        "searchPlaceholder": "Search users, roles, or permissions",
+        "errors": {
+        "noPermissions": "Each identifier must have at least one permission"
+        }
+    },
+    "guild": {
+        "settings": {
+            "title": "Edit Settings for {{name}}"
+        },
+        "notice": "New boards are created with the server settings"
+    },
+    "dashboard": {
+        "boards": "Boards",
+        "noBoards": "No boards available for this server.",
+        "guildInvite": "Click to invite bot",
+        "selectPermission": "Select permission"
+    }
+
+}
