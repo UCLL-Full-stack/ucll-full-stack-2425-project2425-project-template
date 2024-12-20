@@ -3,11 +3,13 @@ import { Driver } from '../model/Driver';
 import { Racecar } from '../model/Racecar';
 import { Crash } from '../model/Crash';
 import raceDb from '../repository/Race.db';
+import tempRaceDB from '../repository/TempRace.db';
 import driverDb from '../repository/Driver.db';
 import racecarDb from '../repository/Racecar.db';
 import crashDb from '../repository/Crash.db';
 import { RaceInput, CrashInput, ParticipantInput, DriverInput, RacecarInput } from '../types';
-import { Participant } from '../model/participant';
+import { Participant } from '../model/Participant';
+import { TempRace } from '../model/TempRace';
 
 const getAllRaces = async (): Promise<Race[] | null> => {
     return raceDb.getAllRaces();
@@ -257,4 +259,68 @@ const editCrash = async (crashId: number, crashData: Partial<CrashInput>): Promi
     return raceDb.editCrash(crashId, crash);
 };
 
-export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getRaceByCrashId };
+const createTempRace = async (raceInput: RaceInput): Promise<TempRace> => {
+    // error handling
+    if (!raceInput.name) {
+        throw new Error('Race name is required');
+    }
+    if (!raceInput.type) {
+        throw new Error('Race type is required');
+    }
+    if (!raceInput.description) {
+        throw new Error('Race description is required');
+    }
+    if (!raceInput.location) {
+        throw new Error('Race location is required');
+    }
+    if (!raceInput.date) {
+        throw new Error('Race date is required');
+    }
+
+    const crashes = (raceInput.crashes || []).map((crashInput: CrashInput) => {
+        const participants = crashInput.participants.map((participantInput: ParticipantInput) => {
+            const driver = new Driver({
+                name: participantInput.driver.name,
+                surname: participantInput.driver.surname,
+                birthdate: participantInput.driver.birthdate,
+                team: participantInput.driver.team,
+                country: participantInput.driver.country,
+                description: participantInput.driver.description,
+            });
+
+            const racecar = new Racecar({
+                name: participantInput.racecar.name,
+                type: participantInput.racecar.type,
+                brand: participantInput.racecar.brand,
+                hp: participantInput.racecar.hp,
+            });
+
+            return new Participant({
+                driver: driver,
+                racecar: racecar,
+            });
+        });
+
+        return new Crash({
+            type: crashInput.type,
+            description: crashInput.description,
+            casualties: crashInput.casualties,
+            deaths: crashInput.deaths,
+            participants: participants,
+        });
+    });
+
+    const newTempRace = new TempRace({
+        name: raceInput.name,
+        type: raceInput.type,
+        description: raceInput.description,
+        location: raceInput.location,
+        date: raceInput.date,
+        crashes: crashes,
+    });
+
+    tempRaceDB.createRace({ race: newTempRace });
+    return newTempRace;
+};
+
+export default { getAllRaces, getRaceById, createRace, addCrashToRace, removeCrashFromRace, editCrash, getAllCrashes, createCrash, getAllRacecars, createRacecar, getAllDrivers, createDriver, updateRace, getRaceByCrashId, createTempRace };

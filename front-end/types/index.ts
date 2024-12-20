@@ -51,6 +51,16 @@ export type Race = {
   crashes?: Crash[];
 };
 
+export type TempRace = {
+  id?: number;
+  name: string;
+  type: string;
+  description: string;
+  location: string;
+  date: Date;
+  crashes?: Crash[];
+};
+
 export type Racecar = {
   id?: number;
   name: string;

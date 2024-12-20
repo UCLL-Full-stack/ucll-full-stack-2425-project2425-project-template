@@ -5,7 +5,7 @@ import { Race as RacePrisma,
     Driver as DriverPrisma,
     Racecar as RacecarPrisma } from "@prisma/client";
 
-export class Race {
+export class TempRace {
     private id?: number;
     private name: string;
     private type: string;
@@ -73,7 +73,7 @@ export class Race {
         return this.crashes;
     }
 
-    equals(other: Race): boolean {
+    equals(other: TempRace): boolean {
         return (
             this.id === other.getId() &&
             this.name === other.getName() &&
@@ -96,7 +96,7 @@ export class Race {
     }: RacePrisma & {
         crashes: (CrashPrisma & { participants: (ParticipantPrisma & { driver: DriverPrisma, racecar: RacecarPrisma })[] } )[] 
     }) {
-        return new Race({
+        return new TempRace({
             id,
             name,
             type,

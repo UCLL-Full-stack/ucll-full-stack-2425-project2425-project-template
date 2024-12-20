@@ -5,6 +5,8 @@ import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import DriverService from '@services/DriverService';
 import RacecarService from '@services/RacecarService';
+import TempRaceService from '@services/TempRaceService';
+import submission_formService from '@services/SubmissionService';
 
 interface Props {
   races: Race[];
@@ -19,6 +21,14 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
   const [items, setItems] = useState<string[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [racecars, setRacecars] = useState<Racecar[]>([]);
+  const [loggedInUser, setLoggedInUser] = useState<{ username: string; permission: string } | null>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('loggedInUser');
+    if (userData) {
+      setLoggedInUser(JSON.parse(userData));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchRacecars = async () => {
@@ -63,8 +73,28 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
     setItems([...items, '']);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const newSubmissionForm = {
+      title,
+      content: description,
+      type: selectedOption,
+      createdAt: new Date(),
+      user: loggedInUser
+    };
+
+    const response = await submission_formService.createSubmissionForm(newSubmissionForm);
+    if (response.ok) {
+      setTitle('');
+      setDescription('');
+      setSelectedOption('');
+      setItems([]);
+      alert('Submission successful!');
+    } else {
+      const errorData = await response.json();
+      setTitle(`Error: ${errorData.message}`);
+    }
   };
 
   return (
@@ -141,30 +171,30 @@ const CrashForm: React.FC<Props> = ({ races, setSubmissionForms }) => {
                 </div>
               </div>
             ))}
-          <button type="button" onClick={addItem} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#28a745', color: '#fff' }}>
-            Add Driver
-          </button>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <label>{t('Race')}</label>
-            <select
-              value={selectedOption}
-              onChange={(e) => setSelectedOption(e.target.value)}
-              style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
-            >
-              {races.map((race, index) => (
-                <option key={index} value={race.id}>
-                  {race.name}
-                </option>
-              ))}
-            </select>
+            <button type="button" onClick={addItem} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#28a745', color: '#fff' }}>
+              Add Driver
+            </button>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <label>{t('Race')}</label>
+              <select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+                style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+              >
+                {races.map((race, index) => (
+                  <option key={index} value={race.id}>
+                    {race.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-        </div>
-  )
-}
-<button type="submit" style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }}>
-  {t('Submit')}
-</button>
+      )
+      }
+      <button type="submit" style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }}>
+        {t('Submit')}
+      </button>
     </form >
   );
 };

@@ -548,4 +548,43 @@ raceRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+/**
+ * @swagger
+ * /races/temp:
+ *   post:
+ *     summary: Create a temporary race
+ *     tags: [Races]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Race'
+ *     responses:
+ *       201:
+ *         description: The created temporary race.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Race'
+ *       400:
+ *         description: Invalid input.
+ *       500:
+ *         description: Internal server error.
+ */
+raceRouter.post('/temp', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const raceInput: RaceInput = req.body;
+        const newTempRace = await raceService.createTempRace(raceInput);
+        res.status(201).json(newTempRace);
+    } catch (error) {
+        const err = error as Error;
+        if (err.message.includes('required')) {
+            res.status(400).json({ error: err.message });
+        } else {
+            next(err);
+        }
+    }
+});
+
 export { raceRouter };

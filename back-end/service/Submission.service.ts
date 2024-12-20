@@ -1,6 +1,5 @@
 import { Submission } from '../model/Submission';
 import SubmissionDb from '../repository/Submission.db';
-import { Race } from '../model/TempRace';
 
 const getAllSubmissions = async (): Promise<Submission[] | null> => {
     return SubmissionDb.getAllSubmissions();
