@@ -11,8 +11,8 @@ const getCocktailById = async ({ id }: { id: number }): Promise<Cocktail> => {
     return cocktail;
 };
 
-const addCocktail = async ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string }): Promise<Cocktail> => {
-    const newCocktail = await cocktailDb.addCocktail({ name, description, strongness, image });
+const addCocktail = async ({ name, description, strongness, image, authorId }: { name: string; description: string; strongness: number; image: string, authorId: number }): Promise<Cocktail> => {
+    const newCocktail = await cocktailDb.addCocktail({ name, description, strongness, image , authorId});
     return newCocktail;
 };
 
@@ -25,12 +25,12 @@ const deleteCocktail = async (id: number): Promise<void> => {
     await cocktailDb.deleteCocktail(id);
 };
 
-const updateCocktail = async ({ id, name, description, strongness, image }: { id: number; name: string; description: string; strongness: number; image: string }): Promise<Cocktail> => {
+const updateCocktail = async ({ id, name, description, strongness, image , authorId}: { id: number; name: string; description: string; strongness: number; image: string, authorId: number }): Promise<Cocktail> => {
     const cocktail = await cocktailDb.getCocktailById(id);
     if (!cocktail) {
         throw new Error(`Cocktail with id ${id} not found`);
     }
-    const updatedCocktail = await cocktailDb.updateCocktail({ id, name, description, strongness, image });
+    const updatedCocktail = await cocktailDb.updateCocktail({ id, name, description, strongness, image , authorId});
     return updatedCocktail;
 };
 

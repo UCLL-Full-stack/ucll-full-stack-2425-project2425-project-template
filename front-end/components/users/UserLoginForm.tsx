@@ -60,6 +60,7 @@ const UserLoginForm: React.FC = () => {
         sessionStorage.setItem("loggedInUser", JSON.stringify({
           token: userthing.token,
           role: userthing.role,
+          userId: userthing.userId,
         }));
   
         setTimeout(() => {

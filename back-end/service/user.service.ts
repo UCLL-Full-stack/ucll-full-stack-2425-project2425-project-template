@@ -60,6 +60,7 @@ const authenticate = async ({ email, password }: UserInput): Promise<Authenticat
   return {
       token: generateJwtToken({ email, role: user.getRole() }),
       email,
+      userId: user.getId() ?? (() => { throw new Error('User ID is undefined.'); })(),
       role: user.getRole(),
   };
 };

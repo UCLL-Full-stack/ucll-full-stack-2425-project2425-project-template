@@ -4,6 +4,7 @@ export type Cocktail = {
     description: string;
     strongness: number;
     image: string;
+    authorId: number;
 }
 
 export type Ingredient = {

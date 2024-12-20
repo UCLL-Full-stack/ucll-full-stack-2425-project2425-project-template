@@ -86,9 +86,10 @@ const getCocktailById = (cocktailId: number) => {
   });
 };
 
-const addCocktail = ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string }) => {
+const addCocktail = ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string}) => {
   const loggedInUser = sessionStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+  const authorId = loggedInUser ? JSON.parse(loggedInUser).userId : null;
 
   if (!token) {
     throw new Error("User is not logged in");
@@ -100,7 +101,7 @@ const addCocktail = ({ name, description, strongness, image }: { name: string; d
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({ name, description, strongness, image })
+    body: JSON.stringify({ name, description, strongness, image , authorId})
   });
 };
 

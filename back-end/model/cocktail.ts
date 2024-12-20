@@ -7,13 +7,15 @@ export class Cocktail {
     private description: string;
     private strongness: number;
     private image: string;
+    private authorId?: number;
 
-    constructor(cocktail: { id?: number; name: string; description: string; strongness: number; image: string}) {
+    constructor(cocktail: { id?: number; name: string; description: string; strongness: number; image: string, authorId?: number }) {
         this.id = cocktail.id;
         this.name = cocktail.name;
         this.description = cocktail.description;
         this.strongness = cocktail.strongness;
         this.image = cocktail.image;
+        this.authorId = cocktail.authorId;
     }
 
     // Getters
@@ -37,6 +39,10 @@ export class Cocktail {
         return this.image;
     }
 
+    getAuthorId(): number | undefined {
+        return this.authorId;
+    }
+
     setName(name: string): void {
         this.name = name;
     }
@@ -56,8 +62,8 @@ export class Cocktail {
         this.strongness === cocktail.getStrongness()
     );
 }
-    static from({ id, name, description, strongness, image }: CocktailPrisma) {    
-        return new Cocktail({id, name, description, strongness, image});
+    static from({ id, name, description, strongness, image , authorId}: CocktailPrisma) {    
+        return new Cocktail({id, name, description, strongness, image, authorId});
     }
 
 }

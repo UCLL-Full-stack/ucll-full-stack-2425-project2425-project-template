@@ -21,7 +21,7 @@ const Home: React.FC = () => {
         <div>
         <CocktailForm
         submitButtonText="Add Cocktail"
-        onSubmit={async function (cocktail: { name: string; description: string; strongness: number; image: string; }) {
+        onSubmit={async function (cocktail: { name: string; description: string; strongness: number; image: string; auhtorId: number; }) {
             try {
             await CocktailService.addCocktail(cocktail);
 
