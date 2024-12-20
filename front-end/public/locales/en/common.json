@@ -1,0 +1,17 @@
+{
+  "home": {
+    "bannerText": "The Workout Planner is now live!",
+    "title": "Plan your",
+    "titleHighlight": "workouts",
+    "subtitle": "Our Workout Planner helps you create and manage your workouts with ease and efficiency!",
+    "cta": "Get started"
+  },
+  "userTable": {
+    "title": "User Details",
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "admin": "Admin",
+    "user": "User"
+  }
+}
