@@ -17,23 +17,22 @@ const getFloorPositions = (id: number): Promise<Position[]> => {
     return FloorDb.getFloorPositions(id);
 };
 
-const updatePosition = async (pos: PositionUpdate): Promise<Position> => {
+const updatePosition = async (p0: number, pos: PositionUpdate): Promise<Position> => {
     const currentFloor = await getFloorById(pos.floorID);
     const currentPos = PositionDb.getPositionById(pos.posID);
-    if (pos.active === false){
+    if (pos.active === false) {
         return PositionDb.changePosition(pos);
     }
-    if (currentFloor.canMoveToPosition(pos.x, pos.y)){
+    if (currentFloor.canMoveToPosition(pos.x, pos.y)) {
         return PositionDb.changePosition(pos);
-    }
-    else{
+    } else {
         return currentPos;
     }
-}
+};
 
 const addPosition = async (pos: PositionInput): Promise<Position> => {
     return positionDb.addPosition(pos);
-}
+};
 
 export default {
     getAllFloors,
