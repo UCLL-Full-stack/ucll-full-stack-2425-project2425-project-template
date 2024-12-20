@@ -20,6 +20,20 @@ export class Invite {
         user: User;
         event: Event;
     }) {
+
+        if (!(invite.user instanceof User)) {
+            throw new Error("Invalid user provided.");
+        }
+
+        if (!(invite.event instanceof Event)) {
+            throw new Error("Invalid event provided.");
+        }
+
+        const validStatuses: InviteStatus[] = ['PENDING', 'ACCEPT', 'DECLINE'];
+        if (!validStatuses.includes(invite.status)) {
+            throw new Error('Invalid status provided.');
+        }
+        
         this.id = invite.id;
         this.status = invite.status;
         this.user = invite.user;

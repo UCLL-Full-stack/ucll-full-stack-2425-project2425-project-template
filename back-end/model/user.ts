@@ -27,6 +27,23 @@ export class User {
         role: Role,
         events: Event[],
     }) {
+
+        if (user.password.length < 8) {
+            throw new Error("Password must be at least 8 characters long.");
+        }
+        if (user.name.length <= 0) {
+            throw new Error("Name can not be empty.")
+        }
+        if (user.username.length <= 0) {
+            throw new Error("Username can not be empty.")
+        }
+        if (user.age < 18 || user.age > 101) {
+            throw new Error("Age needs to be between 18 and 101.");
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+            throw new Error("Email must be in a valid format.");
+        }
+        
         this.id = user.id;
         this.username = user.username;
         this.name = user.name;

@@ -63,7 +63,11 @@ inviteRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
         const invites = await inviteService.getAll();
         res.status(200).json(invites);
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -149,7 +153,11 @@ inviteRouter.get('/:eventId', async (req: Request, res: Response, next: NextFunc
         const invites = await inviteService.getInvitesByEventId(eventId);
         res.status(200).json(invites);
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -188,7 +196,11 @@ inviteRouter.get('/user/:email', async (req: Request, res: Response, next: NextF
         const invites = await inviteService.getInvitesByUserEmail(email);
         res.status(200).json(invites);
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -231,7 +243,11 @@ inviteRouter.put('/status/:inviteId/:answer', async (req: Request, res: Response
         const inviteStatusChange = await inviteService.changeInviteStatus(inviteId, status);
         res.status(200).json(inviteStatusChange);
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 })
 

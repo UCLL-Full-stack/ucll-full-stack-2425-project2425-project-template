@@ -16,7 +16,7 @@ const main = async () => {
         data: {
             username: 'admin',
             name: 'admin',
-            email: 'admin@admin',
+            email: 'admin@ucll.be',
             password: await bcrypt.hash('admin', 12),
             age: 99,
             role: 'ADMIN',

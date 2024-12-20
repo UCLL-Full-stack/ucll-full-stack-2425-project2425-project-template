@@ -56,7 +56,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import eventService from '../service/event.service';
-import ticketService from '../service/ticket.service';
+// import ticketService from '../service/ticket.service';
 
 const eventRouter = express.Router();
 
@@ -85,8 +85,11 @@ eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
         const events = await eventService.getAllEvents();
         res.status(200).json(events);
     } catch (error) {
-        // res.status(400).json({ status: 'error' });
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -128,7 +131,11 @@ eventRouter.get('/details/:id', async (req: Request, res: Response, next: NextFu
         }
         res.status(200).json(event);
     } catch (error) {
-        res.status(400).json({ status: 'error', message: 'Could not fetch event.' });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -163,7 +170,11 @@ eventRouter.post('/create', async (req: Request, res: Response, next: NextFuncti
         const event = await eventService.createEvent(req.body);
         res.status(201).json(event);
     } catch (error) {
-        res.status(400).json({ status: 'error', message: 'Could not create event.' });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 

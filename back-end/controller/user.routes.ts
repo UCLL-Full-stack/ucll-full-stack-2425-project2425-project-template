@@ -94,7 +94,11 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
     } catch (error) {
-        res.status(400).json({ status: 'error' });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -131,9 +135,12 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
         const createdUser = await userService.createUser(userInput);
 
         res.status(200).json(createdUser);
-    } catch (error){
-
-        next(error);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 })
 
@@ -177,13 +184,9 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     try {
         const userInput = <UserInput>req.body;
         const response = await userService.authentication(userInput);
-        res.status(200).json({ message: 'Authentication successful', ... response});
+        res.status(200).json({ message: 'Authentication successful', ...response });
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(401).json({ message: "Incorrect username or password.", type: 'error'});
-        } else {
-            next(error);
-        }
+        next(error);
     }
 })
 
@@ -231,7 +234,11 @@ userRouter.put('/:email/favorite-events/:eventId', async (req: Request, res: Res
         await userService.addEventToFavorite(email, eventId);
         res.status(200).json({ message: 'Event added to favorites' });
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 })
 
@@ -270,7 +277,11 @@ userRouter.get('/:email/favorite-events', async (req: Request, res: Response, ne
         const favoriteEvents = await userService.getFavoriteEventsByUserEmail(email);
         res.status(200).json(favoriteEvents);
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 })
 
