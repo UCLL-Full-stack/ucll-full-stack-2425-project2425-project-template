@@ -3,87 +3,61 @@ import { useEffect, useState } from 'react';
 import Language from './language/Language';
 
 const Header: React.FC = () => {
-
     const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
-  useEffect(() => {
-    setLoggedInUser((sessionStorage.getItem("loggedInUser")));
-  }, []);
+    useEffect(() => {
+        setLoggedInUser(sessionStorage.getItem('loggedInUser'));
+    }, []);
 
-  const handleClick = () => {
-    sessionStorage.removeItem("loggedInUser");
-  };
+    const handleClick = () => {
+        sessionStorage.removeItem('loggedInUser');
+    };
 
     return (
-        <header
-            className="p-3 mb-4 border-bottom"
-            style={{ background: 'linear-gradient(135deg, #2e2e2e, #3f3f3f)' }}
-        >
-            <div className="container d-flex align-items-center justify-content-between">
-                <a
-                    href="/"
-                    className="fs-1 fw-bold text-white text-decoration-none"
-                    style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        letterSpacing: '2px',
-                        textShadow: '0px 2px 5px rgba(0, 0, 0, 0.5)',
-                    }}
-                >
+        <header className="p-3 mb-4 border-b bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg">
+            <div className="container mx-auto flex items-center justify-between">
+                <a href="/" className="text-3xl font-bold text-white tracking-wide shadow-md">
                     Soccer App
                 </a>
-                <nav className="nav">
-                    <Link
-                        href="/"
-                        className="nav-link px-3 fs-5 text-white"
-                        style={{ transition: 'color 0.3s' }}
-                    >
+                <nav className="flex items-center space-x-6">
+                    <Link href="/" className="text-lg text-white hover:text-gray-300 transition">
                         Home
                     </Link>
                     <Link
                         href="/competition"
-                        className="nav-link px-3 fs-5 text-white"
-                        style={{ transition: 'color 0.3s' }}
+                        className="text-lg text-white hover:text-gray-300 transition"
                     >
                         Competitions
                     </Link>
                     <Link
                         href="/team"
-                        className="nav-link px-3 fs-5 text-white"
-                        style={{ transition: 'color 0.3s' }}
+                        className="text-lg text-white hover:text-gray-300 transition"
                     >
                         Teams
                     </Link>
-
-                    <Link
-                        href="/login"
-                        className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
-                        >
-                        Login
-                        </Link>
-                        {loggedInUser && (
-                        <>
-                        <a
+                    {!loggedInUser && (
+                        <Link
                             href="/login"
-                            className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
-                            onClick={handleClick}
+                            className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
                         >
-                            Logout
-                        </a>
-                        <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
-                            Welcome, {loggedInUser}
-                        </div>
+                            Login
+                        </Link>
+                    )}
+                    {loggedInUser && (
+                        <>
+                            <a
+                                href="/login"
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition"
+                                onClick={handleClick}
+                            >
+                                Logout
+                            </a>
+                            <div className="text-white font-medium">Welcome, {loggedInUser}</div>
                         </>
                     )}
                     <Language />
                 </nav>
             </div>
-
-            <style jsx>{`
-                .nav-link:hover {
-                    color: #d3d3d3;
-                    text-decoration: underline;
-                }
-            `}</style>
         </header>
     );
 };

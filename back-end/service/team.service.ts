@@ -46,6 +46,20 @@ const createTeam = async ({
     return team;
 };
 
+const deleteTeam = async ({ id }: { id: number }): Promise<void> => {
+    try {
+        const team = await teamDb.getTeamById({ id });
+        if (!team) {
+            throw new Error(`Team with id ${id} does not exist.`);
+        }
+        await teamDb.deleteTeam({ id });
+        console.log(`Team with id ${id} has been successfully deleted.`);
+    } catch (error) {
+        console.error('Error deleting team:', error);
+        throw new Error('Unable to delete team, please check the server logs.');
+    }
+};
+
 const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
     try {
         const teamPrisma = await database.team.findUnique({
@@ -107,4 +121,5 @@ export default {
     getTeamById,
     getAllTeams,
     getTeamsByCompetition,
+    deleteTeam,
 };

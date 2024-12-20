@@ -29,4 +29,16 @@ const getCompetitionByName = async ({ name }: { name: string }): Promise<Competi
     return user;
 };
 
-export default { createCompetition, getCompetitionById, getAllCompetitions, getCompetitionByName };
+const deleteCompetition = async (id: number): Promise<void> => {
+    const competition = await competitionDb.getCompetitionById({ id });
+    if (!competition) throw new Error(`Competition with id ${id} does not exist.`);
+    await competitionDb.deleteCompetition({ id });
+};
+
+export default {
+    createCompetition,
+    getCompetitionById,
+    getAllCompetitions,
+    getCompetitionByName,
+    deleteCompetition,
+};

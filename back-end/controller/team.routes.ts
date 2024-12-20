@@ -41,6 +41,21 @@ teamRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
+teamRouter.delete('/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        await teamService.deleteTeam({ id: Number(id) });
+        res.status(200).json({ message: `Team with id ${id} has been successfully deleted.` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            errorMessage: 'An error occurred while trying to delete the team.',
+        });
+    }
+});
+
 // teamRouter.post('/linkTeamToUser/:userId/:teamId', async (req: Request, res: Response) => {
 //     try {
 //         const userId = Number(req.params.userId)

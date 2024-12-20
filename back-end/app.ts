@@ -18,7 +18,6 @@ app.use(helmet());
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
-            // Allow connections to own server and the external API
             connectSrc: ["'self'", 'https://api.ucll.be'],
         },
     })
@@ -26,19 +25,20 @@ app.use(
 
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors({
-    origin:'http://localhost:8080',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
+app.use(
+    cors({
+        origin: 'http://localhost:8080',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    })
+);
 app.use(bodyParser.json());
 
 app.use(
     expressjwt({
-    secret: process.env.JWT_SECRET || 'default_secret' ,
-    algorithms: ['HS256'],
-    }).unless({ path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'] 
-    })
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({ path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'] })
 );
 
 app.use('/match', matchRouter);
@@ -80,7 +80,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         res.status(400).json({ status: 'application error', message: err.message });
     }
 });
-
 
 app.listen(port || 3000, () => {
     console.log(`Courses API is running on port ${port}.`);

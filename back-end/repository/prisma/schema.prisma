@@ -36,9 +36,9 @@ model Competition {
   name          String
   matchesPlayed Int         @default(0)
 
-  teams         Team[]
+  teams         Team[]      
 
-  matches       Match[]
+  matches       Match[]  
 }
 
 model Match {

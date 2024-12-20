@@ -50,9 +50,31 @@ const getCompetitionById = async ({ id }: { id: number }): Promise<Competition |
     }
 };
 
+const deleteCompetition = async ({ id }: { id: number }): Promise<Competition> => {
+    try {
+        await database.match.deleteMany({
+            where: {
+                OR: [{ team1: { competitionId: id } }, { team2: { competitionId: id } }],
+            },
+        });
+        await database.team.deleteMany({
+            where: { competitionId: id },
+        });
+        const deletedCompetition = await database.competition.delete({
+            where: { id },
+        });
+
+        return Competition.from(deletedCompetition);
+    } catch (error) {
+        console.error('Error deleting competition:', error);
+        throw new Error('Database error, see server logs');
+    }
+};
+
 export default {
     getAllCompetitions,
     createCompetition,
     getCompetitionById,
     getCompetitionByName,
+    deleteCompetition,
 };

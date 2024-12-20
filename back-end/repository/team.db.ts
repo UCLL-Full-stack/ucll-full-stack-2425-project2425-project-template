@@ -17,6 +17,22 @@ const getAllTeams = async (): Promise<Team[]> => {
     }
 };
 
+const deleteTeam = async ({ id }: { id: number }): Promise<void> => {
+    try {
+        await database.team.delete({
+            where: { id },
+            include: {
+                competition: true,
+                user: true,
+            },
+        });
+        console.log(`Team with id ${id} successfully deleted.`);
+    } catch (error) {
+        console.error(`Error deleting team with id ${id}:`, error);
+        throw new Error('Database error, see server logs');
+    }
+};
+
 const createTeam = async ({
     name,
     userId,
@@ -92,6 +108,7 @@ const getTeamById = async ({ id }: { id: number | undefined }): Promise<Team | n
 
 export default {
     createTeam,
+    deleteTeam,
     getTeamsByCompetition,
     getTeamById,
     getAllTeams,
