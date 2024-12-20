@@ -83,7 +83,7 @@ describe('Board Model', () => {
             'owner1',
             mockPermissionSettings,
             ['role1'],
-            [{ userId: 'user1',roleIds: ['role1'] }],
+            [{ userId: 'user1', roleIds: ['role1'] }],
             ['board1']
         );
 
@@ -98,10 +98,11 @@ describe('Board Model', () => {
             }
         ];
 
-        expect(() => new Board('', '', mockUser, mockGuild, mockColumns, [])).toThrowError('Board Name is required');
-        expect(() => new Board('board1', 'Test Board', null as any, mockGuild, mockColumns, [])).toThrowError('Created By User is required');
-        expect(() => new Board('board1', 'Test Board', mockUser, null as any, mockColumns, [])).toThrowError('Guild is required');
-        expect(() => new Board('board1', 'Test Board', mockUser, mockGuild, [], [])).toThrowError('Board must have at least one column');
+        expect(() => new Board('', 'Test Board', mockUser, mockGuild, mockColumns, mockPermissions)).toThrowError('Board ID is required');
+        expect(() => new Board('board1', '', mockUser, mockGuild, mockColumns, mockPermissions)).toThrowError('Board Name is required');
+        expect(() => new Board('board1', 'Test Board', null as any, mockGuild, mockColumns, mockPermissions)).toThrowError('Created By User is required');
+        expect(() => new Board('board1', 'Test Board', mockUser, null as any, mockColumns, mockPermissions)).toThrowError('Guild is required');
+        expect(() => new Board('board1', 'Test Board', mockUser, mockGuild, [], mockPermissions)).toThrowError('Board must have at least one column');
         expect(() => new Board('board1', 'Test Board', mockUser, mockGuild, mockColumns, [])).toThrowError('Board must have permission settings');
     });
 });

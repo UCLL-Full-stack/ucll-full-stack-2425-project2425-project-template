@@ -13,6 +13,7 @@ export class Board {
     private permissions: PermissionEntry[];
 
     constructor(boardId: string, boardName: string, createdByUser: User, guild: Guild, columns: Column[], permissions: PermissionEntry[]) {
+        this.validate(boardId, boardName, createdByUser, guild, columns, permissions);
         this.boardId = boardId;
         this.boardName = boardName;
         this.createdByUser = createdByUser;
@@ -30,6 +31,27 @@ export class Board {
             boardPrisma.columns,
             boardPrisma.permissions
         );
+    }
+
+    validate(boardId: string, boardName: string, createdByUser: User, guild: Guild, columns: Column[], permissions: PermissionEntry[]): void {
+        if (!boardId) {
+            throw new Error('Board ID is required');
+        }
+        if (!boardName) {
+            throw new Error('Board Name is required');
+        }
+        if (!createdByUser) {
+            throw new Error('Created By User is required');
+        }
+        if (!guild) {
+            throw new Error('Guild is required');
+        }
+        if (!columns || columns.length === 0) {
+            throw new Error('Board must have at least one column');
+        }
+        if (!permissions || permissions.length === 0) {
+            throw new Error('Board must have permission settings');
+        }
     }
 
     getBoardId(): string {
