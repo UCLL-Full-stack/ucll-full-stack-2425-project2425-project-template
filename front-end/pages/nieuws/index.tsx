@@ -34,7 +34,7 @@ const Nieuws: React.FC = () => {
             </Head>
             <Header />
             <main className="min-h-screen">
-                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Nieuws Overzicht</h1>
+                <h1 className="text-5xl font-extrabold text-center text-green-900 mt-4 mb-8">Nieuws</h1>
                 <div className="m-5">
                     {userRole === 'Hoofdleiding' ? (
                         <NieuwsOverviewTableAdmin nieuwsberichten={nieuwsberichten} />

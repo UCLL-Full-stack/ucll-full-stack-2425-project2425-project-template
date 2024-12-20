@@ -107,62 +107,95 @@ groepRouter.get("/", async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
-/**
- * @swagger
- * /groep/{naam}/activiteiten:
- *  get:
- *    summary: Geeft activiteiten van een groep terug
- *    tags:
- *     - groep
- *    parameters:
- *      - in: path
- *        name: naam
- *        required: true
- *        schema:
- *          type: string
- *        description: De naam van de groep
- *    responses:
- *      200:
- *        description: OK
- *        content:
- *          application/json:
- *            schema:
- *              $ref: "#/components/schemas/Activiteit"
- */
-groepRouter.get("/:naam/activiteiten", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const groep = await groepService.getActiviteitenForGroep(req.params.naam);
-        res.status(200).json(groep);
-    } catch (e) {
-        next(e);
-    }
-});
+// /**
+//  * @swagger
+//  * /groep/{naam}/activiteiten:
+//  *  get:
+//  *    summary: Geeft activiteiten van een groep terug
+//  *    tags:
+//  *     - groep
+//  *    parameters:
+//  *      - in: path
+//  *        name: naam
+//  *        required: true
+//  *        schema:
+//  *          type: string
+//  *        description: De naam van de groep
+//  *    responses:
+//  *      200:
+//  *        description: OK
+//  *        content:
+//  *          application/json:
+//  *            schema:
+//  *              $ref: "#/components/schemas/Activiteit"
+//  */
+// groepRouter.get("/:naam/activiteiten", async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const groep = await groepService.getActiviteitenForGroep(req.params.naam);
+//         res.status(200).json(groep);
+//     } catch (e) {
+//         next(e);
+//     }
+// });
+
+// /**
+//  * @swagger
+//  * /groep/{naam}/leiding:
+//  *  get:
+//  *   summary: Geeft leiding van een groep terug
+//  *   tags:
+//  *    - groep
+//  *   parameters:
+//  *    - in: path
+//  *      name: naam
+//  *      required: true
+//  *      schema:
+//  *        type: string
+//  *      description: De naam van de groep
+//  *   responses:
+//  *    200:
+//  *     description: OK
+//  *     content:
+//  *      application/json:
+//  *       schema:
+//  *        $ref: "#/components/schemas/Leiding"
+//  */
+// groepRouter.get("/:naam/leiding", async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const groep = await groepService.getLeidingForGroep(req.params.naam);
+//         res.status(200).json(groep);
+//     } catch (e) {
+//         next(e);
+//     }
+// });
 
 /**
  * @swagger
- * /groep/{naam}/leiding:
+ * /groep/{naam}:
  *  get:
- *   summary: Geeft leiding van een groep terug
+ *   summary: Geeft een groep terug
  *   tags:
  *    - groep
  *   parameters:
  *    - in: path
  *      name: naam
- *      required: true
- *      schema:
- *        type: string
- *      description: De naam van de groep
+ *   required: true
+ *   schema:
+ *    type: string
+ *    description: De naam van de groep
  *   responses:
  *    200:
  *     description: OK
  *     content:
  *      application/json:
  *       schema:
- *        $ref: "#/components/schemas/Leiding"
+ *        $ref: "#/components/schemas/Groep"
+ *    404:
+ *     description: Niet gevonden
  */
-groepRouter.get("/:naam/leiding", async (req: Request, res: Response, next: NextFunction) => {
+groepRouter.get("/:naam", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const groep = await groepService.getLeidingForGroep(req.params.naam);
+        const groep = await groepService.getGroepByNaamForRoute(req.params.naam);
         res.status(200).json(groep);
     } catch (e) {
         next(e);

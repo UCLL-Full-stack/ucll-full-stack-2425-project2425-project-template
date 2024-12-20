@@ -54,11 +54,21 @@ const getGroepById = async (id: number): Promise<Groep> => {
     return groep;
 }
 
+const getGroepByNaamForRoute = async (naam: string): Promise<Groep> => {
+    const standard = capitalizeFirstLetter(naam);
+    const groep = await groepDB.getGroepByNaamForRoute({naam: standard});
+    if (!groep) {
+        throw new Error('Groep not found');
+    }
+    return groep;
+}
+
 export default {
     getAllGroepen, 
     getActiviteitenForGroep, 
     addActiviteitToGroep, 
     getGroepByNaam,
     getLeidingForGroep,
-    getGroepById
+    getGroepById,
+    getGroepByNaamForRoute
 };

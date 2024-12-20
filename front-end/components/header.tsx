@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import getAllGroepen from '@/services/GroepService';
 import { Groep } from '@/types';
+import GroepService from '@/services/GroepService';
 
 const Header: React.FC = () => {
     const router = useRouter();
@@ -33,9 +34,8 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         const fetchGroepen = async () => {
-            const response = await getAllGroepen();
+            const response = await GroepService.getAllGroepen();
             const groepenArray = await response.json();
-            console.log(groepenArray);
             setGroepen(groepenArray);
         }
         fetchGroepen();

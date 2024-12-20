@@ -1,7 +1,7 @@
 import { Activiteit } from "../model/activiteit";
 import { Groep } from "../model/groep";
 import database from "../util/database";
-import { Leiding } from "../model/leiding";
+import { Leiding, PublicLeiding } from "../model/leiding";
 
 
 const createGroep = async (groep: Groep): Promise<Groep> => {
@@ -143,5 +143,36 @@ const getActiviteitenByGroep = async (groep: Groep): Promise<Activiteit[]> => {
     }
 }
 
-export default {createGroep, getAllGroepen, getGroepById, getGroepByNaam, addActiviteitToGroep, addLeidingToGroep, getLeidingByGroep, getActiviteitenByGroep};
+const getGroepByNaamForRoute = async ({naam}: {naam: string}): Promise<Groep> => {
+    try {
+        const groepPrisma = await database.groep.findFirst({
+            where: {
+                naam: naam
+            },
+            include: {
+                activiteiten: true,
+                leiding: true
+            }
+        });
+        if (!groepPrisma) {
+            throw new Error("Groep not found");
+        }
+        return Groep.from({ ...groepPrisma});
+    } catch (e) {
+        console.error(e);
+        throw new Error("Something went wrong with getting groep by naam for route");
+    }
+}
+
+export default {
+    createGroep, 
+    getAllGroepen, 
+    getGroepById, 
+    getGroepByNaam, 
+    addActiviteitToGroep, 
+    addLeidingToGroep, 
+    getLeidingByGroep, 
+    getActiviteitenByGroep,
+    getGroepByNaamForRoute
+};
 
