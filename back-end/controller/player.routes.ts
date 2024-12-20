@@ -97,4 +97,20 @@ playerRouter.put('/coin/:id', async (req: Request, res: Response, next: NextFunc
     }
 })
 
+/*
+swagger documentation to be added.
+*/
+
+playerRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await playerService.deletePlayer(+req.params.id);
+        res.status(200).json("Player deleted succesfully");
+    } catch (error) {
+        res.status(400).json({
+            status: '400',
+            errorMessage: `Something went wrong with deleting user.`,
+        });
+    }
+})
+
 export { playerRouter };

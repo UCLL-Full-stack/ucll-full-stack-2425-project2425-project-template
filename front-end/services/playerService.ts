@@ -78,6 +78,19 @@ const giveACoin = async (id: number) => {
     return await res.json();
 }
 
+const deletePlayer = async (id: number) => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const token = loggedInUser.token;
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/players/' + id, {
+        method: 'DELETE',
+        headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return await res.json();
+}
+
 export default {
     getAllPlayers,
     getPlayerById,
@@ -85,4 +98,5 @@ export default {
     getPlayersFromUser,
     createPlayer,
     giveACoin,
+    deletePlayer,
 };

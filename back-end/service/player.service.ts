@@ -48,6 +48,10 @@ const giveCoin = async (input: string): Promise<Player> => {
     return playerDb.updatePlayer(player);
 };
 
+const deletePlayer = async (id: number) => {
+    await playerDb.deletePlayer(id);
+}
+
 export default {
     getAllPlayers,
     getPlayerById,
@@ -55,4 +59,5 @@ export default {
     getPlayersByUser,
     addPlayer,
     giveCoin,
+    deletePlayer,
 };

@@ -88,6 +88,19 @@ const updatePlayer = async  (player: Player): Promise<Player> => {
     }
 }
 
+const deletePlayer = async (Id: number) => {
+    try {
+      const deletedplayer = await database.player.delete({
+        where: {
+          id: Id,
+        },
+      });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw new Error("Player not found.");
+    }
+  }
+
 
 
 export default {
@@ -95,4 +108,5 @@ export default {
     getPlayerById,
     addPlayer,
     updatePlayer,
+    deletePlayer,
 };
