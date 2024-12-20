@@ -81,7 +81,16 @@ const authenticate = async({email,password}: UserInput): Promise<AuthenticationR
     };
 }
 
+const getUserByEmail = async(email : string): Promise<User | null> => {
+    const user = userDb.getUserByEmail(email);
+    if(!user){
+        throw new Error('user not found')
+    }
+    return userDb.getUserByEmail(email);
+}
+
 export default {
     createUser,
-    authenticate
+    authenticate,
+    getUserByEmail
 }
