@@ -53,7 +53,6 @@ const UserLoginForm: React.FC = () => {
       if (response.success && response.user) {
         const { token, fullname, username, role } = response.user;
   
-        // Store user data in localStorage
         localStorage.setItem(
           "loggedInUser",
           JSON.stringify({ token, fullname, username, role })
@@ -62,7 +61,6 @@ const UserLoginForm: React.FC = () => {
         setStatusMessages([{ message: t("login.success"), type: "success" }]);
         router.push("/");
       } else if (response.success && !response.user) {
-        // Handle cases where success is true but no user data is returned
         setStatusMessages([{ message: t("login.error.noUserData"), type: "error" }]);
       } else {
         setStatusMessages([{ message: t("login.error.invalidCredentials"), type: "error" }]);

@@ -83,21 +83,6 @@ const updateReviewForStudent = async ({
     review: Review;
 }): Promise<Review | null> => {
     const reviewId = review.getId();
-    const comment = review.getComment();
-    const rating = review.getRating();
-    const trip = review.getTrip();
-
-    if (!reviewId) {
-        throw new Error('Review ID is required for updating the review.');
-    }
-
-    if (!comment || comment.trim().length === 0) {
-        throw new Error('Review comment is required.');
-    }
-
-    if (rating < 1 || rating > 5) {
-        throw new Error('Rating must be between 1 and 5.');
-    }
 
     try {
         const updatedReview = await reviewDb.updateReviewForStudent({

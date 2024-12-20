@@ -1,4 +1,3 @@
-import { PaymentStatus } from "@prisma/client";
 import bookingDb from "../repository/booking.db";
 import tripDb from "../repository/trip.db";
 import { Booking } from "../model/booking";
@@ -9,6 +8,7 @@ import studentDb from "../repository/student.db";
 import { UnauthorizedError } from "express-jwt";
 import { bookingRouter } from "../controller/booking.routes";
 import database from "../util/database";
+import { PaymentStatus } from "../model/paymentStatusEnum";
 
 const createBooking = async ({ bookingDate, tripId, studentIds, paymentStatus }: BookingInput): Promise<Booking> => {
 
@@ -126,42 +126,6 @@ const addStudentsToBooking = async ({
         throw new Error("Failed to update students for the booking.");
     }
 };
-const updateStudentsOfBooking = async ({
-    booking,
-}: {
-    booking: Booking;
-}): Promise<Booking | null> => {
-    const bookingId = booking.getId();  
-    const students = booking.getStudents();  
-
-    if (!bookingId) {
-        throw new Error('Booking ID is required for updating students.');
-    }
-
-    if (students.length === 0) {
-        throw new Error('At least one student is required to update the booking.');
-    }
-
-    try {
-        const updatedBookingPrisma = await database.booking.update({
-            where: { id: bookingId },
-            data: {
-                students: {
-                    connect: students.map((student) => ({ id: student.getId() })),  // Connect students by ID
-                },
-            },
-            include: {
-                trip: true,
-                students: { include: { user: true } },
-            },
-        });
-
-        return updatedBookingPrisma ? Booking.from(updatedBookingPrisma) : null;
-    } catch (error) {
-        console.error('Error updating students for booking:', bookingId, error);
-        throw new Error('Database error. See server log for details.');
-    }
-};
 const updatePaymentStatus = async (bookingId: number, newStatus: PaymentStatus): Promise<Booking | null> => {
     if (typeof bookingId !== 'number' || bookingId <= 0) {
         throw new Error("Invalid Booking ID");
@@ -182,4 +146,4 @@ const updatePaymentStatus = async (bookingId: number, newStatus: PaymentStatus):
 };
 
 
-export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, updateStudentsOfBooking, deleteBooking, updatePaymentStatus};
+export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, deleteBooking, updatePaymentStatus};

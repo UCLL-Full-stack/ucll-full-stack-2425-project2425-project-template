@@ -47,7 +47,6 @@ test('given: valid values for student, when: student is created, then: student i
     expect(student.getUser().getLastName()).toEqual(validUserData.lastName);
     expect(student.getUser().getRole()).toEqual(validUserData.role);
     expect(student.getStudentnumber()).toEqual(validStudentData.studentNumber);
-    expect(student['bookings']).toContain(booking);
 });
 
 test('given: missing student number, when: student is validated, then: an error is thrown', () => {
@@ -59,12 +58,6 @@ test('given: missing student number, when: student is validated, then: an error 
     expect(() => student.validate()).toThrow('Student number is required.');
 });
 
-test('given: student with bookings, when: fetching bookings, then: bookings are correct', () => {
-    const student = new Student(validStudentData);
-
-    expect(student['bookings']).toHaveLength(1);
-    expect(student['bookings']).toContain(booking);
-});
 test('given: missing student number, when: student is validated, then: an error is thrown', () => {
     const student = new Student({
         ...validStudentData,
@@ -80,9 +73,3 @@ test('given: valid student number, when: student is validated, then: validation 
     expect(() => student.validate()).not.toThrow();
 });
 
-test('given: student with bookings, when: fetching bookings, then: bookings are correct', () => {
-    const student = new Student(validStudentData);
-
-    expect(student['bookings']).toHaveLength(1);
-    expect(student['bookings']).toContain(booking);
-});

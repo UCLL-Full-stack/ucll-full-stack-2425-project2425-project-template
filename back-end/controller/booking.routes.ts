@@ -169,7 +169,6 @@ bookingRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
 bookingRouter.post('/', async (req: Request, res: Response) => {
   try {
     const booking = await bookingService.createBooking(req.body as BookingInput);
-    console.log("booking", booking);
     res.status(201).json(booking);
   } catch (error) {
     const err = error as Error;
@@ -343,9 +342,9 @@ bookingRouter.delete('/:bookingId', async (req: Request, res: Response) => {
  *               paymentStatus:
  *                 type: string
  *                 enum:
- *                   - PENDING
- *                   - PAID
- *                   - FAILED
+ *                   - Pending
+ *                   - Paid
+ *                   - Confirmed
  *     responses:
  *       200:
  *         description: Payment status updated successfully
@@ -385,7 +384,6 @@ bookingRouter.put('/:bookingId/payment-status', async (req: Request, res: Respon
   const { bookingId } = req.params;
   const { paymentStatus } = req.body;
 
-  // Validate paymentStatus
   if (!Object.values(PaymentStatus).includes(paymentStatus)) {
     return res.status(400).json({
       status: 'error',

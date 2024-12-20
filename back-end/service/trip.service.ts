@@ -69,15 +69,15 @@ const getTripById = async (tripId: number): Promise<Trip | null> => {
     return trip;
 };
 
-const getBookingForTrip = async ({ tripId }: { tripId: number }): Promise<Booking[]> => {
-    try {
-        const bookingsPrisma = await tripDb.getBookingForTrip({ tripId });
-        return bookingsPrisma.map((bookingPrisma: any) => Booking.from(bookingPrisma));
-    } catch (error) {
-        console.error('Error fetching bookings for trip:', tripId, error);
-        throw new Error(`Unable to retrieve bookings for trip with ID: ${tripId}. Please try again later.`);
-    }
-};
+// const getBookingForTrip = async ({ tripId }: { tripId: number }): Promise<Booking[]> => {
+//     try {
+//         const bookingsPrisma = await tripDb.getBookingForTrip({ tripId });
+//         return bookingsPrisma.map((bookingPrisma: any) => Booking.from(bookingPrisma));
+//     } catch (error) {
+//         console.error('Error fetching bookings for trip:', tripId, error);
+//         throw new Error(`Unable to retrieve bookings for trip with ID: ${tripId}. Please try again later.`);
+//     }
+// };
 
 const updateBookingForTrip = async ({ booking }: { booking: Booking }): Promise<Booking | null> => {
     const bookingId = booking.getId();  
@@ -101,4 +101,4 @@ const updateBookingForTrip = async ({ booking }: { booking: Booking }): Promise<
     }
 };
 
-export default { createTrip, getAllTrips, getTripById, getBookingForTrip, updateBookingForTrip };
+export default { createTrip, getAllTrips, getTripById, updateBookingForTrip };

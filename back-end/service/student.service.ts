@@ -44,10 +44,6 @@ const getStudentByUsername = async (username: string): Promise<Student | null> =
   }
 };
 
-
-
-
-
 const getAllStudents = async (): Promise<Student[]> => {
   try {
     return await studentDb.getAllStudents();

@@ -68,7 +68,6 @@ const UserRegisterForm: React.FC = () => {
   
     const { firstName, lastName, username, email, password, studentNumber, role } = formValues;
   
-    // Construct user object conditionally based on the role
     const user: { firstName: string; lastName: string; username: string; email: string; password: string; role: string; studentNumber?: string } = {
       firstName,
       lastName,

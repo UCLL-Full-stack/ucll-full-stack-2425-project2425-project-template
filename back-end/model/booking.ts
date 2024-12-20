@@ -39,13 +39,13 @@ export class Booking {
         students: Student[]; 
         trip: Trip;
     }) {
-        if (!this.bookingDate) {
+        if (!booking.bookingDate) {
             throw new Error('Booking date is required.');
         }
-        if (!this.paymentStatus) {
+        if (!booking.paymentStatus) {
             throw new Error('Payment status is required.');
         }
-        if (!this.trip) {
+        if (!booking.trip) {
             throw new Error('Trip is required.'); 
         }
     }
@@ -102,7 +102,7 @@ export class Booking {
             paymentStatus: paymentStatus as PaymentStatus, 
             trip: Trip.from(trip), 
             students: students.map((student) =>
-                Student.from({...student, user: student.user, bookings: []})
+                Student.from({...student, user: student.user})
             ),
         });
     }

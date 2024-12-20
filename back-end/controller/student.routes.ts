@@ -136,6 +136,49 @@ studentRouter.get('/:id', async (req: Request, res: Response) => {
 });
 
 
+/**
+ * @swagger
+ * /students/{username}:
+ *   get:
+ *     summary: Get student by username
+ *     description: Fetch a student's information by their username.
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         description: The username of the student to fetch.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved student data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 username:
+ *                   type: string
+ *                   example: "john_doe"
+ *                 firstName:
+ *                   type: string
+ *                   example: "John"
+ *                 lastName:
+ *                   type: string
+ *                   example: "Doe"
+ *                 email:
+ *                   type: string
+ *                   example: "john@example.com"
+ *       400:
+ *         description: Bad request or validation error.
+ *       404:
+ *         description: Student not found with the given username.
+ *       500:
+ *         description: Internal server error.
+ */
 studentRouter.get('/:username', async (req: Request, res: Response) => {
   const username = req.params.username
   try {

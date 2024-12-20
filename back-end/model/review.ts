@@ -92,7 +92,7 @@ export class Review {
             comment,
             rating,
             trip: Trip.from(trip),
-            student: Student.from({ ...student, user: student.user, bookings: [] }),
+            student: Student.from({ ...student, user: student.user }),
         });
     }
 }

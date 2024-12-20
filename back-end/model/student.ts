@@ -5,19 +5,16 @@ import { User } from './user';
 export class Student {
     private id?: number;
     private studentNumber: string;
-    private bookings: Booking[] = [];
     private user: User;
 
     constructor(student: {
         id?: number;
         user: User;
         studentNumber: string;
-        bookings?: Booking[];
     }) {
         this.id = student.id;
         this.user = student.user;
         this.studentNumber = student.studentNumber;
-        this.bookings = student.bookings || [];
     }
 
     getId(): number | undefined {
@@ -50,15 +47,11 @@ export class Student {
         id,
         user,
         studentNumber,
-        bookings = [],
-    }: StudentPrisma & { bookings: (BookingPrisma & { trip: TripPrisma })[]; user: UserPrisma }): Student {
+    }: StudentPrisma & { user: UserPrisma }): Student {
         return new Student({
             id: id ? Number(id) : undefined,
             user: User.from(user),
             studentNumber,
-            bookings: bookings.map((booking) =>
-                Booking.from({ ...booking, trip: booking.trip, students: [] })
-            ),
         });
     }
 }
