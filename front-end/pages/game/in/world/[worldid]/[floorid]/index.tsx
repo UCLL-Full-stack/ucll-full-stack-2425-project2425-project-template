@@ -6,6 +6,7 @@ import { World, Floor, Line, Position, Player, PositionUpdate, coordinate, Posit
 import useInterval from 'use-interval';
 import floorService from '@services/floorService';
 import playerService from '@services/playerService';
+import BattleScreen from '@components/game/Battle';
 
 const GameMap: React.FC = () => {
     const router = useRouter();
@@ -21,6 +22,7 @@ const GameMap: React.FC = () => {
     const [lastMoveTime, setLastMoveTime] = useState<number>(0);
     const [spawnedIn, setSpawnedIn] = useState<boolean>(false);
     const [isBeyondLastFloor, setBeyondLastFloor] = useState<boolean>(false);
+    const [showBattleScreen, setBattleScreen] = useState<boolean>(false);
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -143,9 +145,17 @@ const GameMap: React.FC = () => {
                     changeFloor(-1)
                     return true;
                 }
+                if (pos.type === "enemy"){
+                    setBattleScreen(true);
+                    return true;
+                }
             }
         })
         return false;
+    }
+
+    const checkBattleState = () => {
+        sessionStorage.getItem("battleResult");
     }
 
     const changeFloor = async (difference: number) => {
@@ -172,10 +182,12 @@ const GameMap: React.FC = () => {
         getFloor();
         getPlayer();
         getPositions();
+        checkBattleState();
     }, [update]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (showBattleScreen) return;
             const now = Date.now();
             if (now - lastMoveTime < 200){
                 return;
@@ -247,6 +259,11 @@ const GameMap: React.FC = () => {
 
     return (
         <div className="relative overflow-hidden w-screen h-screen bg-black">
+
+            {showBattleScreen && player && (
+                <BattleScreen player={player} />
+            )}
+
             <div
             className="absolute transform"
             style={{

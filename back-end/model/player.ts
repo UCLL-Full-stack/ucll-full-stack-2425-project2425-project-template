@@ -61,6 +61,10 @@ export class Player {
         return this.image;
     }
 
+    giveCoin() {
+        this.currency = this.currency + 1;
+    }
+
     validate(player: {
         name: string;
         statistics: string;

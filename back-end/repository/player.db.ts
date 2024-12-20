@@ -61,6 +61,8 @@ const addPlayer = async (player: Player): Promise<number> => {
     }
 }
 
+const updatePlayer()
+
 
 
 export default {

@@ -42,10 +42,16 @@ const addPlayer = async (input: PlayerInput): Promise<Player> => {
     else throw error();
 };
 
+const giveCoin = async (input: string): Promise<Player> => {
+    const player = await playerDb.getPlayerById(+input);
+    pla
+};
+
 export default {
     getAllPlayers,
     getPlayerById,
     getPlayerImage,
     getPlayersByUser,
     addPlayer,
+    giveCoin,
 };
