@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  accountId  Int         @unique @default(autoincrement())
+  username   String      @unique
+  account    Account?
+  reviews    Review[]
+  watchlists Watchlist[]
+}
+
+model Account {
+  userId    Int      @unique
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Movie {
+  id             Int         @id @default(autoincrement())
+  title          String
+  poster         String?
+  createdAt      DateTime    @default(now())
+  description    String
+  director       String
+  genre          String
+  ageRating      Int
+  duration       Int
+  reviews        Review[]
+  watchlistItems Watchlist[]
+}
+
+model Watchlist {
+  userId    Int
+  movieId   Int
+  createdAt DateTime @default(now())
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  rating    Int
+  text      String
+  createdAt DateTime @default(now())
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
