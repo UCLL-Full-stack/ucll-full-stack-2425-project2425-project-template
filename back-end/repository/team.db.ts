@@ -19,6 +19,11 @@ const getAllTeams = async (): Promise<Team[]> => {
 
 const deleteTeam = async ({ id }: { id: number }): Promise<void> => {
     try {
+        await database.match.deleteMany({
+            where: {
+                OR: [{ team1Id: id }, { team2Id: id }],
+            },
+        });
         await database.team.delete({
             where: { id },
             include: {
@@ -26,7 +31,8 @@ const deleteTeam = async ({ id }: { id: number }): Promise<void> => {
                 user: true,
             },
         });
-        console.log(`Team with id ${id} successfully deleted.`);
+
+        console.log(`Team with id ${id} and its associated matches successfully deleted.`);
     } catch (error) {
         console.error(`Error deleting team with id ${id}:`, error);
         throw new Error('Database error, see server logs');

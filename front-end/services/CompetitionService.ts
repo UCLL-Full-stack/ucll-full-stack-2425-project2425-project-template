@@ -53,7 +53,6 @@ const getCompetitionByName = async (name: string) => {
     return response.json();
 };
 
-// Create a new competition
 const createCompetition = async (competition: Competition) => {
     const token = localStorage.getItem('loggedInUser')
         ? JSON.parse(localStorage.getItem('loggedInUser')!).token

@@ -1,22 +1,18 @@
 import Head from 'next/head';
 import Header from '@components/header';
-import UserLoginForm from '@components/user/UserLoginForm';
-import UserTable from '@components/user/UserTable';
-
+import UserRegisterForm from '@components/user/UserRegisterForm';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
     return (
         <>
             <Head>
-                <title>User Signup</title>
+                <title>Registreer user</title>
             </Head>
             <Header />
             <main>
                 <section className="p-6 min-h-screen flex flex-col items-center">
-                    <UserLoginForm />
-
-                    <UserTable />
+                    <UserRegisterForm />
                 </section>
             </main>
         </>
@@ -35,4 +31,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-export default Login;
+export default Register;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CompetitionService from '@services/CompetitionService';
-import { Competition, Team } from '@types'; // Assuming Team is a type that exists
+import { Competition, Team } from '@types';
 import Link from 'next/link';
 import Header from '@components/header';
 import TeamService from '@services/TeamsService';
@@ -8,7 +8,7 @@ import TeamService from '@services/TeamsService';
 const CompetitionsPage: React.FC = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([]);
     const [competition, setCompetition] = useState<Competition | null>(null);
-    const [teams, setTeams] = useState<Team[]>([]); // State to store teams
+    const [teams, setTeams] = useState<Team[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [competitionName, setCompetitionName] = useState<string>('');
 
@@ -26,25 +26,12 @@ const CompetitionsPage: React.FC = () => {
         fetchCompetitions();
     }, []);
 
-    const handleGetCompetitionByName = async () => {
-        if (!competitionName) return;
-        try {
-            const data = await CompetitionService.getCompetitionByName(competitionName);
-            setCompetition(data);
-            setError(null);
-        } catch (err) {
-            setError('Failed to fetch competition by name.');
-        }
-    };
-
-    // Function to fetch teams in a competition
     const handleCompetitionClick = async (id: number) => {
         try {
             const data = await CompetitionService.getCompetitionById(id);
             setCompetition(data);
             setError(null);
 
-            // Fetch teams for the selected competition
             const teamsData = await TeamService.getTeamsByCompetition(id);
             setTeams(teamsData);
         } catch (err) {
@@ -53,12 +40,11 @@ const CompetitionsPage: React.FC = () => {
         }
     };
 
-    // Function to delete a competition
     const handleDeleteCompetition = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this competition?')) {
             try {
                 await CompetitionService.deleteCompetition(id);
-                setCompetitions(competitions.filter((comp) => comp.id !== id)); // Remove competition from UI
+                setCompetitions(competitions.filter((comp) => comp.id !== id));
                 setError(null);
             } catch (err) {
                 setError('Failed to delete competition.');
@@ -114,11 +100,10 @@ const CompetitionsPage: React.FC = () => {
                                 <tbody>
                                     {competitions.length > 0 ? (
                                         competitions
-                                            .filter(
-                                                (comp) =>
-                                                    comp.name
-                                                        .toLowerCase()
-                                                        .includes(competitionName.toLowerCase()) // Filter by name
+                                            .filter((comp) =>
+                                                comp.name
+                                                    .toLowerCase()
+                                                    .includes(competitionName.toLowerCase())
                                             )
                                             .map((comp) => (
                                                 <tr key={comp.id} className="hover:bg-gray-50">
@@ -202,6 +187,19 @@ const CompetitionsPage: React.FC = () => {
             </div>
         </>
     );
+};
+
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+        },
+    };
 };
 
 export default CompetitionsPage;

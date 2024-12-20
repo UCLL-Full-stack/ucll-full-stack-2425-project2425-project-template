@@ -11,12 +11,6 @@ const getAllUsers = async (): Promise<User[]> => {
     return users;
 };
 
-// const createUser = async ({ name, password, role, team: teamInput }: UserInput): Promise<User> => {
-//     const team = await teamDb.getTeamById({ id: teamInput.id });
-//     const user = new User({ name, password, role, team });
-//     return await userDB.createUser(user);
-// };
-
 const createUser = async ({ name, password, role }: UserInput) => {
     const existing = await userDb.getUserByName({ name });
     if (existing) {

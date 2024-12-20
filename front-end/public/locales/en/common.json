@@ -1,11 +1,31 @@
 {
-    "app.title": "Soccer App",
+    "app.title": "Football App",
+
+    "header": {
+        "home": "Home",
+        "competitions": "Competitions",
+        "teams": "Teams",
+        "match": "Match",
+        "login": "Login",
+        "sigup": "Signup",
+        "language": "Language"
+    },
 
     "general.error": "An error has occurred. Please try again later.",
     "login": {
         "title": "Login",
         "button": "Login",
         "success": "Login succesful. Redirecting to homepage...",
+        "validate": {
+            "name": "Name is required",
+            "password": "Password is required"
+        },
+        "label": { "name": "Name", "password": "Password" }
+    },
+    "register": {
+        "title": "Register",
+        "button": "Register",
+        "success": "Register succesful. Redirecting to loginpage...",
         "validate": {
             "name": "Name is required",
             "password": "Password is required"

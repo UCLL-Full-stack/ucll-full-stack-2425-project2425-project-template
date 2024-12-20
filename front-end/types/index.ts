@@ -11,7 +11,7 @@ export type Team = {
     id: number;
     name: string;
     points: number;
-    userId: number;
+    userId?: number;
     user: User;
     competitionId: number;
     competition: Competition;
@@ -61,4 +61,10 @@ export type StatusMessage = {
 export type authUser = {
     name: string;
     password: string;
+};
+
+export type createUser = {
+    name: string;
+    password: string;
+    role: Role;
 };

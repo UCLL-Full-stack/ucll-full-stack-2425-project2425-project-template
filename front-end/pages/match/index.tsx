@@ -1,142 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import MatchService from '@services/MatchService';
-import { Match } from '@types';
+import { Match, Competition } from '../../types';
+import MatchService from '../../services/MatchService';
+import CompetitionService from '../../services/CompetitionService';
 import Header from '@components/header';
+import Link from 'next/link';
 
 const MatchesPage = () => {
     const [matches, setMatches] = useState<Match[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [competitions, setCompetitions] = useState<Competition[]>([]);
+    const [selectedCompetition, setSelectedCompetition] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [newMatchDate, setNewMatchDate] = useState<string>('');
-    const [newScoreTeam1, setNewScoreTeam1] = useState<number | null>(null);
-    const [newScoreTeam2, setNewScoreTeam2] = useState<number | null>(null);
-    const [newCompetitionId, setNewCompetitionId] = useState<number | null>(null);
-    const [newTeam1Id, setNewTeam1Id] = useState<number | null>(null);
-    const [newTeam2Id, setNewTeam2Id] = useState<number | null>(null);
-    const [newTeamName, setNewTeamName] = useState('');
-    const [newUserId, setNewUserId] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchMatches = async () => {
-            setLoading(true);
             try {
                 const matchesData = await MatchService.getAllMatches();
                 setMatches(matchesData);
             } catch (err) {
                 setError('Failed to fetch matches');
-            } finally {
-                setLoading(false);
+            }
+        };
+
+        const fetchCompetitions = async () => {
+            try {
+                const competitionsData = await CompetitionService.getAllCompetitions();
+                setCompetitions(competitionsData);
+            } catch (err) {
+                setError('Failed to fetch competitions');
             }
         };
 
         fetchMatches();
+        fetchCompetitions();
     }, []);
-
-    const handleCreateMatch = async () => {
-        if (
-            !newMatchDate ||
-            !newCompetitionId ||
-            !newScoreTeam1 ||
-            !newScoreTeam2 ||
-            !newTeam1Id ||
-            !newTeam2Id
-        ) {
-            setError('All fields are required');
-            return;
-        }
-
-        try {
-            const newMatch = {
-                date: newMatchDate,
-                scoreTeam1: newScoreTeam1,
-                scoreTeam2: newScoreTeam2,
-                competition: {
-                    id: newCompetitionId,
-                },
-                team1: {
-                    id: newTeam1Id,
-                },
-                team2: {
-                    id: newTeam2Id,
-                },
-            };
-            const createdMatch = await MatchService.createMatch(newMatch);
-            setMatches((prev) => [...prev, createdMatch]);
-            setNewCompetitionId(null);
-            setNewTeamName('');
-            setNewUserId(null);
-            setNewMatchDate('');
-            setNewScoreTeam1(null);
-            setNewScoreTeam2(null);
-            setNewTeam1Id(null);
-            setNewTeam2Id(null);
-        } catch (error) {
-            setError('failed to create match');
-        }
-    };
 
     return (
         <>
             <Header />
-            <div>
-                <h1>Matches</h1>
-                {error && <div style={{ color: 'red' }}>{error}</div>}
-                {loading && <div>Loading...</div>}
-                <div>
-                    <h2>All Matches</h2>
-                    <ul>
-                        {matches.map((match) => (
-                            <li key={match.id}>
-                                <strong>Match {match.id}</strong>: {match.team1.name} vs{' '}
-                                {match.team2.name} | {match.date} | Score: {match.scoreTeam1}-
-                                {match.scoreTeam2}
-                            </li>
-                        ))}
-                    </ul>
+            <div className="container mx-auto p-4">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-bold">Matches Management</h1>
+                    <Link
+                        href="/match/add"
+                        className="border bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Add Match
+                    </Link>
                 </div>
-                <div>
-                    <h2>Create New Match</h2>
-                    <input
-                        type="text"
-                        placeholder="Match Date"
-                        value={newMatchDate}
-                        onChange={(e) => setNewMatchDate(e.target.value)}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Score Team 1"
-                        value={newScoreTeam1 ?? ''}
-                        onChange={(e) => setNewScoreTeam1(Number(e.target.value))}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Score Team 2"
-                        value={newScoreTeam2 ?? ''}
-                        onChange={(e) => setNewScoreTeam2(Number(e.target.value))}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Competition ID"
-                        value={newCompetitionId ?? ''}
-                        onChange={(e) => setNewCompetitionId(Number(e.target.value))}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Team 1 ID"
-                        value={newTeam1Id ?? ''}
-                        onChange={(e) => setNewTeam1Id(Number(e.target.value))}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Team 2 ID"
-                        value={newTeam2Id ?? ''}
-                        onChange={(e) => setNewTeam2Id(Number(e.target.value))}
-                    />
-                    <button onClick={handleCreateMatch}>Create Match</button>
+
+                {error && <div className="text-red-500 mb-4">{error}</div>}
+
+                <h2 className="text-lg font-semibold mb-4">Matches</h2>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="border border-gray-300 px-4 py-2">Match ID</th>
+                                <th className="border border-gray-300 px-4 py-2">Team 1</th>
+                                <th className="border border-gray-300 px-4 py-2">Team 2</th>
+                                <th className="border border-gray-300 px-4 py-2">Date</th>
+                                <th className="border border-gray-300 px-4 py-2">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {matches.length > 0 ? (
+                                matches.map((match) => (
+                                    <tr key={match.id} className="hover:bg-gray-50">
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {match.id}
+                                        </td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {match.team1.name}
+                                        </td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {match.team2.name}
+                                        </td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {match.date}
+                                        </td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {match.scoreTeam1} - {match.scoreTeam2}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={5}
+                                        className="border border-gray-300 px-4 py-2 text-center"
+                                    >
+                                        No matches found
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>
     );
+};
+
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+        },
+    };
 };
 
 export default MatchesPage;

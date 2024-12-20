@@ -24,6 +24,20 @@ export class Team {
         this.competition = team.competition;
     }
 
+    validate(user: {
+        name: string;
+        points: string;
+        userId: number;
+        competition: Competition;
+    }): void {
+        if (!user.name?.trim()) {
+            throw new Error('Name is required');
+        }
+        if (!user.points?.trim()) {
+            throw new Error('Password is required');
+        }
+    }
+
     getId(): number | undefined {
         return this.id;
     }

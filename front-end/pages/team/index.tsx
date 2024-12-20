@@ -46,6 +46,18 @@ const TeamsPage = () => {
         }
     };
 
+    const handleDeleteTeam = async (id: number) => {
+        if (window.confirm('Are you sure you want to delete this team?')) {
+            try {
+                await TeamService.deleteTeam(id);
+                setTeams(teams.filter((team) => team.id !== id));
+                setError(null);
+            } catch (err) {
+                setError('Failed to delete team.');
+            }
+        }
+    };
+
     return (
         <>
             <Header />
@@ -93,14 +105,17 @@ const TeamsPage = () => {
                                 <th className="border border-gray-300 px-4 py-2">Team Name</th>
                                 <th className="border border-gray-300 px-4 py-2">Points</th>
                                 <th className="border border-gray-300 px-4 py-2">Competition</th>
+                                <th className="border border-gray-300 px-4 py-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {teams.length > 0 ? (
                                 teams.map((team) => (
-                                    <tr key={team.id} className="hover:bg-gray-50">
+                                    <tr key={team.id} className="hover:bg-gray-50 text-center">
                                         <td className="border border-gray-300 px-4 py-2">
-                                            {team.name}
+                                            <Link key={team.id} href={`/team/${team.id}`}>
+                                                {team.name}
+                                            </Link>
                                         </td>
                                         <td className="border border-gray-300 px-4 py-2">
                                             {team.points}
@@ -108,12 +123,20 @@ const TeamsPage = () => {
                                         <td className="border border-gray-300 px-4 py-2">
                                             {team.competition.name}
                                         </td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            <button
+                                                onClick={() => handleDeleteTeam(team.id)}
+                                                className="text-red-500 hover:underline"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={3}
+                                        colSpan={4}
                                         className="border border-gray-300 px-4 py-2 text-center"
                                     >
                                         No teams found
@@ -126,6 +149,19 @@ const TeamsPage = () => {
             </div>
         </>
     );
+};
+
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+        },
+    };
 };
 
 export default TeamsPage;

@@ -1,9 +1,8 @@
-import { Team } from '../../model/team'; // Adjust the path as needed
+import { Team } from '../../model/team';
 import { Competition } from '../../model/competition';
 import { Team as TeamPrisma, Competition as CompetitionPrisma } from '@prisma/client';
 
 test('given: valid values for team, when: team is created, then: team is created with those values', () => {
-    // given
     const competition = new Competition({ id: 1, name: 'World Cup', matchesPlayed: 3 });
     const teamData = {
         id: 1,
@@ -13,10 +12,8 @@ test('given: valid values for team, when: team is created, then: team is created
         competition,
     };
 
-    // when
     const team = new Team(teamData);
 
-    // then
     expect(team.getId()).toEqual(teamData.id);
     expect(team.getName()).toEqual(teamData.name);
     expect(team.getPoints()).toEqual(teamData.points);
@@ -25,7 +22,6 @@ test('given: valid values for team, when: team is created, then: team is created
 });
 
 test('given: two equal teams, when: equals is called, then: it returns true', () => {
-    // given
     const competition = new Competition({ id: 1, name: 'World Cup', matchesPlayed: 3 });
     const teamData = {
         id: 1,
@@ -37,15 +33,12 @@ test('given: two equal teams, when: equals is called, then: it returns true', ()
     const team1 = new Team(teamData);
     const team2 = new Team(teamData);
 
-    // when
     const isEqual = team1.equals(team2);
 
-    // then
     expect(isEqual).toBe(true);
 });
 
 test('given: two different teams, when: equals is called, then: it returns false', () => {
-    // given
     const competition = new Competition({ id: 1, name: 'World Cup', matchesPlayed: 3 });
     const team1 = new Team({
         id: 1,
@@ -62,15 +55,12 @@ test('given: two different teams, when: equals is called, then: it returns false
         competition,
     });
 
-    // when
     const isEqual = team1.equals(team2);
 
-    // then
     expect(isEqual).toBe(false);
 });
 
 test('given: valid TeamPrisma object, when: from is called, then: it creates a Team instance', () => {
-    // given
     const competitionPrisma: CompetitionPrisma = { id: 1, name: 'World Cup', matchesPlayed: 3 };
     const teamPrisma: TeamPrisma & { competition: CompetitionPrisma } = {
         id: 1,
@@ -80,11 +70,8 @@ test('given: valid TeamPrisma object, when: from is called, then: it creates a T
         competitionId: competitionPrisma.id,
         competition: competitionPrisma,
     };
-
-    // when
     const team = Team.from(teamPrisma);
 
-    // then
     expect(team.getId()).toEqual(teamPrisma.id);
     expect(team.getName()).toEqual(teamPrisma.name);
     expect(team.getPoints()).toEqual(teamPrisma.points);

@@ -1,4 +1,4 @@
-import { Team } from "../model/team";
+import { Team } from '../model/team';
 
 type Role = 'admin' | 'owner' | 'player';
 
@@ -17,6 +17,14 @@ type TeamInput = {
     points: number;
     userId: number;
     competition: CompetitionInput;
+    competitionId: number;
+};
+
+type TeamUpdate = {
+    id?: number;
+    name: string;
+    points: number;
+    userId: number;
     competitionId: number;
 };
 
@@ -42,4 +50,12 @@ type AuthenticationResponse = {
     name: string;
 };
 
-export { Role, UserInput, TeamInput, CompetitionInput, MatchInput, AuthenticationResponse };
+export {
+    Role,
+    UserInput,
+    TeamInput,
+    CompetitionInput,
+    MatchInput,
+    AuthenticationResponse,
+    TeamUpdate,
+};

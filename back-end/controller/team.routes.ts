@@ -43,7 +43,7 @@
 
 import express, { Request, Response } from 'express';
 import teamService from '../service/team.service';
-import { TeamInput } from '../types';
+import { TeamInput, TeamUpdate } from '../types';
 import { extractRole } from '../util/jwt';
 const teamRouter = express.Router();
 
@@ -158,22 +158,6 @@ teamRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
-// teamRouter.post('/linkTeamToUser/:userId/:teamId', async (req: Request, res: Response) => {
-//     try {
-//         const userId = Number(req.params.userId)
-//         const teamId = Number(req.params.teamId)
-
-//         const result = await teamService.linkTeamToUser(userId, teamId);
-//         res.status(200).json(result);
-//     } catch (error) {
-//         console.error('Error creating team:', error);
-//         res.status(400).json({
-//             status: 'error',
-//             errorMessage: 'An unknown error occurred',
-//         });
-//     }
-// });
-
 /**
  * @swagger
  * /teams/competition/{competitionId}:
@@ -265,7 +249,7 @@ teamRouter.get('/competition/:competitionId', async (req: Request, res: Response
  */
 teamRouter.put('/:id', async (req: Request, res: Response) => {
     try {
-        const team = <TeamInput>req.body;
+        const team = <TeamUpdate>req.body;
         const result = await teamService.updateTeam({ ...team, id: Number(req.params.id) });
         res.status(200).json(result);
     } catch (error) {
@@ -303,9 +287,12 @@ teamRouter.delete('/:id', async (req: Request, res: Response) => {
     const role = extractRole(req);
 
     if (role !== 'admin') {
-        return res.status(403).json({ status: 'Role', errorMessage: 'You are not authorized to access this resource' });
+        return res.status(403).json({
+            status: 'Role',
+            errorMessage: 'You are not authorized to access this resource',
+        });
     }
-    
+
     try {
         await teamService.deleteTeam({ id: Number(id) });
         res.status(200).json({ message: `Team with id ${id} has been successfully deleted.` });

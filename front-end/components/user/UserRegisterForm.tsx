@@ -1,11 +1,11 @@
 import UserService from '@services/UserService';
-import { authUser, StatusMessage } from '@types';
+import { authUser, createUser, StatusMessage } from '@types';
 import classNames from 'classnames';
 import router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const UserLoginForm: React.FC = () => {
+const UserRegisterForm: React.FC = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [nameError, setNameError] = useState<string | null>(null);
@@ -39,45 +39,21 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        const user: authUser = { name: name, password };
+        const user: createUser = { name: name, password, role: 'owner' };
 
-        const response = await UserService.loginUser(user);
+        const response = await UserService.createUser(user);
+        console.log(response);
 
         if (response.status == 200) {
             setStatusMessages([
                 {
-                    message: t('login.success'),
+                    message: t('register.success'),
                     type: 'success',
                 },
             ]);
 
-            const user = await response.json();
-            localStorage.setItem(
-                'loggedInUser',
-                JSON.stringify({
-                    token: user.token,
-                    fullname: user.fullname,
-                    name: user.name,
-                    role: user.role,
-                })
-            );
-
-            localStorage.setItem(
-                'fullname',
-                JSON.stringify({
-                    fullname: user.fullname,
-                })
-            );
-
-            localStorage.setItem(
-                'role',
-                JSON.stringify({
-                    role: user.role,
-                })
-            );
-
             setTimeout(() => {
-                router.push('/');
+                router.push('/login');
             }, 2000);
         } else if (response.status === 401) {
             const { errorMessage } = await response.json();
@@ -94,7 +70,7 @@ const UserLoginForm: React.FC = () => {
 
     return (
         <>
-            <h3 className="px-0">{t('login.title')}</h3>
+            <h3 className="px-0">{t('register.title')}</h3>
             {statusMessages && (
                 <div className="row">
                     <ul className="list-none mb-3 mx-auto ">
@@ -114,7 +90,7 @@ const UserLoginForm: React.FC = () => {
             )}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="nameInput" className="block mb-2 text-sm font-medium">
-                    {t('login.label.name')}:
+                    {t('register.label.name')}:
                 </label>
                 <div className="block mb-2 text-sm font-medium">
                     <input
@@ -129,7 +105,7 @@ const UserLoginForm: React.FC = () => {
                 <div className="mt-2">
                     <div>
                         <label htmlFor="passwordInput" className="block mb-2 text-sm font-medium">
-                            {t('login.label.password')}:
+                            {t('register.label.password')}:
                         </label>
                     </div>
                     <div className="block mb-2 text-sm font-medium">
@@ -147,11 +123,11 @@ const UserLoginForm: React.FC = () => {
                     className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     type="submit"
                 >
-                    {t('login.button')}
+                    {t('register.button')}
                 </button>
             </form>
         </>
     );
 };
 
-export default UserLoginForm;
+export default UserRegisterForm;

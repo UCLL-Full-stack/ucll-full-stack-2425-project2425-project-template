@@ -1,11 +1,31 @@
 {
     "app.title": "Voetbal App",
 
+    "header": {
+        "home": "Start",
+        "competitions": "Competities",
+        "teams": "Teams",
+        "match": "Match",
+        "login": "Login",
+        "sigup": "Registreren",
+        "language": "Taal"
+    },
+
     "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
     "login": {
         "title": "Inloggen",
         "button": "Inloggen",
         "success": "Inloggen gelukt. Omleiden naar de startpagina...",
+        "validate": {
+            "name": "Naam is verplicht",
+            "password": "Wachtwoord is verplicht"
+        },
+        "label": { "name": "Naam", "password": "Wachtwoord" }
+    },
+    "register": {
+        "title": "Registreer",
+        "button": "Registreer",
+        "success": "Registratie gelukt. Omleiden naar de login pagina...",
         "validate": {
             "name": "Naam is verplicht",
             "password": "Wachtwoord is verplicht"

@@ -22,7 +22,7 @@ const main = async () => {
         data: {
             name: 'user',
             password: await bcrypt.hash('user1', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -30,7 +30,7 @@ const main = async () => {
         data: {
             name: 'user2',
             password: await bcrypt.hash('user2', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -38,7 +38,7 @@ const main = async () => {
         data: {
             name: 'user3',
             password: await bcrypt.hash('user3', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -46,7 +46,7 @@ const main = async () => {
         data: {
             name: 'user4',
             password: await bcrypt.hash('user4', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -54,7 +54,7 @@ const main = async () => {
         data: {
             name: 'user5',
             password: await bcrypt.hash('user5', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -62,7 +62,7 @@ const main = async () => {
         data: {
             name: 'user6',
             password: await bcrypt.hash('user6', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -70,7 +70,7 @@ const main = async () => {
         data: {
             name: 'user7',
             password: await bcrypt.hash('user7', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -78,7 +78,7 @@ const main = async () => {
         data: {
             name: 'user8',
             password: await bcrypt.hash('user8', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -86,7 +86,7 @@ const main = async () => {
         data: {
             name: 'user9',
             password: await bcrypt.hash('user9', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -94,7 +94,7 @@ const main = async () => {
         data: {
             name: 'user10',
             password: await bcrypt.hash('user10', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -102,7 +102,7 @@ const main = async () => {
         data: {
             name: 'user11',
             password: await bcrypt.hash('user11', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -110,7 +110,7 @@ const main = async () => {
         data: {
             name: 'user12',
             password: await bcrypt.hash('user12', 10),
-            role: 'user',
+            role: 'owner',
         },
     });
 
@@ -118,7 +118,6 @@ const main = async () => {
         data: {
             name: 'Pro League',
             matchesPlayed: 5,
-
         },
     });
 
@@ -254,7 +253,6 @@ const main = async () => {
             competitionId: competition1.id,
             team1Id: team1.id,
             team2Id: team2.id,
-
         },
     });
 
@@ -269,7 +267,7 @@ const main = async () => {
         },
     });
 
-    const match3= await prisma.match.create({
+    const match3 = await prisma.match.create({
         data: {
             date: set(new Date(), { hours: 20 }),
             scoreTeam1: 3,
@@ -324,7 +322,6 @@ const main = async () => {
         },
     });
 };
-
 
 (async () => {
     try {

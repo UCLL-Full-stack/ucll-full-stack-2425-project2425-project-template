@@ -37,10 +37,14 @@ const getMatchById = async (id: number) => {
 };
 
 const createMatch = async (match: CreateMatch) => {
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/match`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify(match),
     });
