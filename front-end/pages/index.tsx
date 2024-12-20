@@ -2,6 +2,8 @@ import Header from "@/components/header";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Link from "next/link";
 import { ArrowRight } from "react-feather";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const buttonVariants = ({
   size,
@@ -18,6 +20,8 @@ const buttonVariants = ({
 };
 
 const Home: React.FC = () => {
+  const { t } = useTranslation("common");
+
   return (
     <>
       <Header />
@@ -25,16 +29,15 @@ const Home: React.FC = () => {
         <MaxWidthWrapper className="mb-8 mt-20 sm:mt-24 flex flex-col items-center justify-center text-center">
           <div className="mx-auto mb-2 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
             <p className="text-sm font-semibold text-gray-700">
-              The Workout Planner is now live!
+              {t("home.bannerText")}
             </p>
           </div>
           <h1 className="max-w-4xl text-5xl font-bold md:text-6xl lg:text-7xl text-black">
-            Plan your <span className="text-gray-600">workouts</span>{" "}
-            effortlessly.
+            {t("home.title")}{" "}
+            <span className="text-gray-600">{t("home.titleHighlight")}</span>
           </h1>
           <p className="mt-3 max-w-prose text-zinc-700 sm:text-lg">
-            Our Workout Planner helps you create and manage your workouts with
-            ease and efficiency!
+            {t("home.subtitle")}
           </p>
           <Link
             className={buttonVariants({
@@ -43,13 +46,15 @@ const Home: React.FC = () => {
             })}
             href="/workouts"
           >
-            Get started <ArrowRight className="ml-2 h-5 w-5" />
+            {t("home.cta")} <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </MaxWidthWrapper>
 
         {/* User Details Table */}
         <section className="mt-12 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">User Details</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            {t("userTable.title")}
+          </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -58,19 +63,19 @@ const Home: React.FC = () => {
                     scope="col"
                     className="px-6 py-3 text-left text-sm font-medium text-gray-700"
                   >
-                    Email
+                    {t("userTable.email")}
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-sm font-medium text-gray-700"
                   >
-                    Password
+                    {t("userTable.password")}
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-sm font-medium text-gray-700"
                   >
-                    Role
+                    {t("userTable.role")}
                   </th>
                 </tr>
               </thead>
@@ -83,7 +88,7 @@ const Home: React.FC = () => {
                     User1!
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    Admin
+                    {t("userTable.admin")}
                   </td>
                 </tr>
                 <tr>
@@ -94,7 +99,7 @@ const Home: React.FC = () => {
                     User2!
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    User
+                    {t("userTable.user")}
                   </td>
                 </tr>
               </tbody>
@@ -104,6 +109,17 @@ const Home: React.FC = () => {
       </main>
     </>
   );
+};
+
+import { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default Home;

@@ -1,0 +1,18 @@
+{
+  "home": {
+    "bannerText": "¡El Planificador de Entrenamientos ya está en vivo!",
+    "title": "Planifica tus",
+    "titleHighlight": "entrenamientos",
+    "subtitle": "¡Nuestro Planificador de Entrenamientos te ayuda a crear y gestionar tus entrenamientos con facilidad y eficiencia!",
+    "cta": "Comenzar"
+  },
+  "userTable": {
+    "title": "Detalles del Usuario",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "role": "Rol",
+    "admin": "Administrador",
+    "user": "Usuario"
+  }
+  
+}
