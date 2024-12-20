@@ -13,7 +13,6 @@ const getAllUsers = async (): Promise<User[]> => {
                 },
             },
         });
-        console.log(userPrisma);
         return userPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
         console.error('Error fetching users:', error);

@@ -15,4 +15,17 @@ const generateJwtToken = ({ name, role }: { name: string; role: string }): strin
     }
 };
 
-export {generateJwtToken};
+const extractRole = (req: any): string => {
+    const authHeader = req.headers.authorization;
+
+    const token = authHeader.split(' ')[1];
+
+    const payloadBase64 = token.split('.')[1]; 
+    const decodedPayload = Buffer.from(payloadBase64, 'base64').toString('utf-8');
+    const payload = JSON.parse(decodedPayload); 
+    const role = payload.role || null;
+
+    return role
+}
+
+export {generateJwtToken, extractRole};

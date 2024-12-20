@@ -35,6 +35,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import competitionService from '../service/competition.service';
 import { CompetitionInput } from '../types';
+import { extractRole } from '../util/jwt';
 const competitionRouter = express.Router();
 
 /**
@@ -143,6 +144,8 @@ competitionRouter.get('/name/:name', async (req: Request, res: Response) => {
  * /competitions/{id}:
  *   delete:
  *     summary: Delete a competition by its ID.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -162,6 +165,12 @@ competitionRouter.get('/name/:name', async (req: Request, res: Response) => {
 competitionRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
         const id = Number(req.params.id);
+        const role = extractRole(req);
+
+        if (role !== 'admin') {
+            return res.status(403).json({ status: 'Role', errorMessage: 'You are not authorized to access this resource' });
+        }
+
         await competitionService.deleteCompetition(id);
         res.status(200).json({ message: 'Competition deleted successfully' });
     } catch (error) {

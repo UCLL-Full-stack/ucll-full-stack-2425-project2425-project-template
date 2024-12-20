@@ -131,8 +131,6 @@ userRouter.get('/:id', async (req: Request, res: Response) => {
  * /user/signup:
  *   post:
  *     summary: Create a new user
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

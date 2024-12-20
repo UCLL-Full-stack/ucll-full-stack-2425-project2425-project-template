@@ -44,6 +44,7 @@
 import express, { Request, Response } from 'express';
 import teamService from '../service/team.service';
 import { TeamInput } from '../types';
+import { extractRole } from '../util/jwt';
 const teamRouter = express.Router();
 
 /**
@@ -153,21 +154,6 @@ teamRouter.post('/', async (req: Request, res: Response) => {
         res.status(400).json({
             status: 'error',
             errorMessage: 'An unknown error occurred',
-        });
-    }
-});
-
-teamRouter.delete('/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-
-    try {
-        await teamService.deleteTeam({ id: Number(id) });
-        res.status(200).json({ message: `Team with id ${id} has been successfully deleted.` });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            status: 'error',
-            errorMessage: 'An error occurred while trying to delete the team.',
         });
     }
 });
@@ -287,6 +273,47 @@ teamRouter.put('/:id', async (req: Request, res: Response) => {
         res.status(400).json({
             status: 'error',
             errorMessage: 'An unknown error occurred',
+        });
+    }
+});
+
+/**
+ * @swagger
+ * /teams/{id}:
+ *   delete:
+ *     summary: Delete a team
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The team ID
+ *     responses:
+ *       200:
+ *         description: Team deleted successfully
+ *       500:
+ *         description: Error deleting team
+ */
+teamRouter.delete('/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const role = extractRole(req);
+
+    if (role !== 'admin') {
+        return res.status(403).json({ status: 'Role', errorMessage: 'You are not authorized to access this resource' });
+    }
+    
+    try {
+        await teamService.deleteTeam({ id: Number(id) });
+        res.status(200).json({ message: `Team with id ${id} has been successfully deleted.` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            errorMessage: 'An error occurred while trying to delete the team.',
         });
     }
 });
