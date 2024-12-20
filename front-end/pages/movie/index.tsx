@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Movie } from '@types';  
 import MovieService from '../../service/MovieService';
 import WatchlistService from '../../service/WatchlistService';
+import { useRouter } from 'next/router'; 
 import Head from 'next/head';
 import Header from '../../components/Header';
 
@@ -13,6 +14,8 @@ const Moviepage: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [filteredMovies, setFilteredMovies] = useState<Array<Movie>>([]);
     const [watchlist, setWatchlist] = useState<Array<Movie>>([]);
+
+    const router = useRouter(); 
 
     const getMovies = async () => {
         setError('');
@@ -67,6 +70,9 @@ const Moviepage: React.FC = () => {
         }
     };
 
+   const handleWriteReview = (movieId: number) => {
+    router.push(`/review`);
+};
     useEffect(() => {
         getMovies();
     }, []);
@@ -114,9 +120,16 @@ const Moviepage: React.FC = () => {
                                         >
                                             Add to Watchlist
                                         </button>
+                                        <button
+                                            onClick={() => handleWriteReview(movie.id)}
+                                            className="mt-2 px-4 py-2 bg-blue-500 text-black rounded-lg"
+                                        >
+                                            Write Review
+                                        </button>
                                     </li>
                                 ))
                             )}
+                            
                         </ul>
                     </section>
                 </main>

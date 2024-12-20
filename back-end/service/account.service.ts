@@ -3,7 +3,7 @@ import { Account } from '../model/account';
 import { User } from '../model/user';
 import prisma from '../repository/database';
 
-export const createAccount = async (bio: string, userId: number) => {
+export const createAccount = async (bio: string, userId: number) =>  {
     const user = await prisma.user.findUnique({
         where: { id: userId },
     });

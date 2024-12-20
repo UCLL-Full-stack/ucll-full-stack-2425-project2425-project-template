@@ -8,50 +8,47 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  accountId Int      @unique @default(autoincrement())
-
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  accountId  Int         @unique @default(autoincrement())
+  username   String      @unique
   account    Account?
-  watchlists Watchlist[]
   reviews    Review[]
+  watchlists Watchlist[]
 }
 
 model Account {
-  id        Int      @id @default(autoincrement())
   userId    Int      @unique
   bio       String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Movie {
   id             Int         @id @default(autoincrement())
-  director       String
-  genre          String
-  description    String
   title          String
-  duration       Int
-  ageRating      Int
   poster         String?
   createdAt      DateTime    @default(now())
-  watchlistItems Watchlist[]
+  description    String
+  director       String
+  genre          String
+  ageRating      Int
+  duration       Int
   reviews        Review[]
+  watchlistItems Watchlist[]
 }
 
 model Watchlist {
   userId    Int
   movieId   Int
   createdAt DateTime @default(now())
-
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, movieId])
 }
@@ -63,9 +60,8 @@ model Review {
   rating    Int
   text      String
   createdAt DateTime @default(now())
-
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, movieId])
 }

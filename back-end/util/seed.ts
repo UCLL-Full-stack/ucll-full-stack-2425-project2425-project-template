@@ -6,8 +6,17 @@ import { set } from 'date-fns';
 const prisma = new PrismaClient();
 
 const main = async () => {
+    await prisma.account.deleteMany({
+        where: {
+          userId: {
+            not: undefined,
+          },
+        },
+    });    
     await prisma.user.deleteMany({});
-    await prisma.account.deleteMany({});
+    await prisma.movie.deleteMany({});
+    await prisma.watchlist.deleteMany({});
+    await prisma.review.deleteMany({});
 
     const user1 = await prisma.user.create({
         data: {
@@ -76,30 +85,28 @@ const main = async () => {
           { userId: user2.id, movieId: movie2.id },
         ],
       });
-};
 
+    // Seed Reviews
+    await prisma.review.create({
+      data: {
+        userId: user1.id,
+        movieId: movie1.id,
+        text: 'Amazing movie with a mind-blowing plot!',
+        rating: 4,
+      },
+    });
+  
+    await prisma.review.create({
+      data: {
+        userId: user2.id,
+        movieId: movie2.id,
+        text: 'A groundbreaking sci-fi classic.',
+        rating: 5,
+      },
+    });
 
-  
-//     // Seed Reviews
-//     await prisma.review.create({
-//       data: {
-//         userId: user1.id,
-//         movieId: movie1.id,
-//         text: 'Amazing movie with a mind-blowing plot!',
-//         rating: 5,
-//       },
-//     });
-  
-//     await prisma.review.create({
-//       data: {
-//         userId: user2.id,
-//         movieId: movie2.id,
-//         text: 'A groundbreaking sci-fi classic.',
-//         rating: 5,
-//       },
-//     });
-//   }
-  
+};  
+
 (async () => {
     try {
         await main();

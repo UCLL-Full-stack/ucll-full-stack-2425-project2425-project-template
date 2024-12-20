@@ -5,8 +5,6 @@ import styles from '../styles/header.module.css';
 
 const Header: React.FC = () => {
 
-    
-
     return (
         <header className={styles.header}>
             <Link href="/" className={styles.titleLink}>
@@ -21,14 +19,19 @@ const Header: React.FC = () => {
                     <h1 className={styles.title}>Spilled Popcorn</h1>
                 </div>
             </Link>
-      
-            <Link href="/movie">
-                <button className={styles.registerButton}>Movies</button>
-            </Link>
 
             <Link href="/register">
                 <button className={styles.registerButton}>Register</button>
             </Link>
+
+            <Link href="/login">
+                <button className={styles.registerButton}>Login</button>
+            </Link>      
+
+            <Link href="/movie">
+                <button className={styles.registerButton}>Movies</button>
+            </Link>
+
         </header>
     );
 };

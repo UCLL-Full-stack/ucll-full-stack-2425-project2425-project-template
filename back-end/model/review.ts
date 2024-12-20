@@ -44,7 +44,10 @@ export class Review {
         }
         if (!review.date || isNaN(review.date.getTime()))  {
             throw new Error('Date is required');
-    }
+        }
+        if (review.rating < 1 || review.rating > 5) {
+            return 'Rating must be between 1 and 5 stars.';
+        }
     }
     equals(review: Review): boolean {
         return (

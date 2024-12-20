@@ -8,3 +8,10 @@ type UserInput = {
 export {
     UserInput
 }
+
+export interface Review {
+    movieId: number;
+    userId: number;
+    reviewText: string;
+    rating: number;
+}
