@@ -1,5 +1,5 @@
 import AuthToggle from "../../components/auth/AuthToggle";
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const AuthPage = () => {
   return (
@@ -9,17 +9,16 @@ const AuthPage = () => {
   );
 };
 
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const {locale} = context;
+  const { locale } = context;
 
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? "en", ["common"])),
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
   };
 };
-
 
 export default AuthPage;

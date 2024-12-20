@@ -64,11 +64,7 @@ const CalendarGrid: React.FC = () => {
               newRecipesByDate[dateString] = recipes;
             }
           } catch (error) {
-            console.error(
-              t("errorFetchingMeals"),
-              dateString,
-              error
-            );
+            console.error(t("errorFetchingMeals"), dateString, error);
           }
         }
 
@@ -188,8 +184,8 @@ const CalendarGrid: React.FC = () => {
   };
 
   return (
-    <Card>
-      <CardContent className="p-6">
+    <Card className="w-full">
+      <CardContent className="p-6 w-full">
         <CalendarHeader
           currentDate={currentDate}
           viewMode={viewMode}
@@ -203,7 +199,7 @@ const CalendarGrid: React.FC = () => {
           onToday={handleGoToToday}
         />
 
-        <section className="grid grid-cols-7 gap-2">
+        <section className="grid grid-cols-7 gap-2 w-full">
           {daysOfWeek.map((day) => (
             <div key={day} className="text-center font-semibold p-2">
               {t(day)}

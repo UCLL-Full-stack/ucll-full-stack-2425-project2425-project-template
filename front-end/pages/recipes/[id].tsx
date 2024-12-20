@@ -5,13 +5,14 @@ import { Recipe } from "@/types/recipes";
 import RecipeHeader from "@/components/recipe/RecipeHeader";
 import RecipeContent from "@/components/recipe/RecipeContent";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "next-i18next";
 
 export default function RecipePage() {
   const router = useRouter();
   const { id } = router.query;
-
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -40,16 +41,25 @@ export default function RecipePage() {
     }
   }, [id]);
 
-  console.log(recipe);
-  console.log(recipe?.ingredients[0]);
-
   const handleBack = () => {
     router.back();
   };
 
-  // TO IMPLEMENT
-  const handleToggleFavorite = () => {
-    console.log("Toggle favorite");
+  const handleToggleFavorite = async (mealId: number, isFavorite: boolean) => {
+    try {
+      const token = localStorage.getItem("token") || "";
+      await RecipeService.updateRecipe(
+        mealId,
+        {
+          isFavorite: !isFavorite,
+        },
+        token
+      );
+      const updatedRecipe = await RecipeService.fetchRecipeById(mealId);
+      setRecipe(updatedRecipe);
+    } catch (error) {
+      setError(t("errorUpdatingMeal"));
+    }
   };
 
   // TO IMPLEMENT
@@ -57,9 +67,14 @@ export default function RecipePage() {
     console.log("Edit recipe");
   };
 
-  // TO IMPLEMENT
-  const handleDelete = () => {
-    console.log("Delete recipe");
+  const handleDelete = async (mealId: number) => {
+    try {
+      const token = localStorage.getItem("token") || "";
+      await RecipeService.deleteRecipe(mealId, token);
+      router.back();
+    } catch (error) {
+      setError(t("errorDeletingMeal"));
+    }
   };
 
   if (error)
@@ -69,6 +84,7 @@ export default function RecipePage() {
         <Button onClick={handleBack}>Back</Button>
       </div>
     );
+
   if (!recipe)
     return (
       <div className="flex flex-col justify-center items-center h-screen">
@@ -78,9 +94,9 @@ export default function RecipePage() {
     );
 
   return (
-    <section className="min-h-screen bg-gray-50">
+    <section className="min-h-screen">
       <RecipeHeader
-        isFavorite={recipe.isFavorite}
+        isFavorite={recipe.isFavorite ?? false}
         onBack={handleBack}
         onToggleFavorite={handleToggleFavorite}
         onEdit={handleEdit}

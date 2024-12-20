@@ -29,17 +29,11 @@ const MealPlanner: React.FC = () => {
 
   return (
     <>
-      {/* Main Content */}
-      <main className="flex h-screen overflow-hidden">
-        <section className="flex-1 overflow-auto">
-          <section className="p-6">
-            <Greeting user={user} />
-            <h1 className="text-2xl font-bold mb-3">{t("mealPlanner")}</h1>
-            <CalendarGrid />
-          </section>
-        </section>
-      </main>
-      ``
+      <div className="px-3">
+        <Greeting user={user} />
+        <h1 className="page-title mt-2 px-1">{t("mealPlanner")}</h1>
+        <CalendarGrid />
+      </div>
     </>
   );
 };
