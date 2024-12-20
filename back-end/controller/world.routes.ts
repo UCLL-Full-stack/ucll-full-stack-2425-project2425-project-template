@@ -20,6 +20,7 @@ const worldRouter = express.Router();
  *         description:
  *           type: string
  *           description: The world description
+ *       default: false
  *     WorldInput:
  *       type: object
  *       properties:
@@ -29,6 +30,7 @@ const worldRouter = express.Router();
  *         description:
  *           type: string
  *           description: The world description
+ *       default: false
  */
 
 /**
