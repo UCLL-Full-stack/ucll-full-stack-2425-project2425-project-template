@@ -88,6 +88,8 @@ const GameMap: React.FC = () => {
             let outOfFloors = true;
             world.floors.forEach(aFloor => {
                 if (aFloor.floornumber === parseInt(floorid as string)){
+                    const tiles = aFloor.tiles.sort((a, b) => a.lineNum - b.lineNum);
+                    aFloor.tiles = tiles;
                     setFloor(aFloor);
                     outOfFloors = false;
                 }
@@ -202,6 +204,7 @@ const GameMap: React.FC = () => {
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            console.log(world);
             if (showBattleScreen) return;
             const now = Date.now();
             if (now - lastMoveTime < 200){
