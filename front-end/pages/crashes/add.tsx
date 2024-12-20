@@ -69,7 +69,7 @@ const AddCrash: React.FC = () => {
         setSuccessMessage('Crash added successfully!');
         setError('');
         setTimeout(() => {
-          router.push(`/races`);
+          router.push(`/overview`);
         }, 2000);
       } else {
         const errorData = await response.json();
