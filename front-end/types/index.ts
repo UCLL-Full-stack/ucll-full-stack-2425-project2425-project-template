@@ -5,7 +5,7 @@ export type User = {
   fullname?: string;
   email?: string;
   password?: string;
-  role?: string;
+  role?: UserRole;
 };
 
 export type Exercise = {
@@ -28,3 +28,5 @@ export type StatusMessage = {
   message: string;
   type: "error" | "success";
 };
+
+export type UserRole = "admin" | "user" | "trainer";

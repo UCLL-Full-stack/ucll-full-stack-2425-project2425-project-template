@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowRight } from "react-feather";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const buttonVariants = ({
   size,
@@ -21,6 +23,28 @@ const buttonVariants = ({
 
 const Home: React.FC = () => {
   const { t } = useTranslation("common");
+  const router = useRouter();
+  const [redirectPath, setRedirectPath] = useState<string>("/login");
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      switch (user.role) {
+        case "admin":
+          setRedirectPath("/admin");
+          break;
+        case "trainer":
+          setRedirectPath("/users");
+          break;
+        case "user":
+          setRedirectPath("/workouts");
+          break;
+        default:
+          setRedirectPath("/login");
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -44,7 +68,7 @@ const Home: React.FC = () => {
               size: "lg",
               className: "mt-4",
             })}
-            href="/workouts"
+            href={redirectPath}
           >
             {t("home.cta")} <ArrowRight className="ml-2 h-5 w-5" />
           </Link>

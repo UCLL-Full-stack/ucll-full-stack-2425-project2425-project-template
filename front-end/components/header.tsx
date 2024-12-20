@@ -44,26 +44,55 @@ const Header: React.FC = () => {
           >
             Home
           </Link>
-          <Link
-            href="/workouts"
-            className={`${
-              currentRoute === "/workouts"
-                ? "text-gray-900 font-semibold border-b-2 border-gray-900"
-                : "text-gray-600 hover:text-gray-800"
-            } transition-colors pb-1`}
-          >
-            Workouts
-          </Link>
-          <Link
-            href="/exercises"
-            className={`${
-              currentRoute === "/exercises"
-                ? "text-gray-900 font-semibold border-b-2 border-gray-900"
-                : "text-gray-600 hover:text-gray-800"
-            } transition-colors pb-1`}
-          >
-            Exercises
-          </Link>
+          {loggedInUser?.role === "user" && (
+            <>
+              <Link
+                href="/workouts"
+                className={`${
+                  currentRoute === "/workouts"
+                    ? "text-gray-900 font-semibold border-b-2 border-gray-900"
+                    : "text-gray-600 hover:text-gray-800"
+                } transition-colors pb-1`}
+              >
+                Workouts
+              </Link>
+              <Link
+                href="/exercises"
+                className={`${
+                  currentRoute === "/exercises"
+                    ? "text-gray-900 font-semibold border-b-2 border-gray-900"
+                    : "text-gray-600 hover:text-gray-800"
+                } transition-colors pb-1`}
+              >
+                Exercises
+              </Link>
+            </>
+          )}
+          {(loggedInUser?.role === "admin" ||
+            loggedInUser?.role === "trainer") && (
+            <Link
+              href="/users"
+              className={`${
+                currentRoute === "/users"
+                  ? "text-gray-900 font-semibold border-b-2 border-gray-900"
+                  : "text-gray-600 hover:text-gray-800"
+              } transition-colors pb-1`}
+            >
+              Users
+            </Link>
+          )}
+          {loggedInUser?.role === "admin" && (
+            <Link
+              href="/admin"
+              className={`${
+                currentRoute === "/admin"
+                  ? "text-gray-900 font-semibold border-b-2 border-gray-900"
+                  : "text-gray-600 hover:text-gray-800"
+              } transition-colors pb-1`}
+            >
+              Admin Dashboard
+            </Link>
+          )}
           {!loggedInUser && (
             <Link
               href="/login"
