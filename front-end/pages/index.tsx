@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Header from '@components/header';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import HomeComponent from '@components/homeComponent';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -17,11 +18,7 @@ const Home: React.FC = () => {
       </Head>
       <main>
         <Header />
-        <section className="home-section">
-          <h1 className="home-title">{t("home.title")}</h1>
-          <p className="home-description">{t("home.description1")}</p>
-          <p className="home-description">{t("home.description2")}</p>
-        </section>
+        <HomeComponent />
         
       </main>
     </>
