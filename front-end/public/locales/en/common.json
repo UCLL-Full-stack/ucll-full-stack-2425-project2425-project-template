@@ -66,10 +66,10 @@
         },
 
         "jobs": {
-            "head_coach": "Head Coach",
-            "assistant_coach": "Assistant Coach",
-            "goalkeeper_coach": "Goalkeeping Coach",
-            "fitness_coach": "Fitness Coach",
+            "head_coach": "Head coach",
+            "assistant_coach": "Assistant coach",
+            "goalkeeper_coach": "Goalkeeping coach",
+            "fitness_coach": "Fitness coach",
             "select": "Select Job"
         }
     },
