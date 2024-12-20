@@ -31,14 +31,27 @@ const getSongById = async ({ id }:{ id: number }): Promise<Song | null> => {
     const song = await songDb.getSongById({id})
 
     if (song === null){
-        throw new Error(`User with id ${id} does not exist`)
+        throw new Error(`Song with id ${id} does not exist`)
     }
     return song
 }
 
+
+const deleteSongById = async ({ id }:{ id: number }): Promise<boolean> => {
+    const song = await songDb.deleteSongById({id})
+
+    if (song === null){
+        throw new Error(`Song with id ${id} does not exist`)
+    }
+    return song
+}
+
+
+
 export default {
     createSong,
     getAllSongs,
-    getSongById
+    getSongById,
+    deleteSongById
 }
 

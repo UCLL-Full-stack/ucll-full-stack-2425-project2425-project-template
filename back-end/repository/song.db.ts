@@ -40,8 +40,21 @@ const getSongById = async ({id}: { id: number}): Promise<Song | null> => {
     }
 }
 
+const deleteSongById = async ({ id }: { id: number }): Promise<boolean> => {
+    try {
+        const song = await database.song.delete({
+            where: { id: id }
+        });
+        return song ? true : false;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllSongs,
     getSongById,
-    createSong
+    createSong,
+    deleteSongById
 }

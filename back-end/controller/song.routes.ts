@@ -123,4 +123,40 @@ songRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
     }
 })
 
+/**
+ * @swagger
+ * /songs/delete/{id}:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []  
+ *     summary: Delete a song by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Song successfully deleted.
+ *       404:
+ *         description: Song with the provided ID does not exist.
+ */
+songRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const songId = parseInt(req.params.id);
+
+    try {
+        const result = await songService.deleteSongById({ id: songId });
+
+        if (result) {
+            res.status(200).json({ message: `Song with id ${songId} deleted successfully.` });
+        } else {
+            res.status(404).json({ message: `Song with id ${songId} does not exist.` });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete song.'});
+    }
+});
+
+
 export { songRouter }

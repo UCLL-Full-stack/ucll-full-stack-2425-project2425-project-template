@@ -1,4 +1,4 @@
-type Role = 'admin' | 'user';
+type Role = 'admin' | 'user' | 'artist';
 type SubscriptionType = 'basic' | 'premium'
 
 type UserInput = {
@@ -31,6 +31,7 @@ type AuthenticationResponse = {
     fullname: string;
     role: string;
     id?: number;
+    subscription?: SubscriptionInput;
 };
 
 type AddSongInput = {

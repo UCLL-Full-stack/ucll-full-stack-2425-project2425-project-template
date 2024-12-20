@@ -15,6 +15,14 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     return user;
 };
 
+const getUserById = async (id: number): Promise<User> => {
+    const user = await userDB.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id: ${id} does not exist.`);
+    }
+    return user;
+};
+
 const createUser = async ({username, firstName, lastName, email, role, password}: UserInput): Promise<User> => {
     if (!username) {
         throw new Error('Username is required');
@@ -101,13 +109,22 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
     if (!isValidPassword) {
         throw new Error('Incorrect password.')
     }
+    const subscription = user.getSubscription()
+        ? {
+              id: user.getSubscription()?.getId(), // If `getId()` exists
+              type: user.getSubscription()?.getType(),
+              start_date: user.getSubscription()?.getStartDate(),
+              duration: user.getSubscription()?.getDuration(),
+          }
+        : undefined;
     return {
         token: generateJwtToken({ username, role: user.getRole() }),
         username: username,
         fullname: `${user.getFirstName()} ${user.getLastName()}`,
         role: user.getRole(),
-        id: user.getId()
+        id: user.getId(),
+        subscription: subscription,
     };
 };
 
-export default { getUserByUsername, getAllUsers, createUser, authenticate, changeSubscriptionOfUser };
+export default { getUserByUsername, getAllUsers, createUser, authenticate, changeSubscriptionOfUser, getUserById };

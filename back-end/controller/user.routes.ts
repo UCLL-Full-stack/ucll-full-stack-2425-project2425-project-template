@@ -115,6 +115,35 @@ userRouter.get(
     }
 );
 
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a user by id
+ *     responses:
+ *       200:
+ *         description: get a user by id.
+ *         content:
+ *           application/json:
+ *             schema:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.get(
+    '/:id',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.params.id;
+            const users = await userService.getUserById(parseInt(id));
+            res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 /**
  * @swagger 
  * /users/signup:
@@ -195,8 +224,7 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 userRouter.post('/subscription', async (req: Request, res: Response, next: NextFunction) => {
     console.log("Received body:", req.body);  
 
-    const { subscription, userId } = req.body;
-    const { type, startDate, duration } = subscription;
+    const { type, startDate, duration, userId } = req.body;
 
     try {
         if (!type || !startDate || !duration || !userId) {
