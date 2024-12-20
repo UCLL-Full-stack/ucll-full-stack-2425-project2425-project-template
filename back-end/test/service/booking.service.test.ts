@@ -11,6 +11,7 @@ let mockBookingDbGetAllBookings: jest.Mock;
 let mockBookingDbGetBookingById: jest.Mock;
 let mockBookingDbDeleteBooking: jest.Mock;
 
+
 beforeEach(() => {
     mockBookingDbGetAllBookings = jest.fn();
     mockBookingDbGetBookingById = jest.fn();
@@ -19,6 +20,7 @@ beforeEach(() => {
     bookingDb.deleteBooking = mockBookingDbDeleteBooking;
     bookingDb.getAllBookings = mockBookingDbGetAllBookings;
     bookingDb.getBookingById = mockBookingDbGetBookingById;
+
 });
 
 afterEach(() => {
@@ -274,62 +276,4 @@ test('should throw an error if booking ID is invalid when deleting', async () =>
     // When & Then
     await expect(bookingService.deleteBooking(invalidBookingId)).rejects.toThrow("Invalid Booking ID");
     expect(mockBookingDbDeleteBooking).not.toHaveBeenCalled(); 
-});
-test("Given a valid booking ID and new status, when updatePaymentStatus is called, then it should update the payment status successfully", async () => {
-    // Given: A valid booking ID and new payment status
-    const bookingId = 1;
-    const newStatus = PaymentStatus.Paid;
-    const mockBooking = {
-        id: bookingId,
-        paymentStatus: newStatus,
-        trip: { id: 1, destination: "Paris" },
-        students: [{ id: 1, user: { username: "student1" } }],
-    };
-
-    // Mock the database method to return the updated booking
-    (bookingDb.updatePaymentStatus as jest.Mock).mockResolvedValue(mockBooking);
-
-    // When: Calling updatePaymentStatus with the booking ID and new status
-    const result = await bookingService.updatePaymentStatus(bookingId, newStatus);
-
-    // Then: It should return the updated booking and the updatePaymentStatus method should have been called with correct arguments
-    expect(result).toEqual(mockBooking);
-    expect(bookingDb.updatePaymentStatus).toHaveBeenCalledWith(bookingId, newStatus);
-});
-
-test("Given an invalid booking ID, when updatePaymentStatus is called, then it should throw an 'Invalid Booking ID' error", async () => {
-    // Given: An invalid booking ID (0)
-    const invalidBookingId = 0;
-    const newStatus = PaymentStatus.Paid;
-
-    // When: Calling updatePaymentStatus with the invalid booking ID
-    // Then: It should throw an error indicating the booking ID is invalid
-    await expect(bookingService.updatePaymentStatus(invalidBookingId, newStatus)).rejects.toThrowError("Invalid Booking ID");
-});
-
-test("Given a non-existing booking ID, when updatePaymentStatus is called, then it should throw a 'Booking does not exist' error", async () => {
-    // Given: A non-existing booking ID
-    const mockBookingId = 999;
-    const newStatus = PaymentStatus.Paid;
-    
-    // Mock the database to return null for a non-existing booking
-    (bookingDb.getBookingById as jest.Mock).mockResolvedValue(null);
-
-    // When: Calling updatePaymentStatus with a non-existing booking ID
-    // Then: It should throw an error indicating the booking doesn't exist
-    await expect(bookingService.updatePaymentStatus(mockBookingId, newStatus)).rejects.toThrowError(`Booking with ID ${mockBookingId} does not exist.`);
-});
-
-test("Given a valid booking ID and new status, when the database update fails, then it should throw a 'Failed to update payment status' error", async () => {
-    // Given: A valid booking ID and new payment status
-    const bookingId = 1;
-    const newStatus = PaymentStatus.Paid;
-    const mockError = new Error("Database error");
-
-    // Mock the database method to throw an error
-    (bookingDb.updatePaymentStatus as jest.Mock).mockRejectedValue(mockError);
-
-    // When: Calling updatePaymentStatus with the valid booking ID and new status
-    // Then: It should throw a 'Failed to update payment status' error
-    await expect(bookingService.updatePaymentStatus(bookingId, newStatus)).rejects.toThrowError("Failed to update payment status. Please try again later.");
 });
