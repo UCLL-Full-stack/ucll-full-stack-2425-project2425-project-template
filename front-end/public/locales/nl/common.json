@@ -1,0 +1,66 @@
+{
+    "general": {
+        "title": "Racing Website",
+        "error": "Een probleem is opgetreden. Probeer opnieuw later."
+    },
+    "login": {
+        "title": "Inloggen",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "submit": "Inloggen",
+        "register": "Registreren",
+        "validate": {
+            "username": "gebruikersnaam is verplicht",
+            "password": "Wachtwoord is verplicht",
+            "error": "Foute wachtwoord of gebruikersnaam",
+            "success": "Login Successvol"
+        }
+    },
+    "header": {
+        "home": "Thuis",
+        "informationOverview": "Informatie Overzicht",
+        "submissionForm": "Inzendingsformulier",
+        "login": "Inloggen",
+        "logout": "Uitloggen",
+        "mysubmissions": "Mijn Inzendingsformulieren",
+        "logoutConfirm": "Weet je zeker dat je wilt uitloggen?"
+    },
+    "home": {
+        "welcome": "Welkom op de Race Website",
+        "description": "Ontdek de laatste race-informatie en blijf op de hoogte van alle crashes en gebeurtenissen.",
+        "loggedInMessage": "Welkom {{username}}, je bent ingelogd als {{permission}}",
+        "usersToLogin": "Gebruikers om in te loggen",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "role": "Rol"
+    },
+    "overview": {
+        "title": "Informatie Overzicht",
+        "instructions": "Click op een race om zijn crashes te bekijken."
+    },
+    "submissionForm": {
+        "title": "Inzendingsformulieren",
+        "addCrash": "Voeg een crash toe",
+        "removeCrash": "Verwijder een crash",
+        "editCrash": "Bewerk een crash",
+        "requestTitle": "Verzoek titel",
+        "requestDescription": "Waar gaat dit verzoek over?",
+        "selectAction": "Selecteer Actie",
+        "selectRace": "Selecteer Race",
+        "selectCrash": "Selecteer Crash",
+        "crashType": "Crashtype",
+        "crashDescription": "Crashbeschrijving",
+        "casualties": "Slachtoffers",
+        "deaths": "Doden",
+        "submit": "Verzenden",
+        "successMessage": "Succesvol ingediend!",
+        "errorMessage": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
+        "pendingSubmissions": "In afwachting van inzendingen",
+        "actions": "Acties",
+        "accept": "Accepteren",
+        "deny": "Weigeren",
+        "type": "Type",
+        "createdAt": "Aangemaakt om",
+        "noSubmissions": "Je hebt geen Inzendingsformulieren."
+    }
+}

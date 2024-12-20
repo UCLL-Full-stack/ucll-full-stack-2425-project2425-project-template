@@ -1,0 +1,66 @@
+{
+    "general": {
+        "title": "Racing Website",
+        "error": "An error has occurred. Please try again later."
+    },
+    "login": {
+        "title": "Login",
+        "username": "Username",
+        "password": "Password",
+        "submit": "Login",
+        "register": "Register",
+        "validate": {
+            "username": "Username is required",
+            "password": "Password is required",
+            "error": "Wrong password or username",
+            "success": "Login Successful"
+        }
+    },
+    "header": {
+        "home": "Home",
+        "informationOverview": "Information Overview",
+        "submissionForm": "Submission Form",
+        "login": "Login",
+        "logout": "Logout",
+        "mysubmissions": "My Submissions",
+        "logoutConfirm": "Are you sure you want to logout?"
+    },
+    "home": {
+        "welcome": "Welcome to the Racing Website",
+        "description": "Discover the latest race information and stay updated on all crashes and events.",
+        "loggedInMessage": "Welcome {{username}}, you are logged in as {{permission}}",
+        "usersToLogin": "Users to login",
+        "username": "Username",
+        "password": "Password",
+        "role": "Role"
+    },
+    "overview": {
+        "title": "Information Overview",
+        "instructions": "Click on a race to see its crashes"
+    },
+    "submissionForm": {
+        "title": "Submission Forms",
+        "addCrash": "Add a Crash",
+        "removeCrash": "Remove a Crash",
+        "editCrash": "Edit a Crash",
+        "requestTitle": "Request title",
+        "requestDescription": "What is this request about?",
+        "selectAction": "Select Action",
+        "selectRace": "Select Race",
+        "selectCrash": "Select Crash",
+        "crashType": "Crash Type",
+        "crashDescription": "Crash Description",
+        "casualties": "Casualties",
+        "deaths": "Deaths",
+        "submit": "Submit",
+        "successMessage": "Successfully submitted!",
+        "errorMessage": "An unexpected error occurred. Please try again.",
+        "pendingSubmissions": "Pending Submissions",
+        "actions": "Actions",
+        "accept": "Accept",
+        "deny": "Deny",
+        "type": "Type",
+        "createdAt": "Created At",
+        "noSubmissions": "You have no submissions."
+    }
+}
