@@ -39,16 +39,6 @@ const Navbar: React.FC = () => {
                         {t("nav.boekingen")}
                     </Link>
                 </li>
-
-                {/* Admin only link to the Users List page
-                {loggedInUser && loggedInUser.role === 'admin' && (
-                    <li>
-                        <Link href="/admin/users">
-                            {t("nav.usersList")}
-                        </Link>
-                    </li>
-                )} */}
-
                 {loggedInUser ? (
                     <>
                         <div className={styles['navbar-item']}>

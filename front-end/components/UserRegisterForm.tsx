@@ -11,95 +11,92 @@ const UserRegisterForm: React.FC = () => {
   const { t } = useTranslation("common");
   const router = useRouter();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [studentNumber, setStudentNumber] = useState("");
-  const [role, setRole] = useState<"guest" | "student" | "admin">("guest");
-  const [firstNameError, setFirstNameError] = useState<string | null>(null);
-  const [lastNameError, setLastNameError] = useState<string | null>(null);
-  const [usernameError, setUsernameError] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Record<string, string | null>>({});
+  const [formValues, setFormValues] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    studentNumber: "",
+    role: "guest",
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
-  const [studentNumberError, setStudentNumberError] = useState<string | null>(null);
-  const [roleError, setRoleError] = useState<string | null>(null);
-  const clearErrors = () => {
-    setErrors({});
-    setStatusMessages([]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  
   const validate = (): boolean => {
-    let isValid = true;
+    const newErrors: Record<string, string> = {};
+    const { firstName, lastName, username, email, password, confirmPassword, studentNumber, role } =
+      formValues;
 
-    if (!firstName.trim()) {
-        setFirstNameError(t("register.errors.firstNameRequired"));
-        isValid = false;
-    }
-    if (!lastName.trim()) {
-        setLastNameError(t("register.errors.lastNameRequired"));
-        isValid = false;
-    }
-    if (!username.trim()) {
-        setUsernameError(t("register.errors.usernameRequired"));
-        isValid = false;
-    }
+    if (!firstName.trim()) newErrors.firstName = t("register.errors.firstNameRequired");
+    if (!lastName.trim()) newErrors.lastName = t("register.errors.lastNameRequired");
+    if (!username.trim()) newErrors.username = t("register.errors.usernameRequired");
+
     if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) {
-        setEmailError(t("register.errors.invalidEmail"));
-        isValid = false;
+      newErrors.email = t("register.errors.invalidEmail");
     }
-    if (password.length < 8) {
-        setPasswordError(t("register.errors.passwordTooShort"));
-        isValid = false;
-    }
+
+    if (password.length < 8) newErrors.password = t("register.errors.passwordTooShort");
     if (password !== confirmPassword) {
-        setConfirmPasswordError(t("register.errors.passwordsDoNotMatch"));
-        isValid = false;
+      newErrors.confirmPassword = t("register.errors.passwordsDoNotMatch");
     }
+
     if (role === "student" && !studentNumber.trim()) {
-        setStudentNumberError(t("register.errors.studentNumberRequired"));
-        isValid = false;
+      newErrors.studentNumber = t("register.errors.studentNumberRequired");
     }
 
-    return isValid;
-};
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    clearErrors();
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+    setStatusMessages([]);
+  
     if (!validate()) {
       setStatusMessages([{ message: t("validation.failed"), type: "error" }]);
       return;
     }
-
-    const user = { firstName, lastName, username, email, password, studentNumber, role };
-
+  
+    const { firstName, lastName, username, email, password, studentNumber, role } = formValues;
+  
+    // Construct user object conditionally based on the role
+    const user: { firstName: string; lastName: string; username: string; email: string; password: string; role: string; studentNumber?: string } = {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      role,
+    };
+  
+    if (role === "student" && studentNumber) {
+      user.studentNumber = studentNumber;
+    }
+  
     try {
       const response = await UserService.registerUser(user);
-
-      if (response && response.success) {
+  
+      if (response.success) {
         setStatusMessages([{ message: t("register.success"), type: "success" }]);
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
-      } else if (response && response.message) {
-        setStatusMessages([{ message: response.message, type: "error" }]);
+        setTimeout(() => router.push("/login"), 2000);
       } else {
-        setStatusMessages([{ message: t("register.error.generic"), type: "error" }]);
+        setStatusMessages([{ message: response.message || t("register.error.generic"), type: "error" }]);
       }
-      
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || t("register.error.server");
       setStatusMessages([{ message: errorMessage, type: "error" }]);
     }
   };
+  
 
   return (
     <div className={styles.userLoginPage}>
@@ -107,53 +104,57 @@ const UserRegisterForm: React.FC = () => {
         <h3 className={styles.titleForm}>{t("register.registreer")}</h3>
 
         {/* First Name */}
-        <label className={styles.formLabels} htmlFor="firstNameInput">
+        <label htmlFor="firstName" className={styles.formLabels}>
           {t("register.firstName")}
         </label>
         <input
-          className={styles.inputField}
-          id="firstNameInput"
+          id="firstName"
+          name="firstName"
           type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          value={formValues.firstName}
+          onChange={handleChange}
+          className={styles.inputField}
         />
         {errors.firstName && <p className={errorStyles.errorMessage}>{errors.firstName}</p>}
 
         {/* Last Name */}
-        <label className={styles.formLabels} htmlFor="lastNameInput">
+        <label htmlFor="lastName" className={styles.formLabels}>
           {t("register.lastName")}
         </label>
         <input
-          className={styles.inputField}
-          id="lastNameInput"
+          id="lastName"
+          name="lastName"
           type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          value={formValues.lastName}
+          onChange={handleChange}
+          className={styles.inputField}
         />
         {errors.lastName && <p className={errorStyles.errorMessage}>{errors.lastName}</p>}
 
         {/* Username */}
-        <label className={styles.formLabels} htmlFor="usernameInput">
+        <label htmlFor="username" className={styles.formLabels}>
           {t("register.username")}
         </label>
         <input
-          className={styles.inputField}
-          id="usernameInput"
+          id="username"
+          name="username"
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={formValues.username}
+          onChange={handleChange}
+          className={styles.inputField}
         />
         {errors.username && <p className={errorStyles.errorMessage}>{errors.username}</p>}
 
         {/* Role */}
-        <label className={styles.formLabels} htmlFor="roleInput">
+        <label htmlFor="role" className={styles.formLabels}>
           {t("register.role")}
         </label>
         <select
+          id="role"
+          name="role"
+          value={formValues.role}
+          onChange={handleChange}
           className={styles.inputField}
-          id="roleInput"
-          value={role}
-          onChange={(e) => setRole(e.target.value as "guest" | "student" | "admin")}
         >
           <option value="guest">{t("register.roles.guest")}</option>
           <option value="student">{t("register.roles.student")}</option>
@@ -161,60 +162,62 @@ const UserRegisterForm: React.FC = () => {
         </select>
 
         {/* Student Number */}
-        {role === "student" && (
+        {formValues.role === "student" && (
           <>
-            <label className={styles.formLabels} htmlFor="studentNumberInput">
+            <label htmlFor="studentNumber" className={styles.formLabels}>
               {t("register.studentNumber")}
             </label>
             <input
-              className={styles.inputField}
-              id="studentNumberInput"
+              id="studentNumber"
+              name="studentNumber"
               type="text"
-              value={studentNumber}
-              onChange={(e) => setStudentNumber(e.target.value)}
+              value={formValues.studentNumber}
+              onChange={handleChange}
+              className={styles.inputField}
             />
-            {errors.studentNumber && (
-              <p className={errorStyles.errorMessage}>{errors.studentNumber}</p>
-            )}
+            {errors.studentNumber && <p className={errorStyles.errorMessage}>{errors.studentNumber}</p>}
           </>
         )}
 
         {/* Email */}
-        <label className={styles.formLabels} htmlFor="emailInput">
+        <label htmlFor="email" className={styles.formLabels}>
           {t("register.email")}
         </label>
         <input
-          className={styles.inputField}
-          id="emailInput"
+          id="email"
+          name="email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formValues.email}
+          onChange={handleChange}
+          className={styles.inputField}
         />
         {errors.email && <p className={errorStyles.errorMessage}>{errors.email}</p>}
 
         {/* Password */}
-        <label className={styles.formLabels} htmlFor="passwordInput">
+        <label htmlFor="password" className={styles.formLabels}>
           {t("register.password")}
         </label>
         <input
-          className={styles.inputField}
-          id="passwordInput"
+          id="password"
+          name="password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formValues.password}
+          onChange={handleChange}
+          className={styles.inputField}
         />
         {errors.password && <p className={errorStyles.errorMessage}>{errors.password}</p>}
 
         {/* Confirm Password */}
-        <label className={styles.formLabels} htmlFor="confirmPasswordInput">
+        <label htmlFor="confirmPassword" className={styles.formLabels}>
           {t("register.confirmPassword")}
         </label>
         <input
-          className={styles.inputField}
-          id="confirmPasswordInput"
+          id="confirmPassword"
+          name="confirmPassword"
           type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={formValues.confirmPassword}
+          onChange={handleChange}
+          className={styles.inputField}
         />
         {errors.confirmPassword && (
           <p className={errorStyles.errorMessage}>{errors.confirmPassword}</p>
@@ -222,11 +225,11 @@ const UserRegisterForm: React.FC = () => {
 
         {/* Status Messages */}
         {statusMessages.length > 0 && (
-          <ul className={styles.userLoginStatusMessages}>
+          <ul className={errorStyles.userLoginStatusMessages}>
             {statusMessages.map(({ message, type }, index) => (
               <li
                 key={index}
-                className={type === "error" ? styles.error : styles.success}
+                className={type === "error" ? errorStyles.error : errorStyles.success}
               >
                 {message}
               </li>
