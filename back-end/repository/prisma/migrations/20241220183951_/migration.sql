@@ -21,6 +21,8 @@ CREATE TABLE "Submission" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "solvedAt" TIMESTAMP(3),
     "userId" INTEGER NOT NULL,
+    "raceId" INTEGER,
+    "tempraceId" INTEGER,
 
     CONSTRAINT "Submission_pkey" PRIMARY KEY ("id")
 );
@@ -82,7 +84,25 @@ CREATE TABLE "Race" (
 );
 
 -- CreateTable
+CREATE TABLE "TempRace" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "TempRace_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_CrashToRace" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_CrashToTempRace" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -100,10 +120,22 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Submission_raceId_key" ON "Submission"("raceId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Submission_tempraceId_key" ON "Submission"("tempraceId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_CrashToRace_AB_unique" ON "_CrashToRace"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_CrashToRace_B_index" ON "_CrashToRace"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_CrashToTempRace_AB_unique" ON "_CrashToTempRace"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_CrashToTempRace_B_index" ON "_CrashToTempRace"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_CrashToParticipant_AB_unique" ON "_CrashToParticipant"("A", "B");
@@ -113,6 +145,12 @@ CREATE INDEX "_CrashToParticipant_B_index" ON "_CrashToParticipant"("B");
 
 -- AddForeignKey
 ALTER TABLE "Submission" ADD CONSTRAINT "Submission_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Submission" ADD CONSTRAINT "Submission_raceId_fkey" FOREIGN KEY ("raceId") REFERENCES "Race"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Submission" ADD CONSTRAINT "Submission_tempraceId_fkey" FOREIGN KEY ("tempraceId") REFERENCES "TempRace"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Participant" ADD CONSTRAINT "Participant_racecarId_fkey" FOREIGN KEY ("racecarId") REFERENCES "Racecar"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -125,6 +163,12 @@ ALTER TABLE "_CrashToRace" ADD CONSTRAINT "_CrashToRace_A_fkey" FOREIGN KEY ("A"
 
 -- AddForeignKey
 ALTER TABLE "_CrashToRace" ADD CONSTRAINT "_CrashToRace_B_fkey" FOREIGN KEY ("B") REFERENCES "Race"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CrashToTempRace" ADD CONSTRAINT "_CrashToTempRace_A_fkey" FOREIGN KEY ("A") REFERENCES "Crash"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CrashToTempRace" ADD CONSTRAINT "_CrashToTempRace_B_fkey" FOREIGN KEY ("B") REFERENCES "TempRace"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CrashToParticipant" ADD CONSTRAINT "_CrashToParticipant_A_fkey" FOREIGN KEY ("A") REFERENCES "Crash"("id") ON DELETE CASCADE ON UPDATE CASCADE;

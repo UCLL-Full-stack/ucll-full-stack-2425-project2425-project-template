@@ -355,6 +355,26 @@ const main = async () => {
             },
         },
     });
+
+    const tempRace1 = await prisma.tempRace.create({
+        data: {
+            name: 'Temp Race 1',
+            type: 'Formula 1',
+            description: 'A temporary race for testing',
+            location: 'Test Track 1',
+            date: new Date('2023-06-15T00:00:00Z'),
+        },
+    });
+    
+    const tempRace2 = await prisma.tempRace.create({
+        data: {
+            name: 'Temp Race 2',
+            type: 'Formula 1',
+            description: 'Another temporary race for testing',
+            location: 'Test Track 2',
+            date: new Date('2023-07-20T00:00:00Z'),
+        },
+    });
 }
 
 main()
