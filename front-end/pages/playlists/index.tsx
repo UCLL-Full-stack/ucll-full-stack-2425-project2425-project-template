@@ -1,12 +1,12 @@
 import Head from "next/head";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
-import SongService from "@services/SongService";
-import PlaylistService from "@services/PlaylistService";
-import Header from "@components/header";
-import PlaylistOverview from "@components/playlists/PlaylistOverview";
+import SongService from "@services/songService";
+import PlaylistService from "@services/playlistService";
+import Header from "@components/Header";
+import PlaylistOverview from "@components/playlists/playlistOverview";
 import { useTranslation } from "react-i18next";
-
+import React from 'react';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSidePropsContext } from "next";
 

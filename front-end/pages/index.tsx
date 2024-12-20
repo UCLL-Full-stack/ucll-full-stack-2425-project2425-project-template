@@ -1,4 +1,5 @@
-import Header from "@components/header";
+import React from 'react';
+import Header from "@components/Header";
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
 

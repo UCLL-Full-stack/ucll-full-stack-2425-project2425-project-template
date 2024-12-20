@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SongsOverview from '@components/songs/SongsOverview';
+import SongsOverview from '@components/songs/songsOverview';
 import SongService from '@services/SongService';
 import { Song } from 'types';
 

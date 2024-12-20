@@ -2,7 +2,7 @@ import { StatusMessage } from 'types';
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import UserService from '@services/UserService';
+import UserService from '@services/userService';
 
 const LoginOverview: React.FC = () => {
     const [username, setUsername] = useState("");

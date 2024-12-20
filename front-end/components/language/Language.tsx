@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-
+import React from "react";
 const Language: React.FC = () => {
   const router = useRouter();
   const { locale, pathname, asPath, query } = router;

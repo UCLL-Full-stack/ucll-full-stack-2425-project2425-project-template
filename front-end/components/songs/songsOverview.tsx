@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Song, StatusMessage } from "types";
-import playlistService from "@services/PlaylistService";
+import playlistService from "@services/playlistService";
 import Image from 'next/image';
-import SongService from "@services/SongService";
+import SongService from "@services/songService";
 import Popup from "reactjs-popup";
 import classNames from "classnames";
 

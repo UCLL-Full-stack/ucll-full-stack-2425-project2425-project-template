@@ -1,7 +1,7 @@
-import Header from "@components/header"
+import Header from "@components/Header"
 import Head from "next/head"
 import { useTranslation } from "react-i18next";
-
+import React from 'react';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSidePropsContext } from "next";
 import SignUpOverview from "@components/signup/SignUpOverview";

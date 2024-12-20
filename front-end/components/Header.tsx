@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { User } from "types";
 import Language from "./language/Language";
 import { useTranslation } from "react-i18next";
+import React from 'react'; 
 
 const Header: React.FC = () => {
 

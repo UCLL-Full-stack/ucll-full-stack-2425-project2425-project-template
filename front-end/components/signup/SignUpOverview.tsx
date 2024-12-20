@@ -2,8 +2,9 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { StatusMessage } from "types"
 import { useTranslation } from "react-i18next";
-import UserService from "@services/UserService";
+import UserService from "@services/userService";
 import classNames from "classnames";
+import React from 'react';
 
 const SignUpOverview: React.FC = () => {
     const [firstName, setFirstName] = useState("")

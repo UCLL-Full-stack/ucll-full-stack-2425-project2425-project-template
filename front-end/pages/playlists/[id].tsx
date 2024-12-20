@@ -5,7 +5,7 @@
 // import { Song } from 'types'; 
 // import { useRouter } from 'next/router';
 // import { useTranslation } from "react-i18next";
-
+import React from 'react';
 // import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 // import { GetServerSidePropsContext } from "next";
 

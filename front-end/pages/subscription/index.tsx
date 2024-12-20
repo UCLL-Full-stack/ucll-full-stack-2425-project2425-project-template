@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Song, SubscriptionType } from "types";
-
+import React from 'react';
 import Header from "@components/Header";
-import UserService from "@services/UserService";
+import UserService from "@services/userService";
 
 
 

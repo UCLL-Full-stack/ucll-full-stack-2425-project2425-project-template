@@ -1,4 +1,4 @@
-import PlaylistService from "@services/PlaylistService";
+import PlaylistService from "@services/playlistService";
 import classNames from "classnames";
 import { table } from "console";
 import { useRouter } from "next/router";
