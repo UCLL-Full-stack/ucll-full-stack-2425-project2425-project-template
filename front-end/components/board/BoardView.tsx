@@ -7,6 +7,7 @@ import BoardService from "@/services/BoardService";
 import TaskService from "@/services/TaskService";
 import { useUser } from "@/context/UserContext";
 import UserService from "@/services/UserService";
+import { useTranslation } from "react-i18next";
 
 interface BoardViewProps {
     board: Board;
@@ -30,6 +31,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
         canEditAssignees: false,
         canEditTaskStatus: false,
     });
+    const { t } = useTranslation(["common"]);
 
     const fetchColumnsAndPermissions = async () => {
         try {
@@ -222,7 +224,7 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                             }}
                                             autoFocus
                                             className="w-full bg-transparent text-white placeholder-gray-400 outline-none"
-                                            placeholder="Enter column name"
+                                            placeholder={t("column.placeholder")}
                                         />
                                     </div>
                                 )}
@@ -231,14 +233,14 @@ const BoardView: React.FC<BoardViewProps> = ({ board, onAddColumn, onDeleteColum
                                         onClick={() => setAddingColumn(true)}
                                         className="w-64 flex-shrink-0 border-2 border-dashed border-gray-500 text-gray-500 rounded-md flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition-colors h-20"
                                     >
-                                        + Add Column
+                                        {t("column.add")}
                                     </button>
                                 )}
                             </div>
                         )}
                     </Droppable>
                 ) : (
-                    <p>Loading columns...</p>
+                    <p>{t("loading")}</p>
                 )}
             </DragDropContext>
         </div>

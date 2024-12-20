@@ -4,6 +4,7 @@ import ExpandedTask from "./ExpandedTask";
 import ConfirmationModal from "../ConfirmationModal";
 import UserService from "@/services/UserService";
 import TaskService from "@/services/TaskService";
+import { useTranslation } from "react-i18next";
 
 interface TaskProps {
     task: Task;
@@ -26,6 +27,7 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskD
     const [isExpanded, setIsExpanded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+    const { t } = useTranslation(["common"]);
 
     const handleToggleExpanded = (e: React.MouseEvent) => {
         if (!isExpanded && !isConfirmingDelete) {
@@ -87,8 +89,8 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskD
             )}
             <ConfirmationModal
                 isOpen={isConfirmingDelete}
-                title="Delete Task"
-                message="Are you sure you want to delete this task?"
+                title={t("task.delete")}
+                message={t("task.deleteConfirm")}
                 onConfirm={handleDeleteTask}
                 onCancel={() => {setIsConfirmingDelete(false); setIsHovered(false)} }
             />

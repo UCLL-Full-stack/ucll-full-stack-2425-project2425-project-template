@@ -1,5 +1,7 @@
 import { useUser } from '@/context/UserContext';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './common/LanguageSwitcher';
 
 interface HeaderProps {
     onCreateClick: () => void;
@@ -11,6 +13,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDashboard, boardTitle }) => {
     const { user, setUser } = useUser();
     const [dropDownVisible, setDropDownVisible] = React.useState(false);
+    const { t } = useTranslation(['common']);
 
     const handleLogout = () => {
         sessionStorage.removeItem('user');
@@ -40,12 +43,13 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDa
                 )}
             </div>
             <div className="flex items-center">
+                <LanguageSwitcher />
                 {onBackToDashboard && (
                     <button
                         onClick={onBackToDashboard}
                         className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                     >
-                        Back to Dashboard
+                        {t("actions.back")}
                     </button>
                 )}
                 {user ? (
@@ -56,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDa
                                     onClick={onCreateClick}
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 >
-                                    Create
+                                    {t('actions.create')}
                                 </button>
                             )}
                             <img
@@ -72,13 +76,13 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDa
                                     onClick={handleDiscordRefresh}
                                     className="block px-4 py-2 hover:bg-gray-200 w-full text-left"
                                 >
-                                    Refresh Discord
+                                    {t('actions.refresh')}
                                 </button>
                                 <button
                                     onClick={handleLogout}
                                     className="block px-4 py-2 hover:bg-gray-200 w-full text-left"
                                 >
-                                    Log Out
+                                    {t('header.logout')}
                                 </button>
                             </div>
                         )}
@@ -88,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick, onLoginClick, onBackToDa
                         onClick={onLoginClick}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
-                        Login
+                        {t('header.login')}
                     </button>
                 )}
             </div>

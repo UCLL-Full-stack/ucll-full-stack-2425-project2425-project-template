@@ -15,6 +15,7 @@ import EditBoard from '@/components/dashboard/EditBoard';
 import EditBoardSettings from '@/components/dashboard/EditBoardSettings';
 import BoardView from '@/components/board/BoardView';
 import ColumnService from '@/services/ColumnService';
+import { useTranslation } from 'react-i18next';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ const Home: FC = () => {
   const [isEditingGuildSettings, setIsEditingGuildSettings] = useState(false);
   const [editingBoardId, setEditingBoardId] = useState<string | null>(null);
   const [editingBoardPermissionsId, setEditingBoardPermissionsId] = useState<string | null>(null);
+  const { t } = useTranslation(['common']);
 
   const refreshSelectedBoard = async () => {
     if (!selectedBoard) return;
@@ -112,7 +114,7 @@ const Home: FC = () => {
       return () => clearInterval(interval);
     }
   }, [selectedGuildId, user]);
-  
+
   useEffect(() => {
     if (selectedBoard) {
       const interval = setInterval(refreshSelectedBoard, 5000);
@@ -382,7 +384,7 @@ const Home: FC = () => {
               <>
                 <div className="p-4">
                   {loading && user ? (
-                      <p>Loading guilds...</p>
+                      <p>{t("loading")}</p>
                   ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {displayGuilds.map(guild => (

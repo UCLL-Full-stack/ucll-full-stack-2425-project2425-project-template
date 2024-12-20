@@ -2,6 +2,7 @@ import { useUser } from "@/context/UserContext";
 import GuildService from "@/services/GuildService";
 import { DiscordPermission, Guild, KanbanPermission, PermissionEntry, Role, User } from "@/types";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 interface EditGuildSettingsFormProps {
     guildId: string;
@@ -20,6 +21,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
     const [showAddIdentifierDropdown, setShowAddIdentifierDropdown] = useState(false);
     const [roleMap, setRoleMap] = useState<Map<string, string>>(new Map<string, string>());
     const [userMap, setUserMap] = useState<Map<string, string>>(new Map<string, string>());
+    const { t } = useTranslation(['common']);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,10 +47,10 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
     });
 
     const resolveIdentifierName = (identifier: string): string => {
-        if (roleMap.has(identifier)) return `Role: ${roleMap.get(identifier)}`;
-        if (userMap.has(identifier)) return `User: ${userMap.get(identifier)}`;
+        if (roleMap.has(identifier)) return t('permissions.role', { name: roleMap.get(identifier) });
+        if (userMap.has(identifier)) return t('permissions.user', { name: userMap.get(identifier) });
         if (Object.values(DiscordPermission).includes(identifier as DiscordPermission))
-            return `Permission: ${identifier}`;
+            return t('permissions.discord', { permission: identifier });
         return identifier;
     };
 
@@ -85,11 +87,11 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
         const query = searchQuery.toLowerCase();
         const roles = allRoles
             .filter(role => role.roleName.toLowerCase().includes(query) && !selectedIdentifiers.has(role.roleId))
-            .map(role => ({ label: `Role: ${role.roleName}`, value: role.roleId }));
+            .map(role => ({ label: t('permissions.role', { name: role.roleName }), value: role.roleId }));
 
         const users = allUsers
             .filter(user => user.username.toLowerCase().includes(query) && !selectedIdentifiers.has(user.userId))
-            .map(user => ({ label: `User: ${user.globalName}`, value: user.userId }));
+            .map(user => ({ label: t('permissions.user', { name: user.globalName }), value: user.userId }));
 
         const discordPermissions = Object.values(DiscordPermission)
             .filter(
@@ -97,7 +99,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                     p.toLowerCase().includes(query) &&
                     !selectedIdentifiers.has(p)
             )
-            .map(p => ({ label: `Permission: ${p}`, value: p }));
+            .map(p => ({ label: t('permissions.discord', { permission: p }), value: p }));
 
         return [...roles, ...users, ...discordPermissions];
     };
@@ -109,7 +111,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
     const handleSubmit = async () => {
         const validSettings = guildSettings.every(entry => entry.kanbanPermission.length > 0);
         if (!validSettings) {
-            alert("Each identifier must have at least one permission");
+            alert(t('permissions.errors.noPermissions'));
             return;
         }
         onSubmit(guildSettings);
@@ -118,8 +120,10 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-[#2C2F33] p-6 rounded-lg shadow-lg w-1/2 text-white">
-                <h2 className="text-2xl font-bold mb-4">Edit Settings for {guild?.guildName}</h2>
-                <p className="text-sm text-gray-300 mb-2">New boards are created with the server settings</p>
+                <h2 className="text-2xl font-bold mb-4">
+                    {t('guild.settings.title', { name: guild?.guildName })}
+                </h2>
+                <p className="text-sm text-gray-300 mb-2">{t("guild.notice")}</p>
                 <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
                     {guildSettings.map(entry => (
                         <div
@@ -173,7 +177,7 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                                         setSelectedIdentifier(null);
                                     }}
                                 >
-                                    <option value="">Select Permission</option>
+                                    <option value="">{t("dashboard.selectPermission")}</option>
                                     {availableKanbanPermissions
                                         .filter(p => !entry.kanbanPermission.includes(p))
                                         .map(p => (
@@ -213,15 +217,17 @@ const EditGuildSettingsForm: React.FC<EditGuildSettingsFormProps> = ({ guildId, 
                         className="mt-4 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
                         onClick={() => setShowAddIdentifierDropdown(true)}
                     >
-                        Add Identifier
+                        {t('permissions.addIdentifier')}
                     </button>
                 )}
 
                 <div className="flex justify-end mt-6">
                     <button className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 mr-2" onClick={onClose}>
-                        Cancel
+                        {t('actions.cancel')}
                     </button>
-                    <button className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" onClick={handleSubmit}>Save Changes</button>
+                    <button className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" onClick={handleSubmit}>
+                        {t('actions.save')}
+                    </button>
                 </div>
             </div>
         </div>

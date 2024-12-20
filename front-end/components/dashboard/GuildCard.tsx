@@ -3,6 +3,7 @@ import { Guild, KanbanPermission, User,DiscordPermission } from '@/types';
 import UserService from '@/services/UserService';
 import { useUser } from '@/context/UserContext';
 import { FaPlus, FaGear } from "react-icons/fa6"
+import { useTranslation } from 'react-i18next';
 
 interface GuildCardProps {
     guild: Guild;
@@ -16,6 +17,7 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, on
     const { user } = useUser();
     const [canCreateBoard, setCanCreateBoard] = React.useState(false);
     const [canEditSettings, setCanEditSettings] = React.useState(false);
+    const { t } = useTranslation(['common']);
     // console.log('Guild:', guild);
     useEffect(() => {
         const checkPermissions = async () => {
@@ -54,7 +56,7 @@ const GuildCard: React.FC<GuildCardProps> = ({ guild, onClick, onCreateClick, on
                 <h2 className="text-lg font-bold">{guild.guildName}</h2>
             </div>
             {guild.greyedOut ? (
-                <p className="text-sm">Click to invite bot</p>
+                <p className="text-sm">{t("dashboard.guildInvite")}</p>
             ) : (
                 (canCreateBoard || canEditSettings) && (
                     <div className="absolute top-2 right-2 flex space-x-2">
