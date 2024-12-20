@@ -56,9 +56,10 @@ const Header: React.FC = () => {
                             Login Gegevens
                         </Link>
 
-                        <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/nieuws">
+                        {(!loggedInUser || loggedInUser.role === 'HOOFDLEIDING') && 
+                        (<Link className="hover:bg-green-600 px-3 py-2 rounded" href="/nieuws">
                             Home
-                        </Link>
+                        </Link>)}
                         {loggedInUser ? (
                             <>
                                 <Link
