@@ -13,7 +13,7 @@
         "coach_description": "Ontmoet Onze Trainers",
         "table": "Tabel",
         "table_description": "Bekijk Onze Huidige Stand",
-        "footer": "© {year} Manchester Shitty. Alle Rechten Voorbehouden."
+        "footer": "© {{year}} Manchester Shitty. Alle Rechten Voorbehouden."
     },
 
     "squad": {

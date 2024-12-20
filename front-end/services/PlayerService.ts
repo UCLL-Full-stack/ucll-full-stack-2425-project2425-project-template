@@ -52,6 +52,7 @@ const addPlayer = async (playerData: { name: string; number: number; position: s
 
   return await response.json();
 };
+
 const updatePlayer = async (
   id: number,
   updatedPlayer: { name: string; number: number; position: string; birthdate: Date; stat?: { id: number; appearances: number; goals: number; assists: number } }

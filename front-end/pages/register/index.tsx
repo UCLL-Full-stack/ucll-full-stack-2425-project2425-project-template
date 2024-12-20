@@ -147,9 +147,9 @@ const Register: React.FC = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2 bg-zinc-700 text-yellow-500 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 >
-                  <option value="player">{t("register.player")}</option>
-                  <option value="coach">{t("register.coach")}</option>
-                  <option value="admin">{t("register.admin")}</option>
+                  <option value="Player">{t("register.player")}</option>
+                  <option value="Coach">{t("register.coach")}</option>
+                  <option value="Admin">{t("register.admin")}</option>
                 </select>
               </div>
 

@@ -13,7 +13,7 @@
         "coach_description": "コーチ陣をご紹介",
         "table": "テーブル",
         "table_description": "現在のランキングを確認",
-        "footer": "© {year} マンチェスターシッティ。全著作権所有。"
+        "footer": "© {{year}} マンチェスターシッティ。全著作権所有。"
     },
 
     "squad": {

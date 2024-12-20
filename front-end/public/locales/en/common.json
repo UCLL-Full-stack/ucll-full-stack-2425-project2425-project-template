@@ -13,7 +13,7 @@
         "coach_description": "Meet Our Coaches",
         "table": "Table",
         "table_description": "Check Our Current Standings",
-        "footer": "© {year} Manchester Shitty. All Rights Reserved."
+        "footer": "© {{year}} Manchester Shitty. All Rights Reserved."
     },
 
     "squad": {
