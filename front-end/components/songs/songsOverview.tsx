@@ -60,6 +60,25 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
             setIsPopupOpen(false);
         }
     }
+
+    const handleDeleteSong = async (id: number) => {
+        clearErrors();
+    
+        if (!validate()) {
+            return;
+        }
+    
+        const response = await SongService.deleteSongById(id);
+    
+
+    
+        if (!response.ok) {
+            setStatusMessages([{ message: "error ocurred", type: 'error' }]);
+        } else {
+            setStatusMessages([{ message: 'Song deleted successfully', type: 'success' }]);
+            setIsPopupOpen(false);
+        }
+    }
     
 
     return  (
@@ -151,8 +170,8 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
                             <td className="pl-10"></td>
                             <td className="px-12 py-5">{song.title}</td>
                             <td className="px-12 py-5">{song.genre}</td>
-                            <td className="px-12 py-5"></td>
                             <td className="pr-10"></td>
+                            <td onClick={() => handleDeleteSong(song.id)} className="px-12 tex-red-800 py-5">delete</td>
 
                         </tr>
                     ))}

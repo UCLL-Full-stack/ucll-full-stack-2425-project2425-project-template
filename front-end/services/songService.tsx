@@ -49,10 +49,27 @@ const createSong = async (title: string, genre: string): Promise<Response> => {
     return response
 }
 
+const deleteSongById = async (id: number): Promise<Response> => {
+
+    const loggedInUser = localStorage.getItem('loggedInUser')
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null
+
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/songs/delete/${id}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    })
+
+    return response
+}
+
 
 const SongService = {
     getAllSongs,
     getSongById,
-    createSong
+    createSong,
+    deleteSongById
 }
 export default SongService

@@ -1,4 +1,4 @@
-import { User } from "types";
+import { SubscriptionType, User } from "types";
 
 const loginUser = (user: User) => {
   return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
@@ -55,9 +55,80 @@ const getAllUsers = () => {
   })
 }
 
+const changeSubscription = async (
+    subscriptionType: SubscriptionType,
+    duration: string
+  ): Promise<void> => {
+    try {
+      const loggedInUser = localStorage.getItem("loggedInUser");
+      const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+      const userId = loggedInUser ? JSON.parse(loggedInUser).id : null;
+      const startDate = new Date();
+      
+      let durationInDays = duration;
+      if (duration !== "unlimited") {
+        durationInDays = (parseInt(duration) * 30).toString();
+      }
+  
+      console.log("Duration being sent to backend:", durationInDays); 
+  
+      if (!token || !userId) {
+        throw new Error("Please log in to change your subscription.");
+      }
+  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/subscription`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            type: subscriptionType,
+            startDate: startDate,
+            duration: durationInDays,
+            userId: userId,
+          }),
+        }
+      );
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Error: ${errorData.message}`);
+      }
+  
+      alert(`Subscription changed to ${subscriptionType} for ${duration} months!`);
+    } catch (error) {
+      console.error("Error changing subscription:", error);
+      throw error;
+    }
+  };
+  
+  
+  const getUserById = async (id: number) => {
+
+    const loggedInUser = localStorage.getItem('loggedInUser')
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(`Error fetching user: ${error.message}`);
+    }
+
+    return response.json();
+  }
+
 
 const UserService = {
-  loginUser, signupUser, getAllUsers
+  loginUser, signupUser, getAllUsers, changeSubscription, getUserById,
 }      
     
 export default UserService

@@ -1,4 +1,5 @@
-type Role = 'admin' | 'user';
+type Role = 'admin' | 'user' | 'artist';
+type SubscriptionType = 'basic' | 'premium'
 
 type User = {
     id?: number;
@@ -30,6 +31,14 @@ export type StatusMessage = {
     type: "error" | "success";
 };
 
+type SubscriptionInput = {
+    id?: number;
+    type?: SubscriptionType;
+    start_date?: Date;
+    duration?: number;
+};
+
+
 // type AuthenticationResponse = {
 //     token?: string;
 //     rnummer?: string;
@@ -41,4 +50,7 @@ export type {
     User,
     Song,
     Playlist,
+    SubscriptionType,
+    SubscriptionInput,
+
 }

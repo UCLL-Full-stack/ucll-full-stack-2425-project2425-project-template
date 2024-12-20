@@ -55,13 +55,15 @@ const LoginOverview: React.FC = () => {
           ]);
       
           const user = await response.json()
+          console.log(user)
           localStorage.setItem("loggedInUser",
             JSON.stringify({
               token: user.token,
               fullname: user.fullname,
               username: user.username,
               role: user.role,
-              id: user.id
+              id: user.id,
+              subscription: user.subscription,
             })
           );
       
