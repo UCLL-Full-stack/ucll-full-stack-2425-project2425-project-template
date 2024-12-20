@@ -64,10 +64,22 @@ const CartPage = () => {
         }
     };
 
+    const handleDeleteProduct = async (productId: number) => {
+        try {
+            await CartService.deleteProductFromCart(productId);
+            setItems(items.filter(item => item.id !== productId));
+            const updatedTotalPrice = items.reduce((total, item) => total + item.price, 0);
+            setTotalPrice(updatedTotalPrice);
+        } catch (error) {
+            console.error('Error deleting product from cart:', error);
+            alert('Failed to delete product from cart.');
+        }
+    };
+
     return (
         <div>
             <h1>Your Cart</h1>
-            <Cart items={items} totalPrice={totalPrice} />
+            <Cart items={items} totalPrice={totalPrice} onDeleteProduct={handleDeleteProduct} />
             <button onClick={handleCreateOrder}>Create Order</button>
         </div>
     );

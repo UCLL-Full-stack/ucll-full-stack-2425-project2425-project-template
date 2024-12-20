@@ -11,6 +11,15 @@ class CartService {
         });
         return response.data;
     }
+
+    async deleteProductFromCart(productId: number) {
+        const response = await axios.delete(`${API_URL}/products/${productId}`, {
+            headers: {
+                "Authorization": `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        });
+        return response.data;
+    }
 }
 
 export default new CartService();

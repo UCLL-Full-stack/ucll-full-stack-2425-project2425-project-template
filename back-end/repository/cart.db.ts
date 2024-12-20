@@ -149,6 +149,27 @@ const clearCartProducts = async (cartId: number): Promise<void> => {
     }
 };
 
+const removeProductFromCart = async (cartId: number, productId: number): Promise<Cart> => {
+    try {
+        const updatedCart = await database.cart.update({
+            where: { id: cartId },
+            data: {
+                products: {
+                    disconnect: { id: productId },
+                },
+            },
+            include: {
+                products: true,
+                user: true,
+            },
+        });
+        return Cart.from(updatedCart);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllCarts,
     putProductToCart,
@@ -157,4 +178,5 @@ export default {
     getCartByUserId,
     updateCartTotalPrice,
     clearCartProducts,
+    removeProductFromCart,
 };

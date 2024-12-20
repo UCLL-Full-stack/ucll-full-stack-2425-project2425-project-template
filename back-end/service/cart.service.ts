@@ -83,10 +83,34 @@ const getCartForUser = async (email: string): Promise<Cart> => {
     return cart;
 };
 
+const removeProductFromCart = async (email: string, productId: number): Promise<Cart> => {
+    const user = await userDb.getUserByEmail(email);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const userId = user.getId();
+    if (userId === undefined) {
+        throw new Error('User ID is undefined');
+    }
+
+    const cart = await cartDb.getCartByUserId(userId);
+    if (!cart) {
+        throw new Error('Cart not found');
+    }
+
+    const updatedCart = await cartDb.removeProductFromCart(cart.getId()!, productId);
+    const newTotalPrice = updatedCart.getProducts().reduce((total, product) => total + product.getPrice(), 0);
+
+    const finalCart = await cartDb.updateCartTotalPrice(updatedCart.getId()!, newTotalPrice);
+    return finalCart;
+};
+
 export default { 
     getAllCarts, 
     getCartById, 
     createCart, 
     addProductToCart, 
-    getCartForUser 
+    getCartForUser,
+    removeProductFromCart
 };

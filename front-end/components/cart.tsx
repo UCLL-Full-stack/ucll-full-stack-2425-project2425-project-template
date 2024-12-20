@@ -11,9 +11,10 @@ interface Product {
 interface CartProps {
   items: Product[];
   totalPrice: number;
+  onDeleteProduct: (productId: number) => void;
 }
 
-const Cart: React.FC<CartProps> = ({ items = [], totalPrice }) => {
+const Cart: React.FC<CartProps> = ({ items = [], totalPrice, onDeleteProduct }) => {
   return (
     <div>
       <h2>Shopping Cart</h2>
@@ -27,6 +28,7 @@ const Cart: React.FC<CartProps> = ({ items = [], totalPrice }) => {
               <th>Price</th>
               <th>Description</th>
               <th>Rating</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -36,13 +38,15 @@ const Cart: React.FC<CartProps> = ({ items = [], totalPrice }) => {
                 <td>{item.price}</td>
                 <td>{item.description}</td>
                 <td>{item.rating}</td>
+                <td>
+                  <button onClick={() => onDeleteProduct(item.id)}>Remove</button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-    <h3>Total Price: €{totalPrice.toFixed(2)}</h3>
-
+      <h3>Total Price: €{totalPrice.toFixed(2)}</h3>
     </div>
   );
 };

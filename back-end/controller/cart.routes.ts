@@ -150,4 +150,41 @@ cartRouter.get('/me', isAuthenticated, async (req: Request, res: Response, next:
     }
 });
 
+/**
+ * @swagger
+ * /carts/me/products/{productId}:
+ *   delete:
+ *     summary: Remove a product from the authenticated user's cart.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The product ID.
+ *     responses:
+ *       200:
+ *         description: Product removed from the cart.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Cart'
+ *       404:
+ *         description: Cart or Product not found.
+ */
+cartRouter.delete('/me/products/:productId', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+    const { productId } = req.params;
+    const request = req as Request & { auth: { email: string; role: Role } };
+    const { email } = request.auth;
+
+    try {
+        const updatedCart = await cartService.removeProductFromCart(email, parseInt(productId));
+        res.status(200).json(updatedCart);
+    } catch (error) {
+        res.status(400).json({ status: 'error', errorMessage: (error as Error).message });
+    }
+});
+
 export { cartRouter };
