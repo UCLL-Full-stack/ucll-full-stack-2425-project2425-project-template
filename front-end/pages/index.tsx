@@ -106,10 +106,10 @@ const Home: React.FC = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    user1@example.com
+                    john.doe@example.com
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    User1!
+                    password123
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {t("userTable.admin")}
@@ -117,10 +117,10 @@ const Home: React.FC = () => {
                 </tr>
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    user2@example.com
+                    jane.smith@example.com
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    User2!
+                    password123
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {t("userTable.user")}
