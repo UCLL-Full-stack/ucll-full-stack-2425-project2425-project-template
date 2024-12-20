@@ -76,26 +76,25 @@ const Header: React.FC = () => {
                                 </Link>
                             </>
                         ) : (
-                            <>
-                                <button
-                                    className="hover:bg-green-600 px-3 py-2 rounded relative"
-                                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                                >
-                                    Takken
-                                </button>
-                                {dropdownOpen && (
+                            <div className="relative">
+                            <button
+                                className="hover:bg-green-600 px-3 py-2 rounded"
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                            >
+                                Takken
+                            </button>
+                            {dropdownOpen && (
                                 <ul ref={dropdownRef} className="absolute left-0 bg-green-600 text-white mt-2 rounded shadow-lg z-10">
                                     {groepen && groepen.map((groep, index) => (
                                         <li key={index} className="hover:bg-green-700 px-3 py-2">
-                                            <Link href={`/tak/${groep.id}`}>{groep.naam}</Link>
+                                            <Link href={`/${groep.naam}`}>{groep.naam}</Link>
                                         </li>
                                     ))}
                                 </ul>
                             )}
-                            </>
+                            </div>
                         )}
                         <Link className="hover:bg-green-600 px-3 py-2 rounded" href="/kalender">
-
                             Kalender
                         </Link>
                         {loggedInUser ? (
