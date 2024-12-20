@@ -80,6 +80,9 @@ cocktailRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
  *               image:
  *                 type: string
  *                 example: "/placeholder.png"
+ *               authorId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       201:
  *         description: The cocktail has been added.
@@ -99,13 +102,13 @@ cocktailRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
  */
 cocktailRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, description, strongness, image } = req.body;
+        const { name, description, strongness, image, authorId} = req.body;
 
         if (!name || !description || strongness === undefined || !image) {
             return res.status(400).json({ message: 'All fields are required: name, description, strongness, image.' });
         }
 
-        const newCocktail = cocktailService.addCocktail({ name, description, strongness, image });
+        const newCocktail = cocktailService.addCocktail({ name, description, strongness, image , authorId});
         res.status(201).json(newCocktail);
     } catch (error) {
         next(error);
@@ -172,6 +175,9 @@ cocktailRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
  *               image:
  *                 type: string
  *                 example: "/placeholder.png"
+ *               authorId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       200:
  *         description: The cocktail has been updated.
@@ -194,13 +200,13 @@ cocktailRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
 cocktailRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const { name, description, strongness, image } = req.body;
+        const { name, description, strongness, image, authorId } = req.body;
 
         if (!name || !description || strongness === undefined || !image) {
             return res.status(400).json({ message: 'All fields are required: name, description, strongness, image.' });
         }
 
-        const updatedCocktail = await cocktailService.updateCocktail({ id: Number(id), name, description, strongness, image });
+        const updatedCocktail = await cocktailService.updateCocktail({ id: Number(id), name, description, strongness, image , authorId});
         res.status(200).json(updatedCocktail);
     } catch (error) {
         next(error);

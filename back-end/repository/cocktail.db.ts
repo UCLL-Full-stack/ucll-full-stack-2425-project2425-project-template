@@ -28,7 +28,7 @@ const getCocktailById = async (id: number): Promise<Cocktail | null> => {
   }
 }
 
-const addCocktail = async ({ name, description, strongness, image }: { name: string; description: string; strongness: number; image: string }): Promise<Cocktail> => {
+const addCocktail = async ({ name, description, strongness, image , authorId}: { name: string; description: string; strongness: number; image: string , authorId: number}): Promise<Cocktail> => {
   try {
     const newCocktail = await database.cocktail.create({
       data: {
@@ -36,6 +36,7 @@ const addCocktail = async ({ name, description, strongness, image }: { name: str
         description,
         strongness,
         image,
+        authorId
       },
     });
     return Cocktail.from(newCocktail);
@@ -56,7 +57,7 @@ const deleteCocktail = async (id: number): Promise<void> => {
   }
 }
 
-const updateCocktail = async ({ id, name, description, strongness, image }: { id: number; name: string; description: string; strongness: number; image: string }): Promise<Cocktail> => {
+const updateCocktail = async ({ id, name, description, strongness, image , authorId}: { id: number; name: string; description: string; strongness: number; image: string , authorId: number}): Promise<Cocktail> => {
   try {
     const updatedCocktail = await database.cocktail.update({
       where: { id },
@@ -65,6 +66,7 @@ const updateCocktail = async ({ id, name, description, strongness, image }: { id
         description,
         strongness,
         image,
+        authorId,
       },
     });
     return Cocktail.from(updatedCocktail);

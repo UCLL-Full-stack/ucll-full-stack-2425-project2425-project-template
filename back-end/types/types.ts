@@ -38,5 +38,6 @@ export type CocktailIngredient = {
 export type AuthenticationResponse = {
     token: string;
     email: string;
+    userId: number;
     role: string;
 };
