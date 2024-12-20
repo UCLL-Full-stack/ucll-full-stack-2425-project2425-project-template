@@ -68,4 +68,31 @@ racecarRouter.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /racecars:
+ *   get:
+ *     summary: Retrieve a list of racecars
+ *     tags: [Racecars]
+ *     responses:
+ *       200:
+ *         description: A list of racecars
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Racecar'
+ *       500:
+ *         description: Internal server error
+ */
+racecarRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const racecars = await racecarService.getAllRacecars();
+        res.json(racecars);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 export { racecarRouter };

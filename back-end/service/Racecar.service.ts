@@ -5,4 +5,9 @@ const getRacecarById = async (id: number): Promise<Racecar | null> => {
     return racecarDb.getRacecarById(id);
 };
 
-export default { getRacecarById };
+const getAllRacecars = async (): Promise<Racecar[]> => {
+    const racecars = await racecarDb.getAllRacecars();
+    return racecars ?? [];
+};
+
+export default { getRacecarById, getAllRacecars };

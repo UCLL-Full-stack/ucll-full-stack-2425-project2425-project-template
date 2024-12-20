@@ -9,6 +9,11 @@ const getRacecarById = async (id: string): Promise<Response> => {
   });
 };
 
+const getAllRacecars = async (): Promise<Response> => {
+  return fetch(`${apiUrl}/racecars`, { method: 'GET' });
+}
+
 export default {
+  getAllRacecars,
   getRacecarById,
 };
