@@ -126,9 +126,25 @@ const changeSubscription = async (
     return response.json();
   }
 
+  const updateRole = async (userId: number, newRole: string, adminId: number): Promise<Response> => {
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+  
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/users/updateRole`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ id: userId, role: newRole, adminId })
+    });
+  
+    return response;
+  }
+
 
 const UserService = {
-  loginUser, signupUser, getAllUsers, changeSubscription, getUserById,
+  loginUser, signupUser, getAllUsers, changeSubscription, getUserById, updateRole
 }      
     
 export default UserService

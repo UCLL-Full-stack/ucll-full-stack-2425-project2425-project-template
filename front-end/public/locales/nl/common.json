@@ -1,4 +1,11 @@
 {
+  "home": {
+    "home": "Homepagina",
+    "text1": "Welkom bij een betere versie dan Spotify.",
+    "text2": "Geniet van de muziek en verwijder Spotify. €9,99 per maand is oplichterij.",
+    "text3": "Nee, grapje, ik hou van Spotify. Het is een heel goede app."
+  },
+
   "signup": {
     "title": "Registreren",
     "label": {
@@ -28,8 +35,10 @@
     "songs": "Nummers",
     "playlist": "Playlists",
     "login": "Inloggen",
+    "subscription" : "Abonnementen",
     "signup": "Registeren",
     "logout": "Uitloggen",
-    "welcome": "Welkom"
+    "welcome": "Welkom",
+    "users": "Gebruikers"
   }
 }

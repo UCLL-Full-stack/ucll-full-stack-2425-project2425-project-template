@@ -42,23 +42,31 @@ const PlaylistOverview: React.FC<Props> = ({ playlists, songs }: Props) => {
 
     const handleAddPlaylist = async (event: React.FormEvent) => {
         event.preventDefault();
-
+    
         clearErrors();
-
+    
         if (!validate()) {
             return;
         }
-
-        const response = await PlaylistService.createPlaylist(name)
-        const data = await response.json();
-        if (!response.ok) {
-            setStatusMessages([{message: data, type: "error"}])
-        } else {
-            setStatusMessages([{message: 'Playlist created successfully.', type: 'success'}]);
-            setIsPopupOpen(false);
+    
+        try {
+            const response = await PlaylistService.createPlaylist(name);
+            const data = await response.json();
+    
+            if (!response.ok) {
+                if (data.message === 'Basic subscription users can only create up to 3 playlists.') {
+                    setStatusMessages([{ message: data.message, type: 'error' }]);
+                } else {
+                    setStatusMessages([{ message: data, type: 'error' }]);
+                }
+            } else {
+                setStatusMessages([{ message: 'Playlist created successfully.', type: 'success' }]);
+                setIsPopupOpen(false);
+            }
+        } catch (error) {
+            setStatusMessages([{ message: (error as Error).message, type: 'error' }]);
         }
-
-    }
+    };
 
     const selectPlaylist = (playlist: Playlist) => {
         setSelectedPlaylist(playlist)
@@ -166,7 +174,7 @@ const PlaylistOverview: React.FC<Props> = ({ playlists, songs }: Props) => {
                 </tbody>
             </table>
         )}
-        {selectedPlaylist && (
+        {selectedPlaylist &&  songs.length > 0 && (
                 <section className="mt-5">
                     <h2 className="text-2xl font-bold text-blue-800 mb-6">Songs</h2>
                     <table>
@@ -216,6 +224,9 @@ const PlaylistOverview: React.FC<Props> = ({ playlists, songs }: Props) => {
                         </tbody>
                     </table>
                 </section>
+            )}
+            {songs.length === 0 && (
+                <p className="text-red-500">There are no songs available in the overview</p>
             )}
     </>
     );

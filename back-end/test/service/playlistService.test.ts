@@ -7,7 +7,6 @@ import userDb from "../../repository/user.db";
 import playlistService from "../../service/playlist.service";
 import { Role } from "../../types";
 
-
 const mockUser = new User({ id: 1, firstName: "John", lastName: "Doe", username: 'JohnDoe', email: 'john@example.com', role: "admin", password: "password123" });
 const mockPlaylist = new Playlist({ name: 'Favorites', user: mockUser, totalNumbers: 0, songs: [] });
 const mockSong = new Song({ id: 1, title: 'Song 1', genre: "Country" });

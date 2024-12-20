@@ -28,11 +28,17 @@
  *            genre:
  *              type: string
  *              description: Song genre.
+ *            user:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: number
+ *                      format: int64
  */
 
 import express, { NextFunction, Request, Response } from 'express';
 import songService from '../service/song.service';
-import { Role, SongInput } from '../types';
+import { Role, SongInput, UserInput } from '../types';
 
 const songRouter = express.Router()
 
@@ -98,30 +104,45 @@ songRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *   post:
  *     security:
  *       - bearerAuth: []  
- *     summary: create song
+ *     summary: Create a song
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/SongInput'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Song title.
+ *               genre:
+ *                 type: string
+ *                 description: Song genre.
+ *               user:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                     description: User ID.
  *     responses:
  *       200:
- *         description: created song
+ *         description: Created song
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Song'
-*/
+ */
 songRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const songInput = <SongInput>req.body;
-        const song = await songService.createSong(songInput);
-        res.status(200).json(song)
+        const userInput = <UserInput>req.body.user;
+
+        const song = await songService.createSong(songInput, userInput);
+        res.status(200).json(song);
     } catch(error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 /**
  * @swagger
@@ -136,6 +157,19 @@ songRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
  *         required: true
  *         schema:
  *           type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                     description: User ID.
  *     responses:
  *       200:
  *         description: Song successfully deleted.
@@ -143,10 +177,11 @@ songRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
  *         description: Song with the provided ID does not exist.
  */
 songRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const userInput = <UserInput>req.body.user;
     const songId = parseInt(req.params.id);
 
     try {
-        const result = await songService.deleteSongById({ id: songId });
+        const result = await songService.deleteSongById({ id: songId }, userInput);
 
         if (result) {
             res.status(200).json({ message: `Song with id ${songId} deleted successfully.` });
@@ -154,7 +189,7 @@ songRouter.delete('/delete/:id', async (req: Request, res: Response, next: NextF
             res.status(404).json({ message: `Song with id ${songId} does not exist.` });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Failed to delete song.'});
+        next(error);
     }
 });
 

@@ -244,6 +244,50 @@ userRouter.post('/subscription', async (req: Request, res: Response, next: NextF
     }
 });
 
+/**
+ * @swagger
+ * /users/updateRole:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Update the role of a user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
+ *                 description: User ID.
+ *               role:
+ *                 type: string
+ *                 description: New role.
+ *                 enum: [admin, user, artist]
+ *               adminId:
+ *                 type: number
+ *                 description: Admin User ID.
+ *     responses:
+ *       200:
+ *         description: User role updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+
+userRouter.put('/updateRole', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id, role, adminId } = req.body;
+
+        const updatedUser = await userService.updateRole({ id, role }, adminId);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 
 export { userRouter };

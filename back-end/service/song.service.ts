@@ -2,21 +2,34 @@ import { Song } from "../model/song";
 import songDb from "../repository/song.db";
 import userDb from "../repository/user.db";
 import { UnauthorizedError } from 'express-jwt';
-import { Role, SongInput } from "../types";
+import { Role, SongInput, UserInput } from "../types";
 
-const createSong = async ({
-    title, 
-    genre
-}: SongInput): Promise<Song> => {
+const createSong = async (
+    songInput: SongInput,
+    userInput: UserInput
+): Promise<Song> => {
 
-    if (!title?.trim()) {
-        throw new Error('title is required')
+    if (!userInput || !userInput.id) {
+        throw new Error('User ID is required');
     }
-    if (!genre?.trim()) {
-        throw new Error('Genre is required')
+    
+    const user = await userDb.getUserById({id: userInput.id})
+
+    if (!user) throw new Error('User not found');
+
+    if (!songInput.title?.trim()) {
+        throw new Error('Title is required');
     }
-    const song = new Song({title, genre})
-    return await songDb.createSong(song)
+    if (!songInput.genre?.trim()) {
+        throw new Error('Genre is required');
+    }
+
+    if (user.getRole() === 'user') {
+        throw new Error('A user cannot make songs')
+    }
+    
+    const song = new Song({title: songInput.title, genre: songInput.genre});
+    return await songDb.createSong(song);
 }
 
 const getAllSongs = async ({role} : {role: Role}): Promise<Song[]> => {
@@ -37,7 +50,21 @@ const getSongById = async ({ id }:{ id: number }): Promise<Song | null> => {
 }
 
 
-const deleteSongById = async ({ id }:{ id: number }): Promise<boolean> => {
+const deleteSongById = async ({ id }:{ id: number }, userInput : UserInput): Promise<boolean> => {
+
+    if (!userInput || !userInput.id) {
+        throw new Error('User ID is required');
+    }
+    
+    const user = await userDb.getUserById({id: userInput.id})
+
+    if (!user) throw new Error('User not found');
+
+    if (user.getRole() === 'user') {
+        throw new Error('A user cannot delete songs')
+    }
+
+
     const song = await songDb.deleteSongById({id})
 
     if (song === null){

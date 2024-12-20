@@ -40,20 +40,30 @@ const Header: React.FC = () => {
                     <Link href="/" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
                         {t('header.home')}
                     </Link>
+                    {loggedInUser && (
                     <Link href="/songs" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
                         {t('header.songs')}
                     </Link>
-                    
+                    )}
+                    {loggedInUser && (
                     <Link 
                         href="/playlists" 
                         className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200"
                         >
                         {t('header.playlist')}
                     </Link>
+                    )}
                     {loggedInUser && (
                         <>
                         <Link href="/subscription" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
                             {t('header.subscription')}
+                        </Link>
+                        </>
+                    )}
+                    {loggedInUser?.role === 'admin' && (
+                        <>
+                        <Link href="/users" className="text-lg text-gray-300 hover:text-yellow-400 transition duration-200">
+                            {t('header.users')}
                         </Link>
                         </>
                     )}

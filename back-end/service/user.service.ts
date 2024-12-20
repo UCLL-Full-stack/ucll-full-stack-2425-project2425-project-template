@@ -1,11 +1,39 @@
 import { User } from '../model/user';
 import userDB from '../repository/user.db';
-import { AuthenticationResponse, SubscriptionInput, UserInput } from '../types';
+import { AuthenticationResponse, Role, SubscriptionInput, UserInput } from '../types';
 import bcrypt from 'bcrypt'
 import { generateJwtToken } from '../util/jwt';
 import { Subscription } from '../model/subscription';
 
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
+
+const updateRole = async ({ id, role }: { id: number, role: Role }, adminId: number): Promise<User> => {
+    const adminUser = await userDB.getUserById({ id: adminId });
+    if (!adminUser) {
+        throw new Error(`Admin user with id: ${adminId} does not exist.`);
+    }
+
+    if (adminUser.getRole() !== 'admin') {
+        throw new Error('Only an admin can change other people\'s roles.');
+    }
+
+    const user = await userDB.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id: ${id} does not exist.`);
+    }
+
+    if (!role) {
+        throw new Error('Role does not exist.');
+    }
+
+    await userDB.updateRole(id, role);
+    const updatedUser = await userDB.getUserById({ id });
+    if (!updatedUser) {
+        throw new Error(`Updated user with id: ${id} does not exist.`);
+    }
+    return updatedUser;
+};
+
 
 const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
     const user = await userDB.getUserByUsername({ username });
@@ -127,4 +155,4 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
     };
 };
 
-export default { getUserByUsername, getAllUsers, createUser, authenticate, changeSubscriptionOfUser, getUserById };
+export default { getUserByUsername, getAllUsers, createUser, authenticate, changeSubscriptionOfUser, getUserById, updateRole };

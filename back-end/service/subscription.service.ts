@@ -7,6 +7,4 @@ import subscriptionDb from '../repository/subscription.db';
 
 const getAllUsersBySubscription = async (type: SubscriptionType): Promise<User[]> => subscriptionDb.getAllUsersBySubscription(type);
 
-
-
 export default { getAllUsersBySubscription};

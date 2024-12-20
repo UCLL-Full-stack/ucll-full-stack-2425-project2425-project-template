@@ -1,5 +1,6 @@
 import { Subscription } from '../model/subscription';
 import { User } from '../model/user';
+import { Role } from '../types';
 import database from '../util/database';
 
 const getAllUsers = async (): Promise<User[]> => {
@@ -105,6 +106,18 @@ const changeSubscriptionOfUser = async (subscription: Subscription, userId: numb
     }
 };
 
+const updateRole = async (userId: number, newRole: Role): Promise<void> => {
+    try {
+        await database.user.update({
+            where: { id: userId },
+            data: { role: newRole },
+        });
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+
 
 
 
@@ -113,5 +126,6 @@ export default {
     getUserById,
     getUserByUsername,
     createUser,
-    changeSubscriptionOfUser
+    changeSubscriptionOfUser,
+    updateRole
 };

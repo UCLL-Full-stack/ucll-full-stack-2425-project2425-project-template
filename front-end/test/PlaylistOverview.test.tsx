@@ -1,17 +1,17 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PlaylistOverview from '@components/playlists/PlaylistOverview';
-import PlaylistService from '@services/PlaylistService';
+import PlaylistOverview from '@components/playlists/playlistOverview';
+import PlaylistService from '@services/playlistService';
 import { Playlist, Song } from 'types';
 
-jest.mock('@services/PlaylistService', () => ({
+jest.mock('@services/playlistService', () => ({
   createPlaylist: jest.fn(),
   addSongToPlaylist: jest.fn(),
 }));
 
-const mockCreatePlaylist = PlaylistService.createPlaylist;
-const mockAddSongToPlaylist = PlaylistService.addSongToPlaylist;
+const mockCreatePlaylist = PlaylistService.createPlaylist as jest.Mock;
+const mockAddSongToPlaylist = PlaylistService.addSongToPlaylist as jest.Mock;
 
 const playlists: Playlist[] = [
   {
@@ -36,20 +36,20 @@ const songs: Song[] = [
 ];
 
 test("renders PlaylistOverview with playlists and songs", async () => {
-    render(<PlaylistOverview playlists={playlists} songs={songs} />);
-  
-    expect(screen.getByText("Rock Classics")).toBeInTheDocument();
-    expect(screen.getByText("Pop Hits")).toBeInTheDocument();
-  
-    const playlistItem = screen.getByText("Rock Classics");
-    fireEvent.click(playlistItem);
-  
-    expect(screen.getByText("Song A")).toBeInTheDocument();
-    expect(screen.getByText("Song B")).toBeInTheDocument();
-  });
+  render(<PlaylistOverview playlists={playlists} songs={songs} />);
+
+  expect(screen.getByText("Rock Classics")).toBeInTheDocument();
+  expect(screen.getByText("Pop Hits")).toBeInTheDocument();
+
+  const playlistItem = screen.getByText("Rock Classics");
+  fireEvent.click(playlistItem);
+
+  expect(screen.getByText("Song A")).toBeInTheDocument();
+  expect(screen.getByText("Song B")).toBeInTheDocument();
+});
 
 test("opens popup and handles form submission to create a playlist", async () => {
-  (PlaylistService.createPlaylist as jest.Mock).mockResolvedValue({
+  mockCreatePlaylist.mockResolvedValue({
     ok: true,
     json: async () => ({ name: 'Playlist' }),
   });
@@ -76,7 +76,7 @@ test("selects a playlist and adds a song to it", async () => {
   fireEvent.click(playlistItem);
 
   const addButtons = screen.getAllByText("Add song", { selector: 'button' });
-  fireEvent.click(addButtons[0]); 
+  fireEvent.click(addButtons[0]);
 
   await waitFor(() => {
     expect(PlaylistService.addSongToPlaylist).toHaveBeenCalledWith(playlists[0], songs[0]);

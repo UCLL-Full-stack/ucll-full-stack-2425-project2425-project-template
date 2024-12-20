@@ -1,5 +1,3 @@
-import { Song } from "types"
-
 const getAllSongs = () => {
 
     const loggedInUser = localStorage.getItem('loggedInUser')
@@ -30,8 +28,7 @@ const getSongById = (id: number) => {
     })
 }
 
-const createSong = async (title: string, genre: string): Promise<Response> => {
-
+const createSong = async (title: string, genre: string, userId: number): Promise<Response> => {
     const loggedInUser = localStorage.getItem('loggedInUser')
     const token = loggedInUser ? JSON.parse(loggedInUser).token : null
 
@@ -42,24 +39,27 @@ const createSong = async (title: string, genre: string): Promise<Response> => {
             Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-            title, genre
+            title, genre, user: { id: userId }
         })
     })
 
     return response
 }
 
-const deleteSongById = async (id: number): Promise<Response> => {
+const deleteSongById = async (id: number, userId: number): Promise<Response> => {
 
     const loggedInUser = localStorage.getItem('loggedInUser')
     const token = loggedInUser ? JSON.parse(loggedInUser).token : null
 
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/songs/delete/${id}`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify({
+            user: { id: userId }
+        })
     })
 
     return response

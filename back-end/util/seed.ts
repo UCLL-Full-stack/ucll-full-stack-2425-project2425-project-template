@@ -12,7 +12,7 @@ const main = async () => {
 
     const user_admin = await prisma.user.create({
         data: {
-            username: "admin12",
+            username: "admin",
             password: await bcrypt.hash('admin123', 12),
             email: "admin@admin.be",
             role: "admin",
@@ -49,6 +49,25 @@ const main = async () => {
         }
     });
 
+    const artist_ward = await prisma.user.create({
+        data: {
+            username: "ward",
+            password: await bcrypt.hash('ward123', 12),
+            email: "ward@ucll.be",
+            role: "artist",
+            firstName: "Ward",
+            lastName: "Looyens",
+            subscription: {
+                create: {
+                    type: 'premium',
+                    startDate: new Date(),
+                    duration: '356'
+                }
+            }
+
+        }
+    });
+
     const playlist_1 = await prisma.playlist.create({
         data: {
             name: "playlist1",
@@ -60,6 +79,18 @@ const main = async () => {
     });
 
     console.log('Seeding completed!');
+
+    const playlist_2 = await prisma.playlist.create({
+        data: {
+            name: "playlist2",
+            totalNumbers: 0,
+            user: {
+                connect: { id: artist_ward.id }
+            }
+        }
+    });
+
+console.log('Seeding completed!');
 };
 
 (async () => {

@@ -1,4 +1,11 @@
 {
+  "home": {
+    "home": "Homepage",
+    "text1": "Welcome to a better version than Spotify.",
+    "text2": "Enjoy the music and delete Spotify. 9.99€ a month is a scam.",
+    "text3": "No, just kidding, I love Spotify. It’s a pretty good app."
+  },
+
   "signup": {
     "title": "Sign Up",
     "label": {
@@ -28,10 +35,11 @@
     "songs": "Songs",
     "playlist": "Playlists",
     "login": "Login",
-    "subscription" : "subscription",
+    "subscription" : "Subscription",
     "signup": "Signup",
     "logout": "Logout",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "users": "Users"
   }
 }
   

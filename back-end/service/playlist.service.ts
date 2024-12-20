@@ -27,12 +27,25 @@ const createPlaylist = async ({
         throw new Error('user is required')
     }
 
+    if (user.getRole() === 'user') {
+
+        if (user.getSubscription()?.getType() === 'basic') {
+            const userPlaylists = await playlistDb.getPlaylistsFromUser({ username: user.getUsername() });
+            if (userPlaylists.length >= 3) {
+                throw new Error('Basic subscription users can only create up to 3 playlists.');
+            }
+        } 
+    }
+
     const playlist = new Playlist({ name, user, totalNumbers: 0, songs: []});
     return await playlistDb.createPlaylist(playlist);
 }
 
 const getAllPlaylists = async ({ username, role }: { username: string, role: Role }): Promise<Playlist[]> => {
     if (role === 'admin') {
+        return await playlistDb.getAllPlaylists();
+    }
+    if (role === 'artist') {
         return await playlistDb.getAllPlaylists();
     } 
     else if (role === 'user') {

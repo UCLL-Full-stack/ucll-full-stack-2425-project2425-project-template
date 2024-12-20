@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Song, StatusMessage } from "types";
-import playlistService from "@services/playlistService";
 import Image from 'next/image';
 import SongService from "@services/songService";
 import Popup from "reactjs-popup";
@@ -49,37 +48,44 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
             return;
         }
     
-        const response = await SongService.createSong(title, genre);
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const userId = loggedInUser ? JSON.parse(loggedInUser).id : null;
+    
+        const response = await SongService.createSong(title, genre, userId);
         const data = await response.json();
-
     
         if (!response.ok) {
-            setStatusMessages([{ message: data, type: 'error' }]);
+            setStatusMessages([{ message: data.message || "An error occurred", type: 'error' }]);
         } else {
             setStatusMessages([{ message: 'Song created successfully', type: 'success' }]);
             setIsPopupOpen(false);
         }
     }
 
-    const handleDeleteSong = async (id: number) => {
+    const handleDeleteSong = async (song: Song) => {
         clearErrors();
     
-        if (!validate()) {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const userId = loggedInUser ? JSON.parse(loggedInUser).id : null;
+    
+        if (!userId) {
+            setStatusMessages([{ message: "User not logged in", type: 'error' }]);
             return;
         }
     
-        const response = await SongService.deleteSongById(id);
-    
-
+        const response = await SongService.deleteSongById(song.id, userId);
+        const data = await response.json();
     
         if (!response.ok) {
-            setStatusMessages([{ message: "error ocurred", type: 'error' }]);
+            setStatusMessages([{ message: data.message || "Error occurred", type: 'error' }]);
         } else {
             setStatusMessages([{ message: 'Song deleted successfully', type: 'success' }]);
             setIsPopupOpen(false);
         }
     }
     
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    const userRole = loggedInUser ? JSON.parse(loggedInUser).role : null;
 
     return  (
         <>
@@ -90,75 +96,77 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
                         <th className="pl-10"></th>
                         <th className="px-12 py-5 text-xl">Title</th>
                         <th className="px-12 py-5 text-xl">Genre</th>
-                        <th>
-                                <button
-                                    className="mt-2 text-white font-bold text-3xl"
-                                    onClick={() => setIsPopupOpen(true)}
-                                >
-                                    <Image
-                                        src="/img/add.png"
-                                        alt="Add Logo"
-                                        width={40}
-                                        height={40}
-                                    />
-                                </button>
-                                <Popup open={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-                            <div className="p-12 bg-gray-100 border-yellow-400 border-8 flex flex-col items-center justify-center">
-                                <form onSubmit={handleAddSong}>
-                                    {statusMessages.length > 0 && (
-                                    <div className="mb-6">
-                                    <ul className="list-none">
-                                        {statusMessages.map(({ message, type }, index) => (
-                                        <li
-                                            key={index}
-                                            className={classNames({
-                                            "text-red-800": type === "error",
-                                            "text-green-800": type === "success",
-                                            })}
-                                        >
-                                            {message}
-                                        </li>
-                                        ))}
-                                    </ul>
-                                    </div>
-                                    )}
-                                    <div className="mb-3 flex justify-center items-center">
-                                        <h2 className="font-bold text-2xl text-">Add a song</h2>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="titleInput" className="block mb-2 text-sm font-medium">Song title:</label>
-                                        <div>
-                                            <input 
-                                            id="titleInput"
-                                            type="text" 
-                                            value={title}
-                                            onChange={(event) => setTitle(event.target.value)}/>
-                                            {titleError && <div className="text-red-800 text-sm mt-1">{titleError}</div>}
+                        {userRole !== 'user' && (
+                                    <th>
+                                    <button
+                                        className="mt-2 text-white font-bold text-3xl"
+                                        onClick={() => setIsPopupOpen(true)}
+                                    >
+                                        <Image
+                                            src="/img/add.png"
+                                            alt="Add Logo"
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </button>
+                                    <Popup open={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+                                <div className="p-12 bg-gray-100 border-yellow-400 border-8 flex flex-col items-center justify-center">
+                                    <form onSubmit={handleAddSong}>
+                                        {statusMessages.length > 0 && (
+                                        <div className="mb-6">
+                                        <ul className="list-none">
+                                            {statusMessages.map(({ message, type }, index) => (
+                                            <li
+                                                key={index}
+                                                className={classNames({
+                                                "text-red-800": type === "error",
+                                                "text-green-800": type === "success",
+                                                })}
+                                            >
+                                                {message}
+                                            </li>
+                                            ))}
+                                        </ul>
                                         </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="genreInput" className="block mb-2 text-sm font-medium">Song genre:</label>
-                                        <div>
-                                            <input 
-                                            id="genreInput"
-                                            type="text" 
-                                            value={genre}
-                                            onChange={(event) => setGenre(event.target.value)}/>
-                                            {genreError && <div className="text-red-800 text-sm mt-1">{genreError}</div>}
+                                        )}
+                                        <div className="mb-3 flex justify-center items-center">
+                                            <h2 className="font-bold text-2xl text-">Add a song</h2>
                                         </div>
-                                    </div>
-                                    <div className="mt-6">
-                                        <button
-                                            type="submit"
-                                            className="w-full bg-primary hover:bg-gray-800 hover:text-white  border-gray-800  border-4  text-gray-800 py-2 rounded-lg focus:outline-none"
-                                        >
-                                            Make Song
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </Popup>
-                        </th>
+                                        <div className="mb-3">
+                                            <label htmlFor="titleInput" className="block mb-2 text-sm font-medium">Song title:</label>
+                                            <div>
+                                                <input 
+                                                id="titleInput"
+                                                type="text" 
+                                                value={title}
+                                                onChange={(event) => setTitle(event.target.value)}/>
+                                                {titleError && <div className="text-red-800 text-sm mt-1">{titleError}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="genreInput" className="block mb-2 text-sm font-medium">Song genre:</label>
+                                            <div>
+                                                <input 
+                                                id="genreInput"
+                                                type="text" 
+                                                value={genre}
+                                                onChange={(event) => setGenre(event.target.value)}/>
+                                                {genreError && <div className="text-red-800 text-sm mt-1">{genreError}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="mt-6">
+                                            <button
+                                                type="submit"
+                                                className="w-full bg-primary hover:bg-gray-800 hover:text-white  border-gray-800  border-4  text-gray-800 py-2 rounded-lg focus:outline-none"
+                                            >
+                                                Make Song
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </Popup>
+                            </th>
+                        )}
                         <th className="pr-10"></th>
                     </tr>
                 </thead>
@@ -170,13 +178,30 @@ const SongsOverview: React.FC<Props> = ({ songs }: Props) => {
                             <td className="pl-10"></td>
                             <td className="px-12 py-5">{song.title}</td>
                             <td className="px-12 py-5">{song.genre}</td>
+                            { userRole !== 'user' && (
+                                <td onClick={() => handleDeleteSong(song)} className="px-12 tex-red-800 py-5">
+                                    <button
+                                        className="mt-2 text-white font-bold text-3xl hover:bg-red-700"
+                                        onClick={() => setIsPopupOpen(true)}
+                                    >
+                                        <Image
+                                            src="/img/delete.svg"
+                                            alt="Add Logo"
+                                            width={25}
+                                            height={25}
+                                        />
+                                    </button>
+                                </td>
+                            )}
                             <td className="pr-10"></td>
-                            <td onClick={() => handleDeleteSong(song.id)} className="px-12 tex-red-800 py-5">delete</td>
 
                         </tr>
                     ))}
                 </tbody>
             </table>
+        )}
+        {songs.length === 0 && (
+            <p className="text-red-500">There are no songs available in the overview</p>
         )}
         </>
     )

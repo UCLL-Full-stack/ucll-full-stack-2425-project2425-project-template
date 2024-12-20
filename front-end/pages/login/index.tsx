@@ -26,6 +26,32 @@ const Login: React.FC = () => {
                 <section className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
                     <LoginOverview />
                 </section>
+                <table className="w-100 m-14">
+                <thead className="bg-blue-200 border-b-blue-400 border-b-8">
+                    <tr>
+                        <th className="px-12 py-5 text-xl">Username</th>
+                        <th className="px-12 py-5 text-xl">Password</th>
+                        <th className="px-12 py-5 text-xl">Role</th>
+                    </tr>
+                </thead>
+                <tbody className="bg-gray-300 border-b-gray-600 border-b-8">
+                    <tr>
+                        <td className="px-12 py-5">admin</td>
+                        <td className="px-12 py-5">admin123</td>
+                        <td className="px-12 py-5">admin</td>
+                    </tr>
+                    <tr>
+                        <td className="px-12 py-5">niko</td>
+                        <td className="px-12 py-5">niko123</td>
+                        <td className="px-12 py-5">user</td>
+                    </tr>
+                    <tr>
+                        <td className="px-12 py-5">ward</td>
+                        <td className="px-12 py-5">ward123</td>
+                        <td className="px-12 py-5">artist</td>
+                    </tr>
+                </tbody>
+            </table>
             </main>
         </>
     );
