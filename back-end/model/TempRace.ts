@@ -1,11 +1,11 @@
 import { Crash } from "./Crash";
-import { Race as TempRacePrisma, 
+import { Race as RacePrisma, 
     Crash as CrashPrisma,
     Participant as ParticipantPrisma,
     Driver as DriverPrisma,
     Racecar as RacecarPrisma } from "@prisma/client";
 
-export class TempRace {
+export class Race {
     private id?: number;
     private name: string;
     private type: string;
@@ -73,7 +73,7 @@ export class TempRace {
         return this.crashes;
     }
 
-    equals(other: TempRace): boolean {
+    equals(other: Race): boolean {
         return (
             this.id === other.getId() &&
             this.name === other.getName() &&
@@ -93,10 +93,10 @@ export class TempRace {
         location,
         date,
         crashes
-    }: TempRacePrisma & {
+    }: RacePrisma & {
         crashes: (CrashPrisma & { participants: (ParticipantPrisma & { driver: DriverPrisma, racecar: RacecarPrisma })[] } )[] 
     }) {
-        return new TempRace({
+        return new Race({
             id,
             name,
             type,
