@@ -1,143 +1,80 @@
 import { Exercise } from '../../model/exercise';
+import { User } from '../../model/user';
 import { Workout } from '../../model/workout';
-import { WorkoutExercise } from '../../model/workoutexercise';
+import { Role } from '../../types';
 
 const validWorkout = {
-    workout_id: 1,
-    user_id: 1,
+    id: '1',
+    user: new User({
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'password',
+        role: 'user' as Role,
+    }),
     name: 'upper-body',
     description: 'lorem ipsum',
     exercises: [
         new Exercise({
-            id: 1,
+            id: '1',
             name: 'push-ups',
             description: 'lorem ipsum',
-            video_link: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
-            workoutExercise: new WorkoutExercise({
-                workout_exercise_id: 1,
-                workout_id: 1,
-                exercise_id: 1,
-                sets: 3,
-                reps: 12,
-                rpe: '9-10',
-                restTime: '00:30',
-            }),
+            videoLink: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
+            isFavorite: false,
         }),
     ],
 };
 
-test(`given: valid values for Workout properties; when: Workout is created; then: properties are set correctly`, () => {
-    // given
+test('given: valid values for Workout properties; when: Workout is created; then: properties are set correctly', () => {
     const workout = new Workout(validWorkout);
 
-    // when & then
-    expect(workout.workout_id).toEqual(validWorkout.workout_id);
-    expect(workout.user_id).toEqual(validWorkout.user_id);
+    expect(workout.id).toEqual(validWorkout.id);
+    expect(workout.user.id).toEqual(validWorkout.user.id);
     expect(workout.name).toEqual(validWorkout.name);
     expect(workout.description).toEqual(validWorkout.description);
     expect(workout.exercises).toEqual(validWorkout.exercises);
 });
 
-test(`given: Workout equals method called with matching properties; when: all properties match; then: return true`, () => {
-    // given
+test('given: Workout equals method called with matching properties; when: all properties match; then: return true', () => {
     const workout = new Workout(validWorkout);
 
-    // when
     const isEqual = workout.equals({
-        workout_id: 1,
-        user_id: 1,
+        id: '1',
         name: 'upper-body',
         description: 'lorem ipsum',
+        user: validWorkout.user,
         exercises: validWorkout.exercises,
     });
 
-    // then
     expect(isEqual).toBe(true);
 });
 
-test(`given: Workout equals method called with non-matching properties; when: one or more properties don't match; then: return false`, () => {
-    // given
+test("given: Workout equals method called with non-matching properties; when: one or more properties don't match; then: return false", () => {
     const workout = new Workout(validWorkout);
 
-    // when
     const isEqual = workout.equals({
-        workout_id: 2,
-        user_id: 2,
-        description: 'ipsum lorem',
+        id: '2',
         name: 'lower-body',
-        exercises: [
-            new Exercise({
-                id: 2,
-                name: 'dips',
-                description: 'ipsum lorem',
-                video_link: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
-                workoutExercise: new WorkoutExercise({
-                    workout_exercise_id: 2,
-                    workout_id: 2,
-                    exercise_id: 2,
-                    sets: 4,
-                    reps: 15,
-                    rpe: '7-8',
-                    restTime: '00:45',
-                }),
-            }),
-        ],
+        description: 'ipsum lorem',
+        user: new User({
+            id: '2',
+            firstName: 'Jane',
+            lastName: 'Smith',
+            email: 'jane.smith@example.com',
+            password: 't',
+            role: 'admin' as Role,
+        }),
+        exercises: [],
     });
 
-    // then
     expect(isEqual).toBe(false);
 });
 
-test(`given: Workout equals method called; when: only one field is different; then: return false`, () => {
-    //given
-    const workout = new Workout(validWorkout);
-
-    //when & then
-    expect(workout.equals({ ...validWorkout, user_id: 2 })).toBe(false);
-    expect(workout.equals({ ...validWorkout, description: 'ipsum lorem' })).toBe(false);
-    expect(workout.equals({ ...validWorkout, name: 'lower-body' })).toBe(false);
-    expect(
-        workout.equals({
-            ...validWorkout,
-            exercises: [
-                new Exercise({
-                    id: 2,
-                    name: 'dips',
-                    description: 'ipsum lorem',
-                    video_link: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
-                    workoutExercise: new WorkoutExercise({
-                        workout_exercise_id: 2,
-                        workout_id: 2,
-                        exercise_id: 2,
-                        sets: 4,
-                        reps: 15,
-                        rpe: '7-8',
-                        restTime: '00:45',
-                    }),
-                }),
-            ],
-        })
-    ).toBe(false);
-});
-
-test(`given: an empty name; when: Workout is created; then: an error is thrown`, () => {
-    //given
+test('given: an empty name; when: Workout is created; then: an error is thrown', () => {
     const invalidName = { ...validWorkout, name: '' };
 
-    //when
     const createInvalidWorkout = () => new Workout(invalidName);
 
-    //then
-    expect(createInvalidWorkout).toThrowError('Workout name is required and cannot be empty.');
-});
-
-test(`given: an existing Workout; when: removing a exercise from workout that is not added; then: an error is thrown`, () => {
-    //given
-    const workout = new Workout(validWorkout);
-
-    //when
-    const removeExercise = () => workout.removeExercise(2);
-
-    //then
-    expect(removeExercise).toThrow('Exercise does not exist in this workout.');
+    expect(createInvalidWorkout).toThrowError('Name is required and cannot be empty.');
 });

@@ -20,6 +20,7 @@ export class User {
         role: Role;
         profile?: Profile;
     }) {
+        this.validate(user);
         this.id = user.id;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
@@ -28,41 +29,47 @@ export class User {
         this.role = user.role;
         this.profile = user.profile;
     }
+
     validate(user: {
-        id: string;
+        id?: string;
         firstName: string;
         lastName: string;
         email: string;
         password: string;
         role: Role;
-        profile: Profile;
+        profile?: Profile;
     }) {
         if (
             !user.firstName ||
             typeof user.firstName !== 'string' ||
             user.firstName.trim().length === 0
         ) {
-            throw new Error('First name is required and cannot be empty.');
+            throw new Error('First name cannot be empty.');
         }
         if (
             !user.lastName ||
             typeof user.lastName !== 'string' ||
             user.lastName.trim().length === 0
         ) {
-            throw new Error('Last name is required and cannot be empty.');
+            throw new Error('Last name cannot be empty.');
         }
         if (!user.email || typeof user.email !== 'string' || user.email.trim().length === 0) {
-            throw new Error('Email is required and cannot be empty.');
+            throw new Error('Email cannot be empty.');
+        }
+        // Email validation regex
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(user.email)) {
+            throw new Error('Invalid Email: Must be a valid email address');
         }
         if (
             !user.password ||
             typeof user.password !== 'string' ||
             user.password.trim().length === 0
         ) {
-            throw new Error('Password is required and cannot be empty.');
+            throw new Error('Password cannot be empty.');
         }
         if (!user.role) {
-            throw new Error('Role is required');
+            throw new Error('Role is required.');
         }
     }
 
@@ -81,7 +88,7 @@ export class User {
         email: string;
         password: string;
         role: Role;
-        profile: Profile;
+        profile?: Profile;
     }): boolean {
         return (
             this.id === id &&
@@ -110,7 +117,7 @@ export class User {
             email,
             password,
             role: role as Role,
-            profile: profile ? Profile.from(profile) : undefined, // Check of profiel niet null is
+            profile: profile ? Profile.from(profile) : undefined,
         });
     }
 }

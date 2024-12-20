@@ -1,20 +1,11 @@
 import { Exercise } from '../../model/exercise';
-import { WorkoutExercise } from '../../model/workoutexercise';
 
 const validExercise = {
-    id: 1,
+    id: '1',
     name: 'push-ups',
     description: 'lorem ipsum',
-    video_link: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
-    workoutExercise: new WorkoutExercise({
-        workout_exercise_id: 1,
-        workout_id: 1,
-        exercise_id: 1,
-        sets: 3,
-        reps: 12,
-        rpe: '9-10',
-        restTime: '00:30',
-    }),
+    videoLink: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
+    isFavorite: false,
 };
 
 test(`given: valid values for Exercise properties; when: Exercise is created; then: properties are set correctly`, () => {
@@ -25,8 +16,8 @@ test(`given: valid values for Exercise properties; when: Exercise is created; th
     expect(exercise.id).toEqual(validExercise.id);
     expect(exercise.name).toEqual(validExercise.name);
     expect(exercise.description).toEqual(validExercise.description);
-    expect(exercise.video_link).toEqual(validExercise.video_link);
-    expect(exercise.workoutExercise).toEqual(validExercise.workoutExercise);
+    expect(exercise.videoLink).toEqual(validExercise.videoLink);
+    expect(exercise.isFavorite).toEqual(validExercise.isFavorite);
 });
 
 test(`given: Exercise equals method called with matching properties; when: all properties match; then: return true`, () => {
@@ -35,11 +26,11 @@ test(`given: Exercise equals method called with matching properties; when: all p
 
     // when
     const isEqual = exercise.equals({
-        id: 1,
+        id: '1',
         name: 'push-ups',
         description: 'lorem ipsum',
-        video_link: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
-        workoutExercise: validExercise.workoutExercise,
+        videoLink: 'https://youtu.be/IODxDxX7oi4?si=r9RqbT14IBF6aI5X',
+        isFavorite: false,
     });
 
     // then
@@ -52,19 +43,11 @@ test(`given: Exercise equals method called with non-matching properties; when: o
 
     // when
     const isEqual = exercise.equals({
-        id: 2,
+        id: '2',
         name: 'dips',
         description: 'ipsum lorem',
-        video_link: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
-        workoutExercise: new WorkoutExercise({
-            workout_exercise_id: 2,
-            workout_id: 2,
-            exercise_id: 2,
-            sets: 4,
-            reps: 15,
-            rpe: '7-8',
-            restTime: '00:45',
-        }),
+        videoLink: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
+        isFavorite: true,
     });
 
     // then
@@ -81,28 +64,15 @@ test(`given: Exercise equals method called; when: only one field is different; t
     expect(
         exercise.equals({
             ...validExercise,
-            video_link: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
+            videoLink: 'https://youtu.be/yN6Q1UI_xkE?si=DFFTgnjpAAIR-diV',
         })
     ).toBe(false);
-    expect(
-        exercise.equals({
-            ...validExercise,
-            workoutExercise: new WorkoutExercise({
-                workout_exercise_id: 2,
-                workout_id: 2,
-                exercise_id: 2,
-                sets: 4,
-                reps: 15,
-                rpe: '7-8',
-                restTime: '00:45',
-            }),
-        })
-    ).toBe(false);
+    expect(exercise.equals({ ...validExercise, isFavorite: true })).toBe(false);
 });
 
-test(`given: invalid video_link; when: Exercise is created; then: an error is thrown`, () => {
+test(`given: invalid videoLink; when: Exercise is created; then: an error is thrown`, () => {
     //given
-    const invalidVideoLink = { ...validExercise, video_link: 'invalid link' };
+    const invalidVideoLink = { ...validExercise, videoLink: 'invalid link' };
 
     //when
     const createInvalidExercise = () => new Exercise(invalidVideoLink);

@@ -20,11 +20,46 @@ export class Workout {
         user: User;
         exercises: Exercise[];
     }) {
+        this.validate(workout);
         this.id = workout.id;
         this.name = workout.name;
         this.description = workout.description;
         this.user = workout.user;
         this.exercises = workout.exercises;
+    }
+
+    validate(workout: {
+        id?: string;
+        name: string;
+        description: string;
+        user: User;
+        exercises: Exercise[];
+    }) {
+        if (!workout.name || workout.name.trim().length === 0) {
+            throw new Error('Name is required and cannot be empty.');
+        }
+    }
+
+    equals({
+        id,
+        name,
+        description,
+        user,
+        exercises,
+    }: {
+        id?: string;
+        name: string;
+        description: string;
+        user: User;
+        exercises: Exercise[];
+    }): boolean {
+        return (
+            this.id === id &&
+            this.name === name &&
+            this.description === description &&
+            this.user === user &&
+            this.exercises === exercises
+        );
     }
 
     static from({
