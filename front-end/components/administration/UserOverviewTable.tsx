@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { User } from '@types';
 
 interface Props {
@@ -7,13 +7,6 @@ interface Props {
 }
 
 const UserOverviewTable: React.FC<Props> = ({ users, selectUser }: Props) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-  const handleUserClick = (user: User) => {
-    setSelectedUser(user);
-    selectUser(user);
-  };
-
   return (
     <>
       {users && users.length > 0 ? (
@@ -21,17 +14,16 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser }: Props) => {
           <thead>
             <tr>
               <th scope="col">Name</th>
-              <th scope="col">Type</th>
-              <th scope="col">Location</th>
-              <th scope="col"></th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user, index) => (
-              <tr key={index} onClick={() => handleUserClick(user)} role="button">
-                <td>{user.fullname}</td>
+              <tr key={index} onClick={() => selectUser(user)} role="button">
+                <td>{user.name} {user.surname}</td>
                 <td>{user.email}</td>
-                <td>{user.role}</td>
+                <td>{user.permission}</td>
               </tr>
             ))}
           </tbody>
