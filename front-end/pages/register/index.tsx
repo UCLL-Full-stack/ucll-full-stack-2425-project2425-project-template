@@ -12,7 +12,7 @@ const Registration: React.FC = () => {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/images/logo.png" />
         </Head>
-        <div className="min-h-screen max-w-screen flex flex-col-reverse md:flex-row">
+        <div className="max-h-screen max-w-screen overflow-hidden flex flex-col-reverse md:flex-row">
             <Header></Header>
             <main className="p-1 flex-grow flex justify-center items-center">
             <section className="space-y-1 max-w-xs">
