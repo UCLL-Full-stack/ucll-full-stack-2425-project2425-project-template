@@ -95,6 +95,7 @@
             "min": "Username must be at least 3 characters",
             "max": "Username must be at most 20 characters"
         },
+        "error": "Validation error",
 
         "email": {
             "required": "Email is required",

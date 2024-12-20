@@ -93,6 +93,7 @@
             "min": "Gebruikersnaam moet minimaal 3 tekens bevatten",
             "max": "Gebruikersnaam mag maximaal 20 tekens bevatten"
         },
+        "error": "Validation error",
 
         "email": {
             "required": "Email is verplicht",
