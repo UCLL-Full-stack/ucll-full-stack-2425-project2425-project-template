@@ -1,11 +1,11 @@
-import { Cocktail,  Ingredient } from '@types';
+import { Cocktail, Ingredient } from '@types';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { CocktailIngredientService } from '@services/CocktailIngredientsService';
 import { IngredientService } from '@services/IngredientService';
 import CocktailService from '../../services/CocktailService';
-import UserService from '../../services/UserService';
 import CocktailForm from '@components/cocktail/cocktailForm';
+import UserService from '@services/UserService';
 
 type Props = {
   cocktail: Cocktail;
@@ -87,31 +87,31 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
 };
 
   return (
-    <div>
-                  {isEditing ? (
-                <CocktailForm
-                    initialData={cocktail}
-                    onSubmit={handleEdit}
-                    submitButtonText="Update Cocktail"
-                />
-            ) : (
-                <>
-      <h1>{cocktail.name}</h1>
-      <p>{cocktail.description}</p>
-      <p>Strongness: {cocktail.strongness}</p>
-      <p><strong>Author: </strong>{author}</p>
-      <img src={cocktail.image} alt={cocktail.name} style={imgStyle} />
-      <h2>Ingredients</h2>
-      <ul>
-        {ingredients.map((ingredient) => (
-          <li key={ingredient.id}>
-            {ingredientNames[ingredient.ingredientId]} - {ingredient.amount}
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => setIsEditing(true)} className="edit-btn">Edit Cocktail</button>
-      <button onClick={handleDelete} className="delete-btn">Delete Cocktail</button>
-      </>
+    <div className="cocktail-details">
+      {isEditing ? (
+        <CocktailForm
+          initialData={cocktail}
+          onSubmit={handleEdit}
+          submitButtonText="Update Cocktail"
+        />
+      ) : (
+        <>
+          <h1>{cocktail.name}</h1>
+          <p>{cocktail.description}</p>
+          <p>Strongness: {cocktail.strongness}</p>
+          <p><strong>Author: </strong>{author}</p>
+          <img src={cocktail.image} alt={cocktail.name} style={imgStyle} />
+          <h2>Ingredients</h2>
+          <ul>
+            {ingredients.map((ingredient) => (
+              <li key={ingredient.id}>
+                {ingredientNames[ingredient.ingredientId]} - {ingredient.amount}
+              </li>
+            ))}
+          </ul>
+          <button onClick={() => setIsEditing(true)} className="btn-edit">Edit Cocktail</button>
+          <button onClick={handleDelete} className="delete-btn">Delete Cocktail</button>
+        </>
       )}
     </div>
   );
