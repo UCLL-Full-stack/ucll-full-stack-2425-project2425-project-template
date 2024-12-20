@@ -120,7 +120,7 @@ const CharacterCreationForm: React.FC = () => {
           <label>Image:</label>
           <div className="flex flex-row justify-center">
             {imageOptions.map((image) => (
-              <label key={image} style={{ cursor: "pointer" }}>
+              <label key={image}>
                 <input
                   type="radio"
                   name="image"
@@ -131,7 +131,7 @@ const CharacterCreationForm: React.FC = () => {
                 <img
                   src={"/images/" + image + ".png"}
                   alt="Character option"
-                  style={{ width: "50px", height: "50px" }}
+                  className="w-12 h-12"
                 />
               </label>
             ))}

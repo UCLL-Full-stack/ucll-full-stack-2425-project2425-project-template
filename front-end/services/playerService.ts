@@ -65,10 +65,24 @@ const createPlayer = async (player: PlayerInput) => {
     return res;
 }
 
+const giveACoin = async (id: number) => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const token = loggedInUser.token;
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/players/coin/' + id, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return await res.json();
+}
+
 export default {
     getAllPlayers,
     getPlayerById,
     getPlayerImage,
     getPlayersFromUser,
     createPlayer,
+    giveACoin,
 };

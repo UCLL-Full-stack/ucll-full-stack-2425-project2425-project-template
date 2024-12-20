@@ -53,8 +53,13 @@ export class Floor {
         return this.positions;
     }
 
+    setTiles(tiles: Line[]){
+        this.tiles = tiles;
+    }
+
     canMoveToPosition(x: number, y: number): boolean {
-        const line = this.tiles?.at(y);
+        const tiles = this.tiles.sort((a, b) => a.getLineNum() - b.getLineNum());
+        const line = tiles?.at(y);
         let res = false;
         if (line?.getTiles().at(x) === "floor"){
             res = true;

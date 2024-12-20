@@ -18,7 +18,10 @@ const getWorldById = (id: number): Promise<World> => {
 const generateWorld = async (input: WorldInput): Promise<World> => {
     let floors: Floor[] = []
     for (let i = 1; i < 11; i++){
-        floors.push(new Floor({floornumber: i}));
+        let floor = new Floor({floornumber: i});
+        const tiles = floor.getTiles().sort((a, b) => a.getLineNum() - b.getLineNum());
+        floor.setTiles(tiles);
+        floors.push(floor);
     }
     const user = await userService.getUserByEmail(input.email);
     if (user){
