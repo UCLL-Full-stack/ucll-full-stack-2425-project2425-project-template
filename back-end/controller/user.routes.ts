@@ -186,7 +186,11 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         const response = await userService.authentication(userInput);
         res.status(200).json({ message: 'Authentication successful', ...response });
     } catch (error) {
-        next(error);
+        if (error instanceof Error) {
+            res.status(401).json({ message: error.message });
+        } else {
+            res.status(401).json({ message: 'An unknown error occurred' });
+        }
     }
 })
 

@@ -1,25 +1,33 @@
 import Header from "@components/header";
 import UserOverview from "@components/users/UserOverview";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from '@styles/home.module.css';
 import useSWR from 'swr';
 import UserService from "@services/UserService";
 
-const fetcher = (url: string) => UserService.getAll().then(res => res.json());
-
 const Users: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
+    const [loggedUser, setLoggedUser] = useState<UserInput | null>(null);
+    const [users, setUsers] = useState<UserInput[]>([]);
 
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    const user = loggedInUser ? JSON.parse(loggedInUser) : null;
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const user = loggedInUser ? JSON.parse(loggedInUser) : null;
 
-    const { data: users, error } = useSWR(user && user.role === 'ADMIN' ? '/api/users' : null, fetcher);
+        if (user && user.role === 'ADMIN') {
+            getAllUsers();
+        } else {
+            setErrorMessage("You are not authorised to see this page.");
+            setShowErrorMessage(true);
+        }
+    }, []);
 
-    if (error) {
-        setErrorMessage("Failed to load users.");
-        setShowErrorMessage(true);
+    const getAllUsers = async () => {
+        const response = await UserService.getAll();
+        const usersData = await response.json();
+        setUsers(usersData);
     }
 
     return (
@@ -32,7 +40,7 @@ const Users: React.FC = () => {
             </Head>
             <Header />
             <main className={styles.usersMain}>
-                {users && <UserOverview usersData={users} />}
+                {users && users.length > 0 && <UserOverview usersData={users} />}
 
                 {showErrorMessage && (
                     <p className="mt-3">
@@ -45,6 +53,7 @@ const Users: React.FC = () => {
 };
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { UserInput } from "types";
 export const getServerSideProps = async (context) => {
     const { locale } = context;
 

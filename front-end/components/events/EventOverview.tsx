@@ -14,7 +14,7 @@ type Props = {
 
 const EventOverview: React.FC<Props> = ({ events, showDeleteButton, showLikeButton, email }: Props) => {
   const router = useRouter();
-  const [user, setUsers] = useState<UserInput[]>();
+  const [user, setUser] = useState<UserInput>();
   const [showTickets, setShowTickets] = useState<boolean>(false);
   const [successfullyAddedEventToMyFavorites, setSuccessfullyAddedEventToMyFavorites] = useState<string>("");
   const [emailData, setEmailData] = useState<string>(email);

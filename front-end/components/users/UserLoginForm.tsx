@@ -36,13 +36,12 @@ const UserLoginForm: React.FC = () => {
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        clearErrors();
+
         // Validation
         if (!validation()) {
             return;
         }
-
-        // Clear all errors
-        clearErrors();
 
         const user = { email: email, password: password };
         const response = await UserService.loginUser(user);
@@ -67,9 +66,7 @@ const UserLoginForm: React.FC = () => {
 
         } else if (response.status === 401) {
             const responseBody = await response.json();
-
             setStatusMessages([{ message: responseBody.message, type: 'error' }]);
-
         } else {
             setStatusMessages([
                 {

@@ -45,6 +45,11 @@ const UserSignupForm: React.FC = () => {
             return false;
         }
 
+        if (email === 'admin@ucll.be') {
+            setEmailError('This email is not allowed.');
+            return false;
+        }
+
         if (!password || password.trim() === '') {
             setPasswordError('Password is required.');
             return false;
