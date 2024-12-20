@@ -11,8 +11,22 @@ import { teamRouter } from './controller/team.routes';
 import { coachRouter } from './controller/coach.routes';
 import { matchRouter } from './controller/match.routes';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
+
 
 const app = express();
+app.use(helmet());
+
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            connectSrc: ["'self'", "http://localhost:8080"],
+            }
+        }
+    )
+)
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
@@ -25,7 +39,7 @@ app.use(
     })
 )
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:8080'}));
 app.use(bodyParser.json());
 
 
