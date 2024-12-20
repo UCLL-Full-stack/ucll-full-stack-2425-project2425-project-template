@@ -1,0 +1,87 @@
+{
+    "actions": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "back": "Back to Dashboard",
+        "confirm": "Confirm",
+        "refresh": "Refresh Discord",
+        "add": "Add"
+    },
+    "loading": "Loading...",
+    "errors": {
+        "required": "This field is required",
+        "invalidInput": "Invalid input",
+        "serverError": "A server error occurred"
+    },
+    "header": {
+        "login": "Login",
+        "logout": "Log Out"
+    },
+    "board": {
+        "createdBy": "Created by: {{creator}}",
+        "columns": "Columns",
+        "settings": "Board Settings",
+        "delete": {
+            "confirmation": "Are you sure you want to delete this board?",
+            "warning": "This action cannot be undone and will remove all related columns and tasks."
+        },
+        "create": {
+            "title": "Create a New Board",
+            "nameLabel": "Board Title",
+            "namePlaceholder": "Enter board name",
+            "columnsLabel": "Columns (separated by commas)",
+            "columnPlaceholder": "To Do, In Progress, Done"
+        },
+        "edit": {
+            "title": "Edit Board",
+            "nameLabel": "Board Name"
+        },
+        "permissions": {
+            "title": "Edit Permissions for {{name}}",
+            "addIdentifier": "Add Identifier",
+            "searchPlaceholder": "Search users, roles, or permissions",
+            "role": "Role: {{name}}",
+            "user": "User: {{name}}",
+            "discord": "Permission: {{permission}}"
+        }
+    },
+    "column": {
+        "add": "Add Column",
+        "addTask": "Add Task",
+        "delete": "Delete Column",
+        "edit": "Edit Column",
+        "deleteConfirm": "Are you sure you want to delete this column?"
+    },
+    "task": {
+        "edit": "Edit Task",
+        "delete": "Delete Task",
+        "dueDate": "Due Date",
+        "assignees": "Assignees",
+        "description": "Description",
+        "untitled": "task.untitled",
+        "noDescription": "task.noDescription",
+        "status": "Status",
+        "assignedTo": "Assigned To",
+        "unassigned": "Unassigned"
+    },
+
+    "permissions": {
+    "role": "Role: {{name}}",
+    "user": "User: {{name}}",
+    "discord": "Permission: {{permission}}",
+    "addIdentifier": "Add Identifier",
+    "searchPlaceholder": "Search users, roles, or permissions",
+    "errors": {
+      "noPermissions": "Each identifier must have at least one permission"
+    }
+    },
+        "guild": {
+        "settings": {
+        "title": "Edit Settings for {{name}}"
+        }
+    }
+
+}

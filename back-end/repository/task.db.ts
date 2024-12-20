@@ -1,0 +1,146 @@
+import { de } from 'date-fns/locale';
+import { Task } from '../model/task';
+import database from './database';
+import userDb from './user.db';
+
+const getAllTasks = async (): Promise<Task[]> => {
+    try {
+        const tasksPrisma = await database.task.findMany({
+            include: {
+                assignees: { 
+                    select: { userId: true } 
+                },
+                column: true
+            },
+        });
+        return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getTaskById = async (taskId: string): Promise<Task> => {
+    const taskPrisma = await database.task.findUnique({
+        where: { taskId },
+        include: {
+            assignees: { 
+                select: { userId: true } 
+            },
+            column: true
+        },
+    });
+
+    if (!taskPrisma) {
+        throw new Error("Task not found");
+    }
+
+    return Task.from(taskPrisma);
+};
+
+const addTask = async (taskData: {
+    title: string;
+    description: string;
+    taskIndex: number;
+    dueDate: Date;
+    assigneeIds?: string[];
+    columnId: string;
+}): Promise<Task> => {
+    const { title, description, taskIndex, dueDate, assigneeIds = [], columnId } = taskData;
+    const taskPrisma = await database.task.create({
+        data: {
+            title,
+            description,
+            taskIndex,
+            dueDate,
+            assignees: {
+                connect: assigneeIds.map(userId => ({ userId })),
+            },
+            columnId,
+        },
+        include: {
+            assignees: { 
+                select: { userId: true } 
+            },
+            column: true
+        },
+    });
+
+    return Task.from(taskPrisma);
+};
+
+const updateTask = async (taskId: string, taskData: {
+    title?: string;
+    description?: string;
+    taskIndex?: number;
+    dueDate?: Date;
+    assigneeIds?: string[];
+    columnId?: string;
+}): Promise<Task> => {
+    try {
+        const { title, description, taskIndex, dueDate, assigneeIds, columnId } = taskData;
+        const data: any = {};
+        
+        if (title !== undefined) data.title = title;
+        if (description !== undefined) data.description = description;
+        if (taskIndex !== undefined) data.taskIndex = taskIndex;
+        if (dueDate !== undefined) data.dueDate = dueDate;
+        if (assigneeIds !== undefined) {
+            data.assignees = {
+                set: assigneeIds.map(userId => ({ userId })),
+            };
+        }
+        if (columnId !== undefined) data.columnId = columnId;
+
+        const taskPrisma = await database.task.update({
+            where: { taskId },
+            data,
+            include: {
+                assignees: { 
+                    select: { userId: true } 
+                },
+                column: true
+            },
+        });
+
+        return Task.from(taskPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const deleteTask = async (taskId: string): Promise<void> => {
+    const task = await database.task.findUnique({ where: { taskId } });
+    if (!task) {
+        throw new Error("Task not found");
+    }
+    await database.task.delete({ where: { taskId } });
+};
+
+const getTasksOfColumn = async (columnId: string): Promise<Task[]> => {
+    try {
+        const tasksPrisma = await database.task.findMany({
+            where: { columnId },
+            include: {
+                assignees: { 
+                    select: { userId: true } 
+                },
+                column: true
+            },
+        });
+        return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default {
+    getAllTasks,
+    getTaskById,
+    addTask,
+    updateTask,
+    deleteTask,
+    getTasksOfColumn
+};
