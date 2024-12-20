@@ -21,11 +21,13 @@ const LeidingOverviewTable: React.FC<Props> = ({ leiding: initialLeiding, onEdit
     };
 
     const handleDeleteLeiding = async (leidingId: number) => {
-        try {
-            await onDelete(leidingId);
-            setLeiding(leiding.filter(lid => lid.id !== leidingId));
-        } catch (error) {
-            console.error('Failed to delete leiding:', error);
+        if (window.confirm('Weet je zeker dat je deze leider wilt verwijderen?')) {
+            try {
+                await onDelete(leidingId);
+                setLeiding(leiding.filter(lid => lid.id !== leidingId));
+            } catch (error) {
+                console.error('Failed to delete leiding:', error);
+            }
         }
     };
 
