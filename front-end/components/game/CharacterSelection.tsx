@@ -29,6 +29,14 @@ const CharacterSelection: React.FC = () => {
         setDetect(!detectChange);
     }
 
+    const deleteCharacter = async (character: Player) => {
+        console.log(character.id);
+        const res = await playerService.deletePlayer(character.id);
+        localStorage.removeItem("selectedCharacter");
+        setDetect(!detectChange);
+        router.push("/game");
+    }
+
     useEffect(() => {
         getCharacters();
     }, [loggedInUser]);
@@ -73,6 +81,9 @@ const CharacterSelection: React.FC = () => {
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Class
                         </th>
+                        <th scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -84,6 +95,7 @@ const CharacterSelection: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap">{character.currency}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{character.statistics}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{character.class}</td>
+                            <td className="px-6 py-4 whitespace-nowrap" onClick={() => deleteCharacter(character)}>🗑️</td>
                         </tr>
                     ):(
                         <tr key={index} onClick={() => changeSelectedCharacter(character)}>
@@ -91,6 +103,7 @@ const CharacterSelection: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap">{character.currency}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{character.statistics}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{character.class}</td>
+                            <td className="px-6 py-4 whitespace-nowrap" onClick={() => deleteCharacter(character)}>🗑️</td>
                         </tr>
                     )}
                 </>

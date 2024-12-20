@@ -6,6 +6,7 @@ import { World, Floor, Line, Position, Player, PositionUpdate, coordinate, Posit
 import useInterval from 'use-interval';
 import floorService from '@services/floorService';
 import playerService from '@services/playerService';
+import BattleScreen from '@components/game/Battle';
 
 const GameMap: React.FC = () => {
     const router = useRouter();
@@ -21,6 +22,8 @@ const GameMap: React.FC = () => {
     const [lastMoveTime, setLastMoveTime] = useState<number>(0);
     const [spawnedIn, setSpawnedIn] = useState<boolean>(false);
     const [isBeyondLastFloor, setBeyondLastFloor] = useState<boolean>(false);
+    const [showBattleScreen, setBattleScreen] = useState<boolean>(false);
+    const [enemyPos, setEnemyPos] = useState<Position>();
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -85,6 +88,8 @@ const GameMap: React.FC = () => {
             let outOfFloors = true;
             world.floors.forEach(aFloor => {
                 if (aFloor.floornumber === parseInt(floorid as string)){
+                    const tiles = aFloor.tiles.sort((a, b) => a.lineNum - b.lineNum);
+                    aFloor.tiles = tiles;
                     setFloor(aFloor);
                     outOfFloors = false;
                 }
@@ -143,17 +148,39 @@ const GameMap: React.FC = () => {
                     changeFloor(-1)
                     return true;
                 }
+                if (pos.type === "enemy"){
+                    setEnemyPos(pos);
+                    setBattleScreen(true);
+                    return true;
+                }
             }
         })
         return false;
     }
 
+    const checkBattleState = () => {
+        const result = sessionStorage.getItem("battleResult");
+        if (result){
+            if (result === "Victory"){
+                if (player) playerService.giveACoin(player.id);
+                if (enemyPos && floor){
+                    const enemyPosition: PositionUpdate = ({posID: enemyPos.id, floorID: floor.id, playerID: 0, x: enemyPos.x, y: enemyPos.y, active: false})
+                    floorService.updatePosition(enemyPosition);
+                }
+            }
+            else if (result === "Loss"){
+                changeFloor(-1)
+            }
+            setBattleScreen(false);
+            sessionStorage.removeItem('battleResult');
+        }
+    }
+
     const changeFloor = async (difference: number) => {
         if (floorid && floor && player){
             const prev = playerPosition;
-            if (!prev){
-                return;
-            }
+            if (!prev) return;
+            if (floor.floornumber === 1 && difference === -1) return;
             const res: PositionUpdate = {posID: prev.posID, floorID: floor.id, playerID: player.id, x: prev.x, y: prev.y, active: false};
             await floorService.updatePosition(res);
             const toFloor = +floorid + difference;
@@ -172,10 +199,13 @@ const GameMap: React.FC = () => {
         getFloor();
         getPlayer();
         getPositions();
+        checkBattleState();
     }, [update]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            console.log(world);
+            if (showBattleScreen) return;
             const now = Date.now();
             if (now - lastMoveTime < 200){
                 return;
@@ -247,6 +277,7 @@ const GameMap: React.FC = () => {
 
     return (
         <div className="relative overflow-hidden w-screen h-screen bg-black">
+
             <div
             className="absolute transform"
             style={{
@@ -306,6 +337,12 @@ const GameMap: React.FC = () => {
                     Leave
                 </button>
             </div>
+
+            {showBattleScreen && player && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75">
+                    <BattleScreen player={player} />
+                </div>
+            )}
         </div>
     );
 };

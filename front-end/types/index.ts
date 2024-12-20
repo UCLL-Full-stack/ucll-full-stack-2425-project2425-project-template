@@ -90,3 +90,10 @@ export type WorldInput = {
     email: string,
     name: string,
 }
+
+export type inBattleCharacter = {
+    name: string,
+    hp: number,
+    power: number,
+    image: string,
+}

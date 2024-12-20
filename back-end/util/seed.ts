@@ -41,8 +41,16 @@ async function main() {
         new User({
             name: 'Xander',
             email: 'alnea@example.com',
-            role: 'user',
+            role: 'premiumUser',
             password: await bcrypt.hash('password0233', 12),
+            birthday: new Date(2004, 2, 18),
+            accountBirthday: new Date(2024, 9, 12),
+        }),
+        new User({
+            name: 'Cedric',
+            email: 'cedric@example.com',
+            role: 'admin',
+            password: await bcrypt.hash('password59600', 12),
             birthday: new Date(2004, 2, 18),
             accountBirthday: new Date(2024, 9, 12),
         }),
