@@ -72,7 +72,7 @@ const TaskComponent: React.FC<TaskProps> = ({ task, index, onTaskUpdate, onTaskD
                     </button>
                 )}
             </div>            
-            <p>{task.description}</p>
+            <p className="truncate max-h-[20]%">{task.description}</p>
             {isExpanded && (
                 <ExpandedTask
                     task={task}
