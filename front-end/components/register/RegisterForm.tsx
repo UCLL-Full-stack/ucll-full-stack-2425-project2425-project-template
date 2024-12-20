@@ -82,11 +82,11 @@ const RegisterForm: React.FC = () => {
         email,
         password,
         role: "user",
-        birthDate: birthDateAsDate, // Use the formatted date
-        phoneNumber: phoneNumber,
+        birth_date: birthDateAsDate, // Use the formatted date
+        phone_number: phoneNumber,
       });
   
-      if (register.token) {
+      if (register.id) {
         setStatusMessages("Registration successful. Redirecting...");
         console.log(register);
     
@@ -94,11 +94,13 @@ const RegisterForm: React.FC = () => {
           router.push("/");
         }, 2000);
       } else {
-        setStatusMessages("Registration failed.");
+        setStatusMessages(register.message);
+        // console.log(register);
+        
       }
-    } catch (error) {
+    } catch (error : any) {
       console.error("Error during registration:", error);
-      setStatusMessages("Registration failed.");
+      setStatusMessages(error);
     }
   }
 
@@ -182,7 +184,7 @@ const RegisterForm: React.FC = () => {
           className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="submit"
         >
-          Login
+          Register
         </button>
       </form>
     </>

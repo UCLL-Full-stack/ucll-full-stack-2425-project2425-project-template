@@ -3,6 +3,6 @@ export type User = {
     email?: string;
     password?: string;
     role?: "user";
-    birthDate?: Date;
-    phoneNumber?: string;
+    birth_date?: Date;
+    phone_number?: string;
 };
