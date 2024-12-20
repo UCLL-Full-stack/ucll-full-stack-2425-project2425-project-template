@@ -38,9 +38,24 @@ export type Match = {
     team2: Team;
 };
 
+export type CreateMatch = {
+    date: string;
+    scoreTeam1: number;
+    scoreTeam2: number;
+    competition: {
+        id: number;
+    };
+    team1: {
+        id: number;
+    };
+    team2: {
+        id: number;
+    };
+};
+
 export type StatusMessage = {
     message: string;
-    type: "error" | "success";
+    type: 'error' | 'success';
 };
 
 export type authUser = {

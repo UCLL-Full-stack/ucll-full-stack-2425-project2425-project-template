@@ -1,7 +1,9 @@
 import { Competition } from '@types';
 
 const getAllCompetitions = async () => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions`, {
         method: 'GET',
         headers: {
@@ -16,7 +18,9 @@ const getAllCompetitions = async () => {
 };
 
 const getCompetitionById = async (id: number) => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions/${id}`, {
         method: 'GET',
         headers: {
@@ -30,7 +34,9 @@ const getCompetitionById = async (id: number) => {
     return response.json();
 };
 const getCompetitionByName = async (name: string) => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions/name/${name}`, {
         method: 'GET',
         headers: {
@@ -49,7 +55,9 @@ const getCompetitionByName = async (name: string) => {
 
 // Create a new competition
 const createCompetition = async (competition: Competition) => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;    
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions`, {
         method: 'POST',
         headers: {
@@ -64,11 +72,29 @@ const createCompetition = async (competition: Competition) => {
     return response.json();
 };
 
+const deleteCompetition = async (id: number) => {
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to delete competition with ID: ${id}`);
+    }
+    return response.json();
+};
+
 const CompetitionService = {
     getAllCompetitions,
     getCompetitionById,
     getCompetitionByName,
     createCompetition,
+    deleteCompetition,
 };
 
 export default CompetitionService;

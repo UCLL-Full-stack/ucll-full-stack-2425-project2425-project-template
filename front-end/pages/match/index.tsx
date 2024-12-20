@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MatchService from '@services/MatchService';
 import { Match } from '@types';
+import Header from '@components/header';
 
 const MatchesPage = () => {
     const [matches, setMatches] = useState<Match[]>([]);
@@ -46,53 +47,17 @@ const MatchesPage = () => {
 
         try {
             const newMatch = {
-                id: 0,
                 date: newMatchDate,
                 scoreTeam1: newScoreTeam1,
                 scoreTeam2: newScoreTeam2,
-                competitionId: newCompetitionId,
                 competition: {
                     id: newCompetitionId,
-                    name: '',
-                    matchesPlayed: 0,
-                    teams: [],
-                    matches: [],
                 },
-                team1Id: newTeam1Id,
                 team1: {
-                    id: 0,
-                    name: '',
-                    points: 0,
-                    userId: 0,
-                    user: { id: 0, name: '', password: '', role: '' },
-                    competitionId: newCompetitionId,
-                    competition: {
-                        id: newCompetitionId,
-                        name: '',
-                        matchesPlayed: 0,
-                        teams: [],
-                        matches: [],
-                    },
-                    matchesAsTeam1: [],
-                    matchesAsTeam2: [],
+                    id: newTeam1Id,
                 },
-                team2Id: newTeam2Id,
                 team2: {
-                    id: 0,
-                    name: '',
-                    points: 0,
-                    userId: 0,
-                    user: { id: 0, name: '', password: '', role: '' },
-                    competitionId: newCompetitionId,
-                    competition: {
-                        id: newCompetitionId,
-                        name: '',
-                        matchesPlayed: 0,
-                        teams: [],
-                        matches: [],
-                    },
-                    matchesAsTeam1: [],
-                    matchesAsTeam2: [],
+                    id: newTeam2Id,
                 },
             };
             const createdMatch = await MatchService.createMatch(newMatch);
@@ -111,71 +76,66 @@ const MatchesPage = () => {
     };
 
     return (
-        <div>
-            <h1>Matches</h1>
-
-            {/* Display error */}
-            {error && <div style={{ color: 'red' }}>{error}</div>}
-
-            {/* Display loading state */}
-            {loading && <div>Loading...</div>}
-
-            {/* Display all matches */}
+        <>
+            <Header />
             <div>
-                <h2>All Matches</h2>
-                <ul>
-                    {matches.map((match) => (
-                        <li key={match.id}>
-                            <strong>Match {match.id}</strong>: {match.team1.name} vs{' '}
-                            {match.team2.name} | {match.date} | Score: {match.scoreTeam1}-
-                            {match.scoreTeam2}
-                        </li>
-                    ))}
-                </ul>
+                <h1>Matches</h1>
+                {error && <div style={{ color: 'red' }}>{error}</div>}
+                {loading && <div>Loading...</div>}
+                <div>
+                    <h2>All Matches</h2>
+                    <ul>
+                        {matches.map((match) => (
+                            <li key={match.id}>
+                                <strong>Match {match.id}</strong>: {match.team1.name} vs{' '}
+                                {match.team2.name} | {match.date} | Score: {match.scoreTeam1}-
+                                {match.scoreTeam2}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div>
+                    <h2>Create New Match</h2>
+                    <input
+                        type="text"
+                        placeholder="Match Date"
+                        value={newMatchDate}
+                        onChange={(e) => setNewMatchDate(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Score Team 1"
+                        value={newScoreTeam1 ?? ''}
+                        onChange={(e) => setNewScoreTeam1(Number(e.target.value))}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Score Team 2"
+                        value={newScoreTeam2 ?? ''}
+                        onChange={(e) => setNewScoreTeam2(Number(e.target.value))}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Competition ID"
+                        value={newCompetitionId ?? ''}
+                        onChange={(e) => setNewCompetitionId(Number(e.target.value))}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Team 1 ID"
+                        value={newTeam1Id ?? ''}
+                        onChange={(e) => setNewTeam1Id(Number(e.target.value))}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Team 2 ID"
+                        value={newTeam2Id ?? ''}
+                        onChange={(e) => setNewTeam2Id(Number(e.target.value))}
+                    />
+                    <button onClick={handleCreateMatch}>Create Match</button>
+                </div>
             </div>
-
-            {/* Form to create new match */}
-            <div>
-                <h2>Create New Match</h2>
-                <input
-                    type="text"
-                    placeholder="Match Date"
-                    value={newMatchDate}
-                    onChange={(e) => setNewMatchDate(e.target.value)}
-                />
-                <input
-                    type="number"
-                    placeholder="Score Team 1"
-                    value={newScoreTeam1 ?? ''}
-                    onChange={(e) => setNewScoreTeam1(Number(e.target.value))}
-                />
-                <input
-                    type="number"
-                    placeholder="Score Team 2"
-                    value={newScoreTeam2 ?? ''}
-                    onChange={(e) => setNewScoreTeam2(Number(e.target.value))}
-                />
-                <input
-                    type="number"
-                    placeholder="Competition ID"
-                    value={newCompetitionId ?? ''}
-                    onChange={(e) => setNewCompetitionId(Number(e.target.value))}
-                />
-                <input
-                    type="number"
-                    placeholder="Team 1 ID"
-                    value={newTeam1Id ?? ''}
-                    onChange={(e) => setNewTeam1Id(Number(e.target.value))}
-                />
-                <input
-                    type="number"
-                    placeholder="Team 2 ID"
-                    value={newTeam2Id ?? ''}
-                    onChange={(e) => setNewTeam2Id(Number(e.target.value))}
-                />
-                <button onClick={handleCreateMatch}>Create Match</button>
-            </div>
-        </div>
+        </>
     );
 };
 

@@ -6,11 +6,16 @@ const Header: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
     useEffect(() => {
-        setLoggedInUser(sessionStorage.getItem('loggedInUser'));
+        const user = localStorage.getItem('loggedInUser');
+        if (user) {
+            const parsedUser = JSON.parse(user);
+            setLoggedInUser(parsedUser.name);
+        }
     }, []);
 
     const handleClick = () => {
-        sessionStorage.removeItem('loggedInUser');
+        localStorage.removeItem('loggedInUser');
+        setLoggedInUser(null);
     };
 
     return (
@@ -34,6 +39,12 @@ const Header: React.FC = () => {
                         className="text-lg text-white hover:text-gray-300 transition"
                     >
                         Teams
+                    </Link>
+                    <Link
+                        href="/match"
+                        className="text-lg text-white hover:text-gray-300 transition"
+                    >
+                        Match
                     </Link>
                     {!loggedInUser && (
                         <Link

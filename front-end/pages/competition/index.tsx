@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import CompetitionService from '@services/CompetitionService';
-import { Competition } from '@types';
+import { Competition, Team } from '@types'; // Assuming Team is a type that exists
 import Link from 'next/link';
 import Header from '@components/header';
+import TeamService from '@services/TeamsService';
 
 const CompetitionsPage: React.FC = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([]);
     const [competition, setCompetition] = useState<Competition | null>(null);
+    const [teams, setTeams] = useState<Team[]>([]); // State to store teams
     const [error, setError] = useState<string | null>(null);
-    const [competitionId, setCompetitionId] = useState<number | ''>('');
+    const [competitionName, setCompetitionName] = useState<string>('');
 
     useEffect(() => {
         const fetchCompetitions = async () => {
@@ -24,14 +26,43 @@ const CompetitionsPage: React.FC = () => {
         fetchCompetitions();
     }, []);
 
-    const handleGetCompetitionById = async () => {
-        if (!competitionId) return;
+    const handleGetCompetitionByName = async () => {
+        if (!competitionName) return;
         try {
-            const data = await CompetitionService.getCompetitionById(Number(competitionId));
+            const data = await CompetitionService.getCompetitionByName(competitionName);
             setCompetition(data);
             setError(null);
         } catch (err) {
-            setError('Failed to fetch competition by ID.');
+            setError('Failed to fetch competition by name.');
+        }
+    };
+
+    // Function to fetch teams in a competition
+    const handleCompetitionClick = async (id: number) => {
+        try {
+            const data = await CompetitionService.getCompetitionById(id);
+            setCompetition(data);
+            setError(null);
+
+            // Fetch teams for the selected competition
+            const teamsData = await TeamService.getTeamsByCompetition(id);
+            setTeams(teamsData);
+        } catch (err) {
+            setError('Failed to fetch competition by ID or associated teams.');
+            setTeams([]);
+        }
+    };
+
+    // Function to delete a competition
+    const handleDeleteCompetition = async (id: number) => {
+        if (window.confirm('Are you sure you want to delete this competition?')) {
+            try {
+                await CompetitionService.deleteCompetition(id);
+                setCompetitions(competitions.filter((comp) => comp.id !== id)); // Remove competition from UI
+                setError(null);
+            } catch (err) {
+                setError('Failed to delete competition.');
+            }
         }
     };
 
@@ -52,70 +83,121 @@ const CompetitionsPage: React.FC = () => {
                 {error && <div className="text-red-500 mb-4">{error}</div>}
 
                 <section className="mb-6">
-                    <h2 className="text-lg font-semibold mb-2">Filter by ID</h2>
+                    <h2 className="text-lg font-semibold mb-2">Search by Name</h2>
                     <div className="flex gap-4 items-center">
                         <input
-                            type="number"
-                            placeholder="Competition ID"
-                            value={competitionId}
-                            onChange={(e) => setCompetitionId(Number(e.target.value) || '')}
+                            type="text"
+                            placeholder="Competition Name"
+                            value={competitionName}
+                            onChange={(e) => setCompetitionName(e.target.value)}
                             className="border border-gray-300 rounded px-4 py-2"
                         />
-                        <button
-                            onClick={handleGetCompetitionById}
-                            className="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600"
-                        >
-                            Filter
-                        </button>
                     </div>
-                    {competition && (
-                        <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
-                            <p>
-                                <strong>Name:</strong> {competition.name}
-                            </p>
-                            <p>
-                                <strong>ID:</strong> {competition.id}
-                            </p>
-                            <p>
-                                <strong>Matches Played:</strong> {competition.matchesPlayed}
-                            </p>
-                        </div>
-                    )}
                 </section>
 
-                <h2 className="text-lg font-semibold mb-4">Competitions</h2>
-                <div className="overflow-x-auto">
-                    <table className="min-w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="border border-gray-300 px-4 py-2">Name</th>
-                                <th className="border border-gray-300 px-4 py-2">Matches Played</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {competitions.length > 0 ? (
-                                competitions.map((comp) => (
-                                    <tr key={comp.id} className="hover:bg-gray-50">
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            {comp.name}
-                                        </td>
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            {comp.matchesPlayed}
-                                        </td>
+                <div className="flex gap-8">
+                    <div className="flex-1">
+                        <h2 className="text-lg font-semibold mb-4">Competitions</h2>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="border border-gray-300 px-4 py-2">Name</th>
+                                        <th className="border border-gray-300 px-4 py-2">
+                                            Matches Played
+                                        </th>
+                                        <th className="border border-gray-300 px-4 py-2">
+                                            Actions
+                                        </th>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td
-                                        colSpan={2}
-                                        className="border border-gray-300 px-4 py-2 text-center"
-                                    >
-                                        No competitions found
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    {competitions.length > 0 ? (
+                                        competitions
+                                            .filter(
+                                                (comp) =>
+                                                    comp.name
+                                                        .toLowerCase()
+                                                        .includes(competitionName.toLowerCase()) // Filter by name
+                                            )
+                                            .map((comp) => (
+                                                <tr key={comp.id} className="hover:bg-gray-50">
+                                                    <td className="border border-gray-300 px-4 py-2">
+                                                        {comp.name}
+                                                    </td>
+                                                    <td className="border border-gray-300 px-4 py-2">
+                                                        {comp.matchesPlayed}
+                                                    </td>
+                                                    <td className="border border-gray-300 px-4 py-2">
+                                                        <button
+                                                            onClick={() =>
+                                                                handleCompetitionClick(comp.id)
+                                                            }
+                                                            className="text-blue-500 hover:underline mr-4"
+                                                        >
+                                                            View Teams
+                                                        </button>
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDeleteCompetition(comp.id)
+                                                            }
+                                                            className="text-red-500 hover:underline"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={3}
+                                                className="border border-gray-300 px-4 py-2 text-center"
+                                            >
+                                                No competitions found
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div className="flex-1">
+                        {teams.length > 0 && (
+                            <>
+                                <h2 className="text-lg font-semibold mb-4">
+                                    Teams in Selected Competition
+                                </h2>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full border-collapse border border-gray-300">
+                                        <thead>
+                                            <tr className="bg-gray-100">
+                                                <th className="border border-gray-300 px-4 py-2">
+                                                    Team Name
+                                                </th>
+                                                <th className="border border-gray-300 px-4 py-2">
+                                                    Points
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {teams.map((team) => (
+                                                <tr key={team.id} className="hover:bg-gray-50">
+                                                    <td className="border border-gray-300 px-4 py-2">
+                                                        {team.name}
+                                                    </td>
+                                                    <td className="border border-gray-300 px-4 py-2">
+                                                        {team.points}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </>

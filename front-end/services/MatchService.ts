@@ -1,14 +1,15 @@
-import { Match } from '@types';
+import { CreateMatch, Match } from '@types';
 
 const getAllMatches = async () => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/match`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             Authorization: token ? `Bearer ${token}` : '',
-
         },
     });
     if (!response.ok) {
@@ -18,14 +19,15 @@ const getAllMatches = async () => {
 };
 
 const getMatchById = async (id: number) => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
+    const token = localStorage.getItem('loggedInUser')
+        ? JSON.parse(localStorage.getItem('loggedInUser')!).token
+        : null;
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/match/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             Authorization: token ? `Bearer ${token}` : '',
-
         },
     });
     if (!response.ok) {
@@ -34,15 +36,11 @@ const getMatchById = async (id: number) => {
     return response.json();
 };
 
-const createMatch = async (match: Match) => {
-    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
-
+const createMatch = async (match: CreateMatch) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/match`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: token ? `Bearer ${token}` : '',
-
         },
         body: JSON.stringify(match),
     });
