@@ -4,7 +4,7 @@ import CocktailForm from "../cocktailForm";
 import CocktailService from "@services/CocktailService";
 
 interface CocktailEditButtonProps {
-  cocktailId: string;
+  cocktailId: number;
   name: string;
   description: string;
   strongness: number;

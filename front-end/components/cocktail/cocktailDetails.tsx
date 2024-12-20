@@ -1,10 +1,11 @@
-import { Cocktail, Ingredient } from '@types';
+import { Cocktail,  Ingredient } from '@types';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { CocktailIngredientService } from '@services/CocktailIngredientsService';
 import { IngredientService } from '@services/IngredientService';
 import CocktailService from '../../services/CocktailService';
 import UserService from '../../services/UserService';
+import CocktailForm from '@components/cocktail/cocktailForm';
 
 type Props = {
   cocktail: Cocktail;
@@ -23,6 +24,8 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [ingredientNames, setIngredientNames] = useState<{ [key: number]: string }>({});
   const [author, setAuthor] = useState<string>('');
+  const [isEditing, setIsEditing] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -73,8 +76,26 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
     }
   };
 
+  const handleEdit = async (formData: any) => {
+    try {
+        await CocktailService.updateCocktail({ cocktailId: cocktail.id.toString(), ...formData });
+        setIsEditing(false);
+        router.reload(); // Reload the page to reflect the updated cocktail details
+    } catch (error) {
+        console.error("Error updating cocktail:", error);
+    }
+};
+
   return (
     <div>
+                  {isEditing ? (
+                <CocktailForm
+                    initialData={cocktail}
+                    onSubmit={handleEdit}
+                    submitButtonText="Update Cocktail"
+                />
+            ) : (
+                <>
       <h1>{cocktail.name}</h1>
       <p>{cocktail.description}</p>
       <p>Strongness: {cocktail.strongness}</p>
@@ -88,7 +109,10 @@ const CocktailDetails: React.FC<Props> = ({ cocktail }: Props) => {
           </li>
         ))}
       </ul>
+      <button onClick={() => setIsEditing(true)} className="edit-btn">Edit Cocktail</button>
       <button onClick={handleDelete} className="delete-btn">Delete Cocktail</button>
+      </>
+      )}
     </div>
   );
 };

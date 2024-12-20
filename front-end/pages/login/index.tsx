@@ -4,6 +4,7 @@ import UserLoginForm from "@components/users/UserLoginForm";
 import UserRegisterForm from "@components/users/UserRegisterForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import UserInformation from "@components/users/UserInformation";
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
@@ -20,9 +21,13 @@ const Login: React.FC = () => {
             <div className="form-section">
               <UserLoginForm />
             </div>
+            <div> 
+              <UserInformation /> 
+              </div>
             <div className="form-section">
               <UserRegisterForm />
             </div>
+            
           </div>
         </section>
       </main>
