@@ -21,10 +21,9 @@ const healPokemon = async (id: number): Promise<Pokemon> => {
 
 const addPokemonToTrainer = async (
     idPokemon: number,
-    idTrainer: number
 ): Promise<Trainer> => {
     // Call the function that processes the logic and returns a Trainer
-    const trainer = await nurseDb.addPokemonToTrainer({ idPokemon, idTrainer });
+    const trainer = await nurseDb.addPokemonToTrainer({idPokemon});
     return trainer; // Ensure the return type matches the function signature
 };
 

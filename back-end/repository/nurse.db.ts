@@ -141,25 +141,12 @@ const removePokemonFromNurse = async ({
 
 const addPokemonToTrainer = async ({
     idPokemon,
-    idTrainer,
-}: { idPokemon: number; idTrainer: number }): Promise<Trainer> => {
-    // Step 1: Verify if the Trainer exists
-    const trainer = await database.trainer.findUnique({
-        where: { id: idTrainer },
-        include: {
-            pokemon: true, // Include Pokémon for return
-        },
-    });
-
-    if (!trainer) {
-        throw new Error(`Trainer with id ${idTrainer} does not exist.`);
-    }
-
-    // Step 2: Check if the Pokémon is currently assigned to a Nurse
+}: { idPokemon: number }): Promise<Trainer> => {
+    // Step 1: Retrieve the Pokémon and its previous trainer
     const pokemon = await database.pokemon.findUnique({
         where: { id: idPokemon },
         include: {
-            nurse: true, // Include nurse association if any
+            nurse: true,           // Include nurse association if any
         },
     });
 
@@ -167,25 +154,42 @@ const addPokemonToTrainer = async ({
         throw new Error(`Pokémon with id ${idPokemon} does not exist.`);
     }
 
-    // Check if the Pokémon is assigned to a Nurse
-    if (pokemon.nurseId) {
-        // If the Pokémon is already associated with a Nurse, proceed to add it to the Trainer
-        await database.pokemon.update({
-            where: { id: idPokemon },
-            data: {
-                trainer: {
-                    connect: { id: idTrainer }, // Associate Pokémon with the trainer
-                },
-                previousTrainerId: pokemon.trainerId, // Save the current trainer ID if moving
-            },
-        });
-    } else {
+    // Step 2: Check if the Pokémon has a `previousTrainerId`
+    if (!pokemon.previousTrainerId) {
+        throw new Error(`Pokémon with id ${idPokemon} does not have a previous trainer.`);
+    }
+
+    // Step 3: Ensure the Pokémon is assigned to a Nurse
+    if (!pokemon.nurseId) {
         throw new Error(`Pokémon with id ${idPokemon} is not currently assigned to any Nurse.`);
     }
 
-    // Step 3: Retrieve the updated Trainer object
+    // Step 4: Retrieve the previous trainer using the `previousTrainerId`
+    const previousTrainer = await database.trainer.findUnique({
+        where: { id: pokemon.previousTrainerId },
+        include: {
+            pokemon: true, // Include Pokémon for return
+        },
+    });
+
+    if (!previousTrainer) {
+        throw new Error(`Trainer with id ${pokemon.previousTrainerId} does not exist.`);
+    }
+
+    // Step 5: Update the Pokémon to assign it to the previous trainer
+    await database.pokemon.update({
+        where: { id: idPokemon },
+        data: {
+            trainer: {
+                connect: { id: pokemon.previousTrainerId }, // Assign Pokémon to the previous trainer
+            },
+            previousTrainerId: pokemon.trainerId, // Keep track of the previous trainer ID
+        },
+    });
+
+    // Step 6: Retrieve the updated trainer object
     const updatedTrainer = await database.trainer.findUnique({
-        where: { id: idTrainer },
+        where: { id: pokemon.previousTrainerId },
         include: {
             user: true,
             pokemon: { include: { stats: true } },
@@ -195,16 +199,19 @@ const addPokemonToTrainer = async ({
     });
 
     if (!updatedTrainer) {
-        throw new Error(`Failed to retrieve updated trainer with id ${idTrainer}.`);
+        throw new Error(`Failed to retrieve updated trainer with id ${pokemon.previousTrainerId}.`);
     }
 
-    // Step 4: Return the updated Trainer object
+    // Step 7: Return the updated Trainer object
     return Trainer.from({
         ...updatedTrainer,
         badge: updatedTrainer.badges,
         gymBattle: updatedTrainer.gymBattles,
     });
 };
+
+
+
 
 
 

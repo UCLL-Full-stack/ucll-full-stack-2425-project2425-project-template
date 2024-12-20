@@ -5,8 +5,9 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { expressjwt } from 'express-jwt';
-import { nurseRouter, trainerRouter } from './controller/trainer.routes'; // Ensure this path is correct
-import { userRouter } from './controller/user.routers'; // Ensure you have the user router for login/signup
+import { trainerRouter } from './controller/trainer.routes'; // Ensure this path is correct
+import { userRouter } from './controller/user.routes'; // Ensure you have the user router for login/signup
+import { nurseRouter } from './controller/nurse.routes';
 
 const app = express();
 
@@ -39,7 +40,7 @@ const swaggerOpts = {
       version: '1.0.0',
     },
   },
-  apis: ['./controller/*.routes.ts', './controller/user.routes.ts'], // Ensure user.routes.ts is included here
+  apis: ['./controller/*.routes.ts'], // Ensure user.routes.ts is included here
 };
 
 
