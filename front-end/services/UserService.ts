@@ -24,7 +24,7 @@ const registerUser = async (user: User) => {
   }
 };
 
-const loginUser = async (username: string, password: string, user: User) => {
+const loginUser = async (username: string, password: string) => {
   try {
     const token = localStorage.getItem('token');
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {

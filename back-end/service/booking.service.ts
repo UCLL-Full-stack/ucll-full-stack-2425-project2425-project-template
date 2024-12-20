@@ -42,6 +42,24 @@ const createBooking = async ({ bookingDate, tripId, studentIds, paymentStatus }:
     return newBookingDb;
 };
 
+const deleteBooking = async (bookingId: number): Promise<boolean> => {
+    if (typeof bookingId !== 'number' || bookingId <= 0) {
+        throw new Error("Invalid Booking ID");
+    }
+
+    const booking = await bookingDb.getBookingById(bookingId);
+    if (!booking) {
+        throw new Error(`Booking with ID ${bookingId} does not exist.`);
+    }
+
+    try {
+        await bookingDb.deleteBooking(bookingId);
+        return true;
+    } catch (error) {
+        console.error("Error deleting booking:", error);
+        throw new Error(`Failed to delete booking with ID ${bookingId}. Please try again later.`);
+    }
+};
 
 const getAllBookings = async ({ username, role }: { username: string, role: string }): Promise<Booking[]> => {
     if (role === 'admin') {
@@ -146,4 +164,4 @@ const updateStudentsOfBooking = async ({
 };
 
 
-export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, updateStudentsOfBooking};
+export default { createBooking, getAllBookings, getBookingById , addStudentsToBooking, updateStudentsOfBooking, deleteBooking};

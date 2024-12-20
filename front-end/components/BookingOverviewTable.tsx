@@ -13,10 +13,8 @@ const BookingOverviewTable: React.FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
-
     const [studentId, setStudentId] = useState<number | null>(null);
-
-    
+    const [bookings, setBookings] = useState<Booking[] | null>(null);
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem('loggedInUser');
@@ -46,34 +44,60 @@ const BookingOverviewTable: React.FC = () => {
     const fetchBookings = async (): Promise<Booking[] | null> => {
         try {
             const response = await bookingService.getAllBookings();
-            const bookings : Booking[] = await response.json();
+            const bookings: Booking[] = await response.json();
 
             if (userRole === 'admin') {
                 return bookings;
             } else {
-                let bookingsOfStudent : Booking[] = [];
-
+                let bookingsOfStudent: Booking[] = [];
                 bookings.forEach(booking => {
-                booking.students.forEach(student => {
-                    if(student.id == studentId) {
-                        bookingsOfStudent.push(booking)
-                    }
-                })
-            });
-
-            return bookingsOfStudent;
+                    booking.students.forEach(student => {
+                        if(student.id == studentId) {
+                            bookingsOfStudent.push(booking)
+                        }
+                    });
+                });
+                return bookingsOfStudent;
             }
         } catch (error) {
-            console.error('Error fetching juniors:', error);
+            console.error('Error fetching bookings:', error);
             return null;
         }
     };
 
-    const { data: bookings } = useSWR('fetchBookings', fetchBookings, {
-        refreshInterval: 1000,
-    });
+    useEffect(() => {
+        const loadBookings = async () => {
+            const fetchedBookings = await fetchBookings();
+            setBookings(fetchedBookings);
+        };
 
-    /////////////////////////////////////////////////////////////////////////////////////////
+        loadBookings();
+    }, [userRole, studentId]);
+
+    const handleDelete = async (bookingId: number) => {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+        if (!token) {
+            alert('You must be logged in to delete a booking.');
+            return;
+        }
+
+        try {
+            const response = await bookingService.deleteBooking(bookingId.toString(), token);
+            if (response.ok) {
+                // Remove the deleted booking from the state
+                setBookings((prevBookings) => prevBookings?.filter(booking => booking.id !== bookingId) || null);
+                alert('Booking deleted successfully.');
+            } else {
+                alert('Failed to delete booking.');
+            }
+        } catch (error) {
+            console.error('Error deleting booking:', error);
+            alert('Error deleting booking.');
+        }
+    };
+
     if (!isLoggedIn) {
         return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
     }
@@ -81,8 +105,6 @@ const BookingOverviewTable: React.FC = () => {
     if (userRole === 'guest') {
         return <div className={errorStyles.logInMessage}>{t("error.notAuthorized")}</div>;
     }
-
-    console.log("USERROLE", userRole);
 
     if (!Array.isArray(bookings) || bookings.length === 0) {
         return <div className={errorStyles.loading}>{t("loading")}</div>;
@@ -99,18 +121,31 @@ const BookingOverviewTable: React.FC = () => {
                         <th scope="col">{t("booking.destination")}</th>
                         <th scope="col">{t("booking.datum")}</th>
                         <th scope="col">{t("booking.status")}</th>
+                        {userRole === 'admin' && <th scope="col">{t("booking.actions")}</th>} {/* Show actions column only for admin */}
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredBookings.map((booking, index) => (
-                        <tr key={index}>
-                            <td>{booking.trip.id}</td>
-                            <td>{booking.trip.destination}</td>
-                            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-                            <td>{booking.paymentStatus}</td>
-                        </tr>
-                    ))}
-                </tbody>
+    {filteredBookings.map((booking, index) => (
+        <tr key={index}>
+            <td>{booking.trip.id}</td>
+            <td>{booking.trip.destination}</td>
+            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+            <td>{booking.paymentStatus}</td>
+            {userRole === 'admin' && (
+                <td>
+                <button
+                    className="deleteButton"
+                    onClick={() => handleDelete(booking.id ?? 0)} 
+                >
+                    {t("booking.delete")}
+                </button>
+
+                </td>
+            )}
+        </tr>
+    ))}
+</tbody>
+
             </table>
         </div>
     );

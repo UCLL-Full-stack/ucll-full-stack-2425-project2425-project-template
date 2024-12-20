@@ -234,5 +234,85 @@ bookingRouter.get('/:bookingId', async (req: Request, res: Response, next: NextF
     }
   }
 });
+/**
+ * @swagger
+ * /bookings/{bookingId}:
+ *   delete:
+ *     summary: Delete a booking by ID
+ *     description: Deletes a booking by its unique ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: bookingId
+ *         required: true
+ *         description: ID of the booking to delete
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Booking deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Booking deleted successfully.
+ *       404:
+ *         description: Booking not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Booking with ID {bookingId} does not exist.
+ *       400:
+ *         description: Error occurred during booking deletion
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Failed to delete booking.
+ */
+bookingRouter.delete('/:bookingId', async (req: Request, res: Response) => {
+  const { bookingId } = req.params;
+
+  if (isNaN(Number(bookingId))) {
+    return res.status(400).json({
+      status: 'error',
+      errorMessage: 'Invalid booking ID provided.',
+    });
+  }
+
+  try {
+    const isDeleted = await bookingService.deleteBooking(Number(bookingId));
+    if (isDeleted) {
+      res.status(200).json({ status: 'success', message: 'Booking deleted successfully.' });
+    }
+  } catch (error) {
+    const err = error as Error;
+    if (err.message.includes("does not exist")) {
+      res.status(404).json({ status: 'error', errorMessage: err.message });
+    } else {
+      res.status(400).json({ status: 'error', errorMessage: err.message });
+    }
+  }
+});
 
 export { bookingRouter };

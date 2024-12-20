@@ -31,11 +31,20 @@ const getAllBookings = async () => {
         body: JSON.stringify(bookingData),
     });
 };
-  
+const deleteBooking = async (bookingId: string, token: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/bookings/${bookingId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+};
   const BookingService = {
     getAllBookings,
     getBookingById,
-    createBooking
+    createBooking,
+    deleteBooking
   };
   
   export default BookingService;

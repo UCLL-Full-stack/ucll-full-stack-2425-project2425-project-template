@@ -9,11 +9,14 @@ import { User } from '../../model/user';
 
 let mockBookingDbGetAllBookings: jest.Mock;
 let mockBookingDbGetBookingById: jest.Mock;
+let mockBookingDbDeleteBooking: jest.Mock;
 
 beforeEach(() => {
     mockBookingDbGetAllBookings = jest.fn();
     mockBookingDbGetBookingById = jest.fn();
+    mockBookingDbDeleteBooking = jest.fn();
 
+    bookingDb.deleteBooking = mockBookingDbDeleteBooking;
     bookingDb.getAllBookings = mockBookingDbGetAllBookings;
     bookingDb.getBookingById = mockBookingDbGetBookingById;
 });
@@ -232,3 +235,43 @@ test('should throw error if invalid student ID is provided', async () => {
     })).rejects.toThrow('Student with ID -1 not found');
 });
 
+test('should delete a booking successfully', async () => {
+    // Given
+    const bookingId = 1;
+
+    const mockBooking = new Booking({
+        id: bookingId,
+        bookingDate: new Date(),
+        paymentStatus: PaymentStatus.Paid,
+        students: [],
+        trip: new Trip({
+            id: 1,
+            description: 'Trip to Paris',
+            destination: 'France',
+            startDate: new Date('2024-01-01'),
+            endDate: new Date('2024-01-10'),
+            price: 100,
+        }),
+    });
+
+    mockBookingDbGetBookingById.mockResolvedValue(mockBooking);
+    mockBookingDbDeleteBooking.mockResolvedValue(true);
+
+    // When
+    const result = await bookingService.deleteBooking(bookingId);
+
+    // Then
+    expect(result).toBe(true);
+    expect(mockBookingDbGetBookingById).toHaveBeenCalledWith(bookingId); 
+    expect(mockBookingDbDeleteBooking).toHaveBeenCalledWith(bookingId); 
+});
+
+
+test('should throw an error if booking ID is invalid when deleting', async () => {
+    // Given
+    const invalidBookingId = -1;
+
+    // When & Then
+    await expect(bookingService.deleteBooking(invalidBookingId)).rejects.toThrow("Invalid Booking ID");
+    expect(mockBookingDbDeleteBooking).not.toHaveBeenCalled(); 
+});

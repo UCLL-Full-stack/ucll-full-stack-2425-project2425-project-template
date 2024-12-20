@@ -110,10 +110,21 @@ const updateStudentsOfBooking = async ({
         throw new Error('Database error. See server log for details.');
     }
 };
+const deleteBooking = async (bookingId: number): Promise<void> => {
+    try {
+        await database.booking.delete({
+            where: { id: bookingId },
+        });
+    } catch (error) {
+        console.error("Error deleting booking from database:", error);
+        throw new Error(`Unable to delete booking with ID: ${bookingId}.`);
+    }
+};
 
 export default {
     getAllBookings,
     getBookingById,
+    deleteBooking,
     createBooking,
     getBookingForStudent,
     updateStudentsOfBooking
