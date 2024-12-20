@@ -9,6 +9,7 @@ import { userRouter } from './controller/user.routes';
 import helmet from 'helmet';
 import { playlistRouter } from './controller/playlist.routes';
 import { songRouter } from './controller/song.routes';
+import { subscriptionRouter } from './controller/subscription.routes';
 
 const app = express();
 app.use(helmet())
@@ -31,6 +32,7 @@ app.use(expressjwt({
 app.use('/playlists', playlistRouter);
 app.use('/songs', songRouter);
 app.use('/users', userRouter);
+app.use('/subscriptions', subscriptionRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Courses API is running...' });
