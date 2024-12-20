@@ -30,6 +30,32 @@
  *            type: string
  *          role:
  *            type: string
+ *      User:
+ *        type: object
+ *        properties:
+ *          id:
+ *            type: number
+ *            format: int64
+ *            description: Unique identifier for the user.
+ *          name:
+ *            type: string
+ *            description: User name.
+ *          password:
+ *            type: string
+ *            description: User password.
+ *          role:
+ *            type: string
+ *            description: User role.
+ *          teamId:
+ *            type: number
+ *            description: Team ID.
+ *      AuthenticationResponse:
+ *        type: object
+ *        properties:
+ *          token:
+ *            type: string
+ *          name:
+ *            type: string
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
@@ -63,6 +89,30 @@ userRouter.get('/', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /user/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: A user object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ */
 userRouter.get('/:id', async (req: Request, res: Response) => {
     try {
         const user = await userService.getUserById({ id: Number(req.params.id) });
@@ -75,15 +125,6 @@ userRouter.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
-userRouter.post('/', async (req: Request, res: Response) => {
-    try {
-        const user = <UserInput>req.body;
-        const result = await userService.createUser(user);
-        res.status(200).json(result);
-    } catch (error) {
-        res.status(400).json({ status: 'error', errorMessage: 'fout met aanmaken user' });
-    }
-});
 
 /**
  * @swagger
@@ -104,7 +145,7 @@ userRouter.post('/', async (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserInput'
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Error creating user
  *         content:
@@ -159,7 +200,6 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
  *       500:
  *         description: Server error
  */
-
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
@@ -170,6 +210,30 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /user/name/{name}:
+ *   get:
+ *     summary: Get a user by name
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user name
+ *     responses:
+ *       200:
+ *         description: A user object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ */
 userRouter.get('/name/:name', async (req: Request, res: Response) => {
     try {
         const user = await userService.getUserByName({ name: req.params.name });

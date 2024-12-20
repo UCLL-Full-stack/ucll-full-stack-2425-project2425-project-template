@@ -90,9 +90,49 @@ const getTeamById = async ({ id }: { id: number | undefined }): Promise<Team | n
     }
 };
 
+const updateTeam = async ({
+    id,
+    name,
+    points,
+    userId,
+    competitionId,
+}: {
+    id: number;
+    name: string;
+    points: number;
+    userId: number;
+    competitionId: number;
+}): Promise<Team> => {
+    try {
+        const teamPrisma = await database.team.update({
+            where: { id },
+            data: {
+                name,
+                points,
+                user: {
+                    connect: { id: userId },
+                },
+                competition: {
+                    connect: { id: competitionId },
+                },
+            },
+            include: {
+                competition: true,
+                user: true,
+            },
+        });
+
+        return Team.from(teamPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
     getTeamsByCompetition,
     getTeamById,
     getAllTeams,
+    updateTeam,
 };

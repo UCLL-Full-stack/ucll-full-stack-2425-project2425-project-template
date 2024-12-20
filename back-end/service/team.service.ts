@@ -62,32 +62,6 @@ const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
     }
 };
 
-// const linkTeamToUser = async (userId: number, teamId: number): Promise<Team> => {
-//     if (!userId) {
-//         throw new Error('User ID is required');
-//     }
-//     const userExists = await database.user.findUnique({
-//         where: { id: userId },
-//     });
-//     if (!userExists) {
-//         throw new Error(`No User record found with ID: ${userId}`);
-//     }
-
-//     const teamExists = await database.team.findUnique({
-//         where: { id: teamId },
-//     });
-//     if (!teamExists) {
-//         throw new Error(`No team found with ID: ${teamId}`);
-//     }
-
-//     const team = await teamDb.createTeam({
-//         name,
-//         userId,
-//         competitionId,
-//     });
-
-//     return team;
-// };
 const getTeamsByCompetition = async ({
     competitionId,
 }: {
@@ -102,9 +76,34 @@ const getTeamsByCompetition = async ({
     }
 };
 
+const updateTeam = async ({
+    id,
+    name,
+    points,
+    userId,
+    competitionId,
+}: {
+    id: number;
+    name: string;
+    points: number;
+    userId: number;
+    competitionId: number;
+}): Promise<Team> => {
+    const team = await teamDb.updateTeam({
+        id,
+        name,
+        points,
+        userId,
+        competitionId,
+    });
+
+    return team;
+}
+
 export default {
     createTeam,
     getTeamById,
     getAllTeams,
     getTeamsByCompetition,
+    updateTeam,
 };
