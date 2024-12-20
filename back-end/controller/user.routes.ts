@@ -4,6 +4,27 @@ import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Retrieve a list of users
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Server error
+ */
+
 userRouter.get('/', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
@@ -12,6 +33,34 @@ userRouter.get('/', async (req: Request & { auth: any }, res: Response, next: Ne
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /users/{email}:
+ *   get:
+ *     summary: Retrieve a user by email
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's email
+ *     responses:
+ *       200:
+ *         description: A user object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
 
 userRouter.get(
     '/:email',
@@ -24,6 +73,30 @@ userRouter.get(
         }
     }
 );
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       200:
+ *         description: The created user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Server error
+ */
 
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -34,6 +107,35 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
         next(error);
     }
 });
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Authenticate a user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -45,14 +147,50 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
-userRouter.put('update/:email', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = <UserInput>req.body;
-        const updatedUser = await userService.updateUser(user);
-        res.status(200).json(updatedUser);
-    } catch (error) {
-        next(error);
-    }
-});
+// /**
+//  * @swagger
+//  * /users/update/{email}:
+//  *   put:
+//  *     summary: Update a user by email
+//  *     tags: [Users]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     parameters:
+//  *       - in: path
+//  *         name: email
+//  *         schema:
+//  *           type: string
+//  *         required: true
+//  *         description: The user's email
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             $ref: '#/components/schemas/UserInput'
+//  *     responses:
+//  *       200:
+//  *         description: The updated user
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               $ref: '#/components/schemas/User'
+//  *       400:
+//  *         description: Bad request
+//  *       404:
+//  *         description: User not found
+//  *       500:
+//  *         description: Server error
+//  */
+
+// userRouter.put('update/:email', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const user = <UserInput>req.body;
+//         const updatedUser = await userService.updateUser(user);
+//         res.status(200).json(updatedUser);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 export { userRouter };
