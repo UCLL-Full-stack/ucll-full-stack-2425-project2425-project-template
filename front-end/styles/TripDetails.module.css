@@ -1,0 +1,63 @@
+.trip-details-body {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    min-height: 100vh;
+    background-color: white;
+    font-family: Arial, sans-serif;
+}
+
+.trip-details-page {
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    margin: 2rem auto;
+    width: 80%;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.trip-title {
+    font-size: 2rem;
+    color: rgb(0, 164, 0);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.book-button{
+    display: block;
+    margin: 2rem auto;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: white;
+    /* background-color: rgb(0, 164, 0); */
+    background-color: rgb(0, 115, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.book-button:hover {
+    background-color: rgb(0, 90, 200);
+}
+
+.trip-description {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.trip-details {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.trip-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(0, 164, 0);
+    text-align: center;
+}

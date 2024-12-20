@@ -1,0 +1,58 @@
+.trips-page{
+    background-color: white;
+    font-family: Arial, sans-serif;
+}
+
+.trips-h2{
+    color:rgb(0, 164, 0);
+    font-size: 2rem;
+    text-align: center;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+}
+
+.trips-overview-section{
+    min-height: 100vh;
+    background-color: white;
+    max-width: 85em;
+    margin: 0 auto;
+}
+
+.trips-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.trip-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.trip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.trip-destination {
+    font-size: 1.5rem;
+    color: rgb(0, 164, 0);
+    margin-bottom: 8px;
+}
+
+.trip-detail {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.trip-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+}

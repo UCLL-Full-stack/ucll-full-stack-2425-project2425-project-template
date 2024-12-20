@@ -1,0 +1,36 @@
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    /* margin-top: 5px; */
+    margin-bottom: 1em;
+  }
+  
+  .userLoginStatusMessages {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .userLoginStatusMessages .error {
+    color: red;
+    background-color: white;
+  }
+  
+  .userLoginStatusMessages .success {
+    color: green;
+  }
+
+  .loading{
+    display: flex;
+    justify-content: center;
+  }
+
+  .logInMessage {
+    color: red;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
