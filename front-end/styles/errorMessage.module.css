@@ -19,6 +19,11 @@
     color: green;
   }
 
+  .loading{
+    display: flex;
+    justify-content: center;
+  }
+
   .logInMessage {
     color: red;
     text-align: center;

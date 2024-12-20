@@ -48,9 +48,12 @@ const BookingOverviewTable: React.FC = () => {
             const response = await bookingService.getAllBookings();
             const bookings : Booking[] = await response.json();
 
-            let bookingsOfStudent : Booking[] = [];
+            if (userRole === 'admin') {
+                return bookings;
+            } else {
+                let bookingsOfStudent : Booking[] = [];
 
-            bookings.forEach(booking => {
+                bookings.forEach(booking => {
                 booking.students.forEach(student => {
                     if(student.id == studentId) {
                         bookingsOfStudent.push(booking)
@@ -59,6 +62,7 @@ const BookingOverviewTable: React.FC = () => {
             });
 
             return bookingsOfStudent;
+            }
         } catch (error) {
             console.error('Error fetching juniors:', error);
             return null;
@@ -70,10 +74,6 @@ const BookingOverviewTable: React.FC = () => {
     });
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    if (!Array.isArray(bookings) || bookings.length === 0) {
-        return <div>{t("booking.noBookings")}</div>;
-    }
-
     if (!isLoggedIn) {
         return <div className={errorStyles.logInMessage}>{t("error.login")}</div>;
     }
@@ -82,9 +82,13 @@ const BookingOverviewTable: React.FC = () => {
         return <div className={errorStyles.logInMessage}>{t("error.notAuthorized")}</div>;
     }
 
-    if (userRole !== 'admin' && userRole !== 'student') {
-        return null;
+    console.log("USERROLE", userRole);
+
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+        return <div className={errorStyles.loading}>{t("loading")}</div>;
     }
+
+    const filteredBookings = userRole === 'admin' ? bookings : bookings.filter(booking => booking.students.some(student => student.id === studentId));
 
     return (
         <div className={styles['bookings-table-container']}>
@@ -98,16 +102,14 @@ const BookingOverviewTable: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                {bookings && bookings
-                .filter(booking => booking.students.some(student => student.id === studentId))
-                .map((booking, index) => (
-                    <tr key={index}>
-                        <td>{booking.trip.id}</td>
-                        <td>{booking.trip.destination}</td>
-                        <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-                        <td>{booking.paymentStatus}</td>
-                    </tr>
-                ))}
+                    {filteredBookings.map((booking, index) => (
+                        <tr key={index}>
+                            <td>{booking.trip.id}</td>
+                            <td>{booking.trip.destination}</td>
+                            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                            <td>{booking.paymentStatus}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

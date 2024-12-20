@@ -90,6 +90,7 @@
     },
 
     "error": {
+        "notAuthorized": "Je bent niet gemachtigd om deze pagina te bekijken",
         "login": "Log je in om deze pagina te kunnen bekijken"
     },
 
