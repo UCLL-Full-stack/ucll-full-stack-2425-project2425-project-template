@@ -19,14 +19,6 @@ const OverviewPage: React.FC = () => {
       password: 'Password123',
     },
     {
-      username: 'jane_smith',
-      email: 'jane@example.com',
-      role: 'student',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      password: 'Password456', 
-    },
-    {
       username: 'admin_user',
       email: 'admin@example.com',
       role: 'admin',
