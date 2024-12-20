@@ -1,64 +1,63 @@
-import { Ingredient } from "../../model/ingredient";
+import { Ingredient } from '../../model/ingredient';
 
-describe('Ingredient Class', () => {
-    let ingredient: Ingredient;
+let ingredient: Ingredient;
 
-    beforeEach(() => {
-        // Initialize a new ingredient before each test
-        ingredient = new Ingredient({
-            id: 1, 
-            name: 'Sugar'});
-    });
+beforeEach(() => {
+  ingredient = new Ingredient({ id: 1, name: 'Sugar' });
+});
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
+test('givenAnIngredient_whenCreated_thenItHasCorrectProperties', () => {
+  // when
+  const id = ingredient.getId();
+  const name = ingredient.getName();
 
-    test('givenAnIngredient_whenCreated_thenItHasCorrectProperties', () => {
-        // when
-        const id = ingredient.getId();
-        const name = ingredient.getName();
+  // then
+  expect(id).toBe(1);
+  expect(name).toBe('Sugar');
+});
 
-        // then
-        expect(id).toBe(1);
-        expect(name).toBe('Sugar');
-    });
+test('givenANewName_whenSetNameIsCalled_thenTheNameIsUpdated', () => {
+  // given
+  const newName = 'Brown Sugar';
 
-    test('givenANewName_whenSetNameIsCalled_thenTheNameIsUpdated', () => {
-        // given
-        const newName = 'Brown Sugar';
+  // when
+  ingredient.setName(newName);
+  const updatedName = ingredient.getName();
 
-        // when
-        ingredient.setName(newName);
-        const updatedName = ingredient.getName();
+  // then
+  expect(updatedName).toBe(newName);
+});
 
-        // then
-        expect(updatedName).toBe(newName);
-    });
+test('givenIdenticalIngredients_whenEqualsIsCalled_thenReturnsTrue', () => {
+  // given
+  const otherIngredient = new Ingredient({ id: 1, name: 'Sugar' });
 
-    test('givenTwoEqualIngredients_whenEqualsIsCalled_thenItReturnsTrue', () => {
-        // given
-        const otherIngredient = new Ingredient({
-            id: 1, 
-            name: 'Sugar'});
+  // when
+  const result = ingredient.equals(otherIngredient);
 
-        // when
-        const result = ingredient.equals(otherIngredient);
+  // then
+  expect(result).toBe(true);
+});
 
-        // then
-        expect(result).toBe(true);
-    });
+test('givenDifferentIngredients_whenEqualsIsCalled_thenReturnsFalse', () => {
+  // given
+  const otherIngredient = new Ingredient({ id: 2, name: 'Salt' });
 
-    test('givenTwoDifferentIngredients_whenEqualsIsCalled_thenItReturnsFalse', () => {
-        // given
-        const otherIngredient = new Ingredient({
-            id: 2, 
-            name: 'Salt'});
+  // when
+  const result = ingredient.equals(otherIngredient);
 
-        // when
-        const result = ingredient.equals(otherIngredient);
+  // then
+  expect(result).toBe(false);
+});
 
-        // then
-        expect(result).toBe(false);
-    });
+test('givenIngredientPrismaObject_whenFromIsCalled_thenCreatesIngredientInstance', () => {
+  // given
+  const ingredientPrisma = { id: 1, name: 'Sugar' };
+
+  // when
+  const newIngredient = Ingredient.from(ingredientPrisma);
+
+  // then
+  expect(newIngredient.getId()).toBe(1);
+  expect(newIngredient.getName()).toBe('Sugar');
 });
