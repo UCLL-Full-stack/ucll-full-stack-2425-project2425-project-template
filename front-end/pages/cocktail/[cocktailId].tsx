@@ -19,7 +19,8 @@ const CocktailDetailsPage: React.FC = () => {
     useEffect(() => {
         const fetchCocktail = async () => {
             try {
-                const retrievedCocktail = await CocktailService.getCocktailById(Number(cocktailId));
+                const response = await CocktailService.getCocktailById(Number(cocktailId));
+                const retrievedCocktail: Cocktail = await response.json();
                 setCocktail(retrievedCocktail);
             } catch (error) {
                 console.error("Failed to fetch cocktail:", error);

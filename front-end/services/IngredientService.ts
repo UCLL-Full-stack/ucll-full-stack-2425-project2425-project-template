@@ -2,7 +2,17 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 async function getIngredientById(IngredientId : number) {
     try {
-        const response = await fetch(`${apiUrl}/ingredients/${IngredientId}`);
+      const loggedInUser = localStorage.getItem("loggedInUser");
+      const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+        const response = await fetch(`${apiUrl}/ingredients/${IngredientId}`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
         if (!response.ok) {
             throw new Error(`Error fetching ingredient with ID ${IngredientId}: ${response.statusText}`);
         }

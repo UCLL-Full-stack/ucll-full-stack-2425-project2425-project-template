@@ -3,7 +3,17 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     async function getIngredientsByCocktailId(cocktailId: number) {
         try {
-            const response = await fetch(`${apiUrl}/cocktailIngredients/${cocktailId}/ingredients`);
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+            const response = await fetch(`${apiUrl}/cocktailIngredients/${cocktailId}/ingredients`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                }
+            );
 
             if (!response.ok) {
                 if (response.status === 404) {

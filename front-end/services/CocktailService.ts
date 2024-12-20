@@ -69,7 +69,7 @@ const getAllCocktails = () => {
   });
 };
 
-const getCocktailById = (cocktailId: string) => {
+const getCocktailById = (cocktailId: number) => {
   const loggedInUser = localStorage.getItem("loggedInUser");
   const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
