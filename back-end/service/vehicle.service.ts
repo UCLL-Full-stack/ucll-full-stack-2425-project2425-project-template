@@ -4,118 +4,37 @@ import { VehicleInput } from "../types";
 import vehicleDB from "../repository/vehicle.db";
 import { ca, id } from "date-fns/locale";
 import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error'],
-});
+import vehicleDb from "../repository/vehicle.db";
+import userService from "./user.service";
 
 
+const addVehicle = async (input: Vehicle) => {
+
+    if (!input.manufacturer ||
+        !input.model_name ||
+        !input.price ||
+        !input.bodyType ||
+        !input.fuelType ||
+        !input.transmissionType ||
+        !input.year ||
+        input.mileage == null ||
+        !input.vehicleType ||
+        !input.engineCapacity ||
+        !input.seller) {
+
+        throw new Error('All vehicle properties must be defined');
+    }
+    const seller = await userService.getUserById(Number(input.seller))
+
+    return await vehicleDB.addVehicle(input);
+};
 
 
-// const addVehicle = async (input: VehicleInput) => {
 
-//     if (!input.manufacturer ||
-//         !input.model_name ||
-//         !input.price ||
-//         !input.bodyType ||
-//         !input.fuelType ||
-//         !input.transmissionType ||
-//         !input.year ||
-//         input.mileage == null ||
-//         !input.vehicleType ||
-//         !input.engineCapacity) {
 
-//         throw new Error('All vehicle properties must be defined');
-//     }
-
-//     try {
-//         return vehicleDB.createVehicle({
-//             manufacturer: input.manufacturer,
-//             model_name: input.model_name,
-//             price: input.price,
-//             fuelType: input.fuelType,
-//             transmissionType: input.transmissionType,
-//             year: input.year,
-//             vehicleType: input.vehicleType,
-//             bodyType: input.bodyType,
-//             mileage: input.mileage,
-//             engineCapacity: input.engineCapacity,
-//             createdAt: new Date(),
-//             updatedAt: new Date(),
-//             // userId: input.userId
-//         });
-//     }catch(error){ 
-//         console.error('Error creating vehicle:', error);
-//     }
-
-// try {
-//     const newVehicle = await prisma.vehicle.create({
-//         data: {
-//             manufacturer: input.manufacturer,
-//             model_name: input.model_name,
-//             price: input.price,
-//             fuelType: input.fuelType,
-//             transmissionType: input.transmissionType,
-//             year: input.year,
-//             vehicleType: input.vehicleType,
-//             bodyType: input.bodyType,
-//             mileage: input.mileage,
-//             engineCapacity: input.engineCapacity,
-//             createdAt: new Date(),
-//             updatedAt: new Date()
-//         },
-//     });
-
-//     if (input.vehicleType === "Motorcycle") {
-//         const NewMotorcycle = await prisma.motorcycle.create({
-//             data: {
-//                 manufacturer: input.manufacturer,
-//                 model_name: input.model_name,
-//                 price: input.price,
-//                 fuelType: input.fuelType,
-//                 transmissionType: input.transmissionType,
-//                 year: input.year,
-//                 vehicleType: input.vehicleType,
-//                 bodyType: input.bodyType,
-//                 mileage: input.mileage,
-//                 engineCapacity: input.engineCapacity,
-//                 createdAt: new Date(),
-//                 updatedAt: new Date(),
-//                 vehicleId: newVehicle.id
-//             },  
-//         })
-//     } else { 
-//         const NewCar = await prisma.car.create({
-//             data: {
-//                 manufacturer: input.manufacturer,
-//                 model_name: input.model_name,
-//                 price: input.price,
-//                 fuelType: input.fuelType,
-//                 transmissionType: input.transmissionType,
-//                 year: input.year,
-//                 vehicleType: input.vehicleType,
-//                 bodyType: input.bodyType,
-//                 mileage: input.mileage,
-//                 engineCapacity: input.engineCapacity,
-//                 createdAt: new Date(),
-//                 updatedAt: new Date(),
-//                 vehicleId: newVehicle.id
-
-//             },  
-//         })
-//     }
-//     return newVehicle;
-// } catch (error) {
-//     console.error('Error creating vehicle:', error);
-//     throw error;
-// }
-// };
-
-export const getVehicleById = async (id: number) => {
+const getVehicleById = async (id: number) => {
     try {
-        const vehicle = await prisma.vehicle.findUnique({
-            where: { id },
-        });
+        const vehicle = await vehicleDB.getVehicleByID({ id });
         return vehicle;
     } catch (error) {
         console.error('Error fetching vehicle by ID:', error);
@@ -243,7 +162,7 @@ export const getVehicleById = async (id: number) => {
 
 const getAllCars = async () => {
     try {
-        const cars = await prisma.car.findMany();
+        const cars = await vehicleDB.getAllCars();
         return cars;
     } catch (error) {
         console.error('Error fetching cars:', error);
@@ -252,9 +171,10 @@ const getAllCars = async () => {
 };
 const getAllVehicles = async (): Promise<Car[]> => vehicleDB.getAllVehicles();
 
+
 const getAllMotorcycles = async () => {
     try {
-        const motorcycles = await prisma.motorcycle.findMany();
+        const motorcycles = await await vehicleDB.getAllMotorcycles();
         return motorcycles;
     } catch (error) {
         console.error('Error fetching motorcycles:', error);
@@ -271,7 +191,7 @@ export default {
     getAllCars,
     getAllMotorcycles,
     getAllVehicles,
-    // addVehicle,
+    addVehicle,
     // deleteVehicle,
     // editVehicle,
     // getFilteredVehicles,

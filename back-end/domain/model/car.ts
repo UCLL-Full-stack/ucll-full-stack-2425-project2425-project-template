@@ -1,3 +1,4 @@
+import { User } from "./user"; // Assuming you have a custom User class with the required methods
 import { Vehicle } from "./vehicle";
 
 export class Car extends Vehicle {
@@ -16,6 +17,7 @@ export class Car extends Vehicle {
         engineCapacity: number;
         createdAt: Date;
         updatedAt: Date;
+        seller: User
     }) {
         Car.validate(car); // Call the static validate method before construction
 
@@ -33,6 +35,7 @@ export class Car extends Vehicle {
             engineCapacity: car.engineCapacity,
             createdAt: car.createdAt,
             updatedAt: car.updatedAt,
+            seller: car.seller
         });
     }
 
@@ -85,4 +88,6 @@ export class Car extends Vehicle {
             throw new Error("Created and updated timestamps are required");
         }
     }
+
+    
 }

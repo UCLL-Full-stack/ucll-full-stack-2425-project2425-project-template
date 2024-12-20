@@ -182,9 +182,7 @@ const userVehicles = () => {
 
                     <section>
                         {userVehicles && (<VehiclesOverviewTable vehicles={userVehicles}
-                            onVehiclesChange={function (): void {
-                                throw new Error("Function not implemented.");
-                            }}                            // onVehiclesChange={userVehicles} 
+                            onVehiclesChange={fetchUserVehicles}                            // onVehiclesChange={userVehicles} 
                         />)}
                     </section>
                 </div>
