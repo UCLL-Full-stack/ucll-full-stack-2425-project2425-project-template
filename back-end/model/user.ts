@@ -1,5 +1,6 @@
-import { User as UserPrisma } from '@prisma/client';
+import { User as UserPrisma, Profile as ProfilePrisma } from '@prisma/client';
 import { Role } from '../types';
+import { Profile } from './profile';
 
 export class User {
     readonly id?: string;
@@ -8,6 +9,7 @@ export class User {
     readonly email: string;
     readonly password: string;
     readonly role: Role;
+    readonly profile?: Profile;
 
     constructor(user: {
         id?: string;
@@ -16,6 +18,7 @@ export class User {
         email: string;
         password: string;
         role: Role;
+        profile?: Profile;
     }) {
         this.id = user.id;
         this.firstName = user.firstName;
@@ -23,6 +26,7 @@ export class User {
         this.email = user.email;
         this.password = user.password;
         this.role = user.role;
+        this.profile = user.profile;
     }
     validate(user: {
         id: string;
@@ -31,6 +35,7 @@ export class User {
         email: string;
         password: string;
         role: Role;
+        profile: Profile;
     }) {
         if (
             !user.firstName ||
@@ -68,6 +73,7 @@ export class User {
         email,
         password,
         role,
+        profile,
     }: {
         id: string;
         firstName: string;
@@ -75,6 +81,7 @@ export class User {
         email: string;
         password: string;
         role: Role;
+        profile: Profile;
     }): boolean {
         return (
             this.id === id &&
@@ -82,18 +89,28 @@ export class User {
             this.lastName === lastName &&
             this.email === email &&
             this.password === password &&
-            this.role === role
+            this.role === role &&
+            this.profile === profile
         );
     }
 
-    static from(userPrisma: UserPrisma) {
+    static from({
+        id,
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+        profile,
+    }: UserPrisma & { profile?: ProfilePrisma | null }): User {
         return new User({
-            id: userPrisma.id,
-            firstName: userPrisma.firstName,
-            lastName: userPrisma.lastName,
-            email: userPrisma.email,
-            password: userPrisma.password,
-            role: userPrisma.role as Role,
+            id,
+            firstName,
+            lastName,
+            email,
+            password,
+            role: role as Role,
+            profile: profile ? Profile.from(profile) : undefined, // Check of profiel niet null is
         });
     }
 }

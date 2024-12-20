@@ -6,6 +6,7 @@ export type User = {
   email?: string;
   password?: string;
   role?: string;
+  profile?: Profile;
 };
 
 export type Exercise = {
@@ -22,6 +23,12 @@ export type Workout = {
   description?: string;
   user?: User;
   exercises: Array<Exercise>;
+};
+
+export type Profile = {
+  id?: string;
+  bio?: string;
+  userId?: string;
 };
 
 export type StatusMessage = {

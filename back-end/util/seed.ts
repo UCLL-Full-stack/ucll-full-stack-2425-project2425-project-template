@@ -10,6 +10,7 @@ const main = async () => {
     // await prisma.workoutExercise.deleteMany();
     await prisma.workout.deleteMany();
     await prisma.exercise.deleteMany();
+    await prisma.profile.deleteMany();
     await prisma.user.deleteMany();
 
     // Create Users
@@ -30,6 +31,11 @@ const main = async () => {
             email: 'jane.smith@example.com',
             password: await bcrypt.hash('password123', 10),
             role: 'user',
+            profile: {
+                create: {
+                    bio: 'Fitness enthusiast',
+                },
+            },
         },
     });
 

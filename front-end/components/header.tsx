@@ -12,12 +12,12 @@ const Header: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const user = localStorage.getItem("loggedInUser");
+    const user = sessionStorage.getItem("loggedInUser");
     setLoggedInUser(user ? JSON.parse(user) : null);
   }, []);
 
   const handleClick = () => {
-    localStorage.removeItem("loggedInUser");
+    sessionStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
   };
 
@@ -77,22 +77,32 @@ const Header: React.FC = () => {
             </Link>
           )}
           {loggedInUser && (
-            <Link
-              href="/login"
-              onClick={handleClick}
-              className={`${
-                currentRoute === "/login"
-                  ? "text-gray-900 font-semibold border-b-2 border-gray-900"
-                  : "text-gray-600 hover:text-gray-800"
-              } transition-colors pb-1`}
-            >
-              Logout
-            </Link>
-          )}
-          {loggedInUser && (
-            <div className="text-gray-600 ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
-              Welcome, {loggedInUser?.fullname}!
-            </div>
+            <>
+              <Link
+                href="/profiles"
+                className={`${
+                  currentRoute === "/profile"
+                    ? "text-gray-900 font-semibold border-b-2 border-gray-900"
+                    : "text-gray-600 hover:text-gray-800"
+                } transition-colors pb-1`}
+              >
+                Profile
+              </Link>
+              <Link
+                href="/login"
+                onClick={handleClick}
+                className={`${
+                  currentRoute === "/login"
+                    ? "text-gray-900 font-semibold border-b-2 border-gray-900"
+                    : "text-gray-600 hover:text-gray-800"
+                } transition-colors pb-1`}
+              >
+                Logout
+              </Link>
+              <div className="text-gray-600 ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
+                Welcome, {loggedInUser?.fullname}!
+              </div>
+            </>
           )}
           <Language />
         </nav>

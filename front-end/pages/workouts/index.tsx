@@ -15,7 +15,7 @@ const Workouts: React.FC = () => {
   const [workouts, setWorkouts] = useState<Array<Workout>>([]);
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("loggedInUser");
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
     const userRole = loggedInUser ? JSON.parse(loggedInUser).role : null;
     setRole(userRole);
   }, []);

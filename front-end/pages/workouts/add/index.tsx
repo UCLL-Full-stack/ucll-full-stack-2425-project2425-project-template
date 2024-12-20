@@ -8,7 +8,7 @@ const AddWorkout: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("loggedInUser");
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
     const user = loggedInUser ? JSON.parse(loggedInUser) : null;
     setUser(user);
     setRole(user?.role || null);

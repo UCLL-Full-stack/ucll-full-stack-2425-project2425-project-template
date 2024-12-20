@@ -8,6 +8,7 @@ import userRouter from './controller/user.routes';
 import workoutRouter from './controller/workout.routes';
 import exerciseRouter from './controller/exercise.routes';
 import { expressjwt } from 'express-jwt';
+import profileRouter from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(
 app.use('/exercises', exerciseRouter);
 app.use('/users', userRouter);
 app.use('/workouts', workoutRouter);
+app.use('/profiles', profileRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

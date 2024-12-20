@@ -1,4 +1,4 @@
-const loggedInUser = localStorage.getItem("loggedInUser");
+const loggedInUser = sessionStorage.getItem("loggedInUser");
 const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
 
 const getAllExercises = async () => {

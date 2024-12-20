@@ -28,6 +28,14 @@ const getUserByEmail = async ({ email }: { email: string }): Promise<User> => {
     return user;
 };
 
+const getProfileByUserId = async ({ userId }: { userId: string }): Promise<User> => {
+    const user = await userDb.getProfileByUserId({ userId });
+    if (!user) {
+        throw new Error(`Profile with user ID ${userId} not found`);
+    }
+    return user;
+};
+
 const createUser = async (user: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByEmail({ email: user.email });
     if (existingUser) {
@@ -42,12 +50,13 @@ const createUser = async (user: UserInput): Promise<User> => {
         email: user.email,
         password: hashedPassword,
         role: user.role,
+        profile: user.profile,
     });
 
     return await userDb.createUser(createdUser);
 };
 
-async function authenticate({ email, password }: UserInput): Promise<AuthenticationResponse> {
+async function authenticate({ id, email, password }: UserInput): Promise<AuthenticationResponse> {
     const user = await userDb.getUserByEmail({ email });
     if (!user) {
         throw new Error(`User with email: ${email} not found`);
@@ -57,12 +66,16 @@ async function authenticate({ email, password }: UserInput): Promise<Authenticat
         throw new Error('Invalid password');
     }
 
-    const token = generateJWTtoken({ email: user.email, role: user.role });
+    if (!user.id) {
+        throw new Error('User ID is undefined');
+    }
+    const token = generateJWTtoken({id: user.id, email: user.email, role: user.role });
     return {
         token,
+        id: user.id,
         email: user.email,
         role: user.role,
         fullname: `${user.firstName} ${user.lastName}`,
     };
 }
-export default { getAllUsers, getUserById, getUserByEmail, createUser, authenticate };
+export default { getAllUsers, getUserById, getUserByEmail, createUser, authenticate, getProfileByUserId };

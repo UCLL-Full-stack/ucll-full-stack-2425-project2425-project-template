@@ -11,10 +11,23 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
+const getProfileByUserId = async ({ userId }: { userId: string }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { id:userId },
+        });
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 const getUserById = async ({ id }: { id: string }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
             where: { id },
+            include: { profile: true },
         });
         return userPrisma ? User.from(userPrisma) : null;
     } catch (error) {
@@ -44,12 +57,19 @@ const createUser = async (user: User): Promise<User> => {
                 email: user.email,
                 password: user.password,
                 role: user.role,
+                profile: {
+                    connect: {
+                        id: user.profile?.id,
+                    },
+                }
             },
+            include: { profile: true },
         });
+
         return User.from(userPrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
 };
-export default { getAllUsers, getUserById, getUserByEmail, createUser };
+export default { getAllUsers, getUserById, getUserByEmail, createUser, getProfileByUserId };

@@ -12,12 +12,14 @@ import useInterval from "use-interval";
 
 const Exercises: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
-  const [addedExerciseIds, setAddedExerciseIds] = useState<Set<string>>(new Set());
+  const [addedExerciseIds, setAddedExerciseIds] = useState<Set<string>>(
+    new Set()
+  );
   const router = useRouter();
   const { workoutId, showAddButton } = router.query;
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("loggedInUser");
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
     const userRole = loggedInUser ? JSON.parse(loggedInUser).role : null;
     setRole(userRole);
   }, []);
