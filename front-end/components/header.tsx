@@ -11,7 +11,7 @@ const Header: React.FC = () => {
     const user = localStorage.getItem("loggedInUser");
     if (user) {
       const parsedUser = JSON.parse(user);
-      setLoggedInUser(parsedUser.fullname);
+      setLoggedInUser(parsedUser.email);
     }
   }, []);
 
