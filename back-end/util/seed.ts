@@ -3,7 +3,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
-import { Race } from '../model/TempRace';
 
 dotenv.config();
 
