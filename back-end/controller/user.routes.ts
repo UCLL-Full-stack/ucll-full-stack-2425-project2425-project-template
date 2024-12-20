@@ -54,12 +54,12 @@ const userRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/User'
  */
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request, res: Response) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
     } catch (error) {
-        next(error);
+        console.error('Error fetching users:', error);
     }
 });
 

@@ -1,10 +1,12 @@
 import { Competition } from '@types';
 
 const getAllCompetitions = async () => {
+    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
         },
     });
     if (!response.ok) {
@@ -14,10 +16,12 @@ const getAllCompetitions = async () => {
 };
 
 const getCompetitionById = async (id: number) => {
+    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
         },
     });
     if (!response.ok) {
@@ -26,10 +30,12 @@ const getCompetitionById = async (id: number) => {
     return response.json();
 };
 const getCompetitionByName = async (name: string) => {
+    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions/name/${name}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
         },
     });
     if (!response.ok) {
@@ -43,10 +49,12 @@ const getCompetitionByName = async (name: string) => {
 
 // Create a new competition
 const createCompetition = async (competition: Competition) => {
+    const token = localStorage.getItem('loggedInUser') ? JSON.parse(localStorage.getItem('loggedInUser')!).token : null;    
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/competitions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify(competition),
     });

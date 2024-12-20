@@ -9,19 +9,36 @@ import teamRouter from './controller/team.routes';
 import userRouter from './controller/user.routes';
 import matchRouter from './controller/match.routes';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
-const app = express();
 dotenv.config();
+const app = express();
+app.use(helmet());
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            // Allow connections to own server and the external API
+            connectSrc: ["'self'", 'https://api.ucll.be'],
+        },
+    })
+);
+
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(cors({
+    origin:'http://localhost:8080',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }));
 app.use(bodyParser.json());
 
-app.use(expressjwt({
+app.use(
+    expressjwt({
     secret: process.env.JWT_SECRET || 'default_secret' ,
     algorithms: ['HS256'],
-    }).unless({ path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'] })
-
+    }).unless({ path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'] 
+    })
 );
 
 app.use('/match', matchRouter);
