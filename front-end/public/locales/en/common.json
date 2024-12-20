@@ -10,6 +10,7 @@
         "role": "Role",
         "firstname": "Firstname",
         "lastname": "Lastname",
+        "password": "Password",
         "usersTableTitle": "Users Table"
     },
 

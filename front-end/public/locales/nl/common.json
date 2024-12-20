@@ -10,7 +10,7 @@
         "role": "Rol",
         "firstname": "Voorname",
         "lastname": "Lastname",
-        "password": "Password",
+        "password": "Wachtwoord",
         "usersTableTitle": "Gebruikerstabel"
     },
 
@@ -45,7 +45,10 @@
         "wachtwoord": "Wachtwoord",
         "success": "Login succesvol. Doorsturen naar de homepage...",
         "registreer": "Registreren",
-        "error": "Ongeldige gebruikersnaam of wachtwoord. Probeer opnieuw."
+        "error": {
+            "invalidCredentials": "Ongeldige gebruikersnaam of wachtwoord",
+            "serverError": "Er is een fout opgetreden bij het verwerken van het verzoek."
+            }
     },
 
     "nav": {
@@ -93,7 +96,7 @@
             "min": "Gebruikersnaam moet minimaal 3 tekens bevatten",
             "max": "Gebruikersnaam mag maximaal 20 tekens bevatten"
         },
-        "error": "Validation error",
+        "error": "Validatie error",
 
         "email": {
             "required": "Email is verplicht",
