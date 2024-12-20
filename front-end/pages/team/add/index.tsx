@@ -3,6 +3,9 @@ import { Competition } from '../../../types';
 import TeamService from '../../../services/TeamsService';
 import CompetitionService from '../../../services/CompetitionService';
 import Header from '@components/header';
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
 
 const AddTeamPage = () => {
     const [newTeamName, setNewTeamName] = useState('');
@@ -10,6 +13,7 @@ const AddTeamPage = () => {
     const [newCompetitionId, setNewCompetitionId] = useState<number | null>(null);
     const [competitions, setCompetitions] = useState<Competition[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchCompetitions = async () => {
@@ -61,7 +65,7 @@ const AddTeamPage = () => {
         <>
             <Header />
             <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-6">Add New Team</h1>
+                <h1 className="text-2xl font-bold mb-6">{t('team.add2')}</h1>
                 {error && <div className="text-red-500 mb-4">{error}</div>}
                 <div className="mb-4">
                     <input
@@ -87,7 +91,7 @@ const AddTeamPage = () => {
                         onChange={(e) => setNewCompetitionId(Number(e.target.value))}
                         className="border border-gray-300 rounded px-4 py-2 w-full"
                     >
-                        <option value="">Select Competition</option>
+                        <option value="">{t('team.select')}</option>
                         {competitions.map((competition) => (
                             <option key={competition.id} value={competition.id}>
                                 {competition.name}
@@ -99,15 +103,12 @@ const AddTeamPage = () => {
                     onClick={handleCreateTeam}
                     className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600"
                 >
-                    Create Team
+                    {t('team.Create')}
                 </button>
             </div>
         </>
     );
 };
-
-import { GetServerSideProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { locale } = context;

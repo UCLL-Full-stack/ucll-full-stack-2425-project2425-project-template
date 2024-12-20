@@ -4,12 +4,16 @@ import TeamService from '../../services/TeamsService';
 import CompetitionService from '../../services/CompetitionService';
 import Header from '@components/header';
 import Link from 'next/link';
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
 
 const TeamsPage = () => {
     const [teams, setTeams] = useState<Team[]>([]);
     const [competitions, setCompetitions] = useState<Competition[]>([]);
     const [selectedCompetition, setSelectedCompetition] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchTeams = async () => {
@@ -63,19 +67,19 @@ const TeamsPage = () => {
             <Header />
             <div className="container mx-auto p-4">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">Teams Management</h1>
+                    <h1 className="text-2xl font-bold">{t('team.management')}</h1>
                     <Link
                         href="/team/add"
                         className="border bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600"
                     >
-                        Add Team
+                        {t('team.add')}
                     </Link>
                 </div>
 
                 {error && <div className="text-red-500 mb-4">{error}</div>}
 
                 <div className="mb-6">
-                    <h2 className="text-lg font-semibold mb-2">Filter by Competition</h2>
+                    <h2 className="text-lg font-semibold mb-2">{t('team.filter')}</h2>
                     <div className="flex gap-4 items-center">
                         <select
                             className="border border-gray-300 rounded px-4 py-2"
@@ -102,10 +106,15 @@ const TeamsPage = () => {
                     <table className="min-w-full border-collapse border border-gray-300">
                         <thead>
                             <tr className="bg-gray-100">
-                                <th className="border border-gray-300 px-4 py-2">Team Name</th>
-                                <th className="border border-gray-300 px-4 py-2">Points</th>
-                                <th className="border border-gray-300 px-4 py-2">Competition</th>
-                                <th className="border border-gray-300 px-4 py-2">Actions</th>
+                                <th className="border border-gray-300 px-4 py-2">
+                                    {t('team.name')}
+                                </th>
+                                <th className="border border-gray-300 px-4 py-2">
+                                    {t('team.points')}
+                                </th>
+                                <th className="border border-gray-300 px-4 py-2">
+                                    {t('team.competition')}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,7 +148,7 @@ const TeamsPage = () => {
                                         colSpan={4}
                                         className="border border-gray-300 px-4 py-2 text-center"
                                     >
-                                        No teams found
+                                        {t('team.noTeams')}
                                     </td>
                                 </tr>
                             )}
@@ -150,9 +159,6 @@ const TeamsPage = () => {
         </>
     );
 };
-
-import { GetServerSideProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { locale } = context;
