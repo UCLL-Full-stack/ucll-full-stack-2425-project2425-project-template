@@ -113,7 +113,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
               <td>nurse</td>
             </tr>
             <tr>
-              <td>roak@gmail.com</td>
+              <td>oak@gmail.com</td>
               <td>GoAsh!Go4</td>
               <td>admin</td>
             </tr>
