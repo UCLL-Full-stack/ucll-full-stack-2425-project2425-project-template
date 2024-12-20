@@ -10,7 +10,7 @@ export class Submission {
     private createdBy: number;
     private race?: TempRace;
 
-    constructor(submission: { title: string, content: string, type: string, createdAt: Date, solvedAt?: Date, createdBy: number, race: TempRace, id?: number }) {
+    constructor(submission: { title: string, content: string, type: string, createdAt: Date, solvedAt?: Date, createdBy: number, race?: TempRace, id?: number }) {
         this.validate(submission);
 
         this.title = submission.title;

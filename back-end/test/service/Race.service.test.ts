@@ -3,7 +3,7 @@ import raceService from '../../service/Race.service';
 import { RaceInput, CrashInput } from '../../types';
 import { Race } from '../../model/Race';
 import { Crash } from '../../model/Crash';
-import { Participant } from '../../model/participant';
+import { Participant } from '../../model/Participant';
 import { Driver } from '../../model/Driver';
 import { Racecar } from '../../model/Racecar';
 

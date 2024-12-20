@@ -3,7 +3,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
-import { TempRace } from '../model/TempRace';
+import { Race } from '../model/TempRace';
 
 dotenv.config();
 
@@ -77,13 +77,23 @@ const main = async () => {
 
     const tempRace1 = await prisma.tempRace.create({
         data: {
-            name: 'Grand Prix Monaco',
+            name: 'Temp Race 1',
             type: 'Formula 1',
-            description: 'A high-speed race',
-            location: 'Monaco',
-            date: new Date('2023-05-28T00:00:00Z'),
+            description: 'A temporary race for testing',
+            location: 'Test Track 1',
+            date: new Date('2023-06-15T00:00:00Z'),
         },
-    })
+    });
+    
+    const tempRace2 = await prisma.tempRace.create({
+        data: {
+            name: 'Temp Race 2',
+            type: 'Formula 1',
+            description: 'Another temporary race for testing',
+            location: 'Test Track 2',
+            date: new Date('2023-07-20T00:00:00Z'),
+        },
+    });
 
     await prisma.submission.create({
         data: {
@@ -109,6 +119,9 @@ const main = async () => {
             user: {
                 connect: { id: user1.id },
             },
+            race: {
+                connect: { id: tempRace2.id }
+            }
         },
     });
 
@@ -369,26 +382,6 @@ const main = async () => {
             crashes: {
                 connect: [{ id: crash2.id }, { id: crash4.id }],
             },
-        },
-    });
-
-    const tempRace1 = await prisma.tempRace.create({
-        data: {
-            name: 'Temp Race 1',
-            type: 'Formula 1',
-            description: 'A temporary race for testing',
-            location: 'Test Track 1',
-            date: new Date('2023-06-15T00:00:00Z'),
-        },
-    });
-    
-    const tempRace2 = await prisma.tempRace.create({
-        data: {
-            name: 'Temp Race 2',
-            type: 'Formula 1',
-            description: 'Another temporary race for testing',
-            location: 'Test Track 2',
-            date: new Date('2023-07-20T00:00:00Z'),
         },
     });
 }
