@@ -3,7 +3,7 @@ import { Exercise } from '../model/exercise';
 import { Workout } from '../model/workout';
 import { Profile } from '../model/profile';
 
-type Role = 'admin' | 'user';
+type Role = 'admin' | 'user' | 'trainer';
 
 type ExerciseInput = {
     id?: string;

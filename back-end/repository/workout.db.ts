@@ -158,6 +158,18 @@ const updateWorkout = async (workout: Workout): Promise<Workout | null> => {
     }
 };
 
+const assignWorkoutToUser = async (workoutId: string, userId: string): Promise<void> => {
+    try {
+      await database.workout.update({
+        where: { id: workoutId },
+        data: { userId },
+      });
+    } catch (error) {
+      console.error('Error assigning workout to user:', error);
+      throw new Error('Failed to assign workout to user.');
+    }
+  };
+
 export default {
     getAllWorkouts,
     getWorkoutById,
@@ -167,4 +179,5 @@ export default {
     removeExerciseFromWorkout,
     removeWorkout,
     updateWorkout,
+    assignWorkoutToUser,
 };

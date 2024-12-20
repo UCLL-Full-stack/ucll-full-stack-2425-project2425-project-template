@@ -10,31 +10,31 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  firstName String   
-  lastName  String   
-  email     String   @unique 
+  id        String    @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String    @unique
   password  String
-  role      String
+  role      String    @default("user")
   workouts  Workout[]
   profile   Profile?
 }
 
 model Workout {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   userId      String
   name        String   
   description String 
-  exercises   Exercise[] 
+  exercises Exercise[]
   user        User     @relation(fields: [userId], references: [id])
 }
 
 model Exercise {
-  id          String   @id @default(cuid())
-  name        String   
-  description String  
-  videoLink   String 
-  isFavorite  Boolean 
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  videoLink   String
+  isFavorite  Boolean
   workouts    Workout[]
 }
 
