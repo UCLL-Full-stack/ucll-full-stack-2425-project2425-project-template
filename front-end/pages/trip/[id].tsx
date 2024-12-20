@@ -115,7 +115,7 @@ const TripDetails: React.FC<Props> = ({ initialTrip }) => {
                 </Head>
                 <Navbar />
                 <div className={styles['trip-details-body']}>
-                    <div className={errorStyles.errorMessage}>
+                    <div className={errorStyles.logInMessage}>
                         You have no access to this page
                     </div>
                 </div>
