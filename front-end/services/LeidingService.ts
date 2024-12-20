@@ -78,11 +78,43 @@ const addLeiding = async (naam: string, voornaam: string, telefoon: string, emai
   return response.json();
 };
 
+const changeRole = async (id: number, rol: string) => {
+  const token = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}").token;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leiding/${id}/${rol}`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+      }
+  });
+  if (!response.ok) {
+      throw new Error("Rol wijzigen mislukt.");
+  }
+  return response.json();
+};
+
+const changeGroup = async (id: number, groepNaam: string) => {
+  const token = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}").token;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leiding/groep/${id}/${groepNaam}`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+      }
+  });
+  if (!response.ok) {
+      throw new Error("Groep wijzigen mislukt.");
+  }
+  return response.json();
+};
+
 const LeidingService = {
   getLeiding,
   deleteLeiding,
   updateLeiding,
   addLeiding,
+  changeRole,
+  changeGroup,
 };
 
 export default LeidingService;

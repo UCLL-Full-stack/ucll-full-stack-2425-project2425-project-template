@@ -61,7 +61,7 @@ const updateLeiding = async (leiding: Leiding, rol: Rol, totem: string): Promise
         const groep = await groepService.getGroepById(leidingDB.getGroepId());
         if (!leidingDB) {
             throw new Error('Leiding not found');
-        }else if (leidingDB.getTotem() !== leiding.getTotem() && rol === 'LEIDING') {
+        }else if (leidingDB.getTotem() !== totem && rol === 'LEIDING') {
             throw new UnauthorizedError('credentials_required', new Error('wrong totem'));
         }
         if (leiding.getVoornaam() === '' || leiding.getVoornaam() === null || leiding.getVoornaam() === undefined) {

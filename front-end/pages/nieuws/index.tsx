@@ -5,6 +5,7 @@ import NieuwsOverviewTable from '@/components/nieuws/NieuwsOverviewTable';
 import NieuwsOverviewTableAdmin from '@/components/nieuws/NieuwsOverviewTableAdmin';
 import { Nieuwsbericht } from '@/types';
 import NieuwsberichtService from '@/services/NieuwsberichtService';
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 const Nieuws: React.FC = () => {
     const [nieuwsberichten, setNieuwsberichten] = useState<Nieuwsbericht[]>([]);
@@ -49,5 +50,15 @@ const Nieuws: React.FC = () => {
         </>
     );
 }
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+    const {locale} = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "nl", ["common"])),
+        },
+    };
+};
 
 export default Nieuws;
