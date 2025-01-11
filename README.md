@@ -1,7 +1,8 @@
-# Project template
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/twPj_hbU)
+# Scouts Agenda Manager
 
-To get started, open the Readme.md files in the analysis, back-end and front-end folders.
+### Efe Okan / Victor Trappeniers
 
-Change this readme file to describe your project, change the title and fill in your name below.
+### Description:
+The Scouts Agenda Manager allows parents to check upcoming scout activities. Leaders can create, edit, and delete events. Head leaders have additional privileges to manage leadership roles and post news. Only leaders and head leaders can log into the platform.
 
-### \<Student 1 name\> / \<Student 2 name\>

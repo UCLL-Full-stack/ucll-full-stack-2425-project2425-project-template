@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// start-up: npx prisma migrate dev
+// generate client: npx prisma generate
+// seed: npx ts-node util/seed.ts
+
+// als er issues zijn met de prisma client, run: npx prisma migrate reset
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Leiding {
+  id        Int      @id @default(autoincrement())
+  naam      String   
+  voornaam  String
+  email     String   @unique
+  wachtwoord String
+  telefoon  String
+  rol       String
+  totem     String   @unique
+  nieuwsberichten Nieuwsbericht[] 
+  groepId   Int  
+  groep     Groep @relation(fields: [groepId], references: [id])
+}
+
+model Groep {
+  id      Int      @id @default(autoincrement())
+  naam    String 
+  beschrijving String
+  activiteiten Activiteit[]
+  leiding Leiding[]
+}
+
+model Activiteit {
+  id        Int      @id @default(autoincrement())
+  naam      String
+  beschrijving String
+  beginDatum DateTime
+  eindDatum  DateTime
+  groepen  Groep[]
+}
+
+model Nieuwsbericht {
+    id        Int      @id @default(autoincrement())
+    titel     String
+    inhoud    String
+    datum     DateTime
+    leidingId Int     
+    leiding   Leiding @relation(fields: [leidingId], references: [id])
+}
